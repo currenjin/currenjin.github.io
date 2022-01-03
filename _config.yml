@@ -1,5 +1,5 @@
 # Site settings
-title: currenjin
+title: currenjin wiki
 url: "https://currenjin.github.io"
 baseurl: ""
 description: >
@@ -10,6 +10,7 @@ email: hyun0524e@naver.com
 author: currenjin
 profile: 정현진
 github_username: currenjin
+instagram_username: currenjin
 comment-support: utterances
 
 # Build settings
@@ -46,10 +47,10 @@ utterances:
   branch: master
 
 google_analytics:
-  ua: UA-110224147-1
+  ua: #FIXME
 
 google_adsense:
-  client: ca-pub-3675948545737694
+  client: #FIXME
 
 blame: "https://github.com/currenjin/currenjin.github.io/blame/master/_wiki"
 edit: "https://github.com/currenjin/currenjin.github.io/edit/master/_wiki"
