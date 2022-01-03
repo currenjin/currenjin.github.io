@@ -1,0 +1,62 @@
+# Site settings
+title: currenjin
+url: "https://currenjin.github.io"
+baseurl: ""
+description: >
+    currenjin wiki
+
+# My information
+email: hyun0524e@naver.com
+author: currenjin
+profile: 정현진
+github_username: currenjin
+comment-support: utterances
+
+# Build settings
+plugins:
+  - jekyll-paginate
+  - jekyll-gist
+
+permalink: /blog/:year/:month/:day/:title/
+
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+paginate: 10
+paginator_path: "/blog"
+paginate_path: "/blog/page:num/"
+
+# Collections
+collections:
+    wiki:
+        output: true
+        permalink: /:collection/:path/
+
+# Comment Service
+disqus:
+  id: currenjin
+  shortname: currenjin
+utterances:
+  repo: currenjin/currenjin.github.io
+  issue-term: url
+  label: Comment
+  branch: master
+
+google_analytics:
+  ua: UA-110224147-1
+
+google_adsense:
+  client: ca-pub-3675948545737694
+
+blame: "https://github.com/currenjin/currenjin.github.io/blame/master/_wiki"
+edit: "https://github.com/currenjin/currenjin.github.io/edit/master/_wiki"
+issue: "https://github.com/currenjin/currenjin.github.io/issues/new"
+
+timezone: "Asia/Seoul"
+
+# https://kramdown.gettalong.org/rdoc/Kramdown/Options.html - smart_quotes
+kramdown:
+    smart_quotes: ["apos", "apos", "quot", "quot"]
