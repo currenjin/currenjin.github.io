@@ -3,7 +3,7 @@ layout  : wiki
 title   : Annotation
 summary :
 date    : 2022-01-04 22:38:00 +0900
-updated : 2022-01-04 22:38:00 +0900
+updated : 2022-01-04 23:07:00 +0900
 tag     : java
 toc     : true
 public  : true
@@ -11,7 +11,7 @@ parent  : [[how-to]]
 latex   : true
 ---
 * TOC
-  {:toc}
+{:toc}
 
 # Annotation
 
