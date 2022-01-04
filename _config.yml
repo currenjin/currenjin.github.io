@@ -44,7 +44,7 @@ utterances:
   repo: currenjin/currenjin.github.io
   issue-term: url
   label: Comment
-  branch: master
+  branch: main
 
 google_analytics:
   ua: #FIXME
@@ -52,8 +52,8 @@ google_analytics:
 google_adsense:
   client: #FIXME
 
-blame: "https://github.com/currenjin/currenjin.github.io/blame/master/_wiki"
-edit: "https://github.com/currenjin/currenjin.github.io/edit/master/_wiki"
+blame: "https://github.com/currenjin/currenjin.github.io/blame/main/_wiki"
+edit: "https://github.com/currenjin/currenjin.github.io/edit/main/_wiki"
 issue: "https://github.com/currenjin/currenjin.github.io/issues/new"
 
 timezone: "Asia/Seoul"
