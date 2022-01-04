@@ -10,6 +10,9 @@ regenerate: true
 ## wiki items
 
 * [[example]]
+* [[annotation]]
+* [[TDD]]
+* [[basic-java]]
 
 ---
 
