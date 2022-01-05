@@ -1,6 +1,6 @@
 ---
 layout  : wiki
-title   : Annotation
+title   : Git
 summary :
 date    : 2022-01-05 10:14:00 +0900
 updated : 2022-01-05 10:14:00 +0900
@@ -15,3 +15,8 @@ latex   : true
 
 # Git
 
+### Error
+
+```shell
+fatal: unable to get credential storage lock in 1000 ms: File exists
+```
