@@ -14,6 +14,7 @@ regenerate: true
 * [[TDD]]
 * [[basic-java]]
 * [[git]]
+* [[svg]]
 
 ---
 
