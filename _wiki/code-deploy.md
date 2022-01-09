@@ -22,6 +22,8 @@ AWS 에서 제공하기 때문에, AWS 내 다양한 서비스와 손쉽게 연�
 
 ## 배포 과정
 ### 다이어그램
+![image](https://user-images.githubusercontent.com/60500649/148670039-ed76b7e3-95b4-4f1e-a6aa-0dd54ef49a37.png)
+
 ### 작동 절차
 1. Application Code, AppSpec.yml 파일을 코드 저장소에 업로드
 2. CodeDeploy 에 배포를 요청
