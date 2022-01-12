@@ -10,6 +10,7 @@ regenerate: true
 ## wiki items
 
 * [[example]]
+* [[test-driven-documentation]]
 * [[code-deploy]]
 * [[annotation]]
 * [[TDD]]
