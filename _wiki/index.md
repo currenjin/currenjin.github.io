@@ -10,6 +10,7 @@ regenerate: true
 ## wiki items
 
 * [[example]]
+* [[polymorphism]]
 * [[test-driven-documentation]]
 * [[code-deploy]]
 * [[annotation]]
