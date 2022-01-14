@@ -30,3 +30,10 @@ sample/trevari.jsp 파일 생성 후 Hello Trevari 를 html 태그로 적용
 ### WAS 가 무엇인가
 Web Application Server
 
+## Mission
+### sample에 두개의 링크가 있는데, smaple/trevari.jsp를 검색했을 때 저 페이지가 나오면 됨
+Hello Trevari가 나오면 됨
+### http://localhost:8080/sample/trevari 이렇게 쳤을 때 sample/hello가 나오도록 해라
+### http://localhost:8080/sample/trevari 이렇게 쳤을 떄 Hello Trevari가 나오게 한다.
+### conf를 까봐라.
+자바 파일 만들고 이걸 클래스파일로 만들고 web.xml을 건드러야 마지막 미션을 수행할 수 있을 것이다~
