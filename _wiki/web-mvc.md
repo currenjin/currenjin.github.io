@@ -93,6 +93,17 @@ source.registerCorsConfiguration("/**", config);
 CorsFilter filter = new CorsFilter(source);
 ```
 
+## Test
+- Servlet API Mocks: Unit Test Controller
+- TestContext Framework
+- Spring MVC Test: Annotation 이 달린 Controller 를 테스트하기 위한 프레임워크.
+- Client side REST
+- WebTestClient
+
+### MockMvc
+- Spring MVC Application Test 지원
+- 자체적으로 요청을 수행하고, 응답을 확인하는 데 사용
+
 
 ## Mission
 
