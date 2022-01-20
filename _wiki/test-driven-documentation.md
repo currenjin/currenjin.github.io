@@ -1,6 +1,6 @@
 ---
 layout  : wiki
-title   : Checklist-Driven-Documentation( 주도 문서화)
+title   : Checklist-Driven-Documentation(체크리스트 주도 문서화)
 summary :
 date    : 2022-01-12 22:38:00 +0900
 updated : 2022-01-21 02:56:00 +0900
