@@ -11,7 +11,7 @@ regenerate: true
 
 * [[example]]
 * [[polymorphism]]
-* [[test-driven-documentation]]
+* [[CDD]]
 * [[code-deploy]]
 * [[annotation]]
 * [[TDD]]
