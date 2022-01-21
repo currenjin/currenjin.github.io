@@ -65,5 +65,3 @@ latex   : true
 - 널널하게 작성했을 듯
 - 되는 것만 체크할 수도 있음
 
-![image](https://user-images.githubusercontent.com/60500649/150398020-bb736efe-5720-4efe-b923-578bdd0bedf7.png)
-
