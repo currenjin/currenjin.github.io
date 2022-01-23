@@ -10,6 +10,8 @@ regenerate: true
 ## wiki items
 
 * [[example]]
+* [[fibonacci]]
+* [[think-of-test]]
 * [[polymorphism]]
 * [[CDD]]
 * [[code-deploy]]
