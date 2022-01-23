@@ -3,7 +3,7 @@ layout  : wiki
 title   : Think of Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-01-22 22:38:00 +0900
+updated : 2022-01-24 00:04:00 +0900
 tag     : tdd
 toc     : true
 public  : true
