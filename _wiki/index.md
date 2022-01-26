@@ -11,7 +11,7 @@ regenerate: true
 
 * [[example]]
 * [[fibonacci]]
-* [[think-of-test]]
+* [[test]]
 * [[polymorphism]]
 * [[CDD]]
 * [[code-deploy]]
