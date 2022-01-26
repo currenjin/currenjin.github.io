@@ -1,10 +1,10 @@
 ---
 layout  : wiki
-title   : Think of Test
+title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-01-25 11:46:00 +0900
-tag     : tdd
+updated : 2022-01-26 19:57:00 +0900
+tag     : test
 toc     : true
 public  : true
 parent  : [[how-to]]
@@ -13,7 +13,12 @@ latex   : true
 * TOC
 {:toc}
 
-# Think of Test
+# Test
+
+## 테스트란 무엇인가
+테스트(Test) : 평가하다
+
+## Think of Test
 
 1일 - 하루에 <br>
 1독 - 테스트에 관한 글을 읽습니다. <br>
