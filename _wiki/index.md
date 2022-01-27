@@ -11,6 +11,7 @@ regenerate: true
 
 * [[example]]
 * [[fibonacci]]
+* [[slack]]
 * [[test]]
 * [[polymorphism]]
 * [[CDD]]
