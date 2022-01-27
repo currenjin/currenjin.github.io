@@ -18,10 +18,8 @@ latex   : true
 ## 테스트란 무엇인가
 테스트(Test) : 평가하다
 
-## Tests
-
-### Test Interpretation
-**220127::trevari::member::application::MappingFinderTest**
+## Test Interpretation
+### **220127::trevari::member::application::MappingFinderTest**
 ```java
 @Test
 void find_by_product_option_id() {
@@ -32,9 +30,13 @@ void find_by_product_option_id() {
     assertThat(actual).isEqualTo(ANY_MAPPING);
 }
 ```
+**해석**<br>
 (1) ANY_PRODUCT_OPTION_ID, ANY_EVENTED_AT 을 통해 Mapping 객체를 가져옵니다.<br>
 (2) Mapping 객체는 ANY_MAPPING 과 비교하여 일치한 지 확인합니다.<br>
-ANY_MAPPING 을 의도적으로 반환해 ANY_MAPPING 이랑 비교하는게 의미없는 테스트라 생각됩니다.
+<br>
+**생각**<br>
+ANY_MAPPING 을 의도적으로 반환해 ANY_MAPPING 이랑 비교하는게 의미없는 테스트라 생각됩니다.<br>
+<br>
 
 ## Think of Test
 
