@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-01-28 00:10:00 +0900
+updated : 2022-01-28 00:25:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -42,7 +42,6 @@ ANY_MAPPING 을 의도적으로 반환해 ANY_MAPPING 이랑 비교하는게 의
 
 ## Think of Test
 
-1일 - 하루에 <br>
 1독 - 테스트에 관한 글을 읽습니다. <br>
 1기 - 글에 관한 생각을 기록합니다. <br>
 
