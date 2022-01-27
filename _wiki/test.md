@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-01-26 19:57:00 +0900
+updated : 2022-01-27 23:47:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -17,6 +17,23 @@ latex   : true
 
 ## 테스트란 무엇인가
 테스트(Test) : 평가하다
+
+## Tests
+
+### Test Interpretation
+```java
+@Test
+void find_by_product_option_id() {
+    given(sut.findBy(ANY_PRODUCT_OPTION_ID, ANY_EVENTED_AT)).willReturn(ANY_MAPPING);
+
+    Mapping actual = sut.findBy(ANY_PRODUCT_OPTION_ID, ANY_EVENTED_AT);
+
+    assertThat(actual).isEqualTo(ANY_MAPPING);
+}
+```
+(1) ANY_PRODUCT_OPTION_ID, ANY_EVENTED_AT 을 통해 Mapping 객체를 가져옵니다.<br>
+(2) Mapping 객체는 ANY_MAPPING 과 비교하여 일치한 지 확인합니다.<br>
+ANY_MAPPING 을 의도적으로 반환해 ANY_MAPPING 이랑 비교하는게 의미없는 테스트라 생각됩니다.
 
 ## Think of Test
 
