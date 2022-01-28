@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-01-28 00:25:00 +0900
+updated : 2022-01-28 22:05:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -30,7 +30,7 @@ void find_by_product_option_id() {
     assertThat(actual).isEqualTo(ANY_MAPPING);
 }
 ```
-_**해석**<br>
+_**해설**<br>
 (1) sut.findBy 메소드가 호출될 때, ANY_MAPPING 을 반환하도록 합니다.<br>
 (2) ANY_PRODUCT_OPTION_ID, ANY_EVENTED_AT 을 통해 Mapping 타입의 객체를 가져옵니다. 이때, ANY_MAPPING 을 반환받습니다.<br>
 (3) Mapping 타입의 객체는 ANY_MAPPING 과 비교하여 일치한 지 확인합니다.<br>
@@ -38,6 +38,25 @@ _**해석**<br>
 **생각**<br>
 ANY_MAPPING 을 의도적으로 반환해 ANY_MAPPING 이랑 비교하는게 의미없는 테스트라 생각됩니다.<br>_
 
+### **220128::trevari::member::domain::GeneralServiceTerminationSpecificationTest**
+```java
+@Test
+void 해지불가_이전에만_만족한다() {
+    //1-----2------3-<-해지불가일 ---
+    given(period.getImpossibleTerminatedAt())
+            .willReturn(localDate(_2021, _1, _3));
+
+    assertThat(sut.isSatisfy(localDate(_2021, _1, _2))).isTrue();
+    assertThat(sut.isSatisfy(localDate(_2021, _1, _3))).isFalse();
+    assertThat(sut.isSatisfy(localDate(_2021, _1, _4))).isFalse();
+}
+```
+_**해설**<br>
+(1) 누군가 해지 불가일을 가져오려고 하면, 2021-01-03 을 반환합니다.<br>
+(2) 각 날짜별로 해지가 가능 여부를 올바르게 반환하는지 확인합니다. (2021-01-02, 2021-01-03, 2021-01-04)<br>
+(3) 해지 불가일이 지나지 않았다면, 해지가 가능합니다.<br>
+(4) 해지 불가일이 지났다면, 해지가 불가능합니다.<br>
+<br>
 
 
 ## Think of Test
