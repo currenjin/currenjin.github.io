@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-01-28 22:05:00 +0900
+updated : 2022-01-29 22:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -57,6 +57,38 @@ _**해설**<br>
 (3) 해지 불가일이 지나지 않았다면, 해지가 가능합니다.<br>
 (4) 해지 불가일이 지났다면, 해지가 불가능합니다.<br>_
 
+### **220129::trevari::member::domain::ServiceRunningContextTerminateTest**
+```java
+private static final LocalDateTime ANY_LOCAL_DATE_TIME = localDate(2021, 1, 1);
+
+@Mock
+ServiceRunningPeriod definition;
+
+ServiceRunningContext sut;
+
+@BeforeEach
+void setUp() {
+    sut = new ServiceRunningContext(ANY_SERVICE_ID, Times.of(1), Times.ZERO, AVAILABLE, definition, null, null);
+
+    //초기 상태
+    assertThat(sut.isTerminated()).isFalse();
+}
+
+@Test
+void 여러번_해지해도_멱등하다() {
+
+    sut.terminate(ANY_LOCAL_DATE_TIME, alwaysTrue());
+    assertThat(sut.isTerminated()).isTrue();
+
+    sut.terminate(ANY_LOCAL_DATE_TIME, alwaysTrue()); // 멱등
+    assertThat(sut.isTerminated()).isTrue();
+}
+```
+_**해설**<br>
+(1) ServiceRunningContext(이하 SRC)을 해지합니다.<br>
+(2) 해지 여부를 확인할 때, 해지가 항상 가능하도록 합니다.<br>
+(3) SRC 해지가 되었는지 확인합니다.<br>
+(4) 1-3 번을 다시한 번 수행한 뒤에도 해지된 상태인지 확인합니다.<br>_
 
 ## Think of Test
 
