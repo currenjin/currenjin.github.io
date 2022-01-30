@@ -95,6 +95,28 @@ terminate 메소드 호출 시 전달하는 인자에 ANY_LOCAL_DATE_TIME, alway
 저의 경우에는, 해당 인자를 넘기는 게 어떤 의미인지 바로 파악되지 않았습니다.<br>
 terminate 메소드를 까 본 후에 날짜와 해지가 가능하도록 하는 specification 을 넘긴다는 사실을 알았습니다.<br>_
 
+### **220130::trevari::member::domain::ServiceStateChangedEventTest**
+```java
+@Test
+void 서비스가_해지되면_상태변경_이벤트를_발행한다() {
+    Elsa.freeze(purchasedAt);
+
+    member.terminate();
+
+    DomainEvent event = DomainEventFinder.occurredDomainEventEnvelop(member, ServiceStateChangedEvent.class);
+
+    ServiceStateChangedEvent payload = event.getPayload(ServiceStateChangedEvent.class);
+    assertThat(payload.getMembershipId()).isEqualTo(MEMBERSHIP.getId());
+    assertThat(payload.getUserId()).isEqualTo(USER.getId());
+}
+
+```
+_**해설**<br>
+(1) 특정 시점으로 현재 시점을 고정합니다. (purchasedAt, 211106 20:00)<br>
+(2) 고정된 시점에서 멤버 해지를 시도합니다.<br>
+(3) 멤버 객체를 도메인 이벤트로 감쌉니다.<br>
+(4) 도메인 이벤트 내에 값이 감싸기 위한 객체 내 값과 일치한 지 확인합니다. (membership id, user id)<br>_
+
 
 ## Think of Test
 
