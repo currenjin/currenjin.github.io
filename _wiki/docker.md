@@ -3,7 +3,7 @@ layout  : wiki
 title   : Docker
 summary :
 date    : 2022-01-31 11:00:00 +0900
-updated : 2022-01-31 12:00:00 +0900
+updated : 2022-01-31 13:00:00 +0900
 tag     : container
 toc     : true
 public  : true
@@ -1671,6 +1671,146 @@ Docker Hub Registry에서 확인을 해보니 이미지가 잘 업로드가 됐�
 	
 이 이미지를 내려받고 시다면 별도 로그인 필요 없이 hyun0524e/commit_image:0.0을 입력하면 됩니다!
 
-**이 외에도 사설 레지스트리를 구축해 이미지를 다루는 방법도 있는데 따로 포스팅으로 다룰 예정이에요.**
+## Docker command
+명령은 기본적으로 "docker [Options] COMMAND"로 작성한다.
 
-**궁금한 점이나 어떤 부분에 대한 내용이 부족하다 싶은 것은 댓글 부탁드려요. 감사합니다 :)**
+세세한 옵션에 대해서 정확하게 알고 싶다면 다음 명령어로 도움말을 확인한다.
+
+```
+# docker help
+```
+
+### 컨테이너 관리 
+**Docker Container 생애주기**
+
+: 실행 중, 정지, 파기
+
+실행 중 : Dockerfile에 포함된 CMD 및 ENTRYPOINT 인스트럭션에 정의된 애플리케이션이 실행
+
+정지 : 사용자가 명시적으로 정지하거나 컨테이너에서 실행된 애플리케이션이 종료된 경우 컨테이너가 종료
+
+파기 : 정지 상태의 컨테이너는 명시적으로 파기하지 않는 이상 디스크에 그대로 남아 있는 상태(완전 삭제 바람)
+
+
+#### 컨테이너 생성 및 실행
+```
+docker container run [Options] Image(or Image ID)[:tag] [command]
+ex) docker run new:latest
+	
+-> 도커 이미지로부터 컨테이너를 생성하고 실행하는 명령이다.
+-d : 백그라운드로 컨테이너 실행
+-p : 포트포워딩(-p 9999:8888)
+-i : 컨테이너 실행 시 컨테이너 쪽 입력과의 연결을 유지
+-t : 유사 터미널 기능을 활성화한다.(-i 옵션에 의존)
+--rm : 컨테이너 종료 시 자동으로 파기
+--name : 컨테이너에 이름 설정(--name nice)
+```
+
+#### 컨테이너 정지
+```
+docker container stop [Container ID 또는 Container 명]
+```
+
+#### 컨테이너 재시작
+```
+docker container restart [Container ID 또는 Container 명]
+```
+
+#### 컨테이너 제거(또는 파기)
+```
+docker container rm [Container ID 또는 Container 명]
+```
+
+#### 컨테이너 표준 출력 연결하기
+```
+docker logs [Options] [컨테이너ID 또는 컨테이너명]
+
+-> 실행 중인 특정 도커 컨테이너의 표준 출력 내용을 확인할 수 있다.
+-f : 새로 출력되는 표준 출력 내용을 계속 보여준다.(실시간)
+```
+
+#### 컨테이너에서 명령 실행하기
+```
+docker exec [Options] [컨테이너ID 또는 컨테이너명]
+ex) docker exec -it echo nice!
+
+-> 실행 중인 컨테이너에서 원하는 명령을 실행할 수 있다.
+-it 등 run과 밀접한 옵션들을 사용 가능함.
+```
+
+#### 컨테이너 파일 복사하기
+```
+docker cp [Options] [컨테이너:원본파일] [컨테이너:대상파일]
+ex) docker cp test:/test.txt .
+```
+
+### 운영 관리 명령어
+#### 컨테이너 및 이미지 일괄 파기
+```
+docker [container/image] prune [Options]
+ex) docker container prune
+
+-> 정지된 컨테이너, 사용 중인 컨테이너가 없는 이미지 일괄 삭제
+```
+
+#### 사용 현황 확인하기
+```
+docekr stats [Options] [대상 Container ID]
+-> top 명령어와 비슷한 느낌
+```
+
+### 이미지 관리 명령어
+#### 이미지 빌드
+```
+docker image build -t Image:Tag Dockerfile_path
+ex) docker image build -t image:latest .
+
+-> Dockerfile이 존재하지 않으면 실행이 불가
+
+-t : 이미지명과 tag명을 붙이는 것
+-f : Dockerfile이 다른 파일명으로 되어있을 시에 지정하는 옵션
+--pull : 베이스 이미지를 강제로 받아오는 옵션(--pull=true)
+```
+
+#### 이미지 검색
+```
+docker search [Options] [검색 키워드]
+ex) docker search ubuntu
+
+-> 해당 키워드와 관련된 레포지터리 목록을 볼 수 있다.(네임스페이스가 생략된 이미지는 공식 레포지토리)
+
+--limit : 최대 검색 건수 제한(--limit 5)
+```
+
+#### 이미지 받기
+```
+docker pull [Options] Repo[:Tag]
+ex) docker pull ubuntu:latest
+
+-> 인자로 지정한 레포지토리명과 태그는 Docker Hub에 존재해야 한다.
+```
+
+#### 보유한 이미지 조회
+```
+docker images Repo[:Tag]
+ex) docker images 또는 docker image ls
+
+-> Docker Daemon이 동작하는 HostOS에 저장된 Docker Image 목록 출력
+```
+
+#### 이미지에 태그 부여
+```
+docker image tag 기존이미지명[:태그] 새이미지명[:태그]
+ex) docker image tag new:latest renew:1.0
+
+-> Docker Image의 특정 버전에 태그를 붙일 때 사용
+```
+
+#### 이미지 외부에 공개
+```
+docker image push [Options] Repo[:Tag]
+ex) docker image push new:latest
+
+-> 하기에 앞서 이미지의 네임스페이스를 먼저 변경(자신 혹은 기관이 소유한 Repo에만 이미지 등록할 수 있다.)
+```
+
