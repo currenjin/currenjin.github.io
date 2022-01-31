@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-01-31 10:30:00 +0900
+updated : 2022-01-31 22:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -116,6 +116,33 @@ _**해석**<br>
 (2) 고정된 시점에서 멤버 해지를 시도합니다.<br>
 (3) 멤버 객체를 도메인 이벤트로 감쌉니다.<br>
 (4) 도메인 이벤트 내에 값이 감싸기 위한 객체 내 값과 일치한 지 확인합니다. (membership id, user id)<br>_
+
+### **220131::trevari::member::domain::ServiceRunningContextUseTest**
+```java
+ServiceRunningContext sut;
+
+@BeforeEach
+void setUp() {
+    sut = new ServiceRunningContext(ANY_SERVICE_ID, Times.of(1), Times.ZERO, AVAILABLE, definition, null, null);
+}
+
+@Test
+void 해지가되면_사용할수없다() {
+    //해지처리
+    whenTerminated();
+
+    assertThatThrownBy(() -> sut.use(ANY_LOCAL_DATE_TIME, alwaysTrue())).hasMessageContaining("Service already Terminated when usedAt is");
+}
+
+private void whenTerminated() {
+    sut.terminate(ANY_LOCAL_DATE_TIME, alwaysTrue());
+    assertThat(sut.isTerminated()).isTrue();
+}
+```
+_**해석**<br>
+(1) ServiceRunningContext(이하 SRC) 의 상태를 해지로 변경합니다.<br>
+(2) SRC 사용 시도를 합니다.<br>
+(3) 이미 해지되어 사용할 수 없다는 예외를 확인합니다.<br>_
 
 
 ## Think of Test
