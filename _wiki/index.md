@@ -20,6 +20,7 @@ regenerate: true
 * [[polymorphism]]
 * [[CDD]]
 * [[code-deploy]]
+* [[s3]]
 * [[annotation]]
 * [[TDD]]
 * [[basic-java]]
