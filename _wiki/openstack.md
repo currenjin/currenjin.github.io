@@ -14,6 +14,9 @@ latex   : true
 {:toc}
 
 # Openstack
+## Introduction
+![image](https://user-images.githubusercontent.com/60500649/151739871-26778308-509d-4940-8be0-827ebbcf5ca8.png)
+
 ## Installation
 
 |   **Openstack을 설치하기 위한 최소 사양**   |  |
@@ -38,6 +41,9 @@ latex   : true
 ```
 # vi /etc/hosts
 ```
+![image](https://user-images.githubusercontent.com/60500649/151739894-424144be-7c91-4c77-9b5d-59336194c1f9.png)
+
+
 
 #### Stack User 생성
 'stack'이라는 유저를 생성해 'sudo'명령 사용 시 비밀번호를 요구하지 않도록 설정했다.
@@ -64,6 +70,8 @@ $ cd ./devstack/
 
 // (샘플파일은 '/devstack/sample/local.conf'에 해당한다.)
 ```
+![image](https://user-images.githubusercontent.com/60500649/151739920-c28f63bc-abea-4877-af89-f88f67b65431.png)
+
 
 위와 같이 환경을 설정해준다.
 
@@ -90,18 +98,20 @@ HOST_IP : Openstack을 서비스 할 HOST IP를 나타낸다.
 
 설치가 정상적으로 완료되면 아래와 같은 내용이 출력될 것이다.
 
-[](https://m.blog.naver.com/hyun0524e/221869319612#)[##_Image|t/cfile@995F3A385EA626B92F|CDM|1.3|{"originWidth":800,"originHeight":409,"width":800,"height":409}_##]
+![image](https://user-images.githubusercontent.com/60500649/151739932-c8a41437-7e40-4536-affe-574e9b3dd087.png)
+
 
 **horizon site, keystone site 등 기본적인 서비스들의 웹 주소가 출력된다.**
 
 **# Devstack이 설치될 경로를 지정하지 않으면 `Default Path : '/opt/[username]'`**
 
-[##_Image|t/cfile@999FC53A5EA626BC2D|CDM|1.3|{"originWidth":800,"originHeight":538,"style":"alignCenter","width":800,"height":538}_##]
+#### 웹의 로그인 화면
+![image](https://user-images.githubusercontent.com/60500649/151739948-ed8b722c-0654-44cb-85db-cfb4e1c85e20.png)
 
-웹의 로그인 화면
+
+#### 대시보드
+![image](https://user-images.githubusercontent.com/60500649/151740012-202c2cc8-6c52-4090-87bb-902836bb6502.png)
 
 
-[##_Image|t/cfile@999E483A5EA626BC2D|CDM|1.3|{"originWidth":800,"originHeight":406,"style":"alignCenter","width":800,"height":406}_##]
-
-**위 대쉬보드를 통해 거의 모든 설정을 총괄할 수 있다고 보면 된다.**
+위 대쉬보드를 통해 거의 모든 설정을 총괄할 수 있다고 보면 된다.
 
