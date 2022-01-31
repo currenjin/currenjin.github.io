@@ -47,7 +47,7 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
 
 확인해보니 일반 호스트와 다를게 없네요? **eth0, lo Interface**와 **172.17.0.0/16** 대역을 갖고 있음을 확인 했어요.
 
-**'172.17.0.2'**는 해당하는 Subnet(172.17.0.0/16)에서 컨테이너에 **순차적으로 IP를 할당**하게 되어있어요.
+**'172.17.0.2'** 는 해당하는 Subnet(172.17.0.0/16)에서 컨테이너에 **순차적으로 IP를 할당**하게 되어있어요.
 
 또, 재시작 시 변경될 수도 있답니다.
 
@@ -100,7 +100,7 @@ veth23890e1 Link encap:Ethernet  HWaddr 32:14:59:53:c6:30
 
 **end33, lo, veth.. 그리고 docker0 Interface가 확인되었어요.**
 
-생성된 가상 인터페이스는 **docker0이라는 'Bridge'**도 존재하는데, 이 인터페이스는 **각 veth...와 바인딩 되어 호스트 외부 인터페이스와 이어주는 역할**을 해요.
+생성된 가상 인터페이스는 **docker0이라는 'Bridge'** 도 존재하는데, 이 인터페이스는 **각 veth...와 바인딩 되어 호스트 외부 인터페이스와 이어주는 역할**을 해요.
 
 아래 구성을 보시면 이해가 더 쉬울겁니다!
 
@@ -323,7 +323,7 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
 
 다른 컨테이너의 네트워크 네임스페이스 환경을 공유할 수 있어요. 공유되는 속성은 내부 IP, 네트워크 인터페이스의 MAC주소 등이에요.
 
-컨테이너를 생성할 때 **--net 옵션으로 container:[container ID]**를 입력해주면 돼요!
+컨테이너를 생성할 때 **--net 옵션으로 container:[container ID]** 를 입력해주면 돼요!
 
 ```
 docker run -itd --name ubuntu_test1 ubuntu
@@ -1428,7 +1428,7 @@ ubuntu    Ubuntu is a Debian-based Linux operating sys…   11157       [OK]
 
 ```
 # docker run -it --name hello alpine
-/ # echo hello! > hello.txt
+# echo hello! > hello.txt
 ```
 
 컨테이너를 생성할 때 사용한 이미지는 **alpine linux입니다.** 크기가 매우 경량화돼있는 장점이 있죠.
@@ -1603,7 +1603,7 @@ docker commit 명령어로 컨테이너를 이미지로 만들면 컨테이너�
 
 도커 허브는 도커 이미지를 저장하기 위한 클라우드 공간이라고 생각하면 이해하기 쉬워요. 사용자는 그저 이미지를 올리고(push) 내려받고(pull) 하면 되기에 간단하죠. Docker Hub에는 비공개(Private) 저장소가 있지만 일정 비용을 지불하지 않으면 공개(Public) 저장소를 이용해야 하죠.
 
-**[클릭](https://hub.docker.com)**하면 도커 허브로 이동합니다!. 해당 사이트에서도 docker search 명령어를 입력할 때처럼 이미지를 검색할 수 있답니다.
+**[클릭](https://hub.docker.com)** 하면 도커 허브로 이동합니다!. 해당 사이트에서도 docker search 명령어를 입력할 때처럼 이미지를 검색할 수 있답니다.
 
 ![image](https://user-images.githubusercontent.com/60500649/151732292-2882dc07-ea29-4af6-9ea2-1c6ffcf5e891.png)
 	
