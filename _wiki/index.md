@@ -11,6 +11,7 @@ regenerate: true
 
 * [[example]]
 * [[docker]]
+* [[kubernetes]]
 * [[docker-compose]]
 * [[docker-swarm]]
 * [[dockerfile]]
