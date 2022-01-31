@@ -17,6 +17,7 @@ regenerate: true
 * [[dockerfile]]
 * [[openstack]]
 * [[fibonacci]]
+* [[graphql]]
 * [[slack]]
 * [[test]]
 * [[polymorphism]]
