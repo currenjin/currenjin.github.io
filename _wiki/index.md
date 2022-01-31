@@ -10,6 +10,7 @@ regenerate: true
 ## wiki items
 
 * [[example]]
+* [[docker]]
 * [[fibonacci]]
 * [[slack]]
 * [[test]]
