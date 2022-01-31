@@ -30,7 +30,7 @@ latex   : true
 
 **Ubuntu 환경에서 Network 환경 설정을 마친 상태를 기준으로 설명한다. (Single Node)**
 
-#### 방화벽 비활성화**
+#### 방화벽 비활성화
 ```
 # systemctl stop ufw  // 방화벽 중지
 # systemctl disable ufw  // 재시작 시 방화벽 자동 실행 비활성화
