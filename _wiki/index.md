@@ -14,6 +14,7 @@ regenerate: true
 * [[docker-compose]]
 * [[docker-swarm]]
 * [[dockerfile]]
+* [[openstack]]
 * [[fibonacci]]
 * [[slack]]
 * [[test]]
