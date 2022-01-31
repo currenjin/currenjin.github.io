@@ -17,17 +17,9 @@ latex   : true
 ## Docker Network
 ### Docker Network 구조와 종류는 어떨까? - 1/2
 
-[##_Image|kage@bFJcA2/btqEu7e9IuM/eps0kk0bOsaQ2c3VxVD0G0/img.jpg|CDM|1.3|{"originWidth":255,"originHeight":198,"style":"floatLeft","mobileStyle":"widthContent"}_##]
+#### Docker Network의 구조를 파악해보자 !
 
-많은 엔지니어, 개발자들이 사용하는 도커임에도 **추상적인 네트워크**에 대해 이해가 어려울 때가 많을 거에요.
-
-**그런 분들을 위해**
-
-이 두루뭉실한 네트워크 구조와 종류를 확실하게 파악하는 것이 포스팅의 목적이에요.
-
-**- Docker Network의 구조를 파악해보자 !**
-
-**컨테이너 내부**에서 **인터페이스****를 확인** 해봅시다.
+**컨테이너 내부**에서 **인터페이스 를 확인** 해봅시다.
 
 ```
 docker exec [container-id] ifconfig
@@ -75,7 +67,7 @@ Docker는 각 컨테이너의 외부 연결을 위해 **컨테이너마다 가�
 
 veth : virtual ethernet
 
-컨테이너를 생성한 **'Host'**에서 **인터페이스를 확인**해봅시다.
+컨테이너를 생성한 **'Host'** 에서 **인터페이스를 확인** 해봅시다.
 
 ```
 ifconfig
@@ -112,7 +104,8 @@ veth23890e1 Link encap:Ethernet  HWaddr 32:14:59:53:c6:30
 
 아래 구성을 보시면 이해가 더 쉬울겁니다!
 
-[##_Image|kage@WOq13/btqEtEejsXJ/7Ltae9OLbXTBXkrbz05Pr0/img.png|CDM|1.3|{"originWidth":574,"originHeight":313,"style":"alignLeft","mobileStyle":"widthContent"}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731540-318a5d2d-4687-49fa-af8a-f4e101042aa8.png)
+
 
 실제로 바인딩이 되었는지 확인
 
@@ -129,15 +122,7 @@ docker0         8000.0242bf83fa71       no              veth23890e1
 
 ### Docker Network 구조와 종류는 어떨까? - 2/2
 
-[##_Image|kage@25QLW/btqEALDfRfi/iHBqrKhEhZfYL4YpPMYI4K/img.jpg|CDM|1.3|{"originWidth":255,"originHeight":198,"style":"floatLeft","mobileStyle":"widthContent"}_##]
-
-많은 엔지니어, 개발자들이 사용하는 도커임에도 **추상적인 네트워크**에 대해 이해가 어려울 때가 많을 거에요.
-
-**그런 분들을 위해**
-
-이 두루뭉실한 네트워크 구조와 종류를 확실하게 파악하는 것이 포스팅의 목적이에요.
-
-**- Docker Network의 종류를 알아보자 !**
+#### Docker Network의 종류를 알아보자 !
 
 저번 포스팅에서 컨테이너를 생성하면 기본적으로 docker() 브리지를 통해 외부와 통신할 수 있는 환경을 사용할 수 있다는 설명을 드렸어요.
 
@@ -301,7 +286,8 @@ ex) 호스트 네트워크를 사용하는 컨테이너에서 웹 서버를 구�
 
 이런 구조를 그림으로 표현해보자면 이런 형식이지 않을까요?
 
-[##_Image|kage@dftSoQ/btqEA1eWOte/hKcyOqjrWwAxUhA5Ph9Nik/img.png|CDM|1.3|{"originWidth":234,"originHeight":193,"style":"alignLeft","mobileStyle":"widthContent"}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731632-3ba72c10-e0f3-4944-a4b1-15385483c949.png)
+
 
 **None Network**
 
@@ -378,11 +364,10 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
 
 이해하기 쉽게 그림으로 표현하자면 이런 모습이랍니다.
 
-[##_Image|kage@IMkGJ/btqEBnV9CU3/4c6A9AiHV87cbTtKKIBz4K/img.png|CDM|1.3|{"originWidth":352,"originHeight":344,"style":"alignLeft","mobileStyle":"widthContent","width":251,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731649-748e41d0-67e8-4ee8-9c84-2029807ac72c.png)
+
 
 ## Docker Volume
-
-[##_Image|kage@HRx30/btqFKmv7HYI/lVTv7YHoslc19djK0o7v5k/img.png|CDM|1.3|{"originWidth":541,"originHeight":354,"style":"floatRight","mobileStyle":"widthContent","width":259}_##]
 
 우리는 도커를 사용하면서 약간의 불편함을 겪었어요.
 
@@ -396,7 +381,7 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
 
 이 구성은 아래 그림과 같은 구조를 연상시킨답니다.
 
-[##_Image|kage@b2Sjiv/btqFINupsFh/KUN0TQmgOO0ECjdRjNRiPK/img.png|CDM|1.3|{"originWidth":463,"originHeight":185,"style":"alignLeft","mobileStyle":"widthContent"}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731152-0e3094f2-6efa-4088-97f2-392fc5e5ffa1.png)
 
 이미 생성된 이미지는 어떠한 경우로도 변경되지 않으며, 컨테이너 계층에 원래 이미지에서 변경된 파일시스템 등을 저장합니다. (httpd log 처럼 말이죠)
 
@@ -470,7 +455,7 @@ test.txt
 
 -v 옵션으로 컨테이너와 호스트의 볼륨을 공유한 것을 그림으로 표현했어요.
 
-[##_Image|kage@bvid7r/btqFJrdo8sr/5KUe4bXFNusLTqxXGFdo1K/img.png|CDM|1.3|{"originWidth":483,"originHeight":313,"style":"alignLeft","mobileStyle":"widthContent","width":300,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731230-029708d1-6f6b-40f3-812a-9ed564b111c6.png)
 
 컨테이너와 호스트 간의 디렉토리를 공유하는 것이 아닌 완전히 같은 디렉토리입니다.
 
@@ -507,7 +492,8 @@ test.txt
 
 이런 구조를 그림으로 나타내면 아래와 같겠군요!
 
-[##_Image|kage@DUFT5/btqFIHOPt2A/J7kWqsCHp21qcmcOlDo8Nk/img.png|CDM|1.3|{"originWidth":584,"originHeight":274,"style":"alignLeft","mobileStyle":"widthContent","width":403,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731250-963398f8-86f8-4519-b622-670240e72df3.png)
+
 
 그림처럼 여러 컨테이너가 동일한 컨테이너에 --volumes-from 옵션을 사용함으로써 볼륨을 공유해 사용할 수 있어요.
 
@@ -571,7 +557,8 @@ hello, volume!
 
 이 구조를 그림으로 표현하면 아래와 같아요.
 
-[##_Image|kage@Kal9g/btqFKL95zsK/uCsiAXcIckI8mkXOUmCK90/img.png|CDM|1.3|{"originWidth":577,"originHeight":264,"style":"alignLeft","mobileStyle":"widthContent","width":457,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731263-39435ffb-69f1-42c2-a3dc-dd88390e1f8a.png)
+
 
 볼륨은 디렉터리 하나에 상응하는 단위로서 도커 엔진에서 직접 관리하죠.
 
@@ -649,8 +636,6 @@ docker volume rm $(docker volume list -q)
 ### Container Logging (1/4)
 
 컨테이너 내부에서 어떤 일이 일어나는지 아는 것은 디버깅뿐만 아니라 운영 측면에서도 굉장히 중요해요.
-
-[##_Image|kage@Y2pmR/btqFNhPqvUH/dLoyvZ7jwkjKDn4OUXLiu0/img.png|CDM|1.3|{"originWidth":262,"originHeight":224,"style":"floatLeft","mobileStyle":"widthContent","width":185,"height":null}_##]
 
 그래서 Application Level에서 로그가 기록되도록 개발해 별도의 로깅 서비스를 쓸 수도 있습니다.
 
@@ -751,15 +736,13 @@ max-file : log file의 개수
 
 ### Container Logging - (2/4)
 
-[##_Image|kage@cU2fYp/btqFOhOg3r3/kWWZAb9Rv1Q25TcQmHrEhK/img.png|CDM|1.3|{"originWidth":262,"originHeight":224,"style":"floatLeft","mobileStyle":"widthContent","width":185,"height":null}_##]
-
 도커는 컨테이너의 로그를 기본적으로 Json-file로 저장합니다.
 
 **그 밖에도 각종 로깅 드라이버를 사용하도록 설정해 컨테이너의 로그를 수집**할 수도 있죠.
 
 **우리가 다뤄볼 것은 syslog, fluentd, awslogs 입니다.**
 
-**Syslog**
+#### Syslog
 
 **컨테이너의 로그는 JSON뿐만 아니라 syslog로 보내 저장하도록 설정**할 수 있습니다.
 
@@ -798,7 +781,7 @@ Jul 18 14:51:21 master fd25400ee4c4[3225]: syslogtest
 
 이런 동작을 가능하게하는 rsyslog를 사용해 중앙 컨테이너로 로그를 저장해 볼거에요.
 
-**rsyslog**
+#### rsyslog
 
 ```
 docker run -it \
@@ -879,11 +862,11 @@ $ docker exec -it rsyslog_server tail /var/log/mail.log
 Jul 18 14:32:31 192.168.99.100 maillog[2599]: syslog test!#015
 ```
 
+#### etc
+
 **지금까지 사용했던 syslog와 rsyslog는 유닉스 계열 OS에서 사용할 수 있는 가장 기본적인 Logging 방법이었어요. 하지만 별도의 UI를 제공하지는 않지만 logentries, LogAnalyzer 등과 같은 로그 분석기와 연동하면 웹 인터페이스를 활용해 편리하게 로그를 확인할 수 있답니다.**
 
 ### Container Logging - (3/4)
-
-[##_Image|kage@CyBLY/btqFONe9IuC/ImryRT5kOdiqpNIqvUF90k/img.png|CDM|1.3|{"originWidth":262,"originHeight":224,"style":"floatLeft","mobileStyle":"widthContent","width":173,"height":null}_##]
 
 도커에서 컨테이너 로그를 수집할 때 각종 드라이버를 통해 다양한 방법으로 컨테이너의 로그를 수집할 수 있죠.
 
@@ -899,7 +882,8 @@ fluentd는 각종 로그를 수집하고 저장할 수 있는 기능을 제공�
 
 이제 우리는 실습을 통해 fluentd의 프로세스를 이해할거에요. 작업은 아래 시나리오를 기준으로 진행합니다!
 
-[##_Image|kage@9rS6w/btqFOi0IqdH/vopZuA9zVgCQgPZZSZfQR1/img.png|CDM|1.3|{"originWidth":673,"originHeight":256,"style":"alignLeft","mobileStyle":"widthContent","width":482,"height":null,"caption":"로그 수집 시나리오"}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731749-74a3094f-126f-4342-a04e-ca9e6d8ccdf1.png)
+
 
 fluentd와 mongoDB를 연동해 데이터를 저장하는 구조에요.
 
@@ -1001,13 +985,11 @@ access
 
 ### Container Logging - (4/4)
 
-[##_Image|kage@cemdXc/btqFOMAy01c/BAPAxxkNIA8veTXrROzxL0/img.png|CDM|1.3|{"originWidth":262,"originHeight":224,"style":"floatLeft","mobileStyle":"widthContent","width":173}_##]
-
 도커에서 컨테이너 로그를 수집할 때 각종 드라이버를 통해 다양한 방법으로 컨테이너의 로그를 수집할 수 있죠.
 
 이번에는 도커에서 제공하는 로깅 드라이버 중 awslogs를 사용해볼거에요!
 
-**awslogs**
+#### awslogs
 
 AWS(Amazon Web Service)에서는 로그 및 이벤트 등을 수집하고 저장해 시각적으로 보여주는 CloudWatch를 제공합니다!
 
@@ -1024,60 +1006,70 @@ CloudWatch를 사용하기 위해선 AWS 계정이 필요합니다! 가입은 �
 
 **1. CloudWatch에 해당하는 IAM 권한 생성**
 
-[##_Image|kage@pwKzb/btqFNqSU8k7/LHYeCBGZBVJ7RcL8STjCS1/img.png|CDM|1.3|{"originWidth":283,"originHeight":95,"style":"alignLeft","mobileStyle":"widthContent"}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731822-aa408839-b6ca-498d-92b2-f596711019e5.png)
+
 
 [IAM]를 클릭합니다.
-
-[##_Image|kage@AFASf/btqFNg38fQ5/5llF9UhAaUtDkPKAYqkKO0/img.png|CDM|1.3|{"originWidth":502,"originHeight":642,"style":"alignLeft","mobileStyle":"widthContent","width":263,"height":null}_##]
+	
+![image](https://user-images.githubusercontent.com/60500649/151731841-9ed11b85-c9a6-4c45-9b52-1ef9170f4546.png)
+	
 
 사이드바의 [역할]탭을 클릭하고 [역할 만들기]를 통해 새로운 IAM 권한을 생성해줄게요.
 
-[##_Image|kage@t5ksM/btqFNQDEoky/Ezqf16OMzn8xQUwPo0S990/img.png|CDM|1.3|{"originWidth":1230,"originHeight":485,"style":"alignLeft","mobileStyle":"widthContent","width":540,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731866-0802c4c9-3495-4b73-888b-3cd23c37966d.png)
+
 
 EC2를 선택한 뒤 [다음 : 권한]을 클릭해주세요.
 
-[##_Image|kage@VEy7z/btqFN1Stwmp/UVhYzFphDs8FWbjRMz0klk/img.png|CDM|1.3|{"originWidth":1239,"originHeight":477,"style":"alignLeft","mobileStyle":"widthContent","width":548,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731890-5db0c28d-7043-46ba-a183-137470bf3e39.png)
+
 
 정책 필터에서 CloudWatchFullAccess를 입력해 선택해주고 [다음 : 태그]를 클릭해줄게요.
 
 태그 항목에서는 키와 값을 입력할 수 있는데, 선택사항이므로 저는 패스하겠습니다. [다음 : 검토] 클릭
 
-[##_Image|kage@biRSSD/btqFNFWDRly/gI0KWEQsM1ecPRf5eNGlt0/img.png|CDM|1.3|{"originWidth":1229,"originHeight":438,"style":"alignLeft","mobileStyle":"widthContent","width":546,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731915-0bbcd1ae-4f3d-4c7d-a86c-99969167c600.png)
+
 
 IAM 역할의 이름을 지정해주고 [역할 만들기]를 클릭해 새로운 역할 생성을 마무리합니다.
 
 **2. Log Group 생성**
 
-[##_Image|kage@clmYCi/btqFNgiJ8Hc/6mgXAAb9XlndWajzwQeQM0/img.png|CDM|1.3|{"originWidth":244,"originHeight":110,"style":"alignLeft","mobileStyle":"widthContent"}_##]
-
+![image](https://user-images.githubusercontent.com/60500649/151731931-1710bf9b-1c23-4de3-ae2f-77589748d614.png)
+	
 [관리 및 거버넌스]에서 [CloudWatch]를 클릭할게요.
 
-[##_Image|kage@cP6Qr8/btqFNgbYEdm/3IKiLtPrKXuwrD6IQ1kho1/img.png|CDM|1.3|{"originWidth":532,"originHeight":430,"style":"alignLeft","mobileStyle":"widthContent","width":304,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731942-e9787dda-c7a2-4781-bbb1-67906e4a4dde.png)
 
+	
 사이드바에서 [로그 그룹]을 클릭한 뒤 [로그 그룹 생성]을 통해 새로운 로그 그룹을 만들어봅시다.
 
-[##_Image|kage@8jtZT/btqFMHgQtIK/Q2Q9114lkHrZFAmS3zEhI0/img.png|CDM|1.3|{"originWidth":183,"originHeight":124,"style":"alignLeft","mobileStyle":"widthContent"}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731958-03834bc5-c2be-4a66-ad89-88e2b7ea96df.png)
 
+	
 **3. Log Group에 LogStream 생성**
 
 생성된 로그 그룹의 이름을 클릭해 로그 스트림을 생성합니다.
 
-[##_Image|kage@bVw9cb/btqFN3bJqZW/lY9whTcSMAavZ7Z7wQB3hk/img.png|CDM|1.3|{"originWidth":556,"originHeight":193,"style":"alignLeft","mobileStyle":"widthContent","width":406,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151731992-da057d07-3fbe-4b44-b7b4-f239585e3a34.png)
+
 
 [로그 스트림] 탭의 [로그 스트림 생성]을 클릭해주고 이름을 지정해줍시다.
 
-[##_Image|kage@x0kvj/btqFONztIPF/ATskrPc66JfxuTYjRRbkak/img.png|CDM|1.3|{"originWidth":214,"originHeight":103,"style":"alignLeft","mobileStyle":"widthContent"}_##]
+![image](https://user-images.githubusercontent.com/60500649/151732018-ed254716-88d2-43f6-ba1e-7dbe7084f922.png)
 
-[##_Image|kage@bON1AH/btqFMHOFmJU/XMc6j60sNyyNE5w94DyWe1/img.png|CDM|1.3|{"originWidth":929,"originHeight":255,"style":"alignLeft","mobileStyle":"widthContent","width":525,"height":null}_##]
-
+![image](https://user-images.githubusercontent.com/60500649/151732024-6f3877ac-1206-41fe-9030-40e9b9acd2e1.png)
+	
+	
 생성은 했지만 아직 컨테이너에 대한 로그를 전송하도록 설정하진 않았기에 저장되어있진 않아요.
 
 **4. CloudWatch의 IAM 권한을 사용할 수 있는 EC2 인스턴스 생성과 로그 전송**
 
 EC2 인스턴스에서 아까 생성했던 IAM 권한을 추가해야해요.
 
-[##_Image|kage@mUr6f/btqFN3v09Rd/TiWkkOCs4KXmGLr79ryiOK/img.png|CDM|1.3|{"originWidth":847,"originHeight":124,"style":"alignLeft","mobileStyle":"widthContent","width":478,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151732033-2a139cc2-8770-41b4-a7b6-8972c5e21c4e.png)
 
+	
 [단계 3: 인스턴스 세부 정보 구성]에서 IAM 역할을 지정해줍시다.
 
 IAM 권한을 사용할 수 있도록 설정한 EC2 인스턴스에서 옵션을 추가해 컨테이너를 생성해봐요.
@@ -1096,8 +1088,9 @@ logging driver로는 awslogs(CloudWatch)를 사용하고, Log Group과 Log Strea
 
 Region은 ap-northeast-2(서울)로 지정해요.
 
-[##_Image|kage@eTrRdi/btqFNhWhdSn/qRBASdxtLsVDZ39trNd6e1/img.png|CDM|1.3|{"originWidth":833,"originHeight":251,"style":"alignLeft","mobileStyle":"widthContent","width":462,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151732043-358436b5-8b38-4dc4-b2b1-15ecd5912e9a.png)
 
+	
 CloudWatch에 확인하고자 하는 Log가 정상적으로 수집되었음을 알 수 있습니다!
 
 **이렇게 수집한 로그를 통해 AWS에서는 다양한 작업을 할 수 있습니다.**
@@ -1106,8 +1099,6 @@ CloudWatch에 확인하고자 하는 Log가 정상적으로 수집되었음을 �
 
 ## Docker Resource
 ### Docker 컨테이너 자원 할당 제한
-
-[##_Image|kage@XFOz5/btqFT8rQCZT/U7cqkyCDe43W9zuEzfBeyK/img.png|CDM|1.3|{"originWidth":455,"originHeight":189,"style":"floatLeft","mobileStyle":"widthContent","width":342,"height":null}_##]
 
 우리가 컨테이너를 생성할 때 따로 옵션을 지정하지 않으면 컨테이너는 호스트의 자원을 제한 없이 쓸 수 있게 설정이 됩니다!
 
@@ -1410,8 +1401,9 @@ root@38a1ba0be9a6:/# dd if=/dev/zero of=test.out bs=1M count=10 oflag=direct
 
 ---
 
-[##_Image|kage@bAdJyl/btqF5dyyoPf/W8QU48IEHiYFXyesbmnqZ1/img.png|CDM|1.3|{"originWidth":550,"originHeight":475,"style":"alignCenter","mobileStyle":"widthContent","width":356,"height":null,"caption":"Docker Hub &amp; Docker Engine"}_##]
+![image](https://user-images.githubusercontent.com/60500649/151732101-f9a060c2-95d0-4749-b04b-539213d21904.png)
 
+	
 #### **도커 허브**
 
 데비안/우분투에서 apt-get install 명령을 실행하면 apt 레포지터리에서 패키지를 내려받습니다. 레드햇에서 yum install 명령을 실행하면 yum 레포지터리에서 패키지를 내려받습니다.
@@ -1505,8 +1497,8 @@ alpine          latest         a24bb4013296     8 weeks ago         5.57MB
 
 이 내용을 알아보기 쉽게 그림으로 나타내볼게요.
 
-[##_Image|kage@cb8oQS/btqF5eYAOgG/2z5Cn4gOCXm8BrTwB8pYdK/img.png|CDM|1.3|{"originWidth":575,"originHeight":251,"style":"alignLeft","mobileStyle":"widthContent","width":362,"height":null}_##]
-
+![image](https://user-images.githubusercontent.com/60500649/151732129-226ae954-a4e8-4556-8fbb-8af030a685ab.png)
+	
 alpine linux 이미지와 hello:0.0 이미지가 서로 5.7MB라고 출력이 되어도 5.7MB 크기의 이미지가 각각 존재하는 것은 아니에요. 이미지를 커밋할 때 컨테이너에서 변경된 사항만 새로운 레이어로 저장하고, 그 레이어를 포함해 새로운 이미지를 생성하기 때문에 전체 이미지의 **실제 크기는 5.7MB + hello:0.0 변경 사항 크기**가 되죠.
 
 이런 레이어 구조는 docker history 명령으로 더욱 쉽게 확인할 수 있답니다.
@@ -1580,7 +1572,7 @@ Deleted: sha256:a24bb4013296f61e89ba57005a7b3e52274d8edd3ae2077d04395f806b63d83e
 alpine.tar 
 ```
 
-\-o 옵션은 추출될 파일명을 지정합니다.
+-o 옵션은 추출될 파일명을 지정합니다.
 
 alpine.tar 파일이 존재하는 것을 볼 수 있어요. 해당 이미지를 가지고 도커에 다시 로드하려면 **docker load** 명령어를 사용하면 됩니다!
 
@@ -1613,22 +1605,24 @@ docker commit 명령어로 컨테이너를 이미지로 만들면 컨테이너�
 
 **[클릭](https://hub.docker.com)**하면 도커 허브로 이동합니다!. 해당 사이트에서도 docker search 명령어를 입력할 때처럼 이미지를 검색할 수 있답니다.
 
-[##_Image|kage@de0F77/btqGgxv4sdJ/TscWUqFvQqrWswRhfexBP0/img.png|CDM|1.3|{"originWidth":929,"originHeight":576,"style":"alignCenter","mobileStyle":"widthContent","width":529,"height":null}_##]
-
+![image](https://user-images.githubusercontent.com/60500649/151732292-2882dc07-ea29-4af6-9ea2-1c6ffcf5e891.png)
+	
 이제 본격적으로 도커 허브에 이미지를 올리기 위해서 저장소를 생성할 거예요. 로그인은 필수입니다! \[Sign up\]을 클릭해 가입하면 돼요.
 
-가입이 됐다면 메인 페이지에서 오른쪽에 보이는 \[Create Repository\]를 클릭해 저장소를 생성할 거예요.
+가입이 됐다면 메인 페이지에서 오른쪽에 보이는 [Create Repository]를 클릭해 저장소를 생성할 거예요.
 
-[##_Image|kage@GhhVV/btqGdRJe7Af/QjOAL31dqkCDXFHsk28Oxk/img.png|CDM|1.3|{"originWidth":930,"originHeight":163,"style":"alignCenter","mobileStyle":"widthContent","width":631,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151732363-bdcc66fa-974a-4a75-8583-bbb960f94ec2.png)
 
-\[VIsibility\] 영역은 사용자가 접속할 수 있도록 Public으로 하느냐, 접속하지 못하도록 Private으로 하느냐를 선택합니다. 기본적으로 비공개 저장소는 1개만 무료지만 사용할 이유가 없으니 Public으로 선택할게요.
+	
+[VIsibility] 영역은 사용자가 접속할 수 있도록 Public으로 하느냐, 접속하지 못하도록 Private으로 하느냐를 선택합니다. 기본적으로 비공개 저장소는 1개만 무료지만 사용할 이유가 없으니 Public으로 선택할게요.
 
-[##_Image|kage@rQuVG/btqGewLqvZ2/goQRidDF5WJbhNoPyiK8W0/img.png|CDM|1.3|{"originWidth":905,"originHeight":461,"style":"alignCenter","mobileStyle":"widthContent","width":532,"height":null}_##]
+![image](https://user-images.githubusercontent.com/60500649/151732382-998dfcc0-9174-45ef-bcdf-2cb6edc98800.png)
 
+	
 생각할수록 놀라운 것 같아요! 이렇게 간단하게 저장소가 생성됐다는 게
 
-[##_Image|kage@bpv6cv/btqGbjtnQyH/zF2Lgr4QKrbBTb81NpPWA0/img.png|CDM|1.3|{"originWidth":857,"originHeight":336,"style":"alignCenter","mobileStyle":"widthContent","width":516,"height":null}_##]
-
+![image](https://user-images.githubusercontent.com/60500649/151732399-c83e7e07-fee0-47c7-a2a6-a726ac8f2a58.png)
+	
 이렇게 생성된 저장소에 이미지를 올려볼까요?
 
 ```
@@ -1673,9 +1667,9 @@ Login Succeeded
 
 Docker Hub Registry에서 확인을 해보니 이미지가 잘 업로드가 됐군요.
 
-[##_Image|kage@k6krX/btqGdEi5euu/cYLhoc3COsHqJwOV9SLlg1/img.png|CDM|1.3|{"originWidth":862,"originHeight":180,"style":"alignLeft","mobileStyle":"widthContent","width":543}_##]
-
-이 이미지를 내려받고 시다면 별도 로그인 필요 없이 hyun0524 e/commit\_image:0.0을 입력하면 됩니다!
+![image](https://user-images.githubusercontent.com/60500649/151732418-949f06dd-43fe-4c80-96ae-27c985f2fa9c.png)
+	
+이 이미지를 내려받고 시다면 별도 로그인 필요 없이 hyun0524e/commit_image:0.0을 입력하면 됩니다!
 
 **이 외에도 사설 레지스트리를 구축해 이미지를 다루는 방법도 있는데 따로 포스팅으로 다룰 예정이에요.**
 
