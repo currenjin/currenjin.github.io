@@ -3,7 +3,7 @@ layout  : wiki
 title   : Docker
 summary :
 date    : 2022-01-31 11:00:00 +0900
-updated : 2022-01-31 11:00:00 +0900
+updated : 2022-01-31 12:00:00 +0900
 tag     : container
 toc     : true
 public  : true
@@ -183,7 +183,7 @@ output:
 
 > **역시 아무런 설정 없이 컨테이너를 생성하면 docker() 브리지를 사용하겠죠?**
 
-**Bridge Network**
+#### Bridge Network
 
 저번 포스팅에서 설명한 **docker() 브리지와 비슷한 구조**에요. 브리지 네트워크는 **사용자가 새로 정의한 브리지를 각 컨테이너에 연결하는 네트워크 구조**랍니다. (마찬가지로 외부와 통신을 할 수 있죠!)
 
@@ -249,7 +249,7 @@ mybr
 
 mybr이라는 이름의 브리지 네트워크를 생성했어요! subnet 대역은 '192.168.0.0/24'를 사용하며, 할당에 대한 범위를 'prefix 25'만큼 주었고 게이트웨이는 '192.168.0.1'이 되겠네요.
 
-**Host Network**
+#### Host Network
 
 호스트 네트워크는 간단합니다.
 
@@ -289,7 +289,7 @@ ex) 호스트 네트워크를 사용하는 컨테이너에서 웹 서버를 구�
 ![image](https://user-images.githubusercontent.com/60500649/151731632-3ba72c10-e0f3-4944-a4b1-15385483c949.png)
 
 
-**None Network**
+#### None Network
 
 단어 그대로 아무런 네트워크를 사용하지 않아요. 무슨말이냐고요?
 
@@ -319,7 +319,7 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
 
 **lo 인터페이스 외에는 존재하지 않는** 것을 알 수 있어요. 이는 곧 외부와의 단절이라는 뜻입니다!
 
-**Container Network**
+#### Container Network
 
 다른 컨테이너의 네트워크 네임스페이스 환경을 공유할 수 있어요. 공유되는 속성은 내부 IP, 네트워크 인터페이스의 MAC주소 등이에요.
 
@@ -872,7 +872,7 @@ Jul 18 14:32:31 192.168.99.100 maillog[2599]: syslog test!#015
 
 이번에는 도커에서 제공하는 로깅 드라이버 중 fluentd를 사용해볼거에요!
 
-**fluentd**
+#### fluentd
 
 fluentd는 각종 로그를 수집하고 저장할 수 있는 기능을 제공하는 오픈소스 도구에요.
 
