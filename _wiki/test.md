@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-01-30 22:30:00 +0900
+updated : 2022-01-31 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -30,7 +30,7 @@ void find_by_product_option_id() {
     assertThat(actual).isEqualTo(ANY_MAPPING);
 }
 ```
-_**해설**<br>
+_**해석**<br>
 (1) sut.findBy 메소드가 호출될 때, ANY_MAPPING 을 반환하도록 합니다.<br>
 (2) ANY_PRODUCT_OPTION_ID, ANY_EVENTED_AT 을 통해 Mapping 타입의 객체를 가져옵니다. 이때, ANY_MAPPING 을 반환받습니다.<br>
 (3) Mapping 타입의 객체는 ANY_MAPPING 과 비교하여 일치한 지 확인합니다.<br>
@@ -51,7 +51,7 @@ void 해지불가_이전에만_만족한다() {
     assertThat(sut.isSatisfy(localDate(_2021, _1, _4))).isFalse();
 }
 ```
-_**해설**<br>
+_**해석**<br>
 (1) 누군가 해지 불가일을 가져오려고 하면, 해지 불가일(2021-01-03)을 반환합니다.<br>
 (2) 각 날짜별로 해지가 가능 여부를 올바르게 반환하는지 확인합니다. (2021-01-02, 2021-01-03, 2021-01-04)<br>
 (3) 해지 불가일이 지나지 않았다면, 해지가 가능합니다.<br>
@@ -84,7 +84,7 @@ void 여러번_해지해도_멱등하다() {
     assertThat(sut.isTerminated()).isTrue();
 }
 ```
-_**해설**<br>
+_**해석**<br>
 (1) ServiceRunningContext(이하 SRC)을 해지합니다.<br>
 (2) 해지 여부를 확인할 때, 해지가 항상 가능하도록 합니다.<br>
 (3) SRC 가 해지되었는지 확인합니다.<br>
@@ -111,7 +111,7 @@ void 서비스가_해지되면_상태변경_이벤트를_발행한다() {
 }
 
 ```
-_**해설**<br>
+_**해석**<br>
 (1) 특정 시점으로 현재 시점을 고정합니다. (purchasedAt, 211106 20:00)<br>
 (2) 고정된 시점에서 멤버 해지를 시도합니다.<br>
 (3) 멤버 객체를 도메인 이벤트로 감쌉니다.<br>
