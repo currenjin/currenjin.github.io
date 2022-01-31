@@ -32,10 +32,10 @@ latex   : true
 
 #### Configuration
 **main.go file**
-[##_Image|t/cfile@99754B485EA624422C|CDM|1.3|{"originWidth":547,"originHeight":324,"width":547,"height":324}_##]
+![image](https://user-images.githubusercontent.com/60500649/151737862-05a28d2e-890c-450c-a064-b81d387f3cf4.png)
 
 **Dockerfile**
-[##_Image|t/cfile@994619475EA624432C|CDM|1.3|{"originWidth":285,"originHeight":106,"width":285,"height":106}_##]
+![image](https://user-images.githubusercontent.com/60500649/151737866-6f2bfed5-7b22-49d7-971f-8a120a81a55e.png)
 
 **FROM** : 도커 이미지의 바탕이 될 베이스 이미지를 지정
 
@@ -60,7 +60,7 @@ latex   : true
 
 **main파일과 Dockerfile 작성이 끝났으면 image build를 진행해보자.**
 
-[##_Image|t/cfile@999AA33A5EA624432B|CDM|1.3|{"originWidth":371,"originHeight":31,"width":371,"height":31}_##]
+![image](https://user-images.githubusercontent.com/60500649/151737872-affa3067-9295-476c-aaef-d4cc2ed3411f.png)
 
 ```
 root@localhost test# docker build -t new:latest .
@@ -68,17 +68,17 @@ root@localhost test# docker build -t new:latest .
 -t : 생성할 이미지의 이름 지정
 ```
 
-[##_Image|t/cfile@99A151495EA624442A|CDM|1.3|{"originWidth":653,"originHeight":392,"width":550,"height":330}_##]
+![image](https://user-images.githubusercontent.com/60500649/151737874-98e06508-5128-4f08-8d50-5cce0c675e14.png)
 
 
 이미지가 정상적으로 생성되었다. (go language와 new:latest가 생성되어있는 모습)
 
-[##_Image|t/cfile@9956A54E5EA624442B|CDM|1.3|{"originWidth":647,"originHeight":62,"width":550,"height":53}_##]
+![image](https://user-images.githubusercontent.com/60500649/151737878-51070af2-2e87-4e95-83b1-025b2dbd4874.png)
 
 
 이제 해당 이미지로 컨테이너를 실행해보자.
 
-[##_Image|t/cfile@99EFC8435EA624452E|CDM|1.3|{"originWidth":481,"originHeight":30,"width":481,"height":30}_##]
+![image](https://user-images.githubusercontent.com/60500649/151737884-ce0571a4-5352-488d-bbe7-bf0d8ea95686.png)
 
 ```
 docker run -d -p 9999:8080 --name test new:latest
@@ -90,13 +90,13 @@ docker run -d -p 9999:8080 --name test new:latest
 
 명령 아랫줄 이상한 문자열은 container의 고유 이름을 나타낸다.
 
-[##_Image|t/cfile@99CF044D5EA624462D|CDM|1.3|{"originWidth":800,"originHeight":43,"width":550,"height":30}_##]
+![image](https://user-images.githubusercontent.com/60500649/151737893-9e25d8a8-3e8c-410c-8122-4397a36077bc.png)
 
 정상적으로 작동하는 모습을 볼 수 있다.
 
 
 #### Test
 
-[##_Image|t/cfile@995146405EA624472D|CDM|1.3|{"originWidth":327,"originHeight":30,"style":"alignCenter","width":327,"height":30}_##]
+![image](https://user-images.githubusercontent.com/60500649/151737899-c3695266-07be-49f1-bc2e-b30031db5275.png)
 
 'Hello Docker!!'가 정상적으로 출력이 된다.
