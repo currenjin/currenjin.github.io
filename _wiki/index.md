@@ -11,6 +11,7 @@ regenerate: true
 
 * [[example]]
 * [[docker]]
+* [[docker-compose]]
 * [[fibonacci]]
 * [[slack]]
 * [[test]]
