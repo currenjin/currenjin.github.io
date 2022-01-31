@@ -17,7 +17,8 @@ latex   : true
 
 ## Docker Swarm?
 
-[##_Image|kage@b2Mqb9/btqEhPHh5vO/XusHPLUi2LqXU9lEcTiMLK/img.png|CDM|1.3|{"originWidth":226,"originHeight":223,"style":"floatLeft"}_##]
+![image](https://user-images.githubusercontent.com/60500649/151737760-39abab95-d0df-4450-8b31-d9058aa9cc8d.png)
+
 
 **컨테이너 오케스트레이션** 도구 중 하나 !
 
@@ -96,7 +97,8 @@ SDN(Software Defined Network)를 지원해 여러 노드에 분산된 컨테이�
 
 ## Docker Swarm 본격적으로 다뤄보기
 
-[##_Image|kage@cqUMzI/btqEkMvoe8a/8r1Gl4q8hK98TNOpJ8H710/img.png|CDM|1.3|{"originWidth":404,"originHeight":214,"style":"alignLeft","caption":"기본 환경"}_##]
+![image](https://user-images.githubusercontent.com/60500649/151737790-f66f04b0-4cc8-4646-899b-c0791c9067c7.png)
+
 
 ### Swarm 클러스터 생성하기
 
