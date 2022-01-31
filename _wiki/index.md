@@ -12,6 +12,7 @@ regenerate: true
 * [[example]]
 * [[docker]]
 * [[docker-compose]]
+* [[docker-swarm]]
 * [[dockerfile]]
 * [[fibonacci]]
 * [[slack]]
