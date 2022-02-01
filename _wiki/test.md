@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-01-31 22:00:00 +0900
+updated : 2022-02-01 22:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -144,6 +144,32 @@ _**해석**<br>
 (2) SRC 사용 시도를 합니다.<br>
 (3) 이미 해지되어 사용할 수 없다는 예외를 확인합니다.<br>_
 
+### **220201::trevari::member::domain::ServiceRunningContextUseTest**
+```java
+ServiceRunningContext sut;
+
+@BeforeEach
+void setUp() {
+    sut = new ServiceRunningContext(ANY_SERVICE_ID, Times.of(1), Times.ZERO, AVAILABLE, definition, null, null);
+}
+
+@Test
+void 사용스펙이_만족하면_사용처리한다() {
+    sut = sut.withProvided(Times.of(1));
+
+    sut.use(ANY_LOCAL_DATE_TIME, alwaysTrue());
+
+    assertThat(sut.getUsed()).isEqualTo(oneTime);
+    assertThat(sut.isRemained()).isFalse();
+    assertThat(sut.isUsedUp()).isTrue();
+}
+```
+_**해석**<br>
+(1) ServiceRunningContext(이하 SRC) 의 사용 횟수를 1회로 지정한다.<br>
+(2) SRC 를 사용한다.<br>
+(3) SRC 의 사용 횟수를 확인한다. (1회)<br>
+(4) SRC 의 남은 횟수를 확인한다. (0회)<br>
+(5) SRC 의 상태를 확인한다. (USED_UP, 다 사용함)<br>_
 
 ## Think of Test
 
