@@ -165,7 +165,7 @@ void 사용스펙이_만족하면_사용처리한다() {
 }
 ```
 _**해석**<br>
-(1) ServiceRunningContext(이하 SRC) 의 사용 횟수를 1회로 지정한다.<br>
+(1) ServiceRunningContext(이하 SRC) 의 사용 가능 횟수를 지정한다. (1회)<br>
 (2) SRC 를 사용한다.<br>
 (3) SRC 의 사용 횟수를 확인한다. (1회)<br>
 (4) SRC 의 남은 횟수를 확인한다. (0회)<br>
