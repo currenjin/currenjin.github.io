@@ -171,6 +171,46 @@ _**해석**<br>
 (4) SRC 의 남은 횟수를 확인한다. (0회)<br>
 (5) SRC 의 상태를 확인한다. (USED_UP, 다 사용함)<br>_
 
+### **220202::trevari::member::domain::ServiceRunningContextUseTest**
+```java
+ServiceRunningContext sut;
+
+@BeforeEach
+void setUp() {
+    sut = new ServiceRunningContext(ANY_SERVICE_ID, Times.of(1), Times.ZERO, AVAILABLE, definition, null, null);
+}
+
+@Test
+void 남은_회수() {
+    sut = sut.withProvided(Times.of(2));
+
+    sut.use(ANY_LOCAL_DATE_TIME, alwaysTrue());
+    assertThat(sut.getUsed()).isEqualTo(ONE);
+    assertThat(sut.isRemained()).isTrue();
+    assertThat(sut.isUsedUp()).isFalse();
+
+    sut.use(ANY_LOCAL_DATE_TIME, alwaysTrue());
+    assertThat(sut.getUsed()).isEqualTo(TWO);
+    assertThat(sut.isRemained()).isFalse();
+    assertThat(sut.isUsedUp()).isTrue();
+
+    assertThatThrownBy(() -> sut.use(ANY_LOCAL_DATE_TIME,  alwaysTrue())).hasMessage("Service already UsedUp when usedAt is " + ANY_LOCAL_DATE_TIME);
+}
+```
+_**해석**<br>
+(1) ServiceRunningContext(이하 SRC) 의 사용 가능 횟수를 지정한다. (2회)<br>
+(2) SRC 를 사용한다.<br>
+(3) 첫 번째 SRC 확인<br>
+    (1) SRC 의 사용 횟수를 확인한다. (1회)<br>
+    (2) SRC 의 남은 횟수가 있는지 확인한다. (있음)<br>
+    (3) SRC 의 상태를 확인한다. (NOT USED UP, 다 사용하지 않음)<br>
+(4) SRC 를 사용한다.<br>
+(5) 두 번째 SRC 확인<br>
+    (1) SRC 의 사용 횟수를 확인한다. (2회)<br>
+    (2) SRC 의 남은 횟수가 있는지 확인한다. (없음)<br>
+    (3) SRC 의 상태를 확잏난다. (USED UP, 다 사용함)<br>
+_
+
 ## Think of Test
 
 1독 - 테스트에 관한 글을 읽습니다. <br>
