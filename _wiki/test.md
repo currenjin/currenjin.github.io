@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-01 22:30:00 +0900
+updated : 2022-02-03 00:50:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -209,7 +209,7 @@ _(4) SRC 를 사용한다.<br>
 (5) 두 번째 SRC 확인<br>_
 1. _SRC 의 사용 횟수를 확인한다. (2회)<br>_
 2. _SRC 의 남은 횟수가 있는지 확인한다. (없음)<br>_
-3. _SRC 의 상태를 확잏난다. (USED UP, 다 사용함)<br>_
+3. _SRC 의 상태를 . (USED UP, 다 사용함)<br>_
 
 ## Think of Test
 
