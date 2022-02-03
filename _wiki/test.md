@@ -212,7 +212,7 @@ _(4) SRC 를 사용한다.<br>
 3. _SRC 의 상태를 확인한다. (USED UP, 다 사용함)<br>_
 
 
-### **220203::trevari::member::domain::ServiceRunningContextUseTest**
+### **220203::trevari::member::domain::GeneralServiceTerminationSpecificationTest**
 ```java
 @InjectMocks
 GeneralServiceTerminationSpecification sut;
