@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-03 00:50:00 +0900
+updated : 2022-02-03 22:52:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -210,6 +210,38 @@ _(4) SRC 를 사용한다.<br>
 1. _SRC 의 사용 횟수를 확인한다. (2회)<br>_
 2. _SRC 의 남은 횟수가 있는지 확인한다. (없음)<br>_
 3. _SRC 의 상태를 확인한다. (USED UP, 다 사용함)<br>_
+
+
+### **220203::trevari::member::domain::ServiceRunningContextUseTest**
+```java
+@InjectMocks
+GeneralServiceTerminationSpecification sut;
+
+@Mock
+ServiceRunningPeriod period;
+@Mock
+ServiceRunningContext context;
+
+@BeforeEach
+void setUp() {
+    Elsa.freeze(localDateTime(_2021, _1, _1, 0, 0)); /** Clocks.now() 이전에 선행되어야 함 **/
+    sut = new GeneralServiceTerminationSpecification(period, context, Clocks.now());
+}
+
+@Test
+void 모두사용일때는_해지되지않는다() {
+    given(period.getImpossibleTerminatedAt())
+            .willReturn(localDate(_2021, _1, _3));
+    given(context.isUsedUp()).willReturn(true);
+
+    assertThat(sut.isSatisfy(localDate(_2021, _1, _2))).isFalse();
+
+}
+```
+_**해석**<br>
+(1) 누군가 해지 불가 시작일을 가져오려고 시도하면, 지정된 날짜를 반환한다. (2021-01-03)<br>
+(2) ServiceRunningContext 의 사용 여부 조회시, 지정된 값을 반환한다. (true, 사용함)<br>
+(3) 해지 가능 여부를 확인한다. (false, 불가)<br>_
 
 ## Think of Test
 
