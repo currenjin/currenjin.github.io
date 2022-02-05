@@ -27,6 +27,7 @@ regenerate: true
 * [[annotation]]
 * [[TDD]]
 * [[subnetting-and-supernetting]]
+* [[vrrp]]
 * [[basic-java]]
 * [[git]]
 * [[svg]]
