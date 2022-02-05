@@ -19,6 +19,8 @@ latex   : true
 
 **PC-Router-Internet**
 
+![image](https://user-images.githubusercontent.com/60500649/152643651-b30e30d6-0a71-4e40-821a-2a6dcec45107.png)
+
 보통의 경우에 PC가 통신을 하기 위해선 Router를 지나 인터넷으로 향한다.
 
 * 위 그림에서 PC는 Gateway 주소가 Router 를 바라본다.
@@ -32,6 +34,9 @@ latex   : true
 
 
 **PC-Switch-Router(2)-Internet**
+
+![image](https://user-images.githubusercontent.com/60500649/152643657-4c0afb0c-630b-401a-ae9d-fc2533e82505.png)
+
 
 하지만 이런 구성에서도 불편함은 있었다.
 

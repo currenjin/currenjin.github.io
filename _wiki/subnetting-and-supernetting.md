@@ -21,6 +21,8 @@ latex   : true
 
 ### Subnet Mask
 
+![image](https://user-images.githubusercontent.com/60500649/152643615-22da8dd8-3b24-47a4-9ebf-f57d255bc7ea.png)
+
 ### Subnetting 이란 ?
 
 IP 주소에 *Default Subnet Mask 가 아닌 변형된 Subnet Mask를 적용함으로써 네트워크를 여러개로 분할하고 불필요한 네트워크 자원낭비를 막는 것이다.
@@ -175,7 +177,7 @@ prefix 17에서는 255.255.128.0의 SubnetMask를 가지게 되어서 0 부터 1
 
 Refer to the exhibit. What is the most appropriate summarizaion for these routes?
 
-
+![image](https://user-images.githubusercontent.com/60500649/152643627-5d4bf079-d47c-4f29-b66a-ad907a896523.png)
 
 A. 10.0.0.0 /21
 
@@ -193,7 +195,7 @@ D. 10.0.0.0 /24
 
 A. 10.0.0.0 /21  ->  10.0.0.0 / 255.255.248.0 = 10.0.0.0 ~ 10.0.7.255
 
-B. 10.0.0.0 /22  ->  10.0.0.0 / 255.255.252.0 = 10.0.0.0 ~ 10.0.3.255
+**B. 10.0.0.0 /22  ->  10.0.0.0 / 255.255.252.0 = 10.0.0.0 ~ 10.0.3.255**
 
 C. 10.0.0.0 /23  ->  10.0.0.0 / 255.255.254.0 = 10.0.0.0 ~ 10.0.1.255
 
