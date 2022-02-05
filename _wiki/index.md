@@ -29,6 +29,7 @@ regenerate: true
 * [[subnetting-and-supernetting]]
 * [[vrrp]]
 * [[bpdu]]
+* [[public-ip-private-ip]]
 * [[basic-java]]
 * [[git]]
 * [[svg]]
