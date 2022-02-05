@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-04 20:10:00 +0900
+updated : 2022-02-05 15:10:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -271,6 +271,41 @@ void 당일_환불이면_해지된다() {
 _**해석**<br>
 (1) 누군가 해지 불가 시작일을 가져오려고 시도하면, 지정된 날짜를 반환한다. (2021-01-01)<br>
 (2) ServiceRunningContext 의 해지 가능 여부를 확인한다.  (가능 : True, 해지 시도일: 2021-01-01)<br>_
+
+_**생각**<br>
+테스트 내에 가입 날짜에 대한 내용이 명시적으로 존재하지 않는다. (위로 스크롤 올려서 확인해야 함)<br>
+DisplayName 에도 써놓은 거로 대체가 될 수 있는가?<br>
+혹은 테스트 내에 명시적으로 집어넣는게 맞는가?<br>_
+
+### **220205::trevari::member::domain::GeneralServiceTerminationSpecificationTest**
+```java
+@InjectMocks
+GeneralServiceTerminationSpecification sut;
+
+@Mock
+ServiceRunningPeriod period;
+@Mock
+ServiceRunningContext context;
+
+@BeforeEach
+void setUp() {
+    Elsa.freeze(localDateTime(_2021, _1, _1, 0, 0)); /** Clocks.now() 이전에 선행되어야 함 **/
+    sut = new GeneralServiceTerminationSpecification(period, context, Clocks.now());
+}
+
+@Test
+@DisplayName("2021-01-01 00:00:00 가입 / 2021-01-03 03:33:00 해지")
+void 환불기간이_지나고_당일_환불도_아니면_해지되지_않는다() {
+    given(period.getImpossibleTerminatedAt()).willReturn(localDate(_2021, _1, _1));
+
+    boolean satisfy = sut.isSatisfy(localDateTime(_2021, _1, _3, 3, 33));
+
+    assertThat(satisfy).isFalse();
+}
+```
+_**해석**<br>
+(1) 누군가 해지 불가 시작일을 가져오려고 시도하면, 지정된 날짜를 반환한다. (2021-01-01)<br>
+(2) ServiceRunningContext 의 해지 가능 여부를 확인한다.  (불가능 : False, 해지 시도일: 2021-01-03)<br>_
 
 _**생각**<br>
 테스트 내에 가입 날짜에 대한 내용이 명시적으로 존재하지 않는다. (위로 스크롤 올려서 확인해야 함)<br>
