@@ -26,6 +26,8 @@ STP에서 Root-Bridge를 선출하기 위해선 Bridge-ID를 비교한다고 했
 
 ## BPDU의 간단 구조
 
+![image](https://user-images.githubusercontent.com/60500649/152643679-4ff0c964-60d7-480e-81df-afc7d6fe000d.png)
+
 사진과 같이 BPDU의 구조는
 
 Protocol ID, Version, Message Type, Flags, Root ID, Path Cost, Bridge ID, Port ID, Message Age,
