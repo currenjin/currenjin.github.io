@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-05 15:10:00 +0900
+updated : 2022-02-06 15:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -309,6 +309,35 @@ _**해석**<br>
 
 _**생각**<br>
 테스트 내에 가입 날짜를 명시하면 테스트가 더 명확할 것 같다.<br>_
+
+### **220206::trevari::member::domain::CommunityServiceRunningContextTerminateTest**
+```java
+@Test
+void 서비스_기간에_해지를_시도하면_해지되지_않는다() {
+    Elsa.freeze(firstMeetingAt.plusDays(6));
+
+    member.terminate();
+
+    COMMUNITY_STATUS_OF(COMMUNITY_MEMBER, AVAILABLE);
+}
+
+private void COMMUNITY_STATUS_OF(Badge badge, ServiceRunningState status) {
+    assertThat(member.getServiceRunningContextList().getItems().stream()
+            .filter(i->badge.equals(i.getBadge())).allMatch(i->status.equals(i.getState()))).isTrue();
+}
+```
+_**해석**<br>
+(1) 시점을 고정합니다. (첫 모임일의 6일 후)<br>
+(2) 멤버를 해지합니다.<br>
+(3) 뱃지의 존재 여부와 상태를 확인합니다. (COMMUNITY_MEMBER, AVAILABLE)<br>
+_
+
+_**떠오르는 의문**<br>
+(1) 테스트 코드만 확인하면, 첫 모임일의 6일 후가 서비스 기간 내에 포함되는지 어떻게 알 수 있는가?<br>
+(2) COMMUNITY_STATUS_OF 라는 메소드 명은 제 역할을 하고 있는지?<br>
+(3) 혹은 2번 메소드의 이름을 변경해야 하는 건 아닌지?<br>
+_
+
 
 ## Think of Test
 
