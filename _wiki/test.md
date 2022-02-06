@@ -329,14 +329,12 @@ private void COMMUNITY_STATUS_OF(Badge badge, ServiceRunningState status) {
 _**해석**<br>
 (1) 시점을 고정합니다. (첫 모임일의 6일 후)<br>
 (2) 멤버를 해지합니다.<br>
-(3) 뱃지의 존재 여부와 상태를 확인합니다. (COMMUNITY_MEMBER, AVAILABLE)<br>
-_
+(3) 뱃지의 존재 여부와 상태를 확인합니다. (COMMUNITY_MEMBER, AVAILABLE)<br>_
 
 _**떠오르는 의문**<br>
 (1) 테스트 코드만 확인하면, 첫 모임일의 6일 후가 서비스 기간 내에 포함되는지 어떻게 알 수 있는가?<br>
 (2) COMMUNITY_STATUS_OF 라는 메소드 명은 제 역할을 하고 있는지?<br>
-(3) 혹은 2번 메소드의 이름을 변경해야 하는 건 아닌지?<br>
-_
+(3) 혹은 2번 메소드의 이름을 변경해야 하는 건 아닌지?<br>_
 
 
 ## Think of Test
