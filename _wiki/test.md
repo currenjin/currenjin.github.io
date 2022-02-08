@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-07 22:00:00 +0900
+updated : 2022-02-08 23:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -366,6 +366,23 @@ _**떠오르는 의문**<br>
 (1) 테스트 코드만 확인하면, 첫 모임일의 1일 후가 서비스 기간 내에 포함되는지 어떻게 알 수 있는가?<br>
 (2) COMMUNITY_STATUS_OF 라는 메소드 명은 제 역할을 하고 있는지?<br>
 (3) 혹은 메소드 명을 변경해야 하는 건 아닌지?<br>_
+
+### **220208::trevari::wallet::domain::TicketExpireTest**
+```java
+@Test
+void 티켓_만료일_이후엔_만료될_티켓이다() {
+    Elsa.freeze(EXPIRE_DATE.plusDays(1));
+    TICKET = new Ticket(null, null, EXPIRE_DATE);
+
+    // |-----티켓만료-----만료여부확인-----|
+    // |-------20-----------21--------|
+    assertThat(TICKET.willBeExpired()).isTrue();
+}
+```
+_**해석**<br>
+(1) 시점을 고정합니다. (티켓 만료일 하루 뒤, 21일)<br>
+(2) 티켓을 생성합니다. (만료일 지정, 20일)<br>
+(3) 티켓이 만료될 티켓인지 확인합니다. (True)<br>_
 
 ## Think of Test
 
