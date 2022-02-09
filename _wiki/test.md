@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-08 23:00:00 +0900
+updated : 2022-02-09 23:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -383,6 +383,23 @@ _**해석**<br>
 (1) 시점을 고정합니다. (티켓 만료일 하루 뒤, 21일)<br>
 (2) 티켓을 생성합니다. (만료일 지정, 20일)<br>
 (3) 티켓이 만료될 티켓인지 확인합니다. (True)<br>_
+
+### **220209::trevari::wallet::domain::TicketExpireTest**
+```java
+@Test
+void 티켓_만료일_이전엔_만료될_티켓이_아니다() {
+    Elsa.freeze(EXPIRE_DATE.minusDays(1));
+    TICKET = new Ticket(null, null, EXPIRE_DATE);
+
+    // |-----만료여부확인-----티켓만료-----|
+    // |-------19-----------20--------|
+    assertThat(TICKET.willBeExpired()).isFalse();
+}
+```
+_**해석**<br>
+(1) 시점을 고정합니다. (티켓 만료일 하루 전, 19일)<br>
+(2) 티켓을 생성합니다. (만료일 지정, 20일)<br>
+(3) 티켓이 만료될 티켓인지 확인합니다. (False)<br>_
 
 ## Think of Test
 
