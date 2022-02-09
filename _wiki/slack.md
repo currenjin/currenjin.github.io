@@ -3,7 +3,7 @@ layout  : wiki
 title   : Slack
 summary :
 date    : 2022-01-27 22:00:00 +0900
-updated : 2022-01-27 22:00:00 +0900
+updated : 2022-02-09 22:00:00 +0900
 tag     : slack
 toc     : true
 public  : true
@@ -23,4 +23,10 @@ latex   : true
 채널에 리마인더 보내기	/remind #디자인-팀 주간 미팅 참석 화요일마다
 
 특정 문구를 매일 특정 시간에 보내기 /remind #channel "text" everyday 22:00
+```
+
+### 날짜
+```
+매일 : everyday
+평일 : every weekday
 ```
