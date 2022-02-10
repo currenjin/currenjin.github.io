@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-09 23:00:00 +0900
+updated : 2022-02-10 23:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -400,6 +400,24 @@ _**해석**<br>
 (1) 시점을 고정합니다. (티켓 만료일 하루 전, 19일)<br>
 (2) 티켓을 생성합니다. (만료일 지정, 20일)<br>
 (3) 티켓이 만료될 티켓인지 확인합니다. (False)<br>_
+
+### **220210::trevari::wallet::domain::TicketExpireTest**
+```java
+@Test
+void 티켓_만료일이_null_이면_만료될_티켓이_아니다() {
+    Elsa.freeze(EXPIRE_DATE);
+    TICKET = new Ticket(null, null, null);
+
+    assertThat(TICKET.willBeExpired()).isFalse();
+}
+```
+_**해석**<br>
+(1) 시점을 고정합니다. (티켓 만료일, 20일)<br>
+(2) 티켓을 생성합니다. (만료일 null)<br>
+(3) 티켓이 만료될 티켓인지 확인합니다. (False)<br>_
+
+_**생각**<br>
+(1) 시점 고정 로직(freeze)은 없어져도 될 것 같다. 해당 테스트에서 관심있는 부분이 아니기 때문에.<br>_
 
 ## Think of Test
 
