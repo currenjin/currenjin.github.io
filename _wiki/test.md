@@ -419,7 +419,7 @@ _**해석**<br>
 _**생각**<br>
 (1) 시점 고정 로직(freeze)은 없어져도 될 것 같다. 해당 테스트에서 관심있는 부분이 아니기 때문에.<br>_
 
-### **220211::trevari::wallet::domain::TicketExpireTest**
+### **220211::trevari::wallet::domain::TicketsExpireTest**
 ```java
 @Test
 void 만료일이_지난_티켓들을_가져온다() {
