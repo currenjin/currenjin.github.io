@@ -3,7 +3,7 @@ layout  : wiki
 title   : Fibonacci
 summary :
 date    : 2022-01-23 14:00:00 +0900
-updated : 2022-02-11 14:00:00 +0900
+updated : 2022-02-11 10:00:00 +0900
 tag     : Math
 toc     : true
 public  : true
