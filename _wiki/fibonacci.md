@@ -3,7 +3,7 @@ layout  : wiki
 title   : Fibonacci
 summary :
 date    : 2022-01-23 14:00:00 +0900
-updated : 2022-01-23 14:00:00 +0900
+updated : 2022-02-11 14:00:00 +0900
 tag     : Math
 toc     : true
 public  : true
@@ -20,3 +20,26 @@ latex   : true
 ![image](https://user-images.githubusercontent.com/60500649/150665710-790a7f1f-fa24-4656-9f5e-6d29c58cba0a.png)
 
 피보나치 수열에 의해 만들어지는 사각형의 비율은 황금비(1:1.6)에 근접하다.<br>
+
+## 코딩
+### 피보나치 수열 테스트
+```java
+@Test
+void name() {
+    /* 0, 1, 1, 2, 3, 5, 8, 13, 21 */
+
+    int[][] cases = {{0, 0}, {1, 1}, {2, 1}, {3, 2}, {4, 3}, {5, 5}, {6, 8}, {7, 13}};
+
+    for (int i = 0; cases.length > i; i++) {
+        assertThat(Fibonacci.fib(cases[i][0])).isEqualTo(cases[i][1]);
+    }
+}
+```
+
+```java
+@ParameterizedTest
+@CsvSource(value = {"0, 0", "1, 1", "2, 1", "3, 2", "4, 3", "5, 5", "6, 8", "7, 13"})
+void name2(int input, int output) {
+    assertThat(Fibonacci.fib(input)).isEqualTo(output);
+}
+```
