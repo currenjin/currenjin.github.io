@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-10 23:00:00 +0900
+updated : 2022-02-11 21:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -418,6 +418,33 @@ _**해석**<br>
 
 _**생각**<br>
 (1) 시점 고정 로직(freeze)은 없어져도 될 것 같다. 해당 테스트에서 관심있는 부분이 아니기 때문에.<br>_
+
+### **220211::trevari::wallet::domain::TicketExpireTest**
+```java
+@Test
+void 만료일이_지난_티켓들을_가져온다() {
+    Elsa.freeze(EXPIRE_DATE_20.plusDays(1));
+
+    Ticket TICKET1 = new Ticket("KEY1", null, EXPIRE_DATE_20);
+    Ticket TICKET2 = new Ticket("KEY2", null, EXPIRE_DATE_20);
+    Ticket TICKET3 = new Ticket("KEY3", null, EXPIRE_DATE_22);
+
+    TICKETS.add(TICKET1);
+    TICKETS.add(TICKET2);
+    TICKETS.add(TICKET3);
+
+    assertThat(TICKETS.size()).isEqualTo(3);
+
+    // |-----티켓1,2만료일-----만료여부확인-----티켓3만료일-----|
+    // |-------20-------------21--------------22--------|
+    assertThat(TICKETS.expirableTickets().size()).isEqualTo(2);
+}
+```
+_**해석**<br>
+(1) 시점을 고정합니다. (21일)<br>
+(2) 티켓을 생성합니다. (TICKET1 만료일 : 20일, TICKET2 만료일 : 20일, TICKET3 만료일 : 22일)<br>
+(3) 전체 티켓의 개수를 확인합니다. (3개)<br>
+(4) 만료 티켓의 개수를 확인합니다. (2개)<br>_
 
 ## Think of Test
 
