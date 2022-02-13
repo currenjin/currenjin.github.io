@@ -477,7 +477,7 @@ _**생각**<br>
 (1) 전체 티켓의 개수를 확인할 필요가 없다고 생각한다.<br>
 (2) 하지만, 총 몇 개의 티켓에서 이 정도를 가져왔다. 라는 걸 알려주려면 필요하려나?<br>_
 
-### **220212::trevari::wallet::domain::TicketsExpireTest**
+### **220213::trevari::wallet::domain::WalletTest**
 ```java
 private Wallet sut;
 
