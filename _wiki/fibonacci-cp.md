@@ -11,7 +11,7 @@ parent  : [[how-to]]
 latex   : true
 ---
 * TOC
-{:toc}
+  {:toc}
 
 # 피보나치 수열
 수학에서, 피보나치 수(영어: Fibonacci numbers)는 첫째 및 둘째 항이 1이며 그 뒤의 모든 항은 바로 앞 두 항의 합인 수열이다. 처음 여섯 항은 각각 1, 1, 2, 3, 5, 8이다. 편의상 0번째 항을 0으로 두기도 한다.
@@ -24,28 +24,23 @@ latex   : true
 ## 코딩
 ### 피보나치 수열 테스트
 ```java
-private static final LocalDateTime ANY_LOCAL_DATE_TIME = localDate(2021, 1, 1);
-
-@Mock
-ServiceRunningPeriod definition;
-
-ServiceRunningContext sut;
-
-@BeforeEach
-void setUp() {
-    sut = new ServiceRunningContext(ANY_SERVICE_ID, Times.of(1), Times.ZERO, AVAILABLE, definition, null, null);
-
-    //초기 상태
-    assertThat(sut.isTerminated()).isFalse();
-}
-
 @Test
-void 여러번_해지해도_멱등하다() {
+void name() {
+    /* 0, 1, 1, 2, 3, 5, 8, 13, 21 */
 
-    sut.terminate(ANY_LOCAL_DATE_TIME, alwaysTrue());
-    assertThat(sut.isTerminated()).isTrue();
+    int[][] cases = {{0, 0}, {1, 1}, {2, 1}, {3, 2}, {4, 3}, {5, 5}, {6, 8}, {7, 13}};
 
-    sut.terminate(ANY_LOCAL_DATE_TIME, alwaysTrue()); // 멱등
-    assertThat(sut.isTerminated()).isTrue();
+    for (int i = 0; cases.length > i; i++) {
+        assertThat(Fibonacci.fib(cases[i][0])).isEqualTo(cases[i][1]);
+    }
 }
 ```
+
+```java
+@ParameterizedTest
+@CsvSource(value = {"0, 0", "1, 1", "2, 1", "3, 2", "4, 3", "5, 5", "6, 8", "7, 13"})
+void name2(int input, int output) {
+    assertThat(Fibonacci.fib(input)).isEqualTo(output);
+}
+```
+
