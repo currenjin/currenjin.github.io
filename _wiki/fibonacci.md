@@ -21,33 +21,6 @@ latex   : true
 
 피보나치 수열에 의해 만들어지는 사각형의 비율은 황금비(1:1.6)에 근접하다.<br>
 
-## 코딩
+## 개발
 ### 피보나치 수열 테스트
-```java
-private static final LocalDateTime ANY_LOCAL_DATE_TIME = localDate(2021, 1, 1);
-
-@Mock
-ServiceRunningPeriod definition;
-
-ServiceRunningContext sut;
-
-@BeforeEach
-void setUp() {
-    sut = new ServiceRunningContext(ANY_SERVICE_ID, Times.of(1), Times.ZERO, AVAILABLE, definition, null, null);
-
-    //초기 상태
-    assertThat(sut.isTerminated()).isFalse();
-}
-
-@Test
-void 여러번_해지해도_멱등하다() {
-
-    sut.terminate(ANY_LOCAL_DATE_TIME, alwaysTrue());
-    assertThat(sut.isTerminated()).isTrue();
-
-    sut.terminate(ANY_LOCAL_DATE_TIME, alwaysTrue()); // 멱등
-    assertThat(sut.isTerminated()).isTrue();
-}
-```
-
-## Test
+[Test Code Link](https://github.com/currenjin/TDD/blob/main/fibonacci/src/test/java/com/tdd/fibonacci/FibonacciTest.java)
