@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-12 21:00:00 +0900
+updated : 2022-02-13 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -476,6 +476,29 @@ _**해석**<br>
 _**생각**<br>
 (1) 전체 티켓의 개수를 확인할 필요가 없다고 생각한다.<br>
 (2) 하지만, 총 몇 개의 티켓에서 이 정도를 가져왔다. 라는 걸 알려주려면 필요하려나?<br>_
+
+### **220212::trevari::wallet::domain::TicketsExpireTest**
+```java
+private Wallet sut;
+
+@BeforeEach
+void setUp() {
+    sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+}
+
+@Test
+void addTicketAndFind() {
+    AddTicketCommand command = AddTicketCommandFactory.create("KEY", TicketProps.empty(), ANY_EXPIRY_DATE);
+
+    sut.execute(command);
+
+    assertThat(sut.has(command.newTicket())).isTrue();
+}
+```
+_**해석**<br>
+(1) 티켓 추가를 위한 명령을 생성합니다. (AddTicketCommand)<br>
+(2) 지갑에 티켓 추가 명령을 실행합니다. (AddTicket)<br>
+(3) 지갑에 추가된 티켓이 존재하는지 확인합니다. (True)<br>_
 
 ## Think of Test
 
