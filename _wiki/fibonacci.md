@@ -49,3 +49,5 @@ void 여러번_해지해도_멱등하다() {
     assertThat(sut.isTerminated()).isTrue();
 }
 ```
+
+## Test
