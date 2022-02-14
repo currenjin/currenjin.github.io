@@ -500,6 +500,37 @@ _**해석**<br>
 (2) 지갑에 티켓 추가 명령을 실행합니다. (AddTicket)<br>
 (3) 지갑에 추가된 티켓이 존재하는지 확인합니다. (True)<br>_
 
+### **220214::trevari::wallet::domain::WalletTest**
+```java
+private Wallet sut;
+
+@BeforeEach
+void setUp() {
+    sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+}
+
+@Test
+void when_add_ticket_ignore_same_key() {
+    AddTicketCommand command1 = AddTicketCommandFactory.create("KEY1", TicketProps.empty(), ANY_EXPIRY_DATE);
+    AddTicketCommand command2 = AddTicketCommandFactory.create("KEY2", TicketProps.empty(), ANY_EXPIRY_DATE);
+    AddTicketCommand command3 = AddTicketCommandFactory.create("KEY2", TicketProps.empty(), ANY_EXPIRY_DATE);
+
+
+    assertThat(sut.hasNotTickets()).isTrue();
+
+    sut.execute(command1);
+    sut.execute(command2);
+    sut.execute(command3);
+
+    assertThat(sut.getSizeOfTicket()).isEqualTo(2);
+}
+```
+_**해석**<br>
+(1) 티켓 추가를 위한 명령을 각각 생성하며, 중복된 키가 있도록 합니다. (command1-KEY1, command2-KEY2, command3-KEY2)<br>
+(2) 티켓이 없는지 확인합니다. (True)<br>
+(3) 지갑에 티켓 추가 명령을 실행합니다. (command1-KEY1, command2-KEY2, command3-KEY2)<br>
+(4) 추가된 티켓 수를 확인합니다. (2개, 중복된 티켓 제외)<br>_
+
 ## Think of Test
 
 1독 - 테스트에 관한 글을 읽습니다. <br>
