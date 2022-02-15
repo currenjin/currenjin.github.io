@@ -556,8 +556,15 @@ void terminate() {
     sut.execute(terminateWithTargetPredicate((t) -> key1.equals(t.getKey())));
     assertThat(sut.getSizeOfTicket()).isEqualTo(0);
     assertThat(sut.hasNotTickets()).isTrue();
-
 }
+
+
+private TerminateTicketCommand terminateWithTargetPredicate(TicketFilter ticketFilter) {
+    return TerminateTicketCommand.builder()
+            .withTargetPredicate(ticketFilter)
+            .build();
+}
+
 ```
 _**해석**<br>
 (1) 티켓 추가를 위한 명령을 실행합니다. (Ticket's key : KEY 1, KEY 2)<br>
