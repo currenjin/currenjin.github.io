@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-13 14:00:00 +0900
+updated : 2022-02-15 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -530,6 +530,43 @@ _**해석**<br>
 (2) 티켓이 없는지 확인합니다. (True)<br>
 (3) 지갑에 티켓 추가 명령을 실행합니다. (command1-KEY1, command2-KEY2, command3-KEY2)<br>
 (4) 추가된 티켓 수를 확인합니다. (2개, 중복된 티켓 제외)<br>_
+
+### **220215::trevari::wallet::domain::WalletTest**
+```java
+private Wallet sut;
+
+@BeforeEach
+void setUp() {
+    sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+}
+
+
+@Test
+void terminate() {
+    String key1 = "KEY 1";
+    String key2 = "KEY 2";
+
+    sut.execute(AddTicketCommandFactory.create(key1, TicketProps.empty(), ANY_EXPIRY_DATE));
+    sut.execute(AddTicketCommandFactory.create(key2, TicketProps.empty(), ANY_EXPIRY_DATE));
+    assertThat(sut.getSizeOfTicket()).isEqualTo(2);
+
+    sut.execute(terminateWithTargetPredicate((t1) -> key2.equals(t1.getKey())));
+    assertThat(sut.getSizeOfTicket()).isEqualTo(1);
+
+    sut.execute(terminateWithTargetPredicate((t) -> key1.equals(t.getKey())));
+    assertThat(sut.getSizeOfTicket()).isEqualTo(0);
+    assertThat(sut.hasNotTickets()).isTrue();
+
+}
+```
+_**해석**<br>
+(1) 티켓 추가를 위한 명령을 실행합니다. (Ticket's key : KEY 1, KEY 2)<br>
+(2) 티켓 개수를 확인합니다. (2개)<br>
+(3) 동일한 키를 가진 티켓을 해지합니다. (KEY 2)<br>
+(4) 티켓 개수를 확인합니다. (1개)<br>
+(5) 동일한 키를 가진 티켓을 해지합니다. (KEY 1)<br>
+(6) 티켓 개수를 확인합니다. (0개)<br>
+(7) 보유한 티켓이 없는지 확인합니다. (True)<br>_
 
 ## Think of Test
 
