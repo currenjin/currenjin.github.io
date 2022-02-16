@@ -575,6 +575,39 @@ _**해석**<br>
 (6) 티켓 개수를 확인합니다. (0개)<br>
 (7) 보유한 티켓이 없는지 확인합니다. (True)<br>_
 
+### **220216::trevari::wallet::domain::WalletTest**
+```java
+private Wallet sut;
+
+@BeforeEach
+void setUp() {
+    sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+}
+
+@Test
+void terminateWithAll() {
+    sut.execute(AddTicketCommandFactory.create("KEY 1", TicketProps.empty(), ANY_EXPIRY_DATE));
+
+    TerminateTicketCommand command = terminateWithTargetPredicate(TicketFilter.ALL);
+
+    sut.execute(command);
+
+    assertThat(sut.hasNotTickets()).isTrue();
+
+}
+
+private TerminateTicketCommand terminateWithTargetPredicate(TicketFilter ticketFilter) {
+    return TerminateTicketCommand.builder()
+            .withTargetPredicate(ticketFilter)
+            .build();
+}
+```
+_**해석**<br>
+(1) 티켓을 생성합니다. (KEY 1)<br>
+(2) 티켓 제거 명령을 만듭니다. (모든 티켓)<br>
+(3) 티켓 제거 명령을 실행합니다. <br>
+(4) 티켓이 존재하지 않는지 확인합니다. (True)<br>
+
 ## Think of Test
 
 1독 - 테스트에 관한 글을 읽습니다. <br>
