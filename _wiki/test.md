@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-16 20:00:00 +0900
+updated : 2022-02-17 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -606,7 +606,53 @@ _**해석**<br>
 (1) 티켓을 생성합니다. (KEY 1)<br>
 (2) 티켓 제거 명령을 만듭니다. (모든 티켓)<br>
 (3) 티켓 제거 명령을 실행합니다. <br>
-(4) 티켓이 존재하지 않는지 확인합니다. (True)<br>
+(4) 티켓이 존재하지 않는지 확인합니다. (True)<br>_
+
+### **220217::trevari::wallet::domain::WalletTest**
+```java
+private Wallet sut;
+
+@BeforeEach
+void setUp() {
+    sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+}
+
+@Test
+void expireTicket() {
+
+    String key1 = "KEY 1";
+    String key2 = "KEY 2";
+
+    sut.execute(AddTicketCommandFactory.create(key1, TicketProps.empty(), ANY_EXPIRY_DATE));
+    sut.execute(AddTicketCommandFactory.create(key2, TicketProps.empty(), ANY_EXPIRY_DATE));
+    assertThat(sut.getSizeOfTicket()).isEqualTo(2);
+
+    sut.execute(expireWithTargetPredicate((t1) -> key2.equals(t1.getKey())));
+    assertThat(sut.getSizeOfTicket()).isEqualTo(1);
+
+    sut.execute(expireWithTargetPredicate((t) -> key1.equals(t.getKey())));
+    assertThat(sut.getSizeOfTicket()).isEqualTo(0);
+    assertThat(sut.hasNotTickets()).isTrue();
+}
+
+private ExpireTicketCommand expireWithTargetPredicate(TicketFilter ticketFilter) {
+    return ExpireTicketCommand.builder()
+            .withTargetPredicate(ticketFilter)
+            .build();
+}
+```
+_**해석**<br>
+(1) 티켓을 생성합니다. (KEY 1, KEY 2)<br>
+(2) 티켓을 지갑에 추가합니다.<br>
+(3) 지갑 내 티켓의 총 개수를 확인합니다 (2개)<br>
+(4) 지갑 내 티켓을 만료시킵니다. (KEY 2)<br>
+(5) 티켓의 개수를 확인합니다. (1개)<br>
+(6) 지갑 내 티켓을 만료시킵니다. (KEY 1)<br>
+(7) 티켓의 개수를 확인합니다. (0개)<br>
+(8) 티켓이 존재하지 않는지 확인합나다. (True)<br>_
+
+_**생각**<br>
+(1) 이게 만료로 인해 제거된 건지는 어떻게 알 수 있을까? expireWithTargetPredicate? 헷갈릴 수도 있을 것 같다. <br>_
 
 ## Think of Test
 
