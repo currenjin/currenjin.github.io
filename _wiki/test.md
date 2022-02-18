@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-17 20:00:00 +0900
+updated : 2022-02-18 12:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -653,6 +653,44 @@ _**해석**<br>
 
 _**생각**<br>
 (1) 이게 만료로 인해 제거된 건지는 어떻게 알 수 있을까? expireWithTargetPredicate? 헷갈릴 수도 있을 것 같다. <br>_
+
+### **220218::trevari::wallet::domain::WalletTest**
+```java
+private Wallet sut;
+
+@BeforeEach
+void setUp() {
+    sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+}
+
+@Test
+void expireWithAll() {
+    sut.execute(AddTicketCommandFactory.create("Ket 1", TicketProps.empty(), ANY_EXPIRY_DATE));
+
+    ExpireTicketCommand command = expireWithTargetPredicate(TicketFilter.ALL);
+
+    sut.execute(command);
+
+    assertThat(sut.hasNotTickets()).isTrue();
+}
+
+private ExpireTicketCommand expireWithTargetPredicate(TicketFilter ticketFilter) {
+    return ExpireTicketCommand.builder()
+            .withTargetPredicate(ticketFilter)
+            .build();
+}
+```
+_**해석**<br>
+(1) 티켓을 지갑에 추가합니다. (Ket 1, 오타인 듯)<br>
+(2) 모든 티켓에 대해 만료시키는 명령을 생성합니다.<br>
+(3) 지갑에서 만료 명령을 실행합니다.<br>
+(4) 지갑에 티켓이 없는지 확인합니다.<br>_
+
+_**생각**<br>
+(1) 키 네임에서 오타가 하나 있었는데, 그걸 발견했을 때 저걸 고치는 게 맞는 걸까?<br>
+(2) 저거 하나만 배포하는 게 맞을까?<br>
+(3) 아니면 다른 거 나갈 때 같이 포함해서?<br>
+(4) 아니면 아예 냅둬도 될 까? 동작하는 기능엔 문제가 없으니?<br>_
 
 ## Think of Test
 
