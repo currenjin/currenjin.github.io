@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-18 12:00:00 +0900
+updated : 2022-02-19 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -691,6 +691,48 @@ _**생각**<br>
 (2) 저거 하나만 배포하는 게 맞을까?<br>
 (3) 아니면 다른 거 나갈 때 같이 포함해서?<br>
 (4) 아니면 아예 냅둬도 될 까? 동작하는 기능엔 문제가 없으니?<br>_
+
+### **220219::trevari::wallet::domain::WalletTest**
+```java
+private Wallet sut;
+
+@BeforeEach
+void setUp() {
+    sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+}
+
+@Test
+void useTicketTest() {
+
+    String key1 = "KEY 1";
+    String key2 = "KEY 2";
+
+    sut.execute(AddTicketCommandFactory.create(key1, TicketProps.empty(), ANY_EXPIRY_DATE));
+    sut.execute(AddTicketCommandFactory.create(key2, TicketProps.empty(), ANY_EXPIRY_DATE));
+    assertThat(sut.getSizeOfTicket()).isEqualTo(2);
+
+    sut.execute(useWithTargetPredicate((t1) -> key2.equals(t1.getKey())));
+    assertThat(sut.getSizeOfTicket()).isEqualTo(1);
+
+    sut.execute(useWithTargetPredicate((t) -> key1.equals(t.getKey())));
+    assertThat(sut.getSizeOfTicket()).isEqualTo(0);
+    assertThat(sut.hasNotTickets()).isTrue();
+}
+
+private UseTicketCommand useWithTargetPredicate(TicketFilter ticketFilter) {
+    return UseTicketCommand.builder()
+            .withTargetPredicate(ticketFilter)
+            .build();
+}
+```
+_**해석**<br>
+(1) 티켓을 지갑에 추가합니다. (KEY 1, KEY 2)<br>
+(2) 지갑 내 티켓 개수를 확인합니다. (2개)<br>
+(3) 티켓을 사용 처리합니다. (KEY 2)<br>
+(4) 지갑 내 티켓 개수를 확인합니다. (1개)<br>
+(5) 티켓을 사용 처리합니다. (KEY 1)<br>
+(6) 지갑 내 티켓 개수를 확인합니다. (0개)<br>
+(7) 지갑 내 티켓이 존재하지 않는지 확인합니다. (True)<br>_
 
 ## Think of Test
 
