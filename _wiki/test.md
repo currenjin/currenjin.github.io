@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-19 14:00:00 +0900
+updated : 2022-02-20 18:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -733,6 +733,28 @@ _**해석**<br>
 (5) 티켓을 사용 처리합니다. (KEY 1)<br>
 (6) 지갑 내 티켓 개수를 확인합니다. (0개)<br>
 (7) 지갑 내 티켓이 존재하지 않는지 확인합니다. (True)<br>_
+
+### **220220::trevari::wallet::domain::WalletTest**
+```java
+private Wallet sut;
+
+@BeforeEach
+void setUp() {
+    sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+}
+
+@Test
+void 새롭게_생성한_지갑은_삭제되지_않은_상태다() {
+    Wallet sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+
+    boolean usable = sut.isDeleted();
+
+    assertThat(usable).isFalse();
+}
+```
+_**해석**<br>
+(1) 지갑을 생성합니다.<br>
+(2) 지갑이 삭제된 상태인지 확인합니다. (False)<br>_
 
 ## Think of Test
 
