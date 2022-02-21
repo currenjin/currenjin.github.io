@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-20 18:00:00 +0900
+updated : 2022-02-21 18:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -755,6 +755,29 @@ void 새롭게_생성한_지갑은_삭제되지_않은_상태다() {
 _**해석**<br>
 (1) 지갑을 생성합니다.<br>
 (2) 지갑이 삭제된 상태인지 확인합니다. (False)<br>_
+
+### **220221::trevari::wallet::domain::WalletTest**
+```java
+private Wallet sut;
+
+@BeforeEach
+void setUp() {
+    sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+}
+
+@Test
+void delete는_지갑을_삭제된_상태로_만든다() {
+    Wallet sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+
+    sut.delete();
+
+    assertThat(sut.isDeleted()).isTrue();
+}
+```
+_**해석**<br>
+(1) 지갑을 생성합니다.<br>
+(2) 지갑을 제거합니다.<br>
+(3) 지갑이 제거된 상태인지 확인합니다. (True)<br>_
 
 ## Think of Test
 
