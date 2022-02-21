@@ -24,3 +24,14 @@ latex   : true
 ## 개발
 ### 피보나치 수열 테스트
 [Test Code Link](https://github.com/currenjin/TDD/blob/main/fibonacci/src/test/java/com/tdd/fibonacci/FibonacciTest.java)
+
+```java
+@Test
+void find_by_product_option_id() {
+    given(sut.findBy(ANY_PRODUCT_OPTION_ID, ANY_EVENTED_AT)).willReturn(ANY_MAPPING);
+
+    Mapping actual = sut.findBy(ANY_PRODUCT_OPTION_ID, ANY_EVENTED_AT);
+
+    assertThat(actual).isEqualTo(ANY_MAPPING);
+}
+```
