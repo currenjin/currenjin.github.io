@@ -3,7 +3,7 @@ layout  : wiki
 title   : 객체 지향 프로그래밍(Object-Oriented Programming, OOP)
 summary :
 date    : 2022-02-22 22:30:00 +0900
-updated : 2022-02-22 22:30:00 +0900
+updated : 2022-02-22 11:30:00 +0900
 tag     : programming
 toc     : true
 public  : true
@@ -49,3 +49,40 @@ Business logic 에서는 여러 객체를 서로 상호작용하도록 하며, �
 
 - ATM 시스템<br>
 : 사용자(Object)의 Action 에 따라 계좌(Object) 잔고 속성을 변경하는 입/출금 logic 처리
+
+## 응집도와 결합도
+좋은 소프트웨어 설계를 위해서는 결합도(coupling)는 낮추고 응집도(cohesion)는 높여야한다.
+
+### 응집도
+모듈(클래스) 간의 상호 의존 정도를 나타내는 지표로써 결합도가 낮으면 모듈 간의 상호 의존성이 줄어들어 객체의 재사용 및 유지보수가 유리
+
+### 결합도
+하나의 모듈 내부에 존재하는 구성 요소들의 기능적 관련성으로 응집도가 높은 모듈은 하나의 책임에 집중하고 독립성이 높아져, 재사용 및 유지보수가 용이
+
+
+## 객체지향 설계 5원칙 SOLID
+### SRP(Single Responsibility Principle, 단일 책임 원칙)
+한 클래스는 한 가지 책임을 가져야 한다.
+
+<img width="531" alt="image" src="https://user-images.githubusercontent.com/60500649/155144381-2c77bec0-af1d-4f4b-8744-5f870f75d336.png">
+
+### OCP(Open Closed Principle, 개방 폐쇄 원칙)
+자신의 확장에는 열려 있고, 주변의 변화에 대해서는 닫혀있어야 한다.
+
+<img width="532" alt="image" src="https://user-images.githubusercontent.com/60500649/155144292-413ebd0c-9cfd-432f-99fb-e698db85af64.png">
+
+### LSP(Liskov Substitution Principle, 리스코프 치환 원칙)
+서브 타입은 언제나 자신의 상위 타입으로 교체할 수 있어야 한다.
+
+<img width="635" alt="image" src="https://user-images.githubusercontent.com/60500649/155144201-b0af26e0-9571-4d8b-ad32-82746a3023bb.png">
+
+### ISP(Interface Segregation Principle, 인터페이스 분리 원칙)
+클라이언트는 자신이 사용하지 않는 메서드에 의존 관계를 맺으면 안 된다.
+
+<img width="625" alt="image" src="https://user-images.githubusercontent.com/60500649/155144770-72d7d514-10c8-4765-b95c-7ca10c0cec82.png">
+
+### DIP(Dependency Inversion Principle, 의존 역전 원칙)
+자신보다 변하기 쉬운 것에 의존하지 말아야 한다.
+
+<img width="561" alt="image" src="https://user-images.githubusercontent.com/60500649/155145072-b80a306a-f85b-4ce1-af59-9abc62a48e49.png">
+
