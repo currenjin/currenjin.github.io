@@ -1,6 +1,6 @@
 ---
 layout  : wiki
-title   : 인수 테스트 주도 개발(Acceptance Test Driven Development, ATDD)
+title   : ATDD(Acceptance Test Driven Development, 인수 테스트 주도 개발)
 summary :
 date    : 2022-02-23 00:30:00 +0900
 updated : 2022-02-23 00:30:00 +0900
@@ -13,7 +13,7 @@ latex   : true
 * TOC
 {:toc}
 
-# 인수 테스트 주도 개발(Acceptance Test Driven Development, ATDD)
+# ATDD(Acceptance Test Driven Development, 인수 테스트 주도 개발)
 
 인수 테스트 주도 개발(Acceptance Test Driven Development, ATDD)은 비즈니스 고객, 테스터, 개발자 간의 커뮤니케이션을 기반으로 하는 개발 방법론이다. <br>
 
