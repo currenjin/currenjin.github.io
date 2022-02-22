@@ -36,6 +36,3 @@ Acceptance Test 는 요구 사항이 분석될 때와 코딩 전에 생성된다
 
 작성 예정
 
-## Reference
-[atdd on wikipedia](https://en.wikipedia.org/wiki/Acceptance_test%E2%80%93driven_development)
-
