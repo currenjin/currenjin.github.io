@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-21 18:00:00 +0900
+updated : 2022-02-22 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -778,6 +778,32 @@ _**해석**<br>
 (1) 지갑을 생성합니다.<br>
 (2) 지갑을 제거합니다.<br>
 (3) 지갑이 제거된 상태인지 확인합니다. (True)<br>_
+
+### **220222::trevari::wallet::api::WalletApiControllerTest**
+```java
+@InjectMocks
+WalletApiController sut;
+
+@Test
+void getWallet() {
+    given(walletService.findBy(WALLET_ID_VALUE)).willReturn(Optional.of(wallet));
+
+    sut.getWallet(WALLET_ID_VALUE);
+
+    verify(walletService).findBy(WALLET_ID_VALUE);
+    verify(walletResponseConverter).convertBy(wallet);
+}
+```
+_**해석**<br>
+(1) walletId 를 통해 wallet 을 가져올 때, 미리 정의한 wallet 을 반환합니다.<br>
+(2) walletId 를 통해 지갑을 가져옵니다. (이때, 미리 정의한 wallet 을 반환하도록 합니다)<br>
+(3) walletService 에서 findBy 를 호출했는지 확인합니다.<br>
+(4) walletResponseConverter 에서 convertBy 를 호출했는지 확인합니다.<br>_
+
+_**생각**<br>
+(1) 이것이 화이트박스 테스트인가 보다. (내부 동작을 검사)<br>
+(2) 너무 개발자스러운 테스트라 생각했다.<br>
+(3) 뭔가 좀 더 일상적인 용어로 설명할 수 있을 정도의 테스트면 어떨까?<br>_
 
 ## Think of Test
 
