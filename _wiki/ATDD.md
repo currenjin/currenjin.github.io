@@ -39,13 +39,13 @@ Acceptance criteria 는 테스트에서 확인할 사항에 대한 설명이다.
 Acceptance Test 는 일반적으로 다음 형식을 따른다.
 
 #### Given(setup)
-시스템의 상태가 지정되는 것
+> 시스템의 상태가 지정되는 것
 
 #### When(trigger)
-행동 또는 사건이 일어나는 것
+> 행동 또는 사건이 일어나는 것
 
 #### Then(verification)
-시스템 상태가 변경되거나, 출력이 만들어진 것
+> 시스템 상태가 변경되거나, 출력이 만들어진 것
 
 #### Example
 ```
@@ -59,7 +59,7 @@ Then - Book is marked as checked out
 이전 단계에는 특정 예제 데이터가 포함되어 있지 않으므로 테스트를 완료하기 위해 추가된다.
 
 #### Given
-Book that has not been checked out
+> Book that has not been checked out
 
 _Books_
 - Title : Great book
@@ -67,19 +67,19 @@ _Books_
 
 <br>
 
-User who is registered on the system
+> User who is registered on the system
 
 _Users_
 - Name : Sam
 
 #### When
-User checks out a book
+> User checks out a book
 
 _Checkout action_
 - User : Sam, Checks out, Great book
 
 #### Then
-Book is marked as checked out
+> Book is marked as checked out
 
 _Books_
 - Title : Great book
@@ -103,10 +103,10 @@ _Books_
 비즈니스 고객이 사용자가 한 번에 하나의 책만 대출할 수 있는 비즈니스 규칙을 원한다고 가정한다. 다음 테스트를 통해 다음 사항을 확인할 수 있다.
 
 #### Scenario
-Check that checkout business rule is enforced
+> Check that checkout business rule is enforced
 
 #### Given
-Book that has been checked out
+> Book that has been checked out
 
 _Books_
 
@@ -125,13 +125,13 @@ _Users_
 - Name : Sam
 
 #### When
-User checks out another book
+> User checks out another book
 
 _Checkout action_
 - User :	Sam,	Checks out,	Another great book
 
 #### Then
-Error occurs
+> Error occurs
 
 _Error occurred_
 - Description
