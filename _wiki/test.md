@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-22 20:00:00 +0900
+updated : 2022-02-23 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -804,6 +804,24 @@ _**생각**<br>
 (1) 이것이 화이트박스 테스트인가 보다. (내부 동작을 검사)<br>
 (2) 너무 개발자스러운 테스트라 생각했다.<br>
 (3) 뭔가 좀 더 일상적인 용어로 설명할 수 있을 정도의 테스트면 어떨까?<br>_
+
+### **220223::trevari::wallet::api::WalletApiControllerTest**
+```java
+@InjectMocks
+WalletApiController sut;
+
+@Test()
+@DisplayName("Wallet 이 없다면 예외를 던진다.")
+void when_wallet_is_none_service_throws_exception() {
+    given(walletService.findBy(WALLET_ID_VALUE)).willReturn(Optional.empty());
+
+    assertThatThrownBy(() -> sut.getWallet(WALLET_ID_VALUE)).isInstanceOf(WalletNotFoundException.class);
+
+}
+```
+_**해석**<br>
+(1) walletId 를 통해 wallet 을 가져올 때, 빈 wallet 을 반환하도록 합니다.<br>
+(2) walletId 를 통해 wallet 을 가져올 때 지갑이 존재하지 않는다는 예외가 발생하는지 확인합니다.<br>_
 
 ## Think of Test
 
