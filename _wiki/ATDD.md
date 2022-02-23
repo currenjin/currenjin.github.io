@@ -32,11 +32,11 @@ Acceptance Test 는 요구 사항이 분석될 때와 코딩 전에 생성된다
 - 요구 사항을 참조하지 않는 테스트는 불필요한 테스트다.
 - 구현이 시작된 후 개발된 Acceptance Test 는 새로운 요구 사항을 나타낸다.
 
-## Acceptance criteria and tests Example
-허용 기준은 테스트에서 확인할 사항에 대한 설명입니다. "사용자로서 도서관에서 책을 대출하고 싶습니다"와 같은 요구 사항이 주어지면 수락 기준은 "책이 대출된 것으로 표시되었는지 확인"일 수 있습니다. 이 요구 사항에 대한 승인 테스트는 매번 동일한 효과로 테스트를 실행할 수 있도록 세부 정보를 제공합니다.
+## Acceptance criteria and tests by Example
+Acceptance criteria 는 테스트에서 확인할 사항에 대한 설명이다. "이용자로서 도서관에서 책을 대출하고 싶습니다" 와 같은 요구 사항이 주어지면 Acceptance Criteria 는 "책이 대출된 것으로 표시되었는지 확인" 일 수 있다. 이 요구 사항에 대한 승인 테스트는 매번 동일한 효과로 테스트를 실행할 수 있도록 세부 정보를 제공한다.
 
 ### Test format
-Acceptance Test 는 일반적으로 다음 형식을 따릅니다.
+Acceptance Test 는 일반적으로 다음 형식을 따른다.
 
 #### Given(setup)
 시스템의 상태가 지정되는 것
@@ -47,7 +47,7 @@ Acceptance Test 는 일반적으로 다음 형식을 따릅니다.
 #### Then(verification)
 시스템 상태가 변경되거나, 출력이 만들어진 것
 
-### Test Example
+#### Example
 ```
 Given - Book that has not been checked out
 And - User who is registered on the system
@@ -56,13 +56,12 @@ Then - Book is marked as checked out
 ```
 
 ### Complete test
-이전 단계에는 특정 예제 데이터가 포함되어 있지 않으므로 테스트를 완료하기 위해 추가됩니다.
+이전 단계에는 특정 예제 데이터가 포함되어 있지 않으므로 테스트를 완료하기 위해 추가된다.
 
 #### Given
 Book that has not been checked out
 
 _Books_
-
 - Title : Great book
 - Checked out : No
 
@@ -71,23 +70,72 @@ _Books_
 User who is registered on the system
 
 _Users_
-
 - Name : Sam
 
 #### When
 User checks out a book
 
 _Checkout action_
-
 - User : Sam, Checks out, Great book
 
 #### Then
 Book is marked as checked out
 
 _Books_
-
 - Title : Great book
 - Checked out : Yes
 - User : Sam
 
+### Test examination
+특정 데이터로 테스트를 검토하면 일반적으로 많은 질문이 나온다. 예시의 경우 다음과 같을 수 있다.
 
+```
+책이 이미 대여된 경우 어떻게 하는가?
+책이 존재하지 않으면?
+사용자가 시스템에 등록되어 있지 않으면 어떻게 하는가?
+책을 체크인해야 하는 날짜가 있는가?
+사용자는 몇 권의 책을 체크아웃할 수 있는가?
+```
+
+이러한 질문은 누락되거나 모호한 요구 사항을 밝히는 데 도움이 된다. 예상 결과에 마감일과 같은 추가 세부 정보를 추가할 수 있다. 다른 승인 테스트는 이미 대출된 책을 대출하려고 하는 것과 같은 조건에서 예상한 오류가 발생하는지 확인할 수 있다.
+
+### Another test example
+비즈니스 고객이 사용자가 한 번에 하나의 책만 대출할 수 있는 비즈니스 규칙을 원한다고 가정한다. 다음 테스트를 통해 다음 사항을 확인할 수 있다.
+
+#### Scenario
+Check that checkout business rule is enforced
+
+#### Given
+Book that has been checked out
+
+_Books_
+
+1
+- Title	: Great book
+- Checked out	: Yes
+- User : Sam
+
+2
+- Title : Another great book
+- Checked out : No
+
+<br>
+
+_Users_
+- Name : Sam
+
+#### When
+User checks out another book
+
+_Checkout action_
+- User :	Sam,	Checks out,	Another great book
+
+#### Then
+Error occurs
+
+_Error occurred_
+- Description
+- Violation of checkout business rule
+
+### Project acceptance tests
+In addition to acceptance tests for requirements, acceptance tests can be used on a project as a whole. For example, if this requirement was part of a library book checkout project, there could be acceptance tests for the whole project. These are often termed SMART objectives. An example test is "When the new library system is in production, the users will be able to check books in and out three times as fast as they do today".
