@@ -14,7 +14,6 @@ latex   : true
 {:toc}
 
 # ATDD(Acceptance Test Driven Development, 인수 테스트 주도 개발)
-
 인수 테스트 주도 개발(Acceptance Test Driven Development, ATDD)은 비즈니스 고객, 테스터, 개발자 간의 커뮤니케이션을 기반으로 하는 개발 방법론이다. <br>
 
 ## Overview
@@ -61,7 +60,7 @@ Then - Book is marked as checked out
 #### Given
 > Book that has not been checked out
 
-_Books_
+**Books**
 - Title : Great book
 - Checked out : No
 
@@ -69,19 +68,19 @@ _Books_
 
 > User who is registered on the system
 
-_Users_
+**Users**
 - Name : Sam
 
 #### When
 > User checks out a book
 
-_Checkout action_
+**Checkout action**
 - User : Sam, Checks out, Great book
 
 #### Then
 > Book is marked as checked out
 
-_Books_
+**Books**
 - Title : Great book
 - Checked out : Yes
 - User : Sam
@@ -108,32 +107,30 @@ _Books_
 #### Given
 > Book that has been checked out
 
-_Books_
+**Books**
 
-1
+Data 1.
 - Title	: Great book
 - Checked out	: Yes
 - User : Sam
 
-2
+Data 2.
 - Title : Another great book
 - Checked out : No
 
-<br>
-
-_Users_
+**Users**
 - Name : Sam
 
 #### When
 > User checks out another book
 
-_Checkout action_
+**Checkout action**
 - User :	Sam,	Checks out,	Another great book
 
 #### Then
 > Error occurs
 
-_Error occurred_
+**Error occurred**
 - Description
 - Violation of checkout business rule
 
