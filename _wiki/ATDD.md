@@ -61,8 +61,6 @@ Then - Book is marked as checked out
 #### Given
 Book that has not been checked out
 
-<br>
-
 _Books_
 
 - Title : Great book
@@ -72,8 +70,6 @@ _Books_
 
 User who is registered on the system
 
-<br>
-
 _Users_
 
 - Name : Sam
@@ -81,16 +77,12 @@ _Users_
 #### When
 User checks out a book
 
-<br>
-
 _Checkout action_
 
 - User : Sam, Checks out, Great book
 
 #### Then
 Book is marked as checked out
-
-<br>
 
 _Books_
 
