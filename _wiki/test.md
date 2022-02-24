@@ -845,8 +845,9 @@ void _400_getWallet_for_walletId_is_invalid_state_is_400() throws Exception {
 ```
 _**해석**<br>
 (1) api 요청을 합니다. (유효하지 않은 요청, '/apis/wallets/this is string')<br>
-(2) response status 가 Bad Request 인지 확인합니다.<br>
-(3) response code 가 400인지 확인합니다.<br>_
+(2) http status 가 올바른지 확인합니다. (BadRequest)<br>
+(3) http code 가 올바른지 확인합니다. (400)<br>
+(4) http reason 가 올바른지 확인합니다. (Invalid WalletId.)<br>_
 
 ## Think of Test
 
