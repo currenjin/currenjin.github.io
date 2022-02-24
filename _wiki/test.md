@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-23 20:00:00 +0900
+updated : 2022-02-24 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -822,6 +822,31 @@ void when_wallet_is_none_service_throws_exception() {
 _**해석**<br>
 (1) walletId 를 통해 wallet 을 가져올 때, 빈 wallet 을 반환하도록 합니다.<br>
 (2) walletId 를 통해 wallet 을 가져올 때 지갑이 존재하지 않는다는 예외가 발생하는지 확인합니다.<br>_
+
+### **220224::trevari::wallet::api::WalletApiControllerMVCTest**
+```java
+public static final String WALLETS_URL = "/apis/wallets";
+
+@Autowired
+MockMvc mvc;
+
+@Test
+@DisplayName("[400] In getWallet, When Wallet Id is invalid, Http State is 400")
+void _400_getWallet_for_walletId_is_invalid_state_is_400() throws Exception {
+    mvc.perform(get(WALLETS_URL + "/{walletId}", "this is string")
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .queryParam("v", "0.1.0"))
+
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonOf(ErrorResponse.with(400, "Invalid WalletId.")));
+    //hints Resolved Exception:
+}
+```
+_**해석**<br>
+(1) api 요청을 합니다. (유효하지 않은 요청, '/apis/wallets/this is string')<br>
+(2) response status 가 Bad Request 인지 확인합니다.<br>
+(3) response code 가 400인지 확인합니다.<br>_
 
 ## Think of Test
 
