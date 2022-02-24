@@ -3,7 +3,7 @@ layout  : wiki
 title   : CDD(Checklist-Driven-Documentation, 체크리스트 주도 문서화)
 summary :
 date    : 2022-01-12 22:38:00 +0900
-updated : 2022-01-21 18:22:00 +0900
+updated : 2022-02-24 15:22:00 +0900
 tag     : documentation
 toc     : true
 public  : true
@@ -65,3 +65,6 @@ latex   : true
 - 널널하게 작성했을 듯
 - 되는 것만 체크할 수도 있음
 
+### 02/24(목)
+
+**기획문서 → 스토리 정의 → AC 정의 → Checklist 작성 → 스토리 포인트 정의 → 작업**
