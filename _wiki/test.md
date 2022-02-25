@@ -734,6 +734,11 @@ _**해석**<br>
 (6) 지갑 내 티켓 개수를 확인합니다. (0개)<br>
 (7) 지갑 내 티켓이 존재하지 않는지 확인합니다. (True)<br>_
 
+_**생각**<br>
+(1) 전달하는 walletId 나 다른 메타 데이터(contentType, accept, queryParam)는 테스트를 보는 사람 입장에선 딱히 볼 필요가 없다 생각된다.<br>
+(2) 다른 메소드의 형태로 정의해 호출하는 건 어떨까?<br>
+(3) requestNotFound(inavalidWalletId) 와 같은 형태처럼<br>_
+
 ### **220220::trevari::wallet::domain::WalletTest**
 ```java
 private Wallet sut;
