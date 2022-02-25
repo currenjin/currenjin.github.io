@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-24 20:00:00 +0900
+updated : 2022-02-25 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -848,6 +848,34 @@ _**해석**<br>
 (2) http status 가 올바른지 확인합니다. (BadRequest)<br>
 (3) http code 가 올바른지 확인합니다. (400)<br>
 (4) http reason 가 올바른지 확인합니다. (Invalid WalletId.)<br>_
+
+### **220225::trevari::wallet::api::WalletApiControllerMVCTest**
+```java
+public static final String WALLETS_URL = "/apis/wallets";
+
+@Autowired
+MockMvc mvc;
+
+@Test
+@DisplayName("[404] In getWallet, When Wallet is None, Http State is 404")
+void _404_getWallet_when_wallet_is_none_state_is_404() throws Exception {
+    given(walletService.findBy(anyLong())).willReturn(Optional.empty());
+
+    mvc.perform(get(WALLETS_URL + "/{walletId}", 1)
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .queryParam("v", "0.1.0"))
+
+            .andExpect(status().isNotFound())
+            .andExpect(jsonOf(ErrorResponse.with(404, WalletNotFoundException.withWalletId(1L).getMessage())));
+}
+```
+_**해석**<br>
+(1) wallet 을 가져오려 하면, 빈 값을 반환하도록 합니다.
+(2) api 요청을 합니다. (존재하지 않는 walletId, '/apis/wallets/1')<br>
+(3) http status 가 올바른지 확인합니다. (Not Found)<br>
+(4) http code 가 올바른지 확인합니다. (404)<br>
+(5) http reason 가 올바른지 확인합니다. (Wallet(1) is Not found)<br>_
 
 ## Think of Test
 
