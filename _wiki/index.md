@@ -11,6 +11,7 @@ regenerate: true
 
 * [[example]]
 * [[ATDD]]
+* [[Mockito]]
 * [[docker]]
 * [[oop]]
 * [[kubernetes]]
