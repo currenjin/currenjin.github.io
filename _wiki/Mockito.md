@@ -20,8 +20,6 @@ latex   : true
 ## Example
 
 ### doThrow()
-예외를 던지고 싶을 땐, doThorw() 를 사용한다.
-
 ```java
 @Test(expected = IllegalArgumentException.class)
 public void name(){
@@ -31,3 +29,4 @@ public void name(){
     p.setName(name);
 }
 ```
+예외를 던지고 싶을 때 사용합니다.
