@@ -23,8 +23,8 @@ latex   : true
 @Test(expected = IllegalArgumentException.class)
 public void name(){
     Person person = mock(Person.class);
-    doThrow(new IllegalArgumentException()).when(person).setName(eq('currenjin'));
-    String name = 'currenjin';
+    doThrow(new IllegalArgumentException()).when(person).setName(eq("currenjin"));
+    String name = "currenjin";
     p.setName(name);
 }
 ```
