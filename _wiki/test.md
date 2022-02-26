@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-25 20:00:00 +0900
+updated : 2022-02-26 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -881,6 +881,47 @@ _**해석**<br>
 (3) http status 가 올바른지 확인합니다. (Not Found)<br>
 (4) http code 가 올바른지 확인합니다. (404)<br>
 (5) http reason 가 올바른지 확인합니다. (Wallet(1) is Not found)<br>_
+
+_**생각**<br>
+(1) 전달하는 walletId 나 다른 메타 데이터(contentType, accept, queryParam)는 테스트를 보는 사람 입장에선 딱히 볼 필요가 없다 생각된다.<br>
+(2) 다른 메소드의 형태로 정의해 호출하는 건 어떨까?<br>
+(3) requestNotFound(inavalidWalletId) 와 같은 형태처럼<br>_
+
+### **220226::trevari::wallet::api::WalletApiControllerMVCTest**
+```java
+public static final String WALLETS_URL = "/apis/wallets";
+
+@Autowired
+MockMvc mvc;
+
+@Test
+@DisplayName("[500] In getWallet")
+void _500_getWallet() throws Exception {
+    doThrow(new RuntimeException("some message")).when(walletService).findBy(anyLong());
+
+    mvc.perform(get(WALLETS_URL + "/{walletId}", 1)
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .queryParam("v", "0.1.0"))
+
+            .andExpect(status().isInternalServerError())
+            .andExpect(jsonOf(ErrorResponse.with(500, "some message")));
+}
+```
+_**해석**<br>
+(1) wallet 을 가져오려 하면, 예외를 던지도록 합니다. (some message)<br>
+(2) api 요청을 합니다. (/apis/wallets/1)<br>
+(3) http status 가 올바른지 확인합니다. (Internal Server Error)<br>
+(4) http code 가 올바른지 확인합니다. (500)<br>
+(5) http reason 가 올바른지 확인합니다. (some message)<br>_
+
+_**생각**<br>
+(1) 전달하는 walletId 나 다른 메타 데이터(contentType, accept, queryParam)는 테스트를 보는 사람 입장에선 딱히 볼 필요가 없다 생각된다.<br>
+(2) 다른 메소드의 형태로 정의해 호출하는 것도 괜찮을 것 같다. (ex. requestInternalServerError())<br>_
+
+_**doThrow**<br>
+(1) 이번 테스트 케이스를 통해 doThrow 라는 메소드를 처음 알았다.<br>
+(2) 테스트 시 특정 동작에서 임의의 예외를 던지도록 지정하는 메소드임.<br>_
 
 ## Think of Test
 
