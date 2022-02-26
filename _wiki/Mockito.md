@@ -13,8 +13,6 @@ latex   : true
 * TOC
 {:toc}
 
-테스트(Test) : 평가하다
-
 # Mockito
 
 ## Example
