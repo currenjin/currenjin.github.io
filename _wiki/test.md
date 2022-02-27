@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-26 10:30:00 +0900
+updated : 2022-02-27 14:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -922,6 +922,37 @@ _**생각**<br>
 _**doThrow**<br>
 (1) 이번 테스트 케이스를 통해 doThrow 라는 메소드를 처음 알았다.<br>
 (2) 테스트 시 특정 동작에서 임의의 예외를 던지도록 지정하는 메소드임.<br>_
+
+### **220227::trevari::wallet::api::WalletApiControllerMVCTest**
+```java
+public static final String WALLETS_URL = "/apis/wallets";
+
+@Autowired
+MockMvc mvc;
+
+@Test
+@DisplayName("[200] In getWallet ")
+void _200_getWallet() throws Exception {
+    given(walletService.findBy(ANY.WALLET_ID_VALUE)).willReturn(Optional.of(ANY.WALLET));
+
+    mvc.perform(MockMvcRequestBuilders.get(WALLETS_URL + "/{walletId}", ANY.WALLET_ID_VALUE)
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .queryParam("v", "0.1.0"))
+
+            .andExpect(status().isOk())
+            .andExpect(content().string(objectMapper.writeValueAsString(walletResponseConverter.convertBy(ANY.WALLET))));
+}
+```
+_**해석**<br>
+(1) wallet 을 가져오려 하면, 미리 정의한 wallet 을 반환합니다.<br>
+(2) api 요청을 합니다. (/apis/wallets/{walletId})<br>
+(3) http status 가 올바른지 확인합니다. (Ok)<br>
+(4) http response content 가 올바른지 확인합니다. (미리 정의한 wallet)<br>_
+
+_**생각**<br>
+(1) 전달하는 walletId 나 다른 메타 데이터(contentType, accept, queryParam)는 테스트를 보는 사람 입장에선 딱히 볼 필요가 없다 생각된다.<br>
+(2) 다른 메소드의 형태로 정의해 호출하는 것도 괜찮을 것 같다. (ex. requestOk())<br>_
 
 ## Think of Test
 
