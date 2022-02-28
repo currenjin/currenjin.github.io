@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-27 14:30:00 +0900
+updated : 2022-02-28 12:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -953,6 +953,39 @@ _**해석**<br>
 _**생각**<br>
 (1) 전달하는 walletId 나 다른 메타 데이터(contentType, accept, queryParam)는 테스트를 보는 사람 입장에선 딱히 볼 필요가 없다 생각된다.<br>
 (2) 다른 메소드의 형태로 정의해 호출하는 것도 괜찮을 것 같다. (ex. requestOk())<br>_
+
+### **220228::trevari::wallet::api::WalletApiControllerMVCTest**
+```java
+public static final String WALLETS_URL = "/apis/wallets";
+
+@Autowired
+MockMvc mvc;
+
+@Test
+@DisplayName("[500] In findBy")
+void _500_findBy() throws Exception {
+    doThrow(new RuntimeException("some message")).when(walletService).findBy(ANY.USER_ID);
+
+    mvc.perform(get(WALLETS_URL)
+                    .param("f", "find")
+                    .param("user", ANY.USER_ID.getId())
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .queryParam("v", "0.1.0"))
+
+            .andExpect(status().isInternalServerError())
+            .andExpect(jsonOf(ErrorResponse.with(500, "some message")));;
+}
+```
+_**해석**<br>
+(1) userId 로 wallet 을 가져오려 하면, 예외를 던집니다. (Runtime exception, "some message")<br>
+(2) api 요청을 합니다. (/apis/wallets?f=find&user={userId})<br>
+(3) http status 가 올바른지 확인합니다. (Internal server error)<br>
+(3) http code 가 올바른지 확인합니다. (500)<br>
+(4) http response 가 올바른지 확인합니다. (some message)<br>_
+
+_**해당 테스트 목적**<br>
+(1) Runtime exception 이 감지되면 Internal server error (code: 500) 이 발생하다는 것을 표현한다 생각된다.<br>_
 
 ## Think of Test
 
