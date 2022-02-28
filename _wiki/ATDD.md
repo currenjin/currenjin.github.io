@@ -3,7 +3,7 @@ layout  : wiki
 title   : ATDD(Acceptance Test Driven Development, 인수 테스트 주도 개발)
 summary :
 date    : 2022-02-23 00:30:00 +0900
-updated : 2022-02-24 00:30:00 +0900
+updated : 2022-02-28 21:30:00 +0900
 tag     : atdd
 toc     : true
 public  : true
@@ -135,4 +135,7 @@ Data 2.
 - Violation of checkout business rule
 
 ### Project acceptance tests
-In addition to acceptance tests for requirements, acceptance tests can be used on a project as a whole. For example, if this requirement was part of a library book checkout project, there could be acceptance tests for the whole project. These are often termed SMART objectives. An example test is "When the new library system is in production, the users will be able to check books in and out three times as fast as they do today".
+요구 사항에 대한 Acceptance tests 외에도 Acceptance tests 는 프로젝트 전체에서 사용할 수 있다. 예를 들어, 요구 사항이 도서관 도서 대출 프로젝트의 일부인 경우 전체 프로젝트에 대한 Acceptance test 가 있을 수 있다.
+
+#### Example
+- 새 도서관 시스템이 프로덕션 단계에 있을 때 사용자는 현재보다 3배 빨리 책을 대출 및 반납할 수 있을 것이다.
