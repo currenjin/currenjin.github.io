@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-28 12:30:00 +0900
+updated : 2022-02-28 21:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -985,7 +985,7 @@ _**해석**<br>
 (4) http response 가 올바른지 확인합니다. (some message)<br>_
 
 _**해당 테스트 목적**<br>
-(1) Runtime exception 이 감지되면 Internal server error (code: 500) 이 발생하다는 것을 표현한다 생각된다.<br>_
+(1) Runtime exception 이 감지되면 Internal server error (code: 500) 이 발생한다는 것을 표현한다 생각된다.<br>_
 
 ## Think of Test
 
