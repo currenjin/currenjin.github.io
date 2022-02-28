@@ -3,7 +3,7 @@ layout  : wiki
 title   : ATDD(Acceptance Test Driven Development, 인수 테스트 주도 개발)
 summary :
 date    : 2022-02-23 00:30:00 +0900
-updated : 2022-02-28 21:30:00 +0900
+updated : 2022-02-28 21:34:00 +0900
 tag     : atdd
 toc     : true
 public  : true
@@ -19,6 +19,9 @@ latex   : true
 ## Overview
 Acceptance Test 는 사용자 관점, 즉 시스템의 외부 관점에서 이루어진다. 특정 입력이 주어지면 시스템의 올바른 출력을 지정하는 것과 같이 외부에서 볼 수 있는 효과를 리스트업한다. <br>
 예를 들면, 주문이 **지불**에서 **배송됨**으로 바뀌는 것과 같이 상태가 어떻게 변경되는지 확인할 수 있다.
+
+## Process
+<img width="835" alt="image" src="https://user-images.githubusercontent.com/60500649/155984411-70ee09c7-2286-4853-be93-c8cbdaa8dceb.png">
 
 ## Creation
 Acceptance Test 는 요구 사항이 분석될 때와 코딩 전에 생성된다.  이 덕에, 요구 사항의 요청자(프로덕트 오너, 비즈니스 분석가, 고객 담당자 등), 개발자 및 테스터가 공동으로 개발할 수 있다.
