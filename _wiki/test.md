@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-02-28 21:30:00 +0900
+updated : 2022-03-01 12:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -986,6 +986,36 @@ _**해석**<br>
 
 _**해당 테스트 목적**<br>
 (1) Runtime exception 이 감지되면 Internal server error (code: 500) 이 발생한다는 것을 표현한다 생각된다.<br>_
+
+### **220301::trevari::wallet::api::WalletApiControllerMVCTest**
+```java
+public static final String WALLETS_URL = "/apis/wallets";
+
+@Autowired
+MockMvc mvc;
+
+@Test
+@DisplayName("[400] In findBy, When user id is None, Http State is 400 ")
+void _400_findBy_when_user_id_parameter_is_empty_state_is_400() throws Exception {
+    mvc.perform(get(WALLETS_URL)
+                    .param("f", "find")
+                    .param("user", StringUtils.EMPTY)
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .queryParam("v", "0.1.0"))
+
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonOf(ErrorResponse.with(400, "Invalid UserId.")));
+}
+```
+_**해석**<br>
+(1) api 요청을 합니다. ("/apis/wallets?f=find&user={userId}", userId is empty)<br>
+(2) http status 가 일치하는지 확인합니다. (Bad Request)<br>
+(3) http code 가 일치하는지 확인합니다. (400)<br>
+(4) http response message 가 올바른지 확인합니다. (Invalid UserId)<br>_
+
+_**해당 테스트 목적**<br>
+(1) 요청 시 userId Parameter 값이 비어있다면, Bad Request(400, Invalid UserId) 로 응답한다는 것을 알리기 위해 존재한다고 생각한다.<br>_
 
 ## Think of Test
 
