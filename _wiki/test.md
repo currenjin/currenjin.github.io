@@ -1015,7 +1015,7 @@ _**해석**<br>
 (4) http response message 가 올바른지 확인합니다. (Invalid UserId)<br>_
 
 _**해당 테스트 목적**<br>
-(1) 요청 시 userId Parameter 값이 비어있다면, Bad Request(400, Invalid UserId) 로 응답한다는 것을 알리기 위해 존재한다고 생각한다.<br>_
+- 요청 시 userId Parameter 값이 비어있다면, Bad Request(400, Invalid UserId) 로 응답한다는 것을 알리기 위해 존재한다고 생각한다.<br>_
 
 ## Think of Test
 
