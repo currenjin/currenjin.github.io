@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-01 18:30:00 +0900
+updated : 2022-03-02 15:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1016,6 +1016,39 @@ _**해석**<br>
 
 _**해당 테스트 목적**<br>
 (1) 요청 시 userId Parameter 값이 비어있다면, Bad Request(400, Invalid UserId) 로 응답한다는 것을 알리기 위해 존재한다고 생각한다.<br>_
+
+### **220302::trevari::wallet::api::WalletApiControllerMVCTest**
+```java
+public static final String WALLETS_URL = "/apis/wallets";
+
+@Autowired
+MockMvc mvc;
+
+@Test
+@DisplayName("[404] In findBy, When Wallet is None, Http State is 404 ")
+void _404_findBy_when_wallet_is_none_state_is_404() throws Exception {
+    given(walletService.findBy(ANY.USER_ID)).willReturn(Optional.empty());
+
+    mvc.perform(get(WALLETS_URL)
+                    .param("f", "find")
+                    .param("user", ANY.USER_ID.getId())
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .queryParam("v", "0.1.0"))
+
+            .andExpect(status().isNotFound())
+            .andExpect(jsonOf(ErrorResponse.with(404, WalletNotFoundException.withMessage("Wallet is Not found. UserId is " + ANY.USER_ID.getId()).getMessage())));
+}
+```
+_**해석**<br>
+(1) userId 로 wallet 을 가져올 때, 빈 값을 반환합니다.<br>
+(2) api 요청을 합니다. ("/apis/wallets?f=find&user={userId}", Returned wallet is empty)<br>
+(3) http status 가 일치하는지 확인합니다. (Not Found)<br>
+(4) http code 가 일치하는지 확인합니다. (404)<br>
+(5) http response message 가 올바른지 확인합니다. (Wallet is Not found. UserId is {userId})<br>_
+
+_**해당 테스트 목적**<br>
+(1) 요청 시 userId 에 일치하는 wallet 이 없으면 Not found 로 응답한다는 것을 알리는 목적이라 생각된다.<br>_
 
 ## Think of Test
 
