@@ -3,7 +3,7 @@ layout  : wiki
 title   : 객체 지향 프로그래밍(Object-Oriented Programming, OOP)
 summary :
 date    : 2022-02-22 22:30:00 +0900
-updated : 2022-03-03 22:30:00 +0900
+updated : 2022-03-03 23:00:00 +0900
 tag     : programming
 toc     : true
 public  : true
@@ -60,7 +60,7 @@ Business logic 에서는 여러 객체를 서로 상호작용하도록 하며, �
 하나의 모듈 내부에 존재하는 구성 요소들의 기능적 관련성으로 응집도가 높은 모듈은 하나의 책임에 집중하고 독립성이 높아져, 재사용 및 유지보수가 용이
 
 
-## 객체지향 설계 5원칙 SOLID
+## 객체 지향 설계 5원칙 SOLID
 ### SRP(Single Responsibility Principle, 단일 책임 원칙)
 한 클래스는 한 가지 책임을 가져야 한다.
 
@@ -86,3 +86,15 @@ Business logic 에서는 여러 객체를 서로 상호작용하도록 하며, �
 
 <img width="561" alt="image" src="https://user-images.githubusercontent.com/60500649/155145072-b80a306a-f85b-4ce1-af59-9abc62a48e49.png">
 
+## 객체 지향 생활 체조 원칙
+객체 지향 생활 체조 원칙은 소트웍스 앤솔러지에서 다루고 있는 내용으로 객체 지향 프로그래밍을 잘하기 위한 9가지 원칙을 제시하고 있다.
+
+1. 한 메서드에 오직 한 단계의 들여쓰기만 한다.
+2. else 예약어를 쓰지 않는다.
+3. 모든 원시 값과 문자열을 포장한다.
+4. 한 줄에 점을 하나만 찍는다.
+5. 줄여 쓰지 않는다(축약 금지).
+6. 모든 엔티티를 작게 유지한다.
+7. 3개 이상의 인스턴스 변수를 가진 클래스를 쓰지 않는다.
+8. 일급 컬렉션을 쓴다.
+9. getter/setter/프로퍼티를 쓰지 않는다.
