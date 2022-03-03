@@ -1117,7 +1117,6 @@ _**해당 테스트 목적**<br>
 URL = "/apis/wallets?f=find&meetingId={meetingId}&v=0.1.0"<br>
 MetaData = "contentType=application-json, accept=application-json"<br>_
 
-
 _**이상한 점**<br>
 (1) meetingId 가 empty 지만, 실제 내보내는 에러 메시지는 Invalid UserId 이다.<br>
 (2) Invalid MeetingId 로 수정되어야 한다 생각된다.<br>_
