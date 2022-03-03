@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-03 15:00:00 +0900
+updated : 2022-03-04 15:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1083,6 +1083,44 @@ _**해석**<br>
 _**해당 테스트 목적**<br>
 (1) 코드에 명시된 URL, Parameters, Meta data 의 조합으로 요청을 했을 때, 어떤 결과가 나오는 지 알려주는 용도인 것 같다.<br>
 (2) 해당 테스트 코드에서는 "/apis/wallets?f=find&user={userId}" 로 요청 시 지갑 데이터를 반환해 준다.<br>_
+
+### **220304::trevari::wallet::api::WalletApiControllerMVCTest**
+```java
+public static final String WALLETS_URL = "/apis/wallets";
+
+@Autowired
+MockMvc mvc;
+
+@Test
+@DisplayName("[400] In findUserIdByMeetingId, When meetingId id is None, Http State is 400 ")
+void _400_findUserIdByMeetingId_when_meeting_id_parameter_is_empty_state_is_400() throws Exception {
+    mvc.perform(get(WALLETS_URL)
+                    .param("f", "find")
+                    .param("meetingId", StringUtils.EMPTY)
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .queryParam("v", "0.1.0"))
+
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonOf(ErrorResponse.with(400, "Invalid UserId.")));
+}
+```
+_**해석**<br>
+(1) api 요청을 합니다. ("/apis/wallets?f=find&meetingId={meetingId}&v=0.1.0", meetingId is empty)<br>
+(2) http status 가 일치하는지 확인합니다. (Bad Request)<br>
+(3) http code 가 일치하는지 확인합니다. (400)<br>
+(4) http response message 가 올바른지 확인합니다. (Invalid UserId)<br>_
+
+_**해당 테스트 목적**<br>
+(1) 코드에 명시된 URL, Parameters, Meta data 의 조합으로 요청을 했을 때, 어떤 결과가 나오는 지 알려주는 용도인 것 같다.<br>
+(2) 해당 테스트 코드에서는 아래 형식으로 요청 시 에러(code=400, message=Invalid UserId)를 반환해 준다.<br>
+URL = "/apis/wallets?f=find&meetingId={meetingId}&v=0.1.0"<br>
+MetaData = "contentType=application-json, accept=application-json"<br>_
+
+
+_**이상한 점**<br>
+(1) meetingId 가 empty 지만, 실제 내보내는 에러 메시지는 Invalid UserId 이다.<br>
+(2) Invalid MeetingId 로 수정되어야 한다 생각된다.<br>_
 
 ## Think of Test
 
