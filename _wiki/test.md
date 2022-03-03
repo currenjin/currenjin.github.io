@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-02 15:00:00 +0900
+updated : 2022-03-03 15:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1049,6 +1049,40 @@ _**해석**<br>
 
 _**해당 테스트 목적**<br>
 (1) 요청 시 userId 에 일치하는 wallet 이 없으면 Not found 로 응답한다는 것을 알리는 목적이라 생각된다.<br>_
+
+### **220303::trevari::wallet::api::WalletApiControllerMVCTest**
+```java
+public static final String WALLETS_URL = "/apis/wallets";
+
+@Autowired
+MockMvc mvc;
+
+@Test
+@DisplayName("[200] In findBy")
+void _200_findByUser() throws Exception {
+    given(walletService.findBy(ANY.WALLET.getUserId())).willReturn(Optional.of(ANY.WALLET));
+
+    mvc.perform(get(WALLETS_URL)
+                    .param("f", "find")
+                    .param("user", ANY.WALLET.getUserId().getId())
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .queryParam("v", "0.1.0"))
+
+            .andExpect(status().isOk())
+            .andExpect(content().json(objectMapper.writeValueAsString(walletResponseConverter.convertBy(ANY.WALLET))));
+}
+```
+_**해석**<br>
+(1) userId 로 지갑을 가져올 때, 지정된 지갑을 반환합니다.<br>
+(2) api 요청을 합니다. ("/apis/wallets?f=find&user={userId}")<br>
+(3) http status 가 일치하는지 확인합니다. (Ok)<br>
+(4) http code 가 일치하는지 확인합니다. (200)<br>
+(5) http response content 가 올바른지 확인합니다. (지정된 지갑 데이터)<br>_
+
+_**해당 테스트 목적**<br>
+(1) 코드에 명시된 URL, Parameters, Meta data 의 조합으로 요청을 했을 때, 어떤 결과가 나오는 지 알려주는 용도인 것 같다.<br>
+(2) 해당 테스트 코드에서는 "/apis/wallets?f=find&user={userId}" 로 요청 시 지갑 데이터를 반환해 준다.<br>_
 
 ## Think of Test
 
