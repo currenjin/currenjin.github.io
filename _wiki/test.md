@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-04 15:00:00 +0900
+updated : 2022-03-05 12:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1120,6 +1120,35 @@ MetaData = "contentType=application-json, accept=application-json"<br>_
 _**이상한 점**<br>
 (1) meetingId 가 empty 지만, 실제 내보내는 에러 메시지는 Invalid UserId 이다.<br>
 (2) Invalid MeetingId 로 수정되어야 한다 생각된다.<br>_
+
+### **220305::trevari::wallet::api::DeleteWalletApiControllerTest**
+```java
+@Test
+void _204_successful_deletion(@Mock Wallet wallet) throws Exception {
+    given(walletService.findBy(UserId.of("user_id"))).willReturn(Optional.of(wallet));
+
+    mvc.perform(delete("/apis/wallets/users/{user}", "user_id")
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .queryParam("v", "0.1.0"))
+
+            .andExpect(status().isNoContent());
+}
+```
+_**해석**<br>
+(1) 지갑 삭제 요청 시 미리 정의된 지갑을 반환합니다.<br>
+(2) 지갑 삭제를 요청합니다. ("/apis/wallets/users/{user}?v=0.1.0")<br>
+(3) 상태가 일치한 지 확인합니다. (No Content)<br>
+
+_**해당 테스트 목적**<br>
+(1) 코드에 명시된 URL, Parameters, Meta data 의 조합으로 요청을 했을 때, 어떤 결과가 나오는 지 알려주는 용도인 것 같다.<br>_
+
+_**No Content**<br>
+(1) 성공적으로 처리했지만 컨텐츠를 제공하지는 않는다. 일반 사용자가 볼 일은 거의 드물며 처리 결과만 중요한 API 요청 등에서 주로 사용한다.<br>_
+
+_**약간의 의문**<br>
+(1) 삭제 요청에 성공했을 때 성공 여부를 반환하는게 맞지 않나?<br>
+(2) 동시에 htpp code 는 200 으로 반환하는게 맞다 생각된다.<br>_
 
 ## Think of Test
 
