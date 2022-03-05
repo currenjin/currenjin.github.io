@@ -1138,7 +1138,7 @@ void _204_successful_deletion(@Mock Wallet wallet) throws Exception {
 _**해석**<br>
 (1) 지갑 삭제 요청 시 미리 정의된 지갑을 반환합니다.<br>
 (2) 지갑 삭제를 요청합니다. ("/apis/wallets/users/{user}?v=0.1.0")<br>
-(3) 상태가 일치한 지 확인합니다. (No Content)<br>
+(3) 상태가 일치한 지 확인합니다. (No Content)<br>_
 
 _**해당 테스트 목적**<br>
 (1) 코드에 명시된 URL, Parameters, Meta data 의 조합으로 요청을 했을 때, 어떤 결과가 나오는 지 알려주는 용도인 것 같다.<br>_
