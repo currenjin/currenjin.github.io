@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-05 12:00:00 +0900
+updated : 2022-03-06 12:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1149,6 +1149,28 @@ _**No Content**<br>
 _**약간의 의문**<br>
 (1) 삭제 요청에 성공했을 때 성공 여부를 반환하는게 맞지 않나?<br>
 (2) 동시에 htpp code 는 200 으로 반환하는게 맞다 생각된다.<br>_
+
+### **220306::trevari::wallet::api::DeleteWalletApiControllerTest**
+```java
+@Test
+void _404_WalletNotFoundException(@Mock Wallet wallet) throws Exception {
+    doThrow(WalletNotFoundException.class).when(deleteWalletService).deleteWallet(wallet);
+
+    mvc.perform(delete("/apis/wallets/users/{user}", "user_id")
+                    .contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .queryParam("v", "0.1.0"))
+
+            .andExpect(status().isNotFound());
+}
+```
+_**해석**<br>
+(1) 지갑 삭제 요청 시 예외를 던집니다. (WalletNotFoundException)<br>
+(2) 지갑 삭제를 요청합니다. ("/apis/wallets/users/{user}?v=0.1.0")<br>
+(3) 상태가 일치한 지 확인합니다. (Not Found)<br>_
+
+_**해당 테스트 목적**<br>
+(1) 코드에 명시된 URL, Parameters, Meta data 의 조합으로 요청을 했을 때, 어떤 결과가 나오는 지 알려주는 용도인 것 같다.<br>_
 
 ## Think of Test
 
