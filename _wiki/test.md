@@ -1172,7 +1172,7 @@ _**해석**<br>
 _**해당 테스트 목적**<br>
 (1) 코드에 명시된 URL, Parameters, Meta data 의 조합으로 요청을 했을 때, 어떤 결과가 나오는 지 알려주는 용도인 것 같다.<br>_
 
-### **220307::trevari::wallet::api::DeleteWalletApiControllerTest**
+### **220307::trevari::wallet::consumer::WalletFinderTest**
 ```java
 @Test
 void walletByUserId(@Mock Wallet wallet) {
