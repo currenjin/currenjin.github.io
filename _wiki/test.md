@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-06 12:00:00 +0900
+updated : 2022-03-07 10:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1171,6 +1171,29 @@ _**해석**<br>
 
 _**해당 테스트 목적**<br>
 (1) 코드에 명시된 URL, Parameters, Meta data 의 조합으로 요청을 했을 때, 어떤 결과가 나오는 지 알려주는 용도인 것 같다.<br>_
+
+### **220307::trevari::wallet::api::DeleteWalletApiControllerTest**
+```java
+@Test
+void walletByUserId(@Mock Wallet wallet) {
+    given(repository.findByUserId(USER_ID)).willReturn(wallet);
+    WalletFinder sut = new WalletFinder(repository, longIdGenerator);
+
+    Wallet actual = sut.walletByUserId(USER_ID);
+
+    assertThat(actual).isInstanceOf(Wallet.class);
+}
+```
+_**해석**<br>
+(1) 레파지토리에서 지갑을 가져오려 할 때, 지정된 지갑을 반환합니다.<br>
+(2) Wallet Finder 를 정의합니다.<br>
+(3) Wallet Finder 를 통해 지갑을 가져옵니다.<br>
+(4) 가져온 지갑이 Wallet 클래스인지 확인합니다.<br>_
+
+_**내 생각**<br>
+(1) 이미 특정 지갑을 반환하라고 정의했으니 반환하는 값에 대한 비교가 의미없다고 생각됨.<br>
+(2) 이런 Application 같은 경우에는 WhiteBox 테스트를 통해 특정 메소드를 호출하는 것을 확인하는게 좋겠다.<br>
+(3) 이때는 Mockito.verify() 메소드가 사용될 것이다.<br>_
 
 ## Think of Test
 
