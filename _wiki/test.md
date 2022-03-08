@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-07 10:00:00 +0900
+updated : 2022-03-08 10:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1194,6 +1194,52 @@ _**내 생각**<br>
 (1) 이미 특정 지갑을 반환하라고 정의했으니 반환하는 값에 대한 비교가 의미없다고 생각됨.<br>
 (2) 이런 Application 같은 경우에는 WhiteBox 테스트를 통해 특정 메소드를 호출하는 것을 확인하는게 좋겠다.<br>
 (3) 이때는 Mockito.verify() 메소드가 사용될 것이다.<br>_
+
+### **220308::trevari::wallet::consumer::AddServiceTest**
+```java
+@InjectMocks
+AddService sut;
+
+@BeforeEach
+void setUp() {
+    anyServices = new ArrayList<>();
+    ANY_PROPERTIES.put(BADGE_PROPERTIES_NAME, null);
+    ANY_PROPERTIES.put(MEMBER_ID_PROPERTIES_NAME, "1L");
+    ANY_PROPERTIES.put(MEMBERSHIP_ID_PROPERTIES_NAME, "1L");
+    ANY_PROPERTIES.put(SERVICE_ID_PROPERTIES_NAME, "1L");
+    ANY_CHANGED_SERVICE.setServiceId(ANY_SERVICE_ID);
+    ANY_CHANGED_SERVICE.setBadge(null);
+    ANY_CHANGED_SERVICE.setProperties(ANY_PROPERTIES);
+}
+
+@Test
+void MEETING_ID_가_없는_독서모임_서비스_예외_처리() {
+    ANY_PROPERTIES.put(BADGE_PROPERTIES_NAME, BOOK_CLUB_BADGE_NAME);
+    ANY_PROPERTIES.put(MEETING_ID_PROPERTIES_NAME, null);
+    ANY_PROPERTIES.put(SERVICE_PERIOD_PROPERTIES_NAME, ANY_SERVICE_PERIOD_PROPERTIES);
+    ANY_CHANGED_SERVICE.setBadge(Badge.BOOK_CLUB_MEMBER);
+    ANY_CHANGED_SERVICE.setProperties(ANY_PROPERTIES);
+    anyServices.add(ANY_CHANGED_SERVICE);
+
+    given(repository.findById(ANY_WALLET_ID)).willReturn(wallet);
+    given(command.getWalletId()).willReturn(ANY_WALLET_ID);
+    given(command.getServices()).willReturn(anyServices);
+
+    assertThatThrownBy(() -> sut.add(command));
+}
+```
+**해석**<br>
+해당 테스트를 보자마자 숨이 턱 막혔습니다.<br>
+왜 그럴까요?<br>
+저는 테스트 코드 내에서 필요한 데이터를 추가해 주는 부분이 명시적이지 못하다고 생각합니다.<br>
+이름 자체가 _MEETING ID가 없는 독서모임 서비스 예외 처리_ 이기 때문이죠.<br>
+이런 경우에는 메소드를 따로 정의하는 것이 어떨까 생각합니다.<br>
+<br>
+_ex) MEETING_ID_IS_NULL();_<br>
+<br>
+그리고 다른 프로퍼티 및 데이터들에 대해서는 다른 코드와 비교하여 공통적인 부분만 따로 메소드로 빼거나 setUp 에서 정의하는 게 좋을 것 같습니다.<br>
+그러면 더욱 가독성이 좋은 테스트 코드가 될 것이라는 생각입니다.<br>
+
 
 ## Think of Test
 
