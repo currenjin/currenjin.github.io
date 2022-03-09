@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-08 10:00:00 +0900
+updated : 2022-03-09 12:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1244,6 +1244,70 @@ _ex) MEETING_ID_IS_NULL();_<br>
 그리고 다른 프로퍼티 및 데이터들에 대해서는 다른 코드와 비교하여 공통적인 부분만 따로 메소드로 빼거나 _setUp_ 에서 정의하는 게 좋을 것 같습니다.<br>
 그러면 더욱 가독성이 좋은 테스트 코드가 될 것이라는 생각입니다.<br>
 
+### **220309::trevari::wallet::consumer::AddServiceTest**
+```java
+@InjectMocks
+AddService sut;
+
+@BeforeEach
+void setUp() {
+    anyServices = new ArrayList<>();
+    ANY_PROPERTIES.put(BADGE_PROPERTIES_NAME, null);
+    ANY_PROPERTIES.put(MEMBER_ID_PROPERTIES_NAME, "1L");
+    ANY_PROPERTIES.put(MEMBERSHIP_ID_PROPERTIES_NAME, "1L");
+    ANY_PROPERTIES.put(SERVICE_ID_PROPERTIES_NAME, "1L");
+    ANY_CHANGED_SERVICE.setServiceId(ANY_SERVICE_ID);
+    ANY_CHANGED_SERVICE.setBadge(null);
+    ANY_CHANGED_SERVICE.setProperties(ANY_PROPERTIES);
+}
+
+@Test
+void SERVICE_PERIOD_가_없는_독서모임_서비스_예외_처리() {
+    ANY_PROPERTIES.put(BADGE_PROPERTIES_NAME, BOOK_CLUB_BADGE_NAME);
+    ANY_PROPERTIES.put(MEETING_ID_PROPERTIES_NAME, "asdasdasdasd");
+    ANY_PROPERTIES.put(SERVICE_PERIOD_PROPERTIES_NAME, null);
+    ANY_CHANGED_SERVICE.setBadge(Badge.BOOK_CLUB_MEMBER);
+    ANY_CHANGED_SERVICE.setProperties(ANY_PROPERTIES);
+    anyServices.add(ANY_CHANGED_SERVICE);
+
+    given(repository.findById(ANY_WALLET_ID)).willReturn(wallet);
+    given(command.getWalletId()).willReturn(ANY_WALLET_ID);
+    given(command.getServices()).willReturn(anyServices);
+
+    assertThatThrownBy(() -> sut.add(command));
+}
+```
+**해석**<br>
+해당 테스트 코드는 티켓을 추가하는 서비스에서 독서모임 티켓 추가 명령 시 _SERVICE_PERIOD_ 가 없으면 예외를 내보내는 것을 알리는 테스트 코드입니다.<br>
+
+**생각**<br>
+해당 테스트 코드에서 알아야하는 정보가 너무 많습니다. 그저 _SERVICE_PERIOD 가 없을 때 예외 처리되는 것_ 을 보고싶을 뿐인데 말이죠.<br>
+코드를 수정해 봤습니다.<br>
+
+```java
+@Test
+void SERVICE_PERIOD_가_없는_독서모임_서비스_예외_처리() {
+    SET_DATA_FOR_INVALID_SERVICE_PERIOD();
+
+    assertThatThrownBy(() -> sut.add(command));
+}
+
+private void SET_DATA_FOR_INVALID_SERVICE_PERIOD() {
+    ANY_PROPERTIES.put(BADGE_PROPERTIES_NAME, BOOK_CLUB_BADGE_NAME);
+    ANY_PROPERTIES.put(MEETING_ID_PROPERTIES_NAME, "asdasdasdasd");
+    ANY_PROPERTIES.put(SERVICE_PERIOD_PROPERTIES_NAME, null);
+    ANY_CHANGED_SERVICE.setBadge(Badge.BOOK_CLUB_MEMBER);
+    ANY_CHANGED_SERVICE.setProperties(ANY_PROPERTIES);
+    anyServices.add(ANY_CHANGED_SERVICE);
+
+    given(repository.findById(ANY_WALLET_ID)).willReturn(wallet);
+    given(command.getWalletId()).willReturn(ANY_WALLET_ID);
+    given(command.getServices()).willReturn(anyServices);
+}
+```
+
+메소드 _SET_DATA_FOR_INVALID_SERVICE_PERIOD_ 를 통해 어떤 일을 하는 코드인지 더욱 명시적으로 표현해 봤습니다.<br>
+다른 테스트 코드와의 공통점을 찾아 공통 메소드로 분리하는 것도 좋은 방법일 것 같다는 생각입니다.<br>
 
 ## Think of Test
 
