@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-09 13:00:00 +0900
+updated : 2022-03-10 10:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1309,6 +1309,43 @@ private void SET_DATA_FOR_INVALID_SERVICE_PERIOD() {
 
 메소드 _SET_DATA_FOR_INVALID_SERVICE_PERIOD_ 를 통해 어떤 일을 하는 코드인지 더욱 명시적으로 표현해 봤습니다.<br>
 다른 테스트 코드와의 공통점을 찾아 공통 메소드로 분리하는 것도 좋은 방법일 것 같다는 생각입니다.<br>
+
+### **220310::trevari::wallet::consumer::AddServiceTest**
+```java
+@InjectMocks
+AddService sut;
+
+@Test
+void 티켓_추가() {
+    ANY_PROPERTIES.put(BADGE_PROPERTIES_NAME, BOOK_CLUB_BADGE_NAME);
+    ANY_PROPERTIES.put(MEETING_ID_PROPERTIES_NAME, "asdasdasdasd");
+    ANY_PROPERTIES.put(SERVICE_PERIOD_PROPERTIES_NAME, ANY_SERVICE_PERIOD_PROPERTIES);
+    ANY_CHANGED_SERVICE.setProperties(ANY_PROPERTIES);
+    ANY_CHANGED_SERVICE.setBadge(Badge.BOOK_CLUB_MEMBER);
+    anyServices.add(ANY_CHANGED_SERVICE);
+
+    given(repository.findById(ANY_WALLET_ID)).willReturn(wallet);
+    given(command.getWalletId()).willReturn(ANY_WALLET_ID);
+    given(command.getServices()).willReturn(anyServices);
+
+    sut.add(command);
+
+    verify(wallet).execute(any(AddTicketCommand.class));
+}
+
+```
+**해석**<br>
+해당 테스트 코드는 티켓을 추가하는 서비스에서 티켓 추가 명령이 호출된다는 것을 알리는 테스트 코드입니다.<br>
+
+**생각**<br>
+티켓을 추가할 때 필요한 PROPERTIES 에 대해 추가하는 것은 보여줘도 된다 생각합니다.<br>
+하지만 ANY_CHANGED_SERVICE? 왜 추가하는 서비스에서 변경하는 서비스를 알아야 하지?<br>
+의문이 생기네요..<br>
+<br>
+행하는 역할에 대해서는 따로 이견이 없지만, 상수명이 헷갈립니다.<br>
+차라리, 상수명을 아래처럼 변경하는 것이 더 좋을 것 같습니다.<br>
+ANY_CHANGED_SERVICE -> ANY_SERVICE<br>
+<br>
 
 ## Think of Test
 
