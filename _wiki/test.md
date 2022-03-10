@@ -1332,7 +1332,6 @@ void 티켓_추가() {
 
     verify(wallet).execute(any(AddTicketCommand.class));
 }
-
 ```
 **해석**<br>
 해당 테스트 코드는 티켓을 추가하는 서비스에서 티켓 추가 명령이 호출된다는 것을 알리는 테스트 코드입니다.<br>
