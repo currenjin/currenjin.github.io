@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-10 10:00:00 +0900
+updated : 2022-03-11 10:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1345,6 +1345,47 @@ void 티켓_추가() {
 차라리, 상수명을 아래처럼 변경하는 것이 더 좋을 것 같습니다.<br>
 ANY_CHANGED_SERVICE -> ANY_SERVICE<br>
 <br>
+
+### **220311::trevari::wallet::consumer::CreateServiceTest**
+```java
+@InjectMocks
+CreateService sut;
+
+@Test
+void 지갑이_이미있다면_생성하지않는다() {
+    UserId userId = UserId.of("Tester");
+    CreateCommand command = CreateCommand.of(userId);
+
+    given(repository.existsByUserId(userId)).willReturn(true);
+
+    assertThatThrownBy(() -> sut.create(command)).isInstanceOf(EntityAlreadyExistsException.class);
+
+    verify(repository, never()).save(any(Wallet.class));
+}
+```
+**해석**<br>
+지갑을 추가할 때, 해당하는 유저의 지갑이 이미 있다면 예외를 던지는 테스트 코드입니다.<br>
+
+**생각**<br>
+딱히 뭐라고 할 코드는 아닙니다.<br>
+하지만 우리가 집중하고자 하는 방향에 좀 더 초점을 맞출 수 있도록 하려면 어떻게 해야할까요?<br>
+<br>
+두 가지가 있다.<br>
+(1) 딱히 알아도 되지 않을 정보를 빼고<br>
+(2) 알고싶은 정보를 추가합니다.<br>
+<br>
+첫 번째, 알아도 되지 않을 정보는 _userId 와 verify_ 부분인 것 같습니다.<br>
+해당 유저에 대한 지갑 생성 명령 시 _이미 있는 유저인가? 에 대해서 이미 있다._ 라고 답하는 것만 있으면 되고<br>
+_이미 있는 유저이기 때문에 예외를 발생_ 시키는 것을 알면 됩니다.<br>
+<br>
+두 번째, 알고싶은 정보는 _어떤 예외를 던지는 지와 그 예외에서 어떤 메시지를 던지는 지_ 알고 싶습니다.<br>
+어떤 예외를 던지는 지는 이미 적혀있습니다. 하지만, 이 예외에서 어떤 메시지를 던지는 지는 알 수 없습니다.<br>
+추가해 주면 좋겠습니다.<br>
+```java
+assertThatThrownBy(() -> sut.create(command))
+        .isInstanceOf(EntityAlreadyExistsException.class)
+        .hasMessageContaining("userId is already exist");
+```
 
 ## Think of Test
 
