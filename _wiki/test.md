@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-11 10:00:00 +0900
+updated : 2022-03-12 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1386,6 +1386,32 @@ assertThatThrownBy(() -> sut.create(command))
         .isInstanceOf(EntityAlreadyExistsException.class)
         .hasMessageContaining("userId is already exist");
 ```
+
+### **220312::trevari::wallet::consumer::CreateServiceTest**
+```java
+@InjectMocks
+CreateService sut;
+
+@Test
+void 지갑이_없다면_생성한다() {
+    UserId userId = UserId.of("Tester");
+    CreateCommand command = CreateCommand.of(userId);
+
+    given(repository.existsByUserId(userId)).willReturn(false);
+
+    sut.create(command);
+
+    verify(idGenerator).gen(WalletId.class);
+    verify(repository).save(any(Wallet.class));
+}
+```
+**해석**<br>
+지갑을 추가할 때, 해당하는 유저의 지갑이 없다면 지갑을 추가하는 테스트 코드입니다.<br>
+
+**생각**<br>
+지갑을 생성하는 명령을 실행할 때, 필요한 정보들을 다 담고 있으며,<br>
+지갑의 ID 가 생성되고, 생성된 지갑을 저장하는 것까지 명시적입니다.<br>
+딱히 변경할 필요가 없다고 생각이 드는 코드입니다.<br>
 
 ## Think of Test
 
