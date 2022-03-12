@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-12 14:00:00 +0900
+updated : 2022-03-13 01:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1412,6 +1412,40 @@ void 지갑이_없다면_생성한다() {
 지갑을 생성하는 명령을 실행할 때, 필요한 정보들을 다 담고 있으며,<br>
 지갑의 ID 가 생성되고, 생성된 지갑을 저장하는 것까지 명시적입니다.<br>
 딱히 변경할 필요가 없다고 생각이 드는 코드입니다.<br>
+
+### **220313::trevari::wallet::consumer::WalletFinderTest**
+```java
+@Test
+void walletByUserId(@Mock Wallet wallet) {
+    given(repository.findByUserId(USER_ID)).willReturn(wallet);
+    WalletFinder sut = new WalletFinder(repository, longIdGenerator);
+
+    Wallet actual = sut.walletByUserId(USER_ID);
+
+    assertThat(actual).isInstanceOf(Wallet.class);
+}
+```
+**해석**<br>
+유저 정보(userId)를 통해 지갑 조회 테스트하는 코드입니다.<br>
+
+**생각**<br>
+현재 해당 테스트는 의미없다 생각합니다.<br>
+미리 지정된 지갑을 반환하고, 그 지정된 지갑이 맞는지 확인하는 것이기 때문입니다.<br>
+제 생각에는 애플리케이션 로직인 만큼 다른 로직이 호출되는 것을 확인하는 것이 로직을 표현하기에 좋은 테스트같습니다.<br>
+해당 테스트에서는 repository 의 메소드 호출을 확인하는 것이 될 수 있겠네요.<br>
+이런 식으로 코드를 짤 수 있습니다.<br>
+```java
+@BeforeEach
+void before() {
+    WalletFinder sut = new WalletFinder(repository, longIdGenerator);
+}
+
+@Test
+void walletByUserId(@Mock Wallet wallet) {
+    sut.walletByUserId(USER_ID);
+    verify(repository).findByUserId(USER_ID);
+}
+```
 
 ## Think of Test
 
