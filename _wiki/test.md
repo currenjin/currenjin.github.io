@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-13 01:00:00 +0900
+updated : 2022-03-14 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1446,6 +1446,24 @@ void walletByUserId(@Mock Wallet wallet) {
     verify(repository).findByUserId(USER_ID);
 }
 ```
+
+### **220314::trevari::wallet::consumer::TicketKeyGeneratorTest**
+```java
+@Test
+void generate_book_meeting_ticket_key() {
+    service.setBadge(BOOK_CLUB_MEMBER);
+    String key = ticketKeyGenerator.generate(service);
+
+    assertThat(key).isEqualTo("BC:" + MEETING_ID_1);
+}
+```
+**해석**<br>
+뱃지에 따라 알맞은 포맷으로 키를 생성하는지 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+서비스에 뱃지를 셋팅하고, 키를 만드는 코드를 실행합니다.<br>
+그리고 그 생성한 키를 받아 뱃지에 맞는 포맷인지 확인하네요.<br>
+딱히 변경할 점이 없어보입니다. 저는 알고싶은 부분을 정확하게 알게 되었습니다.<br>
 
 ## Think of Test
 
