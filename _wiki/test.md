@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-14 10:30:00 +0900
+updated : 2022-03-15 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1464,6 +1464,46 @@ void generate_book_meeting_ticket_key() {
 서비스에 뱃지를 셋팅하고, 키를 만드는 코드를 실행합니다.<br>
 그리고 그 생성한 키를 받아 뱃지에 맞는 포맷인지 확인하네요.<br>
 딱히 변경할 점이 없어보입니다. 저는 알고싶은 부분을 정확하게 알게 되었습니다.<br>
+
+### **220315::trevari::member::consumer::TerminateServiceImplTest**
+```java
+TerminateServiceImpl sut;
+TerminateCommand command = new TerminateCommand();
+
+@Mock
+MemberRepository repository;
+
+@Mock
+Member member;
+
+@BeforeEach
+void setUp() {
+    command.setMemberId(ANY_MEMBER_ID);
+    command.setRefundApplicatedAt(ANY_REFUND_APPLICATED_AT);
+    sut = new TerminateServiceImpl(repository);
+}
+
+@Test
+void verify_method() {
+    given(repository.findById(ANY_MEMBER_ID)).willReturn(member);
+
+    sut.terminate(command);
+
+    verify(repository).findById(ANY_MEMBER_ID);
+    verify(member).terminate();
+    verify(repository).save(member);
+}
+```
+**해석**<br>
+해지 명령을 실행할 때, 호출되어야 하는 메소드가 호출되는지 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+딱히 부족하다고 생각이 드는 코드는 아닙니다.<br>
+하지만 더욱 명시적으로 하기 위해선, 멤버가 정말 해지 대상인지 확인시켜주는 코드가 내부에 있으면 좋을 것 같습니다.<br>
+아래 코드를 넣어주면 더욱 명시적일 것 같습니다.<br>
+```java
+given(member.isTerminated()).willReturn(false);
+```
 
 ## Think of Test
 
