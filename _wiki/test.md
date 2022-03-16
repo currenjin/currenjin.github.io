@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-15 10:30:00 +0900
+updated : 2022-03-16 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1504,6 +1504,48 @@ void verify_method() {
 ```java
 given(member.isTerminated()).willReturn(false);
 ```
+
+### **220316::trevari::member::consumer::TerminateServiceImplTest**
+```java
+TerminateServiceImpl sut;
+TerminateCommand command = new TerminateCommand();
+
+@Mock
+MemberRepository repository;
+
+@Mock
+Member member;
+
+@BeforeEach
+void setUp() {
+    command.setMemberId(ANY_MEMBER_ID);
+    command.setRefundApplicatedAt(ANY_REFUND_APPLICATED_AT);
+    sut = new TerminateServiceImpl(repository);
+}
+
+@Test
+void when_member_terminated_never_terminate_again() {
+    given(repository.findById(ANY_MEMBER_ID)).willReturn(member);
+    given(member.isTerminated()).willReturn(true);
+
+    sut.terminate(command);
+
+    verify(member, never()).terminate();
+}
+```
+**해석**<br>
+해지 명령을 실행할 때, 멤버가 이미 해지되어 있다면 해지 명령을 다시하지 않는 것을 보여주는 테스트 코드입니다.<br>
+
+**생각**<br>
+해당 테스트에서 필요한 내용을 생각해 봅니다.<br>
+일단 해지 명령을 시도하는 것이 있을 것이고(sut.terminate), 해지 명령을 시도할 때 멤버가 이미 해지되어 있다는 내용도 필요합니다(willReturn).<br>
+그리고 최종적으로 해지 명령을 다시하지 않는다는 내용이 필요합니다.(verify)<br>
+이 부분들은 전부 포함이 되어있군요.<br>
+해당 테스트 코드에서 표현하고 싶은 부분은 전부 있는 것 같습니다.<br>
+가독성도 괜찮은 것 같아요.<br>
+굳이 변경을 주자면, 테스트 제목을 한글로 바꾸는 건 어떨까요?<br>
+ex) 멤버를 해지할 때, 이미 해지된 멤버면 해지명령을 시도하지 않는다<br>
+꼭 필요한 부분은 아니지만 한 걸음 더 나아갔다는 느낌을 받을 수는 있을 것 같습니다.<br>
 
 ## Think of Test
 
