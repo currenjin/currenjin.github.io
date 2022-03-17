@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-16 10:30:00 +0900
+updated : 2022-03-17 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1546,6 +1546,53 @@ void when_member_terminated_never_terminate_again() {
 굳이 변경을 주자면, 테스트 제목을 한글로 바꾸는 건 어떨까요?<br>
 _ex) 멤버를 해지할 때, 이미 해지된 멤버면 해지명령을 시도하지 않는다_<br>
 꼭 필요한 부분은 아니지만 한 걸음 더 나아갔다는 느낌을 받을 수는 있을 것 같습니다.<br>
+
+### **220317::trevari::scheduler::domain::ScheduleGroupTest**
+```java
+private static final ScheduleGroupId SCHEDULE_GROUP_ID = ScheduleGroupId.of(1L);
+private static final ScheduleTriggerRuleId SCHEDULE_TRIGGER_RULE_ID = ScheduleTriggerRuleId.of(1L);
+private static final LocalDateTime _2022_03_15_18_00 = LocalDateTime.of(2022, 3, 15, 18, 0);
+
+private static ScheduleGroup sut;
+
+@BeforeEach
+void setUp() {
+    sut = ScheduleGroup.of(SCHEDULE_GROUP_ID, SCHEDULE_TRIGGER_RULE_ID, _2022_03_15_18_00);
+}
+
+@Test
+void 스케줄을_추가한다() {
+    sut.newSchedule("d-7");
+    sut.newSchedule("d-5");
+    sut.newSchedule("d-3");
+
+    assertThat(sut.hasScheduleBy(getTriggerDateTime("d-7"))).isTrue();
+    assertThat(sut.hasScheduleBy(getTriggerDateTime("d-5"))).isTrue();
+    assertThat(sut.hasScheduleBy(getTriggerDateTime("d-3"))).isTrue();
+}
+
+private LocalDateTime getTriggerDateTime(String s) {
+    return TriggerRule.ofPattern(s).applyTo(_2022_03_15_18_00);
+}
+```
+**해석**<br>
+스케줄을 추가하고, 각 triggerRuleText 에 해당하는 schdule 이 있는지 확인합니다.<br>
+
+**생각**<br>
+메일을 보내는 시점에서 작업이 진행 중인 프로젝트의 테스트 코드입니다.<br>
+작업을 진행하며 피드백을 반영해도 좋겠다 싶어 테스트 해석 메일로 발송합니다.<br>
+<br>
+일단, 두 가지에 대해 말하고 싶습니다.<br>
+1. ScheduleGroup 을 생성할 때 넘기는 날짜<br>
+2. hasScheduleBy 메소드<br>
+<br>
+ScheduleGroup 생성 시 넘기는 날짜는 무엇을 의미하는 것인지 잘 모르겠습니다.<br>
+그냥 실제 property name 인 _REFERENCE_DATE_TIME_ 으로 변경해 명시적으로 표현하면 좋을 것 같습니다.<br>
+<br>
+이전에는 findScheduleBy 라는 메소드를 사용했으나, 해당 메소드는 아무 곳도 사용하는 곳이 없어 제거한 상태입니다.<br>
+hasScheduleBy 메소드는 테스트 코드를 제외하면 내부에서만 사용하는 메소드입니다.<br>
+이런 경우에는 private 메소드로 변경하는 게 맞다고 생각하지만, 변경한 이후엔 스케줄을 추가했다는 테스트를 어떻게 할 지 잘 떠오르지 않습니다.. 그래서 현재 public 메소드로 두고 있습니다.<br>
+<br>
 
 ## Think of Test
 
