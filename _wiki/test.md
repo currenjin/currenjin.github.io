@@ -1589,8 +1589,8 @@ private LocalDateTime getTriggerDateTime(String s) {
 ScheduleGroup 생성 시 넘기는 날짜는 무엇을 의미하는 것인지 잘 모르겠습니다.<br>
 그냥 실제 property name 인 _REFERENCE_DATE_TIME_ 으로 변경해 명시적으로 표현하면 좋을 것 같습니다.<br>
 <br>
-이전에는 findScheduleBy 라는 메소드를 사용했으나, 해당 메소드는 아무 곳도 사용하는 곳이 없어 제거한 상태입니다.<br>
 hasScheduleBy 메소드는 테스트 코드를 제외하면 내부에서만 사용하는 메소드입니다.<br>
+이전에는 findScheduleBy 라는 메소드로 테스트에 사용했으나, 해당 메소드는 아무 곳도 사용하는 곳이 없어 제거한 상태입니다.<br>
 이런 경우에는 private 메소드로 변경하는 게 맞다고 생각하지만, 변경한 이후엔 스케줄을 추가했다는 테스트를 어떻게 할 지 잘 떠오르지 않습니다.. 그래서 현재 public 메소드로 두고 있습니다.<br>
 <br>
 
