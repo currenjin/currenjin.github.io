@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-17 14:00:00 +0900
+updated : 2022-03-18 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1593,6 +1593,56 @@ hasScheduleBy 메소드는 테스트 코드를 제외하면 내부에서만 사�
 이전에는 findScheduleBy 라는 메소드로 테스트에 사용했으나, 해당 메소드는 아무 곳도 사용하는 곳이 없어 제거한 상태입니다.<br>
 이런 경우에는 private 메소드로 변경하는 게 맞다고 생각하지만, 변경한 이후엔 스케줄을 추가했다는 테스트를 어떻게 할 지 잘 떠오르지 않습니다.. 그래서 현재 public 메소드로 두고 있습니다.<br>
 <br>
+
+### **220318::trevari::member::consumer::MembershipPeriodFinderTest**
+```java
+@BeforeEach
+void setUp() {
+    sut = new MembershipPeriodFinder();
+}
+
+@Test
+void wrong_club_type() {
+    MemberInfoChangeCommand command = new MemberInfoChangeCommand();
+    command.setEventedAt(Clocks.now());
+    command.setClub(Club.of(null, "WRONG_TYPE", LocalDateTime.now(), LocalDateTime.now()));
+    command.setMeetings(Lists.newArrayList(Meeting.of(MeetingId.of("123"), 1L, LocalDateTime.of(2021, 6, 1, 1, 1), LocalDateTime.of(2021, 12, 1, 1, 1))));
+
+    assertThatThrownBy(
+            () -> sut.getPeriodOfMembership(command))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Proper Club Type is not found.");
+}
+```
+**해석**<br>
+멤버십 기간을 가져올 때, 유효하지 않은 타입이면 예외를 던진다는 것을 알 수 있는 테스트입니다.<br>
+
+**생각**<br>
+커맨드를 만들고, 해당하는 커맨드를 통해 명령을 실행합니다.<br>
+저는 집중하고싶은 부분이 clubType 이기 때문에, 해당 값을 제외하고는 알지 않아도 괜찮다고 생각합니다.<br>
+따로 메소드로 추출하고 싶네요. 구현해 보면 아래 형태의 코드가 됩니다.<br>
+```java
+@Test
+void wrong_club_type() {
+    MemberInfoChangeCommand command = createCommandByClubType("WRONG_TYPE");;
+
+    assertThatThrownBy(
+            () -> sut.getPeriodOfMembership(command))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Proper Club Type is not found.");
+}
+
+private MemberInfoChangeCommand createCommandByClubType(String clubType) {
+    MemberInfoChangeCommand command = new MemberInfoChangeCommand();
+    command.setEventedAt(Clocks.now());
+    command.setClub(Club.of(null, clubType, LocalDateTime.now(), LocalDateTime.now()));
+    command.setMeetings(Lists.newArrayList(Meeting.of(MeetingId.of("123"), 1L, LocalDateTime.of(2021, 6, 1, 1, 1), LocalDateTime.of(2021, 12, 1, 1, 1))));
+
+    return command;
+}
+```
+
+보기에 더욱 깔끔한 코드가 된 것 같습니다.<br>
 
 ## Think of Test
 
