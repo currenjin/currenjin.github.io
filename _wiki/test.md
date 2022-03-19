@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-18 14:00:00 +0900
+updated : 2022-03-19 9:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1642,7 +1642,60 @@ private MemberInfoChangeCommand createCommandByClubType(String clubType) {
 }
 ```
 
-보기에 더욱 깔끔한 코드가 된 것 같습니다.<br>
+### **220319::trevari::member::consumer::MembershipPeriodFinderTest**
+```java
+@BeforeEach
+void setUp() {
+    sut = new MembershipPeriodFinder();
+}
+
+@Test
+void period_of_membership() {
+    MemberInfoChangeCommand command = new MemberInfoChangeCommand();
+    command.setEventedAt(Clocks.now());
+    command.setClub(Club.of(null, "BOOK_MEETING_CLUB", LocalDateTime.now(), LocalDateTime.now()));
+    command.setMeetings(Lists.newArrayList(Meeting.of(MeetingId.of("123"), 1L, LocalDateTime.of(2021, 6, 1, 1, 1), LocalDateTime.of(2021, 12, 1, 1, 1))));
+
+    Period result = sut.getPeriodOfMembership(command);
+
+    assertThat(result).isInstanceOf(Period.class);
+}
+```
+**해석**<br>
+멤버십 기간을 가져오는지 확인하는 테스트 코드입니다.<br>
+
+**해석하며 생각한 흐름**<br>
+아마 테스트하는 부분이 무엇인지 확인하면 이 테스트에서 필요한 게 뭔지 알 수 있을 것 같습니다.<br>
+<br>
+then 부분을 먼저 확인해 보겠습니다.<br>
+```java
+assertThat(result).isInstanceOf(Period.class);
+```
+결과에 대한 변수가 Period.class 인지 확인합니다.<br>
+결과에 대한 변수는 result 군요.<br>
+<br>
+result를 살펴봅시다.<br>
+```java
+Period result = sut.getPeriodOfMembership(command);
+```
+해당 값은 뭔진 모르겠지만 멤버십 기간을 가져오는 메소드를 커맨드를 넘기면서 호출한다는 사실을 알 수 있습니다.<br>
+<br>
+어떤 커맨드 일까요?<br>
+```java
+MemberInfoChangeCommand command = new MemberInfoChangeCommand();
+command.setEventedAt(Clocks.now());
+command.setClub(Club.of(null, "BOOK_MEETING_CLUB", LocalDateTime.now(), LocalDateTime.now()));
+command.setMeetings(Lists.newArrayList(Meeting.of(MeetingId.of("123"), 1L, LocalDateTime.of(2021, 6, 1, 1, 1), LocalDateTime.of(2021, 12, 1, 1, 1))));
+```
+MemberInfoChangeCommand 타입의 객체를 넘기는 군요. <br>
+그 아래 setter 를 호출하는 부분은 아마 필요한 값들을 적용하는 것 같습니다.<br>
+진짜 그럴까요? 한 번 setter 를 주석처리하고 테스트를 돌려볼게요.<br>
+```java
+java.lang.NullPointerException
+```
+네.. NullPointerException 이 발생합니다. 커맨드에 세팅해준 값을 통해 어떤 동작을 수행한다는 것을 알 수 있겠네요.<br>
+<br>
+이런 과정으로 저는 필요한 부분이 모두 존재한다는 사실을 알았습니다.<br>
 
 ## Think of Test
 
