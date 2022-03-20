@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-19 9:30:00 +0900
+updated : 2022-03-20 12:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1696,6 +1696,71 @@ java.lang.NullPointerException
 네.. NullPointerException 이 발생합니다. 커맨드에 세팅해준 값을 통해 어떤 동작을 수행한다는 것을 알 수 있겠네요.<br>
 <br>
 이런 과정으로 저는 필요한 부분이 모두 존재한다는 사실을 알았습니다.<br>
+
+### **220320::trevari::member::domain::TicketsSerializeTest**
+```java
+@Test
+void serializeAndDeserialize() {
+    LocalDateTime expiryDate = LocalDateTime.MIN;
+    Tickets tickets = Tickets.init();
+    tickets.add(new Ticket("A", TicketProps.builder().with("id", 1L).build(), expiryDate));
+    tickets.add(new Ticket("B", TicketProps.builder().with("id", 2L).build(), expiryDate));
+
+    String serialized = serializer.serialize(tickets);
+    Tickets deserialized = serializer.deserialize(serialized, Tickets.class);
+
+    assertThat(tickets).isEqualTo(deserialized);
+    assertThat(serializer.serialize(deserialized)).isEqualTo(serialized);
+}
+```
+**해석**<br>
+티켓을 직렬화와 역직렬화 했을 때, 데이터가 일치하는 지 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+then 부분을 보면 tickets 가 deserialized 와 같은지, deserialized 가 직렬화되면 serialized 와 같은지 확인합니다.<br>
+저는 이 테스트에서 표현하고 싶은게 두 가지로 보입니다.<br>
+<br>
+(1) 직렬화한 데이터가 옳은가?<br>
+(2) 역직렬화한 데이터가 옳은가?<br>
+<br>
+위 두 가지를 이 한 테스트 코드에서 모두 표현하는 것은 오히려 가독성을 떨어뜨리는 일이라고 생각합니다.<br>
+저는 위 테스트 코드를 쪼개 두 가지 테스트 코드로 표현하고자 합니다.<br>
+<br>
+```java
+@Test
+void Serialize() {
+    Tickets tickets = getTickets();
+    String ticketsString = getTicketsString();
+
+    String serialized = serializer.serialize(tickets);
+
+    assertThat(serialized).isEqualTo(ticketsString);
+}
+
+
+@Test
+void Deserialize() {
+    Tickets tickets = getTickets();
+    String ticketsString = getTicketsString();
+
+    Tickets deserialized = serializer.deserialize(ticketsString, Tickets.class);
+
+    assertThat(deserialized).isEqualTo(tickets);
+}
+
+private Tickets getTickets() {
+    LocalDateTime expiryDate = LocalDateTime.MIN;
+    Tickets tickets = Tickets.init();
+    tickets.add(new Ticket("A", TicketProps.builder().with("id", 1L).build(), expiryDate));
+    return tickets;
+}
+
+private String getTicketsString() {
+    return "{\"items\":[{\"key\":\"A\",\"properties\":{\"props\":{\"id\":\"1\"}},\"expiryDate\":\"-999999999-01-01T00:00:00\"}]}";
+}
+```
+네, 저는 이렇게 나눈 것이 각 단위를 더 명확하게 표현할 수 있다고 생각해요.<br>
+약간 ticket 들을 가져올 때, 고정된 값을 반환하는 게 약간 불편하긴 하지만 제가 원하는 목적은 일단 달성을 한 것 같습니다.<br>
 
 ## Think of Test
 
