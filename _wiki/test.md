@@ -1823,6 +1823,17 @@ void wallet_삭제하면_isDeleted가_true() {
 그래서, 저의 생각을 반영한 코드를 작성해 보았습니다.<br>
 
 ```java
+@Mock
+WalletRepository walletRepository;
+
+@Mock
+Wallet wallet;
+
+@BeforeEach
+void setUp() {
+    sut = new DeleteWalletService(walletRepository);
+}
+
 @Test
 void deleteWallet에서_호출하는_메소드_확인() {
     sut.deleteWallet(wallet);
