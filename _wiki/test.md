@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-22 10:30:00 +0900
+updated : 2022-03-23 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1842,6 +1842,54 @@ void deleteWallet에서_호출하는_메소드_확인() {
     verify(walletRepository).save(wallet);
 }
 ```
+
+
+### **220323::trevari::member::api::DeleteWalletServiceTest**
+```java
+@BeforeEach
+void setUp() {
+    sut = new DeleteWalletService(walletRepository);
+}
+
+@Test
+void userId의_지갑이_이미_삭제된_상태이면_WalletNotFoundException() {
+    wallet.delete();
+
+    assertThrows(WalletNotFoundException.class, () -> sut.deleteWallet(wallet));
+}
+```
+**해석**<br>
+지갑을 지우는 명령을 실행할 때, 지갑이 이미지 지워진 상태면 예외를 발생시킨다는 것을 알리는 테스트 코드입니다.<br>
+
+**생각**<br>
+두 가지의 문제가 보입니다.<br>
+<br>
+_제목에 userId 가 있지만, 테스트 코드 어느 곳에서도 userId 가 표현되지 않는 것_<br>
+_직접 지갑 객체에서 삭제 명령을 실행하는 것_<br>
+<br>
+위 두 문제 덕분에 해당 테스트 코드에서는 확인하고자 하는 부분이 불분명해 보일 수 밖에 없습니다.<br>
+제가 생각하는 이곳 테스트에서 보고자 하는 부분은 크게 두 가지라 생각합니다.<br>
+<br>
+_지갑이 삭제 상태인가?_<br>
+_삭제 상태이면 예외를 던지는가?_<br>
+<br>
+위 두 부분이 결여된 상태의 현재 테스트 코드는 의미가 없기 때문이죠.<br>
+제가 표현하고자 하는 부분을 반영한 코드는 다음과 같습니다.<br>
+
+```java
+@Test
+void 이미_삭제된_지갑이면_예외가_발생한다() {
+    given(wallet.isDeleted()).willReturn(true);
+
+    assertThatThrownBy(() -> sut.deleteWallet(wallet))
+            .isInstanceOf(WalletNotFoundException.class)
+            .hasMessageContaining("is already deleted.");
+}
+```
+
+given willReturn 메소드를 통해 지갑이 삭제되었다는 것을 알리는 것이 표현되었습니다.<br>
+그리고, 어플리케이션에서 삭제 명령을 실행했을 때, 예외가 발생하는 것,<br>
+어떤 예외가 발생하는지, 어떤 메시지가 담기는 지도 표현되었습니다.<br>
 
 ## Think of Test
 
