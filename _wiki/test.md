@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-23 10:30:00 +0900
+updated : 2022-03-24 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1843,7 +1843,6 @@ void deleteWallet에서_호출하는_메소드_확인() {
 }
 ```
 
-
 ### **220323::trevari::member::api::DeleteWalletServiceTest**
 ```java
 @BeforeEach
@@ -1890,6 +1889,48 @@ void 이미_삭제된_지갑이면_예외가_발생한다() {
 given willReturn 메소드를 통해 지갑이 삭제되었다는 것을 알리는 것이 표현되었습니다.<br>
 그리고, 어플리케이션에서 삭제 명령을 실행했을 때, 예외가 발생하는 것,<br>
 어떤 예외가 발생하는지, 어떤 메시지가 담기는 지도 표현되었습니다.<br>
+
+### **220323::trevari::member::api::WalletServiceTest**
+```java
+@Test
+void findBy() {
+    given(repository.findById(WalletId.of(ANY_WALLET_ID))).willReturn(wallet, (Wallet) null);
+
+    assertThat(sut.findBy(ANY_WALLET_ID).get()).isEqualTo(wallet);
+    assertThat(sut.findBy(ANY_WALLET_ID)).isEqualTo(Optional.empty());
+}
+```
+
+**해석**<br>
+WALLET ID 에 일치하는 지갑을 가져온다는 것을 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+_willReturn 내의 인자가 여러개인 것, 호출되는 횟수에 따라 해당 인덱스에 있는 값이 반환되는 것을 알았다.(여러 개를 쓸 수 있구나)_<br>
+<br>
+자, 코드를 보면 두 가지 테스트가 존재하네요.<br>
+<br>
+_ID 에 따라 지갑을 가져오는가_<br>
+_ID 에 맞는 지갑이 없으면 빈 값인가_<br>
+<br>
+서로 다른 테스트 둘이 붙어있으니 테스트 명도 불명확하고 보는사람으로 하여금 헷갈릴 수 있기 때문이죠.<br>
+해당 테스트 코드는 분리해 주고, 이름도 각 테스트 별로 명확하게 짓는 것이 좋을 것 같습니다.<br>
+제 생각을 반영해 작성한 코드입니다.<br>
+<br>
+```java
+@Test
+void 지갑_조회_시_존재하면_지갑이_반환된다() {
+    given(repository.findById(WalletId.of(ANY_WALLET_ID))).willReturn(wallet);
+
+    assertThat(sut.findBy(ANY_WALLET_ID).get()).isEqualTo(wallet);
+}
+
+@Test
+void 지갑_조회_시_존재하지_않을_때() {
+    given(repository.findById(WalletId.of(ANY_WALLET_ID))).willReturn(null);
+
+    assertThat(sut.findBy(ANY_WALLET_ID)).isEqualTo(Optional.empty());
+}
+```
 
 ## Think of Test
 
