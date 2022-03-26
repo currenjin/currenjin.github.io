@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-25 10:30:00 +0900
+updated : 2022-03-26 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1697,7 +1697,7 @@ java.lang.NullPointerException
 <br>
 이런 과정으로 저는 필요한 부분이 모두 존재한다는 사실을 알았습니다.<br>
 
-### **220320::trevari::member::domain::TicketsSerializeTest**
+### **220320::trevari::wallet::domain::TicketsSerializeTest**
 ```java
 @Test
 void serializeAndDeserialize() {
@@ -1762,7 +1762,7 @@ private String getTicketsString() {
 네, 저는 이렇게 나눈 것이 각 단위를 더 명확하게 표현할 수 있다고 생각해요.<br>
 약간 ticket 들을 가져올 때, 고정된 값을 반환하는 게 약간 불편하긴 하지만 제가 원하는 목적은 일단 달성을 한 것 같습니다.<br>
 
-### **220321::trevari::member::domain::TicketsSerializeTest**
+### **220321::trevari::wallet::domain::TicketsSerializeTest**
 ```java
 @Test
 void 티켓이_없을때_Serialize() {
@@ -1793,7 +1793,7 @@ void 티켓이_없을때_Serialize() {
 }
 ```
 
-### **220322::trevari::member::api::DeleteWalletServiceTest**
+### **220322::trevari::wallet::api::DeleteWalletServiceTest**
 ```java
 @BeforeEach
 void setUp() {
@@ -1843,7 +1843,7 @@ void deleteWallet에서_호출하는_메소드_확인() {
 }
 ```
 
-### **220323::trevari::member::api::DeleteWalletServiceTest**
+### **220323::trevari::wallet::api::DeleteWalletServiceTest**
 ```java
 @BeforeEach
 void setUp() {
@@ -1890,7 +1890,7 @@ given willReturn 메소드를 통해 지갑이 삭제되었다는 것을 알리�
 그리고, 어플리케이션에서 삭제 명령을 실행했을 때, 예외가 발생하는 것,<br>
 어떤 예외가 발생하는지, 어떤 메시지가 담기는 지도 표현되었습니다.<br>
 
-### **220324::trevari::member::api::WalletServiceTest**
+### **220324::trevari::wallet::api::WalletServiceTest**
 ```java
 @Test
 void findBy() {
@@ -1972,6 +1972,81 @@ void 삭제된_클럽을_find_할_때_null을_반환하는지_확인한다() {
     assertThat(actual).isNull();
 }
 ```
+
+### **220326::trevari::product::api::MappingFinderTest**
+```java
+@Test
+void 멤버가_없다면_생성한다() {
+    UserId  userId = UserId.of("Tester");
+    MembershipId membershipId = MembershipId.of(1L);
+    command.setUserId(userId);
+    command.setMembershipId(membershipId);
+
+    when(longIdGenerator.gen(MemberId.class)).thenReturn(MemberId.of(1L));
+    given(repository.existsByUserIdAndMembershipIdAndState(userId, membershipId, MemberState.JOINED)).willReturn(false);
+    Meeting[] meetings = new Meeting[command.getMeetings().size()];
+    meetings = command.getMeetings().stream().map(e -> Meeting.of(e.getId().getValue(), e.getStartedAt())).collect(Collectors.toList()).toArray(meetings);
+    LocalDateTime purchasedAt = command.getEventedAt();
+
+
+    Period periodOfMembership = new BookClubMembershipPeriodFactory(meetings).create();
+    ServiceRunningPeriod communityServiceRunningPeriod = new GeneralServiceRunningContextPeriodFactory(purchasedAt, periodOfMembership).create();
+    List<ServiceRunningContextFactory> list = Arrays.stream(SupportedService.values())
+            .filter(v -> Badge.COMMUNITY_MEMBER.equals(v.getBadge()))
+            .map(s -> new GeneralMemberServiceRunningContextFactory(command.getUserId(), command.getMembershipId(), s, communityServiceRunningPeriod, ExtendedPropsFactory.DO_NOTING)).collect(Collectors.toList());
+    list.addAll(Arrays.stream(meetings)
+            .map(meeting -> new GeneralMemberServiceRunningContextFactory(command.getUserId(), command.getMembershipId(), BOOK_CLUB_MEETING, new BookMeetingPeriodFactory(meeting).create(), MeetingExtendedPropsFactory.of(meeting))).collect(Collectors.toList()));
+    ServiceRunningContextFactory[] factories = new ServiceRunningContextFactory[list.size()];
+    factories = list.toArray(factories);
+
+    given(membershipMemberFactoryFinder.findMembershipFactory(command)).willReturn(new GeneralMembershipMemberFactory(() -> longIdGenerator.gen(MemberId.class), periodOfMembership, factories));
+
+    sut.join(command);
+
+    verify(longIdGenerator).gen(MemberId.class);
+    verify(repository).save(any(Member.class));
+}
+```
+
+**해석**<br>
+해당하는 멤버가 없을 때, 멤버를 생성하는 명령을 실행하는 것을 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+보자마자 숨이 턱 막혔습니다.<br>
+해당 테스트를 알기 위해선 너무나도 많은 정보를 알아야 하고, 동시에 너무나도 많은 피로감이 쌓입니다.<br>
+어플리케이션 로직에서 이렇게 다 만들면서 테스트를 진행하면 의미가 드러나지 않게 된다고 생각하거든요.<br>
+어플리케이션은 다른 로직을 호출하기 위한 중간자라고 생각하기 때문입니다.<br>
+테스트에서 표현하고자 하는 부분을 인식하고 빨리 갈아엎는 게 좋겠네요.<br>
+<br>
+표현하고자 하는 부분은 두 가지인 것 같습니다.<br>
+<br>
+_해당하는 멤버가 없는지_<br>
+_없으면 멤버 생성 메소드를 호출하는지_<br>
+<br>
+복잡한 정보들을 다 빼고, 필요한 부분만 남긴 코드입니다.<br>
+
+```java
+@Mock
+JoinCommand joinCommand;
+
+@Mock
+MembershipMemberFactory factory;
+
+@Mock
+Member member;
+
+@Test
+void 멤버가_없다면_생성을_시도한다() {
+    given(repository.existsByUserIdAndMembershipIdAndState(joinCommand.getUserId(), joinCommand.getMembershipId(), MemberState.JOINED)).willReturn(false);
+    given(membershipMemberFactoryFinder.findMembershipFactory(joinCommand)).willReturn(factory);
+    given(factory.create(joinCommand.getUserId(), joinCommand.getMembershipId(), joinCommand.getEventedAt())).willReturn(member);
+
+    sut.join(joinCommand);
+
+    verify(repository).save(member);
+}
+```
+
 
 ## Think of Test
 
