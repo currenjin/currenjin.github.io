@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-26 10:30:00 +0900
+updated : 2022-03-27 12:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2047,6 +2047,27 @@ void 멤버가_없다면_생성을_시도한다() {
 }
 ```
 
+### **220327::trevari::product::api::MappingFinderTest**
+```java
+@Test
+void 멤버의_상태가_joined인_멤버가_이미있다면_생성하지않는다() {
+
+    given(repository.existsByUserIdAndMembershipIdAndState(ANY_USER_ID, ANY_MEMBERSHIP_ID, MemberState.JOINED)).willReturn(true);
+
+    assertThatThrownBy(() -> sut.join(command)).isInstanceOf(EntityAlreadyExistsException.class);
+
+    verify(repository, never()).save(any(Member.class));
+}
+```
+
+**해석**<br>
+JOINED 인 멤버가 이미 존재한다면 멤버를 생성하지 않는 것을 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+저장하는 메소드를 따로 호출하지 않는 것을 확인하고, join 메소드를 호출했을 때 예외가 발생하네요.<br>
+어떨 때 예외가 발생하는지 확인하고 싶어 시선을 위로 돌리면 이미 membershipId 에 일치하는 멤버가 존재한다는 것을 알 수 있습니다.<br>
+전체적으로 표현하고자 하는 부분만 표현한 깔끔한 테스트라고 생각합니다.<br>
+저는 딱히 고칠 부분이 없다고 생각합니다.<br>
 
 ## Think of Test
 
