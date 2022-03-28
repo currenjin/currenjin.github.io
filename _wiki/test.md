@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-27 12:00:00 +0900
+updated : 2022-03-28 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1973,7 +1973,7 @@ void 삭제된_클럽을_find_할_때_null을_반환하는지_확인한다() {
 }
 ```
 
-### **220326::trevari::product::api::MappingFinderTest**
+### **220326::trevari::member::consumer::DefaultMemberJoinServiceTest**
 ```java
 @Test
 void 멤버가_없다면_생성한다() {
@@ -2047,7 +2047,7 @@ void 멤버가_없다면_생성을_시도한다() {
 }
 ```
 
-### **220327::trevari::product::api::MappingFinderTest**
+### **220327::trevari::member::consumer::DefaultMemberJoinServiceTest**
 ```java
 @Test
 void 멤버의_상태가_joined인_멤버가_이미있다면_생성하지않는다() {
@@ -2068,6 +2068,71 @@ JOINED 인 멤버가 이미 존재한다면 멤버를 생성하지 않는 것을
 어떨 때 예외가 발생하는지 확인하고 싶어 시선을 위로 돌리면 이미 membershipId 에 일치하는 멤버가 존재한다는 것을 알 수 있습니다.<br>
 전체적으로 표현하고자 하는 부분만 표현한 깔끔한 테스트라고 생각합니다.<br>
 저는 딱히 고칠 부분이 없다고 생각합니다.<br>
+
+
+### **220328::trevari::member::consumer::DefaultMemberJoinServiceTest**
+```java
+@Test
+void 멤버가_동일한_멤버십을_구매했는데_멤버State가_TERMINATED이라면_기존데이터는_유지하고_새로운멤버로_JOIN시킨다() {
+    given(repository.existsByUserIdAndMembershipIdAndState(ANY_USER_ID, ANY_MEMBERSHIP_ID, MemberState.JOINED)).willReturn(false);
+    when(longIdGenerator.gen(MemberId.class)).thenReturn(MemberId.of(1L));
+    Meeting[] meetings = new Meeting[command.getMeetings().size()];
+    meetings = command.getMeetings().stream().map(e -> Meeting.of(e.getId().getValue(), e.getStartedAt())).collect(Collectors.toList()).toArray(meetings);
+    LocalDateTime purchasedAt = command.getEventedAt();
+
+
+    Period periodOfMembership = new BookClubMembershipPeriodFactory(meetings).create();
+    ServiceRunningPeriod communityServiceRunningPeriod = new GeneralServiceRunningContextPeriodFactory(purchasedAt, periodOfMembership).create();
+
+    List<ServiceRunningContextFactory> list = Arrays.stream(SupportedService.values())
+            .filter(v -> Badge.COMMUNITY_MEMBER.equals(v.getBadge()))
+            .map(s -> new GeneralMemberServiceRunningContextFactory(command.getUserId(), command.getMembershipId(), s, communityServiceRunningPeriod, ExtendedPropsFactory.DO_NOTING)).collect(Collectors.toList());
+    list.addAll(Arrays.stream(meetings)
+            .map(meeting ->
+                    new GeneralMemberServiceRunningContextFactory(command.getUserId(), command.getMembershipId(), BOOK_CLUB_MEETING, new BookMeetingPeriodFactory(meeting).create(), MeetingExtendedPropsFactory.of(meeting)))
+            .collect(Collectors.toList()));
+    ServiceRunningContextFactory[] factories = new ServiceRunningContextFactory[list.size()];
+    factories = list.toArray(factories);
+    given(membershipMemberFactoryFinder.findMembershipFactory(command)).willReturn(new GeneralMembershipMemberFactory(() -> longIdGenerator.gen(MemberId.class), periodOfMembership, factories));
+
+    sut.join(command);
+
+    verify(repository).save(any(Member.class));
+}
+```
+
+**해석**<br>
+같은 멤버십에서 JOINED 인 멤버가 존재하지 않으면 멤버를 생성한다는 것을 알려주는 테스트 코드입니다.<br>
+
+**생각**<br>
+테스트 제목에는 TERMINATED 상태인 멤버라면 데이터를 유지하고 새로 멤버를 만든다고 하지만,<br>
+멤버가 TERMINATED 상태인 것은 그 어디에도 표현되지 않고 있습니다.<br>
+또한, given/when/then 에서 given 부분이 너무 장황합니다. 알아야 하는 정보가 너무 많습니다.<br>
+TERMINATED 부분을 어떻게 표현할 방법이 없어, 해당 테스트의 의미를 다시 정의해 보는게 좋을 것 같습니다.<br>
+<br>
+_JOINED 상태인 멤버가 없다면, 생성한다._<br>
+<br>
+위와 같이 정의해보니 테스트할 부분이 더 명확해 지는 것 같습니다.<br>
+테스트에서 표현하고 싶은 부분을 정리해 보면,<br>
+<br>
+_JOINED 상태인 멤버가 없는가?_<br>
+_멤버를 생성하는가?_<br>
+<br>
+두 가지가 나옵니다.<br>
+즉시 반영해 보겠습니다.<br>
+
+```java
+@Test
+void JOINED_상태인_멤버가_없다면_생성한다() {
+    given(repository.existsByUserIdAndMembershipIdAndState(joinCommand.getUserId(), joinCommand.getMembershipId(), MemberState.JOINED)).willReturn(false);
+    given(membershipMemberFactoryFinder.findMembershipFactory(joinCommand)).willReturn(factory);
+    given(factory.create(joinCommand.getUserId(), joinCommand.getMembershipId(), joinCommand.getEventedAt())).willReturn(member);
+
+    sut.join(joinCommand);
+
+    verify(repository).save(member);
+}
+```
 
 ## Think of Test
 
