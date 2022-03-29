@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-28 10:30:00 +0900
+updated : 2022-03-29 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2069,7 +2069,6 @@ JOINED 인 멤버가 이미 존재한다면 멤버를 생성하지 않는 것을
 전체적으로 표현하고자 하는 부분만 표현한 깔끔한 테스트라고 생각합니다.<br>
 저는 딱히 고칠 부분이 없다고 생각합니다.<br>
 
-
 ### **220328::trevari::member::consumer::DefaultMemberJoinServiceTest**
 ```java
 @Test
@@ -2133,6 +2132,30 @@ void JOINED_상태인_멤버가_없다면_생성한다() {
     verify(repository).save(member);
 }
 ```
+
+### **220329::trevari::member::consumer::TerminateServiceImplTest**
+```java
+@Test
+void verify_method() {
+    given(repository.findById(ANY_MEMBER_ID)).willReturn(member);
+
+    sut.terminate(command);
+
+    verify(repository).findById(ANY_MEMBER_ID);
+    verify(member).terminate();
+    verify(repository).save(member);
+}
+```
+
+**해석**<br>
+해지 명령을 실행하면, 호출해야하는 메소드를 호출하는지 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+Application 로직의 테스트에서는 화이트박스 테스트를 하는 것이 좋다고 생각합니다.<br>
+화이트박스 테스트는 로직의 내부 동작을 검사하는 테스트로, 메소드의 호출 따위를 확인합니다.<br>
+위 테스트 코드를 봤을 때, 해지 명령 시 어떤 것을 호출하는지 확인할 수 있습니다.<br>
+저는 해당 테스트 코드에서 Application 로직이 어떤 동작을 수행하는지 알 수 있네요.<br>
+수정할 필요는 없이 유지해도 좋은 테스트 코드인 것 같습니다.<br>
 
 ## Think of Test
 
