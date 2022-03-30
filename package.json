@@ -1,5 +1,5 @@
 {
-  "name": "johngrib.github.io",
+  "name": "currenjin.github.io",
   "version": "1.0.0",
   "description": "data generator",
   "main": "generateData.js",
@@ -12,12 +12,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/johngrib/johngrib.github.io.git"
+    "url": "git+https://github.com/currenjin/currenjin.github.io.git"
   },
-  "author": "John Grib",
+  "author": "Hyunjin Jeong",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/johngrib/johngrib.github.io/issues"
+    "url": "https://github.com/currenjin/currenjin.github.io/issues"
   },
-  "homepage": "https://github.com/johngrib/johngrib.github.io#readme"
+  "homepage": "https://github.com/currenjin/currenjin.github.io#readme"
 }
