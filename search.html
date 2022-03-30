@@ -4,7 +4,17 @@ title: Search
 permalink: /search/
 public: true
 ---
-<div id="home-search">
-    <script async src="https://cse.google.com/cse.js?cx=9788524cedaa611e4"></script>
-    <div class="gcse-search" linkTarget="_parent" queryParameterName="searchString"></div>
-</div>
+ <div id="home-search">
+     <script>
+         (function() {
+             var cx = '9788524cedaa611e4';
+             var gcse = document.createElement('script');
+             gcse.type = 'text/javascript';
+             gcse.async = true;
+             gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+             var s = document.getElementsByTagName('script')[0];
+             s.parentNode.insertBefore(gcse, s);
+         })();
+     </script>
+     <gcse:search linkTarget="_parent" queryParameterName="searchString"></gcse:search>
+ </div>
