@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-29 10:30:00 +0900
+updated : 2022-03-30 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2155,6 +2155,32 @@ Application 로직의 테스트에서는 화이트박스 테스트를 하는 것
 화이트박스 테스트는 로직의 내부 동작을 검사하는 테스트로, 메소드의 호출 따위를 확인합니다.<br>
 위 테스트 코드를 봤을 때, 해지 명령 시 어떤 것을 호출하는지 확인할 수 있습니다.<br>
 저는 해당 테스트 코드에서 Application 로직이 어떤 동작을 수행하는지 알 수 있네요.<br>
+수정할 필요는 없이 유지해도 좋은 테스트 코드인 것 같습니다.<br>
+
+### **220330::trevari::member::consumer::TerminateServiceImplTest**
+```java
+@Test
+void when_member_terminated_never_terminate_again() {
+    given(repository.findById(ANY_MEMBER_ID)).willReturn(member);
+    given(member.isTerminated()).willReturn(true);
+
+    sut.terminate(command);
+
+    verify(member, never()).terminate();
+}
+```
+
+**해석**<br>
+해지 명령을 실행하면, 이미 해지된 멤버라면 다시 해지하지 않는 것을 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+Application 로직의 테스트에서는 화이트박스 테스트를 하는 것이 좋다고 생각합니다.<br>
+화이트박스 테스트는 로직의 내부 동작을 검사하는 테스트로, 메소드의 호출 따위를 확인합니다.<br>
+<br>
+_멤버가 해지되었는가?_<br>
+_멤버 해지를 다시 시도하지 않는가?_<br>
+<br>
+테스트 코드를 봤을 때, 해지 명령 시 어떤 것을 호출하는지 확인할 수 있습니다. 위 두 가지 사항에 대해서도 알 수 있죠.<br>
 수정할 필요는 없이 유지해도 좋은 테스트 코드인 것 같습니다.<br>
 
 ## Think of Test
