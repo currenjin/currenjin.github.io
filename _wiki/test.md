@@ -2200,7 +2200,6 @@ void validate_command() {
 뭐 딱히.. 이견은 없는 코드이지만, 예외에 대해 디테일한 정보가 추가되었으면 좋겠군요.<br>
 예외 타입이라던지, 메시지라던지.<br>
 보는 사람으로 하여금 더 정확한 정보를 알 수 있게 될 것 같습니다.<br>
-<br>
 ```java
 @Test
 void when_command_is_null() {
