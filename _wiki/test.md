@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-30 10:30:00 +0900
+updated : 2022-03-31 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2182,6 +2182,34 @@ _멤버 해지를 다시 시도하지 않는가?_<br>
 <br>
 테스트 코드를 봤을 때, 해지 명령 시 어떤 것을 호출하는지 확인할 수 있습니다. 위 두 가지 사항에 대해서도 알 수 있죠.<br>
 수정할 필요는 없이 유지해도 좋은 테스트 코드인 것 같습니다.<br>
+
+### **220331::trevari::member::consumer::TerminateServiceImplTest**
+```java
+@Test
+private final TerminateCommand NULL_COMMAND = null;
+
+void validate_command() {
+    assertThatThrownBy(() -> sut.terminate(NULL_COMMAND));
+}
+```
+
+**해석**<br>
+유효하지 않은 커맨드로 명령을 실행하면 예외를 발생시킨다는 것을 알려주는 테스트 코드입니다.<br>
+
+**생각**<br>
+뭐 딱히.. 이견은 없는 코드이지만, 예외에 대해 디테일한 정보가 추가되었으면 좋겠군요.<br>
+예외 타입이라던지, 메시지라던지.<br>
+보는 사람으로 하여금 더 정확한 정보를 알 수 있게 될 것 같습니다.<br>
+<br>
+```java
+@Test
+void when_command_is_null() {
+    assertThatThrownBy(() -> sut.terminate(NULL_COMMAND))
+            .isInstanceOf(InvalidValueException.class)
+            .hasMessageContaining("terminateCommand is null");
+}
+```
+<br>
 
 ## Think of Test
 
