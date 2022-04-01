@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-03-31 10:30:00 +0900
+updated : 2022-04-01 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2208,6 +2208,53 @@ void when_command_is_null() {
             .hasMessageContaining("terminateCommand is null");
 }
 ```
+<br>
+
+### **220401::trevari::member::domain::GeneralServiceUseSpecificationTest**
+```java
+@InjectMocks
+GeneralServiceUseSpecification sut;
+
+@Mock
+ServiceRunningContext context;
+
+@Mock
+ServiceRunningPeriod periods;
+
+@Test
+void name() {
+    given(periods.ofService())
+            .willReturn(Period.of(localDate(_2021, _1, _3), localDate(_2021, _1, _4)));
+
+    given(context.isNotTerminated()).willReturn(true);
+    given(context.isRemained()).willReturn(true);
+
+    assertThat(sut.isSatisfy(localDate(_2021, _1, _3))).isTrue();
+}
+```
+
+**해석**<br>
+기간 내에 있으며, 해지되지 않고, 아직 사용 횟수가 남아있다면 사용 가능하다는 것을 확인시켜주는 테스트 코드입니다.<br>
+
+**생각**<br>
+아직 프로덕션에서 사용되지 않는 코드이지만, 해석하며 나중을 대비하는 것도 괜찮을 것 같아서 미루다 미루다 이제 봅니다.<br>
+우선 테스트 코드를 해석하며 생각한 흐름을 써보겠습니다.<br>
+<br>
+일단 테스트 제목으론 알 수 없으니 맨 아래 결과를 확인하는 then 부분을 보겠습니다.<br>
+어떤 결과에 대해 만족을 요구할 때, 날짜를 집어넣습니다. 뭔진 모르겠지만 상태에 대한 블랙박스 테스트인 것 같습니다. 내부 동작보단 상태가 더 중요한 테스트겠네요.<br>
+이 날짜가 무엇을 의미하는지 생각해 볼 때, given 절을 보면 periods.ofService 라는 메소드가 있네요.<br>
+여기서 어떤 기간을 반환합니다.(2021. 01. 03 ~ 2021. 01. 04)<br>
+해당 기간 안에 속해있다면 만족하도록 하는 것 같네요.<br>
+그리고 해지된 상태가 아닌가, 남아있는 상태인가에 대해서도 확인을 하는군요.<br>
+<br>
+일단, 사용 기간 내에 있는가에 대한 부분이 덜명시적이라고 생각합니다.<br>
+어떤 메소드를 통해서 사용 기간 내에 있다는 걸 표시해 주면 좋을텐데, 이 부분은 아직 어떻게 해줘야 할 지 잘 떠오르지 않네요.<br>
+추후 수정을 고려해봐야 겠어요.<br>
+<br>
+제목이 바뀌어야 겠네요. 어떤 테스트인지는 제목으로 알 수 없고, 해석하고 난 뒤에야 알 수 있기 때문이죠.<br>
+아래 처럼 바꾸어주면 좋겠네요.<br>
+<br>
+_사용 기간 내에 있으며 해지되지 않고 남아있다면 만족한다_
 <br>
 
 ## Think of Test
