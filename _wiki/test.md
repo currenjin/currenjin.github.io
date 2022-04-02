@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-01 10:30:00 +0900
+updated : 2022-04-02 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2256,6 +2256,49 @@ void name() {
 <br>
 _사용 기간 내에 있으며 해지되지 않고 남아있다면 만족한다_
 <br>
+
+### **220402::trevari::member::domain::GeneralServiceUseSpecificationTest**
+```java
+@InjectMocks
+GeneralServiceUseSpecification sut;
+
+@Mock
+ServiceRunningContext context;
+
+@Mock
+ServiceRunningPeriod periods;
+
+@Test
+void name33() {
+    given(periods.ofService())
+            .willReturn(Period.of(localDate(_2021, _1, _3), localDate(_2021, _1, _4)));
+
+    given(context.isNotTerminated()).willReturn(true);
+    given(context.isRemained()).willReturn(true);
+
+    assertThat(sut.isSatisfy(localDate(_2021, _1, _4))).isFalse();
+}
+```
+
+**해석**<br>
+해지되지 않고, 아직 사용 횟수가 남아있지만 기간 내에 있지 않으면 사용이 불가하다는 것을 확인시켜주는 테스트 코드입니다.<br>
+
+**생각**<br>
+테스트 코드를 해석하며 생각한 흐름을 작성해 보겠습니다.<br>
+<br>
+결과를 보니 210104 라는 날짜가 만족하지 않는다고 나오는 군요?<br>
+저는 이제 이전에 해석했던 경험이 있어 날짜가 무엇을 의미하는지 압니다.<br>
+하지만, 처음 보는 분들이 있을 수 있겠죠?<br>
+해당하는 날짜는 서비스의 기간 내에 속해있는지 판단하는 것입니다.<br>
+서비스의 기간은 맨 위 given 에서 명시가 되어있습니다.(210103 ~ 210104)<br>
+해당 기간의 경계값을 통해 만족 여부를 판단하는 것 같네요.<br>
+<br>
+_딱 떨어지는 날짜라면 만족하지 않도록 합니다._<br>
+<br>
+나머지 given 은 지금 테스트에서 굳이 알아야 할 정보인가? 싶긴 하지만 일단 냅둡니다.<br>
+바꿀 건 그럼 제목밖에 없겠네요. 아래처럼 정의해 줄게요!<br>
+<br>
+_서비스 기간의 마지막이 도래하면 만족하지 않는다._<br>
 
 ## Think of Test
 
