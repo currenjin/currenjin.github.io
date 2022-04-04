@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-03 12:00:00 +0900
+updated : 2022-04-04 20:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2339,6 +2339,47 @@ void name2() {
 누군가 테스트를 확인하면서 힘을 덜 들일 수 있도록 제목을 지어줍니다.<br>
 <br>
 _해지된 상태라면 만족하지 않는다_<br>
+<br>
+
+### **220404::trevari::member::domain::GeneralServiceUseSpecificationTest**
+```java
+@InjectMocks
+GeneralServiceUseSpecification sut;
+
+@Mock
+ServiceRunningContext context;
+
+@Mock
+ServiceRunningPeriod periods;
+
+@Test
+void name3() {
+    given(periods.ofService())
+            .willReturn(Period.of(localDate(_2021, _1, _3), localDate(_2021, _1, _4)));
+
+    given(context.isNotTerminated()).willReturn(true);
+    given(context.isRemained()).willReturn(false); //Look!
+
+    assertThat(sut.isSatisfy(localDate(_2021, _1, _3))).isFalse();
+}
+```
+
+**해석**<br>
+기간 내에 있고, 해지되지 않았지만 남아있지 않다면 만족하지 않는다는 것을 확인시켜주는 테스트 코드입니다.<br>
+
+**생각**<br>
+테스트 코드를 해석하며 생각한 흐름을 작성해 보겠습니다.<br>
+<br>
+저는 이전에 해석했던 경험을 통해서 이 테스트에서 보는 날짜가 기간 내(210103 ~ 210104)에 속해있는지 판단을 위해 존재하는 것을 압니다.<br>
+하지만 기간 내에 속해있어도 만족하지 않는 군요.<br>
+그래서 given 절을 살펴보니 Look 이라는 주석이 보입니다.<br>
+남아있는가에 대한 메시지에 false 가 있군요. 남아있지 않다는 것을 의미합니다.<br>
+남아있지 않으면 만족하지 않는 로직에 대한 테스트인 것을 알 수 있습니다.<br>
+<br>
+한 번 해석하면 이해하기엔 쉬운 테스트지만 제목이 없어 더 노력을 들여야 합니다.<br>
+누군가 테스트를 확인하면서 힘을 덜 들일 수 있도록 제목을 지어줍니다.<br>
+<br>
+_남아있지 않은 상태라면 만족하지 않는다_<br>
 <br>
 
 ## Think of Test
