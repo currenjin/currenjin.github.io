@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-04 20:30:00 +0900
+updated : 2022-04-05 11:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2380,6 +2380,56 @@ void name3() {
 누군가 테스트를 확인하면서 힘을 덜 들일 수 있도록 제목을 지어줍니다.<br>
 <br>
 _남아있지 않은 상태라면 만족하지 않는다_<br>
+<br>
+
+### **220405::trevari::member::domain::GeneralServiceUseSpecificationTest**
+```java
+@InjectMocks
+GeneralServiceUseSpecification sut;
+
+@Mock
+ServiceRunningContext context;
+
+@Mock
+ServiceRunningPeriod periods;
+
+@Test
+void name4() {
+    given(periods.ofService())
+            .willReturn(Period.of(localDate(_2021, _1, _3), localDate(_2021, _1, _4)));
+    given(periods.ofBonus())
+            .willReturn(Period.of(localDate(_2021, _1, _2), localDate(_2021, _1, _3)));
+
+    given(context.isNotTerminated()).willReturn(true);
+    given(context.isRemained()).willReturn(true);
+
+    assertThat(sut.isSatisfy(localDate(_2021, _1, _1))).isFalse();
+    assertThat(sut.isSatisfy(localDate(_2021, _1, _2))).isTrue(); //Bonus !!
+    assertThat(sut.isSatisfy(localDate(_2021, _1, _3))).isTrue(); //Service !!
+    assertThat(sut.isSatisfy(localDate(_2021, _1, _4))).isFalse();
+}
+```
+
+**해석**<br>
+보너스 기간과 서비스 기간 내에 있다면 만족한다는 것을 확인시켜주는 테스트 코드입니다.<br>
+
+**생각**<br>
+given 에선 보너스 기간에 대해서 명시가 되어있고, 서비스 기간에 대해 명시가 되어있습니다.<br>
+then 에선 두 구간에 대해 만족하는지 테스트를 합니다.<br>
+이 곳에선 테스트를 하고자 하는 게 두 가지가 있는 것 같네요.<br>
+<br>
+_서비스 기간에 만족하는가_<br>
+_보너스 기간에 만족하는가_<br>
+<br>
+하지만 한 테스트 코드에 두 의미를 가진 테스트가 존재하는 건 좋지 않다고 생각합니다.<br>
+한 테스트에는 한 의미를 가진 테스트가 있어야 한다고 생각합니다<br>
+이전에 해석했던 코드를 생각했을 때, 서비스 기간에 대한 테스트는 이미 존재합니다<br>
+<br>
+하지만, given 부분에 서비스 기간을 빼면 에러가 발생하니 넣어주긴 해야되어 제거하기엔 난감하군요..<br>
+고민이 되지만.. 일단 코드를 유지해 주겠습니다.<br>
+추가로, 테스트 목적을 알 수 없는 제목을 변경하겠습니다.<br>
+<br>
+_보너스 기간과 서비스 기간 내에 있으면 만족한다_<br>
 <br>
 
 ## Think of Test
