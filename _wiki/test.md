@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-05 11:00:00 +0900
+updated : 2022-04-06 21:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2431,6 +2431,43 @@ _보너스 기간에 만족하는가_<br>
 <br>
 _보너스 기간과 서비스 기간 내에 있으면 만족한다_<br>
 <br>
+
+### **220406::trevari::member::domain::ServiceRunningContextUseTest**
+```java
+@Mock
+ServiceRunningPeriod definition;
+
+ServiceRunningContext sut;
+
+@BeforeEach
+void setUp() {
+    sut = new ServiceRunningContext(ANY_SERVICE_ID, Times.of(1), Times.ZERO, AVAILABLE, definition, null, null);
+}
+
+@Test
+void 해지가되면_사용할수없다() {
+    //해지처리
+    whenTerminated();
+
+    assertThatThrownBy(() -> sut.use(ANY_LOCAL_DATE_TIME, alwaysTrue())).hasMessageContaining("Service already Terminated when usedAt is");
+}
+
+private void whenTerminated() {
+    sut.terminate(ANY_LOCAL_DATE_TIME, alwaysTrue());
+    assertThat(sut.isTerminated()).isTrue();
+}
+```
+
+**해석**<br>
+해지가 되면 사용할 수 없는 것을 확인시켜주는 테스트 코드입니다.<br>
+
+**생각**<br>
+테스트 제목을 보았을 때, 블랙박스 테스트를 통해 확인할 건 두 가지라 생각했습니다.<br>
+<br>
+_해지가 되는지_<br>
+_해지된 걸 사용할 수 없는지_<br>
+<br>
+위 두가지가 있고 해당 내용도 제목에 잘 표현되어서 변경할 부분은 없는 것 같습니다.<br>
 
 ## Think of Test
 
