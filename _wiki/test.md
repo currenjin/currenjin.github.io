@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-06 21:00:00 +0900
+updated : 2022-04-07 21:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2468,6 +2468,38 @@ _해지가 되는지_<br>
 _해지된 걸 사용할 수 없는지_<br>
 <br>
 위 두가지가 있고 해당 내용도 제목에 잘 표현되어서 변경할 부분은 없는 것 같습니다.<br>
+
+### **220407::trevari::member::domain::ServiceRunningContextUseTest**
+```java
+@Test
+void 사용스펙이_만족하지않으면_사용처리는_실패한다() {
+
+    assertThatThrownBy(() -> sut.use(ANY_LOCAL_DATE_TIME, alwaysFalse())).hasMessageContaining("Unsatisfied UseSpecification and invalid periods is");
+}
+```
+
+**해석**<br>
+사용할 때, 조건이 맞지 않으면 사용할 수 없다는 것을 확인시켜주는 테스트 코드입니다.<br>
+
+**생각**<br>
+표현하고자 하는 부분은 잘 표현이 되었다고 생각합니다.<br>
+<br>
+_사용하는 것_<br>
+_만족하지 않는 것_<br>
+_예외가 발생하는 것_<br>
+<br>
+다만, 예외 상황에 대해 더욱 명시적이었으면 좋겠습니다.<br>
+대표적으로 예외에 담긴 메시지와 예외 클래스의 타입이 명시되면 갖고자 하는 정보를 더욱 많이 담은 테스트 코드가 되겠죠.<br>
+(메시지는 담겨 있습니다. 타입만 명시해주면 될 것 같네요)<br>
+<br>
+```java
+@Test
+void 사용스펙이_만족하지않으면_사용처리는_실패한다() {
+    assertThatThrownBy(() -> sut.use(ANY_LOCAL_DATE_TIME, alwaysFalse()))
+            .isInstanceOf(MemberException.class)
+            .hasMessageContaining("Unsatisfied UseSpecification and invalid periods is");
+}
+```
 
 ## Think of Test
 
