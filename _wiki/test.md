@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-07 21:00:00 +0900
+updated : 2022-04-08 21:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2500,6 +2500,39 @@ void 사용스펙이_만족하지않으면_사용처리는_실패한다() {
             .hasMessageContaining("Unsatisfied UseSpecification and invalid periods is");
 }
 ```
+
+### **220408::trevari::member::domain::ServiceRunningContextUseTest**
+```java
+@Test
+void 사용스펙이_만족하면_사용처리한다() {
+    sut = sut.withProvided(Times.of(1));
+
+    sut.use(ANY_LOCAL_DATE_TIME, alwaysTrue());
+
+    assertThat(sut.getUsed()).isEqualTo(oneTime);
+    assertThat(sut.isRemained()).isFalse();
+    assertThat(sut.isUsedUp()).isTrue();
+}
+```
+
+**해석**<br>
+사용할 때, 조건이 맞으면 사용한다는 것을 확인시켜주는 테스트 코드입니다.<br>
+
+**생각**<br>
+이 테스트 코드에서 표현하고자 하는 부분을 보겠습니다.<br>
+<br>
+사용한 횟수가 한 번 인가<br>
+남지 않았는가<br>
+모두 사용했는가<br>
+<br>
+위 세 가지에 대해서 각각 살펴봅니다.<br>
+<br>
+**사용한 횟수가 한 번인가** 에 대해서는 then 구문인 use 를 한 번 호출했으니 당연한 것으로 보입니다.<br>
+**남지 않았는가** 에 대해서는 given 구문에서 횟수 한 번을 정의한 다음, then 구문에서 사용을 한 번 했으니 만족합니다.<br>
+마지막으로, **모두 사용했는가** 에 대해서 윗 줄과 같은 맥락으로 횟수 한 번을 정의하고 한 번을 사용했으니 모두 사용했다 표현되는군요.<br>
+<br>
+저는 표현하고자 하는 부분은 다 들어가 있다고 생각합니다.<br>
+제목에서 말하는 사용 처리에 대해 이 모두가 사용 처리에 대한 상태인가? 를 생각해보면, 좀 애매하긴 하지만 딱히 이견은 없습니다.<br>
 
 ## Think of Test
 
