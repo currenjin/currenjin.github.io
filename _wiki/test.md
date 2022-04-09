@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-08 21:00:00 +0900
+updated : 2022-04-09 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2521,9 +2521,9 @@ void 사용스펙이_만족하면_사용처리한다() {
 **생각**<br>
 이 테스트 코드에서 표현하고자 하는 부분을 보겠습니다.<br>
 <br>
-사용한 횟수가 한 번 인가<br>
-남지 않았는가<br>
-모두 사용했는가<br>
+_사용한 횟수가 한 번 인가_<br>
+_남지 않았는가_<br>
+_모두 사용했는가_<br>
 <br>
 위 세 가지에 대해서 각각 살펴봅니다.<br>
 <br>
@@ -2533,6 +2533,58 @@ void 사용스펙이_만족하면_사용처리한다() {
 <br>
 저는 표현하고자 하는 부분은 다 들어가 있다고 생각합니다.<br>
 제목에서 말하는 사용 처리에 대해 이 모두가 사용 처리에 대한 상태인가? 를 생각해보면, 좀 애매하긴 하지만 딱히 이견은 없습니다.<br>
+
+### **220409::trevari::member::domain::ServiceRunningContextUseTest**
+```java
+@Test
+void 남은_회수() {
+    sut = sut.withProvided(Times.of(2));
+
+    sut.use(ANY_LOCAL_DATE_TIME, alwaysTrue());
+    assertThat(sut.getUsed()).isEqualTo(ONE);
+    assertThat(sut.isRemained()).isTrue();
+    assertThat(sut.isUsedUp()).isFalse();
+
+    sut.use(ANY_LOCAL_DATE_TIME, alwaysTrue());
+    assertThat(sut.getUsed()).isEqualTo(TWO);
+    assertThat(sut.isRemained()).isFalse();
+    assertThat(sut.isUsedUp()).isTrue();
+
+    assertThatThrownBy(() -> sut.use(ANY_LOCAL_DATE_TIME,  alwaysTrue())).hasMessage("Service already UsedUp when usedAt is " + ANY_LOCAL_DATE_TIME);
+}
+```
+
+**해석**<br>
+사용할 수 있는 횟수가 남지 않았다면, 사용할 수 없는 것을 확인할 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+제목을 확인했을 때, 딱 와닿지는 않습니다.<br>
+일단 해석해 보면, 처음 사용할 수 있는 횟수를 두 번 지정한 뒤 두 번의 사용을 거칩니다.<br>
+그 이후 남은 횟수가 없는 상태에서 사용을 시도하면 예외가 발생하는 군요.<br>
+저는 이 테스트 코드에서 표현하고자 하는 부분이 두 가지인 것 같습니다.<br>
+<br>
+_남은 횟수가 없는가_<br>
+_남은 횟수가 없는 상태에서 사용하면 예외가 발생하는가_<br>
+<br>
+일단 저는 해당 테스트 코드에서 남은 횟수가 없다는 부분이 더 잘 보였으면 좋겠네요.<br>
+그리고 제목에 대한 수정도 필요해 보입니다.<br>
+좀 더 표현하고자 하는 부분만 드러내 수정한 코드입니다.<br>
+<br>
+```java
+@Test
+void 남은_횟수가_없다면_사용할_수_없다() {
+    sut = sut.withProvided(Times.of(1));
+
+    sut.use(ANY_LOCAL_DATE_TIME, alwaysTrue());
+    assertThat(sut.getUsed()).isEqualTo(ONE);
+    assertThat(sut.isRemained()).isFalse();
+
+    assertThatThrownBy(() -> sut.use(ANY_LOCAL_DATE_TIME,  alwaysTrue()))
+            .isInstanceOf(MemberException.class)
+            .hasMessage("Service already UsedUp when usedAt is " + ANY_LOCAL_DATE_TIME);
+}
+```
+
 
 ## Think of Test
 
