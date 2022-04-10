@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-09 14:00:00 +0900
+updated : 2022-04-10 20:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2585,6 +2585,42 @@ void 남은_횟수가_없다면_사용할_수_없다() {
 }
 ```
 
+### **220410::trevari::wallet::consumer::WalletFinderTest**
+```java
+@Test
+void walletByUserId(@Mock Wallet wallet) {
+    given(repository.findByUserId(USER_ID)).willReturn(wallet);
+    WalletFinder sut = new WalletFinder(repository, longIdGenerator);
+
+    Wallet actual = sut.walletByUserId(USER_ID);
+
+    assertThat(actual).isInstanceOf(Wallet.class);
+}
+```
+
+**해석**<br>
+지갑을 요청하면 지갑을 반환하는 것을 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+이번 테스트 케이스 같은 경우에, 어플리케이션 로직이지만 도메인 메소드를 호출해 가져오는 값을 확인하는 군요.<br>
+심지어 given 에는 그 값이 반환되도록 미리 정의가 되어있습니다.<br>
+의미가 없는 테스트라 생각합니다.<br>
+<br>
+이전 해석에서도 여러 번 언급을 했습니다만, 어플리케이션 로직에서는 화이트 박스 테스트를 추구합니다.<br>
+화이트 박스 테스트는 특정 로직의 내부 동작을 확인하는 테스트 입니다.<br>
+어플리케이션 로직은 다른 도메인 메소드를 가져다 쓰는 역할로 존재합니다.<br>
+해당 테스트에선, 어떤 메소드를 호출하는지 테스트하면 되겠네요.<br>
+그에 맞게 제목도 변경해 줍니다.<br>
+아래는 제 의견을 반영한 테스트 코드입니다.<br>
+<br>
+```java
+@Test
+void walletByUserId_에서_메소드를_호출한다() {
+    sut.walletByUserId(USER_ID);
+
+    verify(repository.findByUserId(USER_ID));
+}
+```
 
 ## Think of Test
 
