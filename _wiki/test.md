@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-10 20:30:00 +0900
+updated : 2022-04-11 23:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2619,6 +2619,40 @@ void walletByUserId_에서_메소드를_호출한다() {
     sut.walletByUserId(USER_ID);
 
     verify(repository.findByUserId(USER_ID));
+}
+```
+
+### **220411::trevari::wallet::api::DeleteWalletServiceTest**
+```java
+@Test
+void wallet_삭제하면_isDeleted가_true() {
+    sut.deleteWallet(wallet);
+
+    assertThat(wallet.isDeleted()).isTrue();
+}
+```
+
+**해석**<br>
+지갑을 제거하면 제거 상태가 된다는 것을 확인할 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+지갑을 제거하는 명령을 수행하지만, 이 곳은 어플리케이션 로직입니다.<br>
+어플리케이션 테스트에서 도메인 로직을 호출하여 도메인의 상태를 확인하는 것이 옳지 않다고 생각합니다.<br>
+어플리케이션 테스트는 어플리케이션 로직만을 확인할 수 있어야 합니다.<br>
+<br>
+_지갑을 제거하는 도메인 명령을 호출하는가_<br>
+_제거한 지갑을 저장하는가_<br>
+<br>
+내부 동작을 확인하는 화이트 박스 테스트를 적용하여, 위 사항에 대해 테스트하는 것이 좋겠습니다.<br>
+의견을 반영해 적용한 코드입니다.<br>
+<br>
+```java
+@Test
+void 제거_명령을_실행하면_호출한다() {
+    sut.deleteWallet(wallet);
+
+    verify(wallet).delete();
+    verify(walletRepository).save(wallet);
 }
 ```
 
