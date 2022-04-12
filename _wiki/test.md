@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-11 23:30:00 +0900
+updated : 2022-04-13 02:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2653,6 +2653,36 @@ void 제거_명령을_실행하면_호출한다() {
 
     verify(wallet).delete();
     verify(walletRepository).save(wallet);
+}
+```
+
+### **220412::trevari::wallet::api::DeleteWalletServiceTest**
+```java
+@Test
+void userId의_지갑이_이미_삭제된_상태이면_WalletNotFoundException() {
+    wallet.delete();
+
+    assertThrows(WalletNotFoundException.class, () -> sut.deleteWallet(wallet));
+}
+```
+
+**해석**<br>
+지갑이 이미 삭제된 상태라면 예외가 발생한다는 것을 확인할 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+어플리케이션 로직에서 위 테스트 코드처럼 도메인의 상태를 직접 변경하는 것은 좋지 않은 방법이라고 생각합니다.<br>
+어플리케이션 로직에서는 타 메소드를 호출할 뿐이고, 그의 테스트 코드는 그 호출에 대한 확인만 이루어 졌으면 좋겠습니다.<br>
+굳이 필요한 상황이라면, given 을 통해 정의해 주는 방법도 있습니다.<br>
+제 생각을 반영한 코드입니다.<br>
+<br>
+```java
+@Test
+void 이미_삭제된_지갑이면_예외가_발생한다() {
+    given(wallet.isDeleted()).willReturn(true);
+
+    assertThatThrownBy(() -> sut.deleteWallet(wallet))
+            .isInstanceOf(WalletNotFoundException.class)
+            .hasMessageContaining("is already deleted.");
 }
 ```
 
