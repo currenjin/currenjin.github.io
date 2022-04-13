@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-13 02:00:00 +0900
+updated : 2022-04-13 23:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2686,6 +2686,38 @@ void 이미_삭제된_지갑이면_예외가_발생한다() {
 }
 ```
 
+### **220413::trevari::wallet::api::WalletServiceTest**
+```java
+@Test
+void findBy() {
+    given(repository.findById(WalletId.of(ANY_WALLET_ID))).willReturn(wallet, (Wallet) null);
+
+    assertThat(sut.findBy(ANY_WALLET_ID).get()).isEqualTo(wallet);
+    assertThat(sut.findBy(ANY_WALLET_ID)).isEqualTo(Optional.empty());
+}
+```
+
+**해석**<br>
+지갑을 찾을 때, 지갑을 가져오는 것을 확인할 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+해당 로직은 어플리케이션 로직입니다. 도메인 객체의 결과를 테스트하는 방법은 지양합니다.<br>
+어플리케이션 로직에서는 화이트박스 테스트를 지향합니다.<br>
+제 생각을 반영한 테스트는 아래와 같습니다.<br>
+<br>
+지갑을 찾을 때, 지갑을 찾는 레포지토리 메소드를 호출한다.<br>
+<br>
+```java
+@Test
+void 지갑을_찾을_때_호출한다() {
+    sut.findBy(ANY_WALLET_ID);
+
+    verify(repository).findById(WalletId.of(ANY_WALLET_ID));
+}
+```
+
+제 생각을 반영한 코드입니다.<br>ㄹㅗ직ㅇ
+제 생각을 반영한 코드입니다.<br>
 ## Think of Test
 
 1독 - 테스트에 관한 글을 읽습니다. <br>
