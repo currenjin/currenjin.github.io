@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-14 10:00:00 +0900
+updated : 2022-04-14 23:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2716,16 +2716,26 @@ void 지갑을_찾을_때_호출한다() {
 }
 ```
 
-### **220414::trevari::wallet::api::WalletServiceTest**
+### **220414::trevari::wallet::batch::BatchConfigurationTest**
 ```java
+@Test
+void JobExecution_상태가_COMPLETED_이다() throws Exception {
+    JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
 
+    assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
+}
 ```
 
 **해석**<br>
-
+Job 실행 시, Job Execution 상태가 Completed 인 것을 확인할 수 있는 테스트 코드입니다.<br>
 
 **생각**<br>
-
+batch configuration 에 푹 빠져버린 찰나 배치 테스트를 해석하게 되었습니다. 흥미롭네요. (제가 짠 테스트지만..)<br>
+<br>
+Spring batch Process 의 작업을 나타내는 단위인 Job 을 실행했을 때, 상태가 정상적인 경우를 테스트합니다.<br>
+Spring batch 의 테스트는 좀 생소하지만 Job launch 를 하면 execution 상태가 변경되는 것을 알 수 있네요.<br>
+충분히 처음 보는 사람도 이해할 수 있을 정도의 테스트라고 생각합니다.<br>
+딱히 변경의 필요성은 보이지 않습니다.<br>
 
 ## Think of Test
 
