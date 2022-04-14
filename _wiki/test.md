@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-13 23:00:00 +0900
+updated : 2022-04-14 10:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2716,8 +2716,17 @@ void 지갑을_찾을_때_호출한다() {
 }
 ```
 
-제 생각을 반영한 코드입니다.<br>ㄹㅗ직ㅇ
-제 생각을 반영한 코드입니다.<br>
+### **220414::trevari::wallet::api::WalletServiceTest**
+```java
+
+```
+
+**해석**<br>
+
+
+**생각**<br>
+
+
 ## Think of Test
 
 1독 - 테스트에 관한 글을 읽습니다. <br>
