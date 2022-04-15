@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-14 23:30:00 +0900
+updated : 2022-04-15 21:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2736,6 +2736,30 @@ Spring batch Process 의 작업을 나타내는 단위인 Job 을 실행했을 �
 Spring batch 의 테스트는 좀 생소하지만 Job launch 를 하면 execution 상태가 변경되는 것을 알 수 있네요.<br>
 충분히 처음 보는 사람도 이해할 수 있을 정도의 테스트라고 생각합니다.<br>
 딱히 변경의 필요성은 보이지 않습니다.<br>
+
+### **220415::trevari::wallet::batch::BatchConfigurationTest**
+```java
+@Test
+void StepExecution_상태가_COMPLETED_이다() throws Exception {
+    JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
+    Collection<StepExecution> stepExecutions = jobExecution.getStepExecutions();
+
+    stepExecutions.forEach(stepExecution -> assertThat(stepExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED));
+}
+```
+
+**해석**<br>
+Step 실행 시, Step Execution 상태가 Completed 인 것을 확인할 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+스프링 배치에 고통을 받고 있는 요즘입니다.<br>
+현재 작성하는 배치 코드에서 테스트 코드를 짤 수 없는 상황이라 고통을 받고 있으나, 곧 추가를 하려합니다.<br>
+이 불편한 마음을 위안으로 삼아 해당 테스트 코드를 해석해 볼게요.(물론 제가 짠 테스트 코드입니다)<br>
+<br>
+Spring batch Process 에서 Job 을 실행했을 때, 각 단계의 상태가 COMPLETED 인 경우를 테스트합니다.<br>
+Job launch 를 하면 Step 의 Execution 상태가 변경되는 것을 알 수 있네요.<br>
+스프링의 동작 방식을 표현한 테스트입니다. 변경은 필요해 보이지 않네요.<br>
+스프링 배치에서 제공하는 기능을 테스트하는 것이 필요한가에 대해서는 의문이긴 합니다.. 학습 테스트에 가까운 것 같아요.<br>
 
 ## Think of Test
 
