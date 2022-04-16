@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-15 21:30:00 +0900
+updated : 2022-04-16 23:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2760,6 +2760,34 @@ Spring batch Process 에서 Job 을 실행했을 때, 각 단계의 상태가 CO
 Job launch 를 하면 Step 의 Execution 상태가 변경되는 것을 알 수 있네요.<br>
 스프링의 동작 방식을 표현한 테스트입니다. 변경은 필요해 보이지 않네요.<br>
 스프링 배치에서 제공하는 기능을 테스트하는 것이 필요한가에 대해서는 의문이긴 합니다.. 학습 테스트에 가까운 것 같아요.<br>
+
+### **220416::trevari::wallet::batch::BatchConfigurationTest**
+```java
+@Test
+@Rollback
+@SqlMergeMode(MERGE)
+@Sql(statements = {"INSERT INTO \"wallet\" VALUES (1, null, '{\"items\":[{\"key\":\"KEY1\",\"properties\":{},\"expiryDate\":\"2021-12-11T23:59:59\"}]}', null, null, 1, null);"})
+void Reader_Writer_호출을_확인한다() throws Exception {
+    // |----검색 데이터---------대상 데이터--------Reader 호출--------Writer 호출-----|
+    // |------1개--------------1개---------------1번----------------1번---------|
+    JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
+    Collection<StepExecution> stepExecutions = jobExecution.getStepExecutions();
+
+    stepExecutions.forEach(stepExecution -> {
+        assertThat(stepExecution.getReadCount()).isEqualTo(1);
+        assertThat(stepExecution.getWriteCount()).isEqualTo(1);
+    });
+}
+```
+
+**해석**<br>
+데이터가 한 개 있을 때, Reader 와 Writer 를 한 번씩 호출하는 것을 확인하는 테스트입니다.<br>
+
+**생각**<br>
+마찬가지로 스프링 배치에 대한 기능을 확인하는 테스트네요.<br>
+있으면 확실히 어떻게 동작하는지는 알 수 있어 도움은 되겠네요.<br>
+수정할 필요는 없다고 생각이 들지만, 해당 테스트는 스프링 배치의 기능에 대한 테스트이므로 딱히 구성할 필요는 없다 생각이 듭니다.<br>
+학습 테스트에 가깝네요.<br>
 
 ## Think of Test
 
