@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-16 23:00:00 +0900
+updated : 2022-04-17 23:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2788,6 +2788,51 @@ void Reader_Writer_호출을_확인한다() throws Exception {
 있으면 확실히 어떻게 동작하는지는 알 수 있어 도움은 되겠네요.<br>
 수정할 필요는 없다고 생각이 들지만, 해당 테스트는 스프링 배치의 기능에 대한 테스트이므로 딱히 구성할 필요는 없다 생각이 듭니다.<br>
 학습 테스트에 가깝네요.<br>
+
+### **220417::trevari::wallet::batch::BatchConfigurationTest**
+```java
+@Test
+@Rollback
+@SqlMergeMode(MERGE)
+@Sql(statements = {"INSERT INTO \"wallet\" VALUES (1, null, '{\"items\":[{\"key\":\"KEY1\",\"properties\":{},\"expiryDate\":\"2021-12-11T23:59:59\"}]}', null, null, 1, null);"})
+void 티켓이_있으면_가져온다() throws Exception {
+    JdbcPagingItemReader<Wallet> reader = job.reader();
+
+    reader.afterPropertiesSet();
+    Wallet result = reader.read();
+
+    assertThat(result.getId().getId()).isEqualTo(1);
+    assertThat(result.getTickets()).isNotNull();
+}
+```
+
+**해석**<br>
+티켓을 가진 데이터가 존재하면 읽어오는 것을 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+ItemReader 를 통해 티켓이 있는 데이터만 읽어오는 테스트네요.<br>
+<br>
+_티켓을 가진 데이터_<br>
+_데이터를 읽어오는 것_<br>
+_읽어온 데이터가 티켓을 가진 데이터인 것_<br>
+<br>
+위 세 가지에 대해 확인하면 되네요.<br>
+하지만 이미 확인하고자 하는 내용은 존재합니다. 눈에 잘 안 들어올 뿐이죠.<br>
+이 부분을 위해서 필요한 부분만 남기는 작업이 필요해 보이네요.<br>
+아래는 좀 더 보고자 하는 부분만 남긴 코드입니다.<br>
+<br>
+```java
+@Test
+@Rollback
+@SqlMergeMode(MERGE)
+@Sql(statements = HAS_TICKETS)
+void 티켓이_있으면_가져온다() throws Exception {
+    Wallet result = read();
+
+    assertThat(result.getId().getId()).isEqualTo(1);
+    assertThat(result.getTickets()).isNotNull();
+}
+```
 
 ## Think of Test
 
