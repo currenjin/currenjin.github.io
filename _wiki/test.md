@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-17 23:00:00 +0900
+updated : 2022-04-18 23:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2789,7 +2789,7 @@ void Reader_Writer_호출을_확인한다() throws Exception {
 수정할 필요는 없다고 생각이 들지만, 해당 테스트는 스프링 배치의 기능에 대한 테스트이므로 딱히 구성할 필요는 없다 생각이 듭니다.<br>
 학습 테스트에 가깝네요.<br>
 
-### **220417::trevari::wallet::batch::BatchConfigurationTest**
+### **220417::trevari::wallet::batch::ItemReaderTest**
 ```java
 @Test
 @Rollback
@@ -2831,6 +2831,58 @@ void 티켓이_있으면_가져온다() throws Exception {
 
     assertThat(result.getId().getId()).isEqualTo(1);
     assertThat(result.getTickets()).isNotNull();
+}
+```
+
+### **220418::trevari::wallet::batch::ItemReaderTest**
+```java
+@Test
+@Rollback
+@SqlMergeMode(MERGE)
+@Sql(statements = {"INSERT INTO \"wallet\" VALUES (1, null, '{\"items\":[]}', null, null, 1, null);"})
+void 티켓이_없으면_가져오지_않는다() throws Exception {
+    JdbcPagingItemReader<Wallet> reader = job.reader();
+
+    reader.afterPropertiesSet();
+    Wallet result = reader.read();
+
+    assertThat(result).isNull();
+}
+```
+
+**해석**<br>
+티켓이 존재하지 않으면 읽어오지 않는 것을 확인할 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+ItemReader 를 통해 데이터를 가져올 때, 티켓이 없으면 가져오지 않는 코드네요.<br>
+하지만, 테스트 코드를 딱 봤을 때 의도가 명확하지 않아 보입니다.<br>
+해당 테스트 코드에서 표현하고자 하는 의도는 무엇일까요?<br>
+<br>
+_티켓이 존재하지 않는 데이터_<br>
+_데이터를 읽어오는 것_<br>
+_읽어온 데이터가 없는 것_<br>
+<br>
+해당 세 가지에 대해서 테스트 코드에 의미를 부여하면 될 것 같다고 생각이 듭니다.<br>
+이런 의도를 좀 더 드러내고자 하는 코드는 다음과 같습니다.<br>
+<br>
+```java
+private static final String HAS_NOT_TICKETS_DATA = "INSERT INTO \"wallet\" VALUES (1, null, '{\"items\":[]}', null, null, 1, null);";
+
+@Test
+@Rollback
+@SqlMergeMode(MERGE)
+@Sql(statements = HAS_NOT_TICKETS_DATA)
+void 티켓이_없으면_가져오지_않는다() throws Exception {
+    Wallet result = readData();
+
+    assertThat(result).isNull();
+}
+
+private Wallet readData() throws Exception {
+    JdbcPagingItemReader<Wallet> reader = job.reader();
+
+    reader.afterPropertiesSet();
+    return reader.read();
 }
 ```
 
