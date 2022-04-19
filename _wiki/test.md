@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-18 23:30:00 +0900
+updated : 2022-04-19 23:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2873,6 +2873,51 @@ private static final String HAS_NOT_TICKETS_DATA = "INSERT INTO \"wallet\" VALUE
 @SqlMergeMode(MERGE)
 @Sql(statements = HAS_NOT_TICKETS_DATA)
 void 티켓이_없으면_가져오지_않는다() throws Exception {
+    Wallet result = readData();
+
+    assertThat(result).isNull();
+}
+
+private Wallet readData() throws Exception {
+    JdbcPagingItemReader<Wallet> reader = job.reader();
+
+    reader.afterPropertiesSet();
+    return reader.read();
+}
+```
+
+### **220419::trevari::wallet::batch::ItemReaderTest**
+```java
+@Test
+void 데이터가_없으면_가져오지_못한다() throws Exception {
+    JdbcPagingItemReader<Wallet> reader = job.reader();
+
+    reader.afterPropertiesSet();
+    Wallet result = reader.read();
+
+    assertThat(result).isNull();
+}
+```
+
+**해석**<br>
+데이터가 존재하지 않으면 어떠한 것도 읽어오지 않는 것을 확인할 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+ItemReader 를 통해 데이터를 가져올 때, 데이터가 없으면 가져오지 않는 코드네요.<br>
+하지만, 테스트 코드를 딱 봤을 때 데이터가 없다는 부분은 어떻게 알 수 있을까요?<br>
+해당 테스트 코드에서 표현하고자 하는 의도는 무엇일까요?<br>
+<br>
+_데이터가 존재하지 않음_<br>
+_데이터를 읽어오는 것_<br>
+_읽어온 데이터가 없는 것_<br>
+<br>
+위 세 가지에 대해서 생각을 해봤습니다. 하지만, 첫 번째 '데이터가 존재하지 않음' 부분은 도저히 떠오르지가 않네요.<br>
+없는 걸 어떻게 표현할 지에 대한 문제는 가장 어려운 부분인 것 같습니다.<br>
+그 외 나머지 부분에 대해 명시적으로 표현한 코드입니다.<br>
+<br>
+```java
+@Test
+void 데이터가_없으면_가져오지_못한다() throws Exception {
     Wallet result = readData();
 
     assertThat(result).isNull();
