@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-19 23:00:00 +0900
+updated : 2022-04-20 22:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2930,6 +2930,35 @@ private Wallet readData() throws Exception {
     return reader.read();
 }
 ```
+
+### **220420::trevari::wallet::batch::BatchConfigurationTest**
+```java
+@Test
+@Rollback
+@SqlMergeMode(MERGE)
+@Sql(statements = {
+        "INSERT INTO \"wallet\" VALUES (1, null, '{\"items\":[{\"key\":\"KEY1\",\"properties\":{},\"expiryDate\":\"2021-12-11T23:59:59\"}]}', null, null, 1, null);",
+        "INSERT INTO \"wallet\" VALUES (2, null, '{\"items\":[{\"key\":\"KEY2\",\"properties\":{},\"expiryDate\":\"2021-12-11T23:59:59\"}]}', null, null, 1, null);",
+        "INSERT INTO \"wallet\" VALUES (3, null, '{\"items\":[{\"key\":\"KEY3\",\"properties\":{},\"expiryDate\":\"2021-12-13T23:59:59\"}]}', null, null, 1, null);"})
+void 대상_데이터_만큼_writer_가_호출된다() throws Exception {
+    // |----검색 데이터---------대상 데이터--------Writer 호출-----|
+    // |------3개--------------2개-----------------2번--------|
+    JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
+    Collection<StepExecution> stepExecutions = jobExecution.getStepExecutions();
+
+    stepExecutions.forEach(stepExecution -> assertThat(stepExecution.getWriteCount()).isEqualTo(2));
+}
+```
+
+**해석**<br>
+특정 대상 데이터 개수만큼 write 를 진행하는 것을 확인할 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+이 또한 Writer 에 몇 개의 값이 들어왔는 가에 따라 Write count 가 증가하는 Batch 의 특성을 그대로 반영한 테스트 코드라고 생각합니다.<br>
+_다만 알 수 없는 것은 어떻게 대상 데이터가 추출되는가?_ 입니다.<br>
+이 부분은 Processor 에서 추출이 진행되지만 해당 테스트 코드만을 확인해서 알 수가 없군요.<br>
+이를 어떻게 드러내야 할 지는 떠오르지 않습니다.<br>
+해당 테스트 코드를 현재는 유지하지만, 떠오르는 것이 있으시면 말씀 부탁드립니다. 적극 반영하겠습니다.<br>
 
 ## Think of Test
 
