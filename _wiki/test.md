@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-20 22:00:00 +0900
+updated : 2022-04-21 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2959,6 +2959,32 @@ _다만 알 수 없는 것은 어떻게 대상 데이터가 추출되는가?_ �
 이 부분은 Processor 에서 추출이 진행되지만 해당 테스트 코드만을 확인해서 알 수가 없군요.<br>
 이를 어떻게 드러내야 할 지는 떠오르지 않습니다.<br>
 해당 테스트 코드를 현재는 유지하지만, 떠오르는 것이 있으시면 말씀 부탁드립니다. 적극 반영하겠습니다.<br>
+
+### **220421::trevari::wallet::batch::WalletDtoTest**
+```java
+@Test
+void validate_id() {
+    assertThatThrownBy(() -> WalletDto.of(null, TICKETS));
+    assertThatThrownBy(() -> WalletDto.of(-1L, TICKETS));
+    assertThatThrownBy(() -> WalletDto.of(0L, TICKETS));
+}
+```
+
+**해석**<br>
+객체 생성 시, 유효한 값이 아니면 예외가 발생하는 것을 알 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+저는 객체 따위를 생성할 때, 생성 그 자체에 대한 테스트도 하지만<br>
+객체를 생성할 때 넘기는 인자의 유효성 검증도 진행합니다.<br>
+넘기는 인자의 타입이 Long 일 때, 그 값이 음수인지, 0인지, null 인지.<br>
+또는 타입이 String 이라면 그 값이 빈 문자열인지, null 인지. 등에 대해 값의 유효성을 따집니다.<br>
+이런 처리가 되어있지 않으면 해당 객체는 null 과 0 등의 값을 허용하는 것으로 생각하고, 누구나 넣을 수 있겠다 생각합니다.<br>
+그래서 이를 사전에 방지하고자 객체 생성 시 바로 검증하는 것이죠.<br>
+테스트 코드 자체는 변경할 필요가 없어 보입니다.<br>
+하지만 제목이 좀 더 명시적으로 바뀌었으면 좋겠네요.<br>
+<br>
+_ID 가 유효하지 않으면 안 된다._<br>
+<br>
 
 ## Think of Test
 
