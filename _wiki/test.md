@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-21 20:00:00 +0900
+updated : 2022-04-22 23:50:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2985,6 +2985,36 @@ void validate_id() {
 <br>
 _ID 가 유효하지 않으면 안 된다._<br>
 <br>
+
+### **220422::trevari::member::consumer:MemberFinderImplTest**
+```java
+@Test
+void find_member() {
+    given(memberRepository.findByUserIdAndMembershipIdAndState(ANY_USER_ID, ANY_MEMBERSHIP_ID, JOINED)).willReturn(member);
+
+    sut.findBy(ANY_USER_ID, ANY_MEMBERSHIP_ID, JOINED);
+
+    verify(memberRepository).findByUserIdAndMembershipIdAndState(ANY_USER_ID, ANY_MEMBERSHIP_ID, JOINED);
+}
+```
+
+**해석**<br>
+멤버를 찾을 때, 찾는 메소드를 사용하는지 확인할 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+어플리케이션 로직은 다른 도메인 메소드를 호출하는 것이 특징입니다.<br>
+해당 테스트는 그 특성을 잘 반영한 것 같네요.<br>
+verify 를 통해서 다른 로직의 호출 여부를 테스트하고 있습니다.<br>
+다만, given 부분은 있어도 의미가 없다고 생각되네요. 빼줍시다.<br>
+<br>
+```java
+@Test
+void find_member() {
+    sut.findBy(ANY_USER_ID, ANY_MEMBERSHIP_ID, JOINED);
+
+    verify(memberRepository).findByUserIdAndMembershipIdAndState(ANY_USER_ID, ANY_MEMBERSHIP_ID, JOINED);
+}
+```
 
 ## Think of Test
 
