@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-22 23:50:00 +0900
+updated : 2022-04-23 23:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3013,6 +3013,38 @@ void find_member() {
     sut.findBy(ANY_USER_ID, ANY_MEMBERSHIP_ID, JOINED);
 
     verify(memberRepository).findByUserIdAndMembershipIdAndState(ANY_USER_ID, ANY_MEMBERSHIP_ID, JOINED);
+}
+```
+
+### **220423::trevari::member::consumer:MemberFinderImplTest**
+```java
+@Test
+void does_not_exist() {
+    given(memberRepository.findByUserIdAndMembershipIdAndState(ANY_USER_ID, ANY_MEMBERSHIP_ID, JOINED)).willReturn(null);
+    assertThatThrownBy(() -> sut.findBy(ANY_USER_ID, ANY_MEMBERSHIP_ID, JOINED)).isInstanceOf(IllegalArgumentException.class);
+}
+```
+
+**해석**<br>
+조건에 맞는 멤버 데이터가 존재하지 않으면 예외를 발생시키는 것을 알 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+이 테스트를 통해서 우리가 알 수 있는 건 두 가지인 것 같습니다.<br>
+<br>
+_조건에 맞는 멤버가 없으면 null 을 반환한다._<br>
+_null 이 반환되면 예외를 발생시킨다._<br>
+<br>
+표현하고자 하는 부분에선 부족함이 없다 생각합니다.<br>
+하나의 변화를 주자면, 메시지라도 추가하는게 좋겠네요.<br>
+<br>
+```java
+@Test
+void does_not_exist() {
+    given(memberRepository.findByUserIdAndMembershipIdAndState(ANY_USER_ID, ANY_MEMBERSHIP_ID, JOINED)).willReturn(null);
+    
+    assertThatThrownBy(() -> sut.findBy(ANY_USER_ID, ANY_MEMBERSHIP_ID, JOINED))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Member is does not exist.");
 }
 ```
 
