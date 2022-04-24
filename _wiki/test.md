@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-23 23:30:00 +0900
+updated : 2022-04-24 23:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3047,6 +3047,59 @@ void does_not_exist() {
         .hasMessageContaining("Member is does not exist.");
 }
 ```
+
+
+### **220424::trevari::wallet::domain::WalletTest**
+```java
+private Wallet sut;
+
+@BeforeEach
+void setUp() {
+    sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+}
+
+@Test
+void addTicketAndFind() {
+    AddTicketCommand command = AddTicketCommandFactory.create("KEY", TicketProps.empty(), ANY_EXPIRY_DATE);//.create(TicketProps.empty(), (p)->"KEY");
+
+    sut.execute(command);
+
+    assertThat(sut.has(command.newTicket())).isTrue();
+}
+```
+
+**해석**<br>
+티켓을 추가하고 해당 티켓이 존재하는지 확인할 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+알고자 하는 부분은 딱 두 가지라고 생각합니다.<br>
+<br>
+_티켓을 추가한다._<br>
+_티켓이 있는지 확인한다._<br>
+<br>
+먼저 티켓을 추가하는 행위를 진행하기 위해서는 두 가지가 필요하네요.<br>
+**티켓 추가를 위한 정보를 담는 커맨드** 와 그 **커맨드를 실행하는 지갑** 입니다.<br>
+커맨드에는 Key, TicketProps, ExpiryDate 가 들어가는 것을 확인할 수 있네요.<br>
+<br>
+추가 명령을 실행한 뒤에는 **같은 티켓을 또 생성해, 지갑 내 티켓 존재 여부를 확인** 합니다.<br>
+이 테스트로 유추할 수 있는 건, 커맨드를 실행하면 내부에선 newTicket 이 호출된다는 것입니다.<br>
+<br>
+저는 로직에선 필요한 부분은 다 존재한다고 생각합니다.<br>
+이해하기 어려운 테스트 이름과 왜 있는지 모르는 주석이 조금 신경쓰일 뿐이네요.<br>
+변경하고, 지워줍니다.<br>
+<br>
+```java
+@Test
+void 티켓을_추가하고_확인합니다() {
+    AddTicketCommand command = AddTicketCommandFactory.create("KEY", TicketProps.empty(), ANY_EXPIRY_DATE);
+    
+    sut.execute(command);
+
+    assertThat(sut.has(command.newTicket())).isTrue();
+}
+```
+
+
 
 ## Think of Test
 
