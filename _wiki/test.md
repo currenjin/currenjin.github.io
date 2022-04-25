@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-24 23:30:00 +0900
+updated : 2022-04-25 12:40:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3048,6 +3048,56 @@ void does_not_exist() {
 }
 ```
 
+**
+### **220424::trevari::wallet::domain::WalletTest**
+```java
+private Wallet sut;
+
+@BeforeEach
+void setUp() {
+    sut = Wallet.of(ANY_WALLET_ID, ANY_USER_ID);
+}
+
+@Test
+void addTicketAndFind() {
+    AddTicketCommand command = AddTicketCommandFactory.create("KEY", TicketProps.empty(), ANY_EXPIRY_DATE);//.create(TicketProps.empty(), (p)->"KEY");
+
+    sut.execute(command);
+
+    assertThat(sut.has(command.newTicket())).isTrue();
+}
+```
+
+**해석**<br>
+티켓을 추가하고 해당 티켓이 존재하는지 확인할 수 있는 테스트 코드입니다.<br>
+
+**생각**<br>
+알고자 하는 부분은 딱 두 가지라고 생각합니다.<br>
+<br>
+_티켓을 추가한다._<br>
+_티켓이 있는지 확인한다._<br>
+<br>
+먼저 티켓을 추가하는 행위를 진행하기 위해서는 두 가지가 필요하네요.<br>
+**티켓 추가를 위한 정보를 담는 커맨드** 와 그 **커맨드를 실행하는 지갑** 입니다.<br>
+커맨드에는 Key, TicketProps, ExpiryDate 가 들어가는 것을 확인할 수 있네요.<br>
+<br>
+추가 명령을 실행한 뒤에는 **같은 티켓을 또 생성해, 지갑 내 티켓 존재 여부를 확인** 합니다.<br>
+이 테스트로 유추할 수 있는 건, 커맨드를 실행하면 내부에선 newTicket 이 호출된다는 것입니다.<br>
+<br>
+저는 로직에선 필요한 부분은 다 존재한다고 생각합니다.<br>
+이해하기 어려운 테스트 이름과 왜 있는지 모르는 주석이 조금 신경쓰일 뿐이네요.<br>
+변경하고, 지워줍니다.<br>
+<br>
+```java
+@Test
+void 티켓을_추가하고_확인합니다() {
+    AddTicketCommand command = AddTicketCommandFactory.create("KEY", TicketProps.empty(), ANY_EXPIRY_DATE);
+    
+    sut.execute(command);
+
+    assertThat(sut.has(command.newTicket())).isTrue();
+}
+```
 
 ### **220424::trevari::wallet::domain::WalletTest**
 ```java
@@ -3099,7 +3149,53 @@ void 티켓을_추가하고_확인합니다() {
 }
 ```
 
+### **220425::trevari::wallet::api::DeleteWalletServiceTest**
+```java
+@BeforeEach
+void setUp() {
+    sut = new DeleteWalletService(walletRepository);
+}
 
+@Test
+void userId의_지갑이_이미_삭제된_상태이면_WalletNotFoundException() {
+    wallet.delete();
+
+    assertThrows(WalletNotFoundException.class, () -> sut.deleteWallet(wallet));
+}
+```
+
+**해석**<br>
+지갑을 지우는 명령을 실행할 때, 지갑이 이미지 지워진 상태면 예외를 발생시킨다는 것을 알리는 테스트 코드입니다.<br>
+
+**생각**<br>
+두 가지의 문제가 보입니다.<br>
+<br>
+_제목에 userId 가 있지만, 테스트 코드 어느 곳에서도 userId 가 표현되지 않는 것_<br>
+_직접 지갑 객체에서 삭제 명령을 실행하는 것_<br>
+<br>
+위 두 문제 덕분에 해당 테스트 코드에서는 확인하고자 하는 부분이 불분명해 보일 수 밖에 없습니다.<br>
+제가 생각하는 이곳 테스트에서 보고자 하는 부분은 크게 두 가지라 생각합니다.<br>
+<br>
+_지갑이 삭제 상태인가?_<br>
+_삭제 상태이면 예외를 던지는가?_<br>
+<br>
+위 두 부분이 결여된 상태의 현재 테스트 코드는 의미가 없기 때문이죠.<br>
+제가 표현하고자 하는 부분을 반영한 코드는 다음과 같습니다.<br>
+<br>
+```java
+@Test
+void 이미_삭제된_지갑이면_예외가_발생한다() {
+    given(wallet.isDeleted()).willReturn(true);
+
+    assertThatThrownBy(() -> sut.deleteWallet(wallet))
+            .isInstanceOf(WalletNotFoundException.class)
+            .hasMessageContaining("is already deleted.");
+}
+```
+
+given willReturn 메소드를 통해 지갑이 삭제되었다는 것을 알리는 것이 표현되었습니다.<br>
+그리고, 어플리케이션에서 삭제 명령을 실행했을 때, 예외가 발생하는 것,<br>
+어떤 예외가 발생하는지, 어떤 메시지가 담기는 지도 표현되었습니다.<br>
 
 ## Think of Test
 
