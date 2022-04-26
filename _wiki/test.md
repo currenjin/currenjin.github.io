@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-25 12:40:00 +0900
+updated : 2022-04-26 22:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3196,6 +3196,47 @@ void 이미_삭제된_지갑이면_예외가_발생한다() {
 given willReturn 메소드를 통해 지갑이 삭제되었다는 것을 알리는 것이 표현되었습니다.<br>
 그리고, 어플리케이션에서 삭제 명령을 실행했을 때, 예외가 발생하는 것,<br>
 어떤 예외가 발생하는지, 어떤 메시지가 담기는 지도 표현되었습니다.<br>
+
+### **220426::trevari::product::api::MappingFinderTest**
+```java
+@Test
+void 삭제된_클럽을_find_할_때_null을_반환하는지_확인한다() {
+    ProductMembershipMapping productMembershipMapping = new ProductMembershipMapping(null,null,clubId,null,null,null,null,null,null);
+    productMembershipMapping.delete();
+    given(repository.findByClubId(clubId)).willReturn(productMembershipMapping);
+
+    ProductMembershipMapping productMembershipMapping1 = sut.find(clubId);
+
+    assertThat(productMembershipMapping1).isNull();
+}
+```
+
+**해석**<br>
+clubId 를 통해 삭제된 매핑 데이터를 조회하면 null 이 반환되는 것을 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+해당 어플리케이션 테스트 코드는 도메인 로직에 의존하여 작성됩니다.<br>
+이러면 도메인 객체 변화가 일어나면(생성자 access level 을 private 으로 바꾸는 등) 해당 테스트 코드는 깨지게 됩니다.<br>
+저는 도메인 객체를 불러다 와 직접 삭제하는 방식은 사용하지 않아도 된다고 생각합니다.<br>
+제 생각을 반영해 작성한 코드입니다.<br>
+
+```java
+@Mock
+ProductMembershipMapping productMembershipMapping;
+
+@Mock
+ProductMembershipMappingRepository repository;
+
+@Test
+void 삭제된_클럽을_find_할_때_null을_반환하는지_확인한다() {
+    given(repository.findByClubId(clubId)).willReturn(productMembershipMapping);
+    given(productMembershipMapping.isDeleted()).willReturn(true);
+
+    ProductMembershipMapping actual = sut.find(clubId);
+
+    assertThat(actual).isNull();
+}
+```
 
 ## Think of Test
 
