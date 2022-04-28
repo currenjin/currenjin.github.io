@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-04-28 00:30:00 +0900
+updated : 2022-04-28 22:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3299,6 +3299,56 @@ void JOINED_상태인_멤버가_없다면_생성한다() {
     sut.join(joinCommand);
 
     verify(repository).save(member);
+}
+```
+
+### **220428::trevari::wallet::api::DeleteWalletServiceTest**
+```java
+@BeforeEach
+void setUp() {
+    sut = new DeleteWalletService(walletRepository);
+}
+
+@Test
+void wallet_삭제하면_isDeleted가_true() {
+    sut.deleteWallet(wallet);
+
+    assertThat(wallet.isDeleted()).isTrue();
+}
+```
+**해석**<br>
+지갑을 지우는 명령을 실행하면, 지갑은 지워진 상태가 된다는 것을 표현하는 테스트 코드입니다.<br>
+
+**생각**<br>
+해당 코드는 어플리케이션의 로직을 테스트 하는 코드입니다.<br>
+저는 보통 어플리케이션 로직에선 white box 테스트를 진행합니다.<br>
+<br>
+- 화이트박스 테스트는 내부 동작을 확인하는 테스트입니다.<br>
+<br>
+이곳을 예시로, 지갑의 상태가 어떻게 되던 이 테스트 코드에선 신경쓸 것이 아니라고 생각하고,<br>
+지갑에 대한 처리는 명령을 받은 지갑 도메인 로직에서 알아서 처리할 것이기 때문이죠.<br>
+<br>
+결론은 상태에 대한 테스트 보단, 어떤 메소드가 호출되었는지 테스트하는 것이 더 중요하다고 생각합니다.<br>
+그래서, 저의 생각을 반영한 코드를 작성해 보았습니다.<br>
+
+```java
+@Mock
+WalletRepository walletRepository;
+
+@Mock
+Wallet wallet;
+
+@BeforeEach
+void setUp() {
+    sut = new DeleteWalletService(walletRepository);
+}
+
+@Test
+void deleteWallet에서_호출하는_메소드_확인() {
+    sut.deleteWallet(wallet);
+
+    verify(wallet).delete();
+    verify(walletRepository).save(wallet);
 }
 ```
 
