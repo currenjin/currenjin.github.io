@@ -3302,6 +3302,80 @@ void deleteWallet에서_호출하는_메소드_확인() {
 }
 ```
 
+### **220429::trevari::member::consumer::DefaultMemberJoinServiceTest**
+```java
+@Test
+void 멤버가_없다면_생성한다() {
+    UserId  userId = UserId.of("Tester");
+    MembershipId membershipId = MembershipId.of(1L);
+    command.setUserId(userId);
+    command.setMembershipId(membershipId);
+
+    when(longIdGenerator.gen(MemberId.class)).thenReturn(MemberId.of(1L));
+    given(repository.existsByUserIdAndMembershipIdAndState(userId, membershipId, MemberState.JOINED)).willReturn(false);
+    Meeting[] meetings = new Meeting[command.getMeetings().size()];
+    meetings = command.getMeetings().stream().map(e -> Meeting.of(e.getId().getValue(), e.getStartedAt())).collect(Collectors.toList()).toArray(meetings);
+    LocalDateTime purchasedAt = command.getEventedAt();
+
+
+    Period periodOfMembership = new BookClubMembershipPeriodFactory(meetings).create();
+    ServiceRunningPeriod communityServiceRunningPeriod = new GeneralServiceRunningContextPeriodFactory(purchasedAt, periodOfMembership).create();
+    List<ServiceRunningContextFactory> list = Arrays.stream(SupportedService.values())
+            .filter(v -> Badge.COMMUNITY_MEMBER.equals(v.getBadge()))
+            .map(s -> new GeneralMemberServiceRunningContextFactory(command.getUserId(), command.getMembershipId(), s, communityServiceRunningPeriod, ExtendedPropsFactory.DO_NOTING)).collect(Collectors.toList());
+    list.addAll(Arrays.stream(meetings)
+            .map(meeting -> new GeneralMemberServiceRunningContextFactory(command.getUserId(), command.getMembershipId(), BOOK_CLUB_MEETING, new BookMeetingPeriodFactory(meeting).create(), MeetingExtendedPropsFactory.of(meeting))).collect(Collectors.toList()));
+    ServiceRunningContextFactory[] factories = new ServiceRunningContextFactory[list.size()];
+    factories = list.toArray(factories);
+
+    given(membershipMemberFactoryFinder.findMembershipFactory(command)).willReturn(new GeneralMembershipMemberFactory(() -> longIdGenerator.gen(MemberId.class), periodOfMembership, factories));
+
+    sut.join(command);
+
+    verify(longIdGenerator).gen(MemberId.class);
+    verify(repository).save(any(Member.class));
+}
+```
+
+**해석**<br>
+해당하는 멤버가 없을 때, 멤버를 생성하는 명령을 실행하는 것을 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+보자마자 숨이 턱 막혔습니다.<br>
+해당 테스트를 알기 위해선 너무나도 많은 정보를 알아야 하고, 동시에 너무나도 많은 피로감이 쌓입니다.<br>
+어플리케이션 로직에서 이렇게 다 만들면서 테스트를 진행하면 의미가 드러나지 않게 된다고 생각하거든요.<br>
+어플리케이션은 다른 로직을 호출하기 위한 중간자라고 생각하기 때문입니다.<br>
+테스트에서 표현하고자 하는 부분을 인식하고 빨리 갈아엎는 게 좋겠네요.<br>
+<br>
+표현하고자 하는 부분은 두 가지인 것 같습니다.<br>
+<br>
+_해당하는 멤버가 없는지_<br>
+_없으면 멤버 생성 메소드를 호출하는지_<br>
+<br>
+복잡한 정보들을 다 빼고, 필요한 부분만 남긴 코드입니다.<br>
+
+```java
+@Mock
+JoinCommand joinCommand;
+
+@Mock
+MembershipMemberFactory factory;
+
+@Mock
+Member member;
+
+@Test
+void 멤버가_없다면_생성을_시도한다() {
+    given(repository.existsByUserIdAndMembershipIdAndState(joinCommand.getUserId(), joinCommand.getMembershipId(), MemberState.JOINED)).willReturn(false);
+    given(membershipMemberFactoryFinder.findMembershipFactory(joinCommand)).willReturn(factory);
+    given(factory.create(joinCommand.getUserId(), joinCommand.getMembershipId(), joinCommand.getEventedAt())).willReturn(member);
+
+    sut.join(joinCommand);
+
+    verify(repository).save(member);
+}
+```
+
 ## Think of Test
 
 1독 - 테스트에 관한 글을 읽습니다. <br>
