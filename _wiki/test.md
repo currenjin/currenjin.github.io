@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-01 23:30:00 +0900
+updated : 2022-05-02 23:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3459,6 +3459,46 @@ void 남은_횟수가_없다면_사용할_수_없다() {
             .isInstanceOf(MemberException.class)
             .hasMessage("Service already UsedUp when usedAt is " + ANY_LOCAL_DATE_TIME);
 }
+```
+
+### **220502::trevari::member::consumer::TerminateServiceImplTest**
+```java
+TerminateServiceImpl sut;
+TerminateCommand command = new TerminateCommand();
+
+@Mock
+MemberRepository repository;
+
+@Mock
+Member member;
+
+@BeforeEach
+void setUp() {
+    command.setMemberId(ANY_MEMBER_ID);
+    command.setRefundApplicatedAt(ANY_REFUND_APPLICATED_AT);
+    sut = new TerminateServiceImpl(repository);
+}
+
+@Test
+void verify_method() {
+    given(repository.findById(ANY_MEMBER_ID)).willReturn(member);
+
+    sut.terminate(command);
+
+    verify(repository).findById(ANY_MEMBER_ID);
+    verify(member).terminate();
+    verify(repository).save(member);
+}
+```
+**해석**<br>
+해지 명령을 실행할 때, 호출되어야 하는 메소드가 호출되는지 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+딱히 부족하다고 생각이 드는 코드는 아닙니다.<br>
+하지만 더욱 명시적으로 하기 위해선, 멤버가 정말 해지 대상인지 확인시켜주는 코드가 내부에 있으면 좋을 것 같습니다.<br>
+아래 코드를 넣어주면 더욱 명시적일 것 같습니다.<br>
+```java
+given(member.isTerminated()).willReturn(false);
 ```
 
 ## Think of Test
