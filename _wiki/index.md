@@ -10,6 +10,7 @@ regenerate: true
 ## wiki items
 
 * [[example]]
+* [[sleuth-sqs]]
 * [[ATDD]]
 * [[unit-test]]
 * [[Mockito]]
