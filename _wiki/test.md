@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-02 23:30:00 +0900
+updated : 2022-05-03 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3499,6 +3499,37 @@ void verify_method() {
 아래 코드를 넣어주면 더욱 명시적일 것 같습니다.<br>
 ```java
 given(member.isTerminated()).willReturn(false);
+```
+
+### **220503::trevari::wallet::domain::TicketsSerializeTest**
+```java
+@Test
+void 티켓이_없을때_Serialize() {
+    Tickets tickets = Tickets.init();
+
+    String serialized = serializer.serialize(tickets);
+    Tickets deserialized = serializer.deserialize(serialized, Tickets.class);
+
+    assertThat(serialized).isEqualTo("{\"items\":[]}");
+    assertThat(deserialized).isEqualTo(tickets);
+}
+```
+**해석**<br>
+티켓 값이 비어있는 상황에서 직렬화가 되는지 확인하는 테스트 코드입니다.<br>
+
+**생각**<br>
+then 부분에서 두 가지를 확인하는 군요? serialized, deserialized.<br>
+티켓이 빈 상태에서 serialize 된 것만 확인하면 되니, 굳이 deserialize 된 부분을 확인할 필요는 없을 것 같네요.<br>
+해당 부분만 확인할 수 있도록 수정합니다.<br>
+```java
+@Test
+void 티켓이_없을때_Serialize() {
+    Tickets tickets = Tickets.init();
+
+    String serialized = serializer.serialize(tickets);
+
+    assertThat(serialized).isEqualTo("{\"items\":[]}");
+}
 ```
 
 ## Think of Test
