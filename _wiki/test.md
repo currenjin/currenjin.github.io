@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-03 14:00:00 +0900
+updated : 2022-05-05 23:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3502,6 +3502,8 @@ given(member.isTerminated()).willReturn(false);
 ```
 
 ### **220503::trevari::wallet::domain::TicketsSerializeTest**
+`반영 완료`
+
 ```java
 @Test
 void 티켓이_없을때_Serialize() {
