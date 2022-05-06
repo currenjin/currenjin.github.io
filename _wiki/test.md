@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-05 23:00:00 +0900
+updated : 2022-05-06 23:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3462,6 +3462,8 @@ void 남은_횟수가_없다면_사용할_수_없다() {
 ```
 
 ### **220502::trevari::member::consumer::TerminateServiceImplTest**
+`반영 완료`
+
 ```java
 TerminateServiceImpl sut;
 TerminateCommand command = new TerminateCommand();
