@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-06 23:30:00 +0900
+updated : 2022-05-07 15:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3411,6 +3411,8 @@ void walletByUserId(@Mock Wallet wallet) {
 ```
 
 ### **220501::trevari::member::domain::ServiceRunningContextUseTest**
+`반영 완료`
+
 ```java
 @Test
 void 남은_회수() {
@@ -3502,6 +3504,29 @@ void verify_method() {
 ```java
 given(member.isTerminated()).willReturn(false);
 ```
+
+#### **220507::FOR::FEEDBACK::trevari::member::consumer::TerminateServiceImplTest**
+
+`InOrder.verify 를 사용해보는건 어때요?`
+
+```
+@Test
+void verify_method() {
+    InOrder inOrder = inOrder(repository, member);
+    given(repository.findById(ANY_MEMBER_ID)).willReturn(member);
+    given(member.isTerminated()).willReturn(false);
+
+    sut.terminate(command);
+
+    verify(repository).findById(ANY_MEMBER_ID);
+    verify(member).terminate();
+    verify(repository).save(member);
+    inOrder.verify(repository).findById(ANY_MEMBER_ID);
+    inOrder.verify(member).terminate();
+    inOrder.verify(repository).save(member);
+}
+```
+
 
 ### **220503::trevari::wallet::domain::TicketsSerializeTest**
 `반영 완료`
