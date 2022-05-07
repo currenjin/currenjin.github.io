@@ -24,7 +24,13 @@ Spring cloud Sleuth 에서 분산 추적을 위한 Sprign boot Auto-configuratio
 Zipkin 은 분산 추적 시스템입니다.
 
 ## POC(Proof of Concept)
+- [Repository](https://github.com/currenjin/sleuth-sqs-poc)
 
+![image](https://user-images.githubusercontent.com/60500649/167242411-f1b70721-f4f6-4bbd-862f-fc9a535cad88.png)
+
+### Producer
+
+### Consumer
 
 ## References
 - [Spring cloud sleuth](https://spring.io/projects/spring-cloud-sleuth)
