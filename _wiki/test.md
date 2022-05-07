@@ -3505,7 +3505,7 @@ void verify_method() {
 given(member.isTerminated()).willReturn(false);
 ```
 
-#### **220507::FOR::FEEDBACK
+#### **220507::FOR::FEEDBACK**
 
 `InOrder.verify 를 사용해보는건 어때요?`
 
