@@ -28,6 +28,8 @@ Zipkin 은 분산 추적 시스템입니다.
 
 ![image](https://user-images.githubusercontent.com/60500649/167242411-f1b70721-f4f6-4bbd-862f-fc9a535cad88.png)
 
+### Request API
+
 ### Producer
 
 ### Consumer
