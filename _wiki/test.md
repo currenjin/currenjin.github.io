@@ -3505,11 +3505,11 @@ void verify_method() {
 given(member.isTerminated()).willReturn(false);
 ```
 
-#### **220507::FOR::FEEDBACK::trevari::member::consumer::TerminateServiceImplTest**
+#### **220507::FOR::FEEDBACK
 
 `InOrder.verify 를 사용해보는건 어때요?`
 
-```
+```java
 @Test
 void verify_method() {
     InOrder inOrder = inOrder(repository, member);
