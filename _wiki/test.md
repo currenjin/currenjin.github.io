@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-07 15:00:00 +0900
+updated : 2022-05-08 15:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3377,6 +3377,8 @@ void 멤버가_없다면_생성을_시도한다() {
 ```
 
 ### **220430::trevari::wallet::consumer::WalletFinderTest**
+`반영 완료`
+
 ```java
 @Test
 void walletByUserId(@Mock Wallet wallet) {
@@ -3400,12 +3402,13 @@ void walletByUserId(@Mock Wallet wallet) {
 ```java
 @BeforeEach
 void before() {
-    WalletFinder sut = new WalletFinder(repository, longIdGenerator);
+    sut = new WalletFinder(repository, longIdGenerator);
 }
 
 @Test
-void walletByUserId(@Mock Wallet wallet) {
+void walletByUserId() {
     sut.walletByUserId(USER_ID);
+    
     verify(repository).findByUserId(USER_ID);
 }
 ```
