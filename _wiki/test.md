@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-08 15:00:00 +0900
+updated : 2022-05-09 02:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3458,6 +3458,25 @@ void 남은_횟수가_없다면_사용할_수_없다() {
 
     sut.use(ANY_LOCAL_DATE_TIME, alwaysTrue());
     assertThat(sut.getUsed()).isEqualTo(ONE);
+    assertThat(sut.isRemained()).isFalse();
+
+    assertThatThrownBy(() -> sut.use(ANY_LOCAL_DATE_TIME,  alwaysTrue()))
+            .isInstanceOf(MemberException.class)
+            .hasMessage("Service already UsedUp when usedAt is " + ANY_LOCAL_DATE_TIME);
+}
+```
+
+#### **220509::FOR::FEEDBACK**
+`현진님 질문이 있읍니다. 수정된 테스트 코드에서는 assertThat(sut.isUsedUp()).isTrue(); 를 제거해주셨는데 이미 exception message에서 그 의미를 담고 있기 때문에 그러신걸까요?? assertThat(sut.isUsedUp()).isTrue(); 도 남은 횟수가 없다는 메세지를 내포하고 있는 것 같아서 여쭈어봐요`
+
+```java
+@Test
+void 남은_횟수가_없다면_사용할_수_없다() {
+    sut = sut.withProvided(Times.of(1));
+
+    sut.use(ANY_LOCAL_DATE_TIME, alwaysTrue());
+    assertThat(sut.getUsed()).isEqualTo(ONE);
+    assertThat(sut.isUsedUp()).isTrue();
     assertThat(sut.isRemained()).isFalse();
 
     assertThatThrownBy(() -> sut.use(ANY_LOCAL_DATE_TIME,  alwaysTrue()))
