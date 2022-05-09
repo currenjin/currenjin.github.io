@@ -19,9 +19,21 @@ latex   : true
 
 Spring cloud Sleuth 에서 분산 추적을 위한 Sprign boot Auto-configuration 을 제공합니다.
 
+Sleuth는 시작하는 데 필요한 모든 것을 구성합니다. 여기에는 trace data(spans)가 보고되는 위치, 유지할 추적 데이터 수(sampling), 원격 필드(baggage)가 전송되는 경우 및 추적되는 라이브러리가 포함됩니다.
+
+특히, Spring Cloud Sleuth…
+
+Slf4J MDC에 추적 및 범위 ID를 추가하므로 로그 수집기의 지정된 추적 또는 범위에서 모든 로그를 추출할 수 있습니다.
+
+Spring 애플리케이션(서블릿 필터, 나머지 템플릿, 예약된 작업, 메시지 채널, 가상 클라이언트)에서 일반적인 수신 및 송신 지점을 계측합니다.
+
+사용 가능한 경우 spring-cloud-sleuth-zipkin앱은 HTTP를 통해 Zipkin 호환 추적을 생성하고 보고합니다. 기본적으로 localhost(포트 9411)의 Zipkin 수집기 서비스로 보냅니다. 를 사용하여 서비스의 위치를 ​​구성합니다 spring.zipkin.baseUrl.
+
 ## Zipkin
 
-Zipkin 은 분산 추적 시스템입니다.
+Zipkin은 분산 추적 시스템입니다. 서비스 아키텍처의 대기 시간 문제를 해결하는 데 필요한 타이밍 데이터를 수집하는 데 도움이 됩니다. 기능에는 이 데이터의 수집 및 조회가 모두 포함됩니다.
+
+로그 파일에 추적 ID가 있는 경우 해당 ID로 직접 이동할 수 있습니다. 그렇지 않으면 서비스, 작업 이름, 태그 및 기간과 같은 속성을 기반으로 쿼리할 수 있습니다. 서비스에 소요된 시간의 백분율 및 작업 실패 여부와 같은 몇 가지 흥미로운 데이터가 요약됩니다.
 
 ## POC(Proof of Concept)
 - [Repository](https://github.com/currenjin/sleuth-sqs-poc)
