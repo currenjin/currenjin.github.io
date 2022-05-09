@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-09 02:00:00 +0900
+updated : 2022-05-09 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3303,6 +3303,8 @@ void deleteWallet에서_호출하는_메소드_확인() {
 ```
 
 ### **220429::trevari::member::consumer::DefaultMemberJoinServiceTest**
+`반영 완료`
+
 ```java
 @Test
 void 멤버가_없다면_생성한다() {
