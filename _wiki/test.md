@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-09 14:00:00 +0900
+updated : 2022-05-10 13:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3253,6 +3253,8 @@ void JOINED_상태인_멤버가_없다면_생성한다() {
 ```
 
 ### **220428::trevari::wallet::api::DeleteWalletServiceTest**
+`반영 완료`
+
 ```java
 @BeforeEach
 void setUp() {
