@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-10 13:00:00 +0900
+updated : 2022-05-11 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3189,6 +3189,8 @@ void 삭제된_클럽을_find_할_때_null을_반환하는지_확인한다() {
 ```
 
 ### **220427::trevari::member::consumer::DefaultMemberJoinServiceTest**
+`반영 완료`
+
 ```java
 @Test
 void 멤버가_동일한_멤버십을_구매했는데_멤버State가_TERMINATED이라면_기존데이터는_유지하고_새로운멤버로_JOIN시킨다() {
