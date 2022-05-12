@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-11 14:00:00 +0900
+updated : 2022-05-12 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3148,6 +3148,8 @@ given willReturn 메소드를 통해 지갑이 삭제되었다는 것을 알리�
 어떤 예외가 발생하는지, 어떤 메시지가 담기는 지도 표현되었습니다.<br>
 
 ### **220426::trevari::product::api::MappingFinderTest**
+`반영 완료`
+
 ```java
 @Test
 void 삭제된_클럽을_find_할_때_null을_반환하는지_확인한다() {
