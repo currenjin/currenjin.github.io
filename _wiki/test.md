@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-12 14:00:00 +0900
+updated : 2022-05-13 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3100,6 +3100,8 @@ void 티켓을_추가하고_확인합니다() {
 ```
 
 ### **220425::trevari::wallet::api::DeleteWalletServiceTest**
+`반영 완료`
+
 ```java
 @BeforeEach
 void setUp() {
