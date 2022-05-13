@@ -23,7 +23,14 @@ latex   : true
 
 ### Example
 
-#### Component
+#### Drag & Drop(with. vaadin designer)
+
+[Vaadin Designer](https://vaadin.com/designer)
+
+Install Vaadin Designer plugin on IntelliJ
+
+
+#### Code
 ```java
 private Component createH2() {
         H2 appName = new H2("NEW");
