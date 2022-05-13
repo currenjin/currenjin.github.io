@@ -11,6 +11,7 @@ regenerate: true
 
 * [[example]]
 * [[sleuth-sqs]]
+* [[vaadin]]
 * [[specification-pattern]]
 * [[ATDD]]
 * [[unit-test]]
