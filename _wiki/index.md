@@ -11,6 +11,7 @@ regenerate: true
 
 * [[example]]
 * [[sleuth-sqs]]
+* [[specification-pattern]]
 * [[ATDD]]
 * [[unit-test]]
 * [[Mockito]]
