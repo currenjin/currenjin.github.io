@@ -11,8 +11,14 @@ parent  : [[how-to]]
 latex   : true
 ---
 * TOC
-  {:toc}
+{:toc}
 
 # Specification Pattern
 
 Specification pattern
+
+## What is Specification?
+
+## Example
+
+## TDD
