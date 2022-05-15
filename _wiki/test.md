@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-14 15:30:00 +0900
+updated : 2022-05-15 10:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -3017,6 +3017,8 @@ void find_member() {
 ```
 
 ### **220423::trevari::member::consumer:MemberFinderImplTest**
+`반영 완료`
+
 ```java
 @Test
 void does_not_exist() {
@@ -3048,7 +3050,6 @@ void does_not_exist() {
 }
 ```
 
-**
 ### **220424::trevari::wallet::domain::WalletTest**
 `반영 완료`
 
