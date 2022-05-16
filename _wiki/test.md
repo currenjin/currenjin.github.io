@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-15 10:30:00 +0900
+updated : 2022-05-16 19:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2887,6 +2887,8 @@ private Wallet readData() throws Exception {
 ```
 
 ### **220419::trevari::wallet::batch::ItemReaderTest**
+`반영 완료`
+
 ```java
 @Test
 void 데이터가_없으면_가져오지_못한다() throws Exception {
@@ -2987,6 +2989,7 @@ _ID 가 유효하지 않으면 안 된다._<br>
 <br>
 
 ### **220422::trevari::member::consumer:MemberFinderImplTest**
+
 ```java
 @Test
 void find_member() {
