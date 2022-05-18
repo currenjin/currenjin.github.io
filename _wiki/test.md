@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-16 19:30:00 +0900
+updated : 2022-05-18 22:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2790,6 +2790,8 @@ void Reader_Writer_호출을_확인한다() throws Exception {
 학습 테스트에 가깝네요.<br>
 
 ### **220417::trevari::wallet::batch::ItemReaderTest**
+`반영 완료`
+
 ```java
 @Test
 @Rollback
@@ -2835,6 +2837,8 @@ void 티켓이_있으면_가져온다() throws Exception {
 ```
 
 ### **220418::trevari::wallet::batch::ItemReaderTest**
+`반영 완료`
+
 ```java
 @Test
 @Rollback
