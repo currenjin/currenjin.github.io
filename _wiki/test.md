@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-18 22:00:00 +0900
+updated : 2022-05-19 22:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2687,6 +2687,8 @@ void 이미_삭제된_지갑이면_예외가_발생한다() {
 ```
 
 ### **220413::trevari::wallet::api::WalletServiceTest**
+`반영 완료`
+
 ```java
 @Test
 void findBy() {
