@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-19 22:00:00 +0900
+updated : 2022-05-20 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2470,6 +2470,8 @@ _해지된 걸 사용할 수 없는지_<br>
 위 두가지가 있고 해당 내용도 제목에 잘 표현되어서 변경할 부분은 없는 것 같습니다.<br>
 
 ### **220407::trevari::member::domain::ServiceRunningContextUseTest**
+`반영 완료`
+
 ```java
 @Test
 void 사용스펙이_만족하지않으면_사용처리는_실패한다() {
@@ -2535,6 +2537,8 @@ _모두 사용했는가_<br>
 제목에서 말하는 사용 처리에 대해 이 모두가 사용 처리에 대한 상태인가? 를 생각해보면, 좀 애매하긴 하지만 딱히 이견은 없습니다.<br>
 
 ### **220409::trevari::member::domain::ServiceRunningContextUseTest**
+`반영 완료`
+
 ```java
 @Test
 void 남은_회수() {
@@ -2586,6 +2590,8 @@ void 남은_횟수가_없다면_사용할_수_없다() {
 ```
 
 ### **220410::trevari::wallet::consumer::WalletFinderTest**
+`반영 완료`
+
 ```java
 @Test
 void walletByUserId(@Mock Wallet wallet) {
@@ -2623,6 +2629,8 @@ void walletByUserId_에서_메소드를_호출한다() {
 ```
 
 ### **220411::trevari::wallet::api::DeleteWalletServiceTest**
+`반영 완료`
+
 ```java
 @Test
 void wallet_삭제하면_isDeleted가_true() {
@@ -2657,6 +2665,8 @@ void 제거_명령을_실행하면_호출한다() {
 ```
 
 ### **220412::trevari::wallet::api::DeleteWalletServiceTest**
+`반영 완료`
+
 ```java
 @Test
 void userId의_지갑이_이미_삭제된_상태이면_WalletNotFoundException() {
