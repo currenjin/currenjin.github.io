@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-20 20:00:00 +0900
+updated : 2022-05-22 01:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2383,6 +2383,8 @@ _남아있지 않은 상태라면 만족하지 않는다_<br>
 <br>
 
 ### **220405::trevari::member::domain::GeneralServiceUseSpecificationTest**
+`반영 완료`
+
 ```java
 @InjectMocks
 GeneralServiceUseSpecification sut;
