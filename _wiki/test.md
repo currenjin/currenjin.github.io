@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-22 14:00:00 +0900
+updated : 2022-05-23 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2301,6 +2301,8 @@ _딱 떨어지는 날짜라면 만족하지 않도록 합니다._<br>
 _서비스 기간의 마지막이 도래하면 만족하지 않는다._<br>
 
 ### **220403::trevari::member::domain::GeneralServiceUseSpecificationTest**
+`반영 완료`
+
 ```java
 @InjectMocks
 GeneralServiceUseSpecification sut;
