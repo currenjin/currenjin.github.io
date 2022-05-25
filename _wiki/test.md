@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-24 10:30:00 +0900
+updated : 2022-05-25 13:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2211,6 +2211,8 @@ void when_command_is_null() {
 <br>
 
 ### **220401::trevari::member::domain::GeneralServiceUseSpecificationTest**
+`반영 완료`
+
 ```java
 @InjectMocks
 GeneralServiceUseSpecification sut;
