@@ -10,6 +10,7 @@ regenerate: true
 ## wiki items
 
 * [[example]]
+* [[elasticsearch]]
 * [[sleuth-sqs]]
 * [[vaadin]]
 * [[specification-pattern]]
