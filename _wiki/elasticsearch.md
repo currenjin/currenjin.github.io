@@ -3,7 +3,7 @@ layout  : wiki
 title   : Elasticsearch
 summary :
 date    : 2022-05-25 19:00:00 +0900
-updated : 2022-05-26 10:40:00 +0900
+updated : 2022-05-26 12:00:00 +0900
 tag     : elasticsearch
 toc     : true
 public  : true
@@ -57,9 +57,99 @@ http://host:port/ ${index} / ${type} / ${action | id}
 - Spring data elasticsearch
 - Rest High-Level Client
 
-## Pricing
+## PoC
 
-## TEST 
+[PoC Repository](https://github.com/currenjin/spring-data-elasticsearch-poc)
+
+### SDK
+
+```java
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+}
+```
+
+### scenario
+
+#### In(Index)
+
+유저 정보를 삽입할 수 있다.
+
+#### Out(Query)
+
+유저 이름으로 유저 정보를 조회할 수 있다.
+
+유저 전화번호로 유저 정보를 조회할 수 있다.
+
+### Tasks
+
+두 가지 방법이 있다.
+
+- ElasticsearchRepository
+- ElasticsearchRestTemplate (Elasticsearch 구문에 대한 전문지식 보유, 쿼리 설계의 더 많은 제어가 필요한 경우 적합)
+
+#### Run server
+
+docker run -d --name es762 -p 9200:9200 -e "discovery.type=single-node" elasticsearch:7.6.2
+
+#### Elasticsearch Repository
+
+```java
+/**
+ * ElasticsearchRepository 를 상속합니다. 해당 인터페이스는 PagingAndSortingRepository 를 상속합니다.
+ * save(), findById(), findAll(), count(), delete() 등의 메소드가 포함됩니다.
+ */
+```
+
+#### Elasticsearch Configuration
+
+```java
+/**
+ * Spring data Elasticsearch 가 Spring Data 저장소에 대해 제공된 패키지를 스캔하도록 합니다.
+ * Elasticsearch Server 와 통신을 위해 간단한 RestHighLevelClient 를 사용합니다.
+ * ElasticsearchOperations Bean 을 설정해, 서버에서 작업을 실행합니다.
+ */
+```
+
+#### User
+
+```java
+@Document(indexName = "user_index")
+public class User {
+
+    @Id
+    private String id;
+
+    @Field(type = FieldType.Text, name = "name")
+    private String name;
+
+    @Field(type = FieldType.Text, name = "phoneNumber")
+    private String phoneNumber;
+}
+```
+
+#### Indexing
+
+```shell
+$ curl -d '{"id":"test","name":"currenjin","phoneNumber":"01012341234"}' \
+-H "Content-Type: application/json" \
+-X POST http://localhost:{PORT}/
+```
+
+
+#### Query
+
+```shell
+$ curl -X GET "http://localhost:{PORT}/test"
+$ curl -X GET "http://localhost:{PORT}?name=currenjin"
+$ curl -X GET "http://localhost:{PORT}?phoneNumber=01012341234"
+```
+
+```shell
+{"id":"test","name":"currenjin","phoneNumber":"01028810909"}
+```
+
+## Pricing
 
 ## Reference
 - [SLA](https://www.elastic.co/guide/en/cloud/current/ec-faq-getting-started.html#faq-subscriptions)
@@ -69,3 +159,4 @@ http://host:port/ ${index} / ${type} / ${action | id}
 - [elasticsearch로 로그 검색 시스템 만들기](https://d2.naver.com/helloworld/273788)
 - [Elastic 가이드 북](https://esbook.kimjmin.net)
 - [[엘라스틱서치] 실무 가이드(1) - 검색 시스템](https://12bme.tistory.com/589)
+- [Spring-data-Elasticsearch](https://docs.spring.io/spring-data/elasticsearch/docs/current/reference/html/)
