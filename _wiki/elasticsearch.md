@@ -69,7 +69,7 @@ dependencies {
 }
 ```
 
-### scenario
+### Scenario
 
 #### In(Index)
 
@@ -90,7 +90,13 @@ dependencies {
 
 #### Run server
 
-docker run -d --name es762 -p 9200:9200 -e "discovery.type=single-node" elasticsearch:7.6.2
+```shell
+Elasticsearch
+$ make start-elasticsearch * jar is required.
+
+Opensearch
+$ make start-opensearch * jar is required.
+```
 
 #### Elasticsearch Repository
 
@@ -135,6 +141,8 @@ $ curl -d '{"id":"test","name":"currenjin","phoneNumber":"01012341234"}' \
 -H "Content-Type: application/json" \
 -X POST http://localhost:{PORT}/
 ```
+
+![image](https://user-images.githubusercontent.com/60500649/170406070-fb1ac02f-f52b-4962-81ca-7fc321167faa.png)
 
 
 #### Query
