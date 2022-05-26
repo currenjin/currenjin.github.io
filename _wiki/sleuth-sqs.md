@@ -68,6 +68,19 @@ $ curl --request POST --data 'test' http://localhost:5000/post
 
 ### Consumer
 
+1. 메시지가 수신되면 SimpleMessageListenerContainer 의 executeMessage 를 호출
+
+2. executeMessage 에서는 handleMessage 를 호출
+
+3. 이때, TraceMessagingAutoConfiguration 의 SqsQueueMessageHandler 클래스의 handleMesage 가 호출
+  1. SqsQueueMessageHandler 는 QueueMessageHandler 를 상속
+
+4. handleMessage 에서는 TracingMethodMessageHandlerAdapter 의 wrapMethodMessageHandler 를 호출
+
+5. wrapMethodMessageHandler 는 tracer 정보를 삽입
+  1. spanId
+  2. traceId
+
 ## References
 - [Spring cloud sleuth](https://spring.io/projects/spring-cloud-sleuth)
 - [Zipkin](https://zipkin.io)
