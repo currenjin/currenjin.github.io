@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-25 13:30:00 +0900
+updated : 2022-05-26 13:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -2184,6 +2184,8 @@ _멤버 해지를 다시 시도하지 않는가?_<br>
 수정할 필요는 없이 유지해도 좋은 테스트 코드인 것 같습니다.<br>
 
 ### **220331::trevari::member::consumer::TerminateServiceImplTest**
+`반영 완료`
+
 ```java
 @Test
 private final TerminateCommand NULL_COMMAND = null;
