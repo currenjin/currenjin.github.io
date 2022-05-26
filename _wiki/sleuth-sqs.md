@@ -3,7 +3,7 @@ layout  : wiki
 title   : Sleuth AWS SQS
 summary :
 date    : 2022-05-03 13:30:00 +0900
-updated : 2022-05-07 16:00:00 +0900
+updated : 2022-05-26 13:00:00 +0900
 tag     : container
 toc     : true
 public  : true
@@ -38,7 +38,29 @@ Zipkin은 분산 추적 시스템입니다. 서비스 아키텍처의 대기 시
 ## POC(Proof of Concept)
 - [Repository](https://github.com/currenjin/sleuth-sqs-poc)
 
+해당 프로젝트는 Slueth(Zipkin) 를 통한 메시지 추적 POC(Proof of concept) 입니다.
+Rest API 를 통해 POST 요청을 받으면, 메시지를 발행/소비 합니다. 이 과정에서 유지되는 TraceId 를 확인합니다.
+
 ![image](https://user-images.githubusercontent.com/60500649/167242411-f1b70721-f4f6-4bbd-862f-fc9a535cad88.png)
+
+### Run
+#### Clone project
+
+```shell
+$ git clone https://github.com/currenjin/sleuth-sqs-poc
+```
+
+#### Run container
+
+```shell
+$ make start-app *jar is required.
+```
+
+#### Invoke api
+
+```shell
+$ curl --request POST --data 'test' http://localhost:5000/post
+```
 
 ### Request API
 
