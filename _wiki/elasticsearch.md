@@ -57,9 +57,22 @@ http://host:port/ ${index} / ${type} / ${action | id}
 - Spring data elasticsearch
 - Rest High-Level Client
 
-## PoC
+## Spring data Elasticsearch PoC(Proof of Concept)
 
 [PoC Repository](https://github.com/currenjin/spring-data-elasticsearch-poc)
+
+### Scenario
+
+![image](https://user-images.githubusercontent.com/60500649/170408195-a3212762-90f6-48fc-8096-9986e25fa589.png)
+
+#### In(Index)
+
+유저 정보를 삽입할 수 있다.
+
+#### Out(Query)
+
+유저 이름으로 유저 정보를 조회할 수 있다.
+유저 전화번호로 유저 정보를 조회할 수 있다.
 
 ### SDK
 
@@ -69,36 +82,7 @@ dependencies {
 }
 ```
 
-### Scenario
-
-#### In(Index)
-
-유저 정보를 삽입할 수 있다.
-
-#### Out(Query)
-
-유저 이름으로 유저 정보를 조회할 수 있다.
-
-유저 전화번호로 유저 정보를 조회할 수 있다.
-
-### Tasks
-
-두 가지 방법이 있다.
-
-- ElasticsearchRepository
-- ElasticsearchRestTemplate (Elasticsearch 구문에 대한 전문지식 보유, 쿼리 설계의 더 많은 제어가 필요한 경우 적합)
-
-#### Run server
-
-```shell
-Elasticsearch
-$ make start-elasticsearch * jar is required.
-
-Opensearch
-$ make start-opensearch * jar is required.
-```
-
-#### Elasticsearch Repository
+### Elasticsearch Repository
 
 ```java
 /**
@@ -107,7 +91,7 @@ $ make start-opensearch * jar is required.
  */
 ```
 
-#### Elasticsearch Configuration
+### Elasticsearch Configuration
 
 ```java
 /**
@@ -117,7 +101,7 @@ $ make start-opensearch * jar is required.
  */
 ```
 
-#### User
+### User
 
 ```java
 @Document(indexName = "user_index")
@@ -134,7 +118,17 @@ public class User {
 }
 ```
 
-#### Indexing
+### Run server
+
+```shell
+Elasticsearch
+$ make start-elasticsearch * jar is required.
+
+Opensearch
+$ make start-opensearch * jar is required.
+```
+
+### Indexing
 
 ```shell
 $ curl -d '{"id":"test","name":"currenjin","phoneNumber":"01012341234"}' \
@@ -145,7 +139,7 @@ $ curl -d '{"id":"test","name":"currenjin","phoneNumber":"01012341234"}' \
 ![image](https://user-images.githubusercontent.com/60500649/170406070-fb1ac02f-f52b-4962-81ca-7fc321167faa.png)
 
 
-#### Query
+### Query
 
 ```shell
 $ curl -X GET "http://localhost:{PORT}/test"
