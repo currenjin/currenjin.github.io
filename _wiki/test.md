@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-26 13:30:00 +0900
+updated : 2022-05-27 13:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1891,6 +1891,8 @@ given willReturn 메소드를 통해 지갑이 삭제되었다는 것을 알리�
 어떤 예외가 발생하는지, 어떤 메시지가 담기는 지도 표현되었습니다.<br>
 
 ### **220324::trevari::wallet::api::WalletServiceTest**
+`반영 완료`
+
 ```java
 @Test
 void findBy() {
@@ -1933,6 +1935,8 @@ void 지갑_조회_시_존재하지_않을_때() {
 ```
 
 ### **220325::trevari::product::api::MappingFinderTest**
+`반영 완료`
+
 ```java
 @Test
 void 삭제된_클럽을_find_할_때_null을_반환하는지_확인한다() {
@@ -1974,6 +1978,8 @@ void 삭제된_클럽을_find_할_때_null을_반환하는지_확인한다() {
 ```
 
 ### **220326::trevari::member::consumer::DefaultMemberJoinServiceTest**
+`반영 완료`
+
 ```java
 @Test
 void 멤버가_없다면_생성한다() {
@@ -2070,6 +2076,8 @@ JOINED 인 멤버가 이미 존재한다면 멤버를 생성하지 않는 것을
 저는 딱히 고칠 부분이 없다고 생각합니다.<br>
 
 ### **220328::trevari::member::consumer::DefaultMemberJoinServiceTest**
+`반영 완료`
+
 ```java
 @Test
 void 멤버가_동일한_멤버십을_구매했는데_멤버State가_TERMINATED이라면_기존데이터는_유지하고_새로운멤버로_JOIN시킨다() {
