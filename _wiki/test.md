@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-27 13:30:00 +0900
+updated : 2022-05-28 21:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1698,6 +1698,8 @@ java.lang.NullPointerException
 이런 과정으로 저는 필요한 부분이 모두 존재한다는 사실을 알았습니다.<br>
 
 ### **220320::trevari::wallet::domain::TicketsSerializeTest**
+`반영 완료`
+
 ```java
 @Test
 void serializeAndDeserialize() {
@@ -1763,6 +1765,8 @@ private String getTicketsString() {
 약간 ticket 들을 가져올 때, 고정된 값을 반환하는 게 약간 불편하긴 하지만 제가 원하는 목적은 일단 달성을 한 것 같습니다.<br>
 
 ### **220321::trevari::wallet::domain::TicketsSerializeTest**
+`반영 완료`
+
 ```java
 @Test
 void 티켓이_없을때_Serialize() {
@@ -1794,6 +1798,8 @@ void 티켓이_없을때_Serialize() {
 ```
 
 ### **220322::trevari::wallet::api::DeleteWalletServiceTest**
+`반영 완료`
+
 ```java
 @BeforeEach
 void setUp() {
@@ -1844,6 +1850,8 @@ void deleteWallet에서_호출하는_메소드_확인() {
 ```
 
 ### **220323::trevari::wallet::api::DeleteWalletServiceTest**
+`반영 완료`
+
 ```java
 @BeforeEach
 void setUp() {
