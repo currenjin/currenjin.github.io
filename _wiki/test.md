@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-28 21:30:00 +0900
+updated : 2022-05-29 21:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1595,6 +1595,8 @@ hasScheduleBy 메소드는 테스트 코드를 제외하면 내부에서만 사�
 <br>
 
 ### **220318::trevari::member::consumer::MembershipPeriodFinderTest**
+`반영 완료`
+
 ```java
 @BeforeEach
 void setUp() {
