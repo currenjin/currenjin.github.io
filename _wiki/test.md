@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-30 18:30:00 +0900
+updated : 2022-05-31 13:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1347,6 +1347,8 @@ ANY_CHANGED_SERVICE -> ANY_SERVICE<br>
 <br>
 
 ### **220311::trevari::wallet::consumer::CreateServiceTest**
+`반영 완료`
+
 ```java
 @InjectMocks
 CreateService sut;
@@ -1414,6 +1416,8 @@ void 지갑이_없다면_생성한다() {
 딱히 변경할 필요가 없다고 생각이 드는 코드입니다.<br>
 
 ### **220313::trevari::wallet::consumer::WalletFinderTest**
+`반영 완료`
+
 ```java
 @Test
 void walletByUserId(@Mock Wallet wallet) {
@@ -1466,6 +1470,8 @@ void generate_book_meeting_ticket_key() {
 딱히 변경할 점이 없어보입니다. 저는 알고싶은 부분을 정확하게 알게 되었습니다.<br>
 
 ### **220315::trevari::member::consumer::TerminateServiceImplTest**
+`반영 완료`
+
 ```java
 TerminateServiceImpl sut;
 TerminateCommand command = new TerminateCommand();
