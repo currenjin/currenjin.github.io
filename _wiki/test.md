@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-05-31 13:00:00 +0900
+updated : 2022-06-01 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1311,6 +1311,8 @@ private void SET_DATA_FOR_INVALID_SERVICE_PERIOD() {
 다른 테스트 코드와의 공통점을 찾아 공통 메소드로 분리하는 것도 좋은 방법일 것 같다는 생각입니다.<br>
 
 ### **220310::trevari::wallet::consumer::AddServiceTest**
+`반영 완료`
+
 ```java
 @InjectMocks
 AddService sut;
