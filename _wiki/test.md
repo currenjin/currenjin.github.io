@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-01 20:00:00 +0900
+updated : 2022-06-02 13:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1245,6 +1245,8 @@ _ex) MEETING_ID_IS_NULL();_<br>
 그러면 더욱 가독성이 좋은 테스트 코드가 될 것이라는 생각입니다.<br>
 
 ### **220309::trevari::wallet::consumer::AddServiceTest**
+`반영 완료`
+
 ```java
 @InjectMocks
 AddService sut;
