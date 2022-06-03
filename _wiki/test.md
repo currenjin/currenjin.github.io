@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-02 13:30:00 +0900
+updated : 2022-06-03 13:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1196,6 +1196,8 @@ _**내 생각**<br>
 (3) 이때는 Mockito.verify() 메소드가 사용될 것이다.<br>_
 
 ### **220308::trevari::wallet::consumer::AddServiceTest**
+`반영 완료`
+
 ```java
 @InjectMocks
 AddService sut;
