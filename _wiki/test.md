@@ -402,6 +402,8 @@ _**해석**<br>
 (3) 티켓이 만료될 티켓인지 확인합니다. (False)<br>_
 
 ### **220210::trevari::wallet::domain::TicketExpireTest**
+`반영 완료`
+
 ```java
 @Test
 void 티켓_만료일이_null_이면_만료될_티켓이_아니다() {
