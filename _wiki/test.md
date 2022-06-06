@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-05 14:00:00 +0900
+updated : 2022-06-06 14:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -278,6 +278,8 @@ DisplayName 에도 써놓은 거로 대체가 될 수 있는가?<br>
 혹은 테스트 내에 명시적으로 집어넣는게 맞는가?<br>_
 
 ### **220205::trevari::member::domain::GeneralServiceTerminationSpecificationTest**
+`반영 완료`
+
 ```java
 @InjectMocks
 GeneralServiceTerminationSpecification sut;
