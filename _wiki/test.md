@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-06 14:30:00 +0900
+updated : 2022-06-07 11:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -243,6 +243,8 @@ _**해석**<br>
 (3) 해지 가능 여부를 확인한다. (false, 불가)<br>_
 
 ### **220204::trevari::member::domain::GeneralServiceTerminationSpecificationTest**
+`반영 완료`
+
 ```java
 @InjectMocks
 GeneralServiceTerminationSpecification sut;
