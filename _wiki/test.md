@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-07 11:30:00 +0900
+updated : 2022-06-08 13:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -20,6 +20,8 @@ latex   : true
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
+`반영 완료`
+
 ```java
 @Test
 void find_by_product_option_id() {
