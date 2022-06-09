@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-08 13:30:00 +0900
+updated : 2022-06-09 13:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -60,6 +60,8 @@ _**해석**<br>
 (4) 해지 불가일이 지났다면, 해지가 불가능합니다.<br>_
 
 ### **220129::trevari::member::domain::ServiceRunningContextTerminateTest**
+`반영 완료`
+
 ```java
 private static final LocalDateTime ANY_LOCAL_DATE_TIME = localDate(2021, 1, 1);
 
