@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-09 13:30:00 +0900
+updated : 2022-06-10 13:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -319,6 +319,8 @@ _**생각**<br>
 테스트 내에 가입 날짜를 명시하면 테스트가 더 명확할 것 같다.<br>_
 
 ### **220206::trevari::member::domain::CommunityServiceRunningContextTerminateTest**
+`반영 완료`
+
 ```java
 @Test
 void 서비스_기간에_해지를_시도하면_해지되지_않는다() {
