@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-10 13:30:00 +0900
+updated : 2022-06-11 19:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -350,6 +350,8 @@ _**떠오르는 의문**<br>
 (3) 혹은 2번 메소드의 이름을 변경해야 하는 건 아닌지?<br>_
 
 ### **220207::trevari::member::domain::CommunityServiceRunningContextTerminateTest**
+`반영 완료`
+
 ```java
 @Test
 void 보너스_기간에_해지를_시도하면_모든_커뮤니티서비스가_해지된다() {
