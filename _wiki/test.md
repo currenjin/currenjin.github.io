@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-11 19:30:00 +0900
+updated : 2022-06-12 20:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -461,6 +461,8 @@ _**해석**<br>
 (4) 만료 티켓의 개수를 확인합니다. (2개)<br>_
 
 ### **220212::trevari::wallet::domain::TicketsExpireTest**
+`반영 완료`
+
 ```java
 @Test
 void 만료일이_지난_티켓들을_가져온다_expiryDate_null_포함() {
