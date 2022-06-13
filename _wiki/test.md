@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-12 20:30:00 +0900
+updated : 2022-06-13 13:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -671,6 +671,8 @@ _**생각**<br>
 (1) 이게 만료로 인해 제거된 건지는 어떻게 알 수 있을까? expireWithTargetPredicate? 헷갈릴 수도 있을 것 같다. <br>_
 
 ### **220218::trevari::wallet::domain::WalletTest**
+`반영 완료`
+
 ```java
 private Wallet sut;
 
