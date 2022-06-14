@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-13 13:30:00 +0900
+updated : 2022-06-24 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -803,6 +803,8 @@ _**해석**<br>
 (3) 지갑이 제거된 상태인지 확인합니다. (True)<br>_
 
 ### **220222::trevari::wallet::api::WalletApiControllerTest**
+`반영 완료`
+
 ```java
 @InjectMocks
 WalletApiController sut;
