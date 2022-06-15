@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-24 14:00:00 +0900
+updated : 2022-06-25 19:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -875,6 +875,8 @@ _**해석**<br>
 (4) http reason 가 올바른지 확인합니다. (Invalid WalletId.)<br>_
 
 ### **220225::trevari::wallet::api::WalletApiControllerMVCTest**
+`반영 완료`
+
 ```java
 public static final String WALLETS_URL = "/apis/wallets";
 
