@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-25 19:00:00 +0900
+updated : 2022-06-26 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -910,6 +910,8 @@ _**생각**<br>
 (3) requestNotFound(inavalidWalletId) 와 같은 형태처럼<br>_
 
 ### **220226::trevari::wallet::api::WalletApiControllerMVCTest**
+`반영 완료`
+
 ```java
 public static final String WALLETS_URL = "/apis/wallets";
 
