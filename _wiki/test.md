@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-26 14:00:00 +0900
+updated : 2022-06-17 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -979,6 +979,7 @@ _**생각**<br>
 (2) 다른 메소드의 형태로 정의해 호출하는 것도 괜찮을 것 같다. (ex. requestOk())<br>_
 
 ### **220228::trevari::wallet::api::WalletApiControllerMVCTest**
+
 ```java
 public static final String WALLETS_URL = "/apis/wallets";
 
@@ -1042,6 +1043,8 @@ _**해당 테스트 목적**<br>
 (1) 요청 시 userId Parameter 값이 비어있다면, Bad Request(400, Invalid UserId) 로 응답한다는 것을 알리기 위해 존재한다고 생각한다.<br>_
 
 ### **220302::trevari::wallet::api::WalletApiControllerMVCTest**
+`반영 완료`
+
 ```java
 public static final String WALLETS_URL = "/apis/wallets";
 
