@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-17 20:00:00 +0900
+updated : 2022-06-18 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1013,6 +1013,8 @@ _**해당 테스트 목적**<br>
 (1) Runtime exception 이 감지되면 Internal server error (code: 500) 이 발생한다는 것을 표현한다 생각된다.<br>_
 
 ### **220301::trevari::wallet::api::WalletApiControllerMVCTest**
+`반영 완료`
+
 ```java
 public static final String WALLETS_URL = "/apis/wallets";
 
