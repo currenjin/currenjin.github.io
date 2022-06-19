@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-18 20:00:00 +0900
+updated : 2022-06-19 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -979,6 +979,7 @@ _**생각**<br>
 (2) 다른 메소드의 형태로 정의해 호출하는 것도 괜찮을 것 같다. (ex. requestOk())<br>_
 
 ### **220228::trevari::wallet::api::WalletApiControllerMVCTest**
+`반영 완료`
 
 ```java
 public static final String WALLETS_URL = "/apis/wallets";
