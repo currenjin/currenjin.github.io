@@ -19,13 +19,31 @@ latex   : true
 테스트(Test) : 평가하다
 
 ## Test Tools
-### ExtendWith Annotation
-우리는 테스트 코드를 작성할 때, Mockito 를 사용합니다.
-Mockito 를 이용해 Mock 객체를 생성할 때 테스트 클래스에 항상 붙여주던게 있었죠.
+
+### 220620::mockito::inorder
+테스트 코드를 작성할 때, 관심있는 메소드에 대한 호출 여부를 파악할 때가 있습니다.
+이럴 땐 보통 Mockito verify 메소드를 통해 확인하지만, 해당 메소드는 순서에 대한 보장은 하지 않습니다.
+<br>
+이런 상황에선, InOrder 를 사용함으로써 순서를 보장할 수 있도록 합니다.
+<br>
+사용법은 간단합니다.<br>
+1. inOrder 메소드 내 Mock instance 를 인자로 넣습니다.
+2. inOrder 의 verify 를 통해 순서대로 호출합니다.
+
+#### Example)
+```java
+InOrder inOrder = inOrder(firstMock, secondMock);
+
+inOrder.verify(firstMock).someMethod("was called first");
+inOrder.verify(secondMock).someMethod("was called second");
+```
+
+같은 메소드가 여러번 호출됐는지 확인하려면 times 를 추가합니다.
 
 ```java
-@ExtendWith(MockitoExtension.class)
+inOrder.verify(someMock, times(3)).someMethod("was called");
 ```
+
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
