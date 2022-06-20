@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-19 20:00:00 +0900
+updated : 2022-06-20 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -17,6 +17,15 @@ latex   : true
 
 ## 테스트란 무엇인가
 테스트(Test) : 평가하다
+
+## Test Tools
+### ExtendWith Annotation
+우리는 테스트 코드를 작성할 때, Mockito 를 사용합니다.
+Mockito 를 이용해 Mock 객체를 생성할 때 테스트 클래스에 항상 붙여주던게 있었죠.
+
+```java
+@ExtendWith(MockitoExtension.class)
+```
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
