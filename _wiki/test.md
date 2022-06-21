@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-20 14:00:00 +0900
+updated : 2022-06-21 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -20,11 +20,11 @@ latex   : true
 
 ## Test Tools
 
-### 220620::mockito::inorder
-테스트 코드를 작성할 때, 관심있는 메소드에 대한 호출 여부를 파악할 때가 있습니다.
-보통 Mockito verify 메소드를 통해 확인하지만, 해당 메소드는 순서에 대한 보장은 하지 않습니다.
+### **220620::mockito::inorder**
+테스트 코드를 작성할 때, 관심있는 메소드에 대한 호출 여부를 파악할 때가 있습니다.<br>
+보통 Mockito verify 메소드를 통해 확인하지만, 해당 메소드는 순서에 대한 보장은 하지 않습니다.<br>
 <br>
-이런 상황에선, InOrder 를 사용함으로써 순서를 보장할 수 있도록 합니다.
+이런 상황에선, InOrder 를 사용함으로써 순서를 보장할 수 있도록 합니다.<br>
 <br>
 사용법은 간단합니다.<br>
 1. inOrder 메소드 내 Mock instance 를 인자로 넣습니다.
@@ -43,6 +43,50 @@ inOrder.verify(secondMock).someMethod("was called second");
 ```java
 inOrder.verify(someMock, times(3)).someMethod("was called");
 ```
+
+### **220621::mockito::ConsecutiveCalls**
+우리는 테스트 코드를 작성할 때, 특정 메소드가 여러 번 호출되더라도 서로 다른 값을 반환해야 하는 상황이 생깁니다.<br>
+이런 경우에 활용하면 좋은 방법을 공유합니다.<br>
+<br>
+
+#### Example)
+```java
+when(mock.someMethod("some arg"))
+  .thenThrow(new RuntimeException())
+  .thenReturn("foo");
+
+ // Exception 이 발생합니다.
+ mock.someMethod("some arg");
+
+ // foo 를 출력합니다.
+ System.out.println(mock.someMethod("some arg"));
+
+ // foo 를 출력합니다.
+ System.out.println(mock.someMethod("some arg"));
+```
+<br>
+첫 번째 호출: RuntimeException 을 발생시킵니다.<br>
+두 번째 호출: foo 를 반환합니다.<br>
+이후 호출: foo 를 반환합니다.<br>
+_정의한 횟수가 넘어가면, 마지막 스터빙이 동작합니다._<br>
+<br>
+더 짧게 사용할 수도 있습니다.<br>
+<br>
+```java
+when(mock.someMethod("some arg"))
+  .thenReturn("one", "two", "three");
+```
+<br>
+하지만, chaining 방식을 사용하지 않고 아래와 같이 when 메소드를 여러번 사용하는 경우 항상 마지막 스터빙이 동작합니다.<br>
+<br>
+```java
+when(mock.someMethod("some arg"))
+  .thenReturn("one")
+when(mock.someMethod("some arg"))
+  .thenReturn("two")
+```
+<br>
+호출 시 항상 two 를 반환합니다.<br>
 
 
 ## Test Interpretation
