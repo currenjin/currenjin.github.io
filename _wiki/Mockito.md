@@ -3,7 +3,7 @@ layout  : wiki
 title   : Mockito
 summary :
 date    : 2022-02-26 12:00:00 +0900
-updated : 2022-06-21 13:30:00 +0900
+updated : 2022-06-22 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -25,6 +25,16 @@ public void name(){
     String name = "currenjin";
     p.setName(name);
 }
+```
+
+## ArgumentCaptor
+
+전달하는 인자를 확인합니다..
+
+```java
+ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
+verify(mock).doSomething(argument.capture());
+assertEquals("Hyunjin", argument.getValue().getName()); 
 ```
 
 ## ConsecutiveCalls
