@@ -1,6 +1,6 @@
 ---
 layout  : wiki
-title   : Fitness
+title   : Fitnesse
 summary :
 date    : 2022-06-22 09:30:00 +0900
 updated : 2022-06-22 09:30:00 +0900
