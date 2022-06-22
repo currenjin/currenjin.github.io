@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-21 14:00:00 +0900
+updated : 2022-06-22 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -88,6 +88,17 @@ when(mock.someMethod("some arg"))
 <br>
 호출 시 항상 two 를 반환합니다.<br>
 
+### **220622::mockito::ArgumentCaptor**
+테스트 시, 전달하는 인자를 확인할 수도 있습니다.<br>
+마치 사진을 찍어놓고 해당 사진이 정확히 찍혔는지 확인하는 것처럼요.<br>
+<br>
+
+#### Example)
+```java
+ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
+verify(mock).doSomething(argument.capture());
+assertEquals("Hyunjin", argument.getValue().getName()); 
+```
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
