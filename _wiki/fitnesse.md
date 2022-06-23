@@ -15,7 +15,7 @@ latex   : true
 
 # FitNesse
 
-## FitNesse 는 무엇인가?
+## What is FitNesse
 FitNesse 는 자동화 테스트 도구입니다.<br>
 우리가 흔히 말하는 Acceptance criteria 를 지정하고 검증하는 도구죠.<br>
 - Acceptance Criteria 에 대해서 궁금하다면 여기를 보시면 됩니다.<br>
