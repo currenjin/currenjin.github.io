@@ -3,7 +3,7 @@ layout  : wiki
 title   : Fitnesse
 summary :
 date    : 2022-06-22 09:30:00 +0900
-updated : 2022-06-23 10:00:00 +0900
+updated : 2022-06-23 13:30:00 +0900
 tag     : atdd
 toc     : true
 public  : true
@@ -18,9 +18,9 @@ latex   : true
 ## What is FitNesse
 FitNesse 는 자동화 테스트 도구입니다.<br>
 우리가 흔히 말하는 Acceptance criteria 를 지정하고 검증하는 도구죠.<br>
-- Acceptance Criteria 에 대해서 궁금하다면 여기를 보시면 됩니다.<br>
+- Acceptance Criteria 에 대해서 궁금하다면 [여기](https://currenjin.github.io/wiki/ATDD/#acceptance-criteria)를 보시면 됩니다.<br>
 <br>
-FitNesse 는 프로젝트의 모든 이해 관계자가 서로 쉽게 상호작용할 수 있도록 웹 브라우저를 통해 요구사항을 만들고, 수정할 수도 있습니다.(by Wiki)<br>
+FitNesse 는 프로젝트의 모든 이해 관계자가 서로 쉽게 상호작용할 수 있도록 웹 브라우저를 통해 요구사항을 만들고, 수정할 수도 있습니다.(with Wiki)<br>
 또한, 요구사항들은 실제로 실행될 수 있기 때문에 Application 이 설계된 대로 작동한다는 것을 증명할 수 있죠.<br>
 <br>
 
