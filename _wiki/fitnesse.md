@@ -3,7 +3,7 @@ layout  : wiki
 title   : Fitnesse
 summary :
 date    : 2022-06-22 09:30:00 +0900
-updated : 2022-06-23 13:30:00 +0900
+updated : 2022-06-23 14:00:00 +0900
 tag     : atdd
 toc     : true
 public  : true
@@ -35,6 +35,17 @@ FitNesse 는 web server 의 형태이기 때문에, 서버를 실행시켜야 �
 
 ## FitNesse Process
 ![image](https://user-images.githubusercontent.com/60500649/175182572-e72dd4cc-5b4c-45fe-9db7-08d5ed986f90.png)
+
+### Click on the 'Test' button
+테스트 버튼을 클릭하면 무슨 일이 발생할까요?
+
+1. 먼저 FitNesse 는 기본 테스트 시스템인 Slim 에 테스트 테이블을 제출합니다. (테스트 시스템에는 테스트를 실제로 수행하는 데 필요한 코드가 포함되어 있음)
+2. Slim은 테스트 테이블에 해당하는 Fixture 코드를 찾아 실행합니다.
+3. 설계상 픽스처 코드는 실제 작업을 수행하기 위해 일부 기본 애플리케이션 코드를 호출하고 결과를 픽스처에 다시 보고합니다.
+4. Fit은 Fixture 코드를 실행한 결과를 Fitness에 돌려줍니다.
+5. FitNesse 는 테이블 셀을 빨간색으로 바꿀지 녹색으로 바꿀지(예외가 발생한 경우 노란색)을 파악하고 그에 따라 결과 페이지를 표시합니다.
+
+### Fixture Code
 
 ## How to use FitNesse
 ### Test page
