@@ -3,8 +3,8 @@ layout  : wiki
 title   : Fitnesse
 summary :
 date    : 2022-06-22 09:30:00 +0900
-updated : 2022-06-23 09:30:00 +0900
-tag     : java
+updated : 2022-06-23 10:00:00 +0900
+tag     : atdd
 toc     : true
 public  : true
 parent  : [[how-to]]
@@ -37,6 +37,8 @@ FitNesse 는 web server 의 형태이기 때문에, 서버를 실행시켜야 �
 ![image](https://user-images.githubusercontent.com/60500649/175182572-e72dd4cc-5b4c-45fe-9db7-08d5ed986f90.png)
 
 ## How to use FitNesse
+### Test page
+### Test table
 
 ## Example
 ### TwoMinuteExample
