@@ -3,7 +3,7 @@ layout  : wiki
 title   : Fitnesse
 summary :
 date    : 2022-06-22 09:30:00 +0900
-updated : 2022-06-23 14:00:00 +0900
+updated : 2022-06-25 20:00:00 +0900
 tag     : atdd
 toc     : true
 public  : true
@@ -19,6 +19,7 @@ latex   : true
 FitNesse 는 자동화 테스트 도구입니다.<br>
 우리가 흔히 말하는 Acceptance criteria 를 지정하고 검증하는 도구죠.<br>
 - Acceptance Criteria 에 대해서 궁금하다면 [여기](https://currenjin.github.io/wiki/ATDD/#acceptance-criteria)를 보시면 됩니다.<br>
+<br>
 <br>
 FitNesse 는 프로젝트의 모든 이해 관계자가 서로 쉽게 상호작용할 수 있도록 웹 브라우저를 통해 요구사항을 만들고, 수정할 수도 있습니다.(with Wiki)<br>
 또한, 요구사항들은 실제로 실행될 수 있기 때문에 Application 이 설계된 대로 작동한다는 것을 증명할 수 있죠.<br>
@@ -62,6 +63,26 @@ Fixture 는 Slim 이 테이블 내용을 처리하는데 사용할 클래스입�
 ### TwoMinuteExample
 - [Link](http://localhost/FitNesse.UserGuide.TwoMinuteExample)
 
+#### Division class
+
+```java
+public class Division {
+  private double numerator, denominator;
+  
+  public void setNumerator(double numerator) {
+    this.numerator = numerator;
+  }
+  
+  public void setDenominator(double denominator) {
+    this.denominator = denominator;
+  }
+  
+  public double quotient() {
+    return numerator/denominator;
+  }
+} 
+```
+
 테스트 페이지에 접속했습니다.
 
 1. 상단 'Test' 버튼을 클릭합니다.
@@ -72,3 +93,18 @@ Fixture 는 Slim 이 테이블 내용을 처리하는데 사용할 클래스입�
 3. 상단, 'Edit' 버튼을 클릭합니다.
 4. 테스트 테이블의 33 값을 25.0 으로 변경 후 'Save' 합니다.
 5. 'Test' 버튼을 클릭하면 성공하는 것을 확인할 수 있습니다.
+
+#### Fixture code 를 사용해 slim 이 테스트 테이블을 처리하는 방법
+<img width="271" alt="image" src="https://user-images.githubusercontent.com/60500649/175770160-263c3147-36d2-4b5d-b9b3-3f940d25f55b.png">
+<br>
+1. Slim 은 예제 데이터의 행을 처리합니다. (왼쪽에서 오른쪽으로)
+2. Setter method 를 이용해 Division 클래스 필드(numerator, denominator)에 각각 값을 저장합니다.
+   1. setNumerator(numerator), setDenominator(denominator) 를 호출하도록 지시합니다.
+4. 이후 각 행에 대해 quotient method 를 호출합니다.
+5. 값은 각 셀의 색상을 지정하는 결정 테이블로 반환됩니다.
+   1. 반환 값이 셀 값과 일치하면 FitNesse 는 셀을 녹색으로 바꿉니다.
+   2. 일치하지 않으면 FitNesse 는 빨간색으로 바꾸고, 예상 값과 실제 값을 표시합니다.
+   3. Slim 이 예외를 만나거나 필드 또는 메소드를 찾을 수 없는 경우 셀을 노란색으로 바꾸고, 스택 추적을 삽입합니다.
+
+
+
