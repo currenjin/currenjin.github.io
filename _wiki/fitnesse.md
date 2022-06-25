@@ -97,6 +97,7 @@ public class Division {
 #### Fixture code 를 사용해 slim 이 테스트 테이블을 처리하는 방법
 <img width="271" alt="image" src="https://user-images.githubusercontent.com/60500649/175770160-263c3147-36d2-4b5d-b9b3-3f940d25f55b.png">
 <br>
+
 1. Slim 은 예제 데이터의 행을 처리합니다. (왼쪽에서 오른쪽으로)
 2. Setter method 를 이용해 Division 클래스 필드(numerator, denominator)에 각각 값을 저장합니다.
    1. setNumerator(numerator), setDenominator(denominator) 를 호출하도록 지시합니다.
