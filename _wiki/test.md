@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-22 14:00:00 +0900
+updated : 2022-06-26 21:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -79,12 +79,14 @@ when(mock.someMethod("some arg"))
 <br>
 하지만, chaining 방식을 사용하지 않고 아래와 같이 when 메소드를 여러번 사용하는 경우 항상 마지막 스터빙이 동작합니다.<br>
 <br>
+
 ```java
 when(mock.someMethod("some arg"))
   .thenReturn("one")
 when(mock.someMethod("some arg"))
   .thenReturn("two")
 ```
+
 <br>
 호출 시 항상 two 를 반환합니다.<br>
 
@@ -94,11 +96,37 @@ when(mock.someMethod("some arg"))
 <br>
 
 #### Example)
+
 ```java
 ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
 verify(mock).doSomething(argument.capture());
 assertEquals("Hyunjin", argument.getValue().getName()); 
 ```
+
+
+### **220626::mockito::VerificationWithTimeout**
+우리가 화이트박스 테스트를 하면서, 시간 초과를 확인할 수 있습니다.<br>
+1. verify method 를 통해 동작합니다.
+2. verify method 가 원하는 interaction 을 위해 지정된 시간 동안 대기합니다.
+3. 하지만, 메소드가 호출되지 않는 경우 바로 실패합니다.
+
+<br>
+
+#### Example)
+```java
+// someMethod method 가 100ms 이내이면 통과합니다.
+verify(mock, timeout(100)).someMethod();
+
+// someMethod method 가 100ms 이내에서 두 번 호출되면 통과합니다.
+verify(mock, timeout(100).times(2)).someMethod();
+
+// 위와 동일합니다. atLeast method 는 적어도 두 번 호출한다는 뜻입니다.
+verify(mock, timeout(100).atLeast(2)).someMethod();
+```
+
+<br>
+
+하지만, 해당 메소드를 통해 테스트하는 것이 정말 좋은 방법인가에 대한 것은 생각해 봐야겠습니다.
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
