@@ -3,7 +3,7 @@ layout  : wiki
 title   : Mockito
 summary :
 date    : 2022-02-26 12:00:00 +0900
-updated : 2022-06-22 14:00:00 +0900
+updated : 2022-06-26 21:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -97,4 +97,18 @@ void verify_method() {
     inOrder.verify(member).terminate();
     inOrder.verify(repository).save(member);
 }
+```
+
+## Verification with Timeout
+시간 초과를 확인할 수 있습니다.
+
+```java
+// someMethod method 가 100ms 이내이면 통과합니다.
+verify(mock, timeout(100)).someMethod();
+
+// someMethod method 가 100ms 이내에서 두 번 호출되면 통과합니다.
+verify(mock, timeout(100).times(2)).someMethod();
+
+// 위와 동일합니다. atLeast method 는 적어도 두 번 호출한다는 뜻입니다.
+verify(mock, timeout(100).atLeast(2)).someMethod();
 ```
