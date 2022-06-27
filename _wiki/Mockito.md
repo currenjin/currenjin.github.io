@@ -3,7 +3,7 @@ layout  : wiki
 title   : Mockito
 summary :
 date    : 2022-02-26 12:00:00 +0900
-updated : 2022-06-26 21:00:00 +0900
+updated : 2022-06-27 19:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -97,6 +97,22 @@ void verify_method() {
     inOrder.verify(member).terminate();
     inOrder.verify(repository).save(member);
 }
+```
+
+## VerifyNoMoreInteractions
+
+mock 객체에서 더이상 호출하는 메소드가 없음을 확인할 수 있습니다.
+
+```java
+// 메소드 호출
+mock.doSomething();
+mock.doSomethingUnexpected();
+
+// 동작 확인
+verify(mock).doSomething();
+
+// doSomethingUnexpected 메소드가 호출되기 때문에 실패합니다.
+verifyNoMoreInteractions(mock);
 ```
 
 ## Verification with Timeout
