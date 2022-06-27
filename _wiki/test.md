@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-26 21:00:00 +0900
+updated : 2022-06-27 19:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -111,7 +111,6 @@ verify(mock).doSomething(argument.capture());
 assertEquals("Hyunjin", argument.getValue().getName()); 
 ```
 
-
 ### **220626::mockito::VerificationWithTimeout**
 우리가 화이트박스 테스트를 하면서, 시간 초과를 확인할 수 있습니다.<br>
 1. verify method 를 통해 동작합니다.
@@ -135,6 +134,34 @@ verify(mock, timeout(100).atLeast(2)).someMethod();
 <br>
 
 하지만, 해당 메소드를 통해 테스트하는 것이 정말 좋은 방법인가에 대한 것은 생각해 봐야겠습니다.
+
+### **220627::mockito::VerifyNoMoreInteractions**
+
+mock 객체에서 더이상 호출하는 메소드가 없음을 확인할 수 있습니다.<br>
+
+<br>
+
+#### Example)
+
+```java
+// 메소드 호출
+mock.doSomething();
+mock.doSomethingUnexpected();
+
+// 동작 확인
+verify(mock).doSomething();
+
+// doSomethingUnexpected 메소드가 호출되기 때문에 실패합니다.
+verifyNoMoreInteractions(mock);
+```
+
+verifyNoMoreInteractions 의 동작 여부 확인 범위는 setUp method 도 포함됩니다. (@Before)<br>
+<br>
+
+해당 메소드의 경우에는 객체 그 자체의 상호작용을 확인하기 때문에 명시적이지 않다고 생각합니다. (mockito reference 에서 한 말을 빌리자면..)<br>
+저의 경우에는 해당 메소드보다, never() 를 통해 각 메소드 별 동작 여부를 확인합니다.<br>
+비교적 명시적이기 때문이죠.<br>
+<br>
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
