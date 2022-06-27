@@ -3,7 +3,7 @@ layout  : wiki
 title   : Fitnesse
 summary :
 date    : 2022-06-22 09:30:00 +0900
-updated : 2022-06-25 20:00:00 +0900
+updated : 2022-06-27 20:00:00 +0900
 tag     : atdd
 toc     : true
 public  : true
