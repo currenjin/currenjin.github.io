@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-27 19:00:00 +0900
+updated : 2022-06-28 20:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -162,6 +162,35 @@ verifyNoMoreInteractions 의 동작 여부 확인 범위는 setUp method 도 포
 저의 경우에는 해당 메소드보다, never() 를 통해 각 메소드 별 동작 여부를 확인합니다.<br>
 비교적 명시적이기 때문이죠.<br>
 <br>
+
+### **220628::mockito::Reset**
+
+mock 객체의 스텁과 호출한 메소드를 모두 초기화할 수 있습니다.<br>
+
+#### Example)
+
+```java
+List mock = mock(List.class);
+when(mock.size()).thenReturn(10);
+mock.add(1);
+
+// 해당 시점에 mock 객체는 인지하고 있던 모든 stub 과 interaction 을 잊게 됩니다.
+reset(mock);
+```
+
+저는 해당 메소드를 알게 되면서 좋은 점이 생겼습니다.<br>
+바로 reset method 를 사용하는 순간이 온다면, 그건 테스트를 잘못했다는 것의 증거가 되기 때문입니다.<br>
+<br>
+mock 객체의 초기화를 통해 알고자 하는 정보가 있을까요?<br>
+<br>
+저는 한 테스트에서는 한 가지만 봐야한다고 생각합니다. 객체의 단일 행동에 집중해야 하기 때문이죠.<br>
+객체의 초기화가 필요하다면, 그것은 한 번의 테스트에서 여러가지를 확인하고자 하는 경우일 겁니다.<br>
+이런 경우에는 잘못됐다는 인지를 할 수 있으며, 작성하던 테스트 코드를 다시한 번 생각할 수 있다고 생각합니다.<br>
+<br>
+저에겐 reset method 를 사용하지 않기 위해 존재하는 reset method 같은 기분이 드네요.<br>
+(참고로 mockito reference 에서도 사용하지 않는 것을 권장합니다)<br>
+<br>
+
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
