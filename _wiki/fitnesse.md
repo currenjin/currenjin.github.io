@@ -3,7 +3,7 @@ layout  : wiki
 title   : Fitnesse
 summary :
 date    : 2022-06-22 09:30:00 +0900
-updated : 2022-06-27 20:00:00 +0900
+updated : 2022-06-28 10:00:00 +0900
 tag     : atdd
 toc     : true
 public  : true
@@ -59,6 +59,11 @@ Fixture 는 Slim 이 테이블 내용을 처리하는데 사용할 클래스입�
 ## How to use FitNesse
 ### Test page
 ### Test table
+### Backup (Recent changes)
+기본적으로 FitNesse 는 Zip-file 기반의 version control mechanism 을 사용합니다.<br>
+페이지가 업데이트되는 시점에 현재 버전이 백업되고, 새 버전이 적용됩니다.<br>
+- [.Recent Changes page](http://localhost/RecentChanges) 에서 확인이 가능합니다.
+
 
 ## Example
 ### TwoMinuteExample
@@ -108,5 +113,7 @@ public class Division {
    2. 일치하지 않으면 FitNesse 는 빨간색으로 바꾸고, 예상 값과 실제 값을 표시합니다.
    3. Slim 이 예외를 만나거나 필드 또는 메소드를 찾을 수 없는 경우 셀을 노란색으로 바꾸고, 스택 추적을 삽입합니다.
 
+## Reference
+- [넥스트리 통합테스트 적용 사례](https://www.nextree.co.kr/p2613/)
 
 
