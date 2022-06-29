@@ -30,13 +30,19 @@ JUnit 5 는 세 개의 모듈로 나뉘어 존재합니다. (Platform, Jupiter, 
 
 ### JUnit Platform
 JVM 환경에서 테스트 프레임워크를 수행합니다.<br>
-TestEngine API 가 정의되어 있다 합니다.<br>
+TestEngine API 가 정의되어 있습니다.<br>
 
 ex) `@RunWith(JUnitPlatform.class)`
+
+<img width="462" alt="image" src="https://user-images.githubusercontent.com/60500649/176426152-fb336d69-43f1-466b-9dcb-3357a319f959.png">
+
 
 ### JUnit Jupiter
 JUnit 5 에서 새롭게 탄생했습니다.<br>
 Jupiter 기반 테스트를 실행하기 위한 Test Engine 을 제공합니다. (TestEngine API 의 구현체)<br>
+
+<img width="462" alt="image" src="https://user-images.githubusercontent.com/60500649/176426191-1a75d540-044e-4fff-bbed-d8b14e2aeaf0.png">
+
 
 ### JUnit Vintage
 JUnit 3 & 4 를 JUnit 5 플랫폼에서 사용할 수 있도록 지원합니다. (빈티지라서.. 이름이 재밌네요)<br>
