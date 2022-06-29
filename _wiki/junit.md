@@ -16,7 +16,7 @@ latex   : true
 # JUnit
 
 JUnit 은 Java 를 위한 Unit test framework 입니다.<br>
-JUnit은 컴파일 타임 에 JAR 로 연결됩니다.<br>
+JUnit은 컴파일 타임에 JAR 로 연결됩니다.<br>
 (우리의 영웅 켄트 벡 아저씨도 해당 프레임워크의 개발자더군요. 처음 알았습니다)<br>
 <br>
 여담으로, 2013년 GitHub 에 올라온 10,000 개의 Java 프로젝트에 대해 수행된 연구 조사에 따르면 JUnit(slf4j-api 와 동점)이 가장 일반적으로 포함되는 라이브러리였습니다.<br>
