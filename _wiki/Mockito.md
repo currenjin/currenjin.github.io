@@ -3,7 +3,7 @@ layout  : wiki
 title   : Mockito
 summary :
 date    : 2022-02-26 12:00:00 +0900
-updated : 2022-06-28 20:00:00 +0900
+updated : 2022-06-30 18:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -140,4 +140,16 @@ mock.add(1);
 
 // 해당 시점에 mock 객체는 인지하고 있던 모든 stub 과 interaction 을 잊게 됩니다.
 reset(mock);
+```
+
+### At Least
+
+mock 객체 메소드에 대해 최소한의 호출을 확인합니다.
+
+```java
+// 적어도 세 번 호출하면 성공합니다.
+verify(mock, atLeast(3)).someMethod("some arg");
+
+// 적어도 한 번 호출하면 성공합니다.
+verify(mock, atLeastOnce()).someMethod("some arg");
 ```
