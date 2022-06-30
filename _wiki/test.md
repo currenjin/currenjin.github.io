@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-28 20:00:00 +0900
+updated : 2022-06-30 18:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -190,6 +190,26 @@ mock 객체의 초기화를 통해 알고자 하는 정보가 있을까요?<br>
 저에겐 reset method 를 사용하지 않기 위해 존재하는 reset method 같은 기분이 드네요.<br>
 (참고로 mockito reference 에서도 사용하지 않는 것을 권장합니다)<br>
 <br>
+
+### **220630::mockito::verify::AtLeast**
+
+mock 객체 메소드에 대해 최소한의 호출을 확인할 수 있습니다.<br>
+
+#### Example)
+
+```java
+// 적어도 세 번 호출하면 성공합니다.
+verify(mock, atLeast(3)).someMethod("some arg");
+
+// 적어도 한 번 호출하면 성공합니다.
+verify(mock, atLeastOnce()).someMethod("some arg");
+```
+
+아직 해당 메소드를 사용한 적이 없습니다.<br>
+보통은 모두 times 를 사용해서 호출 횟수에 대한 테스트를 진행했죠.<br>
+아마, 정확한 횟수보다는 융통성을 요구할 때 사용할 거라 생각됩니다.<br>
+<br>
+사용하는 케이스가 있다면, 말씀해 주셔도 좋을 것 같습니다!<br>
 
 
 ## Test Interpretation
