@@ -142,7 +142,7 @@ mock.add(1);
 reset(mock);
 ```
 
-### At Least
+### Verify AtLeast
 
 mock 객체 메소드에 대해 최소한의 호출을 확인합니다.
 
