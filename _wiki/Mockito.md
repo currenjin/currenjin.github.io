@@ -62,6 +62,8 @@ public void beforeEach(final ExtensionContext context) {
 }
 ```
 
+.
+
 ```java
 List<Object> testInstances = context.getRequiredTestInstances().getAllInstances();
 ```
@@ -70,6 +72,7 @@ List<Object> testInstances = context.getRequiredTestInstances().getAllInstances(
 
 <img width="395" alt="image" src="https://user-images.githubusercontent.com/60500649/177028979-c9b14172-2e92-4374-9210-32b49994cb1a.png">
 
+.
 
 ```java
 Strictness actualStrictness = this.retrieveAnnotationFromTestClasses(context)
@@ -78,6 +81,8 @@ Strictness actualStrictness = this.retrieveAnnotationFromTestClasses(context)
 ```
 
 Strictness 를 정의합니다. 해당 객체에는 STRICT_STUBS 가 정의되는데, Mockito version 2 의 새로나온 기능이며 Mockito 의 Strict 한 사용을 위함입니다.
+
+.
 
 ```java
 MockitoSession session = Mockito.mockitoSession()
@@ -100,6 +105,8 @@ mockito session 이 정의되는 과정에서 mocking 을 이용해 테스트 �
 이렇게 됩니다. <br> 
 <br>
 필요로 하는 값이 정의되고 나면 해당 세션을 시작하게되죠.<br>
+
+.
 
 ```java
 context.getStore(MOCKITO).put(MOCKS, new HashSet<>());
