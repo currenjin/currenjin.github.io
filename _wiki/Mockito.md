@@ -3,7 +3,7 @@ layout  : wiki
 title   : Mockito
 summary :
 date    : 2022-02-26 12:00:00 +0900
-updated : 2022-06-30 18:00:00 +0900
+updated : 2022-07-03 16:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -14,6 +14,109 @@ latex   : true
 {:toc}
 
 # Mockito
+
+## MockitoExtension
+
+```java
+@ExtendWith(MockitoExtension.class)
+```
+
+이거 많이 보셨죠?<br>
+테스트 클래스에서 Mock Annotation 을 사용하기 위해 항상 정의하던 Extension 입니다.<br>
+정확히 어떤 역할을 하는지, 어떤 동작을 수행하는지, 왜 존재하는 지에 대해서 기술하겠습니다.<br>
+<br>
+<br>
+
+MockitoExtension 클래스는 JUnit Jupiter 종속성 하위에 존재합니다.<br>
+<br>
+해당 클래스는 테스트에 사용되는 여러 인터페이스를 구현합니다.<br>
+
+- BeforeEachCallback
+- AfterEachCallback
+- ParameterResolver
+
+<br>
+많이 본 이름들이 보이죠?<br>
+그 중에서도 BeforeEachCallback 인터페이스는 beforeEach 메소드를 갖고 있습니다.<br>
+MockitoExtension 에서는 beforeEach method 를 override 해 구현하죠.<br>
+그럼 beforeEach 에서는 어떤 행동을 할까요?<br>
+<br>
+
+```java
+@Override
+public void beforeEach(final ExtensionContext context) {
+    List<Object> testInstances = context.getRequiredTestInstances().getAllInstances();
+
+    Strictness actualStrictness = this.retrieveAnnotationFromTestClasses(context)
+        .map(MockitoSettings::strictness)
+        .orElse(strictness);
+
+    MockitoSession session = Mockito.mockitoSession()
+        .initMocks(testInstances.toArray())
+        .strictness(actualStrictness)
+        .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
+        .startMocking();
+
+    context.getStore(MOCKITO).put(MOCKS, new HashSet<>());
+    context.getStore(MOCKITO).put(SESSION, session);
+}
+```
+
+```java
+List<Object> testInstances = context.getRequiredTestInstances().getAllInstances();
+```
+
+먼저 필요한 testInstances 들을 끌고 옵니다. 디버깅을 통해 찍어보니, 실제 테스트 클래스에서 Mock Annotation 을 붙인 Instance 가 표시되더군요.
+
+<img width="395" alt="image" src="https://user-images.githubusercontent.com/60500649/177028979-c9b14172-2e92-4374-9210-32b49994cb1a.png">
+
+
+```java
+Strictness actualStrictness = this.retrieveAnnotationFromTestClasses(context)
+    .map(MockitoSettings::strictness)
+    .orElse(strictness);
+```
+
+Strictness 를 정의합니다. 해당 객체에는 STRICT_STUBS 가 정의되는데, Mockito version 2 의 새로나온 기능이며 Mockito 의 Strict 한 사용을 위함입니다.
+
+```java
+MockitoSession session = Mockito.mockitoSession()
+    .initMocks(testInstances.toArray())
+    .strictness(actualStrictness)
+    .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
+    .startMocking();
+```
+
+mockito session 이 정의되는 과정에서 mocking 을 이용해 테스트 인스턴스를 초기화합니다.<br>
+<br>
+한 마디로,<br>
+
+<img width="440" alt="image" src="https://user-images.githubusercontent.com/60500649/177028511-d487797d-1aac-41ab-b655-16ed7838fae0.png">
+
+원래 이랬던 애들이<br>
+
+<img width="610" alt="image" src="https://user-images.githubusercontent.com/60500649/177028482-aa3c1b13-f331-4184-8169-4bfa4258b1c5.png">
+
+이렇게 됩니다. <br> 
+<br>
+필요로 하는 값이 정의되고 나면 해당 세션을 시작하게되죠.<br>
+
+```java
+context.getStore(MOCKITO).put(MOCKS, new HashSet<>());
+context.getStore(MOCKITO).put(SESSION, session);
+```
+
+Mock 인스턴스 초기화 과정을 마치고 세션이 시작되면, context 에는 관련 정보가 기입이 됩니다. (아직 정확히 무슨 일을 하는 것인지 모릅니다)<br>
+해당 context 들은 afterEach 메소드를 통해서, 테스트가 끝나면 제거됩니다. 해당 내용은 더 알아보고 남겨두겠습니다.<br>
+
+```java
+@Override
+public void afterEach(ExtensionContext context) {
+    context.getStore(MOCKITO).remove(MOCKS, Set.class).forEach(mock -> ((ScopedMock) mock).closeOnDemand());
+    context.getStore(MOCKITO).remove(SESSION, MockitoSession.class)
+            .finishMocking(context.getExecutionException().orElse(null));
+}
+```
 
 ## doThrow()
 예외를 던지고 싶을 때 사용합니다.
