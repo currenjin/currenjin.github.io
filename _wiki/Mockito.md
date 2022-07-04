@@ -3,7 +3,7 @@ layout  : wiki
 title   : Mockito
 summary :
 date    : 2022-02-26 12:00:00 +0900
-updated : 2022-07-03 16:00:00 +0900
+updated : 2022-07-04 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -42,6 +42,8 @@ MockitoExtension 에서는 beforeEach method 를 override 해 구현하죠.<br>
 그럼 beforeEach 에서는 어떤 행동을 할까요?<br>
 <br>
 
+### beforeEach
+
 ```java
 @Override
 public void beforeEach(final ExtensionContext context) {
@@ -62,7 +64,16 @@ public void beforeEach(final ExtensionContext context) {
 }
 ```
 
-.
+#### ExtensionContext
+
+```java
+public void beforeEach(final ExtensionContext context) {}
+```
+
+ExtensionContext 는 현재 실행되고 있는 테스트 context 를 캡슐화합니다.<br>
+
+
+#### Test instances
 
 ```java
 List<Object> testInstances = context.getRequiredTestInstances().getAllInstances();
@@ -72,7 +83,7 @@ List<Object> testInstances = context.getRequiredTestInstances().getAllInstances(
 
 <img width="395" alt="image" src="https://user-images.githubusercontent.com/60500649/177028979-c9b14172-2e92-4374-9210-32b49994cb1a.png">
 
-.
+#### Strictness
 
 ```java
 Strictness actualStrictness = this.retrieveAnnotationFromTestClasses(context)
@@ -82,7 +93,7 @@ Strictness actualStrictness = this.retrieveAnnotationFromTestClasses(context)
 
 Strictness 를 정의합니다. 해당 객체에는 STRICT_STUBS 가 정의되는데, Mockito version 2 의 새로나온 기능이며 Mockito 의 Strict 한 사용을 위함입니다.
 
-.
+#### Mockito session
 
 ```java
 MockitoSession session = Mockito.mockitoSession()
@@ -107,7 +118,7 @@ mockito session 이 정의되는 과정에서 mocking 을 이용해 테스트 �
 필요로 하는 값이 정의되고 나면 해당 세션을 시작하게되죠.<br>
 (세션이 정확히 어떤 역할을 하는 지는 아직 잘 모르겠습니다)<br>
 
-.
+#### Context
 
 ```java
 context.getStore(MOCKITO).put(MOCKS, new HashSet<>());
@@ -116,6 +127,8 @@ context.getStore(MOCKITO).put(SESSION, session);
 
 Mock 인스턴스 초기화 과정을 마치고 세션이 시작되면, context 에는 관련 정보가 기입이 됩니다. (아직 정확히 무슨 일을 하는 것인지 모릅니다)<br>
 해당 context 들은 afterEach 메소드를 통해서, 테스트가 끝나면 제거됩니다. 해당 내용은 더 알아보고 남겨두겠습니다.<br>
+
+### afterEach
 
 ```java
 @Override
