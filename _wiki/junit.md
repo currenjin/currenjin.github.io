@@ -48,20 +48,8 @@ Jupiter 기반 테스트를 실행하기 위한 Test Engine 을 제공합니다.
 JUnit 3 & 4 를 JUnit 5 플랫폼에서 사용할 수 있도록 지원합니다. (빈티지라서.. 이름이 재밌네요)<br>
 
 ## JUnit 4 vs JUnit 5
-| JUnit 5      | JUnit 4      | Features                                           |
-|--------------|--------------|----------------------------------------------------|
-| @Test        | @Test        | Test method 정의                                   |
-| @BeforeAll   | @BeforeClass | 클래스에 포함된 모든 테스트가 수행하기 전에 실행   |
-| @AfterAll    | @AfterClass  | 클래스에 포함된 모든 테스트가 수행한 후에 실행     |
-| @BeforeEach  | @Before      | 클래스에 포함된 각각의 테스트가 수행하기 전에 실행 |
-| @AfterEach   | @After       | 클래스에 포함된 각각의 테스트가 수행한 후에 실행   |
-| @Disable     | @Ignore      | 테스트 클래스 또는 메소드 distable 처리            |
-| @TestFactory | N/A          | Dynamic test를 위한 테스트 factory 메소드          |
-| @Nested      | N/A          | 클래스 안의 클래스를 선언                          |
-| @Tag         | @Category    | 테스트 필터링                                      |
-| @ExtendWith  | N/A          | Custom extension 등록                              |
-| @DisplayName | N/A          | 테스트 메소드 또는 클래스에 사용자가 정의한 이름 정의  |
 
+<img width="675" alt="image" src="https://user-images.githubusercontent.com/60500649/177083450-f5673462-a66b-40d3-ada9-07ac7315b5b0.png">
 
 참고로, 우리가 사용하는 spring boot starter test 라이브러리에는 JUnit 5 가 들어있습니다.<br>
 Vintage 가 있기에 두 버전(JUnit 4, JUnit 5) 모두 호환 가능합니다.<br>
