@@ -73,3 +73,6 @@ TBD
 ## Reference
 - [JUnit wikipedia](https://en.wikipedia.org/wiki/JUnit)
 - [JUnit 4 vs JUnit 5](https://pureainu.tistory.com/190)
+- [JUnit Lifecycle](https://huisam.tistory.com/entry/junit)
+- [JUnit Extension](https://junit.org/junit5/docs/5.3.0-M1/user-guide/index.html#extensions)
+- [Javadoc MockitoExtension](https://javadoc.io/doc/org.mockito/mockito-junit-jupiter/latest/org/mockito/junit/jupiter/MockitoExtension.html)
