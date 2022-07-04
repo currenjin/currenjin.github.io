@@ -3,7 +3,7 @@ layout  : wiki
 title   : JUnit
 summary :
 date    : 2022-06-29 20:00:00 +0900
-updated : 2022-07-04 21:00:00 +0900
+updated : 2022-07-05 00:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -62,7 +62,7 @@ Vintage 가 있기에 두 버전(JUnit 4, JUnit 5) 모두 호환 가능합니다
 
 TBD
 
-## Intercepter
+## Interceptor
 
 우리는 JUnit Extension 을 통해 테스트에서 수행하는 작업을 intercept 할 수 있습니다.<br>
 
@@ -82,7 +82,7 @@ TBD
 
 <br>
 
-개인적으로 흥미로운 클래스인 InvocationInterceptor 를 통해서 Example intercepter extension 을 작성해 보았습니다.<br>
+개인적으로 흥미로운 클래스인 InvocationInterceptor 를 통해서 Example interceptor extension 을 작성해 보았습니다.<br>
 
 ```java
 @Slf4j
