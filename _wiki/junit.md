@@ -3,7 +3,7 @@ layout  : wiki
 title   : JUnit
 summary :
 date    : 2022-06-29 20:00:00 +0900
-updated : 2022-06-29 20:20:00 +0900
+updated : 2022-07-04 14:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -65,6 +65,10 @@ JUnit 3 & 4 를 JUnit 5 플랫폼에서 사용할 수 있도록 지원합니다.
 
 참고로, 우리가 사용하는 spring boot starter test 라이브러리에는 JUnit 5 가 들어있습니다.<br>
 Vintage 가 있기에 두 버전(JUnit 4, JUnit 5) 모두 호환 가능합니다.<br>
+
+## ExtendWith
+
+TBD
 
 ## Reference
 - [JUnit wikipedia](https://en.wikipedia.org/wiki/JUnit)
