@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-06-30 18:00:00 +0900
+updated : 2022-07-05 21:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -211,6 +211,163 @@ verify(mock, atLeastOnce()).someMethod("some arg");
 <br>
 사용하는 케이스가 있다면, 말씀해 주셔도 좋을 것 같습니다!<br>
 
+
+### **220705::springtest::DirtiesContext**
+
+@DirtiesContext Annotation 을 통해 Test life cycle 마다 Application context 를 다시 생성할 수 있습니다.<br>
+Method 와 Class 에 해당 Annotation 을 달 수 있습니다.<br>
+<br>
+예시 코드를 확인해 보겠습니다.<br>
+
+#### Example)
+
+예시를 위한 Class 를 정의해 줬습니다.
+
+**User**
+
+```java
+public class User {
+}
+```
+
+<br>
+
+**UserCache**
+
+```java
+@Component
+public class UserCache {
+
+    private List<User> userList = new ArrayList<>();
+
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void addUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException();
+        }
+
+        userList.add(user);
+    }
+}
+```
+
+<br>
+
+정의한 예시 클래스를 통해 간단한 SpringTest 를 진행해 보겠습니다.<br>
+<br>
+
+먼저, 테스트 클래스에 필요한 어노테이션을 정의해 줍니다.<br>
+
+```java
+@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@TestMethodOrder(OrderAnnotation.class)
+public class DirtiesContextTest
+```
+
+- SpringBootTest 를 위한 어노테이션을 정의했습니다.
+- Mock 어노테이션을 사용한 객체의 생성을 위해 MockitoExtension 을 정의했습니다.
+- 각 테스트 메소드 실행의 순서를 보장하기 위해 TestMethodOrder 를 정의했습니다.
+
+<br>
+
+
+먼저, DirtiesContext 를 사용하지 않고 테스트를 진행해 보겠습니다.<br>
+
+```java
+@Autowired
+private UserCache sut;
+
+@Mock
+User user_1;
+
+@Test
+@Order(1)
+void user_1_을_추가합니다() {
+    sut.addUser(user_1);
+
+    assertThat(sut.getUserList().size()).isEqualTo(1);
+}
+
+@Test
+@Order(2)
+void user_list_를_확인합니다() {
+    assertThat(sut.getUserList().size()).isEqualTo(1);
+}
+```
+
+1. 유저를 UserCache 에 추가한 후 유저 리스트의 길이를 확인합니다.
+2. 다음 테스트에서도 유저 리스트의 길이가 유지되는지 확인합니다.
+
+<br>
+
+당연하게도, 해당 테스트는 통과합니다.<br>
+
+<img width="369" alt="image" src="https://user-images.githubusercontent.com/60500649/177319917-e4cc5a2c-8966-4d8d-a8c8-00db48dc187c.png">
+
+Spring Application Context 가 유지되면서 추가되었던 유저가 계속 존재하게 되는 현상이죠.<br>
+<br>
+
+우리는 이번에 DirtiesContext 를 통해 다음 테스트로 넘어갈 때에도, 해당 정보가 유지되지 않게 설정해 보려 합니다.<br>
+DirtiesContext Annotation 은 spring-test package 하위에 존재합니다.<br>
+
+```java
+@Test
+@Order(3)
+void user_1_을_다시_한_번_추가합니다() {
+    sut.addUser(user_1);
+
+    assertThat(sut.getUserList().size()).isEqualTo(2);
+}
+
+@Test
+@Order(4)
+@DirtiesContext(methodMode = BEFORE_METHOD)
+void user_list_를_확인합니다_with_dirties_context() {
+    assertThat(sut.getUserList().size()).isEqualTo(0);
+}
+```
+
+기존에 존재하던 테스트에서 위 테스트를 추가했습니다.<br>
+
+1. 기존 테스트를 통해 1인 유저리스트에 user 를 추가합니다. 당연하게도 길이는 2 입니다.
+2. 하지만 해당 테스트에서 @DirtiesContext annotation 을 통해 context 를 재설정했습니다. 길이는 0 이 됩니다.
+
+<br>
+
+감동적이게도, 모든 테스트가 정상적으로 돌아가는 것을 확인할 수 있습니다.<br>
+
+<img width="346" alt="image" src="https://user-images.githubusercontent.com/60500649/177320752-d6d1efd6-b286-4fe1-872d-93bc1863c2a1.png">
+
+
+확인된 것과 같이, DirtiesContext 는 Spring test 의 application context 를 재설정할 수 있다는 장점이 있습니다.<br>
+물론, 재설정하면서 테스트 실행 시간은 쭉쭉 늘어나죠.<br>
+
+<br>
+
+#### Supported
+
+DirtiesContext 를 통해 지원하는 동작 리스트입니다 !
+
+**Class level**
+테스트 클래스에 대한 ClassMode 옵션은 컨텍스트가 재설정되는 시기를 정의합니다.
+
+- BEFORE_CLASS: 현재 Test class 의 동작 전
+- BEFORE_EACH_TEST_METHOD: 현재 Test class 의 각 test method 실행 전
+- AFTER_EACH_TEST_METHOD: 현재 Test class 의 각 test method 실행 전
+- AFTER_CLASS: 현재 Test class 의 동작 후
+
+**Method level**
+개별 메서드에 대한 MethodMode 옵션은 컨텍스트가 재설정되는 시기를 정의 합니다 .
+
+- BEFORE_METHOD: Test method 실행 전
+- AFTER_METHOD : Test method 실행 후
+
+
+#### 
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
