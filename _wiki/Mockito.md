@@ -3,7 +3,7 @@ layout  : wiki
 title   : Mockito
 summary :
 date    : 2022-02-26 12:00:00 +0900
-updated : 2022-07-04 14:00:00 +0900
+updated : 2022-07-06 22:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -277,3 +277,141 @@ verify(mock, atLeast(3)).someMethod("some arg");
 // 적어도 한 번 호출하면 성공합니다.
 verify(mock, atLeastOnce()).someMethod("some arg");
 ```
+
+### MockedStatic
+
+우리는 테스트를 위해 특정 클래스를 Mocking 합니다.<br>
+Mocking 된 객체를 통해 특정 메소드가 원하는 값을 반환하도록 명령하고, 또는 어떤 동작을 하라고 미리 정의해 두기도 하죠.<br>
+<br>
+하지만 클래스에 존재하는 static method 를 통해 stub 을 적용하거나, mocking 을 시도하는 데에 있어서 어려움을 겪습니다.<br>
+기존에 우리가 사용하던 Mock 은 static method 가 아니라 객체를 위해 사용되기 때문이죠.<br>
+
+<br>
+
+#### Failed example)
+
+특정 상황을 예시로 들어보겠습니다.<br>
+
+```java
+@Test
+void 이름을_가진_유저를_생성합니다() {
+    User actual = new User(NAME);
+
+    assertThat(actual.getName()).isEqualTo(NAME);
+}
+
+@Test
+void super_유저를_생성합니다() {
+    User actual = User.superUserOf();
+
+    assertThat(actual.getName()).isEqualTo("super");
+}
+```
+
+1. User 클래스가 존재합니다.
+2. User 는 name 을 갖습니다.
+3. User 클래스는 superUser 를 생성하는 static method 가 존재합니다.
+4. superUser 의 name 은 super 입니다.
+
+<br>
+
+이런 상황에서, superUser 가 super 라는 이름 대신 currenjin 이라는 이름을 갖도록 하고싶습니다.<br>
+<br>
+
+given 을 통해 static method 의 반환 값을 의도적으로 정의해 보려 하겠습니다.<br>
+
+```java
+@Mock
+User user;
+
+@Test
+void super_유저를_생성합니다() {
+    given(User.superUserOf()).willReturn(new User(SUPER_USER_NAME));
+
+    User actual = User.superUserOf();
+
+    assertThat(actual.getName()).isEqualTo(SUPER_USER_NAME);
+}
+```
+
+실행을 하면, 당연하게도 실패합니다. 에러 메시지를 보세요.<br>
+
+```java
+when() requires an argument which has to be 'a method call on a mock'.
+For example:
+    when(mock.getArticles()).thenReturn(articles);
+```
+
+<br>
+
+특정 호출에 대한 반환 값을 정의하려면 mock 의 method 여야 합니다.<br>
+static method 를 어떻게 mocking 할 수 있을까요?
+<br>
+
+#### mockStatic
+
+mockStatic 을 사용할 수 있습니다.<br>
+mockito version 3.4.0 이상부터 지원한다고 합니다.<br>
+
+<br>
+
+의존성
+
+```java
+testImplementation 'org.mockito:mockito-inline:3.6.0'
+```
+
+<br>
+
+```java
+@Test
+void super_유저를_생성합니다() {
+    MockedStatic<User> user = mockStatic(User.class);
+    given(User.superUserOf()).willReturn(new User(CURRENJIN));
+
+    User actual = User.superUserOf();
+
+    assertThat(actual.getName()).isEqualTo(CURRENJIN);
+    user.close();
+}
+```
+
+1. Mocking 하기 위한 클래스를 MockedStatic 객체로 정의해 줍니다.
+2. 원하던 작업을 합니다.
+3. 테스트가 끝났다면, MockedStatic 객체를 close 합니다.
+
+close 를 해줘야 하는 이유는 한 스레드에서 등록할 수 있는 static mock 은 한 개이기 때문입니다.<br>
+만약 제거해 주지 않으면 이미 등록되었다는 에러가 발생합니다.<br>
+
+```java
+For com.currenjin.learningtest.mockedstatic.User, static mocking is already registered in the current thread
+```
+
+<br>
+
+전체적으로 간단하다고 생각합니다. 근데, 보기 좀 불편하니 BeforeEach/AfterEach 로 옮겨줍시다.<br>
+
+```java
+private MockedStatic user;
+
+@BeforeEach
+void beforeEach() {
+    user = mockStatic(User.class);
+}
+
+@AfterEach
+void afterEach() {
+    user.close();
+}
+
+@Test
+void super_유저를_생성합니다() {
+    given(User.superUserOf()).willReturn(new User(CURRENJIN));
+
+    User actual = User.superUserOf();
+
+    assertThat(actual.getName()).isEqualTo(CURRENJIN);
+}
+```
+
+테스트 정상적으로 성공합니다.<br>
