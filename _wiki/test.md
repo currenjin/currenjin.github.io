@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-06 22:00:00 +0900
+updated : 2022-07-07 19:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -504,6 +504,27 @@ void super_유저를_생성합니다() {
 ```
 
 테스트 정상적으로 성공합니다.<br>
+
+### **220707::mockito::AtMost**
+
+mock 객체 메소드에 대해 최대한의 호출을 확인할 수 있습니다.<br>
+
+#### Example)
+
+```java
+// 세 번 이하로 호출됐으면 성공합니다.
+verify(mock, atMost(3)).someMethod("some arg");
+
+// 한 번 호출됐으면 성공합니다.
+verify(mock, atMostOnce()).someMethod("some arg");
+```
+
+아직 해당 메소드를 사용한 적이 없습니다.<br>
+보통은 모두 times 를 사용해서 호출 횟수에 대한 테스트를 진행했죠.<br>
+아마, 정확한 횟수보다는 융통성을 요구할 때 사용할 거라 생각됩니다.<br>
+<br>
+사용하는 케이스가 있다면, 말씀해 주셔도 좋을 것 같습니다!<br>
+
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
