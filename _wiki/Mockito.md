@@ -3,7 +3,7 @@ layout  : wiki
 title   : Mockito
 summary :
 date    : 2022-02-26 12:00:00 +0900
-updated : 2022-07-06 22:00:00 +0900
+updated : 2022-07-07 19:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -266,7 +266,7 @@ mock.add(1);
 reset(mock);
 ```
 
-### Verify AtLeast
+## Verify AtLeast
 
 mock 객체 메소드에 대해 최소한의 호출을 확인합니다.
 
