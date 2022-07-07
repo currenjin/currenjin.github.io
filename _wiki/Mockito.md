@@ -278,7 +278,19 @@ verify(mock, atLeast(3)).someMethod("some arg");
 verify(mock, atLeastOnce()).someMethod("some arg");
 ```
 
-### MockedStatic
+### Verify AtMost
+
+mock 객체 메소드에 대해 최대한의 호출을 확인할 수 있습니다.
+
+```java
+// 세 번 이하로 호출됐으면 성공합니다.
+verify(mock, atMost(3)).someMethod("some arg");
+
+// 한 번 호출됐으면 성공합니다.
+verify(mock, atMostOnce()).someMethod("some arg");
+```
+
+## MockedStatic
 
 우리는 테스트를 위해 특정 클래스를 Mocking 합니다.<br>
 Mocking 된 객체를 통해 특정 메소드가 원하는 값을 반환하도록 명령하고, 또는 어떤 동작을 하라고 미리 정의해 두기도 하죠.<br>
@@ -288,7 +300,7 @@ Mocking 된 객체를 통해 특정 메소드가 원하는 값을 반환하도�
 
 <br>
 
-#### Failed example)
+### Failed example)
 
 특정 상황을 예시로 들어보겠습니다.<br>
 
@@ -348,7 +360,7 @@ For example:
 static method 를 어떻게 mocking 할 수 있을까요?
 <br>
 
-#### mockStatic
+### mockStatic
 
 mockStatic 을 사용할 수 있습니다.<br>
 mockito version 3.4.0 이상부터 지원한다고 합니다.<br>
