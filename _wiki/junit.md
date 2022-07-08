@@ -3,7 +3,7 @@ layout  : wiki
 title   : JUnit
 summary :
 date    : 2022-06-29 20:00:00 +0900
-updated : 2022-07-05 00:00:00 +0900
+updated : 2022-07-08 22:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -24,7 +24,21 @@ JUnit은 컴파일 타임에 JAR 로 연결됩니다.<br>
 
 ## JUnit Life cycle
 
-TBD
+개별 테스트 메서드를 격리하여 실행할 수 있도록 하고 변경 가능한 테스트 인스턴스 상태로 인한 예기치 않은 부작용을 피하기 위해 JUnit은 각 테스트 메서드 를 실행하기 전에 각 테스트 클래스의 새 인스턴스를 만듭니다 ( 테스트 클래스 및 메서드 참조 ). 이 "메소드별" 테스트 인스턴스 수명 주기는 JUnit Jupiter의 기본 동작이며 모든 이전 버전의 JUnit과 유사합니다.<br>
+<br>
+
+```
+"메서드별" 테스트 인스턴스 수명 주기 모드가 활성화된 경우에도 조건 (예: , 등) 을 통해 주어진 테스트 메서드 가 비활성화 된 경우 테스트 클래스가 계속 인스턴스화됩니다 .@Disabled@DisabledOnOs
+JUnit Jupiter가 동일한 테스트 인스턴스에서 모든 테스트 메소드를 실행하도록 하려면 테스트 클래스에 @TestInstance(Lifecycle.PER_CLASS). 이 모드를 사용하면 테스트 클래스당 한 번 새 테스트 인스턴스가 생성됩니다. 따라서 테스트 메서드가 인스턴스 변수에 저장된 상태에 의존하는 경우 @BeforeEach또는 @AfterEach메서드에서 해당 상태를 재설정해야 할 수 있습니다.
+```
+
+<br>
+
+"클래스별" 모드에는 기본 "메서드별" 모드에 비해 몇 가지 추가 이점이 있습니다. 특히 "클래스별" 모드를 사용하면 비정적 메서드와 인터페이스 @BeforeAll메서드 를 선언할 수 있습니다. 따라서 "클래스별" 모드를 사용하면 테스트 클래스 에서 및 메서드 를 사용할 수도 있습니다.@AfterAlldefault@BeforeAll@AfterAll@Nested<br>
+<br>
+
+Kotlin 프로그래밍 언어를 사용하여 테스트를 작성 하는 경우 "클래스별" 테스트 인스턴스 수명 주기 모드로 전환하여 메서드를 @BeforeAll더 쉽게 구현할 수도 있습니다 .@AfterAll<br>
+<br>
 
 ## JUnit 4
 JUnit 4 는 단일 모듈로, org.junit 패키지 하위에 존재합니다.<br>
@@ -118,6 +132,23 @@ Test class 가 생성되는 시점에 로그를 찍어보겠습니다.<br>
 테스트 클래스가 생성되는 시점에 정확히 로그가 찍히는 군요.<br>
 intercept extension 을 통해 각 테스트의 속도를 측정한다던가.. 등등 다양한 일들을 할 수 있을 거라 생각됩니다.<br>
 
+## Tag
+각 테스트 클래스 및 메소드에는 태깅을 할 수 있습니다.<br>
+해당 태그가 나중에 테스트를 검색하거나 실행하고자 하는 대상을 필터링하는 데 사용되기도 한다더군요.<br>
+<br>
+테스트 클래스 또는 메소드에 @Tag Annotation 을 사용하면 됩니다. (junit jupiter 패키지 하위에 존재합니다)<br>
+<br>
+
+```java
+@Tag("tagging")
+class TaggingTest {
+
+    @Test
+    @Tag("test")
+    void test() {
+    }
+}
+```
 
 ## Reference
 - [JUnit wikipedia](https://en.wikipedia.org/wiki/JUnit)
