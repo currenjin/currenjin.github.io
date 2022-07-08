@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-07 19:00:00 +0900
+updated : 2022-07-08 22:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -524,6 +524,24 @@ verify(mock, atMostOnce()).someMethod("some arg");
 아마, 정확한 횟수보다는 융통성을 요구할 때 사용할 거라 생각됩니다.<br>
 <br>
 사용하는 케이스가 있다면, 말씀해 주셔도 좋을 것 같습니다!<br>
+
+### **220708::mockito::Tag**
+각 테스트 클래스 및 메소드에는 태깅을 할 수 있습니다.<br>
+해당 태그가 나중에 테스트를 검색하거나 실행하고자 하는 대상을 필터링하는 데 사용되기도 한다더군요.<br>
+<br>
+테스트 클래스 또는 메소드에 @Tag Annotation 을 사용하면 됩니다. (junit jupiter 패키지 하위에 존재합니다)<br>
+<br>
+
+```java
+@Tag("tagging")
+class TaggingTest {
+
+    @Test
+    @Tag("test")
+    void test() {
+    }
+}
+```
 
 
 ## Test Interpretation
