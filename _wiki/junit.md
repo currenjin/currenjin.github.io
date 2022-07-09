@@ -3,7 +3,7 @@ layout  : wiki
 title   : JUnit
 summary :
 date    : 2022-06-29 20:00:00 +0900
-updated : 2022-07-08 22:00:00 +0900
+updated : 2022-07-09 19:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -149,6 +149,106 @@ class TaggingTest {
     }
 }
 ```
+
+### Example
+
+깨끗한 테스트는 clean, 더러운 테스트는 dirty 라는 태그를 달아놓겠습니다.<br>
+
+```java
+class TagTest {
+
+    @Test
+    @Tag("clean")
+    void clean_first() {
+    }
+
+    @Test
+    @Tag("clean")
+    void clean_second() {
+    }
+
+    @Test
+    @Tag("dirty")
+    void dirty_first() {
+    }
+
+    @Test
+    @Tag("dirty")
+    void dirty_second() {
+    }
+}
+```
+
+이제, 해당 태그에 맞는 테스트 코드를 각각 실행시켜 보겠습니다.<br>
+
+#### Gradle
+
+gradle 설정을 통해 특정 태그에 대한 테스트만 수행할 수 있습니다.<br>
+<br>
+
+
+**특정 태그만 제외**
+
+```gradle
+tasks.named('test') {
+    useJUnitPlatform {
+        excludeTags 'dirty'
+    }
+}
+```
+
+**특정 태그만 포함**
+
+```gradle
+tasks.named('test') {
+    useJUnitPlatform {
+        includeTags 'clean'
+    }
+}
+```
+
+**gradle 명령을 통해 특정 태그만 수행**
+
+```gradle
+task cleanTest(type: Test) {
+    useJUnitPlatform {
+        includeTags 'clean'
+    }
+}
+```
+
+**결과**
+
+<img width="948" alt="스크린샷 2022-07-09 오후 7 07 13" src="https://user-images.githubusercontent.com/60500649/178101202-097ef952-3fe7-4b39-80c9-00159ce2ac9d.png">
+
+하지만, gradle 명령에 의존해야 하는 단점이 있습니다.<br>
+<br>
+
+#### Intellij
+
+intelliJ 설정을 통해 특정 태그만 수행할 수 있습니다.<br>
+
+1. Edit Configurations 을 들어갑니다.
+
+<img width="369" alt="스크린샷 2022-07-09 오후 6 55 33" src="https://user-images.githubusercontent.com/60500649/178101284-85c51ff3-b73c-4f42-b1de-63244944f79a.png">
+
+2. Add New Configuration 을 통해 JUnit 설정을 추가합니다.
+
+<img width="488" alt="스크린샷 2022-07-09 오후 7 02 53" src="https://user-images.githubusercontent.com/60500649/178101313-9364edec-bc84-4add-92bb-c6e51d1a8c07.png">
+
+
+3. 실행 방법을 Tags 로 선택합니다.
+
+<img width="648" alt="스크린샷 2022-07-09 오후 7 03 34" src="https://user-images.githubusercontent.com/60500649/178101329-b574d90a-d6dc-44e3-90bf-7d9efbf17f71.png">
+
+4. 실행하고자 하는 태그 이름을 작성합니다.
+
+<img width="550" alt="스크린샷 2022-07-09 오후 7 03 54" src="https://user-images.githubusercontent.com/60500649/178101337-2744d1a7-eff7-4fe7-af5c-e500b41664e9.png">
+
+5. 실행하면 작성한 태그만 실행됩니다.
+
+<img width="948" alt="스크린샷 2022-07-09 오후 7 07 13" src="https://user-images.githubusercontent.com/60500649/178101342-1008be64-b1ab-4b17-b501-c61d3d7bac45.png">
+
 
 ## Reference
 - [JUnit wikipedia](https://en.wikipedia.org/wiki/JUnit)
