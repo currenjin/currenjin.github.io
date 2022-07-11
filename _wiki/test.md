@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-09 19:20:00 +0900
+updated : 2022-07-11 22:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -648,6 +648,74 @@ intelliJ 설정을 통해 특정 태그만 수행할 수 있습니다.<br>
 5. 실행하면 작성한 태그만 실행됩니다.
 
 <img width="948" alt="스크린샷 2022-07-09 오후 7 07 13" src="https://user-images.githubusercontent.com/60500649/178101342-1008be64-b1ab-4b17-b501-c61d3d7bac45.png">
+
+### **220709::mockito::Tag::CustomAnnotation**
+
+Tag 를 custom annotation 으로 만들어 사용할 수 있습니다.<br>
+
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Test
+@Tag("clean")
+public @interface CleanTest {
+}
+```
+
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Test
+@Tag("dirty")
+public @interface DirtyTest {
+}
+```
+
+@Target(ElementType.METHOD) : 메소드에서 사용할 것이라고 명시합니다.<br>
+@Retention(RetentionPolicy.RUNTIME) : Runtime 동안(컴파일 이후) JVM 에서 참조가 가능합니다.<br>
+@Test : 테스트 어노테이션 입니다.<br>
+@Tag : 태그 어노테이션 입니다.<br>
+
+<br>
+
+추가한 커스텀 어노테이션을 적용해 봅시다.<br>
+
+```java
+public class CustomTagTet {
+
+    @CleanTest
+    void clean_first() {
+    }
+
+    @CleanTest
+    void clean_second() {
+    }
+
+    @DirtyTest
+    void dirty_first() {
+    }
+
+    @DirtyTest
+    void dirty_second() {
+    }
+}
+```
+
+<br>
+
+이제, gradle 설정에 dirty tag 는 제외하라는 스크립트를 붙여주고 테스트를 실행해 봅시다.<br>
+
+```gradle
+tasks.named('test') {
+    useJUnitPlatform {
+        excludeTags 'dirty'
+    }
+}
+```
+
+<img width="552" alt="image" src="https://user-images.githubusercontent.com/60500649/178264859-5e0acb1e-2d04-41b5-928e-f43d33c0ffe3.png">
+
+원하는대로, 테스트가 태그를 필터링 해 돌고 있습니다.<br>
 
 
 ## Test Interpretation
