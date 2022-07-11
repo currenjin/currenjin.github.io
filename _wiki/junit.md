@@ -315,9 +315,7 @@ tasks.named('test') {
 
 <img width="552" alt="image" src="https://user-images.githubusercontent.com/60500649/178264859-5e0acb1e-2d04-41b5-928e-f43d33c0ffe3.png">
 
-잘 도네요.<br>
-<br>
-이렇게 우린 테스트를 Tagging 하는 방법과 Custom annotation 을 생성하는 방법 두 가지를 배웠습니다.<br>
+원하는대로, 테스트가 태그를 필터링 해 돌고 있습니다.<br>
 
 
 ## Reference
