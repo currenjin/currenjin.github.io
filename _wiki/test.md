@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-11 22:00:00 +0900
+updated : 2022-07-12 22:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -649,7 +649,7 @@ intelliJ 설정을 통해 특정 태그만 수행할 수 있습니다.<br>
 
 <img width="948" alt="스크린샷 2022-07-09 오후 7 07 13" src="https://user-images.githubusercontent.com/60500649/178101342-1008be64-b1ab-4b17-b501-c61d3d7bac45.png">
 
-### **220709::mockito::Tag::CustomAnnotation**
+### **220711::mockito::Tag::CustomAnnotation**
 
 Tag 를 custom annotation 으로 만들어 사용할 수 있습니다.<br>
 
@@ -716,6 +716,99 @@ tasks.named('test') {
 <img width="552" alt="image" src="https://user-images.githubusercontent.com/60500649/178264859-5e0acb1e-2d04-41b5-928e-f43d33c0ffe3.png">
 
 원하는대로, 테스트가 태그를 필터링 해 돌고 있습니다.<br>
+
+### **220712::trevari::Elsa::CustomAnnotation**
+
+오늘은 어떤 지식을 전달한다기 보다, 지식을 얻고자 작성합니다.<br>
+<br>
+
+일단 아래 코드를 봐주세요.<br>
+
+```java
+@Test
+void 서비스가_해지되면_상태변경_이벤트를_발행한다() {
+    Elsa.freeze(purchasedAt);
+
+    ...
+    ...
+}
+```
+
+저는 해당 테스트 코드에서 Elsa.freeze() 를 꼭 추가해 줘야 하나? 생각했습니다.<br>
+저런 정보들이 물론 있어야 하는 정보이지만, 굳이 메소드 내에 존재하면서 자리를 차지할 필요는 없다고 생각했어요.<br>
+그리고, 테스트를 위해서 Elsa 가 무엇을 하는 클래스인지 알아야 했죠.<br>
+<br>
+결론부터 말하자면, 아래와 같이 바꾸고 싶었습니다.<br>
+
+```java
+@ClockFreezeTest(purchasedAt)
+void 서비스가_해지되면_상태변경_이벤트를_발행한다() {
+  ...
+  ...
+}
+```
+
+바뀐 annotation 이 눈에 들어오실 겁니다.<br>
+적용하게 되면, 이 테스트가 실행되기 위해서 무엇이 선행되어야 하는지를 명시적으로 나타낼 수 있다고 생각했죠.<br>
+<br>
+
+하지만, 적용하는게 순탄하지 않더군요.<br>
+가장 큰 이슈는 Annotation 의 field 에는 LocalDateTime 을 추가할 수 없었습니다.<br>
+<br>
+
+```java
+@Target({ ElementType.ANNOTATION_TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Test
+public @interface ClockFreezeTest {
+    LocalDateTime value();
+}
+```
+
+위와 같이 적용하니 해당 에러가 발생하더군요.<br>
+
+```java
+Invalid type 'LocalDateTime' for annotation member
+```
+
+<br>
+
+이해할 수 없었습니다.<br>
+왜 annotation member 는 LocalDateTime 을 가질 수 없는지?<br>
+그렇다면 String 으로 변환해 다시 파싱하는 불필요한 작업을 해야하나?<br>
+<br>
+
+글을 작성하는 시점에선 이런 의문으로 멈춘 상태입니다.<br>
+<br>
+
+만약, LocalDateTime 을 사용할 수 있게 된다면 JUnit life cycle 을 intercepter 해서 아래와 같은 코드로 annotation 을 완성할 수 있을 것 같습니다.<br>
+더 나아가면, 라이브러리로 적용하여 우리 프로젝트에서 공통화된 형식으로 더욱 편리하게 사용할 수 있게될 거라고 생각합니다.<br>
+
+```java
+@Target({ ElementType.ANNOTATION_TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Test
+public @interface ClockFreezeTest {
+    LocalDateTime value();
+
+    class ClockFreezer implements BeforeEachCallback, AfterEachCallback {
+
+        @Override
+        public void beforeEach(ExtensionContext context) throws Exception {
+            Elsa.freeze(ClockFreezeTest::value);
+        }
+
+        @Override
+        public void afterEach(ExtensionContext context) throws Exception {
+            Elsa.rollback();
+        }
+    }
+}
+```
+
+의견 부탁드립니다. 감사합니다.
 
 
 ## Test Interpretation
