@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-12 22:00:00 +0900
+updated : 2022-07-13 22:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -810,6 +810,107 @@ public @interface ClockFreezeTest {
 
 의견 부탁드립니다. 감사합니다.
 
+
+### **220713::trevari::Elsa::CustomAnnotation**
+
+오늘은 어떤 지식을 전달한다기 보다, 지식을 얻고자 작성합니다.<br>
+<br>
+
+일단, Elsa.freeze 를 어노테이션으로 사용할 수 있도록 하려 했습니다.<br>
+이를 위해서 Custom annotation 을 제작하려고 했죠.<br>
+Custom annotation 을 만들던 중 annotation member 에는 LocalDateTime 타입이 들어가지 못한다는 것을 알았습니다.<br>
+<br>
+
+저는 먼저, 빠르게 동작하는 소프트웨어를 만들기 위해 생각했습니다.<br>
+
+1. Custom annotation 의 value 에는 날짜를 정해진 포맷의 String 타입으로 보낸다.
+2. Test life cycle 내 beforeEach 에서 해당 문자열을 파싱해, LocalDateTime 으로 만든다.
+3. 해당 값으로 Elsa.freeze() 를 호출한다.
+
+<br>
+
+그래서 작성한 코드입니다.
+
+#### Custom annotation
+
+```java
+@Target({ ElementType.ANNOTATION_TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Test
+public @interface ClockFreezeTest {
+    String value() default "";
+}
+```
+
+#### Interceptor
+
+```java
+public class Interceptor implements BeforeEachCallback, AfterEachCallback {
+    @Override
+    public void beforeEach(ExtensionContext context) {
+
+        Method testMethod = context.getTestMethod().orElseThrow(IllegalStateException::new);
+        ClockFreezeTest methodAnn = AnnotatedElementUtils.findMergedAnnotation(testMethod, ClockFreezeTest.class);
+
+        if (methodAnn == null) {
+            return;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(methodAnn.value(), formatter);
+
+        Elsa.freeze(dateTime);
+    }
+
+    @Override
+    public void afterEach(ExtensionContext context) {
+        Elsa.rollback();
+    }
+}
+```
+
+#### Example test
+
+```java
+@ExtendWith(Interceptor.class)
+class TicketExpireTest {
+
+    private static final LocalDateTime EXPIRE_DATE = LocalDateTime.of(2021, 12, 20, 0, 0);
+    private static Ticket TICKET;
+
+    @ClockFreezeTest("2021-12-19 23:59:59")
+    void 티켓_만료일_이전엔_만료될_티켓이_아니다() {
+        TICKET = new Ticket(null, null, EXPIRE_DATE);
+
+        // |-----만료여부확인-----티켓만료-----|
+        // |-------19-----------20--------|
+        assertThat(TICKET.willBeExpired()).isFalse();
+    }
+}
+```
+
+#### 결과
+해당 테스트를 돌려보았지만, 실패합니다.<br>
+확인해 보니, 테스트하는 도메인 메소드에서 현재 시각을 가져올 때, freeze 한 날짜가 나오지 않더군요.<br>
+
+**Capture freeze**
+
+<img width="649" alt="image" src="https://user-images.githubusercontent.com/60500649/178736232-43ecfc6e-9e3f-436d-b8a9-a6c259f05ecf.png">
+
+<br>
+
+**Capture now**
+
+<img width="850" alt="image" src="https://user-images.githubusercontent.com/60500649/178736437-0797e92f-8025-4827-99d4-f8b28e4f24df.png">
+
+<br>
+
+freeze 를 시도하는 BeforeEach override method 와, Clocks 객체의 Life cycle 가 서로 다르다는 생각을 하고 있으나,<br>
+현재는 해당 부분에서 막힌 상태입니다.<br>
+<br>
+
+혹시 의심가는 부분이 있거나, 의견이 있으시면 말씀 부탁드립니다. 감사합니다.<br>
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
