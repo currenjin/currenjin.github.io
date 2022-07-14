@@ -915,7 +915,9 @@ freeze 를 시도하는 BeforeEach override method 와, Clocks 객체의 Life cy
 ### **220714::trevari::Elsa::CustomAnnotation**
 
 오늘은 어떤 지식을 전달한다기 보다, 지식을 얻고자 작성합니다.<br>
+소스코드는 [여기](https://github.com/trevari/wallet/pull/103) 있습니다.<br>
 <br>
+
 
 #### 이슈 해결
 
@@ -997,6 +999,8 @@ String 으로 하게된 이유는 annotation member 에 LocalDateTime 을 지정
 
 기본적으로 이런 점들이 개선된다면, 적어도 라이브러리화 시킬 수 있겠다 라는 생각을 합니다.<br>
 의견 부탁드립니다.<br>
+[링크](https://github.com/trevari/wallet/pull/103)<br>
+<br>
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
