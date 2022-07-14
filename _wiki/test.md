@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-13 22:00:00 +0900
+updated : 2022-07-14 20:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -911,6 +911,94 @@ freeze 를 시도하는 BeforeEach override method 와, Clocks 객체의 Life cy
 <br>
 
 혹시 의심가는 부분이 있거나, 의견이 있으시면 말씀 부탁드립니다. 감사합니다.<br>
+
+### **220714::trevari::Elsa::CustomAnnotation**
+
+오늘은 어떤 지식을 전달한다기 보다, 지식을 얻고자 작성합니다.<br>
+<br>
+
+#### 이슈 해결
+
+전 날, 이슈가 있었습니다.<br>
+시간을 멈춰도, 멈춘 시간대로 가져오질 못 했던 점이죠.<br>
+
+**Capture freeze**
+
+<img width="649" alt="image" src="https://user-images.githubusercontent.com/60500649/178736232-43ecfc6e-9e3f-436d-b8a9-a6c259f05ecf.png">
+
+<br>
+
+**Capture now**
+
+<img width="850" alt="image" src="https://user-images.githubusercontent.com/60500649/178736437-0797e92f-8025-4827-99d4-f8b28e4f24df.png">
+
+<br>
+
+원인을 파악하기 위해, Clocks 객체의 시간이 freeze 되는지 break point 를 걸어 확인했습니다.<br>
+<br>
+
+정상적인 상황이라면, 아래와 같이 시간이 지정되어야 하지만
+
+<img width="532" alt="image" src="https://user-images.githubusercontent.com/60500649/178971253-7ecc879f-3953-4b7f-82fd-c35d13bbed19.png">
+
+<br>
+
+실제 객체에서 시간이 정의되지 않은 것을 확인했습니다.
+
+<img width="542" alt="스크린샷 2022-07-14 오후 7 51 29" src="https://user-images.githubusercontent.com/60500649/178971465-b8e1c459-a9fd-40f3-86a1-15d71f6f007c.png">
+
+<br>
+
+문제를 더 좁혀, freeze 의 호출을 확인해 보았는데, 호출되지 않더군요.<br>
+<br>
+
+그렇게 알게 된 사실이 있습니다.<br>
+interceptor 에서 library 화 된 Clocks 를 사용했지만,<br>
+실제 도메인 코드에선 같은 패키지 디렉토리 내에 있는 Clocks 를 사용했던 것입니다.<br>
+<br>
+
+라이브러리화 된 지금에서는 모듈 내에 정의된 Clocks 파일들을 제거해야 된다는 생각이 들었습니다.<br>
+<br>
+
+#### 결과
+
+Custom annotation 을 통해 시간을 freeze 한 후,<br>
+테스트를 진행해보니 잘 동작하는 것을 확인할 수 있었습니다.<br>
+
+<img width="788" alt="image" src="https://user-images.githubusercontent.com/60500649/178972651-dbcf6a0d-949e-44d9-973a-6ec20a1e63a5.png">
+
+#### 필요 개선점
+
+**첫 번째, Interceptor 를 꼭 써야하나?**
+
+```java
+@ExtendWith(Interceptor.class)
+class TicketExpireTest {
+}
+```
+
+_시간을 멈추는 테스트를 하기 위해, Interceptor 를 확장해야 한다._<br>
+문장부터 어색합니다. 굳이 붙이지 않고, ClockFreezeTest annotation 만 사용해서 테스트를 진행할 수도 있지 않을까 싶습니다.<br>
+하지만, 마땅한 방법이 생각나지 않습니다.<br>
+<br>
+
+**두 번째, ClockFreezeTest 에 전달하는 값을 LocalDateTime 으로 할 수 없을까?**
+
+```java
+@ClockFreezeTest("2021-12-21 00:00:00")
+void 티켓_만료일_이후엔_만료될_티켓이다() {
+}
+```
+
+위와 같이 멈출 시간을 정의할 때, 문자열과 정해진 포맷으로 전달해야한다는 불편함이 있습니다.<br>
+String 으로 하게된 이유는 annotation member 에 LocalDateTime 을 지정할 수 없었기 때문입니다.<br>
+덕분에, Interceptor 를 통해 파싱하는 작업을 추가로 붙여야 했었죠.<br>
+그냥 이전에 사용했던 것처럼 EXPIRE_DATE.plusDays(1) 과 같은 값을 넘기면 어떨까 싶습니다.<br>
+이또한, 마땅한 방법이 생각나지 않습니다.<br>
+<br>
+
+기본적으로 이런 점들이 개선된다면, 적어도 라이브러리화 시킬 수 있겠다 라는 생각을 합니다.<br>
+의견 부탁드립니다.<br>
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
