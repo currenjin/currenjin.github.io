@@ -953,8 +953,7 @@ freeze 를 시도하는 BeforeEach override method 와, Clocks 객체의 Life cy
 <br>
 
 그렇게 알게 된 사실이 있습니다.<br>
-interceptor 에서 library 화 된 Clocks 를 사용했지만,<br>
-실제 도메인 코드에선 같은 패키지 디렉토리 내에 있는 Clocks 를 사용했던 것입니다.<br>
+interceptor 에서 library 화 된 Clocks 를 사용했지만, 실제 도메인 코드에선 같은 패키지 디렉토리 내에 있는 Clocks 를 사용했던 것입니다.<br>
 <br>
 
 라이브러리화 된 지금에서는 모듈 내에 정의된 Clocks 파일들을 제거해야 된다는 생각이 들었습니다.<br>
@@ -962,8 +961,7 @@ interceptor 에서 library 화 된 Clocks 를 사용했지만,<br>
 
 #### 결과
 
-Custom annotation 을 통해 시간을 freeze 한 후,<br>
-테스트를 진행해보니 잘 동작하는 것을 확인할 수 있었습니다.<br>
+Custom annotation 을 통해 시간을 freeze 한 후, 테스트를 진행해보니 잘 동작하는 것을 확인할 수 있었습니다.<br>
 
 <img width="788" alt="image" src="https://user-images.githubusercontent.com/60500649/178972651-dbcf6a0d-949e-44d9-973a-6ec20a1e63a5.png">
 
