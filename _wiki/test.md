@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-14 20:30:00 +0900
+updated : 2022-07-15 22:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1001,6 +1001,63 @@ String 으로 하게된 이유는 annotation member 에 LocalDateTime 을 지정
 의견 부탁드립니다.<br>
 [링크](https://github.com/trevari/wallet/pull/103)<br>
 <br>
+
+### **220715::trevari::Elsa::CustomAnnotation**
+
+오늘은 전날 발송했던 메일에 대해서 피드백받은 내용을 정리합니다.<br>
+<br>
+
+#### Annotation 은 Test 와 분리한다.
+
+**Before**
+
+```java
+@ClockFreezeTest("2021-12-21 00:00:00")
+void 티켓_만료일_이후엔_만료될_티켓이다() {
+}
+```
+
+**After**
+
+```java
+@Test
+@ClockFreeze("2021-12-21 00:00:00")
+void 티켓_만료일_이후엔_만료될_티켓이다() {
+}
+```
+
+ClockFreezeTest 어노테이션을 Test 와 함께 사용했었지만, 해당 어노테이션의 목적이 다르기 때문에 분리합니다.<br>
+<br>
+
+#### Interceptor 를 확장하는것은 필수다.
+
+```java
+@ExtendWith(Interceptor.class)
+class TicketExpireTest {
+}
+```
+
+보이는게 거슬려 제거하고싶었지만, JUnit life cycle 을 intercept 하는 것은 해당 구현체의 역할이기 때문에 확장이 필요하다.<br>
+<br>
+
+#### ClockFreezeTest 의 값에 들어가는게 String 이어도 괜찮다.
+
+```java
+@ClockFreeze("2021-12-21 00:00:00")
+```
+
+이또한, String 값으로 넘겨가며 파싱까지 해야하는 번거로움이 있어 제거하고 싶었습니다.<br>
+하지만 생각보다 다들 괜찮아 하는 것 같아서 유지하기로 했습니다.<br>
+<br>
+
+다만, Enum 값으로 정의할 수도 있고, 날짜를 만들기 위한 static 메소드를 생성할 수도 있겠다고 피드백을 받았습니다.<br>
+해당 부분은 더 디벨롭해 보겠습니다.<br>
+<br>
+
+#### 기타
+
+전체적으로 재밌었던 작업이어서, 프로젝트에 적용하는데에 욕심이 생겼습니다.<br>
+오늘 시간내 들어주시고, 피드백도 해주셔서 감사합니다.<br>
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
