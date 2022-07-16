@@ -191,7 +191,7 @@ public static int fib(int n) {
 
 ![image](https://user-images.githubusercontent.com/60500649/179350673-be20937d-94c0-4c0f-9c25-ffb7b0880079.png)
 
-여전히 잘 돌아가는 것을 확인할 수 있습니다.<br>
+잘 돌아가는 것을 확인할 수 있습니다.<br>
 <br>
 
 하지만, 여전히 추가하는 값(1)의 중복도 불편합니다.<br>
