@@ -1,9 +1,9 @@
 ---
 layout  : wiki
-title   : CDD(Checklist-Driven-Documentation, 체크리스트 주도 문서화)
+title   : CDD(Checklist-Driven-Development, 체크리스트 주도 개발)
 summary :
 date    : 2022-01-12 22:38:00 +0900
-updated : 2022-02-24 15:22:00 +0900
+updated : 2022-07-16 20:00:00 +0900
 tag     : documentation
 toc     : true
 public  : true
@@ -13,7 +13,7 @@ latex   : true
 * TOC
 {:toc}
 
-# Checklist Driven Documentation
+# Checklist Driven Development
 
 ## 목적
 - 요청자 또는 기획과의 간극을 최소화
