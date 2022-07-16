@@ -3,7 +3,7 @@ layout  : wiki
 title   : TDD(Test Driven Development, 테스트 주도 개발)
 summary :
 date    : 2022-01-04 22:38:00 +0900
-updated : 2022-07-10 19:00:00 +0900
+updated : 2022-07-16 20:00:00 +0900
 tag     : tdd
 toc     : true
 public  : true
@@ -57,6 +57,181 @@ latex   : true
 5. 중복을 제거하기 위해 리팩토링을 한다.
 
 ## Pattern
+
+## Example
+
+### Fibonacci
+
+첫 번째 테스트는 `fib(0) = 0` 으로 시작합니다.<br>
+
+```java
+@Test
+void fibonacci() {
+    assertThat(Fibonacci.fib(0)).isEqualTo(0);
+}
+```
+
+어차피 확인할 값이 0 뿐이라, 빠르게 성공시키기 위해 0을 바로 반환합니다.<br>
+
+```java
+public static int fib(int n) {
+    return 0;
+}
+```
+
+<br>
+
+두 번째 테스트는 `fib(1) = 1` 입니다.<br>
+
+```java
+@Test
+void fibonacci() {
+    assertThat(Fibonacci.fib(0)).isEqualTo(0);
+    assertThat(Fibonacci.fib(1)).isEqualTo(1);
+}
+```
+
+돌려보면, 당연히도 실패하겠죠.<br>
+저는 빠르게 테스트를 성공시키기 위해 아래와 같은 '범죄'를 저지를 것입니다.<br>
+
+```java
+public static int fib(int n) {
+    if (n == 0) return 0;
+    return 1;
+}
+```
+
+이 상태에서 테스트를 돌리면 성공합니다.<br>
+<br>
+
+다음 수열을 케이스로 작성해 보겠습니다.<br>
+
+```java
+@Test
+void fibonacci() {
+    assertThat(Fibonacci.fib(0)).isEqualTo(0);
+    assertThat(Fibonacci.fib(1)).isEqualTo(1);
+    assertThat(Fibonacci.fib(2)).isEqualTo(1);
+}
+```
+
+좀 꼴보기가 싫어지는 군요.<br>
+제가 아는 도구를 통해, 좀 더 빠르게 테스트를 진행해 보겠습니다.<br>
+<br>
+
+```java
+@ParameterizedTest
+@CsvSource(value = {"0, 0", "1, 1", "2, 1"})
+void fibonacci(int n, int result) {
+    assertThat(Fibonacci.fib(n)).isEqualTo(result);
+}
+```
+
+간단하게, csv source 값들 중 각 따옴표 내의 값들이 n, result 값으로 들어와 테스트 메소드가 반복 호출됩니다.<br>
+도구에 대한 설명은 뒤로하고, 계속 진행해 보겠습니다.<br>
+<br>
+
+테스트를 돌려보면 통과합니다.<br>
+
+![image](https://user-images.githubusercontent.com/60500649/179350418-272560c7-21dc-4369-9cbf-daa42fdcf702.png)
+
+좀 이상하다고 생각할 수 있지만 일단 돌아가니 넘어갑시다.<br>
+<br>
+
+다음 케이스는 셋째 항의 값이 2인 경우입니다.<br>
+
+```java
+@ParameterizedTest
+@CsvSource(value = {"0, 0", "1, 1", "2, 1", "3, 2"})
+void fibonacci(int n, int result) {
+    assertThat(Fibonacci.fib(n)).isEqualTo(result);
+}
+```
+
+돌리면, 당연하게도 실패합니다.<br>
+테스트를 빠르게 통과시키기 위해, 이전에 저질렀던 범죄를 다시 한 번 저질러 봅시다.<br>
+
+```java
+public static int fib(int n) {
+    if (n == 0) return 0;
+    if (n <= 2) return 1;
+    return 2;
+}
+```
+
+자. 이렇게 하면 통과하겠죠?<br>
+하지만 더이상 나아가면, 계속해서 범죄를 저지르게 되고 그 범죄는 더 큰 악을 낳을 수 밖에 없게 됩니다.<br>
+이정도 쯤에서 악을 제거하기 위해 리팩토링을 진행해 봅시다.<br>
+<br>
+
+일단, 마지막에 반환하는 2 는 1 + 1 로도 바꿀 수 있습니다.<br>
+
+```java
+public static int fib(int n) {
+    if (n == 0) return 0;
+    if (n <= 2) return 1;
+    return 1 + 1;
+}
+```
+
+이렇게 변경하는게 무슨 의미가 있냐고요?<br>
+잘 보시면, 중복된 값(1)이 생긴 것을 알 수 있습니다.<br>
+
+반환하는 첫 번째 1이라는 값은 재귀를 통해 중복을 제거할 수 있겠군요.<br>
+
+```java
+public static int fib(int n) {
+    if (n == 0) return 0;
+    if (n <= 2) return 1;
+    return fib(n - 1) + 1;
+}
+```
+
+네, 이 상태로 테스트를 돌려봅시다.<br>
+
+![image](https://user-images.githubusercontent.com/60500649/179350673-be20937d-94c0-4c0f-9c25-ffb7b0880079.png)
+
+여전히 잘 돌아가는 것을 확인할 수 있습니다.<br>
+<br>
+
+하지만, 여전히 추가하는 값(1)의 중복도 불편합니다.<br>
+해당 값은 사실 1이 아니라 2번째 이전 항의 값이므로, 동일하게 재귀를 사용합니다.<br>
+
+```java
+public static int fib(int n) {
+    if (n == 0) return 0;
+    if (n <= 2) return 1;
+    return fib(n - 1) + fib(n - 2);
+}
+```
+
+이제, 4항을 추가해 볼까요?<br>
+
+```java
+@ParameterizedTest
+@CsvSource(value = {"0, 0", "1, 1", "2, 1", "3, 2", "4, 3"})
+void fibonacci(int n, int result) {
+    assertThat(Fibonacci.fib(n)).isEqualTo(result);
+}
+```
+
+돌려보면, 성공합니다.<br>
+<br>
+
+문제가 없는 건가? 저는 아직 불안한 마음이 있어 세 항을 더 추가해 테스트하겠습니다.<br>
+
+```java
+@ParameterizedTest
+@CsvSource(value = {"0, 0", "1, 1", "2, 1", "3, 2", "4, 3", "5, 5", "6, 8", "7, 13"})
+void fibonacci(int n, int result) {
+    assertThat(Fibonacci.fib(n)).isEqualTo(result);
+}
+```
+
+![image](https://user-images.githubusercontent.com/60500649/179350985-93461d03-1398-48a8-97fe-8074e2da1f94.png)
+
+성공하는군요!<br>
+저는 이렇게 안심할 수 있는 로직을 한 개 만들게 되었습니다.<br>
 
 ## Reference
 [ATDD(Acceptance Test Driven Development)](https://velog.io/@windtrip/ATDDAcceptance-Test-Driven-Development#tdd-bdd-atdd-%EB%B9%84%EA%B5%90)
