@@ -1,6 +1,6 @@
 ---
 layout  : wiki
-title   : CDD(Checklist-Driven-Development, 체크리스트 주도 개발)
+title   : CDD(Checklist Driven Development, 체크리스트 주도 개발)
 summary :
 date    : 2022-01-12 22:38:00 +0900
 updated : 2022-07-16 20:00:00 +0900
