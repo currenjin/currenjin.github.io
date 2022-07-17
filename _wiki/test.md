@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-15 22:00:00 +0900
+updated : 2022-07-17 19:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1058,6 +1058,217 @@ class TicketExpireTest {
 
 전체적으로 재밌었던 작업이어서, 프로젝트에 적용하는데에 욕심이 생겼습니다.<br>
 오늘 시간내 들어주시고, 피드백도 해주셔서 감사합니다.<br>
+
+### **220717::currenjin::PlanetaryOrbitalCalculator::Orbit**
+
+제가 혼자 즐기기 시작한 작업이 있습니다.<br>
+태양계 궤도를 계산하는 계산기를 만들어 주는 것인데요.<br>
+<br>
+
+오늘은 이론적인 부분에 대한 서치를 통해 시간을 많이 썼습니다.<br>
+이에 따라 진행했던 테스트에 대해서만 작성합니다.<br>
+<br>
+
+태양계의 모든 행성들의 궤도 데이터를 담는 객체가 필요했습니다.<br>
+
+```java
+@Test
+void 궤도를_생성합니다() {
+    Orbit actual = Orbit.of(LONG_RADIUS,
+            ECCENTRICITY,
+            INCLINATION,
+            LONGITUDE_OF_ASCENDING_NODE,
+            AVERAGE_LONGITUDE,
+            PERIHELION_LONGITUDE);
+
+    assertThat(actual).isInstanceOf(Orbit.class);
+}
+```
+
+날짜별 행성의 위치 계산에 필요한 궤도 데이터가 정의되어야 했기에, 제가 필요한 데이터들을 생성자로 넣어줬습니다.<br>
+그리고, 그 객체가 Orbit 인지 확인했죠.<br>
+<br>
+
+처음엔 빠르게 통과시키기 위해, 빈 객체를 반환했습니다.<br>
+<br>
+
+통과하는 상태에서 다음 스텝을 나아갔습니다.<br>
+
+```java
+@Test
+void 궤도_데이터가_삽입한_데이터와_일치합니다() {
+    Orbit actual = Orbit.of(LONG_RADIUS,
+            ECCENTRICITY,
+            INCLINATION,
+            LONGITUDE_OF_ASCENDING_NODE,
+            AVERAGE_LONGITUDE,
+            PERIHELION_LONGITUDE);
+
+    assertThat(actual.getLongRadius()).isEqualTo(LONG_RADIUS);
+    assertThat(actual.getEccentricity()).isEqualTo(ECCENTRICITY);
+    assertThat(actual.getInclination()).isEqualTo(INCLINATION);
+    assertThat(actual.getLongitudeOfAscendingNode()).isEqualTo(LONGITUDE_OF_ASCENDING_NODE);
+    assertThat(actual.getAverageLongitude()).isEqualTo(AVERAGE_LONGITUDE);
+    assertThat(actual.getPerihelionLongitude()).isEqualTo(PERIHELION_LONGITUDE);
+}
+```
+
+조금 장황하긴 하지만, 해당 궤도 데이터가 잘 들어가는지 확인이 필요했기에 작성한 테스트입니다.<br>
+이 테스트는 빈 객체를 반환하기만하면 성공하지 못합니다.<br>
+그렇기에 해당 값을 가진 객체를 생성하도록 한 후 Getter 메소드를 추가해 테스트를 성공시켰습니다.<br>
+
+```java
+public class Orbit {
+    public static Orbit of(Double longRadius,
+                           Double eccentricity,
+                           Double inclination,
+                           Double longitudeOfAscendingNode,
+                           Double averageLongitude,
+                           Double perihelionLongitude) {
+        return new Orbit(longRadius, eccentricity, inclination, longitudeOfAscendingNode, averageLongitude, perihelionLongitude);
+    }
+
+    private final Double longRadius;
+    private final Double eccentricity;
+    private final Double inclination;
+    private final Double longitudeOfAscendingNode;
+    private final Double averageLongitude;
+    private final Double perihelionLongitude;
+
+    protected Orbit(Double longRadius, Double eccentricity, Double inclination, Double longitudeOfAscendingNode, Double averageLongitude, Double perihelionLongitude) {
+
+        this.longRadius = longRadius;
+        this.eccentricity = eccentricity;
+        this.inclination = inclination;
+        this.longitudeOfAscendingNode = longitudeOfAscendingNode;
+        this.averageLongitude = averageLongitude;
+        this.perihelionLongitude = perihelionLongitude;
+    }
+
+    public Double getLongRadius() {
+        return longRadius;
+    }
+
+    public Double getEccentricity() {
+        return eccentricity;
+    }
+
+    public Double getInclination() {
+        return inclination;
+    }
+
+    public Double getLongitudeOfAscendingNode() {
+        return longitudeOfAscendingNode;
+    }
+
+    public Double getAverageLongitude() {
+        return averageLongitude;
+    }
+
+    public Double getPerihelionLongitude() {
+        return perihelionLongitude;
+    }
+}
+```
+
+Lombok 을 사용하지 않아 좀 장황하게 됐습니다.<br>
+어쨌던 테스트는 성공합니다.<br>
+<br>
+
+이제 그릇은 만들어졌고, 태양계 행성 각각의 궤도 데이터를 담아야 했습니다.<br>
+행성 각각의 데이터는 정의한 궤도 데이터에 추가로 필요한 데이터가 있습니다.<br>
+
+- AU: 태양과 행성까지의 거리(km)
+- Change per century: 세기 당 궤도 데이터 변화량
+
+모든 궤도 데이터는 이미 계산되어 있어 저는 갖다 쓰기만 하면 됩니다.<br>
+마찬가지로, 담을 그릇이 필요했죠.<br>
+새로운 그릇을 추가했습니다.<br>
+
+```java
+@Test
+void 지구_궤도를_생성합니다() {
+    PlanetOrbit actual = PlanetOrbit.of(EARTH.LONG_RADIUS,
+            EARTH.ECCENTRICITY,
+            EARTH.INCLINATION,
+            EARTH.LONGITUDE_OF_ASCENDING_NODE,
+            EARTH.AVERAGE_LONGITUDE,
+            EARTH.PERIHELION_LONGITUDE,
+            EARTH.AU,
+            EARTH.CHANGE_PER_CENTURY);
+
+    assertThat(actual).isInstanceOf(Orbit.class);
+    assertThat(actual.getAu()).isEqualTo(EARTH.AU);
+    assertThat(actual.getChangePerCentury()).isEqualTo(EARTH.CHANGE_PER_CENTURY);
+}
+```
+
+먼저 선택된 건 지구입니다.<br>
+지구에 대한 모든 궤도 데이터는 클래스의 스태틱 필드로 만들어 가져오게 했습니다.<br>
+
+```java
+public class EARTH {
+  public static final Double AU = 149597870.0;
+
+  public static final Double LONG_RADIUS = 1.00000261 * AU;
+  public static final Double ECCENTRICITY = 0.01671123;
+  public static final Double INCLINATION = -0.00001531;
+  public static final Double LONGITUDE_OF_ASCENDING_NODE = 0.0;
+  public static final Double AVERAGE_LONGITUDE = 100.46457166;
+  public static final Double PERIHELION_LONGITUDE = 102.93768193;
+
+  public static final Orbit CHANGE_PER_CENTURY = Orbit.of(
+          0.00000562 * AU,
+          -0.00004392,
+          -0.01294668,
+          0.0,
+          35999.37244981,
+          0.32327364);
+}
+```
+
+<br>
+
+이제 테스트를 빠르게 성공시키기 위해서 PlanetOrbit 클래스를 생성했습니다.<br>
+PlanetOrbit 클래스는 Orbit 을 상속했고, AU 와 Change per Century 필드가 추가되었습니다.
+
+```java
+public class PlanetOrbit extends Orbit {
+
+  public static PlanetOrbit of(Double longRadius,
+                         Double eccentricity,
+                         Double inclination,
+                         Double longitudeOfAscendingNode,
+                         Double averageLongitude,
+                         Double perihelionLongitude,
+                         Double au,
+                         Orbit changePerCentury) {
+
+      return new PlanetOrbit(longRadius, eccentricity, inclination, longitudeOfAscendingNode, averageLongitude, perihelionLongitude, au, changePerCentury);
+  }
+
+  private final Double au;
+  private final Orbit changePerCentury;
+
+  private PlanetOrbit(Double longRadius, Double eccentricity, Double inclination, Double longitudeOfAscendingNode, Double averageLongitude, Double perihelionLongitude, Double au, Orbit changePerCentury) {
+      super(longRadius, eccentricity, inclination, longitudeOfAscendingNode, averageLongitude, perihelionLongitude);
+      this.au = au;
+      this.changePerCentury = changePerCentury;
+  }
+
+  public Orbit getChangePerCentury() {
+      return this.changePerCentury;
+  }
+
+  public Double getAu() {
+      return this.au;
+  }
+}
+```
+
+현재는 여기까지 작업을 마무리한 상태입니다.<br>
+지금은 정해진 값들을 정해진 위치에 넣는 것 뿐이라 그저 그렇겠지만, 이 시기가 끝나면 훨씬 재밌는 테스트로 찾아뵐 수 있을 거라 생각합니다.<br>
+감사합니다.<br>
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
