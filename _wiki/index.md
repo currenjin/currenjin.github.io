@@ -10,6 +10,7 @@ regenerate: true
 ## wiki items
 
 * [[example]]
+* [[lambda-with-api-gateway]]
 * [[junit]]
 * [[fitnesse]]
 * [[elasticsearch]]
