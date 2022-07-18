@@ -1386,7 +1386,7 @@ public double elapsedCentury() {
 
 <br>
 
-이제, 필요한 다른 경계값 테스트도 추가해 줍니다.<br>
+이제, 필요한 다른 테스트도 추가해 줍니다.<br>
 
 ```java
 @Test
