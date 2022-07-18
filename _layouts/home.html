@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
-    <div>
-        {% include header.html %}
-        <body>
-        {% include searchbox.html %}
-        {{ content }}
-        {% include footer.html %}
-        </body>
-    </div>
+    {% include header.html %}
+    <body>
+        <div class="home-content">
+            {% include searchbox.html %}
+            {{ content }}
+            {% include footer.html %}
+        </div>
+    </body>
 </html>
