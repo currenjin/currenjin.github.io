@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-17 19:00:00 +0900
+updated : 2022-07-18 21:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1269,6 +1269,177 @@ public class PlanetOrbit extends Orbit {
 현재는 여기까지 작업을 마무리한 상태입니다.<br>
 지금은 정해진 값들을 정해진 위치에 넣는 것 뿐이라 그저 그렇겠지만, 이 시기가 끝나면 훨씬 재밌는 테스트로 찾아뵐 수 있을 거라 생각합니다.<br>
 감사합니다.<br>
+
+### **220718::currenjin::PlanetaryOrbitalCalculator::JulianClock**
+
+이전에 정의했던 궤도의 기본 요소들은 역기점인 J2000 때 측정된 값입니다.<br>
+<br>
+
+역기점은 천문학에서 천체의 궤도 요소의 기준이 되는, 관측 또는 예측이 된 시기를 의미합니다.<br>
+국제 천문 연맹에서는, 1984 년부터 J2000.0 을 사용하기로 결정했죠.<br>
+J 는 1년을 365.25 일로 산정하는 율리우스력을 의미하며, 2000.0 은 2000 년부터 시작되는 것을 의미합니다.<br>
+<br>
+
+오늘은 작업하면서 사용할 시간을 역기점을 기준으로 측정할 수 있도록 해주는 유틸리티를 TDD 로 구현합니다.<br>
+<br>
+
+처음엔, 기본적으로 역기점으로부터 하루가 지났음을 테스트했습니다.<br>
+TimeFreezer(aka. Elsa) 를 통해 시간을 얼리고, 날짜가 얼마나 지났는지 확인했습니다.<br>
+
+```java
+@Test
+void 역기점으로부터_하루가_지났다() {
+    TimeFreezer.freeze(J2000.plusDays(1));
+
+    assertThat(sut.elapsedDate()).isEqualTo(1);
+}
+```
+
+필요한 로직을 정의했습니다.<br>
+
+```java
+private static final LocalDateTime J2000 = LocalDateTime.of(2000, 1, 1, 12, 0, 0);
+private final int DAY = 60 * 60 * 24;
+    
+public int elapsedDate() {
+    return getEpochTime() / DAY;
+}
+```
+
+역기점을 가져오는 getEpochTime 메소드를 생성했습니다.<br>
+
+```java
+private int getEpochTime() {
+    return (int) (Clocks.now().toEpochSecond(UTC) - J2000.toEpochSecond(UTC));
+}
+```
+
+조금 복잡하게 정의되어 있습니다.<br>
+이유는, 실제 LocalDateTime 에서 제공하는 EpochTime 은 천문학에서 사용되는 EpochTime 과 다르더군요.<br>
+LocalDateTime 에서 사용되는 EpochTime 은 `1970년 1월 1일 00:00:00` 기준이며,<br>
+천문학에서 사용되는 EpochTime 과 30년 12시간 차이가 존재합니다.<br>
+<br>
+
+어쩄건, 천문학에서 사용하는 역기점으로 변환시켜주는 작업을 진행했습니다.<br>
+그 이후 테스트를 돌려보니 잘 돌아가더군요.<br>
+
+<img width="305" alt="image" src="https://user-images.githubusercontent.com/60500649/179501295-89171f20-15c7-4563-b089-d701f245766b.png">
+
+<br>
+
+경계값을 확인하기 위해 테스트를 추가했습니다.<br>
+
+```java
+@Test
+void 역기점으로부터_하루_전이다() {
+    TimeFreezer.freeze(J2000.minusDays(1));
+
+    assertThat(sut.elapsedDate()).isEqualTo(-1);
+}
+
+@Test
+void 역기점_당일이다() {
+    TimeFreezer.freeze(J2000);
+
+    assertThat(sut.elapsedDate()).isEqualTo(0);
+}
+```
+
+<br>
+
+이제 실제로 사용해야 하는 세기에 대한 테스트가 필요합니다.<br>
+
+먼저, 다음과 같은 상수를 정의했습니다.<br>
+
+```java
+static final double YEAR = 365.25;
+static final double CENTURY = 100 * YEAR;
+```
+
+YEAR 는 율리우스력의 1년을 일수로 정의했습니다.<br>
+CENTURY 는 한 세기를 의미합니다.<br>
+<br>
+
+이제 아래 테스트를 진행하고자 했습니다.<br>
+Between 을 통한 테스트로 진행한 이유는 따로 설명하겠습니다.<br>
+
+```java
+@Test
+void 역기점으로부터_1세기가_지났다() {
+    TimeFreezer.freeze(J2000.plusYears(100));
+
+    assertThat(sut.elapsedCentury()).isBetween(0.999, 1.0);
+}
+```
+
+그리고 빠르게 통과할 수 있도록 로직을 작성했습니다.<br>
+
+```java
+public double elapsedCentury() {
+    return elapsedDate() / TimeConstant.CENTURY;
+}
+```
+
+테스트가 통과하는 군요.<br>
+
+<img width="324" alt="image" src="https://user-images.githubusercontent.com/60500649/179509111-6a50a440-c483-450f-8c93-f24578980d8b.png">
+
+<br>
+
+이제, 필요한 다른 경계값 테스트도 추가해 줍니다.<br>
+
+```java
+@Test
+void 역기점으로부터_1세기_전이다() {
+    TimeFreezer.freeze(J2000.minusYears(100));
+
+    assertThat(sut.elapsedCentury()).isBetween(-1.0, -0.999);
+}
+
+@Test
+void 역기점으로부터_10세기_전이다() {
+    TimeFreezer.freeze(J2000.minusYears(1000));
+
+
+    assertThat(sut.elapsedCentury()).isBetween(-10.0, -9.999);
+}
+
+@Test
+void 역기점으로부터_20세기_후이다() {
+    TimeFreezer.freeze(J2000.plusYears(2000));
+
+    assertThat(sut.elapsedCentury()).isBetween(19.999, 20.0);
+}
+```
+
+모두 돌려보니 통과하는 것을 확인할 수 있습니다.<br>
+
+<img width="327" alt="image" src="https://user-images.githubusercontent.com/60500649/179509278-1a95ccd8-e077-43e9-b913-360d07f47ab0.png">
+
+<br>
+
+이렇게 JulianClock 이라는 클래스를 만들 수 있었습니다.<br>
+궤도 요소에 따른 계산이 필요할 때, 유용하게 사용할 예정입니다.<br>
+
+#### 진행하며 발생한 이슈
+
+처음엔, 세기에 대한 테스트를 진행할 때 아래와 같은 테스트 케이스를 작성했습니다.<br>
+
+```java
+@Test
+void 역기점으로부터_1세기_전이다() {
+    TimeFreezer.freeze(J2000.minusYears(100));
+
+    assertThat(sut.elapsedCentury()).isEqualTo(-1);
+}
+```
+
+하지만 해당 테스트를 돌려보면 실패합니다.<br>
+왜냐하면, 천문학적인 단위를 통해서 우리가 일반적으로 사용하는 딱 떨어지는 값을 요구하기 어려웠죠.<br>
+<br>
+
+처음엔 해결하고자 long 값으로 어떻게든 처리하려고 했으나, 결국 정밀한 값을 위해서는 double 이 옳다는 판단을 내렸고 통과했던 테스트 케이스로 변경하게 되었습니다.<br>
+
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
