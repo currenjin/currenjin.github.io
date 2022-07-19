@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-18 21:00:00 +0900
+updated : 2022-07-19 21:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1440,6 +1440,173 @@ void 역기점으로부터_1세기_전이다() {
 
 처음엔 해결하고자 long 값으로 어떻게든 처리하려고 했으나, 결국 정밀한 값을 위해서는 double 이 옳다는 판단을 내렸고 통과했던 테스트 케이스로 변경하게 되었습니다.<br>
 
+### **220719::currenjin::PlanetaryOrbitalCalculator::**
+
+궤도 요소 중 근일점 편각과 진근점 이각이 필요합니다.<br>
+<br>
+
+하지만 정의된 행성의 궤도 데이터에는 없어 직접 계산을 해줘야 하는데요.<br>
+이번엔 두 요소를 계산하는 계산기를 만들려고 합니다.<br>
+<br>
+
+#### 근일점 편각
+
+궤도의 승교점부터 근점까지의 각을 운동 방향으로 잰 각거리로, 궤도 요소 중 하나입니다.<br>
+<br>
+
+근일점 편각 w 를 구하기 위해선 근일점 경도와, 승교점 적경이 필요합니다.<br>
+필요한 값들은 이미 궤도 데이터에 존재하기에 계산만 해주면 됩니다.<br>
+
+```java
+지구 궤도 데이터
+
+public static final Double LONGITUDE_OF_ASCENDING_NODE = 0.0; // 승교점 적경
+public static final Double PERIHELION_LONGITUDE = 102.93768193; // 근일점 경도
+```
+
+근일점 편각은 근일점 경도에서 승교점 적경을 뺀 값입니다.<br>
+해당 값을 구하기 위한 테스트를 작성해 보겠습니다.<br>
+
+```java
+public static final Double LONGITUDE_OF_ASCENDING_NODE = 0.0;
+public static final Double PERIHELION_LONGITUDE = 102.93768193;
+
+@Test
+void 근일점_편각은_근일점_경도에서_승교적_적경을_뺀_값이다() {
+    double actual = ArgumentOfPeriapsisCalculator.calculate(PERIHELION_LONGITUDE, LONGITUDE_OF_ASCENDING_NODE);
+
+    assertThat(actual).isEqualTo(PERIHELION_LONGITUDE - LONGITUDE_OF_ASCENDING_NODE);
+}
+```
+
+간단하네요. 이제 해당 테스트를 통과시켜 봅시다.<br>
+
+```java
+public static double calculate(Double perihelionLongitude, Double longitudeOfAscendingNode) {
+
+    return perihelionLongitude - longitudeOfAscendingNode;
+}
+```
+
+돌려보면 통과합니다.<br>
+<br>
+
+실패하는 케이스를 추가해 볼까요?<br>
+
+```java
+@Test
+void 근일점_경도가_유효하지_않은_값이면_안된다() {
+    assertThatThrownBy(() ->
+            ArgumentOfPeriapsisCalculator.calculate(null, LONGITUDE_OF_ASCENDING_NODE))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+
+@Test
+void 승교점_적경이_유효하지_않은_값이면_안된다() {
+    assertThatThrownBy(() ->
+            ArgumentOfPeriapsisCalculator.calculate(PERIHELION_LONGITUDE, null))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+```
+
+네, 두 테스트는 IllegalArgumentException 을 던지도록 유도되었습니다.<br>
+테스트를 성공시켜 보겠습니다.<br>
+
+```java
+public static double calculate(Double perihelionLongitude, Double longitudeOfAscendingNode) {
+    validate(perihelionLongitude, longitudeOfAscendingNode);
+
+    return perihelionLongitude - longitudeOfAscendingNode;
+}
+
+private static void validate(Double perihelionLongitude, Double longitudeOfAscendingNode) {
+    if (perihelionLongitude == null) {
+        throw new IllegalArgumentException();
+    }
+
+    if (longitudeOfAscendingNode == null) {
+        throw new IllegalArgumentException();
+    }
+}
+```
+
+너무 간단한 로직이라 사실 필요없는 행위들이라고 생각할 수 있습니다.<br>
+하지만 저는 메세지를 담을 수 있다는 점에서 충분히 할 수 있는 행위라고 느껴집니다.<br>
+테스트를 돌려보면 성공하는 것을 볼 수 있습니다.<br>
+
+<img width="320" alt="image" src="https://user-images.githubusercontent.com/60500649/179745684-e8e296a0-eb66-42ee-b97e-8d1e54c162f2.png">
+
+<br>
+
+#### 진근점 이각
+
+이제, 근일점 편각을 구헀으니 진근점 이각을 구해야 합니다.<br>
+진근점 이각은 타원의 주초점에서 바라본 궤도 근점과 물체의 현재 위치 간의 각도입니다.<br>
+<br>
+
+해당 값을 구하기 위해선 먼저, 평균근점이각을 구해야 하는데요.<br>
+평균근점이각은 어떤 물체가 공전 속도와 공전 주기를 유지한 채 정확한 원 궤도로 옮겨간다고 가정했을 때 물체와 궤도 근점간의 각거리를 의미합니다.<br>
+<br>
+
+평균근점이각을 구하는 이유는 진근점 이각 때문이니, 진근점 이각 계산기에 평균근점이각 계산 메소드를 포함시키겠습니다.<br>
+평균근점이각을 계산하는 테스트를 작성할게요.<br>
+평균근점이각 M 을 구하는 방법은 평균 경도 l 과 근일점 경도 w 의 차입니다. (M = l - w)<br>
+평균 경도와 근일점 경도는 역시 궤도 데이터에 포함되어 있습니다.<br>
+
+```java
+public static final Double AVERAGE_LONGITUDE = 100.46457166;
+public static final Double PERIHELION_LONGITUDE = 102.93768193;
+
+@Test
+void 평균근점이각은_평균_경도에서_근일점_경도를_뺀_값이다() {
+    double actual = TrueAnomalyCalculator.calculateMeanAnomaly(AVERAGE_LONGITUDE, PERIHELION_LONGITUDE);
+
+    assertThat(actual).isEqualTo(AVERAGE_LONGITUDE - PERIHELION_LONGITUDE);
+}
+
+@Test
+void 평균근점이각_계산시_평균_경도가_유효하지_않으면_안된다() {
+    assertThatThrownBy(() ->
+            TrueAnomalyCalculator.calculateMeanAnomaly(null, PERIHELION_LONGITUDE))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+
+@Test
+void 평균근점이각_계산시_근일점_경도가_유효하지_않으면_안된다() {
+    assertThatThrownBy(() ->
+            TrueAnomalyCalculator.calculateMeanAnomaly(AVERAGE_LONGITUDE, null))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+```
+
+로직이 단순하니 확신을 갖고 빠르게 넘어가겠습니다.<br>
+
+```java
+public static double calculateMeanAnomaly(Double averageLongitude, Double perihelionLongitude) {
+    validateMeanAnomalyCalculator(averageLongitude, perihelionLongitude);
+
+    return averageLongitude - perihelionLongitude;
+}
+
+private static void validateMeanAnomalyCalculator(Double averageLongitude, Double perihelionLongitude) {
+    if (averageLongitude == null) {
+        throw new IllegalArgumentException();
+    }
+
+    if (perihelionLongitude == null) {
+        throw new IllegalArgumentException();
+    }
+}
+```
+
+테스트가 모두 통과합니다.<br>
+
+<img width="339" alt="image" src="https://user-images.githubusercontent.com/60500649/179748824-e61b6005-2179-44df-8456-257074fbae9b.png">
+
+<br>
+
+평균근점이각까지 구하며, 진근점이각을 구할 준비가 되었습니다.<br>
+다음 시간에 구해볼게요. 감사합니다.<br>
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
