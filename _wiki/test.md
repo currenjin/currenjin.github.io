@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-19 21:30:00 +0900
+updated : 2022-07-20 00:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1440,7 +1440,7 @@ void 역기점으로부터_1세기_전이다() {
 
 처음엔 해결하고자 long 값으로 어떻게든 처리하려고 했으나, 결국 정밀한 값을 위해서는 double 이 옳다는 판단을 내렸고 통과했던 테스트 케이스로 변경하게 되었습니다.<br>
 
-### **220719::currenjin::PlanetaryOrbitalCalculator::**
+### **220719::currenjin::PlanetaryOrbitalCalculator::ArgumentOfPeriapsisAndTrueAnomalyCalculator**
 
 궤도 요소 중 근일점 편각과 진근점 이각이 필요합니다.<br>
 <br>
