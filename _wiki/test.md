@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-20 00:30:00 +0900
+updated : 2022-07-20 20:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1607,6 +1607,128 @@ private static void validateMeanAnomalyCalculator(Double averageLongitude, Doubl
 
 평균근점이각까지 구하며, 진근점이각을 구할 준비가 되었습니다.<br>
 다음 시간에 구해볼게요. 감사합니다.<br>
+
+### **220719::currenjin::PlanetaryOrbitalCalculator::TrueAnomalyCalculator**
+
+필요한 궤도 요소 중 근일점 편각과 진근점 이각을 계산해야 합니다.<br>
+근일점 편각은 전 날 작업을 통해 구할 수 있게 되었고, 진근점 이각을 계산하기 위한 평균 근점 이각까지 구할 수 있게 됐습니다.<br>
+<br>
+
+#### 진근점 이각
+
+평균 근점 이각으로 진근점 이각을 유도하는 공식은 아래와 같습니다.<br>
+
+<img width="233" alt="스크린샷 2022-07-19 오후 9 22 33" src="https://user-images.githubusercontent.com/60500649/179951029-b2fdfbe4-693e-4d73-859d-d589aae4131a.png">
+
+e 는 이심률, M 은 평균 근점 이각이죠.<br>
+<br>
+
+테스트를 진행해 보겠습니다.<br>
+
+```java
+public static final Double EPOCH_ECCENTRICITY = 0.01671123;
+public static final Double EPOCH_AVERAGE_LONGITUDE = 100.46457166;
+public static final Double EPOCH_PERIHELION_LONGITUDE = 102.93768193;
+
+@Test
+void 진근점이각을_계산한다() {
+    double actual = TrueAnomalyCalculator.calculate(EPOCH_ECCENTRICITY, EPOCH_AVERAGE_LONGITUDE, EPOCH_PERIHELION_LONGITUDE);
+
+    assertThat(actual).isEqualTo(-0.044630145101967715);
+}
+```
+
+역기점 때 관측한 궤도 요소를 통해 테스트를 진행합니다.<br>
+정해진 공식이 있으니, 빠르게 구현해 줍니다.<br>
+
+```java
+
+public static double calculate(Double eccentricity, Double averageLongitude, Double perihelionLongitude) {
+
+    double meanAnomaly = calculateMeanAnomaly(averageLongitude, perihelionLongitude);
+
+    return (meanAnomaly + (eccentricity * Math.sin(meanAnomaly))) / (1 - (eccentricity * Math.cos(meanAnomaly)));
+}
+```
+
+하지만, 지금 상태에서 테스트를 돌리면 실패하게 될 겁니다.<br>
+계산기에서 구한 meanAnomaly 는 degree 값이지만, 실제 공식에서 사용되는 값은 radian 값이기 때문이죠.<br>
+radian 값으로 변환해 줍니다.<br>
+
+```java
+public static double calculate(Double eccentricity, Double averageLongitude, Double perihelionLongitude) {
+    double meanAnomaly = calculateMeanAnomaly(averageLongitude, perihelionLongitude);
+    double radianMeanAnomaly = meanAnomaly * (Math.PI / 180);
+
+    return (radianMeanAnomaly + (eccentricity * Math.sin(radianMeanAnomaly))) / (1 - (eccentricity * Math.cos(radianMeanAnomaly)));
+}
+```
+
+<br>
+
+테스트를 돌리면, 성공하는 것을 확인할 수 있습니다.<br>
+
+<img width="318" alt="image" src="https://user-images.githubusercontent.com/60500649/179952041-3e9d7c3d-8c67-432f-8890-ec88c6e41569.png">
+
+<br>
+
+이제 예외에 대한 테스트도 진행해 줍니다.<br>
+마찬가지로, 빠르게 작성할게요.<br>
+
+```java
+@Test
+void 진근점이각을_계산시_이심률이_유효하지_않으면_안된다() {
+    assertThatThrownBy(() ->
+            TrueAnomalyCalculator.calculate(null, EPOCH_AVERAGE_LONGITUDE, EPOCH_PERIHELION_LONGITUDE))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+
+@Test
+void 진근점이각을_계산시_평균_적경이_유효하지_않으면_안된다() {
+    assertThatThrownBy(() ->
+            TrueAnomalyCalculator.calculate(EPOCH_ECCENTRICITY, null, EPOCH_PERIHELION_LONGITUDE))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+
+@Test
+void 진근점이각을_계산시_근일점_적경이_유효하지_않으면_안된다() {
+    assertThatThrownBy(() ->
+            TrueAnomalyCalculator.calculate(EPOCH_ECCENTRICITY, EPOCH_AVERAGE_LONGITUDE, null))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+```
+
+빠르게 추가해 줍니다.<br>
+
+```java
+private static void validate(Double eccentricity, Double averageLongitude, Double perihelionLongitude) {
+    if (eccentricity == null) {
+        throw new IllegalArgumentException();
+    }
+
+    if (averageLongitude == null) {
+        throw new IllegalArgumentException();
+    }
+
+    if (perihelionLongitude == null) {
+        throw new IllegalArgumentException();
+    }
+}
+```
+
+이제 돌리면 모든 테스트가 통과합니다.<br>
+
+<img width="359" alt="image" src="https://user-images.githubusercontent.com/60500649/179954316-dbebf7bb-4be9-4b60-83b3-999022fbac6b.png">
+
+<br>
+
+이제 진근점 이각까지 구하면서 모든 궤도 요소가 모이게 되었습니다.<br>
+하지만 아직 해결해야 하는 부분이 있습니다.<br>
+세기당 변화량을 적용해 궤도 요소를 추출할 수 있어야 합니다.<br>
+<br>
+
+내일 계산해 주겠습니다!<br>
+감사합니다.<br>
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
