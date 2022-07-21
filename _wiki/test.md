@@ -1732,7 +1732,7 @@ private static void validate(Double eccentricity, Double averageLongitude, Doubl
 
 ### **220721::currenjin::PlanetaryOrbitalCalculator::CurrentOrbitCalculator**
 
-모든 궤도 요소를 구하게 되었습니다.<br>
+이전 작업을 통해 모든 궤도 요소를 구하게 되었습니다.<br>
 이제 해야할 일은, 지난 시간에 따라 변화한 궤도 요소들을 추출해야 하죠.<br>
 해당 작업을 완료하면 드디어 현 시점의 궤도 요소를 얻을 수 있게 됩니다. 기대가 되는 군요.<br>
 
