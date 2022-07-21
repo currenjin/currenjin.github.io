@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-20 20:30:00 +0900
+updated : 2022-07-21 20:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1608,7 +1608,7 @@ private static void validateMeanAnomalyCalculator(Double averageLongitude, Doubl
 평균근점이각까지 구하며, 진근점이각을 구할 준비가 되었습니다.<br>
 다음 시간에 구해볼게요. 감사합니다.<br>
 
-### **220719::currenjin::PlanetaryOrbitalCalculator::TrueAnomalyCalculator**
+### **220720::currenjin::PlanetaryOrbitalCalculator::TrueAnomalyCalculator**
 
 필요한 궤도 요소 중 근일점 편각과 진근점 이각을 계산해야 합니다.<br>
 근일점 편각은 전 날 작업을 통해 구할 수 있게 되었고, 진근점 이각을 계산하기 위한 평균 근점 이각까지 구할 수 있게 됐습니다.<br>
@@ -1728,6 +1728,193 @@ private static void validate(Double eccentricity, Double averageLongitude, Doubl
 <br>
 
 내일 계산해 주겠습니다!<br>
+감사합니다.<br>
+
+### **220721::currenjin::PlanetaryOrbitalCalculator::CurrentOrbitCalculator**
+
+모든 궤도 요소를 구하게 되었습니다.<br>
+이제 해야할 일은, 지난 시간에 따라 변화한 궤도 요소들을 추출해야 하죠.<br>
+해당 작업을 완료하면 드디어 현 시점의 궤도 요소를 얻을 수 있게 됩니다. 기대가 되는 군요.<br>
+
+#### 시간에 따른 궤도 요소
+
+테스트를 먼저 작성해 보겠습니다.
+
+```java
+@Test
+void 역기점으로부터_한_세기가_지난_시점의_장반경_값() {
+    TimeFreezer.freeze(A_CENTURY_AFTER_EPOCH_TIME);
+
+    Orbit actual = CurrentOrbitCalculator.of(PLANET);
+
+    assertThat(actual.getLongRadius())
+            .isEqualTo(PLANET.getLongRadius() + PLANET.getChangePerCentury().getLongRadius());
+}
+```
+
+정의했던 장반경의 한 세기 지난 시점의 값을 기대하는 테스트입니다.<br>
+<br>
+
+이번엔 좀 더 정통적인 방식으로 TDD 를 해보겠습니다.<br>
+먼저, 가장 빠르게 테스트를 통과하려면 어떻게 해야할까요?<br>
+로직을 작성해 보겠습니다.<br>
+
+```java
+public class CurrentOrbitCalculator {
+
+    public static Orbit of(PlanetOrbit planetOrbit) {
+        double longRadius = planetOrbit.getLongRadius() + planetOrbit.getChangePerCentury().getLongRadius();
+
+        return Orbit.of(longRadius,
+                null,
+                null,
+                null,
+                null,
+                null);
+    }
+}
+```
+
+멋지죠?<br>
+테스트를 돌려보면 당연히도 통과합니다.<br>
+하지만, 우리의 마음 속에는 아직 찝찝함이 있죠.<br>
+이런 불편함을 조금이라도 덜어줄 수 있게 리팩토링을 해볼까요?<br>
+
+```java
+public static Orbit of(PlanetOrbit planetOrbit) {
+    double longRadius = planetOrbit.getLongRadius() + planetOrbit.getChangePerCentury().getLongRadius();
+    double eccentricity = 1.1;
+    double inclination = 1.1;
+    double longitudeOfAscendingNode = 1.1;
+    double averageLongitude = 1.1;
+    double perihelionLongitude = 1.1;
+
+    return Orbit.of(longRadius,
+            eccentricity,
+            inclination,
+            longitudeOfAscendingNode,
+            averageLongitude,
+            perihelionLongitude);
+}
+```
+
+이번 스텝은 이정도면 됐습니다.<br>
+이제 다음 스텝을 위한 테스트를 추가해 볼게요!<br>
+
+```java
+@Test
+void 역기점으로부터_두_세기가_지난_시점의_장반경_값() {
+    TimeFreezer.freeze(TWO_CENTURY_AFTER_EPOCH_TIME);
+
+    Orbit actual = CurrentOrbitCalculator.of(PLANET);
+
+    assertThat(actual.getLongRadius())
+            .isEqualTo(PLANET.getLongRadius() + (PLANET.getChangePerCentury().getLongRadius() * 2));
+}
+```
+
+두 세기가 지난 시점에서의 기대하는 장반경 값을 정의했습니다.<br>
+이 테스트가 통과되기 위한 가장 빠른 방법은 무엇일까요?<br>
+아까 작성한 로직에서 2를 곱해주는 방법이 있겠지만, 그렇게되면 다른 테스트는 실패하게 되겠죠?<br>
+이 시점에서 정확한 로직을 파악하는 것이 중요합니다.<br>
+<br>
+현 시점에 얼만큼의 세기가 지났는지 계산해 주던 계산기를 만들었었죠.<br>
+그 친구를 이용해 로직을 작성해 보겠습니다.<br>
+
+```java
+public static Orbit of(PlanetOrbit planetOrbit) {
+    JulianClock julianClock = new JulianClock();
+    double elapsedCentury = julianClock.elapsedCentury();
+
+    double longRadius = planetOrbit.getLongRadius() + (planetOrbit.getChangePerCentury().getLongRadius() * elapsedCentury);
+    double eccentricity = 1.1;
+    double inclination = 1.1;
+    double longitudeOfAscendingNode = 1.1;
+    double averageLongitude = 1.1;
+    double perihelionLongitude = 1.1;
+
+    return Orbit.of(longRadius,
+            eccentricity,
+            inclination,
+            longitudeOfAscendingNode,
+            averageLongitude,
+            perihelionLongitude);
+}
+```
+
+간단하네요.<br>
+세기당 변화량에 현 시점에서 지난 세기만큼 곱해준다면, 현 시점의 궤도 요소 변화량을 알 수 있습니다.<br>
+이제, 테스트를 돌려보겠습니다.<br>
+
+<img width="405" alt="image" src="https://user-images.githubusercontent.com/60500649/180196653-c3a1b1f2-4c92-4235-a039-bd5bfa744e09.png">
+
+잘 돌아가네요!<br>
+<br>
+
+우리가 안심해도 될 지, 정말 문제가 없는지, 역기점과 이의 한 세기 전도 테스트해 보겠습니다.<br>
+
+```java
+@Test
+void 역기점으로부터_한_세기_이전_시점의_장반경_값() {
+    TimeFreezer.freeze(A_CENTURY_BEFORE_EPOCH_TIME);
+
+    Orbit actual = CurrentOrbitCalculator.of(PLANET);
+
+    assertThat(actual.getLongRadius())
+            .isEqualTo(PLANET.getLongRadius() + (PLANET.getChangePerCentury().getLongRadius() * -1));
+}
+
+@Test
+void 역기점의_장반경_값() {
+    TimeFreezer.freeze(EPOCH_TIME);
+
+    Orbit actual = CurrentOrbitCalculator.of(PLANET);
+
+    assertThat(actual.getLongRadius())
+            .isEqualTo(PLANET.getLongRadius());
+}
+```
+
+<img width="232" alt="image" src="https://user-images.githubusercontent.com/60500649/180197853-bf1fcbe2-e7fd-4979-b3c2-77c7bdb0453e.png">
+
+테스트가 잘 통과합니다!<br>
+<br>
+
+나머지 궤도 요소들 또한 같은 테스트를 진행해 줍니다.<br>
+이제 복붙의 영역이네요. 신나게 해줍시다.<br>
+
+```java
+public static Orbit of(PlanetOrbit planetOrbit) {
+    JulianClock julianClock = new JulianClock();
+    double elapsedCentury = julianClock.elapsedCentury();
+
+    double longRadius = planetOrbit.getLongRadius() + (planetOrbit.getChangePerCentury().getLongRadius() * elapsedCentury);
+    double eccentricity = planetOrbit.getEccentricity() + (planetOrbit.getChangePerCentury().getEccentricity() * elapsedCentury);
+    double inclination = planetOrbit.getInclination() + (planetOrbit.getChangePerCentury().getInclination() * elapsedCentury);
+    double longitudeOfAscendingNode = planetOrbit.getLongitudeOfAscendingNode() + (planetOrbit.getChangePerCentury().getLongitudeOfAscendingNode() * elapsedCentury);
+    double averageLongitude = planetOrbit.getAverageLongitude() + (planetOrbit.getChangePerCentury().getAverageLongitude() * elapsedCentury);
+    double perihelionLongitude = planetOrbit.getPerihelionLongitude() + (planetOrbit.getChangePerCentury().getPerihelionLongitude() * elapsedCentury);
+
+    return Orbit.of(longRadius,
+            eccentricity,
+            inclination,
+            longitudeOfAscendingNode,
+            averageLongitude,
+            perihelionLongitude);
+}
+```
+
+코드가 더럽습니다. 대부분 중복으로 이루어져 있네요.<br>
+이 부분들은 추후 리팩토링할 수 있을 것 같아요.<br>
+이제 테스트를 돌려볼까요? (하나씩 테스트해 보며 추가해서 결과를 알고 있지만)<br>
+
+<img width="368" alt="image" src="https://user-images.githubusercontent.com/60500649/180199260-23717a8c-bac8-42ca-ad08-64f0f32ff717.png">
+
+와우! 모두 통과합니다!<br>
+이제 우린 현시점의 궤도 요소들을 알 수 있게 되었습니다.<br>
+<br>
+
+다음 시간에는 해당 궤도 요소를 통해 실제 행성의 위치를 도출할 수 있을 거라 기대합니다.<br>
 감사합니다.<br>
 
 ## Test Interpretation
