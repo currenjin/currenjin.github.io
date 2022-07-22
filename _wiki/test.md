@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-21 20:30:00 +0900
+updated : 2022-07-22 20:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1440,9 +1440,9 @@ void 역기점으로부터_1세기_전이다() {
 
 처음엔 해결하고자 long 값으로 어떻게든 처리하려고 했으나, 결국 정밀한 값을 위해서는 double 이 옳다는 판단을 내렸고 통과했던 테스트 케이스로 변경하게 되었습니다.<br>
 
-### **220719::currenjin::PlanetaryOrbitalCalculator::ArgumentOfPeriapsisAndTrueAnomalyCalculator**
+### **220719::currenjin::PlanetaryOrbitalCalculator::ArgumentOfPeriapsisAndEccentricityAnomalyCalculator**
 
-궤도 요소 중 근일점 편각과 진근점 이각이 필요합니다.<br>
+궤도 요소 중 근일점 편각과 편심 이각이 필요합니다.<br>
 <br>
 
 하지만 정의된 행성의 궤도 데이터에는 없어 직접 계산을 해줘야 하는데요.<br>
@@ -1538,17 +1538,17 @@ private static void validate(Double perihelionLongitude, Double longitudeOfAscen
 
 <br>
 
-#### 진근점 이각
+#### 편심 이각
 
-이제, 근일점 편각을 구헀으니 진근점 이각을 구해야 합니다.<br>
-진근점 이각은 타원의 주초점에서 바라본 궤도 근점과 물체의 현재 위치 간의 각도입니다.<br>
+이제, 근일점 편각을 구헀으니 편심 이각을 구해야 합니다.<br>
+편심 이각은 움직이는 물체의 위치를 결정하는 궤도 요소입니다. 해당 값으로 실제 행성이 어떤 위치에 있는지에 대한 값을 도출할 수 있습니다.<br>
 <br>
 
 해당 값을 구하기 위해선 먼저, 평균근점이각을 구해야 하는데요.<br>
 평균근점이각은 어떤 물체가 공전 속도와 공전 주기를 유지한 채 정확한 원 궤도로 옮겨간다고 가정했을 때 물체와 궤도 근점간의 각거리를 의미합니다.<br>
 <br>
 
-평균근점이각을 구하는 이유는 진근점 이각 때문이니, 진근점 이각 계산기에 평균근점이각 계산 메소드를 포함시키겠습니다.<br>
+평균근점이각을 구하는 이유는 편심 이각 때문이니, 편심 이각 계산기에 평균근점이각 계산 메소드를 포함시키겠습니다.<br>
 평균근점이각을 계산하는 테스트를 작성할게요.<br>
 평균근점이각 M 을 구하는 방법은 평균 경도 l 과 근일점 경도 w 의 차입니다. (M = l - w)<br>
 평균 경도와 근일점 경도는 역시 궤도 데이터에 포함되어 있습니다.<br>
@@ -1559,7 +1559,7 @@ public static final Double PERIHELION_LONGITUDE = 102.93768193;
 
 @Test
 void 평균근점이각은_평균_경도에서_근일점_경도를_뺀_값이다() {
-    double actual = TrueAnomalyCalculator.calculateMeanAnomaly(AVERAGE_LONGITUDE, PERIHELION_LONGITUDE);
+    double actual = EccentricityAnomalyCalculator.calculateMeanAnomaly(AVERAGE_LONGITUDE, PERIHELION_LONGITUDE);
 
     assertThat(actual).isEqualTo(AVERAGE_LONGITUDE - PERIHELION_LONGITUDE);
 }
@@ -1567,14 +1567,14 @@ void 평균근점이각은_평균_경도에서_근일점_경도를_뺀_값이다
 @Test
 void 평균근점이각_계산시_평균_경도가_유효하지_않으면_안된다() {
     assertThatThrownBy(() ->
-            TrueAnomalyCalculator.calculateMeanAnomaly(null, PERIHELION_LONGITUDE))
+            EccentricityAnomalyCalculator.calculateMeanAnomaly(null, PERIHELION_LONGITUDE))
             .isInstanceOf(IllegalArgumentException.class);
 }
 
 @Test
 void 평균근점이각_계산시_근일점_경도가_유효하지_않으면_안된다() {
     assertThatThrownBy(() ->
-            TrueAnomalyCalculator.calculateMeanAnomaly(AVERAGE_LONGITUDE, null))
+            EccentricityAnomalyCalculator.calculateMeanAnomaly(AVERAGE_LONGITUDE, null))
             .isInstanceOf(IllegalArgumentException.class);
 }
 ```
@@ -1605,18 +1605,18 @@ private static void validateMeanAnomalyCalculator(Double averageLongitude, Doubl
 
 <br>
 
-평균근점이각까지 구하며, 진근점이각을 구할 준비가 되었습니다.<br>
+평균근점이각까지 구하며, 편심 이각을 구할 준비가 되었습니다.<br>
 다음 시간에 구해볼게요. 감사합니다.<br>
 
-### **220720::currenjin::PlanetaryOrbitalCalculator::TrueAnomalyCalculator**
+### **220720::currenjin::PlanetaryOrbitalCalculator::EccentricityAnomalyCalculator**
 
-필요한 궤도 요소 중 근일점 편각과 진근점 이각을 계산해야 합니다.<br>
-근일점 편각은 전 날 작업을 통해 구할 수 있게 되었고, 진근점 이각을 계산하기 위한 평균 근점 이각까지 구할 수 있게 됐습니다.<br>
+필요한 궤도 요소 중 근일점 편각과 편심 이각을 계산해야 합니다.<br>
+근일점 편각은 전 날 작업을 통해 구할 수 있게 되었고, 편심 이각을 계산하기 위한 평균 근점 이각까지 구할 수 있게 됐습니다.<br>
 <br>
 
-#### 진근점 이각
+#### 편심 이각
 
-평균 근점 이각으로 진근점 이각을 유도하는 공식은 아래와 같습니다.<br>
+평균 근점 이각으로 편심 이각을 유도하는 공식은 아래와 같습니다.<br>
 
 <img width="233" alt="스크린샷 2022-07-19 오후 9 22 33" src="https://user-images.githubusercontent.com/60500649/179951029-b2fdfbe4-693e-4d73-859d-d589aae4131a.png">
 
@@ -1631,8 +1631,8 @@ public static final Double EPOCH_AVERAGE_LONGITUDE = 100.46457166;
 public static final Double EPOCH_PERIHELION_LONGITUDE = 102.93768193;
 
 @Test
-void 진근점이각을_계산한다() {
-    double actual = TrueAnomalyCalculator.calculate(EPOCH_ECCENTRICITY, EPOCH_AVERAGE_LONGITUDE, EPOCH_PERIHELION_LONGITUDE);
+void 편심_이각을_계산한다() {
+    double actual = EccentricityAnomalyCalculator.calculate(EPOCH_ECCENTRICITY, EPOCH_AVERAGE_LONGITUDE, EPOCH_PERIHELION_LONGITUDE);
 
     assertThat(actual).isEqualTo(-0.044630145101967715);
 }
@@ -1677,23 +1677,23 @@ public static double calculate(Double eccentricity, Double averageLongitude, Dou
 
 ```java
 @Test
-void 진근점이각을_계산시_이심률이_유효하지_않으면_안된다() {
+void 편심_이각을_계산시_이심률이_유효하지_않으면_안된다() {
     assertThatThrownBy(() ->
-            TrueAnomalyCalculator.calculate(null, EPOCH_AVERAGE_LONGITUDE, EPOCH_PERIHELION_LONGITUDE))
+            EccentricityAnomalyCalculator.calculate(null, EPOCH_AVERAGE_LONGITUDE, EPOCH_PERIHELION_LONGITUDE))
             .isInstanceOf(IllegalArgumentException.class);
 }
 
 @Test
-void 진근점이각을_계산시_평균_적경이_유효하지_않으면_안된다() {
+void 편심_이각을_계산시_평균_적경이_유효하지_않으면_안된다() {
     assertThatThrownBy(() ->
-            TrueAnomalyCalculator.calculate(EPOCH_ECCENTRICITY, null, EPOCH_PERIHELION_LONGITUDE))
+            EccentricityAnomalyCalculator.calculate(EPOCH_ECCENTRICITY, null, EPOCH_PERIHELION_LONGITUDE))
             .isInstanceOf(IllegalArgumentException.class);
 }
 
 @Test
-void 진근점이각을_계산시_근일점_적경이_유효하지_않으면_안된다() {
+void 편심_이각을_계산시_근일점_적경이_유효하지_않으면_안된다() {
     assertThatThrownBy(() ->
-            TrueAnomalyCalculator.calculate(EPOCH_ECCENTRICITY, EPOCH_AVERAGE_LONGITUDE, null))
+            EccentricityAnomalyCalculator.calculate(EPOCH_ECCENTRICITY, EPOCH_AVERAGE_LONGITUDE, null))
             .isInstanceOf(IllegalArgumentException.class);
 }
 ```
@@ -1722,7 +1722,7 @@ private static void validate(Double eccentricity, Double averageLongitude, Doubl
 
 <br>
 
-이제 진근점 이각까지 구하면서 모든 궤도 요소가 모이게 되었습니다.<br>
+이제 편심 이각까지 구하면서 모든 궤도 요소가 모이게 되었습니다.<br>
 하지만 아직 해결해야 하는 부분이 있습니다.<br>
 세기당 변화량을 적용해 궤도 요소를 추출할 수 있어야 합니다.<br>
 <br>
