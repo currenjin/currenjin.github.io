@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-22 20:30:00 +0900
+updated : 2022-07-23 12:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -1916,6 +1916,260 @@ public static Orbit of(PlanetOrbit planetOrbit) {
 
 다음 시간에는 해당 궤도 요소를 통해 실제 행성의 위치를 도출할 수 있을 거라 기대합니다.<br>
 감사합니다.<br>
+
+### **220723::currenjin::PlanetaryOrbitalCalculator::PlanetaryPositionCalculator**
+
+이제 태양계 행성들의 시간 별 위치 값을 계산할 수 있습니다.<br>
+<br>
+
+실제 행성의 위치를 표현할 수 있는 요소는 진근점 이각과 유클리드 거리인데요.<br>
+진근점 이각은 항성과 천체까지의 거리각입니다.<br>
+유클리드 거리는 두 점 사이의 거리를 계산할 때 주로 사용하는 방법인데요. 여기서 두 조첨은 항성과 천체를 나타냅니다.<br>
+<br>
+
+먼저, 두 값을 구하기 위해 필요한 황도 좌표 평면의 좌표값을 구해볼게요.<br>
+
+#### 황도 좌표 평면의 좌표값
+
+좌표값 x, y는 아래와 같은 수식으로 구할 수 있습니다.<br>
+
+```
+e : 이심률
+E : 편심 이각
+l : 장반경
+
+x = l * (cosE - e)
+y = l * √(1 - e^2) * sinE
+```
+
+테스트를 작성해 볼까요?<br>
+
+```java
+@Test
+void 역기점의_황도_좌표값() {
+    TimeFreezer.freeze(EPOCH_TIME);
+
+    EclipticCoordinate actual = sut.calculateEclipticCoordinate(PLANET);
+
+    assertThat(actual.getX()).isEqualTo(X_OF_EPOCH_TIME);
+    assertThat(actual.getY()).isEqualTo(Y_OF_EPOCH_TIME);
+}
+```
+
+역기점을 기준으로, 황도 좌표 평면의 X 축 Y 축을 구했습니다.<br>
+비교하는 값은 실제 역기점의 좌표 값을 가져왔습니다.<br>
+<br>
+
+해당 테스트를 통과시키려 하는데, EclipticCoordinate 라는 객체가 필요하군요.<br>
+먼저 생성해 줬습니다.<br>
+
+```java
+public class EclipticCoordinate {
+}
+```
+
+이 상태에서는 테스트가 통과할 수 없습니다.<br>
+가장 빠르게 통과할 수 있도록, 해당 객체가 좌표 값을 가질 수 있도록 테스트를 추가했습니다.<br>
+
+```java
+@Test
+void 황도_좌표를_생성합니다() {
+    EclipticCoordinate actual = EclipticCoordinate.of(X, Y);
+
+    assertThat(actual.getX()).isEqualTo(X);
+    assertThat(actual.getY()).isEqualTo(Y);
+}
+```
+
+해당 테스트가 통과할 수 있도록 구현했습니다.<br>
+
+```java
+public class EclipticCoordinate {
+
+    public static EclipticCoordinate of(double x, double y) {
+        return new EclipticCoordinate(x, y);
+    }
+
+    private final double x;
+    private final double y;
+
+    private EclipticCoordinate(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+}
+```
+
+테스트를 돌려보면 잘 통과하는 군요.<br>
+<br>
+
+다시 돌아와서, 좌표를 계산해 주는 테스트가 통과할 수 있도록 로직을 작성해 보겠습니다.<br>
+<br>
+
+```java
+public class PlanetaryPositionCalculator {
+
+  public EclipticCoordinate calculateEclipticCoordinate(PlanetOrbit planet) {
+
+      Orbit currentOrbit = CurrentOrbitCalculator.of(planet);
+      double eccentricityAnomaly = EccentricityAnomalyCalculator.calculate(currentOrbit.getEccentricity(), currentOrbit.getAverageLongitude(), currentOrbit.getPerihelionLongitude());
+
+      double x = (currentOrbit.getLongRadius() * 1000) * (Math.cos(eccentricityAnomaly) - currentOrbit.getEccentricity());
+      double y = (currentOrbit.getLongRadius() * 1000) * (Math.sqrt(1 - (currentOrbit.getEccentricity() * currentOrbit.getEccentricity()))) * Math.sin(eccentricityAnomaly);
+
+      return EclipticCoordinate.of(x, y);
+  }
+}
+```
+
+행성의 역기점 기준 궤도 요소를 받습니다.<br>
+역기점 기준 궤도 요소를 통해 현 시점의 궤도 요소를 계산합니다.<br>
+필요한 추가 요소를 계산한 후 x 축과 y 축을 계산합니다.<br>
+<br>
+
+통과하는지 확인해 볼까요?<br>
+
+![image](https://user-images.githubusercontent.com/60500649/180588905-1075176b-bfd9-406f-a3aa-c4931ad69274.png)
+
+좋습니다! 잘 통과하네요.<br>
+
+혹시 모르니 null 값이 들어가는 상황에 대한 예외 처리 테스트도 수행해 줍시다.<br>
+
+```java
+@Test
+void 황도_좌표값_계산시_유효하지_않은_값이면_안된다() {
+    assertThatThrownBy(() -> sut.calculateEclipticCoordinate(null)).isInstanceOf(IllegalArgumentException.class);
+}
+```
+
+```java
+public EclipticCoordinate calculateEclipticCoordinate(PlanetOrbit planet) {
+
+    validatePlanetOrbit(planet);
+    
+    ...
+}
+
+private void validatePlanetOrbit(PlanetOrbit planet) {
+    if (planet == null) {
+        throw new IllegalArgumentException();
+    }
+}
+```
+
+<br>
+
+#### 유클리드 거리
+이제 필요한 좌표 값을 구했으니, 먼저 유클리드 거리 값을 구해볼게요.<br>
+<br>
+
+좌표 값을 통해 구할 수 있는 유클리드 거리의 수식은 아래와 같습니다.<br>
+
+```java
+AU : 태양과 지구 
+
+√(x^2 + y^2) / AU
+```
+
+마찬가지로 테스트를 작성해 줍니다.<br>
+
+```java
+@Test
+void 역기점의_유클리드_거리를_계산한다() {
+    TimeFreezer.freeze(EPOCH_TIME);
+
+    double actual = sut.calculateEuclideanDistance(PLANET);
+
+    assertThat(actual).isEqualTo(EUCLIDEAN_DISTANCE_OF_EPOCH_TIME);
+}
+```
+
+마찬가지로, 역기점 기준의 유클리드 거리 값과 비교합니다.<br>
+성공하기 위한 로직을 작성해 줍니다.<br>
+
+```java
+public double calculateEuclideanDistance(PlanetOrbit planet) {
+
+    EclipticCoordinate eclipticCoordinate = calculateEclipticCoordinate(planet);
+
+    return Math.sqrt(Math.pow(eclipticCoordinate.getX(), 2) + Math.pow(eclipticCoordinate.getY(), 2)) / (1000 * planet.getAu());
+}
+```
+
+행성 궤도 요소를 받습니다.<br>
+황도 좌표 평면의 좌표값을 받습니다.<br>
+해당 값으로 위에 작성한 수식에 맞게 계산해 줍니다.<br>
+<br>
+
+이제 테스트를 돌려보면 잘 통과합니다.<br>
+
+![image](https://user-images.githubusercontent.com/60500649/180590186-04a776a4-2765-4805-b921-dddbe0efe26a.png)
+
+아까와 같이 validate 도 진행해 주는 테스트를 짜고 통과시켰습니다.<br>
+과정은 동일하기에 생략합니다.<br>
+<br>
+
+#### 진근점 이각
+
+마지막입니다. 진근점 이각을 구하면 끝입니다.<br>
+좌표 값을 통해 유도할 수 있는 진근점 이각의 수식은 아래와 같습니다.<br>
+
+```java
+atan2(y, x)
+```
+
+테스트를 만들고, 빠르게 로직을 작성해 주겠습니다.<br>
+
+```java
+@Test
+void 역기점의_진근점_이각을_계산한다() {
+    TimeFreezer.freeze(EPOCH_TIME);
+
+    double actual = sut.calculateTrueAnomaly(PLANET);
+
+    assertThat(actual).isEqualTo(TRUE_ANOMALY_OF_EPOCH_TIME);
+}
+```
+
+마찬가지로, 역기점을 기준으로 계산된 진근점 이각을 비교합니다.<br>
+
+```java
+public double calculateTrueAnomaly(PlanetOrbit planet) {
+
+    EclipticCoordinate eclipticCoordinate = calculateEclipticCoordinate(planet);
+
+    return Math.atan2(eclipticCoordinate.getY(), eclipticCoordinate.getX()) * (180 / Math.PI);
+}
+```
+
+행성 궤도 요소 값을 받습니다.<br>
+궤도 요소 값을 통해 좌표 값을 가져옵니다.<br>
+좌표 값으로 위 수식에 맞게 계산합니다.<br>
+(180 / pi) 는 radian 값을 degree 로 변환해 주기 위해 추가했습니다.<br>
+<br>
+
+테스트를 돌려보면 역시 통과하죠.<br>
+
+![image](https://user-images.githubusercontent.com/60500649/180590400-1faa9a2d-2452-4a66-941f-1d3fa271f907.png)
+
+아까와 같이 validate 테스트와 로직을 추가해 주면 됩니다.<br>
+<br>
+
+#### 결과
+
+이제 드디어 행성 위치를 계산할 수 있게 되었습니다.<br>
+이 글을 작성하는 시점에서의 지구의 위치는 태양으로부터 `0.9944538116859933 AU` 만큼 떨어져 있고, 태양과 지구 사이에 `0.9944538116859933 도` 만큼 기울어져 있습니다.<br>
+<br>
+
+감사합니다.
 
 ## Test Interpretation
 ### **220127::trevari::member::application::MappingFinderTest**
