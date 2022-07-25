@@ -3,7 +3,7 @@ layout  : wiki
 title   : TDD(Test Driven Development, 테스트 주도 개발)
 summary :
 date    : 2022-01-04 22:38:00 +0900
-updated : 2022-07-24 19:00:00 +0900
+updated : 2022-07-25 22:00:00 +0900
 tag     : tdd
 toc     : true
 public  : true
@@ -57,6 +57,87 @@ latex   : true
 5. 중복을 제거하기 위해 리팩토링을 한다.
 
 ## Pattern
+
+### 픽스처
+
+여러 테스트에서 공통으로 사용하는 객체를 생성할 때, 어떻게하면 좋을까요?<br>
+각 테스트 코드에 있는 지역 변수를 인스턴스 변수로 바꾸고 setUp() 메서드를 재정의하여 이 메서드에 인스턴스 변수들을 초기화하도록 합니다.<br>
+<br>
+
+우리는 모두 코드에서 중복을 제거하길 원합니다. 이떄, 우리는 테스트 코드에서도 중복을 제거해야 할까요?<br>
+제거해야 할 겁니다.<br>
+<br>
+
+우리가 종종 테스트 코드를 만들었을 때, 객체를 세팅하는 코드는 여러 테스트에 걸쳐 동일한 경우가 있습니다. (이러한 객체들은 테스트 픽스처라고 부릅니다)<br>
+이런 중복이 좋지 않은 이유는 다음과 같습니다.<br>
+
+- 복붙을 하더라도 반복 작성하는 코드에는 시간이 소요되는데, 테스트를 빠르게 작성하는 데에 방해 요소가 됩니다.
+- 인터페이스를 수동으로 변경할 필요가 있을 경우, 여러 인터페이스를 고쳐줘야 합니다.
+
+<br>
+
+예시를 통해 중복을 제거해 봅시다.<br>
+
+```java
+@Test
+void empty() {
+    Rectangle empty = new Rectangle(0, 0, 0, 0);
+
+    assertThat(empty.isEmpty()).isTrue();
+}
+
+@Test
+void width() {
+    Rectangle empty = new Rectangle(0, 0, 0, 0);
+
+    assertThat(empty.getWidth()).isEqualTo(0.0);
+}
+```
+
+다음과 같이 중복을 제거할 수 있습니다.<br>
+
+```java
+Rectangle empty;
+
+@BeforeEach
+void setUp() {
+    empty = new Rectangle(0, 0, 0, 0);
+
+}
+
+@Test
+void empty() {
+    assertThat(empty.isEmpty()).isTrue();
+}
+
+@Test
+void width() {
+    assertThat(empty.getWidth()).isEqualTo(0.0);
+}
+```
+
+공통 적으로 필요한 객체를 setUp method 로 추출했습니다.<br>
+해당 method 는 각 test method 가 호출되기 전에 호출되죠.<br>
+<br>
+
+사실, 위 내용과 아래 내용을 모두 사용해도 상관은 없습니다.<br>
+저 같은 경우에는 공통적인 setUp 코드를 분리하는데, 이 과정에서 세부 사항에 대해 외워야 한다는 단점이 있습니다.<br>
+이것을 덜 분리하는 방향도 좋습니다.<br>
+또는 test method 내에서 보아야 하는 내용만 setUp 하기도 합니다.<br>
+<br>
+
+사실 테스트 케이스의 하위 클래스와 하위 클래스의 인스턴스 관계는 사람들이 가장 혼란스러워 하는 부분 중 하나입니다.<br>
+저는 되도록이면 서로 다른 유형의 인스턴스인 경우에는 따로 분리해서 테스트 케이스를 작성합니다. (ex. EmptyRectangleTest, NormalRectangleTest)<br>
+그렇게 되면 setUp method 내에서도 생성하는 인스턴스가 서로 다르겠죠.<br>
+이는 각 인스턴스의 유형에 따라 특정 관계가 맺어진다는 뜻이 될 수도 있습니다.<br>
+<br>
+
+하지만 꼭 모든 픽스처가 유형 별로 분리되어지지는 않습니다.<br>
+한 픽스처가 여러 클래스를 통해 테스트하는 경우도 있고, 한 클래스를 통해 여러 픽스처를 테스트하는 경우도 있습니다.<br>
+우리가 인식해야할 것은 꼭 한 모델에 대해서 하나의 테스트 클래스가 대응되지 않는다는 점입니다.<br>
+<br>
+
+감사합니다.<br>
 
 ### 초록 막대 패턴
 
