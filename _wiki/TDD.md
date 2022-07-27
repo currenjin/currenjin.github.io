@@ -3,7 +3,7 @@ layout  : wiki
 title   : TDD(Test Driven Development, 테스트 주도 개발)
 summary :
 date    : 2022-01-04 22:38:00 +0900
-updated : 2022-07-26 20:00:00 +0900
+updated : 2022-07-27 22:00:00 +0900
 tag     : tdd
 toc     : true
 public  : true
@@ -213,6 +213,86 @@ public static int plus(int n1, int n2) {
 <br>
 
 테스트 퍼스트..<br>
+
+### 단언 우선
+
+테스트를 작성할 때 단언(assert)은 언제 쯤 쓰는게 좋을까요?<br>
+테스트를 작성할 때 먼저 단언을 쓰고 진행하는 것이 좋습니다.<br>
+
+- 우리는 어떠한 시스템을 만들어낼 때, 무슨 일을 하는가에 대해 관심이 있습니다. 이때, 시스템이 어떻게 할 것인가에 대한 사용자 스토리를 먼저 작성합니다.
+- 특정 기능을 개발할 때, 무슨 일을 하는가에 대해 관심이 있습니다. 이때, 기능이 완료되면 통과할 수 있는 테스트를 먼저 작성합니다.
+- 테스트를 개발할 때, 무슨 일을 하는가에 대해 관심이 있습니다. 이때, 완료될 때 통과해야 할 단언부터 작성합니다.
+
+<br>
+
+우리가 구현에 대해 전혀 고려하지 않고 테스트만 작성할 때도 다양한 문제들을 해결할 수 있죠.<br>
+
+- 테스트하고자 하는 기능이 어디에 속할까? 기존의 메소드를 수정해야 할까, 기존의 클래스에 새로운 메소드를 추가해야 할까, 아니면 이름이 같은 메소드를 새 클래스에 넣어야 할까?
+- 메소드 이름은 무엇으로 해야 할까?
+- 올바른 결과를 어떤 식으로 검사할 건가?
+- 테스트가 제안하는 다른 테스트는 무엇이 있을까?
+
+<br>
+
+예를 들어 봅시다. 우리는 소켓을 통해 다른 시스템과 통신하려고 합니다.<br>
+통신을 마친 후의 소켓은 닫혀 있고,<br>
+소켓에서 문자열 `abc` 를 읽어와야 한다고 합시다.<br>
+
+```java
+@Test
+void transaction_complete() {
+    assertThat(reader.isClosed()).isTrue();
+    assertThat(reply.contents()).isEqualTo("abc");
+}
+```
+
+단언을 먼저 작성했습니다.<br>
+reply 는 어디서 올까요? socket 입니다.<br>
+
+```java
+@Test
+void transaction_complete() {
+    Buffer reply = reader.contents();
+    
+    assertThat(reader.isClosed()).isTrue();
+    assertThat(reply.contents()).isEqualTo("abc");
+}
+```
+
+socket 은 어디에서 올까요? 서버에 접속할 때 생성됩니다.<br>
+
+```java
+@Test
+void transaction_complete() throws IOException {
+    Socket reader = new Socket("localhost", defaultPort());
+    
+    Buffer reply = reader.contents();
+
+    assertThat(reader.isClosed()).isTrue();
+    assertThat(reply.contents()).isEqualTo("abc");
+}
+```
+
+그리고, 이 서버는 작업 전에 열어둬야 합니다.<br>
+
+```java
+@Test
+void transaction_complete() throws IOException {
+    Server writer = Server(defaultPort(), "abc");
+    Socket reader = new Socket("localhost", defaultPort());
+    
+    Buffer reply = reader.contents();
+
+    assertThat(reader.isClosed()).isTrue();
+    assertThat(reply.contents()).isEqualTo("abc");
+}
+```
+
+코드가 유효하지 않을지 몰라도 지금 중요한 것은 단언 우선의 테스트 코드 작성을 보았다는 것입니다.<br>
+우리는 작은 단계로 아주 빠른 피드백을 받으며 테스트의 아웃라인을 만들었습니다.<br>
+<br>
+
+감사합니다.<br>
 
 ## Example
 
