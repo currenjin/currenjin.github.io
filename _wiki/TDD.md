@@ -3,7 +3,7 @@ layout  : wiki
 title   : TDD(Test Driven Development, 테스트 주도 개발)
 summary :
 date    : 2022-01-04 22:38:00 +0900
-updated : 2022-07-27 22:00:00 +0900
+updated : 2022-07-28 22:00:00 +0900
 tag     : tdd
 toc     : true
 public  : true
@@ -293,6 +293,91 @@ void transaction_complete() throws IOException {
 <br>
 
 감사합니다.<br>
+
+### 하나에서 여럿으로
+
+객체 컬렉션(collection)을 다루는 연산은 어떻게 구현할까요?<br>
+먼저, 컬렉션 없이 구현하고 그 다음에 컬렉션을 사용하는 것이 좋습니다.<br>
+<br>
+
+예를 들어, 숫자 배열의 합을 구하는 함수를 작성한다고 생각해 봅시다.<br>
+하나로 시작합니다.<br>
+
+```java
+@Test
+void sum_1() {
+    assertThat(Operator.sum(5)).isEqualTo(5);
+}
+```
+
+해당 테스트를 통과시키기 위해서 구현합니다.<br>
+
+```java
+public class Operator {
+    public static int sum(int n) {
+        return n;
+    }
+}
+```
+
+바로 값을 반환한다면 통과하겠죠?<br>
+<br>
+
+이제 리스트(`Lists.newArrayList(5, 7)`)를 넘겨 합산을 해보고 싶습니다.<br>
+기존 메소드에서 List 를 받는 메소드를 추가로 생성합니다.<br>
+
+```java
+@Test
+void sum_2() {
+    assertThat(Operator.sum(5, Lists.newArrayList(5, 7))).isEqualTo(5);
+}
+```
+
+```java
+public class Operator {
+    public static int sum(int n) {
+        return n;
+    }
+
+    public static int sum(int n, List<Integer> numbers) {
+        return n;
+    }
+}
+```
+
+그리고 해당 예시는 변화의 격리하기로 볼 수 있습니다.<br>
+인자를 추가하면, 테스트 케이스에 영향을 주지 않으면서 자유롭게 구현을 변경할 수 있죠.<br>
+<br>
+
+이제 단일값 대신 컬렉션을 사용할 수 있습니다.<br>
+
+```java
+public static int sum(int n, List<Integer> numbers) {
+    return numbers.stream().mapToInt(e -> e).sum();
+}
+```
+
+이제 사용하지 않는 단일 인자를 제거하면 됩니다.<br>
+
+```java
+@Test
+void sum_2() {
+    assertThat(Operator.sum(Lists.newArrayList(5, 7))).isEqualTo(12);
+}
+
+public static int sum(List<Integer> numbers) {
+    return numbers.stream().mapToInt(e -> e).sum();
+}
+```
+
+그리고 유효하지 않은 메소드는 제거를 하거나, 제거가 불안하다면 Deprecated annotation 을 달아주면 다른 사람들이 인지할 수 있습니다.<br>
+
+```java
+@Deprecated
+public static int sum(int n) {
+    return n;
+}
+```
 
 ## Example
 
