@@ -71,6 +71,7 @@ int area = bounds.area();
 
 <br>
 
-##### 기타
+## 참조
 
-기타
+참조
+
