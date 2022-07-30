@@ -1,6 +1,6 @@
 ---
 layout  : wiki
-title   : Refactoring(리팩토링)
+title   : Refactoring (리팩토링)
 summary :
 date    : 2022-07-30 14:00:00 +0900
 updated : 2022-07-30 14:00:00 +0900
@@ -32,32 +32,39 @@ latex   : true
 <br>
 
 Shape 는 면적을 계산하는 책임을 갖고 있습니다.<br>
+<br>
+
+**Shape**
 
 ```java
-Shape
-
 ...
 int width = bounds.right() - bounds.left();
 int height = bounds.bottom() - bounds.top();
 int area = width * height;
 ...
+
 ```
 
 한 메소드에서 다른 객체에 하나 이상의 메시지를 보내는 것은 의심할 만한 사항입낟. 이 경우 bounds(Rectangle instance)로 네 개의 메시지가 보내지고 있습니다.<br>
 해당 부분을 옮겨 봅시다.<br>
+<br>
+
+**Rectangle**
 
 ```java
-Rectangle
-
 public int area() {
         int width = this.right() - this.left();
         int height = this.bottom() - this.top();
         
         return width * height;
 }
+```
 
+<br>
 
-Shape
+**Shape**
+
+```java
 ...
 int area = bounds.area();
 ...
@@ -73,5 +80,5 @@ int area = bounds.area();
 
 ## 참조
 
-참조
+참조입니다.
 
