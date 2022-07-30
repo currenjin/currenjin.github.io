@@ -1,10 +1,10 @@
 ---
 layout  : wiki
-title   : Refactoring(리팩토링)
+title   : Refactoring
 summary :
 date    : 2022-07-30 14:00:00 +0900
 updated : 2022-07-30 14:00:00 +0900
-tag     : refactoring
+tag     : refactor
 toc     : true
 public  : true
 parent  : [[how-to]]
@@ -73,7 +73,6 @@ int area = bounds.area();
 
 <br>
 
-## 참조
+#### 참조
 
-참조입니다.
-
+참조
