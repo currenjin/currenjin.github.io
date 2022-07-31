@@ -3,7 +3,7 @@ layout  : wiki
 title   : JUnit
 summary :
 date    : 2022-06-29 20:00:00 +0900
-updated : 2022-07-11 22:00:00 +0900
+updated : 2022-07-31 18:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -75,6 +75,200 @@ Vintage 가 있기에 두 버전(JUnit 4, JUnit 5) 모두 호환 가능합니다
 ## ExtendWith
 
 TBD
+
+## Condition
+
+### Operating system
+
+특정 운영 체제에서만 테스트가 동작할 수 있도록 할 수 있습니다.<br>
+<br>
+
+```java
+@Test
+@EnabledOnOs(MAC)
+void onlyOnMacOs() {
+    // ...
+}
+
+@TestOnMac
+void testOnMac() {
+    // ...
+}
+
+@Test
+@EnabledOnOs({ LINUX, MAC })
+void onLinuxOrMac() {
+    // ...
+}
+
+@Test
+@DisabledOnOs(WINDOWS)
+void notOnWindows() {
+    // ...
+}
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Test
+@EnabledOnOs(MAC)
+@interface TestOnMac {
+}
+```
+
+### Java runtime environment
+
+특정 버전의 JRE 에서만 테스트가 동작될 수 있도록 할 수 있습니다.<br>
+<br>
+
+```java
+@Test
+@EnabledOnJre(JAVA_8)
+void onlyOnJava8() {
+    // ...
+}
+
+@Test
+@EnabledOnJre({ JAVA_9, JAVA_10 })
+void onJava9Or10() {
+    // ...
+}
+
+@Test
+@EnabledForJreRange(min = JAVA_9, max = JAVA_11)
+void fromJava9to11() {
+    // ...
+}
+
+@Test
+@EnabledForJreRange(min = JAVA_9)
+void fromJava9toCurrentJavaFeatureNumber() {
+    // ...
+}
+
+@Test
+@EnabledForJreRange(max = JAVA_11)
+void fromJava8To11() {
+    // ...
+}
+
+@Test
+@DisabledOnJre(JAVA_9)
+void notOnJava9() {
+    // ...
+}
+
+@Test
+@DisabledForJreRange(min = JAVA_9, max = JAVA_11)
+void notFromJava9to11() {
+    // ...
+}
+
+@Test
+@DisabledForJreRange(min = JAVA_9)
+void notFromJava9toCurrentJavaFeatureNumber() {
+    // ...
+}
+
+@Test
+@DisabledForJreRange(max = JAVA_11)
+void notFromJava8to11() {
+    // ...
+}
+```
+
+
+### System property
+
+특정 JVM 시스템의 속성에 따라 테스트가 동작될 수 있도록 할 수 있습니다.<br>
+<br>
+
+```java
+@Test
+@EnabledIfSystemProperty(named = "os.arch", matches = ".*64.*")
+void onlyOn64BitArchitectures() {
+    // ...
+}
+
+@Test
+@DisabledIfSystemProperty(named = "ci-server", matches = "true")
+void notOnCiServer() {
+    // ...
+}
+```
+
+### Environment variable
+
+특정 환경 변수에 따라 테스트가 동작될 수 있도록 합니다.<br>
+<br>
+
+```java
+@Test
+@EnabledIfEnvironmentVariable(named = "ENV", matches = "staging-server")
+void onlyOnStagingServer() {
+    // ...
+}
+
+@Test
+@DisabledIfEnvironmentVariable(named = "ENV", matches = ".*development.*")
+void notOnDeveloperWorkstation() {
+    // ...
+}
+```
+
+### Custom
+
+사용자가 정의한 조건에 따라 테스트가 동작될 수 있도록 합니다.<br>
+
+
+```java
+@Test
+@EnabledIf("customCondition")
+void enabled() {
+    // ...
+}
+
+@Test
+@DisabledIf("customCondition")
+void disabled() {
+    // ...
+}
+
+boolean customCondition() {
+    return true;
+}
+```
+
+Condition method 가 외부에 존재할 수 있습니다.<br>
+
+```java
+package example;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
+
+class ExternalCustomConditionDemo {
+
+    @Test
+    @EnabledIf("example.ExternalCondition#customCondition")
+    void enabled() {
+        // ...
+    }
+
+}
+
+class ExternalCondition {
+
+    static boolean customCondition() {
+        return true;
+    }
+
+}
+```
+
+@EnabledIf, @DisabledIf annotation 이 클래스 수준에서 사용되는 경우 condition 메서드는 항상 static 이어야 합니다.<br>
+외부 클래스에 있는 condition 메서드 또한 static 이어야 합니다.<br>
+<br>
+
 
 ## Interceptor
 
