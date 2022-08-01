@@ -554,6 +554,1088 @@ void fibonacci(int n, int result) {
 성공하는군요!<br>
 저는 이렇게 안심할 수 있는 로직을 한 개 만들게 되었습니다.<br>
 
+### Planetary orbital calculator
+
+태양계의 모든 행성들의 궤도 데이터를 담는 객체가 필요했습니다.<br>
+
+```java
+@Test
+void 궤도를_생성합니다() {
+    Orbit actual = Orbit.of(LONG_RADIUS,
+            ECCENTRICITY,
+            INCLINATION,
+            LONGITUDE_OF_ASCENDING_NODE,
+            AVERAGE_LONGITUDE,
+            PERIHELION_LONGITUDE);
+
+    assertThat(actual).isInstanceOf(Orbit.class);
+}
+```
+
+날짜별 행성의 위치 계산에 필요한 궤도 데이터가 정의되어야 했기에, 제가 필요한 데이터들을 생성자로 넣어줬습니다.<br>
+그리고, 그 객체가 Orbit 인지 확인했죠.<br>
+<br>
+
+처음엔 빠르게 통과시키기 위해, 빈 객체를 반환했습니다.<br>
+<br>
+
+통과하는 상태에서 다음 스텝을 나아갔습니다.<br>
+
+```java
+@Test
+void 궤도_데이터가_삽입한_데이터와_일치합니다() {
+    Orbit actual = Orbit.of(LONG_RADIUS,
+            ECCENTRICITY,
+            INCLINATION,
+            LONGITUDE_OF_ASCENDING_NODE,
+            AVERAGE_LONGITUDE,
+            PERIHELION_LONGITUDE);
+
+    assertThat(actual.getLongRadius()).isEqualTo(LONG_RADIUS);
+    assertThat(actual.getEccentricity()).isEqualTo(ECCENTRICITY);
+    assertThat(actual.getInclination()).isEqualTo(INCLINATION);
+    assertThat(actual.getLongitudeOfAscendingNode()).isEqualTo(LONGITUDE_OF_ASCENDING_NODE);
+    assertThat(actual.getAverageLongitude()).isEqualTo(AVERAGE_LONGITUDE);
+    assertThat(actual.getPerihelionLongitude()).isEqualTo(PERIHELION_LONGITUDE);
+}
+```
+
+조금 장황하긴 하지만, 해당 궤도 데이터가 잘 들어가는지 확인이 필요했기에 작성한 테스트입니다.<br>
+이 테스트는 빈 객체를 반환하기만하면 성공하지 못합니다.<br>
+그렇기에 해당 값을 가진 객체를 생성하도록 한 후 Getter 메소드를 추가해 테스트를 성공시켰습니다.<br>
+
+```java
+public class Orbit {
+    public static Orbit of(Double longRadius,
+                           Double eccentricity,
+                           Double inclination,
+                           Double longitudeOfAscendingNode,
+                           Double averageLongitude,
+                           Double perihelionLongitude) {
+        return new Orbit(longRadius, eccentricity, inclination, longitudeOfAscendingNode, averageLongitude, perihelionLongitude);
+    }
+
+    private final Double longRadius;
+    private final Double eccentricity;
+    private final Double inclination;
+    private final Double longitudeOfAscendingNode;
+    private final Double averageLongitude;
+    private final Double perihelionLongitude;
+
+    protected Orbit(Double longRadius, Double eccentricity, Double inclination, Double longitudeOfAscendingNode, Double averageLongitude, Double perihelionLongitude) {
+
+        this.longRadius = longRadius;
+        this.eccentricity = eccentricity;
+        this.inclination = inclination;
+        this.longitudeOfAscendingNode = longitudeOfAscendingNode;
+        this.averageLongitude = averageLongitude;
+        this.perihelionLongitude = perihelionLongitude;
+    }
+
+    public Double getLongRadius() {
+        return longRadius;
+    }
+
+    public Double getEccentricity() {
+        return eccentricity;
+    }
+
+    public Double getInclination() {
+        return inclination;
+    }
+
+    public Double getLongitudeOfAscendingNode() {
+        return longitudeOfAscendingNode;
+    }
+
+    public Double getAverageLongitude() {
+        return averageLongitude;
+    }
+
+    public Double getPerihelionLongitude() {
+        return perihelionLongitude;
+    }
+}
+```
+
+Lombok 을 사용하지 않아 좀 장황하게 됐습니다.<br>
+어쨌던 테스트는 성공합니다.<br>
+<br>
+
+이제 그릇은 만들어졌고, 태양계 행성 각각의 궤도 데이터를 담아야 했습니다.<br>
+행성 각각의 데이터는 정의한 궤도 데이터에 추가로 필요한 데이터가 있습니다.<br>
+
+- AU: 태양과 행성까지의 거리(km)
+- Change per century: 세기 당 궤도 데이터 변화량
+
+모든 궤도 데이터는 이미 계산되어 있어 저는 갖다 쓰기만 하면 됩니다.<br>
+마찬가지로, 담을 그릇이 필요했죠.<br>
+새로운 그릇을 추가했습니다.<br>
+
+```java
+@Test
+void 지구_궤도를_생성합니다() {
+    PlanetOrbit actual = PlanetOrbit.of(EARTH.LONG_RADIUS,
+            EARTH.ECCENTRICITY,
+            EARTH.INCLINATION,
+            EARTH.LONGITUDE_OF_ASCENDING_NODE,
+            EARTH.AVERAGE_LONGITUDE,
+            EARTH.PERIHELION_LONGITUDE,
+            EARTH.AU,
+            EARTH.CHANGE_PER_CENTURY);
+
+    assertThat(actual).isInstanceOf(Orbit.class);
+    assertThat(actual.getAu()).isEqualTo(EARTH.AU);
+    assertThat(actual.getChangePerCentury()).isEqualTo(EARTH.CHANGE_PER_CENTURY);
+}
+```
+
+먼저 선택된 건 지구입니다.<br>
+지구에 대한 모든 궤도 데이터는 클래스의 스태틱 필드로 만들어 가져오게 했습니다.<br>
+
+```java
+public class EARTH {
+  public static final Double AU = 149597870.0;
+
+  public static final Double LONG_RADIUS = 1.00000261 * AU;
+  public static final Double ECCENTRICITY = 0.01671123;
+  public static final Double INCLINATION = -0.00001531;
+  public static final Double LONGITUDE_OF_ASCENDING_NODE = 0.0;
+  public static final Double AVERAGE_LONGITUDE = 100.46457166;
+  public static final Double PERIHELION_LONGITUDE = 102.93768193;
+
+  public static final Orbit CHANGE_PER_CENTURY = Orbit.of(
+          0.00000562 * AU,
+          -0.00004392,
+          -0.01294668,
+          0.0,
+          35999.37244981,
+          0.32327364);
+}
+```
+
+<br>
+
+이제 테스트를 빠르게 성공시키기 위해서 PlanetOrbit 클래스를 생성했습니다.<br>
+PlanetOrbit 클래스는 Orbit 을 상속했고, AU 와 Change per Century 필드가 추가되었습니다.
+
+```java
+public class PlanetOrbit extends Orbit {
+
+  public static PlanetOrbit of(Double longRadius,
+                         Double eccentricity,
+                         Double inclination,
+                         Double longitudeOfAscendingNode,
+                         Double averageLongitude,
+                         Double perihelionLongitude,
+                         Double au,
+                         Orbit changePerCentury) {
+
+      return new PlanetOrbit(longRadius, eccentricity, inclination, longitudeOfAscendingNode, averageLongitude, perihelionLongitude, au, changePerCentury);
+  }
+
+  private final Double au;
+  private final Orbit changePerCentury;
+
+  private PlanetOrbit(Double longRadius, Double eccentricity, Double inclination, Double longitudeOfAscendingNode, Double averageLongitude, Double perihelionLongitude, Double au, Orbit changePerCentury) {
+      super(longRadius, eccentricity, inclination, longitudeOfAscendingNode, averageLongitude, perihelionLongitude);
+      this.au = au;
+      this.changePerCentury = changePerCentury;
+  }
+
+  public Orbit getChangePerCentury() {
+      return this.changePerCentury;
+  }
+
+  public Double getAu() {
+      return this.au;
+  }
+}
+```
+
+정의한 궤도의 기본 요소들은 역기점인 J2000 때 측정된 값입니다.<br>
+<br>
+
+역기점은 천문학에서 천체의 궤도 요소의 기준이 되는, 관측 또는 예측이 된 시기를 의미합니다.<br>
+국제 천문 연맹에서는, 1984 년부터 J2000.0 을 사용하기로 결정했죠.<br>
+J 는 1년을 365.25 일로 산정하는 율리우스력을 의미하며, 2000.0 은 2000 년부터 시작되는 것을 의미합니다.<br>
+<br>
+
+오늘은 작업하면서 사용할 시간을 역기점을 기준으로 측정할 수 있도록 해주는 유틸리티를 TDD 로 구현합니다.<br>
+<br>
+
+처음엔, 기본적으로 역기점으로부터 하루가 지났음을 테스트했습니다.<br>
+TimeFreezer(aka. Elsa) 를 통해 시간을 얼리고, 날짜가 얼마나 지났는지 확인했습니다.<br>
+
+```java
+@Test
+void 역기점으로부터_하루가_지났다() {
+    TimeFreezer.freeze(J2000.plusDays(1));
+
+    assertThat(sut.elapsedDate()).isEqualTo(1);
+}
+```
+
+필요한 로직을 정의했습니다.<br>
+
+```java
+private static final LocalDateTime J2000 = LocalDateTime.of(2000, 1, 1, 12, 0, 0);
+private final int DAY = 60 * 60 * 24;
+    
+public int elapsedDate() {
+    return getEpochTime() / DAY;
+}
+```
+
+역기점을 가져오는 getEpochTime 메소드를 생성했습니다.<br>
+
+```java
+private int getEpochTime() {
+    return (int) (Clocks.now().toEpochSecond(UTC) - J2000.toEpochSecond(UTC));
+}
+```
+
+조금 복잡하게 정의되어 있습니다.<br>
+이유는, 실제 LocalDateTime 에서 제공하는 EpochTime 은 천문학에서 사용되는 EpochTime 과 다르더군요.<br>
+LocalDateTime 에서 사용되는 EpochTime 은 `1970년 1월 1일 00:00:00` 기준이며,<br>
+천문학에서 사용되는 EpochTime 과 30년 12시간 차이가 존재합니다.<br>
+<br>
+
+어쩄건, 천문학에서 사용하는 역기점으로 변환시켜주는 작업을 진행했습니다.<br>
+그 이후 테스트를 돌려보니 잘 돌아가더군요.<br>
+
+<img width="305" alt="image" src="https://user-images.githubusercontent.com/60500649/179501295-89171f20-15c7-4563-b089-d701f245766b.png">
+
+<br>
+
+경계값을 확인하기 위해 테스트를 추가했습니다.<br>
+
+```java
+@Test
+void 역기점으로부터_하루_전이다() {
+    TimeFreezer.freeze(J2000.minusDays(1));
+
+    assertThat(sut.elapsedDate()).isEqualTo(-1);
+}
+
+@Test
+void 역기점_당일이다() {
+    TimeFreezer.freeze(J2000);
+
+    assertThat(sut.elapsedDate()).isEqualTo(0);
+}
+```
+
+<br>
+
+이제 실제로 사용해야 하는 세기에 대한 테스트가 필요합니다.<br>
+
+먼저, 다음과 같은 상수를 정의했습니다.<br>
+
+```java
+static final double YEAR = 365.25;
+static final double CENTURY = 100 * YEAR;
+```
+
+YEAR 는 율리우스력의 1년을 일수로 정의했습니다.<br>
+CENTURY 는 한 세기를 의미합니다.<br>
+<br>
+
+이제 아래 테스트를 진행하고자 했습니다.<br>
+Between 을 통한 테스트로 진행한 이유는 따로 설명하겠습니다.<br>
+
+```java
+@Test
+void 역기점으로부터_1세기가_지났다() {
+    TimeFreezer.freeze(J2000.plusYears(100));
+
+    assertThat(sut.elapsedCentury()).isBetween(0.999, 1.0);
+}
+```
+
+그리고 빠르게 통과할 수 있도록 로직을 작성했습니다.<br>
+
+```java
+public double elapsedCentury() {
+    return elapsedDate() / TimeConstant.CENTURY;
+}
+```
+
+테스트가 통과하는 군요.<br>
+
+<img width="324" alt="image" src="https://user-images.githubusercontent.com/60500649/179509111-6a50a440-c483-450f-8c93-f24578980d8b.png">
+
+<br>
+
+이제, 필요한 다른 테스트도 추가해 줍니다.<br>
+
+```java
+@Test
+void 역기점으로부터_1세기_전이다() {
+    TimeFreezer.freeze(J2000.minusYears(100));
+
+    assertThat(sut.elapsedCentury()).isBetween(-1.0, -0.999);
+}
+
+@Test
+void 역기점으로부터_10세기_전이다() {
+    TimeFreezer.freeze(J2000.minusYears(1000));
+
+
+    assertThat(sut.elapsedCentury()).isBetween(-10.0, -9.999);
+}
+
+@Test
+void 역기점으로부터_20세기_후이다() {
+    TimeFreezer.freeze(J2000.plusYears(2000));
+
+    assertThat(sut.elapsedCentury()).isBetween(19.999, 20.0);
+}
+```
+
+모두 돌려보니 통과하는 것을 확인할 수 있습니다.<br>
+
+<img width="327" alt="image" src="https://user-images.githubusercontent.com/60500649/179509278-1a95ccd8-e077-43e9-b913-360d07f47ab0.png">
+
+<br>
+
+이렇게 JulianClock 이라는 클래스를 만들 수 있었습니다.<br>
+궤도 요소에 따른 계산이 필요할 때, 유용하게 사용할 예정입니다.<br>
+<br>
+
+궤도 요소 중 근일점 편각과 편심 이각이 필요합니다.<br>
+<br>
+
+하지만 정의된 행성의 궤도 데이터에는 없어 직접 계산을 해줘야 하는데요.<br>
+이번엔 두 요소를 계산하는 계산기를 만들려고 합니다.<br>
+<br>
+
+#### 근일점 편각
+
+궤도의 승교점부터 근점까지의 각을 운동 방향으로 잰 각거리로, 궤도 요소 중 하나입니다.<br>
+<br>
+
+근일점 편각 w 를 구하기 위해선 근일점 경도와, 승교점 적경이 필요합니다.<br>
+필요한 값들은 이미 궤도 데이터에 존재하기에 계산만 해주면 됩니다.<br>
+
+```java
+지구 궤도 데이터
+
+public static final Double LONGITUDE_OF_ASCENDING_NODE = 0.0; // 승교점 적경
+public static final Double PERIHELION_LONGITUDE = 102.93768193; // 근일점 경도
+```
+
+근일점 편각은 근일점 경도에서 승교점 적경을 뺀 값입니다.<br>
+해당 값을 구하기 위한 테스트를 작성해 보겠습니다.<br>
+
+```java
+public static final Double LONGITUDE_OF_ASCENDING_NODE = 0.0;
+public static final Double PERIHELION_LONGITUDE = 102.93768193;
+
+@Test
+void 근일점_편각은_근일점_경도에서_승교적_적경을_뺀_값이다() {
+    double actual = ArgumentOfPeriapsisCalculator.calculate(PERIHELION_LONGITUDE, LONGITUDE_OF_ASCENDING_NODE);
+
+    assertThat(actual).isEqualTo(PERIHELION_LONGITUDE - LONGITUDE_OF_ASCENDING_NODE);
+}
+```
+
+간단하네요. 이제 해당 테스트를 통과시켜 봅시다.<br>
+
+```java
+public static double calculate(Double perihelionLongitude, Double longitudeOfAscendingNode) {
+
+    return perihelionLongitude - longitudeOfAscendingNode;
+}
+```
+
+돌려보면 통과합니다.<br>
+<br>
+
+실패하는 케이스를 추가해 볼까요?<br>
+
+```java
+@Test
+void 근일점_경도가_유효하지_않은_값이면_안된다() {
+    assertThatThrownBy(() ->
+            ArgumentOfPeriapsisCalculator.calculate(null, LONGITUDE_OF_ASCENDING_NODE))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+
+@Test
+void 승교점_적경이_유효하지_않은_값이면_안된다() {
+    assertThatThrownBy(() ->
+            ArgumentOfPeriapsisCalculator.calculate(PERIHELION_LONGITUDE, null))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+```
+
+네, 두 테스트는 IllegalArgumentException 을 던지도록 유도되었습니다.<br>
+테스트를 성공시켜 보겠습니다.<br>
+
+```java
+public static double calculate(Double perihelionLongitude, Double longitudeOfAscendingNode) {
+    validate(perihelionLongitude, longitudeOfAscendingNode);
+
+    return perihelionLongitude - longitudeOfAscendingNode;
+}
+
+private static void validate(Double perihelionLongitude, Double longitudeOfAscendingNode) {
+    if (perihelionLongitude == null) {
+        throw new IllegalArgumentException();
+    }
+
+    if (longitudeOfAscendingNode == null) {
+        throw new IllegalArgumentException();
+    }
+}
+```
+
+너무 간단한 로직이라 사실 필요없는 행위들이라고 생각할 수 있습니다.<br>
+하지만 저는 메세지를 담을 수 있다는 점에서 충분히 할 수 있는 행위라고 느껴집니다.<br>
+테스트를 돌려보면 성공하는 것을 볼 수 있습니다.<br>
+
+<img width="320" alt="image" src="https://user-images.githubusercontent.com/60500649/179745684-e8e296a0-eb66-42ee-b97e-8d1e54c162f2.png">
+
+<br>
+
+#### 편심 이각
+
+이제, 근일점 편각을 구헀으니 편심 이각을 구해야 합니다.<br>
+편심 이각은 움직이는 물체의 위치를 결정하는 궤도 요소입니다. 해당 값으로 실제 행성이 어떤 위치에 있는지에 대한 값을 도출할 수 있습니다.<br>
+<br>
+
+해당 값을 구하기 위해선 먼저, 평균근점이각을 구해야 하는데요.<br>
+평균근점이각은 어떤 물체가 공전 속도와 공전 주기를 유지한 채 정확한 원 궤도로 옮겨간다고 가정했을 때 물체와 궤도 근점간의 각거리를 의미합니다.<br>
+<br>
+
+평균근점이각을 구하는 이유는 편심 이각 때문이니, 편심 이각 계산기에 평균근점이각 계산 메소드를 포함시키겠습니다.<br>
+평균근점이각을 계산하는 테스트를 작성할게요.<br>
+평균근점이각 M 을 구하는 방법은 평균 경도 l 과 근일점 경도 w 의 차입니다. (M = l - w)<br>
+평균 경도와 근일점 경도는 역시 궤도 데이터에 포함되어 있습니다.<br>
+
+```java
+public static final Double AVERAGE_LONGITUDE = 100.46457166;
+public static final Double PERIHELION_LONGITUDE = 102.93768193;
+
+@Test
+void 평균근점이각은_평균_경도에서_근일점_경도를_뺀_값이다() {
+    double actual = EccentricityAnomalyCalculator.calculateMeanAnomaly(AVERAGE_LONGITUDE, PERIHELION_LONGITUDE);
+
+    assertThat(actual).isEqualTo(AVERAGE_LONGITUDE - PERIHELION_LONGITUDE);
+}
+
+@Test
+void 평균근점이각_계산시_평균_경도가_유효하지_않으면_안된다() {
+    assertThatThrownBy(() ->
+            EccentricityAnomalyCalculator.calculateMeanAnomaly(null, PERIHELION_LONGITUDE))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+
+@Test
+void 평균근점이각_계산시_근일점_경도가_유효하지_않으면_안된다() {
+    assertThatThrownBy(() ->
+            EccentricityAnomalyCalculator.calculateMeanAnomaly(AVERAGE_LONGITUDE, null))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+```
+
+로직이 단순하니 확신을 갖고 빠르게 넘어가겠습니다.<br>
+
+```java
+public static double calculateMeanAnomaly(Double averageLongitude, Double perihelionLongitude) {
+    validateMeanAnomalyCalculator(averageLongitude, perihelionLongitude);
+
+    return averageLongitude - perihelionLongitude;
+}
+
+private static void validateMeanAnomalyCalculator(Double averageLongitude, Double perihelionLongitude) {
+    if (averageLongitude == null) {
+        throw new IllegalArgumentException();
+    }
+
+    if (perihelionLongitude == null) {
+        throw new IllegalArgumentException();
+    }
+}
+```
+
+테스트가 모두 통과합니다.<br>
+
+<img width="339" alt="image" src="https://user-images.githubusercontent.com/60500649/179748824-e61b6005-2179-44df-8456-257074fbae9b.png">
+
+<br>
+
+평균근점이각까지 구하며, 편심 이각을 구할 준비가 되었습니다.<br>
+<br>
+
+필요한 궤도 요소 중 근일점 편각과 편심 이각을 계산해야 합니다.<br>
+근일점 편각은 전 날 작업을 통해 구할 수 있게 되었고, 편심 이각을 계산하기 위한 평균 근점 이각까지 구할 수 있게 됐습니다.<br>
+<br>
+
+#### 편심 이각
+
+평균 근점 이각으로 편심 이각을 유도하는 공식은 아래와 같습니다.<br>
+
+<img width="233" alt="스크린샷 2022-07-19 오후 9 22 33" src="https://user-images.githubusercontent.com/60500649/179951029-b2fdfbe4-693e-4d73-859d-d589aae4131a.png">
+
+e 는 이심률, M 은 평균 근점 이각이죠.<br>
+<br>
+
+테스트를 진행해 보겠습니다.<br>
+
+```java
+public static final Double EPOCH_ECCENTRICITY = 0.01671123;
+public static final Double EPOCH_AVERAGE_LONGITUDE = 100.46457166;
+public static final Double EPOCH_PERIHELION_LONGITUDE = 102.93768193;
+
+@Test
+void 편심_이각을_계산한다() {
+    double actual = EccentricityAnomalyCalculator.calculate(EPOCH_ECCENTRICITY, EPOCH_AVERAGE_LONGITUDE, EPOCH_PERIHELION_LONGITUDE);
+
+    assertThat(actual).isEqualTo(-0.044630145101967715);
+}
+```
+
+역기점 때 관측한 궤도 요소를 통해 테스트를 진행합니다.<br>
+정해진 공식이 있으니, 빠르게 구현해 줍니다.<br>
+
+```java
+
+public static double calculate(Double eccentricity, Double averageLongitude, Double perihelionLongitude) {
+
+    double meanAnomaly = calculateMeanAnomaly(averageLongitude, perihelionLongitude);
+
+    return (meanAnomaly + (eccentricity * Math.sin(meanAnomaly))) / (1 - (eccentricity * Math.cos(meanAnomaly)));
+}
+```
+
+하지만, 지금 상태에서 테스트를 돌리면 실패하게 될 겁니다.<br>
+계산기에서 구한 meanAnomaly 는 degree 값이지만, 실제 공식에서 사용되는 값은 radian 값이기 때문이죠.<br>
+radian 값으로 변환해 줍니다.<br>
+
+```java
+public static double calculate(Double eccentricity, Double averageLongitude, Double perihelionLongitude) {
+    double meanAnomaly = calculateMeanAnomaly(averageLongitude, perihelionLongitude);
+    double radianMeanAnomaly = meanAnomaly * (Math.PI / 180);
+
+    return (radianMeanAnomaly + (eccentricity * Math.sin(radianMeanAnomaly))) / (1 - (eccentricity * Math.cos(radianMeanAnomaly)));
+}
+```
+
+<br>
+
+테스트를 돌리면, 성공하는 것을 확인할 수 있습니다.<br>
+
+<img width="318" alt="image" src="https://user-images.githubusercontent.com/60500649/179952041-3e9d7c3d-8c67-432f-8890-ec88c6e41569.png">
+
+<br>
+
+이제 예외에 대한 테스트도 진행해 줍니다.<br>
+마찬가지로, 빠르게 작성할게요.<br>
+
+```java
+@Test
+void 편심_이각을_계산시_이심률이_유효하지_않으면_안된다() {
+    assertThatThrownBy(() ->
+            EccentricityAnomalyCalculator.calculate(null, EPOCH_AVERAGE_LONGITUDE, EPOCH_PERIHELION_LONGITUDE))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+
+@Test
+void 편심_이각을_계산시_평균_적경이_유효하지_않으면_안된다() {
+    assertThatThrownBy(() ->
+            EccentricityAnomalyCalculator.calculate(EPOCH_ECCENTRICITY, null, EPOCH_PERIHELION_LONGITUDE))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+
+@Test
+void 편심_이각을_계산시_근일점_적경이_유효하지_않으면_안된다() {
+    assertThatThrownBy(() ->
+            EccentricityAnomalyCalculator.calculate(EPOCH_ECCENTRICITY, EPOCH_AVERAGE_LONGITUDE, null))
+            .isInstanceOf(IllegalArgumentException.class);
+}
+```
+
+빠르게 추가해 줍니다.<br>
+
+```java
+private static void validate(Double eccentricity, Double averageLongitude, Double perihelionLongitude) {
+    if (eccentricity == null) {
+        throw new IllegalArgumentException();
+    }
+
+    if (averageLongitude == null) {
+        throw new IllegalArgumentException();
+    }
+
+    if (perihelionLongitude == null) {
+        throw new IllegalArgumentException();
+    }
+}
+```
+
+이제 돌리면 모든 테스트가 통과합니다.<br>
+
+<img width="359" alt="image" src="https://user-images.githubusercontent.com/60500649/179954316-dbebf7bb-4be9-4b60-83b3-999022fbac6b.png">
+
+<br>
+
+이제 편심 이각까지 구하면서 모든 궤도 요소가 모이게 되었습니다.<br>
+하지만 아직 해결해야 하는 부분이 있습니다.<br>
+세기당 변화량을 적용해 궤도 요소를 추출할 수 있어야 합니다.<br>
+<br>
+
+지난 시간에 따라 변화한 궤도 요소들을 추출해야 하죠.<br>
+해당 작업을 완료하면 드디어 현 시점의 궤도 요소를 얻을 수 있게 됩니다. 기대가 되는 군요.<br>
+
+#### 시간에 따른 궤도 요소
+
+테스트를 먼저 작성해 보겠습니다.
+
+```java
+@Test
+void 역기점으로부터_한_세기가_지난_시점의_장반경_값() {
+    TimeFreezer.freeze(A_CENTURY_AFTER_EPOCH_TIME);
+
+    Orbit actual = CurrentOrbitCalculator.of(PLANET);
+
+    assertThat(actual.getLongRadius())
+            .isEqualTo(PLANET.getLongRadius() + PLANET.getChangePerCentury().getLongRadius());
+}
+```
+
+정의했던 장반경의 한 세기 지난 시점의 값을 기대하는 테스트입니다.<br>
+<br>
+
+이번엔 좀 더 전통적인 방식으로 TDD 를 해보겠습니다.<br>
+먼저, 가장 빠르게 테스트를 통과하려면 어떻게 해야할까요?<br>
+로직을 작성해 보겠습니다.<br>
+
+```java
+public class CurrentOrbitCalculator {
+
+    public static Orbit of(PlanetOrbit planetOrbit) {
+        double longRadius = planetOrbit.getLongRadius() + planetOrbit.getChangePerCentury().getLongRadius();
+
+        return Orbit.of(longRadius,
+                null,
+                null,
+                null,
+                null,
+                null);
+    }
+}
+```
+
+멋지죠?<br>
+테스트를 돌려보면 당연히도 통과합니다.<br>
+하지만, 우리의 마음 속에는 아직 찝찝함이 있죠.<br>
+이런 불편함을 조금이라도 덜어줄 수 있게 리팩토링을 해볼까요?<br>
+
+```java
+public static Orbit of(PlanetOrbit planetOrbit) {
+    double longRadius = planetOrbit.getLongRadius() + planetOrbit.getChangePerCentury().getLongRadius();
+    double eccentricity = 1.1;
+    double inclination = 1.1;
+    double longitudeOfAscendingNode = 1.1;
+    double averageLongitude = 1.1;
+    double perihelionLongitude = 1.1;
+
+    return Orbit.of(longRadius,
+            eccentricity,
+            inclination,
+            longitudeOfAscendingNode,
+            averageLongitude,
+            perihelionLongitude);
+}
+```
+
+이번 스텝은 이정도면 됐습니다.<br>
+이제 다음 스텝을 위한 테스트를 추가해 볼게요!<br>
+
+```java
+@Test
+void 역기점으로부터_두_세기가_지난_시점의_장반경_값() {
+    TimeFreezer.freeze(TWO_CENTURY_AFTER_EPOCH_TIME);
+
+    Orbit actual = CurrentOrbitCalculator.of(PLANET);
+
+    assertThat(actual.getLongRadius())
+            .isEqualTo(PLANET.getLongRadius() + (PLANET.getChangePerCentury().getLongRadius() * 2));
+}
+```
+
+두 세기가 지난 시점에서의 기대하는 장반경 값을 정의했습니다.<br>
+이 테스트가 통과되기 위한 가장 빠른 방법은 무엇일까요?<br>
+아까 작성한 로직에서 2를 곱해주는 방법이 있겠지만, 그렇게되면 다른 테스트는 실패하게 되겠죠?<br>
+이 시점에서 정확한 로직을 파악하는 것이 중요합니다.<br>
+<br>
+현 시점에 얼만큼의 세기가 지났는지 계산해 주던 계산기를 만들었었죠.<br>
+그 친구를 이용해 로직을 작성해 보겠습니다.<br>
+
+```java
+public static Orbit of(PlanetOrbit planetOrbit) {
+    JulianClock julianClock = new JulianClock();
+    double elapsedCentury = julianClock.elapsedCentury();
+
+    double longRadius = planetOrbit.getLongRadius() + (planetOrbit.getChangePerCentury().getLongRadius() * elapsedCentury);
+    double eccentricity = 1.1;
+    double inclination = 1.1;
+    double longitudeOfAscendingNode = 1.1;
+    double averageLongitude = 1.1;
+    double perihelionLongitude = 1.1;
+
+    return Orbit.of(longRadius,
+            eccentricity,
+            inclination,
+            longitudeOfAscendingNode,
+            averageLongitude,
+            perihelionLongitude);
+}
+```
+
+간단하네요.<br>
+세기당 변화량에 현 시점에서 지난 세기만큼 곱해준다면, 현 시점의 궤도 요소 변화량을 알 수 있습니다.<br>
+이제, 테스트를 돌려보겠습니다.<br>
+
+<img width="405" alt="image" src="https://user-images.githubusercontent.com/60500649/180196653-c3a1b1f2-4c92-4235-a039-bd5bfa744e09.png">
+
+잘 돌아가네요!<br>
+<br>
+
+우리가 안심해도 될 지, 정말 문제가 없는지, 역기점과 이의 한 세기 전도 테스트해 보겠습니다.<br>
+
+```java
+@Test
+void 역기점으로부터_한_세기_이전_시점의_장반경_값() {
+    TimeFreezer.freeze(A_CENTURY_BEFORE_EPOCH_TIME);
+
+    Orbit actual = CurrentOrbitCalculator.of(PLANET);
+
+    assertThat(actual.getLongRadius())
+            .isEqualTo(PLANET.getLongRadius() + (PLANET.getChangePerCentury().getLongRadius() * -1));
+}
+
+@Test
+void 역기점의_장반경_값() {
+    TimeFreezer.freeze(EPOCH_TIME);
+
+    Orbit actual = CurrentOrbitCalculator.of(PLANET);
+
+    assertThat(actual.getLongRadius())
+            .isEqualTo(PLANET.getLongRadius());
+}
+```
+
+<img width="232" alt="image" src="https://user-images.githubusercontent.com/60500649/180197853-bf1fcbe2-e7fd-4979-b3c2-77c7bdb0453e.png">
+
+테스트가 잘 통과합니다!<br>
+<br>
+
+나머지 궤도 요소들 또한 같은 테스트를 진행해 줍니다.<br>
+이제 복붙의 영역이네요. 신나게 해줍시다.<br>
+
+```java
+public static Orbit of(PlanetOrbit planetOrbit) {
+    JulianClock julianClock = new JulianClock();
+    double elapsedCentury = julianClock.elapsedCentury();
+
+    double longRadius = planetOrbit.getLongRadius() + (planetOrbit.getChangePerCentury().getLongRadius() * elapsedCentury);
+    double eccentricity = planetOrbit.getEccentricity() + (planetOrbit.getChangePerCentury().getEccentricity() * elapsedCentury);
+    double inclination = planetOrbit.getInclination() + (planetOrbit.getChangePerCentury().getInclination() * elapsedCentury);
+    double longitudeOfAscendingNode = planetOrbit.getLongitudeOfAscendingNode() + (planetOrbit.getChangePerCentury().getLongitudeOfAscendingNode() * elapsedCentury);
+    double averageLongitude = planetOrbit.getAverageLongitude() + (planetOrbit.getChangePerCentury().getAverageLongitude() * elapsedCentury);
+    double perihelionLongitude = planetOrbit.getPerihelionLongitude() + (planetOrbit.getChangePerCentury().getPerihelionLongitude() * elapsedCentury);
+
+    return Orbit.of(longRadius,
+            eccentricity,
+            inclination,
+            longitudeOfAscendingNode,
+            averageLongitude,
+            perihelionLongitude);
+}
+```
+
+코드가 더럽습니다. 대부분 중복으로 이루어져 있네요.<br>
+이 부분들은 추후 리팩토링할 수 있을 것 같아요.<br>
+이제 테스트를 돌려볼까요? (하나씩 테스트해 보며 추가해서 결과를 알고 있지만)<br>
+
+<img width="368" alt="image" src="https://user-images.githubusercontent.com/60500649/180199260-23717a8c-bac8-42ca-ad08-64f0f32ff717.png">
+
+와우! 모두 통과합니다!<br>
+이제 우린 현시점의 궤도 요소들을 알 수 있게 되었습니다.<br>
+이제 태양계 행성들의 시간 별 위치 값을 계산할 수 있습니다.<br>
+<br>
+
+실제 행성의 위치를 표현할 수 있는 요소는 진근점 이각과 유클리드 거리인데요.<br>
+진근점 이각은 항성과 천체까지의 거리각입니다.<br>
+유클리드 거리는 두 점 사이의 거리를 계산할 때 주로 사용하는 방법인데요. 여기서 두 조첨은 항성과 천체를 나타냅니다.<br>
+<br>
+
+먼저, 두 값을 구하기 위해 필요한 황도 좌표 평면의 좌표값을 구해볼게요.<br>
+
+#### 황도 좌표 평면의 좌표값
+
+좌표값 x, y는 아래와 같은 수식으로 구할 수 있습니다.<br>
+
+```
+e : 이심률
+E : 편심 이각
+l : 장반경
+
+x = l * (cosE - e)
+y = l * √(1 - e^2) * sinE
+```
+
+테스트를 작성해 볼까요?<br>
+
+```java
+@Test
+void 역기점의_황도_좌표값() {
+    TimeFreezer.freeze(EPOCH_TIME);
+
+    EclipticCoordinate actual = sut.calculateEclipticCoordinate(PLANET);
+
+    assertThat(actual.getX()).isEqualTo(X_OF_EPOCH_TIME);
+    assertThat(actual.getY()).isEqualTo(Y_OF_EPOCH_TIME);
+}
+```
+
+역기점을 기준으로, 황도 좌표 평면의 X 축 Y 축을 구했습니다.<br>
+비교하는 값은 실제 역기점의 좌표 값을 가져왔습니다.<br>
+<br>
+
+해당 테스트를 통과시키려 하는데, EclipticCoordinate 라는 객체가 필요하군요.<br>
+먼저 생성해 줬습니다.<br>
+
+```java
+public class EclipticCoordinate {
+}
+```
+
+이 상태에서는 테스트가 통과할 수 없습니다.<br>
+가장 빠르게 통과할 수 있도록, 해당 객체가 좌표 값을 가질 수 있도록 테스트를 추가했습니다.<br>
+
+```java
+@Test
+void 황도_좌표를_생성합니다() {
+    EclipticCoordinate actual = EclipticCoordinate.of(X, Y);
+
+    assertThat(actual.getX()).isEqualTo(X);
+    assertThat(actual.getY()).isEqualTo(Y);
+}
+```
+
+해당 테스트가 통과할 수 있도록 구현했습니다.<br>
+
+```java
+public class EclipticCoordinate {
+
+    public static EclipticCoordinate of(double x, double y) {
+        return new EclipticCoordinate(x, y);
+    }
+
+    private final double x;
+    private final double y;
+
+    private EclipticCoordinate(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+}
+```
+
+테스트를 돌려보면 잘 통과하는 군요.<br>
+<br>
+
+다시 돌아와서, 좌표를 계산해 주는 테스트가 통과할 수 있도록 로직을 작성해 보겠습니다.<br>
+<br>
+
+```java
+public class PlanetaryPositionCalculator {
+
+  public EclipticCoordinate calculateEclipticCoordinate(PlanetOrbit planet) {
+
+      Orbit currentOrbit = CurrentOrbitCalculator.of(planet);
+      double eccentricityAnomaly = EccentricityAnomalyCalculator.calculate(currentOrbit.getEccentricity(), currentOrbit.getAverageLongitude(), currentOrbit.getPerihelionLongitude());
+
+      double x = (currentOrbit.getLongRadius() * 1000) * (Math.cos(eccentricityAnomaly) - currentOrbit.getEccentricity());
+      double y = (currentOrbit.getLongRadius() * 1000) * (Math.sqrt(1 - (currentOrbit.getEccentricity() * currentOrbit.getEccentricity()))) * Math.sin(eccentricityAnomaly);
+
+      return EclipticCoordinate.of(x, y);
+  }
+}
+```
+
+행성의 역기점 기준 궤도 요소를 받습니다.<br>
+역기점 기준 궤도 요소를 통해 현 시점의 궤도 요소를 계산합니다.<br>
+필요한 추가 요소를 계산한 후 x 축과 y 축을 계산합니다.<br>
+<br>
+
+통과하는지 확인해 볼까요?<br>
+
+![image](https://user-images.githubusercontent.com/60500649/180588905-1075176b-bfd9-406f-a3aa-c4931ad69274.png)
+
+좋습니다! 잘 통과하네요.<br>
+
+혹시 모르니 null 값이 들어가는 상황에 대한 예외 처리 테스트도 수행해 줍시다.<br>
+
+```java
+@Test
+void 황도_좌표값_계산시_유효하지_않은_값이면_안된다() {
+    assertThatThrownBy(() -> sut.calculateEclipticCoordinate(null)).isInstanceOf(IllegalArgumentException.class);
+}
+```
+
+```java
+public EclipticCoordinate calculateEclipticCoordinate(PlanetOrbit planet) {
+
+    validatePlanetOrbit(planet);
+    
+    ...
+}
+
+private void validatePlanetOrbit(PlanetOrbit planet) {
+    if (planet == null) {
+        throw new IllegalArgumentException();
+    }
+}
+```
+
+<br>
+
+#### 유클리드 거리
+
+이제 필요한 좌표 값을 구했으니, 먼저 유클리드 거리 값을 구해볼게요.<br>
+<br>
+
+좌표 값을 통해 구할 수 있는 유클리드 거리의 수식은 아래와 같습니다.<br>
+
+```java
+AU : 태양과 지구 
+
+√(x^2 + y^2) / AU
+```
+
+마찬가지로 테스트를 작성해 줍니다.<br>
+
+```java
+@Test
+void 역기점의_유클리드_거리를_계산한다() {
+    TimeFreezer.freeze(EPOCH_TIME);
+
+    double actual = sut.calculateEuclideanDistance(PLANET);
+
+    assertThat(actual).isEqualTo(EUCLIDEAN_DISTANCE_OF_EPOCH_TIME);
+}
+```
+
+마찬가지로, 역기점 기준의 유클리드 거리 값과 비교합니다.<br>
+성공하기 위한 로직을 작성해 줍니다.<br>
+
+```java
+public double calculateEuclideanDistance(PlanetOrbit planet) {
+
+    EclipticCoordinate eclipticCoordinate = calculateEclipticCoordinate(planet);
+
+    return Math.sqrt(Math.pow(eclipticCoordinate.getX(), 2) + Math.pow(eclipticCoordinate.getY(), 2)) / (1000 * planet.getAu());
+}
+```
+
+행성 궤도 요소를 받습니다.<br>
+황도 좌표 평면의 좌표값을 받습니다.<br>
+해당 값으로 위에 작성한 수식에 맞게 계산해 줍니다.<br>
+<br>
+
+이제 테스트를 돌려보면 잘 통과합니다.<br>
+
+![image](https://user-images.githubusercontent.com/60500649/180590186-04a776a4-2765-4805-b921-dddbe0efe26a.png)
+
+아까와 같이 validate 도 진행해 주는 테스트를 짜고 통과시켰습니다.<br>
+과정은 동일하기에 생략합니다.<br>
+<br>
+
+#### 진근점 이각
+
+마지막입니다. 진근점 이각을 구하면 끝입니다.<br>
+좌표 값을 통해 유도할 수 있는 진근점 이각의 수식은 아래와 같습니다.<br>
+
+```java
+atan2(y, x)
+```
+
+테스트를 만들고, 빠르게 로직을 작성해 주겠습니다.<br>
+
+```java
+@Test
+void 역기점의_진근점_이각을_계산한다() {
+    TimeFreezer.freeze(EPOCH_TIME);
+
+    double actual = sut.calculateTrueAnomaly(PLANET);
+
+    assertThat(actual).isEqualTo(TRUE_ANOMALY_OF_EPOCH_TIME);
+}
+```
+
+마찬가지로, 역기점을 기준으로 계산된 진근점 이각을 비교합니다.<br>
+
+```java
+public double calculateTrueAnomaly(PlanetOrbit planet) {
+
+    EclipticCoordinate eclipticCoordinate = calculateEclipticCoordinate(planet);
+
+    return Math.atan2(eclipticCoordinate.getY(), eclipticCoordinate.getX()) * (180 / Math.PI);
+}
+```
+
+행성 궤도 요소 값을 받습니다.<br>
+궤도 요소 값을 통해 좌표 값을 가져옵니다.<br>
+좌표 값으로 위 수식에 맞게 계산합니다.<br>
+(180 / pi) 는 radian 값을 degree 로 변환해 주기 위해 추가했습니다.<br>
+<br>
+
+테스트를 돌려보면 역시 통과하죠.<br>
+
+![image](https://user-images.githubusercontent.com/60500649/180590400-1faa9a2d-2452-4a66-941f-1d3fa271f907.png)
+
+아까와 같이 validate 테스트와 로직을 추가해 주면 됩니다.<br>
+<br>
+
+#### 결과
+
+이제 드디어 행성 위치를 계산할 수 있게 되었습니다.<br>
+이 글을 작성하는 시점에서의 지구의 위치는 태양으로부터 `0.9944538116859933 AU` 만큼 떨어져 있고, 태양과 지구 사이에 `0.9944538116859933 도` 만큼 기울어져 있습니다.<br>
+<br>
+
+### 진행하며 발생한 이슈
+
+처음엔, 세기에 대한 테스트를 진행할 때 아래와 같은 테스트 케이스를 작성했습니다.<br>
+
+```java
+@Test
+void 역기점으로부터_1세기_전이다() {
+    TimeFreezer.freeze(J2000.minusYears(100));
+
+    assertThat(sut.elapsedCentury()).isEqualTo(-1);
+}
+```
+
+하지만 해당 테스트를 돌려보면 실패합니다.<br>
+왜냐하면, 천문학적인 단위를 통해서 우리가 일반적으로 사용하는 딱 떨어지는 값을 요구하기 어려웠죠.<br>
+<br>
+
+처음엔 해결하고자 long 값으로 어떻게든 처리하려고 했으나, 결국 정밀한 값을 위해서는 double 이 옳다는 판단을 내렸고 통과했던 테스트 케이스로 변경하게 되었습니다.<br>
+
+
 ## Reference
 [ATDD(Acceptance Test Driven Development)](https://velog.io/@windtrip/ATDDAcceptance-Test-Driven-Development#tdd-bdd-atdd-%EB%B9%84%EA%B5%90)
 
