@@ -3,7 +3,7 @@ layout  : wiki
 title   : JUnit
 summary :
 date    : 2022-06-29 20:00:00 +0900
-updated : 2022-07-31 18:00:00 +0900
+updated : 2022-08-01 18:00:00 +0900
 tag     : test
 toc     : true
 public  : true
