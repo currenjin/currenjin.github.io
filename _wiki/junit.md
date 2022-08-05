@@ -3,7 +3,7 @@ layout  : wiki
 title   : JUnit
 summary :
 date    : 2022-06-29 20:00:00 +0900
-updated : 2022-08-04 18:00:00 +0900
+updated : 2022-08-05 21:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -75,6 +75,41 @@ Vintage 가 있기에 두 버전(JUnit 4, JUnit 5) 모두 호환 가능합니다
 ## ExtendWith
 
 TBD
+
+## Disabled
+
+Disabled annotation 을 통해 테스트 클래스 또는 메소드를 비활성화할 수 있습니다.<br>
+<br>
+
+**Class**
+
+```java
+@Disabled("Disabled until bug has been fixed")
+class ClassDisabledTest {
+
+    @Test
+    void add() {
+        int actual = Operator.add(1, 3);
+
+        assertThat(actual).isEqualTo(4);
+    }
+}
+```
+
+**Method**
+
+```java
+class MethodDisabledTest {
+
+    @Disabled("Disabled until bug has been fixed")
+    @Test
+    void add() {
+        int actual = Operator.add(1, 3);
+
+        assertThat(actual).isEqualTo(4);
+    }
+}
+```
 
 ## Condition
 
