@@ -548,7 +548,8 @@ tasks.named('test') {
 
 ## Repeated test
 
-JUNit Jupiter는 @Repeated로 메소드에 주석을 달아서 지정된 횟수만큼 테스트를 반복할 수 있는 기능을 제공합니다.원하는 총 반복 횟수를 테스트하고 지정합니다. 반복 테스트의 각 호출은 동일한 라이프사이클 콜백과 확장을 완전히 지원하는 일반 @Test 메서드의 실행과 같이 동작합니다.<br>
+JUNit Jupiter 에서, RepeatedTest annocation 을 통해 지정된 횟수만큼 테스트를 반복할 수 있습니다.<br>
+RepeatedTest annotation 의 동작은 일반 @Test 메서드와 같은 .<br>
 <br>
 
 아래는 10번 반복되는 테스트입니다.<br>
