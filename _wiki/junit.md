@@ -574,7 +574,7 @@ class OperatorTest {
 <br>
 
 RepeatedTest 의 기본 display name 은 다음과 같은 패턴을 갖습니다.<br>
-`repeatation {currentRepetition}/{totalRepetition}` <br>
+`repeatation {currentRepetition} of {totalRepetition}` <br>
 
 <img width="388" alt="스크린샷 2022-08-06 오후 5 21 24" src="https://user-images.githubusercontent.com/60500649/183241042-129b46b0-392d-4770-a8c1-a7b91a202498.png">
 
