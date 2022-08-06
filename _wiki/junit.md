@@ -3,7 +3,7 @@ layout  : wiki
 title   : JUnit
 summary :
 date    : 2022-06-29 20:00:00 +0900
-updated : 2022-08-05 21:00:00 +0900
+updated : 2022-08-06 21:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -548,6 +548,7 @@ tasks.named('test') {
 
 
 ## Reference
+- [JUnit 5 User Guide](https://junit.org/junit5/docs/current/user-guide/)
 - [JUnit wikipedia](https://en.wikipedia.org/wiki/JUnit)
 - [JUnit 4 vs JUnit 5](https://pureainu.tistory.com/190)
 - [JUnit Lifecycle](https://huisam.tistory.com/entry/junit)
