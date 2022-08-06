@@ -565,7 +565,8 @@ class OperatorTest {
 
 <br>
 
-반복 횟수를 지정할 뿐만 아니라 @Repeated의 이름 속성을 통해 각 반복에 대한 사용자 정의 표시 이름을 구성할 수 있습니다.주석을 테스트합니다. 또한, 표시 이름은 정적 텍스트와 동적 자리 표시자의 조합으로 구성된 패턴일 수 있습니다. 다음 자리 표시자가 현재 지원됩니다.<br>
+RepeatedTest annotation 에서는 횟수뿐만 아니라, displayName property 를 통해 각 반복에 대한 이름을 정의할 수 있습니다.<br>
+그리고 displayName 은 텍스트와 repetition 의 조합으로 구성할 수 있습니다.<br>
 <br>
 
 - {displayName}: RepeatedTest annotation 의 이름을 붙여줍니다.
