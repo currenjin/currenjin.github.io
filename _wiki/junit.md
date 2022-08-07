@@ -713,7 +713,7 @@ ParameterizedTest annotation 을 사용하면 서로 다른 인자를 통해 테
 Test annotation 대신, ParameterizedTest annotation 을 사용합니다.<br>
 <br>
 
-다음 예제는 @ValueSource 어노테이션을 사용하여 String배열을 인수의 소스로 지정하는 매개변수화된 테스트를 보여줍니다.
+아래는 ValueSource annotation 을 사용하여 String 배열을 인자로하는 Parameterized test 를 보여줍니다.
 
 ```java
 @ParameterizedTest
