@@ -707,6 +707,31 @@ When using the ConsoleLauncher with the unicode theme enabled, execution of Repe
 │     └─ Wiederholung 5 von 5 ✔
 ```
 
+## Parameterized test
+
+ParameterizedTest annotation 을 사용하면 서로 다른 인자를 통해 테스트를 여러번 동작시킬 수 있습니다.<br>
+Test annotation 대신, ParameterizedTest annotation 을 사용합니다.<br>
+<br>
+
+다음 예제는 @ValueSource 어노테이션을 사용하여 String배열을 인수의 소스로 지정하는 매개변수화된 테스트를 보여줍니다.
+
+```java
+@ParameterizedTest
+@ValueSource(strings = { "racecar", "radar", "able was I ere I saw elba" })
+void palindromes(String candidate) {
+    assertTrue(StringUtils.isPalindrome(candidate));
+}
+```
+
+위 테스트 메소드를 실행할 때 각 테스트 별로 동작하고, 결과가 노출됩니다.<br>
+
+```
+palindromes(String) ✔
+├─ [1] candidate=racecar ✔
+├─ [2] candidate=radar ✔
+└─ [3] candidate=able was I ere I saw elba ✔
+```
+
 ## Reference
 - [JUnit 5 User Guide](https://junit.org/junit5/docs/current/user-guide/)
 - [JUnit wikipedia](https://en.wikipedia.org/wiki/JUnit)
