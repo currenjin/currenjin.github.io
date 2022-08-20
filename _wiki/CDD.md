@@ -3,7 +3,7 @@ layout  : wiki
 title   : CDD(Checklist Driven Development, 체크리스트 주도 개발)
 summary :
 date    : 2022-01-12 22:38:00 +0900
-updated : 2022-07-18 15:00:00 +0900
+updated : 2022-08-20 15:00:00 +0900
 tag     : documentation
 toc     : true
 public  : true
@@ -14,6 +14,8 @@ latex   : true
 {:toc}
 
 # Checklist Driven Development
+
+사람들은 맡은 일을 시작할 때에는 그 일을 완벽하게 마치고자 하는 습성이 있습니다. 에러가 없도록, 모든 요구 사항이 충족되도록. 하지만 시간이 지날 수록 완벽하게 끝내고자 하는 마음은 뒷전으로 가고, 어느새 일을 빨리 끝내기에 급급하죠. 배포하기 전 작성하는 체크리스트에 이런 상황이 적나라하게 드러납니다.
 
 ## 목적
 - 요청자 또는 기획과의 간극을 최소화
