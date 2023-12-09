@@ -10,7 +10,6 @@ regenerate: true
 ## wiki items
 
 * [[example]]
-* [[multithreaded-javascript]]
 * [[refactoring]]
 * [[lambda-with-api-gateway]]
 * [[junit]]
@@ -48,6 +47,7 @@ regenerate: true
 * [[git]]
 * [[svg]]
 * [[n+1]]
+* [[multithreaded-javascript]]
 
 ---
 

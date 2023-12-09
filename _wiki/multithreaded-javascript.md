@@ -4,7 +4,7 @@ title   : Multithreaded Javascript(Concurrency Beyond the Event Loop)
 summary :
 date    : 2023-12-09 22:00:00 +0900
 updated : 2023-12-09 22:00:00 +0900
-tag     : javascript
+tag     : programming
 toc     : true
 public  : true
 parent  : [[how-to]]
