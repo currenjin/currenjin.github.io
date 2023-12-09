@@ -10,6 +10,7 @@ regenerate: true
 ## wiki items
 
 * [[example]]
+* [[multithreaded-javascript]]
 * [[refactoring]]
 * [[lambda-with-api-gateway]]
 * [[junit]]
