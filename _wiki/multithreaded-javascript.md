@@ -25,36 +25,9 @@ latex   : true
 
 루비나 파이썬에서 Global Interpreter Lock(GIL)이라는 개념은 한 시점에 하나의 스레드만 실행되는 방식이다. 메모리 관리에 효율적이기는 하지만, 스레드를 여러개 생성할 경우 GIL로 인해 한 스레드가 작업하는 동안 다른 스레드는 기다려야 한다. 이러한 문제 때문에 프로세스를 여러 개 만들어 멀티태스킹을 구현하기도 한다. 이번 작업을 통해 콜백이나 프로미스(promise)와 같은 비동기식 함수를 사용해 멀티태스킹을 구현할 것이다.
 
-```javascript
-// Example 1-1
-
-readFile(filename,(data) => {
-	doSomethingWithData(data, (modifiedData) => {
-		writeFile(modifiedData, () => {
-			console.log('done');
-		});
-	});
-});
-
-or 
-
-const data = await readFile(filename);
-const modifiedData = await doSomethingWithData(data);
-const writeFile(filename);
-console.log('done');
-```
 
 대부분의 Javascript 환경에서는 스레드를 사용한다. GIL처럼 제약을 거는 요소는 없지만, 스레드 간 객체를 직접적으로 공유할 수는 없다. 그럼에도 CPU 부하가 큰 작업을 다룰 때 스레드의 장점이 있다. 브라우저에서 메인 스레드와 별개의 스레드를 생성하여 멀티태스킹을 구현할 수도 있다.
 
-```javascript
-// Example 1-2
-
-const worker = new Worker('worker.js');
-worker.postMessage('Hello, world');
-
-// worker.js
-self.onmessage = (msg) => console.log(msg.data);
-```
 
 이번 작업을 통해 Javascript 스레드를 프로그래밍 관점에서 분석하고, 설명할 수 있다. 스레드를 어떻게 사용하는지, 또 무엇보다 언제 사용해야 하는지를 알 수 있다.
 
