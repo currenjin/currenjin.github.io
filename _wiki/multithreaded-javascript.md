@@ -91,6 +91,75 @@ OS에서 커널 바깥쪽 실행단은 프로세스와 스레드로 구분된다
 
 ## 싱글스레드 기반 자바스크립트
 
+기존 자바스크립트가 구동되는 플랫폼에서는 멀티스레딩을 제공하지 않았다. 그렇기에 대부분의 사람들이 자바스크립트는 싱글스레드 언어라고 생각한다. 자바스크립트 언어에는 멀티스레딩 관련 내장 기능이 없지만, 가상머신(VM)이 내장된 환경(Node.js 또는 브라우저)에서 관련 API를 제공한다.
+
+대부분의 자바스크립트 프로그램은 싱글스레드 기반의 이벤트 핸들링 코드로 구성돼 있다. 그리고 이벤트가 발생하면 호출되는 함수를 콜백함수라고 부르며, 이는 Node.js 및 브라우저에서 비동기 프로그램을 구현하기 위한 핵심이다. Promise, Async/Await 또한 모두 콜백 기반의 문법이다. 콜백 함수는 다른 함수와 병렬적으로 실행되지 않는다. 콜백 함수의 코드가 처리되는 시점에는 다른 코드를 병렬적으로 실행할 수 없다는 의미다.
+
+보통 여러 작업이 실행되면, 이것이 병렬적으로 실행된다고 생각하기 쉽지만, 동시적인 실행이다. 아래는 Node.js로 구현한 예시다. 아래 코드를 reader.js라는 이름의 파일로 저장한 후, 같은 위치에 1.txt, 2.txt, 3.txt 파일(각 파일에는 1, 2, 3을 저장한다)을 저장해본다. 이후 node reader.js 명령어를 실행해본다.
+
+```javascript
+// Example 1-3
+
+import fs from 'fs/promises';
+
+async function getNum(filename) {
+	return parseInt(await fs.readFile(filename, 'utf8'), 10);
+}
+
+try {
+	const numberPromises = [1, 2, 3].map(i => getNum(`${i}.txt`));
+	const numbers = await Promise.all(numberPromises);
+	console.log(numbers[0] + numbers[1] + numbers[2]);
+} catch(err) {
+	console.error('Something went wrong:');
+	console.error(err);
+}
+
+// Output
+6
+```
+
+코드를 보면, `Promise.all()`이라는 함수를 사용하는데, 3개의 텍스트 파일이 읽히고 파싱이 완료될 때까지 기다리는 함수다. 한 번에 여러 개의 프로미스를 생성하긴 했지만, 그렇다고 3개의 텍스트 파일을 처리하는 작업이 실제로 동시에 처리된 것은 아니다. 작업들이 정해진 시간 내에 번갈아 처리되는 것 뿐이다. 여전히 명령어 포인터는 딱 한 개다. 한 번에 한 개의 명령어만 실행될 수 있다.
+
+싱글스레드는 자바스크립트가 단일할 환경 아래에서 실행된다는 것을 의미한다. VM 인스턴스가 한 개, 명령어 포인터가 한 개, 메모리를 관리하는 가비지 컬렉터도 한 개라는 뜻이다. Interpreter가 한 번에 하나의 명령만 실행할 수 있는 것이다. 하지만, 딱 한 개의 전역 객체만 사용할 수 있는 것은 아니다. 여기서 realm이라는 개념이 나오는데, Node.js와 브라우저 둘 다 사용하는 개념이다.
+
+realm은 자바스크립트 환경 자체가 인스턴스화된 개념이라고 생각하면 된다. 마치 자바스크립트 코드에서 객체가 인스턴스화된 것처럼 말이다. 각 realm마다 전역 객체를 갖고 있고, 전역 객체 Date, Math와 같은 내장 속성도 가지고 있따. Node.js 환경에서는 global, 브라우저에서는 window라고 부른다. 최근에는 어느 환경이던 globalThis로 표준화해 사용한다.
+
+브라우저 환경에서는, 웹페이지 프레임마다 한 개의 realm을 갖고 있다. 각 프레임의 고유한 real 안에서 사용할 수 있는 원시 타입(Primitive) 및 객체 타입(Object) 자료형이 존재한다. 실제로 instanceof를 실행해보면 예상을 빗나가는 결과가 나온다.
+
+```javascript
+// Example 1-4
+
+// iframe에 속한 전역 객체를 contentWindow 속성을 통해 접근
+const iframe = document.createElement('iframe');
+document.body.appendChild(iframe);
+const FrameObject = iframe.contentWindow.Object;
+
+// 메인 프레임의 Object와 FrameObject는 다른 프레임에 속함
+console.log(Object === FrameObject);
+console.log(new Object() instanceof FrameObject);
+// 하지만 Object와 값은 같음
+console.log(FrameObject.name);
+```
+
+Node.js 환경에서는 `vm.createContext()`라는 함수를 통해 새로운 realm을 생성할 수 있다.
+
+```javascript
+// Example 1-5
+
+// runInNewContext로 새로운 컨텍스트에 객체를 생성
+const vm = require('vm');
+const ContextObject = vm.runInNewContext('Object');
+
+// 메인 컨텍스트의 Object와 ContextObject는 서로 다른 컨텍스트에 속함
+console.log(Object === ContextObject);
+console.log(new Object() instanceof ContextObject);
+// 하지만 Object와 값은 같음
+console.log(ContextObject.name);
+```
+
+realm의 개념을 브라우저와 Node.js의 예시로 설명했다. 중요한 점은 언제나 명령어 포인터가 한 개이며, 여러 개의 realm에 속한 코드 중 한 개 realm의 코드만 실행될 수 있다. 전제는 싱글스레드 환경이라는 것을 잊지 말자.
+
 ## 숨겨진 스레드
 
 ## C언어의 스레드 : Happycoin으로 부자되세요
