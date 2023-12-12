@@ -375,8 +375,8 @@ const random64 = () => {
 
 위 예시에선 Node.js에서 제공하는 crypto 모듈이 등장한다. 해당 모듈에는 암호학적으로 안전한 랜덤 숫자 생성 기능이 있다.
 
-1. randomFillSync 함수를 호출하면, 타입 배열에 랜덤한 숫자를 채워서 리턴해준다.
-2. BigUint64Array 배열 생성자로 생성한다. 우리의 암호화폐는 64비트 unsigned integer 타입만 다루기 때문이다.
+1. `randomFillSync` 함수를 호출하면, 타입 배열에 랜덤한 숫자를 채워서 리턴해준다.
+2. `BigUint64Array` 배열 생성자로 생성한다. 우리의 암호화폐는 64비트 unsigned integer 타입만 다루기 때문이다.
 
 그리고, 해당 숫자가 행복한지 아닌지 판단하는 코드를 추가한다.
 
@@ -421,7 +421,7 @@ for (let i = 1; i < 10000000; i++) {
 process.stdout.write(`\ncount : ${count}\n`);
 ```
 
-10,000,000번의 루프를 돌며, 랜덤 숫자를 구한 뒤 happycoin인지 확인한다. happycoin이라면 그 값을 출력한다. process.stdout.write() 함수를 사용한 이유는 console.log() 함수를 사용했을 때의 개행을 방지하기 위해서다.
+10,000,000번의 루프를 돌며, 랜덤 숫자를 구한 뒤 happycoin인지 확인한다. happycoin이라면 그 값을 출력한다. `process.stdout.write()` 함수를 사용한 이유는 `console.log()` 함수를 사용했을 때의 개행을 방지하기 위해서다.
 
 코드를 실행해보자.
 
@@ -483,15 +483,15 @@ if (isMainThread) {
 전체적으로 if 분기가 많이 되어있다. 아래와 같은 프로세스로 진행된다.
 
 1. 현재 실행 위치가 메인 스레드라면
-    1. js 파일을 통해 4개의 워커 스레드를 생성한다.
-    2. 각 워커에 메시지 핸들러를 붙인다.
-    3. 메시지 핸들러 내부에서 전달받은 메시지가 done일 경우 워커의 작업을 종료한다.
-    4. 전달받은 메시지가 bigint인 경우 happycoin이므로, 각 숫자를 출력한다.
-    5. 모든 워커의 작업이 끝난 경우 count를 출력한다.
+   1. js 파일을 통해 4개의 워커 스레드를 생성한다.
+   2. 각 워커에 메시지 핸들러를 붙인다.
+   3. 메시지 핸들러 내부에서 전달받은 메시지가 `done`일 경우 워커의 작업을 종료한다.
+   4. 전달받은 메시지가 bigint인 경우 happycoin이므로, 각 숫자를 출력한다.
+   5. 모든 워커의 작업이 끝난 경우 `count`를 출력한다.
 2. 현재 실행 위치가 메인스레드가 아니라면
-    1. 10,000,000/4번 루프를 돈다. 동일한 작업을 4개의 루프가 나눠서 처리하기 때문이다.
-    2. 찾아낸 happycoin을 메인 스레드에 보낸다. 이때, MessagePort 객체를 통해 전송한다.
-    3. 루프가 종료되면, MessagePort 객체를 통해 done이라는 메시지를 보낸다.
+   1. 10,000,000/4번 루프를 돈다. 동일한 작업을 4개의 루프가 나눠서 처리하기 때문이다.
+   2. 찾아낸 happycoin을 메인 스레드에 보낸다. 이때, `MessagePort` 객체를 통해 전송한다.
+   3. 루프가 종료되면, `MessagePort` 객체를 통해 `done`이라는 메시지를 보낸다.
 
 각각의 워커 스레드에서 마구잡이로 출력하지 않기 위해 한 곳에서만 출력하도록 했다.
 
@@ -521,6 +521,107 @@ count : 128
 싱글 스레드로 작업을 처리할 때보다, 2개의 스레드로 처리할 때 속도가 2배 이상 빨랐다. 3개는 훨씬 더 빨라졌다. 엄청난 속도 향상을 보였는데 반면, 4개부터는 오히려 속도가 줄기 시작한다. 이 글을 읽는 사람들도 자신의 환경에서 테스트해보길 바란다. 이유가 과연 무엇일까?에 대한 고민을 스스로 충분히 해보고, 환경에 따른 적절한 스레드가 몇 개인지에 대한 설계를 해보자.
 
 ## Piscina를 통한 워커 풀
+
+프로그램 부하가 점점 높아진다면 어떻게 해결할까? 우리는 이제 자연스럽게 멀티스레딩을 떠올리게 될 것이다. Node.js의 경우 특히 HTTP 요청을 처리하는 작업이 매우 자주 발생하는데, 해당 작업을 여러 스레드로 분산시켜 속도를 높여줄 수 있겠다. 예를 들어 작업 1개를 스레드 1개에 할당하고, 다 처리되면 결과를 받는 식으로 말이다. 이렇게 여러 개의 워커 스레드가 필요한 경우, 워커 스레드 풀을 만들어서 메인 스레드가 하나의 풀에 작업 처리를 요청하면 어떨까?
+
+스레드 풀과 관련된 모듈 중 piscina(이탈리아어로 수영장)라는 모듈이 있다. 여러 개의 워커 스레드를 하나의 풀로 합쳐, 각 스레드에 작업을 할당해 주는 기능을 지원한다.
+
+사용법은 간단하다.
+
+1. 메인 스레드에서는 Piscina 인스턴스를 생성하고, 생성자에는 워커 스레드의 동작 코드가 담긴 `filename`을 넘기면 된다.
+2. 인스턴스 내부적으로는 워커 스레드 풀을 만들어서, 들어오는 작업 요청을 할당할 큐를 설정한다.
+3. 작업 할당 시 `run()` 함수를 호출하는데, 인자로는 작업을 처리할 때 필요한 값을 넘긴다.
+
+   해당 값은 기본적으로 `postMessage()`를 통해 워커로 전달되어 소유권 이전이 아니라, 데이터가 복사된다.
+
+4. 작업이 완료되면 프로미스를 리턴한다.
+5. 그리고 워커 스레드에서는 메인 스레드에서 넘겨준 인자를 받아 작업을 수행하는 함수를 `export`한다.
+
+```javascript
+// Example 3-12
+
+const Piscina = require('piscina');
+
+if (!Piscina.isWorkerThread) {
+  const piscina = new Piscina({ filename: './example_3-12.js' });
+  piscina.run(9).then(squareRootOfNine => {
+    console.log('The square root of nine is', squareRootOfNine);
+  });
+}
+
+module.exports = num => Math.sqrt(num);
+```
+
+위 예시처럼 풀에서 딱 한 종류의 작업만 수행하면 괜찮지만, 여러 종류의 작업을 수행하는 경우가 대부분일 것이다. 예를 들어 0부터 10,000,000 미만의 모든 숫자에 대한 제곱근을 계산한다면 어떨까? 그러면 10,000,000번의 루프를 돌 것이다. (`console.log()` 함수를 사용하면 로그가 너무 많이 찍혀 `assert` 문으로 변경하겠다)
+
+```javascript
+// Example 3-13
+
+const Piscina = require('piscina');
+const assert = require('assert');
+
+if (!Piscina.isWorkerThread) {
+  const piscina = new Piscina({filename: './example_3-12.js'});
+
+  for (let i = 0; i < 10000000; i++) {
+    piscina.run(i).then(squareRootOfI => {
+      assert.ok(typeof squareRootOfI === 'number');
+    });
+  }
+}
+
+module.exports = num => Math.sqrt(num);
+```
+
+하지만, 이렇게 작업하면 작업 큐가 계속해서 늘어나 결국 메모리 할당 에러가 발생한다. 이를 해결하기 위해서는 큐의 크기에 제한을 걸어야 하는데, piscina 인스턴스 생성자에 `maxQueue`라는 옵션을 넣을 수 있다. piscina 개발자들이 가장 이상적인 값으로는 스레드 개수의 제곱으로 설정한다고 한다. 그대로 적용하기 위해서는 `auto`로 설정하면 된다.
+
+```javascript
+const piscina = new Piscina({ filename: './example_3-12.js', maxQueue: "auto" });
+```
+
+이제 큐의 크기에 제한을 걸었다. 큐가 꽉 찼을 때를 대비해야할 텐데, 방법은 두 가지다.
+
+1. `piscina.queueSize`, `piscina.options.maxQueue` 값을 서로 비교한다.
+
+   만약 서로의 값이 동일하다면 큐가 꽉 찼다는 의미다. `piscina.run()`을 호출하기 전 값을 비교한다면, 큐에 작업을 할당하기 전에 미리 확인할 수 있다.
+
+2. `piscina.run()` 호출 시점에 큐가 가득찬 경우, 리턴되는 프로미스는 `reject`이다.
+
+   해당 값을 이용해 처리하면 된다. 하지만 처리하기 전에, 큐에 불필요한 작업 할당 시도가 있을 수 있다.
+
+
+큐가 가득찼을 때에는 piscina 모듈의 `drain`이라는 이벤트를 통해 큐가 비는 시점을 알 수 있다.
+
+```javascript
+// Example 3-14
+
+const Piscina = require('piscina');
+const assert = require('assert');
+const { once } = require('events');
+
+if (!Piscina.isWorkerThread) {
+  const piscina = new Piscina({
+    filename: './example_3-12.js',
+    maxQueue: "auto",
+  });
+
+  (async () => {
+    for (let i = 0; i < 10000000; i++) {
+			// 두 값이 동일하면, 큐가 꽉 참
+      if (piscina.queueSize === piscina.options.maxQueue) {
+				// drain 이벤트가 발생할 때까지 기다린 다음, 새로운 태스크를 큐에 할당
+        await once(piscina, 'drain');
+      }
+
+      piscina.run(i).then(squareRootOfI => {
+        assert.ok(typeof squareRootOfI === 'number');
+      });
+    }
+  })();
+}
+```
+
+이제 실행하게 되면, 메모리 할당 에러가 발생하지 않을 것이다. 이후에는 piscina를 통해 happycoin을 채굴해보자.
 
 ## Happycoin으로 가득 찬 풀
 
