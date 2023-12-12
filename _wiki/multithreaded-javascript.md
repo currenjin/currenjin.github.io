@@ -625,6 +625,88 @@ if (!Piscina.isWorkerThread) {
 
 ## Happycoin으로 가득 찬 풀
 
+Happycoin 코드에 piscina 모듈을 적용할 것이다. 기존에는 happycoin을 찾을 때마다 메인 스레드에 값을 보냈다. 이번에는 happycoin을 찾으면 그 값을 한 곳에 모아뒀다가, 코드가 종료되는 시점에 한 번에 내보낼 것이다. 이러면 굳이 `MessagePort`를 통해 매번 메인 스레드에 값을 보낼 필요가 없다. 차이점은, 결과를 보기 위해 프로그램이 끝날 때까지 기다려야한다는 것이다.
+
+```javascript
+import crypto from 'crypto';
+import Piscina from 'piscina';
+
+const big64arr = new BigUint64Array(1);
+const random64 = () => {
+  crypto.randomFillSync(big64arr);
+  return big64arr[0];
+};
+
+const sumDigitsSquared = (num) => {
+  let total = 0n;
+  while (num > 0) {
+    const numModBase = num % 10n;
+    total += numModBase ** 2n;
+    num = num / 10n;
+  }
+
+  return total;
+};
+
+const isHappy = (num) => {
+  while (num != 1n && num != 4n) {
+    num = sumDigitsSquared(num);
+  }
+  return num === 1n;
+};
+
+const isHappycoin = (num) => {
+  return isHappy(num) && num % 10000n === 0n;
+};
+
+const THREAD_COUNT = 8;
+
+if (!Piscina.isWorkerThread) {
+  const piscina = new Piscina({
+    filename: './happycoin/happycoin-piscina.js',
+    minThreads: THREAD_COUNT,
+    maxThreads: THREAD_COUNT,
+  });
+
+  let done = 0;
+  let count = 0;
+
+  for (let i = 0; i < THREAD_COUNT; i++) {
+    (async () => {
+      const { total, happycoins } = await piscina.run();
+      process.stdout.write(happycoins);
+      count += total;
+
+      if (++done === THREAD_COUNT) {
+        console.log(`\ncount : ${count}\n`);
+      }
+    })();
+  }
+}
+```
+
+이제 아래 내용을 넣어볼게요. 워커 스레드에서 실행할 함수를 `export`한 부분입니다.
+
+```javascript
+exports = () => {
+  let happycoins = '';
+  let total = 0;
+
+  for (let i = 0; i < 10000000/THREAD_COUNT; i++) {
+    const randomNum = random64();
+
+    if (isHappycoin(randomNum)) {
+      happycoins += randomNum.toString() + ' ';
+      total++;
+    }
+  }
+
+  return { total, happycoins };
+};
+```
+
+실행해보면, 결과는 비슷하지만 하나씩 출력되는 것이 아니라, 한 꺼번에 출력된다. 이번 작업은 piscina 모듈의 일반적인 사용법과는 다르다. 보통은 독립적인 역할을 수행하는 작업이 여러 개 있고, 작업의 순서와 작업량을 고려해 큐에 담는다. 하지만, 메인 스레드에서 10,000,000번 도는 루프가 있고, 루프를 돌 때마다 매번 큐에 작업을 할당하고 응답을 기다렸다면 단일 스레드에서 실행하는 것과 비슷할 정도로 느릴 것이다.
+
 # 공유 메모리
 
 ## 공유 메모리 입문
