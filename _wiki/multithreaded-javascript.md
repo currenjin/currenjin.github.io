@@ -3,7 +3,7 @@ layout  : wiki
 title   : Multithreaded Javascript(Concurrency Beyond the Event Loop)
 summary :
 date    : 2023-12-09 22:00:00 +0900
-updated : 2023-12-09 22:00:00 +0900
+updated : 2023-12-14 22:00:00 +0900
 tag     : programming
 toc     : true
 public  : true
@@ -709,15 +709,516 @@ exports = () => {
 
 # 공유 메모리
 
+그동안은 멀티스레딩 구현에 있어 메시지 패싱 API를 통해 이벤트 루프에 전적으로 맡겼다. 하지만, 이번에는 `Atomics`와 `SharedArrayBuffer`를 이용해 공유 메모리로 멀티스레딩을 구현해보자.
+
 ## 공유 메모리 입문
+
+### 브라우저에서 공유 메모리 사용하기
+
+아주 기초적인 웹 워커 통신 애플리케이션을 구현해보자. `postMessage()`는 여전히 나오지만, 아주 기본적인 부분만 사용한다.
+
+```javascript
+// Example 4-1
+
+<html>
+    <head>
+        <title>Shared Memory Hello World</title>
+        <script src="example_4-2.js"></script>
+    </head>
+</html>
+```
+
+```javascript
+// Example 4-2
+
+import {Worker} from "worker_threads";
+
+if (!crossOriginIsolated) {
+  throw new Error('Cannot use SharedArrayBuffer');
+}
+
+const worker = new Worker('example_4-3.js');
+
+const buffer = new SharedArrayBuffer(1024);
+const view = new Uint8Array(buffer);
+
+console.log('now', view[0]);
+
+worker.postMessage(buffer);
+
+setTimeout(() => {
+  console.log('later', view[0]);
+  console.log('prop', buffer.foo);
+}, 500);
+```
+
+일단, 이전에 만들었던 코드와 유사하다. 다른 특징은 브라우저 전역 변수인 `crossOriginIsolated` 값을 확인해, `SharedArrayBuffer` 인스턴스 생성 가능 여부를 확인할 수 있다([스펙터 버그](https://ko.wikipedia.org/wiki/%EC%8A%A4%ED%8E%99%ED%84%B0_(%EB%B2%84%EA%B7%B8))). 이를 위해 HTTP 헤더를 다음과 같이 설정하자.
+
+```javascript
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
+```
+
+테스트 환경에서는 위 헤더를 자동으로 설정하지만, 상용화된 앱에서 SharedArrayBuffer를 사용할 경우 반드시 설정하자.
+
+위 코드에서는 워커 인스턴스를 생성한 다음, SharedArrayBuffer 인스턴스를 생성했다. 인자 1,024는 버퍼에 할당된 바이트 개수를 나타낸다. 다른 버퍼 객체와 달리, SharedArrayBuffer 객체를 생성하면 이후 줄이거나 늘릴 수가 없다.
+
+이후 나오는 변수 view는 버퍼를 읽고 쓰는 수단이다. 뷰를 사용하는 방법은 배열의 요소에 접근할 때 인덱스를 사용하는 것과 동일하다. 코드에서는 view[0]를 확인한 후, worker.postMessage() 함수에 buffer 인스턴스를 넘긴다.
+
+```javascript
+// Example 4-3
+
+self.onmessage = ({ data: buffer }) => {
+  buffer.foo = 42;
+  const view = new Uint8Array(buffer);
+
+  view[0] = 2;
+
+  console.log('updated in worker');
+};
+```
+
+onmessage 이벤트 핸들러를 구현했다.
+
+1. example_4-2에서 postMessage() 함수가 호출되면, 뒤이어 이 핸들러가 호출된다.
+2. 그리고 인자로 넘어온 buffer를 읽어들인다.
+3. buffer.foo 속성을 할당한다.
+4. buffer에 대한 새로운 뷰를 붙인다.
+5. 새로운 뷰로 버퍼값을 업데이트한다.
+
+### Node.js의 공유 메모리
+
+```javascript
+// Example 4-4
+
+import { Worker } from 'worker_threads';
+
+const worker = new Worker('./example_4-5.js');
+
+const buffer = new SharedArrayBuffer(1024);
+const view = new BigUint64Array(buffer);
+
+console.log('now', view[0]);
+
+worker.postMessage(buffer);
+
+setTimeout(() => {
+  console.log('later', view[0]);
+  console.log('prop', buffer.foo);
+  worker.unref();
+}, 500);
+```
+
+```javascript
+// Example 4-5
+
+import { parentPort } from "worker_threads";
+
+parentPort.on('message', (buffer) => {
+  buffer.foo = 1;
+  const view = new Uint8Array(buffer);
+  view[0] = 2;
+  console.log('updated in worker');
+});
+```
+
+이전 코드와 거의 유사하다. 다만, `worker.unref()`를 호출하여 워커 스레드가 무한정 돌아가지 않고 종료되게 한다. 이후 워커 스레드 코드를 구현하여 `parentPort` 속성을 사용한다. (브라우저와 같이 `self.onmessage`를 사용할 수 없기 때문이다)
+
+```javascript
+// COMMAND
+node ./example_4-4.js
+
+// OUTPUT
+now 0n
+updated in worker
+later 2n
+prop undefined
+```
+
+첫 번째 로그는 메인 스레드에서 출력되었고, `buffer`의 초기값이다. 이후 로그는 워커 스레드에서, 그 이후 출력된 값은 `2`로 변경되었다.
+
+마지막 `buffer.foo`를 출력한 로그는 왜 `undefined`가 떴을까? 사실 스레드 간 공유한 것은 저장된 메모리 위치의 레퍼런스다. `buffer` 객체 자체는 공유되지 않는다. (공유된다면 구조화된 클론 알고리즘 법칙을 저해하는 것이다. 해당 법칙은 서로 다른 스레드 간 객체 레퍼런스를 공유할 수 없다)
 
 ## SharedArrayBuffer와 TypedArrays
 
+전통적으로 자바스크립트 언어에서는 바이너리 데이터를 직접 다루는 기능을 지원하지 않았다.
+
+- 문자열? 문자열은 데이터 스토리지 메커니즘을 추상화한 개념이다.
+- 배열? 배열에 여러 가지 타입의 값을 담기는 하지만 버퍼라고 하기엔 적합하지 않다.
+
+Node.js가 등장하고, 웹 페이지 외부에서 자바스크립트를 실행하는 것이 가능해지며 달라졌다. Node.js 런타임을 통해 우리는 파일시스템을 용이하게 읽고 쓸 수 있으며, 네트워크를 통한 데이터 스트리밍을 할 수 있다. 이때 상호작용하는 데이터는 ASCII 기반의 텍스트 파일, 바이너리 데이터 등이 포함된다. 이때 활용하기 위해 `Buffer` 클래스가 탄생했다.
+
+자바스크립트 언어 자체의 제한으로, 이를 대신할 API가 개발되었고 브라우저 외부 컨텍스트와 상호작용이 가능해졌다. 결과적으로 먼저 `ArrayBuffer`, 뒤따라 `SharedArrayBuffer` 객체가 탄생했고, 자바스크립트 언어의 핵심이 됐다.
+
+`ArrayBuffer`, `SharedArrayBuffer`는 정해진 크기의 바이너리 데이터를 담는 버퍼다. 바이너리 데이터는 말 그대로 2진수로 된 데이터를 말한다. 직접 버퍼 인스턴스 값을 콘솔 로그로 출력하면 16진수로 표현될 것이다. 예를 들어 0x54(접두사 0x는 10진수, 0b는 2진수)라는 값은 두 가지의 수로 나타낼 수 있다. 대문자 T, 10진수 84. 이를 결정하는 것은 문맥이다.
+
+메모리값만 보아서는 해당 데이터를 파악하기 어렵다. 또한 버퍼에 저장된 데이터를 직접 수정할 수가 없기 때문에 뷰를 먼저 생성해 데이터를 수정해야 한다.
+
+`ArrayBuffer`, `SharedArrayBuffer`의 부모 클래스는 `Object`이다. `Object`에서 속성과 메서드를 상속받으며, 자식 클래스에 버퍼의 바이트 길이를 나타내는 `read-only byteLength`, 인자로 넘긴 범윗값에 해당하는 버퍼 데이터를 리턴하는 `slice(begin, end)` 메서드다.
+
+```javascript
+// EXAMPLE
+const ab = new ArrayBuffer(8);
+const view = new Uint8Array(ab);
+
+for (let i = 0; i < 8; i++) view[i] = i;
+
+console.log(view);
+
+console.log('bytelength', ab.byteLength);
+console.log('slice 0, 3', ab.slice(0, 3));
+console.log('slice 3, 5', ab.slice(3, 5));
+console.log('slice 3, 5\'s bytelength', ab.slice(3, 5).byteLength);
+console.log('slice -2, 7', ab.slice(-2, 7));
+console.log('slice -5, -3', ab.slice(-5, -3));
+console.log('array buffer', ab);
+
+// OUTPUTS on Node.js
+Uint8Array(8) [
+  0, 1, 2, 3,
+  4, 5, 6, 7
+]
+bytelength 8
+slice 0, 3 ArrayBuffer { [Uint8Contents]: <00 01 02>, byteLength: 3 }
+slice 3, 5 ArrayBuffer { [Uint8Contents]: <03 04>, byteLength: 2 }
+slice 3, 5's bytelength 2
+slice -2, 7 ArrayBuffer { [Uint8Contents]: <06>, byteLength: 1 }
+slice -5, -3 ArrayBuffer { [Uint8Contents]: <03 04>, byteLength: 2 }
+array buffer ArrayBuffer {
+  [Uint8Contents]: <00 01 02 03 04 05 06 07>,
+  byteLength: 8
+}
+
+// OUTPUTS on Chrome
+Uint8Array(8) [0, 1, 2, 3, 4, 5, 6, 7, buffer: ArrayBuffer(8), byteLength: 8, byteOffset: 0, length: 8, Symbol(Symbol.toStringTag): 'Uint8Array']
+51-3783436a3f5768d6.js:1 bytelength 8
+51-3783436a3f5768d6.js:1 slice 0, 3 ArrayBuffer(3)
+51-3783436a3f5768d6.js:1 slice 3, 5 ArrayBuffer(2)
+51-3783436a3f5768d6.js:1 slice 3, 5's bytelength 2
+51-3783436a3f5768d6.js:1 slice -2, 7 ArrayBuffer(1)
+51-3783436a3f5768d6.js:1 slice -5, -3 ArrayBuffer(2)
+51-3783436a3f5768d6.js:1 array buffer ArrayBuffer(8)
+```
+
+`ArrayBuffer`는 자바스크립트 환경에 따라 다른 방식으로 출력된다. Node.js는 `Uint8Array` 뷰를 통해 읽어들인 것처럼 16진수 형태로 출력한다. 크롬에서는 여러 종류의 뷰로 읽어들인 값을 하나의 객체에 담아 보여준다. 그리고 파이어폭스에서는 데이터가 출력되지 않는다. 출력하기 위해서는 뷰를 생성해 읽어들여야 한다.
+
+뷰의 부모 클래스는 `TypedArray` 클래스다. `TypedArray`는 별도 인스턴스로 생성하거나 전역 객체로 사용할 수가 없다. 대신 자식 클래스의 인스턴스를 생성해 `prototype` 속성에 접근할 수 있다.
+
+참고로, `Uint8Array`를 사용하면, 2진수 8비트의 최대값까지만 기록이 가능하다. 즉, 0부터 255까지만 기록할 수 있다. 맨 앞의 U는 `unsinged`, 양수만 담을 수 있다는 뜻이고, 없다면 음수도 가능하다. 첫 번째 비트가 0이면 양수를, 1이면 음수를 나타낸다.
+
+자바스크립트에는 `integer` 타입이 없고, `Number` 타입이 존재한다. 부동 소수점 형식인데, 이는 `Float64`와 동일한 데이터 형식이다. `Float64`가 아닌 다른 형식의 데이터를 뷰에 할당할 경우 자바스크립트 내부적으로 숫자 변환을 시킨다. `Float64Array` 뷰에 어떤 숫자를 할당하면 원래 값을 거의 그대로 유지한다. 만약 `Float32Array` 뷰에 어떤 숫자를 대입하면, 해당 뷰를 통해 표현할 수 있는 숫자의 최솟/최댓값 범위는 줄고, 소수점 정확도 범위도 줄어든다.
+
+```javascript
+// EXAMPLE
+
+const buffer = new ArrayBuffer(16);
+
+const view64 = new Float64Array(buffer);
+view64[0] = 1.123456789123456789;
+console.log(view64[0]);
+
+const view32 = new Float32Array(buffer);
+view32[2] = 1.123456789123456789;
+console.log(view32[2]);
+
+// OUTPUT
+1.1234567891234568
+1.1234568357467651
+```
+
+`Float64Array` 뷰는 소수점 16번째까지 정확도가 유지되지만, `Float32Array` 뷰는 소수점 6번째까지만 정확도가 유지된다.
+
+짚고 넘어가야 할 부분이 있다. 위 코드에서 버퍼를 가리키는 `TypedArray` 인스턴스가 2개다. 각각의 뷰에 값을 적용한 이후 바로 버퍼를 출력해보면 아래와 같다.
+
+```javascript
+// view64
+ArrayBuffer {
+  [Uint8Contents]: <16 12 7c d3 ad f9 f1 3f 00 00 00 00 00 00 00 00>,
+  byteLength: 16
+}
+
+// view32
+ArrayBuffer {
+  [Uint8Contents]: <16 12 7c d3 ad f9 f1 3f 6f cd 8f 3f 00 00 00 00>,
+  byteLength: 16
+}
+```
+
+만약, `view64[1]`, `view32[0]`을 읽어들이면 어떤 결과가 나올까?
+
+```javascript
+console.log(view64[1]);
+console.log(view32[0]);
+
+// OUTPUT
+5.268660944e-315
+-1082635190272
+```
+
+이런 말도 안 되지만 사실 굉장히 합리적인 결과가 나오게 된다. 하나의 데이터를 표현하는 메모리 공간이 2가지 종류의 뷰에 의해 잘리거나, 합쳐지면서 새로운 값이 표현된다. 또한, `nonfloat` 타입 `TypedArray` 뷰의 경우, 뷰의 지원 범위를 벗어난 값이 대입되면 특정한 변환 과정을 거친다. 먼저, 소수점 자릿수는 소거되어 정수로 변환된다. 범위를 벗어난 값은 0으로 리셋된다. `Uint8Array`를 사용해서 테스트해 보자.
+
+```javascript
+// EXAMPLE
+const buffer = new ArrayBuffer(8);
+const view = new Uint8Array(buffer);
+
+view[0] = 255;
+view[1] = 256;
+view[2] = 257;
+view[3] = 1.1;
+view[4] = -1;
+view[5] = -1.9;
+
+console.log(view[0]);
+console.log(view[1]);
+console.log(view[2]);
+console.log(view[3]);
+console.log(view[4]);
+console.log(view[5]);
+
+// OUTPUT
+255
+0
+1
+1
+255
+255
+```
+
 ## 데이터 가공을 위한 Atomic 메서드
+
+원자성(Atomicity)이라는 말이 있다. 데이터베이스에서 ACID 트랜잭션 특성의 제일 첫 번째인 A에 해당한다. 원자성은, 트랜잭션의 연산이 여러 개의 작은 단계로 구성될 때 모든 단계가 완전히 성공하거나, 그렇지 않다면 어떤 단계도 수행되지 않아야 하는 것이다. 예를 들어, 데이터베이스에 1개의 쿼리를 던지면 이는 원자성을 보장한다. 하지만 3개의 쿼리를 던지면 이는 원자성을 보장하지 않는다.
+
+반면, 3개의 쿼리를 하나의 데이터베이스 트랜잭션으로 감싼다면, 이 트랜잭션은 원자성을 보장한다. 모두 성공하거나, 그렇지 않다면 어떤 쿼리도 수행하지 않는다. 이렇게 하지 않는다면 동일한 상탯값에 동시에 접근하는 등의 부작용이 있을 것이다. 여기서 독립성이라는 개념이 나오는데, 하나의 연산을 수행할 때, 다른 종류의 연산이 끼어들지 않아야 한다는 것이다(새치기).
+
+자바스크립트에 Atomics라는 전역 객체가 있는데, 모든 속성과 메서드는 정적이다. new 생성자를 통해 생성할 수 없다는 의미다. 우리에게 익숙한 Math 전역 객체와 비슷한 특징이다.
+
+### 메서드
+
+**add 메서드**는 typedArray의 index 위치에 있는 값에 value 를 더한다. 그리고 더하기 전의 기존 값을 리턴한다.
+
+```javascript
+old = Atomics.add(typedArray, index, value);
+```
+
+**and 메서드**는 typedArray의 index 위치에 있는 값에 value를 곱한다.
+
+```javascript
+old = Atomics.and(typedArray, index, value);
+```
+
+**compreExchange 메서드**는 oldExpectedValue 값이 typedArray의 index 위치에 있는 값과 동일한지 확인한다. 동일하다면, 그 값을 value 값으로 교체하고, 그렇지 않다면 아무 작업도 수행하지 않는다.
+
+교체 성공 여부는 oldExpectedValue와 old 값을 서로 비교하여 동일한지 확인하면 된다.
+
+```javascript
+old = Atomics.compareExchange(typedArray, index, oldExpectedValue, value);
+```
+
+**exchange 메서드**는 typedArray의 index 위치에 있는 값을 value 값으로 교체한다. 역시 기존 값을 리턴한다.
+
+```javascript
+old = Atomics.exchange(typedArray, index, value);
+```
+
+**isLockFree 메서드**는 size 값이 TypedArray 객체의 BYTES_PER_ELEMENT 속성에 포함되는지 확인한다. true라면, Atomics를 통해 고성능의 알고리즘을 구현할 수 있다.
+
+```javascript
+free = Atomics.isLockFree(size);
+```
+
+**load 메서드**는 typedArray의 index 위치에 있는 값을 리턴한다.
+
+```javascript
+value = Atomics.load(typedArray, index);
+```
+
+**or 메서드**는 typedArray의 index위치에 있는 값과 value 값에 대해 OR 연산을 수행한다. 역시 기존 값을 리턴
+
+```javascript
+old = Atomics.or(typedArray, index, value);
+```
+
+**store 메서드**는 typeArray의 index 위치에 value 값을 대입한다. 이후 value 값을 반환한다.
+
+```javascript
+value = Atomics.store(typedArray, index, value);
+```
+
+**sub 메서드**는 typedArray의 index 위치에 있는 값에서 value 값을 뺀다. 역시 기존 값을 리턴한다.
+
+```javascript
+old = Atomics.sub(typedArray, index, value);
+```
+
+**xor 메서드**는 typedArray의 index 위치에 있는 값과 value 값에 대해 XOR 연산을 수행한다. 역시 기존 값 리턴
+
+```javascript
+old = Atomics.xor(typedArray, index, value);
+```
 
 ## 원자성에 대한 논의
 
+위에서 언급한 메서드는 모두 원자성을 보장하여 수행한다. 예시 코드를 작성해보자.
+
+```javascript
+const typedArray = new Uint8Array();
+
+typedArray[0] = 7;
+
+let old1 = Atomics.compareExchange(typedArray, 0, 7, 1);
+let old2 = Atomics.compareExchange(typedArray, 0, 7, 2);
+```
+
+위 두 개의 메서드는 어떤 순서로 호출되는지 누구도 알 수 없다. 동시에 실행될 수도 있다. 하지만, Atomic 객체가 원자성을 보장하는 덕분에, 2개 중 1개의 스레드만 초기값인 7을 반환받고, 다른 스레드는 업데이트된 값인 1 혹은 2를 반환받는다.
+
+![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0e02f099-20d3-40ca-a357-0e60d7d02ee8/b729d33a-5f28-4cfb-81a1-96368ab5c1d7/Untitled.png)
+
+반면 비원자성 코드로 바꾸어보면, 잘못된 값이 대입되는 이슈가 생길 수 있다.
+
+```javascript
+const old = typedArray[0];
+if (old === 7) {
+  typedArray[0] = 1;
+}
+```
+
+해당 코드에서 여러 개의 스레드가 동일한 데이터를 공유하면서 이 데이터에 접근을 시도한다. 코드가 정상적으로 동작하기 위해서는, 하나의 스레드가 데이터를 사용하고 있을 때 다른 스레드가 해당 데이터에 접근하지 못하도록 해야 한다. 즉, 하나의 스레드에만 공유 자원에 대한 독점적인 접근을 허용해야 한다. 이것을 임계 구역(Critical Section)이라고 한다. (독립성)
+
+![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0e02f099-20d3-40ca-a357-0e60d7d02ee8/6fda228a-2dbb-4e0c-a0ab-805976017367/Untitled.png)
+
+2개의 스레드 모두 값을 변경했고, 에러가 발생하지 않았다. 하지만 실제 동작이 성공한 스레드는 Thread #2 뿐이다. 이러한 상황을 경쟁 상태(race condition)이라고 한다. 말 그대로 2개 이상의 스레드가 동일한 동작을 놓고 경쟁하는 상태를 말한다.
+
+버퍼를 다루면서 Atomics 객체를 통해 원자성을 보장하고 싶다면, 버퍼에 직접 접근할 때 Atomics 객체의 메서드를 적절히 활용해야 한다. 만약 동일한 버퍼에 대해 스레드 하나는 Atomics 객체로 접근하고, 또다른 스레드는 직접 읽고 쓴다면 어떨까? 데이터에 비정상적인 값이 대입될 수 있고, 예상치 못한 문제가 발생할 것이다. Atomics 객체를 통해 접근한다면, 암시적 잠금(implictic lock)을 걸어 원자성을 보장해준다.
+
 ## 데이터 직렬화
+
+버퍼에는 다양한 값이 들어갈 수 있다. 그 타입에는 숫자, 문자열, 객체 등을 사용할 수도 있다. 이 경우 데이터를 버퍼에 쓰기 전에 직렬화를, 읽어들일 때는 역직렬화를 거쳐야 한다.
+
+다양한 직렬화 도구들이 존재한다. 다만, 데이터의 크기와 직렬화 성능 간에 트레이드 오프가 발생하는 것이 공통적인 특징이다.
+
+### Boolean
+
+Boolean 타입에 담을 수 있는 값의 최소 단위는 1비트이다. 버퍼에 Boolean 값을 저장하기 위해서는 Uint8Array와 같은 최소 단위의 뷰를 생성하고, 1바이트짜리 ArrayBuffer와 연결하면 된다. 그렇게되면 1바이트에 최대 8개의 불 값을 저장할 수 있다. 또한, 대량의 불 값을 처리할 경우, 불 인스턴스를 1개씩 만드는 것보다 버퍼에 한꺼번에 저장하는 편이 성능 오버헤드 측면에서 더 낫다.
+
+```javascript
+Buffer : [0][0][1][0][1][1][0][1]
+```
+
+위와 같이 각 비트에 불 값을 저장하는데, 맨 오른쪽부터 한 칸씩 왼쪽으로 이동하며 저장하는 것이 좋다. 저장해야 할 불 값이 클수록, 버퍼의 사이즈도 커져야 하며, 또 값이 저장된 기존 비트 영역은 그대로 유지되어야 하기 때문이다. 버퍼의 사이즈는 오른쪽으로 늘어나니까 말이다.
+
+만약 값을 저장하는 버퍼의 크기가 1바이트였다가, 2바이트로 늘어난다고 가정해보자. 맨 오른쪽 비트만 사용했을 경우, 0과 1만 사용할 수 있다. 하지만 맨 왼쪽 비트를 사용하면, 버퍼의 크기가 1바이트일 때에는 0 혹은 128이며, 2바이트가 되면 0 혹은 32,768로 늘어난다. 이렇게되면 앱 버전이 달라지는 과정에서 버퍼의 기존 값을 유지하기 어려워진다.
+
+```javascript
+const buffer = new ArrayBuffer(1);
+const view = new Uint8Array(buffer);
+
+const setBool = (slot, value) => {
+  view[0] = (view[0] & ~(1 << slot)) | ((value | 0) << slot);
+};
+
+const getBool = (slot) => {
+  return !((view[0] & (1 << slot)) === 0);
+};
+```
+
+위 코드에서는 1바이트짜리 버퍼를 생성한 뒤, 뷰를 생성한다. 이제 버퍼의 맨 오른쪽 비트부터 시작하는데, 1로 설정하기 위해서는 `setBool(0, true)`를 실행하면 된다. 비트를 0으로 설정하기 위해서는 `setBool(1, false)`를 실행한다. 그 다음 비트값을 읽어들인다면 `getBool(2)`를 실행하면 된다.
+
+setBool()
+
+1. 인자로 넘어온 불 값 value를 정수로 변환한다(value | 0은 false → 0, true → 1로 변환한다).
+2. 값을 왼쪽으로 시프트하기 위해 오른편에 저장할 위치 slot의 개수만큼 0을 붙인다.
+3. ~연산자를 통해 비트를 반전시키고, 이 값을 기존 값과 비트 AND 연산을 수행한다.
+4. 이렇게 나온 값은 맨 오른편 연산값과 OR 연산을 수행한다.
+
+getBool()
+
+1. 1이라는 숫자를 slot의 개수만큼 왼쪽으로 시프트한다.
+2. & 연산자를 통해 기존의 view[0] 값과 비교한다.
+3. 시프트된 값과 기존 값에 대해 AND 연산을 수행한다. slot 위치의 값이나 0이 온다.
+4. 나온 값이 0과 동일한지 확인하고 ! 연산자를 통해 반댓값으로 반환한다.
+
+상용화할 때에는 slot의 위치가 8번째 비트를 넘는 시점에 대한 처리를 해줘야 한다. 이런 경우에는 경계 검사(bounds chechking)를 수행하는 것이 낫다.
+
+### 문자열
+
+ASCII 코드 기반의 간단한 문자열의 경우, 문자는 1개의 1바이트로 표현이 가능하다. 하지만, 우리는 문명 시대에 살고 있으면서 모든 문자를 1바이트 범위 내로 표현하는 것이 불가능하다. 대신 몇 개의 바이트를 통해 문자를 숫자로 표현하는 인코딩 시스템을 사용해야 한다. 인코딩 형식 중 하나는 UTF-16인데, 2-4바이트를 사용해 문자를 표현하고, 최대 4바이트를 통해 이모지를 표현한다. 조금 더 보편적인 건 UTF-8. 문자는 1-4바이트 범위 내에서 표현하며, 1바이트 범위에는 ASCII 코드와도 호환된다.
+
+```javascript
+const stringToArrayBuffer = (string) => {
+  const buffer = new ArrayBuffer(string.length);
+  const view = new Uint8Array(buffer);
+
+  for (let i = 0; i < string.length; i++) view[i] = string.charCodeAt(i);
+
+  return view;
+};
+
+console.log(stringToArrayBuffer('foo'));
+console.log(stringToArrayBuffer('€'));
+
+// OUTPUT
+Uint8Array(3) [ 102, 111, 111 ]
+Uint8Array(1) [ 172 ]
+```
+
+foo라는 단순한 문자열은 성공했지만, 유로 기호는 이상한 값이 나온다(숫자로는 8,364이다).
+
+최신 자바스크립트에서 제공되는 API를 통해 직접 인코딩/디코딩이 가능하다. 전역 객체인 `TextEncoder`, `TextDecoder`이다. 둘 다 생성자 함수를 통해 만들 수 있고, 브라우저와 Node.js 모두 사용 가능하다. (UTF-8을 사용한다)
+
+```javascript
+const enc = new TextEncoder();
+const dec = new TextDecoder();
+
+const buffer1 = new ArrayBuffer(3);
+const view1 = new Uint8Array(buffer1);
+
+view1[0] = 226; view1[1] = 130; view1[2] = 172;
+
+console.log(enc.encode('€'));
+console.log(dec.decode(buffer1));
+console.log(dec.decode(view1));
+
+// OUTPUT
+Uint8Array(3) [ 226, 130, 172 ]
+€
+€
+```
+
+여기서 알아둬야 할 점은, `decode()` 함수의 인자로 `Uint8Array` 뷰를 넘길 수도 있고, 해당 뷰가 가리키는 `ArrayBuffer` 자체를 넘길 수도 있다는 것이다. 버퍼에 뷰를 연결할 필요도 없이, 네트워크로부터 전송된 데이터를 바로 디코딩할 수 있다는 장점이 있다.
+
+### 객체 타입
+
+객체 역시 TextEncoder API를 활용해 JSON으로 변환한 뒤, 버퍼에 쓰는 것이 가능하다.
+
+```javascript
+const enc = new TextEncoder();
+const dec = new TextDecoder();
+
+const obj = { 'name': 'currenjin', 'age': 24 };
+
+const encodedObj = enc.encode(JSON.stringify(obj));
+const decodedObj = dec.decode(encodedObj);
+
+console.log(encodedObj);
+console.log(decodedObj);
+
+// OUTPUT
+Uint8Array(29) [
+  123,  34, 110,  97, 109, 101,  34,
+   58,  34,  99, 117, 114, 114, 101,
+  110, 106, 105, 110,  34,  44,  34,
+   97, 103, 101,  34,  58,  50,  52,
+  125
+]
+{"name":"currenjin","age":24}
+```
+
+JSON 객체는 obj 객체를 받아 문자열로 변환한다. 하지만 결과를 보면 불필요한 공백이 포함되어 있다. 이러한 페이로드를 줄이려면 MessagePack 같은 모듈을 사용하면 된다. 객체 메타데이터를 바이너리화하여, 직렬화된 객체의 크기를 줄여주는 역할을 한다.
+
+### 마무리
+
+스레드 통신의 성능을 좌우하는 요소에 있어서, 전송되는 페이로드의 크기보다는 페이로드를 직렬화/역직렬화하는 부분에서 성능의 차이가 크게 발생한다. 따라서 데이터를 좀 더 단순화시켜 스레드에 전송하는 것이 좋다. 심지어 스레드에 객체를 전송할 때도, 직렬화된 객체를 버퍼에 쓰는 것보다는 구조화된 복제 알고리즘에 기반한 `.onmessage`와 `.postMessage` 메서드를 사용하는 것이 속도 및 보안성 측면에서 더 낫다.
 
 # 공유 메모리 중급
 
