@@ -1072,7 +1072,7 @@ let old2 = Atomics.compareExchange(typedArray, 0, 7, 2);
 
 위 두 개의 메서드는 어떤 순서로 호출되는지 누구도 알 수 없다. 동시에 실행될 수도 있다. 하지만, Atomic 객체가 원자성을 보장하는 덕분에, 2개 중 1개의 스레드만 초기값인 7을 반환받고, 다른 스레드는 업데이트된 값인 1 혹은 2를 반환받는다.
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0e02f099-20d3-40ca-a357-0e60d7d02ee8/b729d33a-5f28-4cfb-81a1-96368ab5c1d7/Untitled.png)
+![스크린샷 2023-12-14 오후 5 19 11](https://github.com/currenjin/currenjin.github.io/assets/60500649/be7d2f6d-4602-43dc-80da-4e1b7dfd9e4c)
 
 반면 비원자성 코드로 바꾸어보면, 잘못된 값이 대입되는 이슈가 생길 수 있다.
 
@@ -1085,7 +1085,7 @@ if (old === 7) {
 
 해당 코드에서 여러 개의 스레드가 동일한 데이터를 공유하면서 이 데이터에 접근을 시도한다. 코드가 정상적으로 동작하기 위해서는, 하나의 스레드가 데이터를 사용하고 있을 때 다른 스레드가 해당 데이터에 접근하지 못하도록 해야 한다. 즉, 하나의 스레드에만 공유 자원에 대한 독점적인 접근을 허용해야 한다. 이것을 임계 구역(Critical Section)이라고 한다. (독립성)
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0e02f099-20d3-40ca-a357-0e60d7d02ee8/6fda228a-2dbb-4e0c-a0ab-805976017367/Untitled.png)
+![스크린샷 2023-12-14 오후 5 33 16](https://github.com/currenjin/currenjin.github.io/assets/60500649/1970eb53-0c40-439b-a788-d5d96d45b4d5)
 
 2개의 스레드 모두 값을 변경했고, 에러가 발생하지 않았다. 하지만 실제 동작이 성공한 스레드는 Thread #2 뿐이다. 이러한 상황을 경쟁 상태(race condition)이라고 한다. 말 그대로 2개 이상의 스레드가 동일한 동작을 놓고 경쟁하는 상태를 말한다.
 
