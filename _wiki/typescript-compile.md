@@ -181,7 +181,7 @@ const emitResult = emitFiles(
 
 마지막으로 emitFiles 속으로 빨려들어가 어떤 동작이 수행되는지 확인해보자.
 
-(to `src/compiler/emitter`)
+(to `src/compiler/emitter.ts`)
 
 ### emitter
 
@@ -204,3 +204,25 @@ return {
 ```
 
 forEachEmittedFile 함수를 호출해 타겟 파일들을 모두 순회하며 emit을 진행한다. 결과적으로 diagnostics, emittedFiles, sourceMaps 등을 반환하는 것을 확인할 수 있다.
+
+컴파일된 소스코드는 어디서 저장될까?
+
+(to `src/compiler/watch.ts`)
+
+### watch
+
+```jsx
+export function listFiles<T extends BuilderProgram>(program: Program | T, write: (s: string) => void) {
+    const options = program.getCompilerOptions();
+    if (options.explainFiles) {
+        explainFiles(isBuilderProgram(program) ? program.getProgram() : program, write);
+    }
+    else if (options.listFiles || options.listFilesOnly) {
+        forEach(program.getSourceFiles(), file => {
+            write(file.fileName);
+        });
+    }
+}
+```
+
+컴파일된 소스코드들은 watch에서 받아 write 함수를 호출해 저장한다.
