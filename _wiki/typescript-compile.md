@@ -13,12 +13,4 @@ latex   : true
 * TOC
 {:toc}
 
-# Typescript Compile
-
-![스크린샷 2023-12-15 오후 12 35 17](https://github.com/currenjin/currenjin.github.io/assets/60500649/95b91a12-3972-4669-aba5-4339e4c87493)
-
-테스트
-
-### 테스트
-
-...
+..
