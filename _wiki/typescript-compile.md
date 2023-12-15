@@ -15,9 +15,13 @@ latex   : true
 
 # Typescript Compile
 
-![스크린샷 2023-12-15 오후 12 35 17](https://github.com/currenjin/currenjin.github.io/assets/60500649/95b91a12-3972-4669-aba5-4339e4c87493)
+타입스크립트는 자바스크립트의 슈퍼셋, 자바스크립트에서 정의할 수 없었던 타입을 정의해 소프트웨어 안정성을 높이는 데에 큰 비중을 차지한다.
+
+## 동작과정 
 
 아래 그림은 Typescript Compile 과정의 모식도다.
+
+![스크린샷 2023-12-15 오후 12 35 17](https://github.com/currenjin/currenjin.github.io/assets/60500649/95b91a12-3972-4669-aba5-4339e4c87493)
 
 이런 모식도만 본다고 우리가 코드 동작 과정을 이해하고자 하는 욕구는 사라지지 않을 것이다.
 
