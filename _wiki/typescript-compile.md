@@ -64,7 +64,7 @@ performCompilation(
 );
 ```
 
-그리고 호출되는 performCompilation 함수를 따라가보자.
+내부에서는 performCompilation 함수가 호출된다. 따라가보자.
 
 <br>
 
