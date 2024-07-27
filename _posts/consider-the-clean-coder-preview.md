@@ -4,6 +4,7 @@ title   : [Consider - The Clean Coder] 미리 읽어두기
 summary : consider, clean coder, 미리 읽어두기 
 date    : 2024-06-23 13:00:00 +0900
 tag     : consider clean-coder
+resource: 
 toc     : true
 comment : true
 public  : true

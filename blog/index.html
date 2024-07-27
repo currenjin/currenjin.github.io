@@ -7,29 +7,29 @@ public: true
 <div>
     <h3>Blog</h3>
 
-{% include pagination.html %}
+    {% include pagination.html %}
 
     <ul>
-{% for post in paginator.posts %}
-    {% if post.public == true %}
+        {% for post in paginator.posts %}
+        {% if post.public == true %}
         <li>
             <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">
                 <span>{{ post.title }}</span>
                 <div style="float: right;">{{ post.date | date: "%Y.%m.%d" }}</div>
                 <div>- {{ post.summary }}</div>
                 <ul class="tag-list">
-        {% for tag in post.tags %}
+                    {% for tag in post.tags %}
                     <li class="post-tag">
                         <a href="/tag/#{{tag}}" >#{{tag}}</a>
                     </li>
-        {% endfor %}
+                    {% endfor %}
                 </ul>
             </a>
         </li>
-    {% endif %}
-{% endfor %}
+        {% endif %}
+        {% endfor %}
     </ul>
 
-{% include pagination.html %}
+    {% include pagination.html %}
 
 </div>
