@@ -4,6 +4,7 @@ title   : [Consider - The Clean Coder] 테스트 주도 개발
 summary : consider, clean coder, TDD
 date    : 2024-06-23 13:00:00 +0900
 tag     : consider clean-coder tdd
+resource: 2A/73EE4A-1FD5-4EC0-8FA1-73F624DF978F
 toc     : true
 comment : true
 public  : true
