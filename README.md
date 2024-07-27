@@ -1,3 +1,3 @@
-# Currenjin's Wiki
+# currenjin's page
 
-개인 위키입니다.
+개인 페이지

@@ -7,14 +7,12 @@ regenerate: true
 <div class="blog-face">
     <div>
         <H3>
-            부담없이 기록합니다.
+            기록, 생각 등의 모든 것...
         </H3>
     </div>
     <div>
-        <!-- <a href="/blog/">블로그</a>-->
-        <!--        /-->
-        <!-- 태그 수정 후 다시 적용 -->
-        <!-- <a href="/tag/">태그</a>-->
+         <a href="/blog/">블로그</a>
+         <a href="/tag/">태그</a>
     </div>
     <div class="contact">
 {% if site.github_username %}
@@ -23,11 +21,7 @@ regenerate: true
 {% if site.instagram_username %}
         <a href="https://instagram.com/{{ site.instagram_username }}">Instagram</a>
 {% endif %}
-<!--{% if site.email %}-->
-<!--        <a href="mailto:{{ site.email }}">Email</a>-->
-<!--{% endif %}-->
         <a href="https://simpleisit.tistory.com/">Blog</a>
-        <!--     sitemap 수정 후 적용   <a href="{{ "/feed.xml" | prepend: site.baseurl }}">RSS</a>-->
     </div>
 </div>
 <div>
@@ -45,11 +39,11 @@ regenerate: true
                         {{ doc.title }}
                     </div>
                     <div class="post-excerpt">{{ doc.summary }}</div>
-<!--                    <ul class="tag-list">-->
-<!--                        <li class="post-tag">-->
-<!--                            {{ doc. tag }}-->
-<!--                        </li>-->
-<!--                    </ul>-->
+                    <ul class="tag-list">
+                        <li class="post-tag">
+                            {{ doc. tag }}
+                        </li>
+                    </ul>
                 </a>
             </div>
         </li>
