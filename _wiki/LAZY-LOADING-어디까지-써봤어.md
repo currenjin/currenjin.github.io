@@ -1,6 +1,6 @@
 ---
 layout  : wiki
-title   : Web-MVC
+title   : LAZY LOADING 어디까지 써봤어?
 summary :
 date    : 2024-09-03 19:52:00 +0900
 updated : 2024-09-03 19:52:00 +0900
