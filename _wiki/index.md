@@ -49,7 +49,8 @@ regenerate: true
 * [[svg]]
 * [[n+1]]
 * [[multithreaded-javascript]]
-* [[java-to-kotlin.md]]
+* [[java-to-kotlin]]
+* [[toss-slash-24]]
 
 ---
 
