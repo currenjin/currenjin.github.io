@@ -51,6 +51,7 @@ regenerate: true
 * [[multithreaded-javascript]]
 * [[java-to-kotlin]]
 * [[toss-slash-24]]
+* [[fixture-monkey-with-jpa]]
 
 ---
 
