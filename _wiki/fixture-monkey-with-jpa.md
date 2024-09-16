@@ -355,9 +355,43 @@ public final class DefaultArbitraryBuilder<T> implements ArbitraryBuilder<T>, Ex
 
 resolverArbitrary를 호출하면, 해당 컨텍스트 정보에 맞게 값을 생성한다. User class 내 각 필드 타입에 따라 값을 생성한다는 의미다.
 
-resolveArbitrary에서는 CombinableArbitrary 인스턴스를 반환하는데 combined 메서드를 호출하며 값을 매핑하고 반환한다.
+여기서 호출하는 resolve 메서드에는 ObjectTree를 정의한다. 일부분을 가져와서 보자.
 
-그러면 결과적으로 아래 값이 반환된다.
+```java
+public CombinableArbitrary<?> resolve(
+        RootProperty rootProperty,
+        ArbitraryBuilderContext builderContext
+) {
+   // ...
+   
+   objectTree -> {
+       List<ArbitraryManipulator> registeredManipulators =
+           monkeyManipulatorFactory.newRegisteredArbitraryManipulators(
+               registeredArbitraryBuilders,
+               objectTree.getMetadata().getNodesByProperty()
+           );
+   
+       List<ArbitraryManipulator> joinedManipulators =
+           Stream.concat(registeredManipulators.stream(), manipulators.stream())
+               .collect(Collectors.toList());
+   
+       List<ArbitraryManipulator> optimizedManipulator = manipulatorOptimizer
+           .optimize(joinedManipulators)
+           .getManipulators();
+   
+       for (ArbitraryManipulator manipulator : optimizedManipulator) {
+           manipulator.manipulate(objectTree);
+       }
+       return objectTree.generate();
+   }
+}
+```
+
+이곳에서 ArbitraryManipulator 인스턴스를 이용해 ObjectTree 인스턴스를 컨트롤하고, generate 메서드를 호출해 최종 객체를 완성한다.
+
+이 과정이 지난 후 resolveArbitrary에서는 CombinableArbitrary 인스턴스를 반환하고 combined 메서드를 호출한다.
+
+combined 메서드가 호출되면 생성되었던 ObjectTree 인스턴스를 이용해 User 인스턴스를 생성하고 반환한다. 결과적으로 아래 값이 반환된다.
 
 ```java
 User {
@@ -374,8 +408,136 @@ User {
 
 그러면 문자열의 난수는 어떤 방식으로 생성될까?
 
+예를 들어, User 클래스의 firstName 타입은 문자열(String)이다. 문자열은 MonkeyStringArbitrary 클래스를 통해 처리된다.
+
+```java
+public final class MonkeyStringArbitrary implements StringArbitrary {
+}
+```
+
+해당 클래스는 StringArbitrary 인터페이스를 구현했는데, 관련된 함수가 jqwik 라이브러리에 의존하기 때문이다.
+
+아래 코드를 보면 잘 확인할 수 있다.
+
+```java
+public final class MonkeyStringArbitrary implements StringArbitrary {
+    // 문자 생성 담당
+    private CharacterArbitrary characterArbitrary = new DefaultCharacterArbitrary();
+    
+    // 문자열 생성 메서드 
+    @Override
+    public RandomGenerator<String> generator(int genSize) {
+        long maxUniqueChars = characterArbitrary
+              .exhaustive(maxLength())
+              .map(ExhaustiveGenerator::maxCount)
+              .orElse((long)maxLength());
+        return RandomGenerators.strings(
+              randomCharacterGenerator(),
+              minLength, maxLength(), maxUniqueChars,
+              genSize, lengthDistribution,
+              newThreadSafeArbitrary(characterArbitrary)
+        );
+    }
+}
+```
+
+generator 메서드 호출을 통해 jqwik 라이브러리로 위임을 했다. DefaultCharacterArbitrary 클래스를 확인해 보면 아래와 같은 코드가 있다.
+
+```java
+private Arbitrary<Character> defaultArbitrary() {
+   return this.rangeArbitrary('\u0000', '\uffff').filter((c) -> {
+      return !isNoncharacter(c) && !isPrivateUseCharacter(c);
+   });
+}
+```
+
+기본적으로 유니코드를 생성하고 있는데 이 때문에 여러 언어가 포함된 값이 생성된다. 대신, 비문자와 개인용 문자를 제외한다.
+
+이를 사용하는 과정을 MonkeyStringArbitrary 클래스부터 확인해보자.
+
+```java
+// MonkeyStringArbitrary
+private RandomGenerator<Character> randomCharacterGenerator() {
+   RandomGenerator<Character> characterGenerator = effectiveCharacterArbitrary().generator(1, false);
+   if (repeatChars > 0) {
+      return characterGenerator.injectDuplicates(repeatChars);
+   } else {
+      return characterGenerator;
+   }
+}
+
+// DefaultCharacterArbitrary
+public RandomGenerator<Character> generator(int genSize) {
+   return this.arbitrary().generator(genSize);
+}
+
+private Arbitrary<Character> arbitrary() {
+   if (this.partsWithSize.isEmpty()) {
+      return this.defaultArbitrary();
+   } else {
+      return this.partsWithSize.size() == 1 ? (Arbitrary)((Tuple.Tuple2)this.partsWithSize.get(0)).get2() : Arbitraries.frequencyOf(this.partsWithSize);
+   }
+}
+```
+
+이렇게 defaultArbitrary를 호출하여 값을 생성하는 것을 알 수 있다.
+
+여러 테스트 환경 특성 상 중국어 간체라던가 키릴문자가 나오는 상황이 발생하면 안 될 수도 있다. 알파벳 값만 얻고 싶은가?
+
+```java
+@Override
+public StringArbitrary alpha() {
+  this.characterArbitrary = this.characterArbitrary.alpha();
+  return this;
+}
+```
+
+친절하게도 MonkeyStringArbitrary 구현체에 구현이 되어있다. 알파벳 뿐만 아니라 ascii, numberic, whitespace 등을 사용할 수 있다.
+
+이를 이용해 모든 문자열 필드는 알파벳만으로 구성해 보겠다.
+
+```java
+@BeforeEach
+void setUp() {
+    firstUser = fixtureMonkey.giveMeBuilder(User.class)
+            .set("firstName", new MonkeyStringArbitrary().alpha())
+            .sample();
+}
+
+// 결과
+User {
+   id = null;
+   firstName = "NiGPfLvWoDwxIrhOdnXkyVYCmtRpASM";
+   lastName = "彜ॵ䕥殿騍눭≖鿤ᄭ똊暿즹쓨ᷧ⻐ᣡ媻哙떬បଝ䗳";
+   active = true;
+   emailAddress = null;
+   createdAt = "Mon Sep 16 17:07:37 KST 2024";
+}
+```
+
+모든 객체를 생성할 때, 한 번에 적용하고 싶다면? 처음 fixtureMonkey 인스턴스를 빌드할 때 register 해주면 된다.
+
+```java
+FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
+      .objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
+      .register(User.class, arbitraryBuilder ->
+              arbitraryBuilder.giveMeBuilder(String.class)
+                      .set("firstName", new MonkeyStringArbitrary().alpha())
+                      .set("lastName", new MonkeyStringArbitrary().alpha())
+      )
+      .build();
+
+User {
+   id = null;
+   firstName = "sZfq";
+   lastName = "PbAuticMWIXoUJVLhJZdrVRCPzh";
+   active = false;
+   emailAddress = "";
+   createdAt = "Thu Feb 08 00:00:00 KST 2024";
+}
+```
+
 ### TO-DO(memo)
 - 생성자가 여러 개이고, 특정 필드는 nullable한 경우를 fixtureMonkey로 적용하기
-- 문자열의 난수는 어떻게 생성되는지
 
 ## The End
