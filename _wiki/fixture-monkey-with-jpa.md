@@ -545,4 +545,6 @@ FixtureMonkey를 활용하면 테스트 데이터 생성의 복잡성을 줄이�
 추가로, 사실과 다른 내용이 있다면 댓글로 남겨주길 바란다.
 
 ### TO-DO(memo)
-- 생성자가 여러 개이고, 특정 필드는 nullable한 경우를 fixtureMonkey로 적용하기
+- Nullable 테스트를 고려하기(ex. null인 경우 예외, null이 아닌 경우 예외 등)
+- 특정 포맷을 적용하기(ex. email@test.com)
+- 특정 범위만 허용/제외하기(ex. 1-99)
