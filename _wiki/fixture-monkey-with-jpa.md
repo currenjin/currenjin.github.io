@@ -3,7 +3,7 @@ layout  : wiki
 title   : Fixture Monkey를 적용해보자 w/JPA Test
 summary :
 date    : 2024-09-15 22:00:00 +0900
-updated : 2024-09-15 22:00:00 +0900
+updated : 2024-09-16 18:00:00 +0900
 tag     : fixture-monkey
 toc     : true
 public  : true
@@ -19,29 +19,28 @@ latex   : true
 
 ## Problem
 
-테스트를 작성하며 각자 느끼는 고충이 있을 것이다. 그 중 많은 사람들이 테스트를 위한 셋업 코드를 작성하며 많은 시간을 소요하고, 지루함을 느끼곤 한다.
+테스트를 작성하며 각자 느끼는 고충이 있을 것이다. 그 중 많은 사람들이 테스트를 위한 셋업 코드를 작성하며 많은 시간을 소요하고, 지루함을 느끼곤 한다. TDD의 저자 켄트벡은 두려움이 지루함으로 변할 때까지 테스트를 작성하라고 하지만, 나는 더 나아가 반복되는 지루함은 반드시 자동화해야 한다고 생각한다.
 
-TDD의 저자 켄트벡은 두려움이 지루함으로 변할 때까지 테스트를 작성하라고 하지만, 나는 반복되는 지루함은 반드시 자동화해야 한다고 생각한다.
-
-테스트 코드를 작성하는 우리의 두려움은 지루함으로 바뀌었으니, 이 지루함의 반복됨을 편함으로 바꿀 수는 없을까?
-
-그런 나는 발견했다.
+> 테스트 코드를 작성하는 우리의 두려움은 지루함으로 바뀌었으니, 이 지루함의 반복됨을 편함으로 바꿀 수는 없을까?
 
 ## Fixture Monkey
 
-> Fixture Monkey는 테스트 객체를 쉽게 생성하고 조작할 수 있도록 고안된 라이브러리다.
+Fixture Monkey는 이런 고민을 해결해준다. 이 라이브러리를 사용하면,
 
-Fixture Monkey를 사용하며 테스트 코드를 작성 시 반복적이고 지루한 셋업 코드를 줄일 수 있다.
+1. 테스트 데이터 생성을 자동화하여 시간을 아낄 수 있다.
+2. 다양한 시나리오를 쉽게 테스트할 수 있다.
+3. 테스트 코드의 가독성과 유지보수성이 높아진다.
+4. 엣지 케이스를 쉽게 생성하여 더 견고한 테스트가 가능하다.
 
-이는 개발자가 테스트 로직 자체에 더욱 집중할 수 있다는 의미이다.
+Fixture Monkey를 사용하면, 테스트 작성에 대한 부담은 줄어들고 실제 비즈니스 로직 테스트에 더 집중할 수 있다.
 
-## Spring Boot Jpa
+## Spring Boot JPA
 
-Fixture Monkey를 테스트하기 위해 Spring Data Jpa 프로젝트에 구현되어있는 테스트 코드를 참고할 생각이다.
+Fixture Monkey를 테스트하기 위해 Spring Data JPA 프로젝트에 구현되어있는 테스트 코드를 참고할 생각이다. JPA가 무엇인지, 사용법은 어떻게 되는지는 이 글을 보는 사람이라면 알고 있다고 가정하겠다.
 
 ### Links
 
-- [GitHub - Spring Data Jpa](https://github.com/spring-projects/spring-data-jpa/blob/main/spring-data-jpa/src/test/java/org/springframework/data/jpa/repository/UserRepositoryTests.java)
+- [GitHub - Spring Data JPA](https://github.com/spring-projects/spring-data-jpa/blob/main/spring-data-jpa/src/test/java/org/springframework/data/jpa/repository/UserRepositoryTests.java)
 - [GitHub - Example Code](https://github.com/currenjin/TDD/tree/main/fixture-monkey/src)
 
 ### Environment
@@ -49,6 +48,7 @@ Fixture Monkey를 테스트하기 위해 Spring Data Jpa 프로젝트에 구현�
 - `Spring Boot Framework 2.6.4`
 - `Java 17`
 - `Fixture Monkey 1.0.25`
+- `Spring Data JPA`
 - `H2 Database`
 
 ### Domain Model
@@ -196,9 +196,7 @@ void setUp() {
 
 자, 이제 어떻게 할 것인가? 이메일만 따로 받아 객체를 생성하는 메소드를 작성할 것인가? 그러면 완전 다른 값이 필요한 객체는?
 
-결국엔 객체를 생성하며 모든 값을 '생각하고' 넣어주어야 한다는 것이다.
-
-Fixture Monkey에서는 우리가 테스트 로직에만 집중할 수 있도록 도와준다.
+결국엔 객체를 생성하며 모든 값을 '생각하고' 넣어주어야 한다는 것이다. Fixture Monkey에서는 우리가 테스트 로직에만 집중할 수 있도록 도와준다.
 
 ### Dependency & Build object
 
@@ -234,7 +232,9 @@ void setUp() {
 }
 ```
 
-놀랍게도 이게 끝이다! fixtureMonkey 객체에서 giveMeOne(class)를 호출하면 필요한 파라미터에 난수값을 적용해 해당 클래스의 객체를 생성해주는 것이다.
+**놀랍게도 이게 끝이다!**
+
+fixtureMonkey 객체에서 giveMeOne(class)를 호출하면 필요한 파라미터에 난수값을 적용해 해당 클래스의 객체를 생성해주는 것이다.
 
 Debug를 통해 생성된 객체를 확인해 볼까?
 
@@ -249,7 +249,7 @@ User {
 }
 ```
 
-### Fixture Monkey 동작
+## Fixture Monkey 동작
 
 > 내부 동작이 궁금하지 않다면 넘어가도 좋다.
 
@@ -355,7 +355,7 @@ public final class DefaultArbitraryBuilder<T> implements ArbitraryBuilder<T>, Ex
 
 resolverArbitrary를 호출하면, 해당 컨텍스트 정보에 맞게 값을 생성한다. User class 내 각 필드 타입에 따라 값을 생성한다는 의미다.
 
-여기서 호출하는 resolve 메서드에는 ObjectTree를 정의한다. 일부분을 가져와서 보자.
+여기서 호출하는 resolve 메서드에는 ObjectTree 인스턴스를 구성한다. 일부 코드를 가져와서 확인해보자.
 
 ```java
 public CombinableArbitrary<?> resolve(
@@ -387,9 +387,9 @@ public CombinableArbitrary<?> resolve(
 }
 ```
 
-이곳에서 ArbitraryManipulator 인스턴스를 이용해 ObjectTree 인스턴스를 컨트롤하고, generate 메서드를 호출해 최종 객체를 완성한다.
+resolve 메서드의 반환 코드 중 일부인데, ArbitraryManipulator 인스턴스를 이용해 ObjectTree 인스턴스를 컨트롤하고, generate 메서드를 호출해 최종 객체를 완성한다.
 
-이 과정이 지난 후 resolveArbitrary에서는 CombinableArbitrary 인스턴스를 반환하고 combined 메서드를 호출한다.
+resolve 메서드에서 반환되는 객체는 CombinableArbitrary 인스턴스이고, combined 메서드를 호출한다.
 
 combined 메서드가 호출되면 생성되었던 ObjectTree 인스턴스를 이용해 User 인스턴스를 생성하고 반환한다. 결과적으로 아래 값이 반환된다.
 
@@ -406,7 +406,7 @@ User {
 
 ### Fixture Monkey 문자열 난수
 
-그러면 문자열의 난수는 어떤 방식으로 생성될까?
+문자열의 난수는 어떤 방식으로 생성될까?
 
 예를 들어, User 클래스의 firstName 타입은 문자열(String)이다. 문자열은 MonkeyStringArbitrary 클래스를 통해 처리된다.
 
@@ -537,7 +537,9 @@ User {
 }
 ```
 
+## The End
+
+FixtureMonkey를 활용하면 테스트 데이터 생성의 복잡성을 줄이고 테스트 자체에 더 집중할 수 있다. 이는 코드의 품질을 높이고 개발 생산성을 향상시키는 데 큰 도움이 될 것이다. FixtureMonkey와 함께 더 나은 테스트 문화를 만들어나가길 바란다.
+
 ### TO-DO(memo)
 - 생성자가 여러 개이고, 특정 필드는 nullable한 경우를 fixtureMonkey로 적용하기
-
-## The End
