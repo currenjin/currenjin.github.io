@@ -79,8 +79,6 @@ public class User {
 
     private String lastName;
 
-    private int age;
-
     private boolean active;
 
     @Column(nullable = false, unique = true)
@@ -101,13 +99,283 @@ public interface UserRepository extends JpaRepository<User, Long> {
 }
 ```
 
-### AS-IS Example
+## Test
 
 먼저, 우리가 일반적으로 작성하는 테스트 코드로 작성하겠다.
 
+기본 클래스 셋업으로는 아래 코드와 같다.
 
+```java
+@DataJpaTest
+class UserRepositoryTest {
+    @PersistenceContext
+    private EntityManager em;
 
+    @Autowired
+    private UserRepository repository;
+    
+    // ...Test Function
+}
+```
 
-### TO-BE Example
+설명해보자면,
+
+1. `@DataJpaTest` : JPA 테스트를 위한 어플리케이션 컨텍스트만 로드하여 인메모리 데이터베이스를 사용한다.
+2. `@PersistenceContext EntityManager` : JPA EntityManager를 주입받는다. 테스트에서 직접적인 데이터베이스 조작이 필요한 경우 사용한다. 
+3. `@Autowired UserRepository` : 테스트 대상인 UserRepository를 주입받는다. 
+
+### Creation AS-IS
+
+첫 번째로, 생성을 위한 테스트를 진행하겠다.
+
+```java
+@BeforeEach
+void setUp() {
+    firstUser = new User("hyunjin", "jeong", "hyun0524e@naver.com");
+}
+
+@Test
+void creation() {
+    Query query = em.createQuery("select count(u) from User u");
+    Long before = (Long) query.getSingleResult();
+
+    repository.save(firstUser);
+
+    assertEquals(before + 1L, query.getSingleResult());
+}
+```
+
+1. firstUser 객체를 직접 생성한다.
+2. entityManager를 통해 count 쿼리를 생성한다.
+3. 생성 이전 count를 조회한다.
+4. firstUser를 db에 저장한다.
+5. 생성 이후 count와 생성 이전 count + 1과 일치한지 확인한다.
+
+위 코드만 보면 우리가 일반적으로 작성하는 테스트 코드로 생각된다.
+
+여기서, firstUser 객체에 더 많은 파라미터를 담게 된다면 어떨까?
+
+```java
+@BeforeEach
+void setUp() {
+    firstUser = new User("hyunjin", "jeong", "hyun0524e@naver.com", "서울특별시 강남구 태헤란로 xx번길", "xx아파트 xxx동 xxxx호", "010-0000-0000", LocalDate.of(2000, 5, 24));
+}
+```
+
+**게다가** 객체를 여러 개 생성하여 테스트하려면 어떻게 될까?
+
+```java
+private User firstUser;
+private User secondUser;
+private User thirdUser;
+private User fourthUser;
+private User fifthUser;
+
+@BeforeEach
+void setUp() {
+    firstUser = new User("hyunjin", "jeong", "hyun0524e@naver.com", "서울특별시 강남구 태헤란로 xx번길", "xx아파트 xxx동 xxxx호", "010-0000-0000", LocalDate.of(2000, 5, 24));
+    secondUser = new User("hyunjin", "jeong", "hyun0524e@naver.com", "서울특별시 강남구 태헤란로 xx번길", "xx아파트 xxx동 xxxx호", "010-0000-0000", LocalDate.of(2000, 5, 24));
+    thirdUser = new User("hyunjin", "jeong", "hyun0524e@naver.com", "서울특별시 강남구 태헤란로 xx번길", "xx아파트 xxx동 xxxx호", "010-0000-0000", LocalDate.of(2000, 5, 24));
+    fourthUser = new User("hyunjin", "jeong", "hyun0524e@naver.com", "서울특별시 강남구 태헤란로 xx번길", "xx아파트 xxx동 xxxx호", "010-0000-0000", LocalDate.of(2000, 5, 24));
+    fifthUser = new User("hyunjin", "jeong", "hyun0524e@naver.com", "서울특별시 강남구 태헤란로 xx번길", "xx아파트 xxx동 xxxx호", "010-0000-0000", LocalDate.of(2000, 5, 24));
+}
+```
+
+**게다가** 우리가 만든 User Entity에서 이메일은 중복할 수 없다는 점은 잊지 말자
+
+```java
+@BeforeEach
+void setUp() {
+    firstUser = new User("hyunjin", "jeong", "hyun0524e@naver.com", "서울특별시 강남구 태헤란로 xx번길", "xx아파트 xxx동 xxxx호", "010-0000-0000", LocalDate.of(2000, 5, 24));
+    secondUser = new User("hyunjin", "jeong", "qwe@test.com", "서울특별시 강남구 태헤란로 xx번길", "xx아파트 xxx동 xxxx호", "010-0000-0000", LocalDate.of(2000, 5, 24));
+    thirdUser = new User("hyunjin", "jeong", "zxc@test.com", "서울특별시 강남구 태헤란로 xx번길", "xx아파트 xxx동 xxxx호", "010-0000-0000", LocalDate.of(2000, 5, 24));
+    fourthUser = new User("hyunjin", "jeong", "dfg@test.com", "서울특별시 강남구 태헤란로 xx번길", "xx아파트 xxx동 xxxx호", "010-0000-0000", LocalDate.of(2000, 5, 24));
+    fifthUser = new User("hyunjin", "jeong", "asd@test.com", "서울특별시 강남구 태헤란로 xx번길", "xx아파트 xxx동 xxxx호", "010-0000-0000", LocalDate.of(2000, 5, 24));
+}
+```
+
+자, 이제 어떻게 할 것인가? 이메일만 따로 받아 객체를 생성하는 메소드를 작성할 것인가? 그러면 완전 다른 값이 필요한 객체는?
+
+결국엔 객체를 생성하며 모든 값을 '생각하고' 넣어주어야 한다는 것이다.
+
+Fixture Monkey에서는 우리가 테스트 로직에만 집중할 수 있도록 도와준다.
+
+### Dependency & Build object
+
+일단 종속성을 추가하고,
+
+**Dependency**
+```java
+dependencies {
+    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.25'
+}
+```
+
+사용을 위해 테스트 클래스에서 FixtureMonkey 객체를 빌드한다.
+
+**First SetUp**
+```java
+@DataJpaTest
+class UserRepositoryTest {
+    FixtureMonkey fixtureMonkey = FixtureMonkey.builder().objectIntrospector(ConstructorPropertiesArbitraryIntrospector.INSTANCE).build();
+    
+    // ...
+}
+```
+
+### Creation TO-BE
+
+아까 정의했던 객체를 FixtureMonkey를 통해 생성해 보자.
+
+```java
+@BeforeEach
+void setUp() {
+    firstUser = fixtureMonkey.giveMeOne(User.class);
+}
+```
+
+놀랍게도 이게 끝이다! fixtureMonkey 객체에서 giveMeOne(class)를 호출하면 필요한 파라미터에 난수값을 적용해 해당 클래스의 객체를 생성해주는 것이다.
+
+Debug를 통해 생성된 객체를 확인해 볼까?
+
+```java
+User {
+    id = null;
+    firstName = "춝䪼ꧏ";
+    lastName = "苖⻵ꪘ쫏▷膄톣㷂䱧";
+    active = true;
+    emailAddress = "ᛩോ튅⛝櫕ᣵ솙칖谌ｰ퀭埘樅㺏㧑⍭規喲ꫮ൐Ὧ륑삲砎鳃抝Фꞻ᣾⤇崆";
+    createdAt = "Mon Sep 16 12:18:00 KST 2024";
+}
+```
+
+### Fixture Monkey 동작
+
+> 내부 동작이 궁금하지 않다면 넘어가도 좋다.
+
+라이브러리의 소스코드를 확인해서 파악한 구조로는 다음과 같은 동작 과정을 거친다.
+
+![image](https://github.com/user-attachments/assets/b79fec6c-0c74-4f11-8b40-2212abfad4c0)
+
+1. giveMeOne 메서드를 호출한다.
+2. 타입 정보를 담은 default builder 인스턴스를 생성한 후 sample 메서드를 호출한다.
+3. sample 메서드에서는 각 필드의 타입에 일치하는 값을 생성하고, 이 값으로 해당하는 타입 인스턴스를 생성한다.
+   1. resolve 함수가 호출되면 타입에 일치하는 값을 생성한다.
+   2. conbimed 함수가 호출되면 필드에 생성된 값으로 인스턴스를 생성해 반환한다.
+
+**giveMeOne**
+
+```java
+public <T> T giveMeOne(Class<T> type) {
+    return this.giveMe(type, 1).get(0);
+}
+```
+
+타입 객체를 넘기며 호출하는 내부 함수 giveMe가 있다.
+
+**giveMe**
+```java
+public <T> List<T> giveMe(Class<T> type, int size) {
+    return this.giveMe(type).limit(size).collect(toList());
+}
+
+public <T> Stream<T> giveMe(Class<T> type) {
+    return Stream.generate(() -> this.giveMeBuilder(type).sample());
+}
+```
+
+giveMeBuilder를 호출한 후, sample을 호출하는데
+
+먼저 giveMeBuilder를 보자.
+
+```java
+public <T> ArbitraryBuilder<T> giveMeBuilder(Class<T> type) {
+    TypeReference<T> typeReference = new TypeReference<T>(type) {
+    };
+    return giveMeBuilder(typeReference);
+}
+```
+
+giveMeBuilder에서는 type을 받고, 해당하는 타입에 대한 ArbitraryBuilder를 리턴받는다.
+
+ArbitraryBuilder를 만들어주는 함수를 확인해볼까? 이해하기 쉽게 주석을 달아놨다.
+
+```java
+public <T> ArbitraryBuilder<T> giveMeBuilder(TypeReference<T> type) {
+    // 1. Type에 대한 정보를 담는다.
+    RootProperty rootProperty = new RootProperty(type.getAnnotatedType());
+
+    // 2. Type에 해당하는 ArbitraryBuilder를 매칭한다.
+    ArbitraryBuilderContext builderContext = registeredArbitraryBuilders.stream()
+        .filter(it -> it.match(rootProperty))
+        .map(MatcherOperator::getOperator)
+        .findAny()
+        .map(DefaultArbitraryBuilder.class::cast)
+        .map(DefaultArbitraryBuilder::getContext)
+        .orElse(new ArbitraryBuilderContext());
+
+    // 3. Type 정보를 담은 DefaultArbitraryBuilder 인스턴스를 생성한다.
+    return new DefaultArbitraryBuilder<>(
+        fixtureMonkeyOptions,
+        rootProperty,
+        new ArbitraryResolver(
+            traverser,
+            manipulatorOptimizer,
+            monkeyManipulatorFactory,
+            fixtureMonkeyOptions,
+            monkeyContext,
+            registeredArbitraryBuilders
+        ),
+        traverser,
+        monkeyManipulatorFactory,
+        builderContext.copy(),
+        registeredArbitraryBuilders,
+        monkeyContext,
+        fixtureMonkeyOptions.getInstantiatorProcessor()
+    );
+}
+```
+
+우리는 User Type을 통해 호출하니 User Type에 대한 정보를 담은 ArbitraryBuilder가 반환될 것이다.
+
+이제 위에서 언급한 sample 메서드가 호출되면 어떤일이 발생할까?
+
+```java
+public interface ArbitraryBuilder<T> {
+    T sample();
+}
+
+// 구현체
+public final class DefaultArbitraryBuilder<T> implements ArbitraryBuilder<T>, ExperimentalArbitraryBuilder<T> {
+    public T sample() {
+        return this.resolveArbitrary(this.context).combined();
+    }
+}
+```
+
+resolverArbitrary를 호출하면, 해당 컨텍스트 정보에 맞게 값을 생성한다. User class 내 각 필드 타입에 따라 값을 생성한다는 의미다.
+
+resolveArbitrary에서는 CombinableArbitrary 인스턴스를 반환하는데 combined 메서드를 호출하며 값을 매핑하고 반환한다.
+
+그러면 결과적으로 아래 값이 반환된다.
+
+```java
+User {
+    id = null;
+    firstName = "춝䪼ꧏ";
+    lastName = "苖⻵ꪘ쫏▷膄톣㷂䱧";
+    active = true;
+    emailAddress = "ᛩോ튅⛝櫕ᣵ솙칖谌ｰ퀭埘樅㺏㧑⍭規喲ꫮ൐Ὧ륑삲砎鳃抝Фꞻ᣾⤇崆";
+    createdAt = "Mon Sep 16 12:18:00 KST 2024";
+}
+```
+
+### Fixture Monkey 문자열 난수
+
+그러면 문자열의 난수는 어떤 방식으로 생성될까?
+
+### TO-DO(memo)
+- 생성자가 여러 개이고, 특정 필드는 nullable한 경우를 fixtureMonkey로 적용하기
+- 문자열의 난수는 어떻게 생성되는지
 
 ## The End
