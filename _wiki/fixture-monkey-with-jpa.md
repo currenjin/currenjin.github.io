@@ -3,7 +3,7 @@ layout  : wiki
 title   : Fixture Monkey를 적용해보자 w/JPA Test
 summary :
 date    : 2024-09-15 22:00:00 +0900
-updated : 2024-09-16 18:00:00 +0900
+updated : 2024-09-17 18:00:00 +0900
 tag     : fixture-monkey
 toc     : true
 public  : true
@@ -41,7 +41,7 @@ Fixture Monkey를 테스트하기 위해 Spring Data JPA 프로젝트에 구현�
 ### Links
 
 - [GitHub - Spring Data JPA](https://github.com/spring-projects/spring-data-jpa/blob/main/spring-data-jpa/src/test/java/org/springframework/data/jpa/repository/UserRepositoryTests.java)
-- [GitHub - Example Code](https://github.com/currenjin/TDD/tree/main/fixture-monkey/src)
+- [GitHub - Example Code](https://github.com/currenjin/TDD/blob/main/fixture-monkey/src/test/java/com/tdd/domain/user/UserRepositoryTest.java)
 
 ### Environment
 
