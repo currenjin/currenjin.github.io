@@ -3,7 +3,7 @@ layout  : wiki
 title   : Fixture Monkey를 적용해보자 w/JPA Test
 summary :
 date    : 2024-09-15 22:00:00 +0900
-updated : 2024-09-17 18:00:00 +0900
+updated : 2024-09-21 21:00:00 +0900
 tag     : fixture-monkey
 toc     : true
 public  : true
@@ -539,6 +539,81 @@ User {
    createdAt = "Thu Feb 08 00:00:00 KST 2024";
 }
 ```
+
+### 객체 리스트 생성
+
+객체를 하나하나 정의하기에도 지루함이 느껴질 때가 있다.
+
+```java
+private User firstUser;
+private User secondUser;
+private User thirdUser;
+private User fourthUser;
+private User fifthUser;
+
+@BeforeEach
+void setUp() {
+  firstUser = fixtureMonkey.giveMeOne(User.class);
+  secondUser = fixtureMonkey.giveMeOne(User.class);
+  thirdUser = fixtureMonkey.giveMeOne(User.class);
+  fourthUser = fixtureMonkey.giveMeOne(User.class);
+  fifthUser = fixtureMonkey.giveMeOne(User.class);
+}
+
+@Test
+void creation() {
+   Query query = em.createQuery("select count(u) from User u");
+   Long before = (Long) query.getSingleResult();
+   List<User> users = List.of(firstUser, secondUser, thirdUser, fourthUser, fifthUser);
+
+   repository.saveAll(users);
+
+   assertEquals(before + 5L, query.getSingleResult());
+}
+```
+
+위 예제 코드와 같이 사용할 수도 있겠지만, 여러 개의 객체를 한 번에 생성하고자 하면 어떻게 해야할까?
+
+동작 과정을 살펴보던 중 giveMeOne 메서드에서 호출하던 giveMe 메서드를 보자.
+
+```java
+public <T> T giveMeOne(Class<T> type) {
+    return this.giveMe((Class)type, 1).get(0);
+}
+
+public <T> List<T> giveMe(Class<T> type, int size) {
+   return (List)this.giveMe(type).limit((long)size).collect(Collectors.toList());
+}
+```
+
+size 값만큼 객체를 생성해주는 것으로 보인다. 마침, public 메서드이니 우리도 사용할 수 있겠다.
+
+```java
+private List<User> userList;
+
+@BeforeEach
+void setUp() {
+    userList = fixtureMonkey.giveMe(User.class, 5);
+}
+
+@Test
+void creation() {
+   Query query = em.createQuery("select count(u) from User u");
+   Long before = (Long) query.getSingleResult();
+
+   repository.saveAll(userList);
+
+   assertEquals(before + 5L, query.getSingleResult());
+}
+```
+
+giveMe 메서드를 호출하여 5개의 객체 생성을 요청했다.
+
+테스트는 성공했고, Debug mode로 userList를 확인해 보자.
+
+<img width="743" alt="image" src="https://github.com/user-attachments/assets/466a4709-9ab4-4330-b3aa-91511adcd71c">
+
+다섯 개의 User 인스턴스가 생성된 것을 확인할 수 있다.
 
 ## The End
 
