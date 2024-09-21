@@ -411,6 +411,8 @@ User {
 
 문자열의 난수는 어떤 방식으로 생성될까?
 
+#### 로직 분석
+
 예를 들어, User 클래스의 firstName 타입은 문자열(String)이다. 문자열은 MonkeyStringArbitrary 클래스를 통해 처리된다.
 
 ```java
@@ -497,6 +499,8 @@ public StringArbitrary alpha() {
 
 친절하게도 MonkeyStringArbitrary 구현체에 구현이 되어있다. 알파벳 뿐만 아니라 ascii, numberic, whitespace 등을 사용할 수 있다.
 
+#### 로직 구현
+
 이를 이용해 모든 문자열 필드는 알파벳만으로 구성해 보겠다.
 
 ```java
@@ -548,6 +552,8 @@ User {
 
 **문자열 난수** 챕터에서 확인했듯이, FixtureMonkey 인스턴스를 빌드하는 과정에서 MonkeyStringArbitrary를 적용할 수 있을 것이다.
 
+#### 로직 분석
+
 한글만 적용해주기 위해서는 일단 alpha 메서드를 확인할 필요가 있다. (한글만 적용해주는 메서드가 없기 때문이다)
 
 ```java
@@ -556,19 +562,15 @@ public StringArbitrary alpha() {
    this.characterArbitrary = this.characterArbitrary.alpha();
    return this;
 }
-```
 
-jqwik의 alpha 메서드를 호출한다. 내부를 확인해 보면,
-
-```java
 public CharacterArbitrary alpha() {
     return this.range('A', 'Z').range('a', 'z');
 }
 ```
 
-range를 알파벳으로 정의해 주는데, 우리가 직접 range를 설정할 수 있는 메서드를 지원하지 않을리는 없다.
+jqwik 라이브러리를 호출한다.
 
-MonkeyStringArbitrary 클래스 내에 all 메서드를 발견했는데, 해당 메서드에서는 모든 범위를 직접 지정해준다.
+내부에서 range를 알파벳으로 정의해 주는데, 직접 range를 설정할 수 있는 메서드를 지원하지 않을리가 없다고 생각한다.
 
 ```java
 @Override
@@ -583,9 +585,9 @@ public StringArbitrary withCharRange(char from, char to) {
 }
 ```
 
-운이 좋게도 withCharRange는 public 메서드여서 직접 정의할 수가 있겠다.
+MonkeyStringArbitrary 클래스 내에 all 메서드를 발견했는데, 해당 메서드에서는 모든 범위를 직접 지정해준다. 운이 좋게도 withCharRange는 public 메서드여서 직접 정의할 수가 있겠다.
 
-그럼 **어떤 값을 정의하는가?**
+#### 어떤 값을 정의하는가?
 
 jqwik library 내의 defaultArbitrary에서 확인했듯이 Unicode로 범위를 지정해줘야 한다. 한글은 AC00부터 D7AF까지이며, 실질적 사용 범위는 D7A3까지이다. (나머지 문자는 정의되지 않음)
 
@@ -620,7 +622,9 @@ User {
 } 
 ```
 
-그리고 이는 메서드화될 수 있다고 생각하여 FixtureMonkey Repository를 Fork하여 [Pull Request](https://github.com/naver/fixture-monkey/pull/1056)를 진행해 둔 상태이다.
+#### Contribute
+
+이는 메서드화될 수 있다고 생각하여 FixtureMonkey Repository를 Fork하여 [Pull Request](https://github.com/naver/fixture-monkey/pull/1056)를 진행해 둔 상태이다.
 
 **MonkeyStringArbitrary**
 
@@ -714,6 +718,8 @@ void creation() {
 
 위 예제 코드와 같이 사용할 수도 있겠지만, 여러 개의 객체를 한 번에 생성하고자 하면 어떻게 해야할까?
 
+#### 로직 분석
+
 동작 과정을 살펴보던 중 giveMeOne 메서드에서 호출하던 giveMe 메서드를 보자.
 
 ```java
@@ -727,6 +733,8 @@ public <T> List<T> giveMe(Class<T> type, int size) {
 ```
 
 size 값만큼 객체를 생성해주는 것으로 보인다. 마침, public 메서드이니 우리도 사용할 수 있겠다.
+
+#### 로직 구현
 
 ```java
 private List<User> userList;
