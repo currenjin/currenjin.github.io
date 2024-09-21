@@ -540,6 +540,146 @@ User {
 }
 ```
 
+### 한글 문자열 적용(feat. contribute)
+
+- [PR Link](https://github.com/naver/fixture-monkey/pull/1056)
+
+문자열에 한글만 적용하고 싶다면 어떻게 할까?
+
+**문자열 난수** 챕터에서 확인했듯이, FixtureMonkey 인스턴스를 빌드하는 과정에서 MonkeyStringArbitrary를 적용할 수 있을 것이다.
+
+한글만 적용해주기 위해서는 일단 alpha 메서드를 확인할 필요가 있다. (한글만 적용해주는 메서드가 없기 때문이다)
+
+```java
+@Override
+public StringArbitrary alpha() {
+   this.characterArbitrary = this.characterArbitrary.alpha();
+   return this;
+}
+```
+
+jqwik의 alpha 메서드를 호출한다. 내부를 확인해 보면,
+
+```java
+public CharacterArbitrary alpha() {
+    return this.range('A', 'Z').range('a', 'z');
+}
+```
+
+range를 알파벳으로 정의해 주는데, 우리가 직접 range를 설정할 수 있는 메서드를 지원하지 않을리는 없다.
+
+MonkeyStringArbitrary 클래스 내에 all 메서드를 발견했는데, 해당 메서드에서는 모든 범위를 직접 지정해준다.
+
+```java
+@Override
+public StringArbitrary all() {
+    return this.withCharRange(Character.MIN_VALUE, Character.MAX_VALUE);
+}
+
+@Override
+public StringArbitrary withCharRange(char from, char to) {
+   this.characterArbitrary = this.characterArbitrary.range(from, to);
+   return this;
+}
+```
+
+운이 좋게도 withCharRange는 public 메서드여서 직접 정의할 수가 있겠다.
+
+그럼 **어떤 값을 정의하는가?**
+
+jqwik library 내의 defaultArbitrary에서 확인했듯이 Unicode로 범위를 지정해줘야 한다. 한글은 AC00부터 D7AF까지이며, 실질적 사용 범위는 D7A3까지이다. (나머지 문자는 정의되지 않음)
+
+<img width="125" alt="image" src="https://github.com/user-attachments/assets/b970cae4-b0a0-46ec-8bd8-4ad81fec42b9">
+<img width="125" alt="스크린샷 2024-09-21 오후 9 50 55" src="https://github.com/user-attachments/assets/b9c2ba8d-3b6b-4e84-a674-2e20d6b0a8e8">
+
+그리고 이를 문자로 봤을 때 `가`부터 `힣` 까지이다.
+
+직접 정의해 보면,
+
+```java
+FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
+   .objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
+   .register(User.class, arbitraryBuilder ->
+      arbitraryBuilder.giveMeBuilder(String.class)
+         .set("firstName", new MonkeyStringArbitrary().withCharRange('가', '힣'))
+         .set("lastName", new MonkeyStringArbitrary().withCharRange('가', '힣'))
+      )
+   .build();
+```
+
+생성된 객체를 확인해 봤을 때 값은 아래와 같다.
+
+```java
+User {
+   id = null;
+   firstName = "짇쇅";
+   lastName = "뚼셃룫욻믉묩돚펇뒄냱쨃뮀튣퇿졷쑂졗징욡뎩몁";
+   active = true;
+   emailAddress = null;
+   createdAt = "Wed Feb 07 00:00:00 KST 2024";
+} 
+```
+
+그리고 이는 메서드화될 수 있다고 생각하여 FixtureMonkey Repository를 Fork하여 [Pull Request](https://github.com/naver/fixture-monkey/pull/1056)를 진행해 둔 상태이다.
+
+**MonkeyStringArbitrary**
+
+```java
+public StringArbitrary korean() {
+   this.characterArbitrary = this.characterArbitrary.range('가', '힣');
+   return this;
+}
+```
+
+그리고 위 메서드를 검증하기 위한 테스트도 작성했다.
+
+**MonkeyStringArbitraryTest**
+
+```java
+StringArbitrary koreanStringArbitrary = new MonkeyStringArbitrary().korean();
+
+@Test
+void koreanShouldGenerateOnlyKoreanCharacters() {
+   StringArbitrary arbitrary = koreanStringArbitrary.ofMinLength(1).ofMaxLength(10);
+
+   String sample = arbitrary.sample();
+
+   assertTrue(sample.chars().allMatch(ch -> ch >= '가' && ch <= '힣'));
+}
+```
+
+샘플 데이터를 추출하여 Unicode 상 한글 범위에 해당하는지 테스트했다.
+
+```java
+@Property(tries = 100)
+void koreanShouldAlwaysGenerateStringsWithinKoreanCharacterRange(
+    @ForAll @Size(min = 1, max = 50) String ignored
+) {
+   String sample = koreanStringArbitrary.sample();
+
+   assertTrue(sample.chars().allMatch(ch -> ch >= '가' && ch <= '힣'));
+}
+```
+
+마찬가지로 여러번 시도하여 항상 한글 범위에 해당하는지 테스트했다.
+
+```java
+@Test
+void koreanShouldRespectMinAndMaxLength() {
+   int minLength = 5;
+   int maxLength = 10;
+   StringArbitrary arbitrary = koreanStringArbitrary.ofMinLength(minLength).ofMaxLength(maxLength);
+
+   String sample = arbitrary.sample();
+
+   assertTrue(sample.length() >= minLength && sample.length() <= maxLength);
+}
+```
+
+그리고 샘플 데이터 생성을 요청한 길이가 올바른지 또한 검증했다.
+
+해당 PR이 통과할지는 불분명하겠지만, 불편함을 편함으로 바꿔주는 FixtureMonkey를 다루며 편리함을 추구하는 시도는 지속할 것이다.
+
 ### 객체 리스트 생성
 
 객체를 하나하나 정의하기에도 지루함이 느껴질 때가 있다.
