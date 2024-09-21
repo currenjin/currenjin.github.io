@@ -225,7 +225,7 @@ class UserRepositoryTest {
 
 ### Creation TO-BE
 
-아까 정의했던 객체를 FixtureMonkey를 통해 생성해 보자.
+위에서 정의했던 객체를 FixtureMonkey를 통해 생성해 보자.
 
 ```java
 @BeforeEach
@@ -252,6 +252,7 @@ User {
 ```
 
 ## Fixture Monkey 동작
+
 > 내부 동작이 궁금하지 않다면 넘어가도 좋다.
 
 ### 내부 동작 
@@ -409,7 +410,7 @@ User {
 
 ### Fixture Monkey 문자열 난수
 
-문자열의 난수는 어떤 방식으로 생성될까?
+> 문자열의 난수는 어떤 방식으로 생성될까?
 
 #### 로직 분석
 
@@ -546,9 +547,9 @@ User {
 
 ### 한글 문자열 적용(feat. contribute)
 
-- [PR Link](https://github.com/naver/fixture-monkey/pull/1056)
+> 문자열에 한글만 적용하고 싶다면 어떻게 할까?
 
-문자열에 한글만 적용하고 싶다면 어떻게 할까?
+- [PR Link](https://github.com/naver/fixture-monkey/pull/1056)
 
 **문자열 난수** 챕터에서 확인했듯이, FixtureMonkey 인스턴스를 빌드하는 과정에서 MonkeyStringArbitrary를 적용할 수 있을 것이다.
 
@@ -585,7 +586,9 @@ public StringArbitrary withCharRange(char from, char to) {
 }
 ```
 
-MonkeyStringArbitrary 클래스 내에 all 메서드를 발견했는데, 해당 메서드에서는 모든 범위를 직접 지정해준다. 운이 좋게도 withCharRange는 public 메서드여서 직접 정의할 수가 있겠다.
+MonkeyStringArbitrary 클래스 내에 all 메서드를 발견했는데, 해당 메서드에서는 모든 범위를 직접 지정해준다.
+
+운이 좋게도 withCharRange는 public 메서드여서 직접 정의할 수가 있겠다.
 
 #### 어떤 값을 정의하는가?
 
@@ -594,7 +597,7 @@ jqwik library 내의 defaultArbitrary에서 확인했듯이 Unicode로 범위를
 <img width="125" alt="image" src="https://github.com/user-attachments/assets/b970cae4-b0a0-46ec-8bd8-4ad81fec42b9">
 <img width="125" alt="스크린샷 2024-09-21 오후 9 50 55" src="https://github.com/user-attachments/assets/b9c2ba8d-3b6b-4e84-a674-2e20d6b0a8e8">
 
-그리고 이를 문자로 봤을 때 `가`부터 `힣` 까지이다.
+> 그리고 이를 문자로 봤을 때 `가`부터 `힣` 까지이다.
 
 직접 정의해 보면,
 
@@ -682,7 +685,7 @@ void koreanShouldRespectMinAndMaxLength() {
 
 그리고 샘플 데이터 생성을 요청한 길이가 올바른지 또한 검증했다.
 
-해당 PR이 통과할지는 불분명하겠지만, 불편함을 편함으로 바꿔주는 FixtureMonkey를 다루며 편리함을 추구하는 시도는 지속할 것이다.
+> 해당 PR이 통과할지는 불분명하겠지만, 불편함을 편함으로 바꿔주는 FixtureMonkey를 다루며 편리함을 추구하는 시도는 지속할 것이다.
 
 ### 객체 리스트 생성
 
