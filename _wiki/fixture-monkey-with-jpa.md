@@ -3,7 +3,7 @@ layout  : wiki
 title   : Fixture Monkey를 적용해보자 w/JPA Test
 summary :
 date    : 2024-09-15 22:00:00 +0900
-updated : 2024-09-21 21:00:00 +0900
+updated : 2024-09-26 15:00:00 +0900
 tag     : fixture-monkey
 toc     : true
 public  : true
