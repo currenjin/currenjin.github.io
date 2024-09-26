@@ -689,7 +689,7 @@ void koreanShouldRespectMinAndMaxLength() {
 
 > 24.09.26 기준 몇 가지 피드백 반영 후 승인 및 반영되었다. - [commit](https://github.com/naver/fixture-monkey/commit/0ab56069e4b86ab5051f46db4e94a2c7d4ac63ab)
 
-<img width="877" alt="image" src="https://github.com/user-attachments/assets/06424044-4e1e-4599-bd63-1cca1ae51409">
+<img width="803" alt="스크린샷 2024-09-26 오후 6 43 03" src="https://github.com/user-attachments/assets/0281a15c-0382-44ed-96fe-ac09b9d4ff40">
 
 ### 객체 리스트 생성
 
