@@ -687,7 +687,7 @@ void koreanShouldRespectMinAndMaxLength() {
 
 > 해당 PR이 통과할지는 불분명하겠지만, 불편함을 편함으로 바꿔주는 FixtureMonkey를 다루며 편리함을 추구하는 시도는 지속할 것이다.
 
-> 24.09.26 기준 몇 가지 피드백 반영 후 승인 및 반영되었다.
+> 24.09.26 기준 몇 가지 피드백 반영 후 승인 및 반영되었다. - [commit](https://github.com/naver/fixture-monkey/commit/0ab56069e4b86ab5051f46db4e94a2c7d4ac63ab)
 
 <img width="877" alt="image" src="https://github.com/user-attachments/assets/06424044-4e1e-4599-bd63-1cca1ae51409">
 
