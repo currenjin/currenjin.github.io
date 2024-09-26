@@ -687,6 +687,10 @@ void koreanShouldRespectMinAndMaxLength() {
 
 > 해당 PR이 통과할지는 불분명하겠지만, 불편함을 편함으로 바꿔주는 FixtureMonkey를 다루며 편리함을 추구하는 시도는 지속할 것이다.
 
+> 24.09.26 기준 몇 가지 피드백 반영 후 승인 및 반영되었다.
+
+<img width="877" alt="image" src="https://github.com/user-attachments/assets/06424044-4e1e-4599-bd63-1cca1ae51409">
+
 ### 객체 리스트 생성
 
 객체를 하나하나 정의하기에도 지루함이 느껴질 때가 있다.
