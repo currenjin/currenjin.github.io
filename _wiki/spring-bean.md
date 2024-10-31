@@ -116,8 +116,6 @@ Bean의 생명주기에 대한 궁금증을 해결할 수 있는 챕터다.
 5. @PreDestroy 메서드 실행
 6. destroy() 메서드 실행
 
-### 생성자 호출
-
 순서만 봐서는 와닿지 않을 것이다. 아래와 같은 예제를 생각해보자.
 
 ```java
@@ -135,7 +133,9 @@ public class UserRepository {
 }
 ```
 
-그리고 Bean의 생명주기에 따라 콘솔 출력을 해보자. 첫 번째로는, 생성자를 호출하는 것이다.
+### 생성자 호출
+
+Bean의 생명주기에 따라 콘솔 출력을 해보자. 첫 번째로는, 생성자를 호출하는 것이다.
 
 - [ ] 생성자 호출 (Bean 인스턴스 생성)
 - [ ] 의존성 주입 (Properties 세팅)
@@ -143,6 +143,8 @@ public class UserRepository {
 - [ ] afterPropertiesSet() 메서드 실행
 - [ ] @PreDestroy 메서드 실행
 - [ ] destroy() 메서드 실행
+
+UserService의 생성자에 콘솔을 작성해보자.
 
 ```java
 public UserService(UserRepository userRepository) {
@@ -185,7 +187,7 @@ class UserServiceBeanTest {
 
 ### 의존성 주입
 
-의존성 주입도 확인해보자.
+의존성 주입도 확인해보자. `UserService`가 `UserRepository`를 의존하고 있기 때문에 `UserRepository`의 생성자에 다음과 같은 콘솔을 추가한다.
 
 ```java
 @Repository
@@ -218,7 +220,7 @@ public class UserRepository {
 
 PostConstruct 메서드는 이름과 같이, 생성자를 호출한 이후 호출되는 메서드이다.
 
-한 번, 두 Bean 모두 적용해보자.
+`UserService`, `UserRepository` 모두 적용해보자.
 
 ```java
 @Service
@@ -275,7 +277,7 @@ public class UserRepository {
 
 이제는 afterPropertiesSet 메서드를 상속받아 실행해보자.
 
-afterPropertiesSet은 우리가 application.yml 등에서 정의한 환경변수가 스프링의 빈에 의해 주입된 이후 실행되는 메서드다.
+afterPropertiesSet 메서드는 우리가 application.yml 등에서 정의한 환경변수가 스프링의 빈에 의해 주입된 이후 실행되는 메서드다.
 
 확인하기 위해서는 InitializingBean을 상속하여 메서드를 오버라이딩 해야한다.
 
@@ -314,7 +316,7 @@ public class UserRepository implements InitializingBean {
 4. afterPropertiesSet 메서드 실행: UserService
 ```
 
-어떤 차이인지 모르겠다면 다음의 예제로 확인해보자.
+어떤 차이인지 모르겠다면 `UserService`에서 `Value Annotation`을 통해 `Properties`를 주입받도록 해준다. (`cacheEnabled`)
 
 ```java
 @Service
@@ -341,7 +343,7 @@ public class UserService implements InitializingBean {
 }
 ```
 
-결과는 어떨 것 같은가?
+결과가 어떨지 상상해보자.
 
 ```
 2. 의존성 주입: Properties 세팅
@@ -352,15 +354,15 @@ public class UserService implements InitializingBean {
 4. afterPropertiesSet 메서드 실행: UserService. property : true
 ```
 
-무언가 이상하지 않은가? PostConstruct를 호출하는 시점에 이미 properties가 주입되어있는 상태이다. 그렇다면, afterPropertiesSet은 왜 존재할까?
+무언가 이상하지 않은가? PostConstruct를 호출하는 시점에 이미 properties가 주입되어있는 상태이다. 그렇다면, PostConstructor와 afterPropertiesSet은 도대체 무슨 차이일까?
 
-일단, PostConstruct는 javax 패키지에 있고, afterPropertiesSet 메서드는 springframework 패키지에 있다. 특히 가장 큰 차이는 정의된 메서드를 보면 알 수 있는데, afterPropertiesSet 메서드는 Exception을 던질 수 있다는 점이다.
+극명한 차이는 다음과 같다. PostConstruct는 javax 패키지에 있고, afterPropertiesSet 메서드는 springframework 패키지에 있다. 특히 정의된 afterPropertiesSet 메서드를 보면, Exception을 던질 수 있다.
 
 ```java
 void afterPropertiesSet() throws Exception;
 ```
 
-이로 인해, property 값에 따라 예외를 핸들링하는 작업이 가능하다. 그 외에는 큰 차이가 없으므로 스프링 프레임워크에 의존하지 않는 PostConstruct 어노테이션을 많이 사용한다.
+이로 인해, afterPropertiesSet 메서드는 property 값에 따라 예외를 핸들링 할 수 있다. 그 외에는 큰 차이가 없으므로 스프링 프레임워크에 의존하지 않는 PostConstruct 어노테이션이 주로 사용된다.
 
 - [x] **생성자 호출 (Bean 인스턴스 생성)**
 - [x] **의존성 주입 (Properties 세팅)**
@@ -371,7 +373,7 @@ void afterPropertiesSet() throws Exception;
 
 ### @PreDestroy 메서드 실행
 
-PreDestroy 또한 어노테이션이 존재한다. 아래와 같이 적용해보자.
+PreDestroy 또한 어노테이션이 존재한다. `UserService`와 `UserRepository`에 다음과 같이 적용해보자.
 
 ```java
 @Service
@@ -418,7 +420,7 @@ class UserServiceBeanTest {
 
 자, 이번엔 결과가 어떨지 상상해보자. 이제는 예상이 가지 않는가? 자연스럽게 상상해보자.
 
-그리고 결과는 다음과 같다.
+결과는 다음과 같다.
 
 ```
 2. 의존성 주입: Properties 세팅
@@ -432,7 +434,7 @@ class UserServiceBeanTest {
 5. PreDestroy 메서드 실행: UserRepository
 ```
 
-close 명령이 실행되면, `UserRepository`를 의존하는 `UserService`에서 먼저 Destroy가 진행된다. 당연한 결과다.
+`context.close` 메서드가 호출되면, `UserRepository`를 의존하는 `UserService`에서 먼저 `Destroy`가 진행된다. 당연한 결과다.
 
 - [x] **생성자 호출 (Bean 인스턴스 생성)**
 - [x] **의존성 주입 (Properties 세팅)**
@@ -467,7 +469,7 @@ public class UserRepository implements InitializingBean, DisposableBean {
 }
 ```
 
-이제는 대부분 예상이 갈 것이다.
+결과는 대부분 예상할 수 있을 것이다.
 
 ```
 2. 의존성 주입: Properties 세팅
@@ -483,4 +485,4 @@ public class UserRepository implements InitializingBean, DisposableBean {
 6. destroy 메서드 실행: UserRepository
 ```
 
-그리고 눈치챈 사람도 있겠지만, PreDestroy는 javax 패키지에 존재하고, destroy 메서드는 springframework 패키지에 존재하며 에러 핸들링이 가능하다는 차이가 있다.
+눈치챈 사람도 있겠지만, PreDestroy는 javax 패키지에 존재하고, destroy 메서드는 springframework 패키지에 존재하며 에러 핸들링이 가능하다는 차이가 있다.
