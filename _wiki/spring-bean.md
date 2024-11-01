@@ -486,3 +486,44 @@ public class UserRepository implements InitializingBean, DisposableBean {
 ```
 
 눈치챈 사람도 있겠지만, PreDestroy는 javax 패키지에 존재하고, destroy 메서드는 springframework 패키지에 존재하며 에러 핸들링이 가능하다는 차이가 있다.
+
+## Circular Dependency(순환 참조)
+
+### Problem
+
+```java
+@Service
+public class UserService {
+   private final OrderService orderService;
+
+   public UserService(OrderService orderService) {
+      this.orderService = orderService;
+   }
+}
+
+@Service
+public class OrderService {
+   private final UserService userService;
+
+   public OrderService(UserService userService) {
+      this.userService = userService;
+   }
+}
+```
+
+위 예시를 보고 어떤 문제가 있는지 설명할 수 있는가? 문제점을 짚을 수 있다면 순환 참조 문제에 대해 인지하고 있는 것이다. 어떤 문제가 있을까?
+
+1. `Spring IoC Container`가 `Bean`을 생성한다.
+2. `UserService Bean` 생성을 시도한다.
+   - `UserService` 생성자 호출
+   - `OrderService` 의존성 필요
+3. `OrderService Bean` 생성을 시도한다.
+   - `OrderService` 생성자 호출
+   - `UserService` 의존성 필요
+4. 다시 `UserService Bean` 생성을 시도한다.
+5. `BeanCurrentlyInCreationException` 발생
+
+### Solution
+
+해결하기 위해선 어떤 방법이 필요할까?
+
