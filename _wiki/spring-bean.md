@@ -3,7 +3,7 @@ layout  : wiki
 title   : Spring Bean
 summary :
 date    : 2024-10-31 17:00:00 +0900
-updated : 2024-10-31 17:00:00 +0900
+updated : 2024-11-02 22:00:00 +0900
 tag     : spring
 toc     : true
 public  : true
@@ -511,19 +511,42 @@ public class OrderService {
 }
 ```
 
-위 예시를 보고 어떤 문제가 있는지 설명할 수 있는가? 문제점을 짚을 수 있다면 순환 참조 문제에 대해 인지하고 있는 것이다. 어떤 문제가 있을까?
+위 예시를 보고 어떤 문제가 있는지 설명할 수 있는가? 문제점을 짚을 수 있다면 순환 참조 문제에 대해 인지하고 있는 것이다.
 
+문제 상황을 순서대로 보자면,
 1. `Spring IoC Container`가 `Bean`을 생성한다.
 2. `UserService Bean` 생성을 시도한다.
-   - `UserService` 생성자 호출
-   - `OrderService` 의존성 필요
+   - `UserService` 생성자를 호출한다.
+   - `OrderService` 의존성이 필요하다.
 3. `OrderService Bean` 생성을 시도한다.
-   - `OrderService` 생성자 호출
-   - `UserService` 의존성 필요
+   - `OrderService` 생성자를 호출한다.
+   - `UserService` 의존성이 필요하다.
 4. 다시 `UserService Bean` 생성을 시도한다.
+   - 무한 반복
 5. `BeanCurrentlyInCreationException` 발생
 
+예시 코드를 입력했다면, 이제 테스트를 작성해볼까?
+
+```java
+class CircularDependencyTest {
+   @Test
+   void beanCurrentlyInCreationExceptionTest() {
+      AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+
+      context.register(UserService.class);
+      context.register(OrderService.class);
+
+      assertThatThrownBy(context::refresh)
+              .isInstanceOf(UnsatisfiedDependencyException.class)
+              .hasRootCauseInstanceOf(BeanCurrentlyInCreationException.class);
+   }
+}
+```
+
+해당 테스트는
+1. ApplicationContext 내에 UserService, OrderService Bean을 등록하고,
+2. refresh 메서드를 호출했을 때
+3. BeanCurrentlyInCreationException 발생 여부를 판단한다.
+   - `isInstanceOf(UnsatisfiedDependencyException.class)`는 의존성을 만족시키지 못했을 때 발생하는 상위 예외이다.   
+
 ### Solution
-
-해결하기 위해선 어떤 방법이 필요할까?
-
