@@ -3,7 +3,7 @@ layout  : wiki
 title   : Spring Bean
 summary :
 date    : 2024-10-31 17:00:00 +0900
-updated : 2024-11-02 22:00:00 +0900
+updated : 2024-11-03 21:00:00 +0900
 tag     : spring
 toc     : true
 public  : true
@@ -549,4 +549,72 @@ class CircularDependencyTest {
 3. BeanCurrentlyInCreationException 발생 여부를 판단한다.
    - `isInstanceOf(UnsatisfiedDependencyException.class)`는 의존성을 만족시키지 못했을 때 발생하는 상위 예외이다.   
 
+
 ### Solution
+해결할 수 있는 여러 방법이 있다. 순차적으로 확인해보자.
+
+#### 별도 로직 분리
+```java
+@Service
+public class CommonService {
+    public void process() {
+        // 공통 로직
+    }
+}
+```
+
+```java
+@Service
+public class UserService {
+    private final CommonService commonService;
+
+    public UserService(CommonService commonService) {
+        this.commonService = commonService;
+    }
+}
+```
+
+```java
+@Service
+public class OrderService {
+    private final CommonService commonService;
+
+    public OrderService(CommonService commonService) {
+        this.commonService = commonService;
+    }
+}
+```
+
+#### @Lazy
+
+```java
+@Service
+public class UserService {
+    private final OrderService orderService;
+
+    public UserService(@Lazy OrderService orderService) {
+        this.orderService = orderService;
+    }
+}
+```
+
+#### Event based
+```java
+@Service
+public class UserService {
+    private final ApplicationEventPublisher eventPublisher;
+
+    public void processUser() {
+        // 처리 후 이벤트 발행
+        eventPublisher.publishEvent(new UserProcessedEvent());
+    }
+}
+
+@Service
+public class OrderService {
+    @EventListener
+    public void handleUserProcessed(UserProcessedEvent event) {
+        // 이벤트 처리
+    }
+}
+```
