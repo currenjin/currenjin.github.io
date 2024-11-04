@@ -53,6 +53,7 @@ regenerate: true
 * [[toss-slash-24]]
 * [[fixture-monkey-with-jpa]]
 * [[spring-bean]]
+* [[layered-architecture]]
 
 ---
 
