@@ -54,6 +54,7 @@ regenerate: true
 * [[fixture-monkey-with-jpa]]
 * [[spring-bean]]
 * [[layered-architecture]]
+* [[the-well-grounded-java-developer]]
 
 ---
 
