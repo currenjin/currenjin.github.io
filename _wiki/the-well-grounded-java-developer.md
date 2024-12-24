@@ -11,7 +11,7 @@ parent  : [[how-to]]
 latex   : true
 ---
 * TOC
-  {:toc}
+{:toc}
 
 # 기본기가 탄탄한 자바 개발자(The well-grounded java developer)
 
