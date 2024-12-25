@@ -3,7 +3,7 @@ layout  : wiki
 title   : 기본기가 탄탄한 자바 개발자(The well-grounded java developer)
 summary :
 date    : 2024-12-21 18:00:00 +0900
-updated : 2024-12-24 23:00:00 +0900
+updated : 2024-12-25 17:00:00 +0900
 tag     : java
 toc     : true
 public  : true
@@ -149,7 +149,7 @@ duck.quack();
 #### 프로젝트 직소
 > OpenJDK 내 프로젝트는 프로젝트 직소(Project jigsaw)로 알려져 있다.
 
-OpenJDK 프로젝트의 모듈화 목표
+**OpenJDK 프로젝트의 모듈화 목표**
 - JDK 플랫폼 소스 모듈화하기
 - 프로세스 풋프린트 줄이기
 - 애플리케이션 시작 시간 개선하기
@@ -159,7 +159,7 @@ OpenJDK 프로젝트의 모듈화 목표
 
 해당 목표는 JDK와 자바 런타임에 밀접하게 초점을 맞춘 후 아래와 같은 다른 목표로 추진됐다.
 
-추진된 목표
+**추진된 목표**
 - 단일 모놀리식 런타임 JAR 끝내기
 - JDK 내부를 적절히 캡슐화해서 보호하기
 - 외부에 영향 없이 주요 내부의 변경 가능하게 하기
