@@ -3,7 +3,7 @@ layout  : wiki
 title   : 기본기가 탄탄한 자바 개발자(The well-grounded java developer)
 summary :
 date    : 2024-12-21 18:00:00 +0900
-updated : 2025-01-07 21:30:00 +0900
+updated : 2025-01-07 23:30:00 +0900
 tag     : java
 toc     : true
 public  : true
@@ -34,6 +34,47 @@ latex   : true
 - `.java` -(javac)-> `.class` -(class loader)-> `변환된 .class` -(interpreter)-> `실행코드` -(JIT Compiler)-> `기계어`  
 - 자바는 **컴파일 언어**이면서 **인터프리터 언어**이다.
 
+#### JVM 동작
+1. javac로 .class 파일 생성
+2. 저장소에 있는 .class파일을 JVM메모리로 로딩 
+   - 동적 로딩 기반
+   - 클래스 로더의 단점은 로딩만 할 수 있고, 언로딩은 불가
+     - 기존 스프링부트 서버를 생각하면, 언로딩을 하지 않고 계속해서 로딩
+     - 가비지 컬렉션에서 처리하는 것과는 다른 언로딩인가?
+3. .class를 변환작업을 거쳐 새로운 .class 생성
+   - compiler가 .class파일로 변환할 때와 JVM이 .class 파일로 변환할 때의 차이
+4. 새로 생성된 .class를 JIT컴파일러로 컴파일하여 기계어로 변환
+   - 핫스팟으로 지정된 건 기계어로 실행
+     - 핫스팟이란 무엇인가?
+   - 핫스팟에 대한 판단 역할은 JDK
+     - OpenJDK, correta 등 환경마다 다름
+
+#### JVM실행 모드에 대한 이해
+1. 인터프리터로만 실행
+   - JVM의 주 동작은 인터프리팅
+2. 인터프리터로 실행하다가 JIT컴파일하여 기계어로 실행
+   - 인터프리터로 실행하고, JIT컴파일 안 하는게 좋다. (빠른 스타트, 느린 실행)
+3. .class를 기계어로 컴파일 하는 컴파일러는 c1, c2가 있음
+   - JIT컴파일러가 느리기 때문에 모든 JVM 내 c1, c2 내장
+   - c1 : 최적화 안 하고 빠르게 실행하기 때문에 낮은 성능
+   - c2 : 인라인, 데드트래킹 등을 하는데 느린 속도
+4. c1으로만 실행 또는 c2로만 실행
+   - `java -XX options`
+   - c1 컴파일러로 동작하게 실행하면 실행 할때마다 JIT로 계속 컴파일
+
+#### 클래스 로딩 후 바이트코드 조작
+1. 자바 에이전트를 이용함
+2. 자바 에이전트도 자바로 작성한 jar파일임
+3. java.lang.instrument 패키지의 다양한 기능을 사용
+4. 실행 시 에이전트 옵션을 넣고 실행
+   - `java -javaagent:agent.jar -cp . MyClass`
+5. 에이전트에 의한 바이트코드 조작은 컴파일타임에는 인지할 수 없음
+6. 따라서 모니터링이나 코드 커버리지 계산 등 부수작업에 흔히 사용됨
+7. 하지만, AspecJ처럼 AOP에도 사용될 수 있고 인터페이스로 조작하면 Annotation Processor 없이 비슷한 동작 가능
+   - JPA는 AOP임. 엄청 느리다. 특히 Kotlin을 사용하면 KSP로 한 번 더 감싸기 때문에 엄청 느려짐
+
+
+
 ### 릴리즈 로드맵
 
 ![image](https://github.com/user-attachments/assets/6eaa7350-7a0b-40e3-8c78-223daa6e37a0)
@@ -48,24 +89,28 @@ latex   : true
 - 변수 이름만으로도 타입을 알 수 있는 경우
 - 로컬 변수의 범위와 사용법이 짧고 간단한 경우
 
-type interface
+#### 시스템
+- Java : 지역 변수 선언 시점의 컨텍스트만 고려
+- Kotlin : 빌더가 되는 람다 내의 내용까지 고려
+
+#### type interface
 ```java
 List<Integer> before = Collections.<Integer>emptyList();
 List<Integer> after = Collections.emptyList();
 ```
 
-diamond syntax
+#### diamond syntax
 ```java
 Map<Integer, Map<String, String>> beforeUserLists = new HashMap<Integer, Map<String, String>>();
 Map<Integer, Map<String, String>> afterUserLists = new HashMap<>();
 ```
 
-lambda
+#### lambda
 ```java
 Function<String, Integer> lengthFn = s -> s.length();
 ```
 
-LVTI, local variable type interface
+#### LVTI, local variable type interface
 - 로컬 변수의 선언만을 검사한다.
 - 제약 조건 해결 알고리즘을 적용한다.
 ```java
@@ -103,7 +148,7 @@ var fn = s -> s.length();
 var n = null;
 ```
 
-Nondenotable type
+#### Nondenotable type
 ```java
 var duck = new Object() {
     void quack() {
@@ -113,6 +158,12 @@ var duck = new Object() {
 
 duck.quack();
 ```
+
+#### var 쓸만할 때
+1. 익명클래스를 명시적으로 선언하지 않아도 자동화됨
+2. for(var item : collection)에서 특히 효과적
+3. 람다 인자에 Annotation 넣고 싶을 때
+   `Consumer<Person> f = (@Nonnull var person) -> {..}`
 
 ## 자바 모듈
 ### 요약
@@ -259,6 +310,18 @@ A가 B에 정의된 타입을 반환하는 메서드를 내보내는 경우, A�
 - 모듈 A가 다른 모듈을 전이적으로 필요한 경우 A에 종속된 모든 코드는 암시적으로 전이적 의존성도 함께 가져온다.
 - 전이성 사용을 최소화하는 것이 권장된다.
 
+### 모듈 전이성과 클래스로딩 문제
+1. 기존 : 패키지 바다에서 의존성이 연결된 클래스파일을 모아 로딩
+2. 모듈 : 클래스로더가 모듈의존성 그래프에 기반하여 관련된 모듈 내 클래스를 일제히 로딩
+3. 모듈 전체가 아니라 필요한 클래스만 골라서 로딩
+4. but, 전이성 설정을 비롯하여 internal 작성이 유도됨에 따라 폭발정인 클래스 의존성이 쉽게 작성되는 경향이 강함
+
+#### 모듈 캐노니컬
+1. 기존 : 클래스 캐노니컬 충돌이 생김
+2. 모듈 : 모듈 캐노니컬 충돌이 생김
+3. 기존 해결 방식 : 클래스 로더를 분리하여 각각 로딩할 수 있음
+4. 모듈 해결 방식 : 없음. 직소는 모든 모듈을 하나의 이름공간으로 관리
+
 ### 모듈 로드
 클래스 로딩에 대한 모듈식 접근 방식의 기본 원칙
 - 모듈은 과거 방식의 클래스 패스가 아닌 모듈 패스에서 해결한다.
@@ -277,3 +340,9 @@ A가 B에 정의된 타입을 반환하는 메서드를 내보내는 경우, A�
 
 #### Unnamed Module
 > 클래스 패스에 있는 모든 클래스와 JAR가 추가되는 단일 모듈
+
+### jlink
+1. 설치형 프로그램을 만들기 좋음. msi, dmg 등 생성
+2. OS별 서명, 메타정보 등을 지원하지는 않음
+3. 코틀린 컴포즈 테스크톱 등이 사용
+4. 자동모듈을 활용
