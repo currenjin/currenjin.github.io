@@ -44,7 +44,6 @@ regenerate: true
 * [[bpdu]]
 * [[public-ip-private-ip]]
 * [[osi-7-layer]]
-* [[basic-java]]
 * [[git]]
 * [[svg]]
 * [[n+1]]
