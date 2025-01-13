@@ -401,6 +401,27 @@ Class<?> clazz = Class.forName("MyClass");
       - 모든 정적 변수 초기화 및 모든 정적 초기화 블록 실행
       - JVM이 새로 로드된 클래스의 바이트코드를 실행
 
+### 클래스 로더
+#### BootstrapClassLoader(or PrimordialClassLoader)
+- `java.base` 로드 시 사용된다.
+- `JVM` 시작 프로세스의 초기에 인스턴스화된다.(JVM의 일부)
+
+#### PlatformClassLoader
+- 애플리케이션이 의존하는 나머지 플랫폼 모듈을 로드한다.
+- 모든 플랫폼 클래스에 액세스하기 위한 기본 인터페이스이다.(내부 클래스의 인스턴스)
+
+#### AppClassLoader
+- 애플리케이션 클래스를 로드한다.
+- 최신 자바 환경에서 대부분의 작업을 수행한다.
+
+#### CustomClassLoader
+- ClassLoader를 서브클래싱할 수 있다.
+- ClassLoader class가 final이 아니기 때문에 가능하다.
+
+#### 클래스로더 계층구조
+![image](https://github.com/user-attachments/assets/2afa1147-8fef-4f02-9161-91d96af9230e)
+
+
 ## 동시성
 
 ## 자바 성능
