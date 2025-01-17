@@ -43,9 +43,6 @@ ex) Feat: Separate API query scope between SuperAdmin and Admin
 
 ### Commit type
 
-
-아래와 같이 마크다운 표로 만들어보았습니다:
-
 | Tag Name | Description |
 |----------|-------------|
 | Feat | 새로운 기능을 추가 |
