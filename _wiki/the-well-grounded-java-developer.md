@@ -450,6 +450,12 @@ Class<?> clazz = Class.forName("MyClass");
       - 모든 정적 변수 초기화 및 모든 정적 초기화 블록 실행
       - JVM이 새로 로드된 클래스의 바이트코드를 실행
 
+### 클래스 객체
+> 로딩와 링킹 프로세스의 최종 결과는 새로 로드되고 링크된 타입을 나타내는 `Class` 객체
+
+- 상위 타입에 해당하는 `Class` 객체를 반환하는 `getSuperclass()` 등 여러 유용한 메서드를 제공한다.
+- `Method`, `Field` 그리고 클래스의 멤버에 대한 참조가 존재한다.
+
 ### 클래스 로더
 #### BootstrapClassLoader(or PrimordialClassLoader)
 - `java.base` 로드 시 사용된다.
