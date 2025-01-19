@@ -3,7 +3,7 @@ layout  : wiki
 title   : 기본기가 탄탄한 자바 개발자(The well-grounded java developer)
 summary :
 date    : 2024-12-21 18:00:00 +0900
-updated : 2025-01-19 23:00:00 +0900
+updated : 2025-01-19 22:00:00 +0900
 tag     : java
 toc     : true
 public  : true
@@ -602,6 +602,30 @@ public boolean push(String s) {
 - 알고리즘
 
 ### 블록 구조 동시성(Before ver.5)
+#### synchronized
+은행 계좌에서 돈을 인출하는 메서드가 있다.
+```java
+public synchronized boolean withdraw(int amount) {
+    if (balance >= amount) {
+        balance = balance - amount;
+        return true;
+    }
+
+    return false;
+}
+```
+
+메서드는 객체 인스턴스에 속한 잠금을 획득해야 한다. 한 번에 한 스레드만 객체의 동기화된 블록이나 메서드를 통과할 수 있다. 만약, 다른 스레드가 시도하면 JVM에 의해 일시 중단된다. (`critical section`)
+
+- 원시타입이 아닌 객체만 잠글 수 있다.
+- 객체들의 배열을 잠가도 개별 객체는 잠기지 않는다.
+- 동기화된 메서드는 전체 메서드를 포괄하는 `synchronized (this)` 블록과 동일하다고 생각할 수 있다. (바이트코드에선 다르다)
+- `static synchronized` 메서드는 잠글 인스턴스가 없어 `Class`를 잠근다.
+- 내부 클래스의 동기화는 외부 클래스와 독립적이다.
+- 동기화되지 않은 메서드는 잠금 상태를 고려하지 않는다. 해당 메서드는 동시에 실행이 가능하고, 동기화된 메서드가 실행 중일 때도 진행이 가능하다.
+- 자바의 잠금은 재진입이 가능하다. 재진입은 한 스레드가 이미 보유한 잠금을 다시 얻을 수 있는 특성이다. 
+  - 동일한 객체에 대해 `synchronized` 메서드가 다른 `synchronized` 메서드를 호출하는 경우 이미 잠금을 보유하고 있는 스레드는 다른 동기화 지점을 만나더라도 계속 진행할 수 있다.
+
 
 ### 메모리 모델
 
