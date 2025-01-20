@@ -3,7 +3,7 @@ layout  : wiki
 title   : 기본기가 탄탄한 자바 개발자(The well-grounded java developer)
 summary :
 date    : 2024-12-21 18:00:00 +0900
-updated : 2025-01-20 00:37:00 +0900
+updated : 2025-01-20 13:00:00 +0900
 tag     : java
 toc     : true
 public  : true
@@ -645,7 +645,93 @@ public synchronized boolean withdraw(int amount) {
       3. 스레드가 I/O를 대기 중이거나 다른 스레드가 보유한 잠금을 획득하기 위해 `BLOCKED` 상태로 전환될 수 있다.
       4. 자바 스레드에 해당하는 OS 스레드가 실행을 중단한 경우 해당 스레드 객체는 `TERMINATED` 상태로 전환된다.
 
-### 완전히 동기화된 객체
+#### 완전히 동기화된 객체
+- 모든 필드는 모든 생성자에서 일관된 상태로 초기화된다.
+- `public` 필드가 없다.
+- 객체 인스턴스는 비공개 메서드에서 반환된 후에도 일관성이 보장된다.
+- 모든 메서드는 유한한 시간 안에 종료된다는 것이 증명돼야 한다.
+- 모든 메서드는 동기화돼야 한다.
+- 어떤 메서드도 불일치한 상태에서 다른 인스턴스의 메서드를 호출하지 않는다.
+- 어떤 메서드도 불일치한 상태에서 현재 인스턴스의 비공개 메서드를 호출하지 않는다.
+
+```java
+public class FSOAccount {
+    private double balance;
+
+    public FSOAccount(double openingBalance) {
+        this.balance = openingBalance;
+    }
+
+    public synchronized void deposit(int amount) {
+        balance += amount;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+}
+```
+- 잔액에 대한 모든 접근을 조정하기 위해 `synchronized`를 사용해야 한다.
+- 이러한 잠금이 결국 성능을 저하시킨다.
+
+#### 교착상태
+교착상태에 대해 알아보기 위해 `FSOAccount` 클래스 내 이체를 위한 메서드를 추가한다.
+```java
+public synchronized boolean transferTo(FSOAccount other, int amount) {
+    try {
+        Thread.sleep(10);
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+
+    if (amount >= balance) {
+        balance -= amount;
+        other.deposit(amount);
+        return true;
+    }
+
+    return false;
+}
+```
+
+그리고 이를 사용하는 `Main` 클래스다.
+```java
+public class FSOMain {
+    private static final int MAX_TRANSFERS = 1_000;
+
+    public static void main(String[] args) throws InterruptedException {
+        FSOAccount a = new FSOAccount(10_000);
+        FSOAccount b = new FSOAccount(10_000);
+
+        Thread tA = new Thread(() -> {
+            for (int i = 0; i <MAX_TRANSFERS; i++) {
+                boolean ok = a.transferTo(b, 1);
+                if (!ok) {
+                    System.out.println("Thread A failed at " + i);
+                }
+            }
+        });
+
+        Thread tB = new Thread(() -> {
+            for (int i = 0; i <MAX_TRANSFERS; i++) {
+                boolean ok = b.transferTo(a, 1);
+                if (!ok) {
+                    System.out.println("Thread B failed at " + i);
+                }
+            }
+        });
+
+        tA.start();
+        tB.start();
+        tA.join();
+        tB.join();
+
+        System.out.println("End: " + a.getBalance() + " : " + b.getBalance());
+    }
+}
+```
+
+FSOAccount의 Thread.sleep() 코드는 스레드 스케줄러가 두 개의 스레드를 실행해 교착상태를 일으킬 수 있도록 하기 위한 것이다.
 
 ### 메모리 모델
 
