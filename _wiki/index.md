@@ -54,6 +54,7 @@ regenerate: true
 * [[spring-bean]]
 * [[layered-architecture]]
 * [[the-well-grounded-java-developer]]
+* [[jpa-deep-dive-by-currenjin]]
 
 ---
 
