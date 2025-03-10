@@ -1650,6 +1650,14 @@ public class DirtyCheckingBasicTest {
 }
 ```
 
+**둘 다 Update 쿼리가 발생**
+
+```java
+update post
+	set title=? 
+	where id=?
+```
+
 어느 것이 더 좋다기 보다는 프로젝트의 특성에 따라 적용
 
 - save()는 의도를 명확하게 표현함 (명시적)
@@ -1680,124 +1688,130 @@ public void processOrder(Long orderId) {
 
 ```
 
-## JPA의 더티 체킹은 왜 만들어졌는가?
+## 스냅샷 저장 메커니즘 상세 분석
 
-### 개발 생산성 향상
-
-**Before) JDBC only**
+### 스냅샷이란 무엇인가?
 
 ```java
-// JDBC 방식
-Person person = findPerson(id);
-person.setName("새이름");
-person.setAge(30);
-
-// UPDATE 쿼리 직접 작성
-String sql = "UPDATE Person SET name = ?, age = ? WHERE id = ?";
-PreparedStatement stmt = connection.prepareStatement(sql);
-stmt.setString(1, person.getName());
-stmt.setInt(2, person.getAge());
-stmt.setLong(3, person.getId());
-stmt.executeUpdate();
-```
-
-![Image](https://github.com/user-attachments/assets/cb7f80bd-e641-4bfe-b204-ed29019ae991)
-
-- 가장 직접적인 이유는 개발자가 반복적으로 작성해야 하는 코드를 줄이기 위함
-- JDBC를 직접 사용할 때는 객체 변경 후 매번 UPDATE 쿼리를 명시적으로 작성해야함
-
-**After) JPA with DirtyChecking**
-
-```java
-Person person = findPerson(id);
-person.setName("새이름");
-person.setAge(30);
-```
-
-### 트랜잭션 일관성
-
-- 더티체킹은 트랜잭션 내에서 변경된 모든 객체를 자동으로 추적하고 일관되게 처리함
-- 복잡한 비즈니스 트랜잭션에서 데이터 일관성을 유지하는 데 도움이 됨
-
-```java
-@Transactional
-public void transferMoney(Account from, Account to, BigDecimal amount) {
-    from.withdraw(amount);
-    to.deposit(amount);
+// EntityEntry 클래스 (Hibernate 내부 구현)
+public class EntityEntry implements Serializable {
+    private final Object[] loadedState;  // 스냅샷 데이터
+    private final Object id;
+    private final Object version;
+    private final EntityPersister persister;
+    private final Status status;
+    private final LockMode lockMode;
+    // ...
 }
 
 ```
 
-- 두 계좌의 변경사항이 자동으로 감지되어 하나의 트랜잭션으로 처리됨
-- 명시적 save() 호출을 잊는 실수를 방지
+- **정의**: 엔티티가 영속성 컨텍스트에 처음 저장될 때 원본 상태를 저장한 복사본
+- **목적**: 변경 감지(더티 체킹)의 기준점으로 사용
+- **생성 시점**: 엔티티가 다음 상태가 될 때 생성
+    - 최초 영속화(persist) 시
+    - 조회(find, JPQL) 시
+    - 준영속 -> 영속 전환 시
 
-### 객체 중심 개발 👍🏾
-
-- 언급
-
-  ![Image](https://github.com/user-attachments/assets/ca450530-9457-4e20-af86-15936aafcd52)
-
-  Gavin King “Hibernate in Action”
-
-  Eric Evans “Domain-Driven Design”
-
-  Vaughn Vernon “Implementing Domain-Driven Design”
-
+### 스냅샷 생성 과정 심층 분석
 
 ```java
-// 객체 세계: 자연스러운 상태 변경
-person.setName("새이름");
+// DefaultLoadEventListener.java (Hibernate)
+@Override
+protected void postLoad(
+        final LoadEvent event,
+        final EntityPersister persister,
+        final EntityKey keyToLoad,
+        final Object entity) {
 
-// JDBC 세계: 명시적 업데이트 필요
-preparedStatement.executeUpdate("UPDATE person SET name = ? WHERE id = ?");
+    // 1. 영속성 컨텍스트 가져오기
+    PersistenceContext persistenceContext = event.getSession().getPersistenceContextInternal();
 
-// JPA 세계: 객체 변경만으로 충분 (더티체킹)
-person.setName("새이름");  // 트랜잭션 종료 시 자동 반영
+    // 2. 엔티티 현재 상태 추출
+    Object[] values = persister.getPropertyValues(entity);
 
-```
+    // 3. 이벤트 리스너 호출
+    event.getSession().getInterceptor().onLoad(
+        entity,
+        keyToLoad.getIdentifier(),
+        values,
+        persister.getPropertyNames(),
+        persister.getPropertyTypes()
+    );
 
-- 객체 세계에서는 객체 상태 변경이 자연스러움
-- But, 디비 세계에서는 명시적인 UPDATE가 필요
-- 결국 객체 지향과 디비 사이의 인식 불일치를 해결하기 위함임
+    // 4. 엔티티 영속화 및 스냅샷 생성
+    persistenceContext.addEntity(
+        entity,
+        Status.MANAGED,
+        values,  // 이 값들이 스냅샷으로 저장됨
+        keyToLoad,
+        persister.getVersion(entity),
+        LockMode.NONE,
+        true,
+        persister,
+        true
+    );
 
-```java
-// 도메인 로직에 집중
-@Transactional
-public void approveOrder(Order order) {
-    order.approve();  // 도메인 로직
-    order.getItems().forEach(item -> {
-        item.allocateInventory();  // 연관 객체 도메인 로직
-    });
-    // 데이터베이스 작업 신경 쓸 필요 없음
+    // 연관 관계 처리 등 추가 로직...
 }
+
 ```
 
-- JPA는 도메인 주도 설계(DDD)와 같은 객체 중심 개발 방법론을 지원하기 위해 설계됨
-- 개발자가 데이터베이스 작업보다 도메인 로직에 집중할 수 있게함
+- **원본 상태 추출**
+    - `persister.getPropertyValues(entity)`
+    - 기본형(primitive), 임베디드 타입, 연관 관계 참조 포함
+- **스냅샷 데이터 저장**: `persistenceContext.addEntity(...)`
+    - `EntityEntry` 객체에 원본 상태 배열 보관
+    - 식별자, 버전 정보, 락 모드 등 함께 저장
+- **메모리 관리 고려사항**:
+    - 각 엔티티마다 원본 상태의 복사본 유지 (메모리 부담)
+    - 콜렉션, 대용량 필드의 경우 참조만 저장 (얕은 복사)
 
-## 구현체를 본 적 있는가
+## 엔티티 상태 변화 감지의 정확한 타이밍
 
-### **스냅샷 생성 과정**
+### 플러시 동작 타이밍 분석
 
 ```java
-@Test
-@Transactional
-void 스냅샷_생성_분석() {
-    // [디버깅] - 엔티티 로드 시점에 중단점 설정
-    Product product = entityManager.find(Product.class, testProductId);
+// AbstractFlushingEventListener.java (Hibernate)
+protected void flushEntities(final FlushEvent event) {
+    LOG.trace("Flushing entities and processing referenced collections");
 
-    // EntityEntry 객체와 loadedState 배열 확인 (디버거 화면)
-    // Session -> persistenceContext -> entitiesByKey -> EntityEntry -> loadedState
+    // 더티 체킹 및 SQL 준비 단계
+    prepareEntityFlushes(event);
 
-    // 상태 변경
-    product.setName("새 이름");
-    product.setPrice(new BigDecimal("99.99"));
+    // 콜렉션 처리
+    flushCollections(event);
 
-    // [디버깅] - flush 시점에 중단점 설정
-    entityManager.flush();
+    // 실제 엔티티 플러시 실행
+    performEntityFlushes(event);
 
-    // dirtyCheck 메서드 호출 과정 추적
-    // DefaultFlushEntityEventListener -> dirtyCheck -> findDirty
+    // 추가 후처리
+    postFlush(event);
+}
+
+// 더티 체킹의 핵심 - 엔티티 플러시 준비
+protected void prepareEntityFlushes(FlushEvent event) {
+    final EventSource source = event.getSession();
+    final PersistenceContext persistenceContext = source.getPersistenceContextInternal();
+
+    // 영속성 컨텍스트에서 모든 엔티티와 엔트리 가져오기
+    persistenceContext.prepareEntityFlushes();
+
+    // DefaultFlushEntityEventListener 호출하여 더티 체킹 수행
+    final Iterable<EntityEntry> list = persistenceContext.reentrantSafeEntityEntries();
+    for (EntityEntry entry : list) {
+        final Object entity = persistenceContext.getEntity(entry);
+        final EntityPersister persister = entry.getPersister();
+        final Status status = entry.getStatus();
+
+        if (status != Status.DELETED && status != Status.GONE) {
+            // 더티 체킹 이벤트 생성 및 처리
+            FlushEntityEvent entityEvent =
+                new FlushEntityEvent(source, entity, entry);
+            source.getEventListenerManager()
+                .flushEntity(entityEvent);
+        }
+    }
 }
 
 ```
@@ -1922,55 +1936,475 @@ public boolean isSame(Object x, Object y) {
 }
 ```
 
-## **더티체킹은 실제로 얼마나 효율적인가**
-
-### **메모리 사용량 측정**
+## 더티체킹 감지가 안 되는 코드
 
 ```java
-java
-Copy
-// 1만 건 엔티티 처리 시 메모리 사용량 비교
-List<Product> products = loadProducts(10000);
+@Entity
+public class PostWithTransient {
+    @Id
+    private Long id;
 
-// 더티체킹 사용: 모든 엔티티를 영속성 컨텍스트에 유지
-long dirtyCheckingMemory = measureMemoryUsage(() -> {
-    for (Product product : products) {
-        product.setPrice(product.getPrice().multiply(new BigDecimal("1.1")));
-    }
+    private String title;
+
+    @Transient
+    private String transientTitle;
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    public String getTransientTitle() { return transientTitle; }
+    public void setTransientTitle(String transientTitle) { this.transientTitle = transientTitle; }
+}
+```
+
+```java
+@Transactional
+public void updateTransientField(Long postId, String newTitle) {
+	Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new IllegalArgumentException("Post not found"));
+
+	PostWithTransient postWithTransient = new PostWithTransient();
+	postWithTransient.setId(post.getId());
+	postWithTransient.setTitle(post.getTitle());
+	postWithTransient.setTransientTitle(post.getTitle());  // 초기값 설정
+
+	em.persist(postWithTransient);
+	em.flush();
+
+	postWithTransient.setTransientTitle(newTitle);
+}
+
+@Transactional(readOnly = true)
+public PostWithTransient findPostWithTransientById(Long id) {
+	return em.find(PostWithTransient.class, id);
+}
+```
+
+```java
+@Test
+public void 준영속_상태_엔티티_변경은_감지되지_않음() {
+    sut.updateDetached(testPostId, NEW_TITLE);
+
+    Post actual = postRepository.findById(testPostId).get();
+
+    assertEquals(OLD_TITLE, actual.getTitle());
+}
+
+@Test
+public void 비영속_필드_변경은_감지되지_않음() {
+    sut.updateTransientField(testPostId, NEW_TITLE);
+
+    PostWithTransient actual = sut.findPostWithTransientById(testPostId);
+
+    assertEquals(OLD_TITLE, actual.getTransientTitle());
+}
+```
+
+### 자동 플러시 발생 시점 (5가지)
+
+1. **명시적 `flush()` 호출 시**:
+
+    ```java
     entityManager.flush();
-});
+    session.flush();
+    
+    ```
 
-// 최적화된 배치 처리: 100건마다 컨텍스트 정리
-long optimizedMemory = measureMemoryUsage(() -> {
-    int batchSize = 100;
-    for (int i = 0; i < products.size(); i++) {
-        products.get(i).setPrice(products.get(i).getPrice().multiply(new BigDecimal("1.1")));
-        if (i % batchSize == 0) {
-            entityManager.flush();
-            entityManager.clear();
+2. **트랜잭션 커밋 시** (`@Transactional` 종료 시점):
+
+    ```java
+    @Transactional
+    public void updateEntity() {
+        Entity entity = repository.findById(1L).get();
+        entity.setValue("변경");
+        // 트랜잭션 종료 시 자동 flush
+    }
+    
+    ```
+
+3. **JPQL/HQL 쿼리 실행 직전**:
+
+    ```java
+    Entity entity = entityManager.find(Entity.class, 1L);
+    entity.setValue("변경");
+    
+    // 쿼리 실행 전 자동 flush 발생
+    List<Entity> results = entityManager
+        .createQuery("select e from Entity e")
+        .getResultList();
+    
+    ```
+
+4. **네이티브 쿼리 실행 시** (FlushMode.AUTO 설정된 경우):
+
+    ```java
+    Entity entity = entityManager.find(Entity.class, 1L);
+    entity.setValue("변경");
+    
+    // 기본적으로 네이티브 쿼리는 자동 flush 안 함
+    // 명시적 설정 필요:
+    Query query = entityManager
+        .createNativeQuery("SELECT * FROM entity")
+        .setFlushMode(FlushModeType.AUTO);
+    query.getResultList();
+    
+    ```
+
+5. **Hibernate `scrollableResults`, `iterate()` 호출 시**:
+
+    ```java
+    Session session = entityManager.unwrap(Session.class);
+    ScrollableResults scroll = session
+        .createQuery("from Entity")
+        .scroll();
+    // 자동 flush 발생
+    
+    ```
+
+
+## 라이브 디버깅
+
+### 엔티티 로드
+
+```java
+@Test
+public void loadEntityAndTrackChanges() {
+    // 브레이크포인트 1: 엔티티 로드 직전
+    Post post = postRepository.findById(1L).get();
+
+    // 브레이크포인트 2: 엔티티 로드 직후
+    post.setTitle("변경된 제목");
+
+    // 브레이크포인트 3: 변경 직후
+    // 이 시점에서는 아직 SQL이 생성되지 않음
+}
+```
+
+- Entity Load
+    - AbstractEntityPersister.hydrate
+    - object
+- Entity Load Event
+    - DefaultLoadEventListener.postLoad
+    - entity
+    - sesion
+
+### 자동 플러시
+
+```java
+@Test
+@Transactional
+public void flushTriggeredByJPQL() {
+    // 브레이크포인트 1: 엔티티 변경 전
+    Post post = postRepository.findById(1L).get();
+    post.setTitle("변경된 제목");
+    
+    // 브레이크포인트 2: JPQL 쿼리 실행 직전 (자동 플러시 발생 지점)
+    List<Post> allPosts = postRepository.findAll();
+    
+    // 브레이크포인트 3: 쿼리 실행 후
+}
+```
+
+- flush
+    - AbstractFlushingEventListener.flushEntities
+
+### 더티 체킹 핵심 로직
+
+```java
+@Test
+@Transactional
+public void dirtyCheckingProcess() {
+    // 브레이크포인트 1: 트랜잭션 시작
+    Post post = postRepository.findById(1L).get();
+    
+    // 브레이크포인트 2: 여러 필드 변경
+    post.setTitle("새 제목");
+    post.setContent("새 내용");
+    
+    // 브레이크포인트 3: 트랜잭션 종료 직전 (커밋 시점)
+} // 트랜잭션 종료 - 자동 플러시 발생
+```
+
+- DirtyCheck
+    - DefaultFLushEntityEventListener.dirtyCheck
+    - flushEntityEvent
+- findDirty
+    - TypeHelper.findDirty
+
+## JPA의 더티 체킹은 왜 만들어졌는가?
+
+### ORM 패러다임의 등장과 더티 체킹의 필요성
+
+**객체-관계 불일치 문제**
+
+```java
+// 전통적인 JDBC 접근 방식
+User user = findUserById(1);
+user.setName("새이름");
+
+// 개발자가 명시적 UPDATE 쿼리 작성 필요
+String sql = "UPDATE users SET name = ? WHERE id = ?";
+PreparedStatement stmt = connection.prepareStatement(sql);
+stmt.setString(1, user.getName());
+stmt.setLong(2, user.getId());
+stmt.executeUpdate();
+
+```
+
+- **객체 지향 vs 관계형 DB**: 1990년대 객체지향 언어가 보편화되면서 객체 모델과 관계형 모델 간의 패러다임 불일치 문제가 부각됨
+
+**초기 솔루션과 한계**
+
+- **초기 접근법**: Object-to-Table 매핑 도구
+    - TopLink (1994), CocoBase (1997) 등
+    - 단순 CRUD 자동화에 초점
+    - 객체 상태 변경 추적 기능 미흡
+- **문제점**:
+    - 상태 변경 추적을 개발자가 수동으로 관리
+    - 코드 중복 및 휴먼 에러 가능성 높음
+    - 객체지향적 설계와 DB 작업 간 괴리 지속
+
+**더티 체킹의 등장**
+
+- **근본적 질문**: "객체의 상태가 변경되었을 때, 왜 개발자가 명시적으로 update를 호출해야 하는가?"
+- **패러다임 전환**: 객체 상태 변경을 자동으로 감지하고 DB에 반영하는 메커니즘의 필요성 대두
+- **토피 레미가 제안한 비전** (1999, "Transparent Persistence"):
+    - "개발자는 객체만 다루고, 데이터베이스 작업은 ORM이 자동으로 처리해야 한다"
+    - 이 비전이 더티 체킹의 철학적 기반이 됨
+
+### Hibernate 초기 버전부터 현재까지의 더티 체킹 구현 변화
+
+**Hibernate 초기 버전 (2001-2004)**
+
+```java
+// Hibernate 2.x의 더티 체킹 (2003년경)
+private void compareWithSnapshot(SessionImpl session) {
+    Object[] currentState = getPropertyValues();
+    Type[] types = getPersister().getPropertyTypes();
+
+    boolean[] dirty = new boolean[currentState.length];
+    int dirtyCount = 0;
+
+    for (int i = 0; i < currentState.length; i++) {
+        if (!types[i].isEqual(currentState[i], snapshot[i])) {
+            dirty[i] = true;
+            dirtyCount++;
         }
     }
-});
 
-// 각 방식 메모리 사용량: 그래프로 시각화
-// dirtyCheckingMemory vs optimizedMemory
+    if (dirtyCount > 0) {
+        markDirty(dirty, currentState);
+    }
+}
 
 ```
 
-### **SQL 생성 효율성**:
+- **Hibernate 1.0** (2001):
+    - 가빈 킹(Gavin King)이 EJB 2.0 Entity Beans의 대안으로 개발
+    - 초기 더티 체킹: 단순 필드별 값 비교 방식
+    - 메모리 사용량이 많고 성능 부담 컸음
+- **Hibernate 2.1** (2003):
+    - 더티 체킹 최적화 시도: 타입별 효율적 비교 알고리즘 도입
+    - `EntityEntry` 클래스의 등장과 스냅샷 데이터 구조화
+
+**Hibernate 3.x와 JPA 표준화 (2005-2010)**
+
+- **Hibernate 3.0** (2005):
+    - JDK 1.5 지원 및 어노테이션 기반 매핑 도입
+    - 플러시 최적화: 변경 감지를 위한 엔티티 순회 알고리즘 개선
+    - 더티 체킹 프로세스의 모듈화: `FlushEntityEventListener` 도입
+- **JPA 1.0 표준화** (2006):
+    - Java Persistence API 표준으로 더티 체킹 개념 확립
+    - 영속성 컨텍스트와 더티 체킹의 관계 명확화
+    - Hibernate가 JPA 표준 구현체로 자리잡음
+- **Hibernate 3.5/3.6** (2009-2010):
+    - JPA 2.0 지원 및 더티 체킹 성능 개선
+    - `DynamicUpdate` 어노테이션 도입: 변경된 필드만 UPDATE 가능
+
+**현대적 구현 (2011-현재)**
+
+- **Hibernate 4.x** (2011-2015):
+    - 바이트코드 향상 기술 도입으로 더티 체킹 성능 개선
+    - `SelfDirtinessTracker` 인터페이스 도입: 엔티티가 자신의 변경 상태 추적 가능
+    - 컬렉션 변경 감지 최적화
+- **Hibernate 5.x** (2015-2020):
+    - 더티 체킹 알고리즘 개선: 필드 접근 최소화
+    - 병렬 플러시 및 더티 체킹 파이프라인 도입 시도
+    - `@DynamicUpdate`의 지속적 개선
+- **Hibernate 6.x** (2021-현재):
+    - 더티 체킹 과정의 메모리 사용량 최적화
+    - Jakarta EE 9+ 지원 및 성능 향상
+    - 리액티브 트랜잭션 지원과 더티 체킹의 결합
+
+**주요 기술적 변화**
+
+- **초기**: 단순 값 비교 기반 더티 체킹
+- **중기**: 타입별 커스텀 비교 로직 및 스냅샷 최적화
+- **현재**: 바이트코드 조작, 자체 추적 능력, 메모리 최적화
+
+### 다른 ORM 프레임워크와의 비교
+
+MyBatis vs Hibernate의 더티 체킹 관점 비교
 
 ```java
-// @DynamicUpdate 효과 측정: 50개 필드 중 1개만 변경
-Product product = entityManager.find(Product.class, 1L);
-List<String> generatedSql = captureSql(() -> {
-    product.setName("변경된 이름");
-    entityManager.flush();
-});
+// MyBatis 접근법 - 명시적 매핑과 수동 업데이트
+@Update("UPDATE users SET name = #{name}, email = #{email} WHERE id = #{id}")
+int updateUser(User user);
 
-// SQL 크기 분석: @DynamicUpdate 적용 전/후 비교
-System.out.println("SQL 크기: " + generatedSql.get(0).length() + " 바이트");
+// 사용자 코드
+User user = userMapper.getUserById(1);
+user.setName("새이름");
+userMapper.updateUser(user);  // 명시적 업데이트 호출 필요
+
+// Hibernate 접근법 - 자동 변경 감지
+@Transactional
+public void updateUser(Long id, String newName) {
+    User user = userRepository.findById(id).get();
+    user.setName(newName);  // 명시적 save() 불필요
+}
 
 ```
+
+**SQL 매퍼 계열 (MyBatis, iBatis)**
+
+- **철학적 차이**:
+    - SQL 중심 접근법 vs 객체 중심 접근법
+    - 데이터베이스 작업의 명시성 vs 투명성
+- **변경 감지 방식**:
+    - **MyBatis**: 더티 체킹 개념 없음, 모든 업데이트는 명시적 호출 필요
+    - **Hibernate**: 자동 변경 감지로 개발자의 부담 감소
+- **장단점 비교**:
+    - **MyBatis 장점**: SQL 완전 제어, 성능 최적화 용이, 학습 곡선 낮음
+    - **MyBatis 단점**: 반복적 코드 작성, 객체 변경 추적 부재, 도메인 모델 약화
+    - **Hibernate 장점**: 객체 중심 개발, 생산성 향상, 도메인 모델 강화
+    - **Hibernate 단점**: 복잡한 쿼리 처리 어려움, 성능 최적화 복잡, 학습 곡선 높음
+
+**다른 JPA 구현체들**
+
+- **EclipseLink (ex-TopLink)**:
+    - 더티 체킹 구현: `UnitOfWorkImpl.calculateChanges()`
+    - 차이점: 변경 감지 시 타입별 비교자(Comparator) 활용
+    - 성능 특성: 메모리 사용량 적음, 초기 로딩 시간 김
+- **OpenJPA**:
+    - 더티 체킹 구현: 바이트코드 향상 기술에 강점
+    - 차이점: 필드 접근 인터셉션 기반 변경 감지
+    - 성능 특성: 엔티티 로딩 빠름, 업데이트 시 오버헤드 적음
+- **DataNucleus (ex-JPOX)**:
+    - 더티 체킹 구현: 하이브리드 방식 (스냅샷 + 필드 인터셉션)
+    - 차이점: JDO/JPA 이중 지원, 다양한 데이터 스토어 지원
+    - 성능 특성: 유연성 높음, 일반적으로 Hibernate보다 다소 느림
+
+**비-Java 환경의 ORM과 더티 체킹**
+
+- **Entity Framework (C#/.NET)**:
+    - 더티 체킹 구현: `DbContext.ChangeTracker` 기반
+    - 차이점: 프록시 없이도 변경 감지 가능 (POCO 지원)
+    - 접근법: Hibernate와 유사한 철학, Microsoft 기술 스택 최적화
+- **Django ORM (Python)**:
+    - 더티 체킹 구현: 모델 인스턴스의 원본 상태 보존 방식
+    - 차이점: 명시적 `save()` 호출 필요하나 변경된 필드만 업데이트
+    - 접근법: "Explicit is better than implicit" 파이썬 철학 반영
+- **Doctrine (PHP)**:
+    - 더티 체킹 구현: Unit of Work 패턴, 엔티티 스냅샷 비교
+    - 차이점: Hibernate에서 영감 받았으나 PHP 언어 특성에 맞게 최적화
+    - 접근법: Hibernate와 매우 유사한 개념 모델
+
+## 더티 체킹의 철학적 의미
+
+### 개발 생산성 향상
+
+**Before) JDBC only**
+
+```java
+// JDBC 방식
+Person person = findPerson(id);
+person.setName("새이름");
+person.setAge(30);
+
+// UPDATE 쿼리 직접 작성
+String sql = "UPDATE Person SET name = ?, age = ? WHERE id = ?";
+PreparedStatement stmt = connection.prepareStatement(sql);
+stmt.setString(1, person.getName());
+stmt.setInt(2, person.getAge());
+stmt.setLong(3, person.getId());
+stmt.executeUpdate();
+```
+
+![Image](https://github.com/user-attachments/assets/ca450530-9457-4e20-af86-15936aafcd52)
+
+- 가장 직접적인 이유는 개발자가 반복적으로 작성해야 하는 코드를 줄이기 위함
+- JDBC를 직접 사용할 때는 객체 변경 후 매번 UPDATE 쿼리를 명시적으로 작성해야함
+
+**After) JPA with DirtyChecking**
+
+```java
+Person person = findPerson(id);
+person.setName("새이름");
+person.setAge(30);
+```
+
+### 트랜잭션 일관성
+
+- 더티체킹은 트랜잭션 내에서 변경된 모든 객체를 자동으로 추적하고 일관되게 처리함
+- 복잡한 비즈니스 트랜잭션에서 데이터 일관성을 유지하는 데 도움이 됨
+
+```java
+@Transactional
+public void transferMoney(Account from, Account to, BigDecimal amount) {
+    from.withdraw(amount);
+    to.deposit(amount);
+}
+
+```
+
+- 두 계좌의 변경사항이 자동으로 감지되어 하나의 트랜잭션으로 처리됨
+- 명시적 save() 호출을 잊는 실수를 방지
+
+### 객체 중심 개발 👍🏾
+
+- 언급
+
+  ![Image](https://github.com/user-attachments/assets/cb7f80bd-e641-4bfe-b204-ed29019ae991)
+
+  Gavin King “Hibernate in Action”
+
+  Eric Evans “Domain-Driven Design”
+
+  Vaughn Vernon “Implementing Domain-Driven Design”
+
+
+```java
+// 객체 세계: 자연스러운 상태 변경
+person.setName("새이름");
+
+// JDBC 세계: 명시적 업데이트 필요
+preparedStatement.executeUpdate("UPDATE person SET name = ? WHERE id = ?");
+
+// JPA 세계: 객체 변경만으로 충분 (더티체킹)
+person.setName("새이름");  // 트랜잭션 종료 시 자동 반영
+
+```
+
+- **객체의 자율성**: 객체는 자신의 상태를 스스로 관리하는 자율적 존재
+- **데이터베이스 독립성**: 객체는 자신이 어떻게 저장되는지 알 필요가 없음
+- **더티 체킹의 역할**: 객체 모델과 관계형 모델 간의 다리 역할
+
+```java
+// 도메인 로직에 집중
+@Transactional
+public void approveOrder(Order order) {
+    order.approve();  // 도메인 로직
+    order.getItems().forEach(item -> {
+        item.allocateInventory();  // 연관 객체 도메인 로직
+    });
+    // 데이터베이스 작업 신경 쓸 필요 없음
+}
+```
+
+- **애그리게이트 루트 개념**: 일관성 경계 내에서의 상태 변경 추적
+- **유비쿼터스 언어**: 비즈니스 언어로 도메인 표현 시 기술적 세부사항 최소화
+- **더티 체킹의 기여**: 도메인 모델의 순수성 유지에 기여
 
 ## 실무에서의 딜레마와 해법
 
@@ -2011,10 +2445,9 @@ public void updateAllPricesSafely() {
 
 ```
 
-### **단순 대량 업데이트**
+### **단순 대량 업데이트(bulk)**
 
 ```java
-// 더티체킹보다 효율적인 벌크 연산
 @Transactional
 public int updateCategoryPrices(String category, BigDecimal increase) {
     return entityManager.createQuery(
@@ -2026,21 +2459,6 @@ public int updateCategoryPrices(String category, BigDecimal increase) {
 }
 
 ```
-
-## 디버거로 보는 실제 동작 과정
-
-라이브 디버깅 세션에서 다음을 중점적으로 확인
-
-1. **엔티티 로드 시**:
-   - `AbstractEntityPersister.hydrate()` - 엔티티 데이터 로딩
-   - `DefaultLoadEventListener.postLoad()` - 스냅샷 생성
-   - `StatefulPersistenceContext.addEntity()` - 영속성 컨텍스트에 등록
-2. **플러시 시**:
-   - `AbstractFlushingEventListener.flushEntities()` - 엔티티 순회
-   - `DefaultFlushEntityEventListener.onFlushEntity()` - 각 엔티티 처리
-   - `DefaultFlushEntityEventListener.dirtyCheck()` - 변경 감지
-   - `TypeHelper.findDirty()` - 필드별 비교
-   - `AbstractEntityPersister.updateOrInsert()` - SQL 생성
 
 ## 결론
 
