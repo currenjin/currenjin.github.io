@@ -57,7 +57,7 @@ Java에서는 String 클래스로 구현되고, 불변이다.
 
 #### 문자열 연결 (String Concatenation) 문제
 
-왜 문제가 되는가?
+##### 왜 문제가 되는가?
 ```java
 String result = "";
 for (int i = 0; i < n; i++) {
@@ -86,9 +86,22 @@ for (int i = 0; i < n; i++) {
 4. **시간 복잡도**:
     - i번째 반복에서 i 길이의 문자열을 복사해야 하므로 전체 시간 복잡도는 O(1+2+3+...+n) = O(n²)가 된다.
 
+##### 해결책
+StringBuilder는 내부적으로 가변 배열을 사용하여 O(n) 시간 복잡도를 제공한다.
+
+```java
+public String efficientConcatenation(int n) {
+    StringBuilder sb = new StringBuilder(n * 10); // 초기 용량 설정
+    for (int i = 0; i < n; i++) {
+        sb.append("데이터").append(i);
+    }
+    return sb.toString();
+}
+```
+
 #### 문자열 분할 (String Splitting) 문제
 
-왜 문제가 되는가?
+##### 왜 문제가 되는가?
 ```java
 for (int i = 0; i < iterations; i++) {
     String[] parts = text.split("\\s+");
@@ -112,9 +125,23 @@ for (int i = 0; i < iterations; i++) {
     - 반복적인 패턴 컴파일은 CPU 캐시를 효율적으로 활용하지 못한다.
     - 재사용 대신 매번 새로운 계산을 수행하므로 명령어 캐시와 데이터 캐시의 효율이 떨어진다.
 
+##### 해결책
+```java
+import java.util.regex.Pattern;
+
+public void efficientSplitting(String text, int iterations) {
+    Pattern pattern = Pattern.compile("\\s+"); // 패턴을 한 번만 컴파일
+    
+    for (int i = 0; i < iterations; i++) {
+        String[] parts = pattern.split(text);
+        // 처리 로직
+    }
+}
+```
+
 #### 문자열 인턴 (String Interning) 활용
 
-왜 문제가 되는가?
+##### 왜 문제가 되는가?
 ```java
 String s1 = new String("문자열");
 String s2 = new String("문자열");
@@ -135,9 +162,19 @@ String s2 = new String("문자열");
     - 내부적으로 해시 테이블 구조를 사용하여 문자열을 저장하고 조회한다.
     - `intern()` 메소드는 이 풀에서 동일한 내용의 문자열을 찾거나, 없으면 추가한다.
 
+##### 해결책
+```java
+public void withInterning() {
+    String s1 = new String("문자열").intern();
+    String s2 = new String("문자열").intern();
+    
+    System.out.println(s1 == s2); // true: 같은 객체 참조
+}
+```
+
 #### 대용량 문자열 처리: 메모리 맵 파일
 
-왜 문제가 되는가?
+##### 왜 문제가 되는가?
 ```java
 String content = new String(Files.readAllBytes(Paths.get(filePath)));
 ```
@@ -161,9 +198,34 @@ String content = new String(Files.readAllBytes(Paths.get(filePath)));
     - 파일 데이터를 직접 메모리에 로드하지 않고, 필요할 때 페이지 단위(보통 4KB)로 로드한다.
     - 메모리 맵은 프로세스의 가상 주소 공간을 사용하지만 물리적 메모리(RAM)는 실제 접근 시에만 사용한다.
 
+##### 해결책
+```java
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
+
+public void efficientLargeFileProcessing(String filePath) throws IOException {
+    try (RandomAccessFile file = new RandomAccessFile(filePath, "r");
+         FileChannel channel = file.getChannel()) {
+         
+        long fileSize = channel.size();
+        MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, fileSize);
+        
+        // 필요한 부분만 문자열로 변환하여 처리
+        byte[] bytes = new byte[1024]; // 청크 단위로 처리
+        while (buffer.hasRemaining()) {
+            int length = Math.min(buffer.remaining(), bytes.length);
+            buffer.get(bytes, 0, length);
+            String chunk = new String(bytes, 0, length, StandardCharsets.UTF_8);
+            // 청크 처리 로직
+        }
+    }
+}
+```
+
 #### 문자열 풀 및 캐싱 전략
 
-왜 문제가 되는가?
+##### 왜 문제가 되는가?
 ```java
 public String getFormattedValue(int value) {
     return "Value: " + value;
@@ -188,9 +250,22 @@ public String getFormattedValue(int value) {
     - 자주 사용되는 값의 문자열은 한 번만 생성되고 재사용된다.
     - 동시성 제어를 위한 세그먼트 락(Java 7) 또는 CAS(Compare-And-Swap, Java 8+) 연산을 사용한다.
 
+##### 해결책
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class EfficientCache {
+    private final ConcurrentHashMap<Integer, String> cache = new ConcurrentHashMap<>();
+    
+    public String getFormattedValue(int value) {
+        return cache.computeIfAbsent(value, k -> "Value: " + k);
+    }
+}
+```
+
 #### 문자열 비교 최적화
 
-왜 문제가 되는가?
+##### 왜 문제가 되는가?
 ```java
 if (s.equals(target)) {
     return true;
@@ -217,6 +292,23 @@ if (s.equals(target)) {
 4. **메모리 접근 패턴**:
     - 최적화된 비교는 순차적인 메모리 접근을 줄여준다.
     - 길이와 해시코드 비교는 단일 정수 비교로, 문자열 내용 전체를 검사하는 것보다 캐시 효율적이다.
+
+##### 해결책
+```java
+public boolean efficientComparison(String[] array, String target) {
+    int targetLength = target.length();
+    int targetHash = target.hashCode();
+    
+    for (String s : array) {
+        if (s.length() == targetLength && s.hashCode() == targetHash) {
+            if (s.equals(target)) { // 최종 검증 단계에서만 완전한 비교
+                return true;
+            }
+        }
+    }
+    return false;
+}
+```
 
 ### 배열
 
