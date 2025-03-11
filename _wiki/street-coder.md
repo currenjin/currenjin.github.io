@@ -3,7 +3,7 @@ layout  : wiki
 title   : 스트리트 코더(Street coder)
 summary :
 date    : 2025-03-10 20:00:00 +0900
-updated : 2025-03-10 20:00:00 +0900
+updated : 2025-03-11 13:00:00 +0900
 tag     : programming
 toc     : true
 public  : true
@@ -86,7 +86,7 @@ for (int i = 0; i < n; i++) {
 4. **시간 복잡도**:
     - i번째 반복에서 i 길이의 문자열을 복사해야 하므로 전체 시간 복잡도는 O(1+2+3+...+n) = O(n²)가 된다.
 
-#### 2. 문자열 분할 (String Splitting) 문제
+#### 문자열 분할 (String Splitting) 문제
 
 왜 문제가 되는가?
 ```java
@@ -188,7 +188,7 @@ public String getFormattedValue(int value) {
     - 자주 사용되는 값의 문자열은 한 번만 생성되고 재사용된다.
     - 동시성 제어를 위한 세그먼트 락(Java 7) 또는 CAS(Compare-And-Swap, Java 8+) 연산을 사용한다.
 
-#### 6. 문자열 비교 최적화
+#### 문자열 비교 최적화
 
 왜 문제가 되는가?
 ```java
