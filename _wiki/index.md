@@ -56,6 +56,7 @@ regenerate: true
 * [[the-well-grounded-java-developer]]
 * [[jpa-deep-dive-by-currenjin]]
 * [[street-coder]]
+* [[implementation-patterns]]
 
 ---
 
