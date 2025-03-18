@@ -57,6 +57,7 @@ regenerate: true
 * [[jpa-deep-dive-by-currenjin]]
 * [[street-coder]]
 * [[implementation-patterns]]
+* [[ERD]]
 
 ---
 
