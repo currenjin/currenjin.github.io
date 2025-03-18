@@ -14,9 +14,10 @@ latex   : true
 {:toc}
 
 # ERD
+구조화된 데이터에 대한 일련의 표현이다.
+
 ## ER diagram notation
 ![Image](https://github.com/user-attachments/assets/bbbae9b6-0d13-4167-aab4-095642831459)
-
 
 ## Reference
 - https://www.lucidchart.com/pages/ER-diagram-symbols-and-meaning
