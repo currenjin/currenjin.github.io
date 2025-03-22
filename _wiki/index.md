@@ -58,6 +58,7 @@ regenerate: true
 * [[street-coder]]
 * [[implementation-patterns]]
 * [[ERD]]
+* [[java-virtual-machine]]
 
 ---
 
