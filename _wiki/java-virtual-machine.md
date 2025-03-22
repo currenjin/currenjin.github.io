@@ -11,7 +11,7 @@ parent  : [[how-to]]
 latex   : true
 ---
 * TOC
-  {:toc}
+{:toc}
 
 # JVM
 > 스택 기반의 해석 머신이다.
