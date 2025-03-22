@@ -40,9 +40,75 @@ latex   : true
 - `aload_0` : 현재 객체를 스택 상단에 넣어라
   - 자주 쓰이는데, 단축형이어서 클래스 파일 크기가 상당히 줄어든다.
 
+### Category
+| 패밀리명          | 명령어             | 인수                               | 설명                                  |
+|---------------|-----------------|----------------------------------|-------------------------------------|
+| **상수 로딩**     |                 |                                  |                                     |
+|               | iconst_\<i\>    | -                                | int 상수(-1~5)를 스택에 푸시                |
+|               | aconst_null     | -                                | null 참조를 스택에 푸시                     |
+|               | ldc             | index                            | 상수 풀에서 항목(String, int, float 등)을 로드 |
+| **지역 변수 접근**  |                 |                                  |                                     |
+|               | iload_\<n\>     | -                                | int 지역 변수 n을 스택에 로드 (n=0~3)         |
+|               | aload_\<n\>     | -                                | 참조 지역 변수 n을 스택에 로드 (n=0~3)          |
+|               | istore_\<n\>    | -                                | 스택에서 int를 꺼내 지역 변수 n에 저장 (n=0~3)    |
+|               | astore_\<n\>    | -                                | 스택에서 참조를 꺼내 지역 변수 n에 저장 (n=0~3)     |
+| **산술 연산**     |                 |                                  |                                     |
+|               | iadd            | -                                | int 덧셈                              |
+|               | isub            | -                                | int 뺄셈                              |
+|               | imul            | -                                | int 곱셈                              |
+|               | idiv            | -                                | int 나눗셈                             |
+|               | iinc            | index, const                     | 지역 변수에 상수 값을 더함 (루프 카운터에 주로 사용)     |
+| **분기 명령**     |                 |                                  |                                     |
+|               | if_icmpeq       | branch                           | 두 int가 같으면 분기                       |
+|               | if_icmpne       | branch                           | 두 int가 다르면 분기                       |
+|               | if_icmplt       | branch                           | 첫 int가 두번째보다 작으면 분기                 |
+|               | if_icmpgt       | branch                           | 첫 int가 두번째보다 크면 분기                  |
+|               | ifnull          | branch                           | 참조가 null이면 분기                       |
+|               | ifnonnull       | branch                           | 참조가 null이 아니면 분기                    |
+|               | goto            | branch                           | 무조건 분기                              |
+| **메소드 호출/반환** |                 |                                  |                                     |
+|               | invokevirtual   | indexbyte1, indexbyte2           | 인스턴스 메소드 호출 (일반 메소드 호출)             |
+|               | invokespecial   | indexbyte1, indexbyte2           | 특수 메소드 호출 (생성자, private, super)     |
+|               | invokestatic    | indexbyte1, indexbyte2           | 정적 메소드 호출                           |
+|               | invokeinterface | indexbyte1, indexbyte2, count, 0 | 인터페이스 메소드 호출                        |
+|               | invokedynamic   | indexbyte1, indexbyte2, 0, 0     | 동적 메소드 호출 (람다, 메소드 참조)              |
+|               | ireturn         | -                                | int 반환                              |
+|               | areturn         | -                                | 객체 참조 반환                            |
+|               | return          | -                                | void 반환                             |
+| **객체/배열 조작**  |                 |                                  |                                     |
+|               | new             | indexbyte1, indexbyte2           | 새 객체 생성                             |
+|               | newarray        | atype                            | 기본 타입 배열 생성                         |
+|               | anewarray       | indexbyte1, indexbyte2           | 참조 타입 배열 생성                         |
+|               | getfield        | indexbyte1, indexbyte2           | 인스턴스 필드 값 가져오기                      |
+|               | putfield        | indexbyte1, indexbyte2           | 인스턴스 필드 값 설정                        |
+|               | getstatic       | indexbyte1, indexbyte2           | 정적 필드 값 가져오기                        |
+|               | aaload          | -                                | 객체 배열에서 항목 로드                       |
+|               | aastore         | -                                | 객체 배열에 항목 저장                        |
+|               | arraylength     | -                                | 배열의 길이 가져오기                         |
+|               | instanceof      | indexbyte1, indexbyte2           | 객체가 특정 타입인지 검사                      |
+|               | checkcast       | indexbyte1, indexbyte2           | 객체 타입 캐스팅 검사                        |
+| **스택 조작**     |                 |                                  |                                     |
+|               | dup             | -                                | 스택 최상위 값 복제                         |
+|               | pop             | -                                | 스택 최상위 값 제거                         |
+| **예외 처리**     |                 |                                  |                                     |
+|               | athrow          | -                                | 예외 던지기                              |
+| **동기화**       |                 |                                  |                                     |
+|               | monitorenter    | -                                | 모니터 진입 (synchronized 블록 시작)         |
+|               | monitorexit     | -                                | 모니터 퇴출 (synchronized 블록 종료)         |
+
+### Heap & Thread
+일관된 상태를 유지하려면 JVM이 관리 작업 수행 도중 공유 힙이 변경되지 않게 모든 애플리케이션 스레드를 멈추어야 한다.
+1. JVM 애플리케이션 스레드 하나하나가 진짜 OS 스레드다.
+2. Interpreted 메서드를 실행하는 스레드에 대해 옵코드가 디스패치되는 시점에서 애플리케이션 스레드가 실행하는 것은 유저 코드가 아니라 JVM Interpreter 코드이다.
+3. 따라서 힙 상태 일관성이 보장되고 애플리케이션 스레드를 멈출 수 있다.
+
+> 바이트코드 사이사이가 애플리케이션 스레드를 멈추기에 이상적인 시점이자, 단순한 세이브포인트로 볼 수 있다.
+
 ## Class file
-### 구조
+### Structure
 > MVCATSIFMA
+>
+> My Very Cute Animal Turns Savage In Full Moon Areas
 
 - `Magic number` : `0xCAFEBABE`라는 매직넘버로 클래스 파일임을 나타냄(4바이트)
 - `Version` : 메이저/마이너 버전 숫자(4바이트)
