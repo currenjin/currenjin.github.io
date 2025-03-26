@@ -25,9 +25,11 @@ latex   : true
 ## Interpreter
 > 평가 스택을 이용해 중간값들을 담아두고 가장 마지막에 실행된 명령어와 독립적으로 프로그램을 구성하는 옵코드를 하나씩 순서대로 처리하는 'while 루프 안의 switch문'이다.
 >
-> 가장 단순한 인터프리터는 switch 문이 포함된 while 루프 형태 - [Example code(ocelotvm)](https://github.com/kittylyst/ocelotvm/blob/master/src/main/java/ocelot/InterpMain.java)
+> 가장 단순한 인터프리터는 switch 문이 포함된 while 루프 형태
 
-### execMethod()
+### Example) execMethod()
+- [Example code(ocelotvm)](https://github.com/kittylyst/ocelotvm/blob/master/src/main/java/ocelot/InterpMain.java)
+
 ```java
 JVMValue execMethod(final String klassName, final String desc, final byte[] instr, final InterpLocalVars lvt) {
     if (instr == null || instr.length == 0)
@@ -543,7 +545,7 @@ public class CallA {
 ```
 Final 메서드 호출부가 invokespecial로 컴파일되면 CallA:otherMethod 다음 바이트코드로 바뀔 것이다.
 
-```
+```shell
 public void otherMethod()
     Code:
         0: aload_1
@@ -561,7 +563,7 @@ public void otherMethod()
 #### Object::<init>
 자바 언어 명세를 보면, 종료화(11.6절) 대상 객체는 반드시 종료화 서브시스템에 등록해야 한다 작성되어있다.
 
-1. Object 생성자의 Object::init> 호출이 완료되면
+1. Object 생성자의 Object::<init> 호출이 완료되면
 2. 곧바로 객체를 등록해야 한다.
 3. JVMTI처럼 바이트코드를 건드리는 툴에서는 이 코드 위치가 모호할 수 있다.
 
