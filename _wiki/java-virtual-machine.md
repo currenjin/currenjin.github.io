@@ -24,6 +24,57 @@ latex   : true
 
 ## Interpreter
 > 평가 스택을 이용해 중간값들을 담아두고 가장 마지막에 실행된 명령어와 독립적으로 프로그램을 구성하는 옵코드를 하나씩 순서대로 처리하는 'while 루프 안의 switch문'이다.
+>
+> 가장 단순한 인터프리터는 switch 문이 포함된 while 루프 형태 - [Example code(ocelotvm)](https://github.com/kittylyst/ocelotvm/blob/master/src/main/java/ocelot/InterpMain.java)
+
+### execMethod()
+```java
+JVMValue execMethod(final String klassName, final String desc, final byte[] instr, final InterpLocalVars lvt) {
+    if (instr == null || instr.length == 0)
+        return null;
+
+    final InterpEvalStack eval = new InterpEvalStack();
+
+    int current = 0;
+    LOOP:
+    while (true) {
+        byte b = instr[current++];
+        Opcode op = table[b & 0xff];
+        if (op == null) {
+            System.err.println("Unrecognised opcode byte: " + (b & 0xff) + " encountered at position " + (current - 1) + ". Stopping.");
+            System.exit(1);
+        }
+        byte num = op.numParams();
+        JVMValue v, v2, ret;
+        OtKlassParser.CPMethod toBeCalled;
+        int paramCount, jumpTo, cpLookup;
+        InterpLocalVars withVars;
+        JVMValue[] toPass;
+        switch (op) {
+            case ACONST_NULL:
+                eval.aconst_null();
+                break;
+            case ALOAD:
+                eval.push(lvt.aload(instr[current++]));
+                break;
+            case ALOAD_0:
+                eval.push(lvt.aload((byte) 0));
+                break;
+            // ...
+            case RET:
+                throw new IllegalArgumentException("Illegal opcode byte: " + (b & 0xff) + " encountered at position " + (current - 1) + ". Stopping.");
+            default:
+                System.err.println("Saw " + op + " - that can't happen. Stopping.");
+                System.exit(1);
+        }
+        // SAFEPOINT CHECK GOES HERE
+    }
+}
+```
+1. 메서드에서 한 번에 한 바이트코드씩 읽어들여 옵코드 별로 분기하는 코드이다.
+2. 매개변수가 딸린 옵코드는 읽는 위치가 정확한지 확인하기 위해 스트림에서도 읽는다.
+3. 임시값은 EvaluationStack에서 평가된다. 산술 옵코드는 이 스택 위에서 정수 계산을 한다.
+
 
 ## Bytecode(Opcode)
 - JVM에서 각 스택 머신 작업 코드(옵코드)는 1바이트로 나타낸다(그래서 이름도 바이트코드이다, 0-255, 현재 약 200개 사용 중).
@@ -463,54 +514,3 @@ Constant pool:
 }
 SourceFile: "Post.java"
 ```
-
-## Interpreter
-> 가장 단순한 인터프리터는 switch 문이 포함된 while 루프 형태 - [Example code(ocelotvm)](https://github.com/kittylyst/ocelotvm/blob/master/src/main/java/ocelot/InterpMain.java)
-
-### execMethod()
-```java
-JVMValue execMethod(final String klassName, final String desc, final byte[] instr, final InterpLocalVars lvt) {
-    if (instr == null || instr.length == 0)
-        return null;
-
-    final InterpEvalStack eval = new InterpEvalStack();
-
-    int current = 0;
-    LOOP:
-    while (true) {
-        byte b = instr[current++];
-        Opcode op = table[b & 0xff];
-        if (op == null) {
-            System.err.println("Unrecognised opcode byte: " + (b & 0xff) + " encountered at position " + (current - 1) + ". Stopping.");
-            System.exit(1);
-        }
-        byte num = op.numParams();
-        JVMValue v, v2, ret;
-        OtKlassParser.CPMethod toBeCalled;
-        int paramCount, jumpTo, cpLookup;
-        InterpLocalVars withVars;
-        JVMValue[] toPass;
-        switch (op) {
-            case ACONST_NULL:
-                eval.aconst_null();
-                break;
-            case ALOAD:
-                eval.push(lvt.aload(instr[current++]));
-                break;
-            case ALOAD_0:
-                eval.push(lvt.aload((byte) 0));
-                break;
-            // ...
-            case RET:
-                throw new IllegalArgumentException("Illegal opcode byte: " + (b & 0xff) + " encountered at position " + (current - 1) + ". Stopping.");
-            default:
-                System.err.println("Saw " + op + " - that can't happen. Stopping.");
-                System.exit(1);
-        }
-        // SAFEPOINT CHECK GOES HERE
-    }
-}
-```
-1. 메서드에서 한 번에 한 바이트코드씩 읽어들여 옵코드 별로 분기하는 코드이다.
-2. 매개변수가 딸린 옵코드는 읽는 위치가 정확한지 확인하기 위해 스트림에서도 읽는다.
-3. 임시값은 EvaluationStack에서 평가된다. 산술 옵코드는 이 스택 위에서 정수 계산을 한다.
