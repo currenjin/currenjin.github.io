@@ -178,7 +178,6 @@ JVMValue execMethod(final String klassName, final String desc, final byte[] inst
 - `Attribute` : 클래스가 지닌 모든 속성(소스 파일명 등)
 
 ### Compile
-
 #### Example code
 
 ```java
@@ -526,7 +525,6 @@ SourceFile: "Post.java"
 - [전체 옵코드 목록](https://github.com/openjdk/jdk/blob/master/src/hotspot/share/interpreter/bytecodes.cpp)
 
 ### Edge case
-
 #### Final 메서드
 오버라이드할 수 없으니 javac로 컴파일하면 invokespecial 옵코드가 나오리라 예상할 수 있다.
 
@@ -543,6 +541,7 @@ public class CallA {
     }
 }
 ```
+
 Final 메서드 호출부가 invokespecial로 컴파일되면 CallA:otherMethod 다음 바이트코드로 바뀔 것이다.
 
 ```shell
@@ -552,6 +551,7 @@ public void otherMethod()
         1: invokespecial #4   // Method A.fMethod:()V
         4: return
 ```
+
 이 상태에서,
 1. fMethod() 메서드를 non-final로 변경하면
 2. 해당 메서드는 서브클래스에서 오버라이드가 가능하다.
