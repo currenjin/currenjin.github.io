@@ -514,3 +514,55 @@ Constant pool:
 }
 SourceFile: "Post.java"
 ```
+
+## HotSpot
+> Template Interpreter 로써, 시작할 때마다 동적으로 interpreter를 구축한다.
+
+- Assembly language 코드로 작성되어있다.
+- Private Bytecode를 정의해 쓴다.
+- Edge case를 다루는 데 도움이 되는 설계 방식이다.
+- [전체 옵코드 목록](https://github.com/openjdk/jdk/blob/master/src/hotspot/share/interpreter/bytecodes.cpp)
+
+### Edge case
+
+#### Final 메서드
+오버라이드할 수 없으니 javac로 컴파일하면 invokespecial 옵코드가 나오리라 예상할 수 있다.
+
+```java
+public class A {
+    public final void fMethod() {
+        // 작업
+    }
+}
+
+public class CallA {
+    public void otherMethod(A obj) {
+        obj.fMethod();
+    }
+}
+```
+Final 메서드 호출부가 invokespecial로 컴파일되면 CallA:otherMethod 다음 바이트코드로 바뀔 것이다.
+
+```
+public void otherMethod()
+    Code:
+        0: aload_1
+        1: invokespecial #4   // Method A.fMethod:()V
+        4: return
+```
+이 상태에서,
+1. fMethod() 메서드를 non-final로 변경하면
+2. 해당 메서드는 서브클래스에서 오버라이드가 가능하다.
+3. 서브클래스 인스턴스를 otherMethod() 메서드의 인수로 넘긴다면
+4. Bytecode 수준에서는 invokespecial 명령이 실행될테니 메서드를 잘못 호출하게 된다. (LSP 위반)
+
+> 이를 위해 핫스팟 인터프리터에서는 final 메서드를 디스패치하는 private bytecode가 있다.
+
+#### Object::<init>
+자바 언어 명세를 보면, 종료화(11.6절) 대상 객체는 반드시 종료화 서브시스템에 등록해야 한다 작성되어있다.
+
+1. Object 생성자의 Object::init> 호출이 완료되면
+2. 곧바로 객체를 등록해야 한다.
+3. JVMTI처럼 바이트코드를 건드리는 툴에서는 이 코드 위치가 모호할 수 있다.
+
+> 이를 위해 핫스팟은 진짜 Object생성자에서 반환되는 지점을 표시하는 private bytecode가 있다.
