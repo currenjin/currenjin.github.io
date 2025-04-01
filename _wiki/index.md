@@ -59,6 +59,7 @@ regenerate: true
 * [[implementation-patterns]]
 * [[ERD]]
 * [[java-virtual-machine]]
+* [[garbage-collection]]
 
 ---
 
