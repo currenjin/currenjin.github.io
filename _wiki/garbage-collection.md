@@ -2,8 +2,8 @@
 layout  : wiki
 title   : GC(Garbage Collection, 가비지 컬렉션)
 summary :
-date    : 2025-04-01 10:00:00 +0900
-updated : 2025-04-01 10:00:00 +0900
+date    : 2025-04-8 19:00:00 +0900
+updated : 2025-04-8 19:00:00 +0900
 tag     : garbage-collection
 toc     : true
 public  : true
@@ -63,3 +63,6 @@ latex   : true
 
 #### live object graph(or transitive closure of reachable objects)
 이산 수학에 나오는 용어로, 살아있는 객체 그래프의 어느 지점에서 출발하든 접근 가능한 모든 지점의 집합을 의미한다. 
+
+### Example
+- [Link](https://github.com/currenjin/alexandria-playground/blob/main/implementation-mark-and-sweep-algorithm/src/main/java/com/currenjin/markandsweep/ObjectGraph.java)
