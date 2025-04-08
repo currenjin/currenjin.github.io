@@ -3,7 +3,7 @@ layout  : wiki
 title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
-updated : 2022-07-23 12:30:00 +0900
+updated : 2025-04-08 19:30:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -17,6 +17,36 @@ latex   : true
 
 ## 테스트란 무엇인가
 테스트(Test) : 평가하다
+
+## Performance Test
+
+### Latency test
+
+> 종단 트랜잭션에 걸리는 시간은?
+
+### Throughput test
+
+> 현재 시스템이 처리 가능한 동시 트랜잭션 개수는?
+
+### Load test
+
+> 특정 부하를 시스템이 감당할 수 있는가?
+
+### Stress test
+
+> 이 시스템의 한계점은 어디까지인가?
+
+### Endurance test
+
+> 시스템을 장시간 실행할 경우 성능 이상 증상이 나타나는가?
+
+### Capacity planning test
+
+> 리소스를 추가한 만큼 시스템이 확장되는가?
+
+### Degradation
+
+> 시스템이 부분적으로 실패할 경우 어떤 일이 벌어지는가?
 
 ## Test Tools
 
