@@ -60,6 +60,7 @@ regenerate: true
 * [[ERD]]
 * [[java-virtual-machine]]
 * [[garbage-collection]]
+* [[concurrent-linked-queue]]
 
 ---
 
