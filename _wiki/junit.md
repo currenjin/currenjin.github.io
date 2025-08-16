@@ -98,11 +98,14 @@ Vintage 가 있기에 두 버전(JUnit 4, JUnit 5) 모두 호환 가능합니다
 - 독립적으로 실행된다.
 
 
-## ExtendWith
+## `@ExtendWith`
 
 TBD
 
-## Disabled
+## `@DisplayName`
+
+
+## `@Disabled`
 
 Disabled annotation 을 통해 테스트 클래스 또는 메소드를 비활성화할 수 있습니다.<br>
 <br>
@@ -342,10 +345,10 @@ class ExternalCondition {
 
 많이 사용할만한 인터페이스를 추리자면, 아래 정도가 되겠네요.<br>
 
-- BeforeAllCallBack: @BeforeAll 실행 후
-- BeforeEachCallBack: @BeforeEach 실행 후
-- AfterEachCallBack: @AfterEach 실행 후
-- AfterAllCallBack: @AfterAll 실행 후
+- BeforeAllCallBack: `@BeforeAll` 실행 후
+- BeforeEachCallBack: `@BeforeEach` 실행 후
+- AfterEachCallBack: `@AfterEach` 실행 후
+- AfterAllCallBack: `@AfterAll` 실행 후
 - TestInstancePostProcessor: Test instance 생성 후
 - TestInstancePreDestroyCallBack: Test instance 제거 전
 
@@ -387,7 +390,7 @@ Test class 가 생성되는 시점에 로그를 찍어보겠습니다.<br>
 테스트 클래스가 생성되는 시점에 정확히 로그가 찍히는 군요.<br>
 intercept extension 을 통해 각 테스트의 속도를 측정한다던가.. 등등 다양한 일들을 할 수 있을 거라 생각됩니다.<br>
 
-## Tag
+## `@Tag`
 각 테스트 클래스 및 메소드에는 태깅을 할 수 있습니다.<br>
 해당 태그가 나중에 테스트를 검색하거나 실행하고자 하는 대상을 필터링하는 데 사용되기도 한다더군요.<br>
 <br>
