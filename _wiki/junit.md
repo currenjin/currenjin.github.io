@@ -3,7 +3,7 @@ layout  : wiki
 title   : JUnit
 summary :
 date    : 2022-06-29 20:00:00 +0900
-updated : 2022-08-07 21:00:00 +0900
+updated : 2025-08-16 23:00:00 +0900
 tag     : test
 toc     : true
 public  : true
@@ -20,7 +20,6 @@ JUnit은 컴파일 타임에 JAR 로 연결됩니다.<br>
 <br>
 여담으로, 2013년 GitHub 에 올라온 10,000 개의 Java 프로젝트에 대해 수행된 연구 조사에 따르면 JUnit(slf4j-api 와 동점)이 가장 일반적으로 포함되는 라이브러리였습니다.<br>
 (각 라이브러리는 프로젝트의 30.7% 만큼 사용되었습니다)<br>
-(우리의 영웅 켄트 벡 아저씨도 해당 프레임워크의 개발자더군요. 처음 알았습니다)<br>
 
 ## JUnit Life cycle
 
@@ -71,6 +70,33 @@ JUnit 3 & 4 를 JUnit 5 플랫폼에서 사용할 수 있도록 지원합니다.
 
 참고로, 우리가 사용하는 spring boot starter test 라이브러리에는 JUnit 5 가 들어있습니다.<br>
 Vintage 가 있기에 두 버전(JUnit 4, JUnit 5) 모두 호환 가능합니다.<br>
+
+## Core Annotations
+- 테스트 클래스(test class): 클래스, 정적 멤버 클래스, 하나 이상의 테스트 메서드를 포함하는 `@Nested` 애노테이션이 붙은 내부 클래스를 말한다.
+  - 추상 클래스일 수 없다.
+  - 단일한 생성자를 가지고 있어야 한다.
+  - 생성자는 파라미터가 아예 없거나, 런타임에 의존성 주입으로 동적으로 리졸브할 수 있는 파라미터만 사용할 수 있다.
+  - 가시성을 보장하기 위한 최소 요구 사항으로 디폴트 접근 제어자를 사용할 수 있다.
+- 테스트 메서드(test method): `@Test`, `@RepeatedTest`, `@ParameterizedTest`, `@TestFactory`, `@TestTemplate` 애노테이션이 붙은 메서드를 말한다.
+- 생애 주기 메서드(life cycle method): `@BeforeAll`, `@AfterAll`, `@BeforeEach`, `@AfterEach` 애노테이션이 붙은 메서드를 말한다.
+
+### `@BeforeAll`
+- 전체테스트가 실행되기 전에 한 번 실행된다.
+- 테스트 클래스에 `@TestInstance(Lifecycle.PER_CLASS)가 없다면 정적(`static`)으로 선언해야 한다.
+
+### `@AfterAll`
+- 전체 테스트가 실행된 후 한 번 실행된다.
+- 테스트 클래스에 `@TestInstance(Lifecycle.PER_CLASS)가 없다면 정적(`static`)으로 선언해야 한다.
+
+### `@BeforeEach`
+- 각 테스트가 실행되기 전에 실행된다.
+
+### `@AfterEach`
+- 각 테스트가 실행된 이후에 실행된다.
+
+### `@Test`
+- 독립적으로 실행된다.
+
 
 ## ExtendWith
 
