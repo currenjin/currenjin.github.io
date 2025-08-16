@@ -80,6 +80,47 @@ Vintage 가 있기에 두 버전(JUnit 4, JUnit 5) 모두 호환 가능합니다
 - 테스트 메서드(test method): `@Test`, `@RepeatedTest`, `@ParameterizedTest`, `@TestFactory`, `@TestTemplate` 애노테이션이 붙은 메서드를 말한다.
 - 생애 주기 메서드(life cycle method): `@BeforeAll`, `@AfterAll`, `@BeforeEach`, `@AfterEach` 애노테이션이 붙은 메서드를 말한다.
 
+```java
+public class CoreAnnotationsTest {
+	private static ResourceForAllTests resourceForAllTests;
+	private SUT sut;
+
+	@BeforeAll
+	static void beforeAll() {
+		resourceForAllTests = new ResourceForAllTests("테스트를 위한 리소스");
+	}
+
+	@AfterAll
+	static void afterAll() {
+		resourceForAllTests.close();
+	}
+
+	@BeforeEach
+	void setUp() {
+		sut = new SUT("테스트 대상 시스템");
+	}
+
+	@AfterEach
+	void tearDown() {
+		sut.close();
+	}
+
+	@Test
+	void testRegularWork() {
+		boolean canReceiveRegularWork = sut.canReceiveRegularWork();
+
+		assertTrue(canReceiveRegularWork);
+	}
+
+	@Test
+	void testAdditionalWork() {
+		boolean canReceiveAdditionalWork = sut.canReceiveAdditionalWork();
+
+		assertFalse(canReceiveAdditionalWork);
+	}
+}
+```
+
 ### `@BeforeAll`
 - 전체테스트가 실행되기 전에 한 번 실행된다.
 - 테스트 클래스에 `@TestInstance(Lifecycle.PER_CLASS)가 없다면 정적(`static`)으로 선언해야 한다.
@@ -104,6 +145,36 @@ TBD
 
 ## `@DisplayName`
 
+> 테스트 클래스나 테스트 메서드에 자신만의 디스플레이 네임을 작성하는 데 사용한다.
+
+- 테스트 클래스, 테스트 메서드에서 사용할 수 있다.
+- IDE, 빌드 도구 등의 테스트 리포트에서도 보통 적용된다.
+
+```java
+@DisplayName("The test class showing the @DisplayName annotation.")
+public class DisplayNameTest {
+  private SUT sut = new SUT();
+
+  @Test
+  @DisplayName("Our system under test says hello.")
+  void testHello() {
+    assertEquals("Hello", sut.hello());
+  }
+
+  @Test
+  @DisplayName("🥺")
+  void testTalking() {
+    assertEquals("How are you?", sut.talk());
+  }
+
+  @Test
+  void testBye() {
+    assertEquals("Bye", sut.bye());
+  }
+}
+```
+
+<img width="641" height="199" alt="Image" src="https://github.com/user-attachments/assets/c39acd47-616f-45d3-9f97-854b505de41c" />
 
 ## `@Disabled`
 
