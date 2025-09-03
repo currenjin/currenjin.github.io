@@ -61,6 +61,7 @@ regenerate: true
 * [[java-virtual-machine]]
 * [[garbage-collection]]
 * [[concurrent-linked-queue]]
+* [[designing-data-intensive-applications]]
 
 ---
 
