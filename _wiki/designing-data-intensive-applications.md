@@ -142,6 +142,74 @@ RDB 테이블: orders(id, user_id, status, created_at, total_amount, ...), order
 - 인덱스는 온라인 생성/백그라운드 옵션 사용, 리빌드 시간 동안 배포 금지 윈도우 설정
 - 이중 쓰기가 필요하면 가능한 Outbox/이벤트로 일관성 보강, 아니면 듀얼 리드로 점진 전환
 
+## Ch03 Storage and Retrieval
+
+### TL;DR
+
+### Key Ideas
+
+### Trade-offs
+
+### Apply our Domain
+
+### SLI, SLO
+#### SLI
+
+#### SLO
+
+### Open Questions
+
+## Ch04 Encoding and Evolution
+
+### TL;DR
+
+### Key Ideas
+
+### Trade-offs
+
+### Apply our Domain
+
+### SLI, SLO
+#### SLI
+
+#### SLO
+
+### Open Questions
+
+## Ch05 Replication
+
+### TL;DR
+
+### Key Ideas
+
+### Trade-offs
+
+### Apply our Domain
+
+### SLI, SLO
+#### SLI
+
+#### SLO
+
+### Open Questions
+
+## Ch06 Partitioning
+
+### TL;DR
+
+### Key Ideas
+
+### Trade-offs
+
+### Apply our Domain
+
+### SLI, SLO
+#### SLI
+
+#### SLO
+
+### Open Questions
+
 ## Ch07 Transaction
 ### TL;DR (3문장)
 
@@ -274,3 +342,71 @@ RDB 테이블: orders(id, user_id, status, created_at, total_amount, ...), order
 - 리더 **리스 기간**을 얼마로? (`lease >> clock_skew_p99 + RTT`)
 - **Retry Budget** 소진 시 정책(스로틀/셰딩/에러)과 알람 기준은?
 - 이벤트 스트림의 **재정렬 허용 창**(seconds)과 **데두프 TTL**은?
+
+## Ch09 Consistency and Consensus
+
+### TL;DR
+
+### Key Ideas
+
+### Trade-offs
+
+### Apply our Domain
+
+### SLI, SLO
+#### SLI
+
+#### SLO
+
+### Open Questions
+
+## Ch10 Batch Processing
+
+### TL;DR
+
+### Key Ideas
+
+### Trade-offs
+
+### Apply our Domain
+
+### SLI, SLO
+#### SLI
+
+#### SLO
+
+### Open Questions
+
+## Ch11 Stream Processing
+
+### TL;DR
+
+### Key Ideas
+
+### Trade-offs
+
+### Apply our Domain
+
+### SLI, SLO
+#### SLI
+
+#### SLO
+
+### Open Questions
+
+## Ch12 The Future of Data Systems
+
+### TL;DR
+
+### Key Ideas
+
+### Trade-offs
+
+### Apply our Domain
+
+### SLI, SLO
+#### SLI
+
+#### SLO
+
+### Open Questions
