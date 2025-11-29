@@ -3,7 +3,7 @@ layout  : wiki
 title   : Building Microservices
 summary :
 date    : 2025-10-30 13:00:00 +0900
-updated : 2025-11-28 19:00:00 +0900
+updated : 2025-11-29 22:00:00 +0900
 tag     : architecture
 toc     : true
 public  : true
@@ -440,3 +440,29 @@ Choreographed Sage: 여러 협력 서비스 사이에서 사가 운영에 대한
 
 ### Consequences
 - 엑셀 업로드 시 특정 데이터에 오류가 났을 때, 트랜잭션 처리가 제대로 되는지 확인이 필요하다. 그리고 이를 사용자가 인지할 수 있도록 해야한다.
+
+## INTERVIEW-001. What are microservices?
+- createdDate: 2025-11-05
+- updatedDate: 2025-11-05
+
+### Answer
+Microservices are independently deployable services modeled around a business domain.
+
+#### Key
+- Independent deployment: each service can be deployed without affecting others
+- Business domain focus: organized around capabilities like "orders" or "payments", not technical layers
+- Decentralized data - each service owns its data
+
+The key phrase is "independently deployable" - this is what distinguishes microservices from other service-oriented approaches.
+
+### What NOT to say
+- Small services: size is relative and not the defining characteristic
+- Using containers: deployment mechanism, not architecture
+
+### Follow-up prepared
+- Benefits: technology heterogeneity, resilience, independent scaling
+- Challenges: distributed transactions, operational complexity, monitoring
+
+### Connection to experience
+- Decided against full migration due to operational overhead
+- Shows understanding of trade-offs, not just blindly following trends
