@@ -62,6 +62,7 @@ regenerate: true
 * [[garbage-collection]]
 * [[concurrent-linked-queue]]
 * [[designing-data-intensive-applications]]
+* [[building-microservices]]
 * [[programming-language]]
 
 ---
