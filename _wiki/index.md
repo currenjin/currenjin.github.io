@@ -64,6 +64,7 @@ regenerate: true
 * [[designing-data-intensive-applications]]
 * [[building-microservices]]
 * [[programming-language]]
+* [[sre-google]]
 
 ---
 
