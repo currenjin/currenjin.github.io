@@ -65,6 +65,7 @@ regenerate: true
 * [[building-microservices]]
 * [[programming-language]]
 * [[sre-google]]
+* [[opencode]]
 
 ---
 
