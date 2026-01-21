@@ -66,6 +66,7 @@ regenerate: true
 * [[programming-language]]
 * [[sre-google]]
 * [[opencode]]
+* [[tidy-first]]
 
 ---
 
