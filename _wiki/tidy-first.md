@@ -2,8 +2,8 @@
 layout  : wiki
 title   : 켄트 벡의 Tidy First?
 summary :
-date    : 2026-01-21 13:00:00 +0900
-updated : 2026-01-21 13:00:00 +0900
+date    : 2026-01-21 12:00:00 +0900
+updated : 2026-01-21 12:00:00 +0900
 tag     : tidy-first
 toc     : true
 public  : true
