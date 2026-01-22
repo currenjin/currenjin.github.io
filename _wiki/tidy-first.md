@@ -3,7 +3,7 @@ layout  : wiki
 title   : 켄트 벡의 Tidy First?
 summary :
 date    : 2026-01-21 12:00:00 +0900
-updated : 2026-01-21 12:00:00 +0900
+updated : 2026-01-22 12:00:00 +0900
 tag     : tidy-first
 toc     : true
 public  : true
@@ -14,6 +14,8 @@ latex   : true
 {:toc}
 
 # 켄트 벡의 Tidy First?
+
+- [Github](https://github.com/currenjin/alexandria-playground/tree/main/book-tidy-first)
 
 ## Ch01. Guard Clauses
 
@@ -294,7 +296,7 @@ latex   : true
 
 ### Key Ideas
 - 정리는 연쇄 반응을 일으킨다
-- Guard Clause → Dead Code 삭제 → 변수 인라인
+- Guard Clause -> Dead Code 삭제 -> 변수 인라인
 - 작은 단계를 밟으면 큰 변화도 안전하게 달성할 수 있다
 - 각 단계가 테스트를 통과하면 언제든 멈출 수 있다
 
@@ -330,7 +332,7 @@ latex   : true
 
 ### Key Ideas
 - 정리를 위한 시간을 의도적으로 만든다
-- "기능 → 정리 → 기능 → 정리"의 반복
+- "기능 -> 정리 -> 기능 -> 정리"의 반복
 - 몰아서 정리하는 것보다 꾸준히 정리하는 것이 낫다
 - 보이스카우트 규칙: 캠프장을 떠날 때 왔을 때보다 깨끗하게
 
@@ -393,7 +395,7 @@ latex   : true
 
 ### Open Questions
 - 유익한 관계란 무엇인가?
-  - 명확한 방향성 (A → B, 양방향 아님)
+  - 명확한 방향성 (A -> B, 양방향 아님)
   - 최소한의 연결 (필요한 것만)
   - 변경의 전파가 제한적
 
