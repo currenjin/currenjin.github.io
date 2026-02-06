@@ -67,6 +67,7 @@ regenerate: true
 * [[sre-google]]
 * [[opencode]]
 * [[tidy-first]]
+* [[modern-software-engineering]]
 
 ---
 
