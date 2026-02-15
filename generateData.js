@@ -11,7 +11,7 @@ getFiles('./_posts', 'blog', list);
 
 const dataList = list.map(file => collectData(file))
     .filter((row) => row != null)
-    .filter((row) => row.public != 'false')
+    .filter((row) => row.public !== false && row.public !== 'false')
     .sort(lexicalOrderingBy('fileName'))
 
 
@@ -206,8 +206,8 @@ function saveTagCount(tagMap) {
     });
 }
 
-function parseInfo(file, info) {
-    if (info === null) {
+function parseInfo(file, metadata) {
+    if (metadata == null) {
         return undefined;
     }
 
@@ -218,22 +218,8 @@ function parseInfo(file, info) {
         modified: fs.statSync(file.path).mtime
     };
 
-    const rawData = info.split('\n');
-
-    rawData.forEach(str => {
-        const result = /^\s*([^:]+):\s*(.+)\s*$/.exec(str);
-
-        if (result == null) {
-            return;
-        }
-
-        const key = result[1].trim();
-        const val = result[2].trim()
-            .replace(/\[{2}\/?|\]{2}/g, '')    // 문서 이름 앞뒤의 [[  ]], [[/ ]] 를 제거한다.
-        ;
-
-        obj[key] = val;
-    });
+    const sanitizedMetadata = sanitizeMetadata(metadata);
+    Object.assign(obj, sanitizedMetadata);
 
     if (file.type === 'blog') {
         const datePath = toBlogDatePath(obj.date);
@@ -343,5 +329,62 @@ function getFiles(path, type, array, testFileList = null) {
 
 function collectData(file) {
     const data = fs.readFileSync(file.path, 'utf8');
-    return parseInfo(file, data.split('---')[1]);
+    return parseInfo(file, parseFrontMatter(data));
+}
+
+function parseFrontMatter(rawData) {
+    const frontMatterMatch = /^---\s*\n([\s\S]*?)\n---(?:\s*\n|$)/.exec(rawData);
+    if (!Array.isArray(frontMatterMatch)) {
+        return null;
+    }
+    const frontMatter = frontMatterMatch[1];
+
+    try {
+        return YAML.parse(frontMatter);
+    } catch (err) {
+        return parseLegacyFrontMatter(frontMatter);
+    }
+}
+
+function parseLegacyFrontMatter(frontMatter) {
+    const metadata = {};
+    const rawData = frontMatter.split('\n');
+    rawData.forEach(str => {
+        const result = /^\s*([^:]+):\s*(.+)\s*$/.exec(str);
+        if (result == null) {
+            return;
+        }
+        const key = result[1].trim();
+        const val = result[2].trim();
+        metadata[key] = val;
+    });
+    return metadata;
+}
+
+function sanitizeMetadata(metadata) {
+    const sanitized = {};
+    for (const key in metadata) {
+        sanitized[key] = sanitizeMetadataValue(metadata[key]);
+    }
+    return sanitized;
+}
+
+function sanitizeMetadataValue(value) {
+    if (value == null) {
+        return value;
+    }
+    if (Array.isArray(value)) {
+        return value.map(sanitizeMetadataValue);
+    }
+    if (typeof value === 'object') {
+        const copied = {};
+        for (const k in value) {
+            copied[k] = sanitizeMetadataValue(value[k]);
+        }
+        return copied;
+    }
+    if (typeof value === 'string') {
+        return value.replace(/\[{2}\/?|\]{2}/g, '');
+    }
+    return value;
 }
