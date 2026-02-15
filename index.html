@@ -37,11 +37,15 @@ regenerate: true
                         {{ doc.title }}
                     </div>
                     <div class="post-excerpt">{{ doc.summary }}</div>
+                {% if doc.tags %}
                     <ul class="tag-list">
-                        <li class="post-tag">
-                            {{ doc. tag }}
-                        </li>
+                        <li class="post-tag">{{ doc.tags | join: ' ' }}</li>
                     </ul>
+                {% elsif doc.tag %}
+                    <ul class="tag-list">
+                        <li class="post-tag">{{ doc.tag }}</li>
+                    </ul>
+                {% endif %}
                 </a>
             </div>
         </li>

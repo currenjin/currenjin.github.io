@@ -16,11 +16,12 @@ const dataList = list.map(file => collectData(file))
 
 
 dataList.forEach(function collectTagMap(data) {
-    if (!data.tag) {
+    const tags = data.tags || data.tag;
+    if (!tags) {
         return;
     }
 
-    data.tag.forEach(tag => {
+    tags.forEach(tag => {
         if (!tagMap[tag]) {
             tagMap[tag] = [];
         }
@@ -45,6 +46,7 @@ dataList.sort(lexicalOrderingBy('fileName'))
                 parent: page.parent,
                 url: page.url,
                 updated: page.updated || page.date,
+                tags: page.tags || page.tag || [],
                 children: [],
             };
     });
@@ -227,10 +229,27 @@ function parseInfo(file, info) {
             .replace(/\.md$/, '');
     }
 
-    if (obj.tag) {
-        obj.tag = obj.tag.split(/\s+/);
+    const normalizedTags = normalizeTags(obj.tags || obj.tag);
+    if (normalizedTags.length > 0) {
+        obj.tags = normalizedTags;
+        obj.tag = normalizedTags;
     }
     return obj;
+}
+
+function normalizeTags(value) {
+    if (value == null) {
+        return [];
+    }
+
+    if (Array.isArray(value)) {
+        return value.map(v => String(v).trim()).filter(Boolean);
+    }
+
+    return String(value)
+        .split(/[,\s]+/)
+        .map(v => v.trim())
+        .filter(Boolean);
 }
 
 function isDirectory(path) {

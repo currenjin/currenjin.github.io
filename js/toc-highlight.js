@@ -1,13 +1,18 @@
 (function() {
     const TOC_ID = '#markdown-toc';
     const ACTIVE_CLASS = 'active-toc';
+    const tocRoot = document.querySelector(TOC_ID);
+    const postContent = document.querySelector(".post-content");
+
+    if (!tocRoot || !postContent) {
+        return;
+    }
 
     /**
      * toc 엘리먼트 맵 캐시.
      */
     const tocMap = {};
-    document.querySelector(TOC_ID)
-        .querySelectorAll('a')
+    tocRoot.querySelectorAll('a')
         .forEach(n => {
             const idStr = n.id.replace(/^markdown-toc-/, '')
             tocMap[idStr] = n
@@ -16,8 +21,10 @@
     /**
      * 본문의 헤딩 엘리먼트 배열 캐시.
      */
-    const headings = document.querySelector(".post-content")
-        .querySelectorAll("h1, h2, h3, h4, h5, h6, h7, h8, h9");
+    const headings = postContent.querySelectorAll("h1, h2, h3, h4, h5, h6");
+    if (!headings || headings.length === 0) {
+        return;
+    }
 
     /**
      * 활성화된 모든 toc 엘리먼트를 비활성화한다.
@@ -58,15 +65,14 @@
     }
 
     let activeHeadingId = null;
-    document.body.onscroll = function() {
+    document.addEventListener('scroll', function() {
         const currentHeading = findCurrentHeading(headings);
 
         if (currentHeading.id == activeHeadingId) {
             return;
         }
-        // console.log(currentHeading)
         deActivate();
         activate(tocMap[currentHeading.id]);
         activeHeadingId = currentHeading.id;
-    }
+    });
 })();

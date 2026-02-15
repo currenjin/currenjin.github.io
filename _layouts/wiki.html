@@ -25,7 +25,7 @@ layout: document
         <div id="parent-list"></div>
 {% endraw %}
 
-{% if page.tags %}
+{% if page.tags or page.tag %}
     {% include post-tags.html %}
 {% endif %}
 
