@@ -7,12 +7,16 @@
     --ink-main: #10161d;
     --ink-subtle: #4d5b6b;
     --line-soft: #c8bcaa;
-    --accent: #143f63;
-    --accent-warm: #a25d22;
-    --focus: #0e79b2;
+    --accent: #5f4dd6;
+    --accent-warm: #d1a64e;
+    --focus: #25bfd8;
+    --cosmos-indigo: #2d2c69;
+    --cosmos-violet: #5f4dd6;
+    --cosmos-cyan: #25bfd8;
+    --cosmos-gold: #d1a64e;
     --star: rgba(255, 251, 240, 0.95);
-    --nebula-blue: rgba(20, 63, 99, 0.22);
-    --nebula-amber: rgba(162, 93, 34, 0.18);
+    --nebula-blue: rgba(45, 44, 105, 0.26);
+    --nebula-amber: rgba(209, 166, 78, 0.22);
 }
 
 *,
@@ -79,6 +83,11 @@ body::after {
     }
 }
 
+html,
+body {
+    overflow-x: hidden;
+}
+
 body, th, td, div, p, li {
     word-break: keep-all;
 }
@@ -89,16 +98,16 @@ p, li {
 
 a {
     color: var(--accent);
-    text-decoration-color: rgba(47, 79, 102, 0.35);
+    text-decoration-color: rgba(95, 77, 214, 0.42);
     text-underline-offset: 2px;
 }
 
 a:visited {
-    color: #435968;
+    color: #3f3b86;
 }
 
 a:hover {
-    color: var(--accent-warm);
+    color: var(--cosmos-cyan);
 }
 
 a:focus-visible {
@@ -113,9 +122,9 @@ a:focus-visible {
 blockquote {
     margin: 1.2rem 0;
     padding: 0.35rem 0 0.35rem 0.9rem;
-    border-left: 3px solid var(--accent-warm);
+    border-left: 3px solid var(--cosmos-gold);
     color: var(--ink-subtle);
-    background: rgba(255, 255, 255, 0.45);
+    background: linear-gradient(90deg, rgba(95, 77, 214, 0.08) 0%, rgba(37, 191, 216, 0.06) 61.8%, rgba(209, 166, 78, 0.06) 100%);
 }
 
 code, pre {
@@ -201,7 +210,7 @@ h6 {
 
 .post-content h2::before,
 .post-content h3::before {
-    color: var(--accent-warm);
+    color: var(--cosmos-cyan);
     margin-right: 0.3rem;
 }
 

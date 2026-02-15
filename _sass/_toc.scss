@@ -1,10 +1,10 @@
 @media (min-width: 1700px) {
     ul#markdown-toc {
         position: fixed;
-        top: 0.6rem;
+        top: 0.75rem;
         bottom: 0;
-        left: calc(50vw + 450px);
-        width: 310px;
+        right: 0.75rem;
+        width: 300px;
         background-color: rgba(255, 255, 255, 0.85);
         z-index: 40;
         font-size: 0.8rem;
@@ -27,6 +27,9 @@
 $active-color: var(--accent-warm);
 .active-toc {
     color: $active-color;
+    background: linear-gradient(90deg, rgba(95, 77, 214, 0.13) 0%, rgba(37, 191, 216, 0.08) 61.8%, rgba(209, 166, 78, 0.12) 100%);
+    border-radius: 8px;
+    padding: 0.06rem 0.42rem;
 }
 .active-toc:visited {
     color: $active-color;
