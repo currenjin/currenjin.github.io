@@ -7,7 +7,6 @@ const tagMap = {};
 const pageMap = {};
 
 getFiles('./_wiki', 'wiki', list);
-getFiles('./_posts', 'blog', list);
 
 const dataList = list.map(file => collectData(file))
     .filter((row) => row != null)
@@ -221,12 +220,7 @@ function parseInfo(file, metadata) {
     const sanitizedMetadata = sanitizeMetadata(metadata);
     Object.assign(obj, sanitizedMetadata);
 
-    if (file.type === 'blog') {
-        const datePath = toBlogDatePath(obj.date);
-        const slug = toBlogSlug(file.name);
-        obj.url = `/blog/${datePath}/${slug}`;
-
-    } else if (file.type === 'wiki') {
+    if (file.type === 'wiki') {
         obj.url = file.path
             .replace(/^\.\/_wiki/, '/wiki')
             .replace(/\.md$/, '');
@@ -258,26 +252,7 @@ function getFileName(file) {
     if (file.type === 'wiki') {
         return file.path.replace(/^\.\/_wiki\/(.+)?\.md$/, '$1');
     }
-    if (file.type === 'blog') {
-        return file.path
-            .replace(/^\.\/_posts\//, '')
-            .replace(/\.md$/, '');
-    }
     return file.path.replace(/^\.\//, '').replace(/\.md$/, '');
-}
-
-function toBlogDatePath(dateText) {
-    const found = /^(\d{4})-(\d{2})-(\d{2})/.exec(dateText || '');
-    if (!Array.isArray(found)) {
-        return '1970/01/01';
-    }
-    return `${found[1]}/${found[2]}/${found[3]}`;
-}
-
-function toBlogSlug(fileName) {
-    return (fileName || '')
-        .replace(/\.md$/, '')
-        .replace(/^\d{4}-\d{2}-\d{2}-/, '');
 }
 
 function toDate(value) {

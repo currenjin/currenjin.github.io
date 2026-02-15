@@ -1,9 +1,9 @@
 # Site settings
-title: blog title
+title: wiki title
 url: "https://.........."
 baseurl: ""
 description: >
-    blog description
+    wiki description
 
 # My information
 email:
@@ -15,20 +15,13 @@ comment-support:
 
 # Build settings
 plugins:
-  - jekyll-paginate
   - jekyll-gist
-
-permalink: /blog/:year/:month/:day/:title/
 
 markdown: kramdown
 highlighter: rouge
 kramdown:
   input: GFM
   syntax_highlighter: rouge
-
-paginate: 10
-paginator_path: "/blog"
-paginate_path: "/blog/page:num/"
 
 # Collections
 collections:
