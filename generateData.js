@@ -212,7 +212,7 @@ function parseInfo(file, info) {
     }
 
     const obj = {
-        fileName: file.path.replace(/^\.\/_wiki\/(.+)?\.md$/, '$1'),
+        fileName: getFileName(file),
         type: file.type,
         url: '',
         modified: fs.statSync(file.path).mtime
@@ -236,8 +236,9 @@ function parseInfo(file, info) {
     });
 
     if (file.type === 'blog') {
-        obj.url = '/blog/' + obj.date.replace(/^(\d{4})-(\d{2})-(\d{2}).*$/, '$1/$2/$3/');
-        obj.url += obj.fileName.replace(/^.*[/]\d{4}-\d{2}-\d{2}-([^/]*)\.md$/, '$1');
+        const datePath = toBlogDatePath(obj.date);
+        const slug = toBlogSlug(file.name);
+        obj.url = `/blog/${datePath}/${slug}`;
 
     } else if (file.type === 'wiki') {
         obj.url = file.path
@@ -265,6 +266,32 @@ function normalizeTags(value) {
         .split(/[,\s]+/)
         .map(v => v.trim())
         .filter(Boolean);
+}
+
+function getFileName(file) {
+    if (file.type === 'wiki') {
+        return file.path.replace(/^\.\/_wiki\/(.+)?\.md$/, '$1');
+    }
+    if (file.type === 'blog') {
+        return file.path
+            .replace(/^\.\/_posts\//, '')
+            .replace(/\.md$/, '');
+    }
+    return file.path.replace(/^\.\//, '').replace(/\.md$/, '');
+}
+
+function toBlogDatePath(dateText) {
+    const found = /^(\d{4})-(\d{2})-(\d{2})/.exec(dateText || '');
+    if (!Array.isArray(found)) {
+        return '1970/01/01';
+    }
+    return `${found[1]}/${found[2]}/${found[3]}`;
+}
+
+function toBlogSlug(fileName) {
+    return (fileName || '')
+        .replace(/\.md$/, '')
+        .replace(/^\d{4}-\d{2}-\d{2}-/, '');
 }
 
 function toDate(value) {
