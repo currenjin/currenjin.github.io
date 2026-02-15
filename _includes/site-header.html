@@ -1,0 +1,34 @@
+<header class="header">
+    <div>
+        <a class="site-title" href="{{ site.baseurl }}/">{{ site.title }}</a>
+    </div>
+    <div>
+        <a class="site-title-right" href="https://docs.google.com/document/d/1dokB9vn3sFZtjfOz0RAF-0QL1evdOdDEgXo9GQ5Amsk/edit?tab=t.0" target="_blank" rel="noopener noreferrer">me</a>
+    </div>
+    <div>
+        <a id="random-button" class="site-title-right" href="/wiki/index/#random" onclick="if(typeof random === 'function')random()">random</a>
+    </div>
+    <div>
+        <a class="site-title-right" href="/wiki/index/">wiki</a>
+    </div>
+</header>
+<script>
+;(function(){
+    var isCtrl = false;
+
+    document.onkeyup = function(e){
+        if (e.which === 17) {
+            isCtrl = false;
+        }
+    };
+
+    document.onkeydown = function(e){
+        if (e.which === 17) {
+            isCtrl = true;
+        }
+        if (e.which === 82 && isCtrl === true) {
+            document.getElementById("random-button").click();
+        }
+    };
+})();
+</script>
