@@ -9,25 +9,5 @@ layout: default
         {{ content }}
     </article>
 </div>
-<script>
-    function random() {
-        var list = document.querySelectorAll('.wiki-list a')
-        var random = Math.floor((Math.random() * list.length));
-        var url = list[random].href;
-        window.location.href = url;
-    }
-
-    function init() {
-        if(/#random$/.test(window.location.href)) {
-            return random();
-        }
-        document.querySelector('div.post-main').classList.remove('hide');
-    };
-
-    if (document.readyState === 'complete' || document.readyState !== 'loading') {
-      init();
-    } else {
-      document.addEventListener('DOMContentLoaded', init);
-    }
-</script>
+<script defer src="/js/wikiindex.js"></script>
 {% include createLink.html %}

@@ -12,23 +12,4 @@
         <a class="site-title-right" href="/wiki/index/">wiki</a>
     </div>
 </header>
-<script>
-;(function(){
-    var isCtrl = false;
-
-    document.onkeyup = function(e){
-        if (e.which === 17) {
-            isCtrl = false;
-        }
-    };
-
-    document.onkeydown = function(e){
-        if (e.which === 17) {
-            isCtrl = true;
-        }
-        if (e.which === 82 && isCtrl === true) {
-            document.getElementById("random-button").click();
-        }
-    };
-})();
-</script>
+<script defer src="/js/site-header-shortcut.js"></script>
