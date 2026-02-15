@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html>
-    {% include head.html %}
-    <body>
-        {% include site-header.html %}
-        <div class="page-content">
-            {% include searchbox.html %}
-            <div class="post">
-                {{ content }}
-            </div>
-        </div>
-        {% include footer.html %}
-    </body>
-</html>
+---
+layout: default
+---
+{{ content }}
