@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-<div class="post-main" style="display:none">
+<div class="post-main hide">
     <header class="post-header">
         <h1 class="page-title">{{ page.title }}</h1>
     </header>
@@ -21,7 +21,7 @@ layout: default
         if(/#random$/.test(window.location.href)) {
             return random();
         }
-        document.querySelector('div.post-main').style.display = 'block';
+        document.querySelector('div.post-main').classList.remove('hide');
     };
 
     if (document.readyState === 'complete' || document.readyState !== 'loading') {
