@@ -140,6 +140,10 @@
     gap: 0.96rem;
 }
 
+h3.indent {
+    margin-bottom: 0.35rem;
+}
+
 .post-list > li {
     border: 1px solid rgba(95, 77, 214, 0.3);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(252, 248, 241, 0.96) 100%);
@@ -186,7 +190,7 @@
     text-decoration: none;
     padding: 1.08rem 1.08rem 1.12rem 1.18rem;
     color: var(--ink-main);
-    border-left: 3px solid rgba(95, 77, 214, 0.26);
+    border-left: 4px solid rgba(95, 77, 214, 0.42);
 }
 
 .post-link:visited {
@@ -195,25 +199,37 @@
 
 .post-link:hover {
     color: var(--ink-main);
-    background: linear-gradient(90deg, rgba(95, 77, 214, 0.06) 0%, rgba(95, 77, 214, 0) 46%);
+    background: linear-gradient(90deg, rgba(95, 77, 214, 0.09) 0%, rgba(95, 77, 214, 0) 54%);
 }
 
 .post-link:hover .post-meta {
-    color: #34316f;
+    color: #5c5b7f;
+}
+
+.post-link:hover .post-title {
+    color: #231f5c;
 }
 
 .post-meta {
-    color: #42406f;
-    font-size: 0.9rem;
+    color: #6a6989;
+    font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
 
+.post-title {
+    margin-top: 0.18rem;
+    color: #28255f;
+    font-size: 1.24rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
 .post-excerpt {
     color: #2c3744;
     margin-top: 0.4rem;
-    font-size: 1.05rem;
+    font-size: 1rem;
     line-height: 1.65;
 }
 
