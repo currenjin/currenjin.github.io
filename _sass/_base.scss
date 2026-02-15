@@ -1,15 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Sans+KR:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500&display=swap');
 
 :root {
-    --bg-main: #f5f1e7;
-    --bg-layer: #fbf8f1;
-    --bg-card: #fffdf8;
-    --ink-main: #1f2831;
-    --ink-subtle: #5e6975;
-    --line-soft: #d8cfbd;
-    --accent: #2f4f66;
-    --accent-warm: #9a6a3a;
-    --focus: #2a6d92;
+    --bg-main: #ece7dc;
+    --bg-layer: #f7f2e6;
+    --bg-card: #fffefb;
+    --ink-main: #10161d;
+    --ink-subtle: #4d5b6b;
+    --line-soft: #c8bcaa;
+    --accent: #143f63;
+    --accent-warm: #a25d22;
+    --focus: #0e79b2;
+    --star: rgba(255, 251, 240, 0.95);
+    --nebula-blue: rgba(20, 63, 99, 0.22);
+    --nebula-amber: rgba(162, 93, 34, 0.18);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 body {
@@ -20,9 +29,54 @@ body {
     -webkit-text-size-adjust: 100%;
     font-feature-settings: "kern" 1;
     background:
-        radial-gradient(circle at 12% 10%, rgba(47, 79, 102, 0.08) 0, rgba(47, 79, 102, 0) 42%),
-        radial-gradient(circle at 84% 18%, rgba(154, 106, 58, 0.1) 0, rgba(154, 106, 58, 0) 38%),
+        radial-gradient(circle at 6% 8%, var(--nebula-blue) 0, rgba(20, 63, 99, 0) 34%),
+        radial-gradient(circle at 90% 14%, var(--nebula-amber) 0, rgba(162, 93, 34, 0) 36%),
+        linear-gradient(125deg, rgba(20, 63, 99, 0.17) 0 1px, transparent 1px 100%),
+        linear-gradient(58deg, rgba(162, 93, 34, 0.1) 0 1px, transparent 1px 100%),
         var(--bg-main);
+    background-size: auto, auto, 980px 560px, 940px 540px, auto;
+    background-attachment: fixed;
+    position: relative;
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+
+body::before {
+    background-image:
+        radial-gradient(circle at 12% 24%, var(--star) 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 24% 14%, rgba(255, 251, 240, 0.9) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 33% 28%, rgba(255, 251, 240, 0.85) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 49% 18%, rgba(255, 251, 240, 0.92) 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 62% 30%, rgba(255, 251, 240, 0.82) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 76% 16%, rgba(255, 251, 240, 0.93) 0 1.1px, transparent 1.7px),
+        radial-gradient(circle at 88% 26%, rgba(255, 251, 240, 0.86) 0 1px, transparent 1.6px);
+    background-size: 100% 100%;
+    opacity: 0.68;
+    animation: starPulse 7s ease-in-out infinite alternate;
+}
+
+body::after {
+    background-image:
+        linear-gradient(114deg, rgba(255, 251, 240, 0.26) 0 1px, transparent 1px 100%),
+        linear-gradient(47deg, rgba(255, 251, 240, 0.2) 0 1px, transparent 1px 100%);
+    background-size: 700px 420px, 760px 460px;
+    opacity: 0.24;
+}
+
+@keyframes starPulse {
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 0.82;
+    }
 }
 
 body, th, td, div, p, li {
@@ -109,13 +163,13 @@ pre code {
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Cormorant Garamond', 'Noto Serif KR', serif;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--ink-main);
-    letter-spacing: 0.01em;
+    letter-spacing: 0.02em;
 }
 
 h1 {
-    font-size: 2.45rem;
+    font-size: 2.7rem;
     margin: 0;
 }
 
@@ -125,12 +179,12 @@ h1 {
 }
 
 h2 {
-    font-size: 2rem;
+    font-size: 2.2rem;
     border-bottom: 1px solid var(--line-soft);
 }
 
 h3 {
-    font-size: 1.7rem;
+    font-size: 1.85rem;
 }
 
 h4 {
