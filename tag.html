@@ -46,63 +46,47 @@ public: true
      * 주어진 태그에 해당하는 모든 문서의 링크를 만들어 줍니다.
      */
     function createLinks(resp, tagName) {
-        if (resp.data == null) {
+        if (resp == null || resp.data == null) {
             return;
         }
 
-        const data = resp.data;
-        const documents = [];
-
-        let listItems = '';
-        for (let i = 0; i < data.length; i++) {
-            const idText = getDocumentElementId(tagName, data[i]);
-            listItems += `<li id="${idText}"></li>`;
+        const documents = Array.isArray(resp.data) ? resp.data : [];
+        if (documents.length === 0) {
+            document.getElementById('tag-collection').innerHTML = `
+                <h3>${tagName}</h3>
+                <p>문서가 없습니다.</p>`;
+            return;
         }
-        const template = `
-            <h3>${tagName}</h3>
-            <ul class="post-list"> ${listItems} </ul>`;
 
-        document.getElementById('tag-collection').innerHTML = template;
-
-        for (let i = 0; i < data.length; i ++) {
-            setTimeout(() => insertDocumentLink(data[i], tagName), 0);
-        }
-    }
-
-    /*
-     * 문서 하나의 링크를 생성합니다.
-     */
-    function insertDocumentLink(documentId, tagName) {
-        axios.get(`/data/metadata/${documentId}.json`, {})
-            .then((resp) => {
-                if (resp == null || resp.data == null) {
-                    return;
-                }
-                const d = resp.data;
-
-                const updatedDate = d.updated.replace(/^(\d{4}-\d{2}-\d{2}).*$/, '$1')
+        const listItems = documents
+            .map((d) => {
+                const href = (typeof d.url === 'string' && d.url.length > 0) ? d.url : '#';
+                const title = d.title || '(제목 없음)';
+                const updated = d.updated || '';
+                const updatedDate = d.updatedDate || '';
                 const summaryText = (d.summary == null || /^\s*$/.test(d.summary))
-                    ? ('')
-                    : ('-' + d.summary);
-                const subDocument = (d.children && d.children.length > 0)
-                    ? `- 서브 문서: ${d.children.length} 개`
+                    ? ''
+                    : `-${d.summary}`;
+                const childrenCount = Number(d.childrenCount || 0);
+                const subDocument = childrenCount > 0
+                    ? `- 서브 문서: ${childrenCount} 개`
                     : '';
 
-                const link = `
-                <a class="post-link" href="${d.url}">
-                    <span>${d.title}</span>
-                    <div class="post-meta" style="float: right;" title="${d.updated}">${updatedDate}</div>
-                    <div class="post-excerpt">${summaryText}</div>
-                    <div class="post-sub-document">${subDocument}</div>
-                </a>`;
+                return `
+                    <li>
+                        <a class="post-link" href="${href}">
+                            <span>${title}</span>
+                            <div class="post-meta" style="float: right;" title="${updated}">${updatedDate}</div>
+                            <div class="post-excerpt">${summaryText}</div>
+                            <div class="post-sub-document">${subDocument}</div>
+                        </a>
+                    </li>`;
+            })
+            .join('');
 
-                const idText = getDocumentElementId(tagName, documentId);
-                document.getElementById(idText).innerHTML = link;
-            });
-    }
-
-    function getDocumentElementId(tagName, documentId) {
-        return `tag-${tagName}-${documentId}`;
+        document.getElementById('tag-collection').innerHTML = `
+            <h3>${tagName}</h3>
+            <ul class="post-list">${listItems}</ul>`;
     }
 
     function showInitTag() {
@@ -114,4 +98,3 @@ public: true
         }
     }
 </script>
-

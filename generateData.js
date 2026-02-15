@@ -124,14 +124,30 @@ function saveTagFiles(tagMap, pageMap) {
 
         for (const index in tagDatas) {
             const tagData = tagDatas[index];
-            const data = pageMap[tagData.fileName]
+            const data = pageMap[tagData.fileName];
+
+            if (!data) {
+                continue;
+            }
 
             const documentId = (data.type === 'wiki')
                 ? tagData.fileName
                 : data.url;
+            const updated = data.updated || '';
 
-            collection.push(documentId);
+            collection.push({
+                id: documentId,
+                type: data.type,
+                title: data.title || '',
+                url: data.url || '',
+                updated,
+                updatedDate: toDate(updated),
+                summary: data.summary || '',
+                childrenCount: Array.isArray(data.children) ? data.children.length : 0,
+            });
         }
+
+        collection.sort(compareByUpdatedDescThenTitleAsc);
 
         fs.writeFile(`./data/tag/${tag}.json`, JSON.stringify(collection), err => {
             if (err) {
@@ -249,6 +265,20 @@ function normalizeTags(value) {
         .split(/[,\s]+/)
         .map(v => v.trim())
         .filter(Boolean);
+}
+
+function toDate(value) {
+    const found = /^(\d{4}-\d{2}-\d{2})/.exec(value || '');
+    return Array.isArray(found) ? found[1] : '';
+}
+
+function compareByUpdatedDescThenTitleAsc(a, b) {
+    const aTime = Date.parse(a.updated || '') || 0;
+    const bTime = Date.parse(b.updated || '') || 0;
+    if (aTime !== bTime) {
+        return bTime - aTime;
+    }
+    return (a.title || '').localeCompare((b.title || ''));
 }
 
 function isDirectory(path) {
