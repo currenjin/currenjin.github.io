@@ -7,7 +7,7 @@ updated : 2022-02-09 22:00:00 +0900
 tags     : slack
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

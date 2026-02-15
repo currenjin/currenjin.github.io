@@ -7,7 +7,7 @@ updated : 2022-01-31 22:00:00 +0900
 tags     : graphql
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

@@ -7,7 +7,7 @@ updated : 2025-01-17 20:00:00 +0900
 tags     : git
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

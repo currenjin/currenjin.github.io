@@ -7,7 +7,7 @@ updated : 2025-12-20 21:00:00 +0900
 tags     : architecture
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

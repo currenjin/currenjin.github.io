@@ -7,7 +7,7 @@ updated : 2022-01-07 01:55:00 +0900
 tags     : svg
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

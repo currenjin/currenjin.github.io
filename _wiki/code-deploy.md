@@ -7,7 +7,7 @@ updated : 2022-01-08 15:28:00 +0900
 tags     : aws
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

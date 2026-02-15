@@ -7,7 +7,7 @@ updated : 2025-03-15 18:00:00 +0900
 tags     : programming
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

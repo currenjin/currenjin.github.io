@@ -7,7 +7,7 @@ updated : 2022-01-31 13:50:00 +0900
 tags     : cloud-computing
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

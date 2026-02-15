@@ -7,7 +7,7 @@ updated : 2025-07-15 14:00:00 +0900
 tags     : data-structure
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

@@ -7,7 +7,7 @@ updated : 2026-01-22 12:00:00 +0900
 tags     : tidy-first
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

@@ -7,7 +7,7 @@ updated : 2025-04-8 19:00:00 +0900
 tags     : garbage-collection
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

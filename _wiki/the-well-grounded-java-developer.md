@@ -7,7 +7,7 @@ updated : 2025-01-20 13:00:00 +0900
 tags     : java
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

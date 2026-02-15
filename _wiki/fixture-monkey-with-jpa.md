@@ -7,7 +7,7 @@ updated : 2024-09-26 15:00:00 +0900
 tags     : fixture-monkey
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

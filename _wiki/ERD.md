@@ -7,7 +7,7 @@ updated : 2025-03-18 11:30:00 +0900
 tags     : erd
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

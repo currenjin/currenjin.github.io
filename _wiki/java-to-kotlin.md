@@ -7,7 +7,7 @@ updated : 2024-09-11 13:00:00 +0900
 tags     : kotlin
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

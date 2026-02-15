@@ -7,7 +7,7 @@ updated : 2026-01-19 13:00:00 +0900
 tags     : ai-agent
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

@@ -7,7 +7,7 @@ updated : 2025-03-05 07:00:00 +0900
 tags     : jpa
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

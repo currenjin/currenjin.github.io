@@ -7,7 +7,7 @@ updated : 2026-02-06 12:00:00 +0900
 tags     : modern-software-engineering
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC

@@ -7,7 +7,7 @@ updated : 2022-05-26 12:00:00 +0900
 tags     : elasticsearch
 toc     : true
 public  : true
-parent  : [[how-to]]
+parent  : [[index]]
 latex   : true
 ---
 * TOC
