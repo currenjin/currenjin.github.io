@@ -137,7 +137,7 @@
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 0.7rem;
+    gap: 0.96rem;
 }
 
 .post-list > li {
@@ -184,7 +184,7 @@
 .post-link {
     display: block;
     text-decoration: none;
-    padding: 0.8rem 0.9rem 0.82rem 1rem;
+    padding: 1.08rem 1.08rem 1.12rem 1.18rem;
     color: var(--ink-main);
     border-left: 3px solid rgba(95, 77, 214, 0.26);
 }
@@ -204,7 +204,7 @@
 
 .post-meta {
     color: #42406f;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -212,7 +212,8 @@
 
 .post-excerpt {
     color: #2c3744;
-    margin-top: 0.26rem;
+    margin-top: 0.4rem;
+    font-size: 1.05rem;
     line-height: 1.65;
 }
 
