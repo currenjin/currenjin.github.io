@@ -4,7 +4,7 @@ title   : Implementation patterns
 summary :
 date    : 2025-03-15 18:00:00 +0900
 updated : 2025-03-15 18:00:00 +0900
-tag     : programming
+tags     : programming
 toc     : true
 public  : true
 parent  : [[how-to]]

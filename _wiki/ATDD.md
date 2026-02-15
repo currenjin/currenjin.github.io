@@ -4,7 +4,7 @@ title   : ATDD(Acceptance Test Driven Development, 인수 테스트 주도 개�
 summary :
 date    : 2022-02-23 00:30:00 +0900
 updated : 2022-07-02 20:00:00 +0900
-tag     : atdd
+tags     : atdd
 toc     : true
 public  : true
 parent  : [[how-to]]

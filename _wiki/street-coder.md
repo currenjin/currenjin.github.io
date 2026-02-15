@@ -4,7 +4,7 @@ title   : 스트리트 코더(Street coder)
 summary :
 date    : 2025-03-10 20:00:00 +0900
 updated : 2025-03-16 22:00:00 +0900
-tag     : programming
+tags     : programming
 toc     : true
 public  : true
 parent  : [[how-to]]

@@ -4,7 +4,7 @@ title   : 공인 아이피와 사설 아이피(Public & Private IP Address)
 summary :
 date    : 2022-02-05 14:00:00 +0900
 updated : 2022-02-05 14:00:00 +0900
-tag     : network
+tags     : network
 toc     : true
 public  : true
 parent  : [[how-to]]

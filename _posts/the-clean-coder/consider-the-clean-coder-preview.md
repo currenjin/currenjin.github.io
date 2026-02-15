@@ -3,7 +3,7 @@ layout  : post
 title   : [Consider - The Clean Coder] 미리 읽어두기
 summary : consider, clean coder, 미리 읽어두기 
 date    : 2024-06-23 13:00:00 +0900
-tag     : consider clean-coder
+tags     : consider clean-coder
 resource: 2A/73EE4A-1FD5-4EC0-8FA1-73F624DF978F
 toc     : true
 comment : true

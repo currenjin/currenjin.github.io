@@ -1,7 +1,3 @@
 <div class="post-tag">
-{% if page.tags %}
-    {{ page.tags | join: ' ' }}
-{% elsif page.tag %}
-    {{ page.tag }}
-{% endif %}
+    {{ page.tags }}
 </div>

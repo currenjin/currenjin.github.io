@@ -4,7 +4,7 @@ title   : Vaadin
 summary :
 date    : 2022-05-13 14:30:00 +0900
 updated : 2022-05-13 15:30:00 +0900
-tag     : view
+tags     : view
 toc     : true
 public  : true
 parent  : [[how-to]]

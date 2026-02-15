@@ -4,7 +4,7 @@ title   : 다형성(polymorphism)
 summary :
 date    : 2022-01-14 11:04:00 +0900
 updated : 2022-01-14 11:04:00 +0900
-tag     : 
+tags     : 
 toc     : true
 public  : true
 parent  : [[how-to]]

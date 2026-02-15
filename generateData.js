@@ -16,7 +16,7 @@ const dataList = list.map(file => collectData(file))
 
 
 dataList.forEach(function collectTagMap(data) {
-    const tags = data.tags || data.tag;
+    const tags = data.tags;
     if (!tags) {
         return;
     }
@@ -46,7 +46,7 @@ dataList.sort(lexicalOrderingBy('fileName'))
                 parent: page.parent,
                 url: page.url,
                 updated: page.updated || page.date,
-                tags: page.tags || page.tag || [],
+                tags: page.tags || [],
                 children: [],
             };
     });
@@ -229,10 +229,9 @@ function parseInfo(file, info) {
             .replace(/\.md$/, '');
     }
 
-    const normalizedTags = normalizeTags(obj.tags || obj.tag);
+    const normalizedTags = normalizeTags(obj.tags);
     if (normalizedTags.length > 0) {
         obj.tags = normalizedTags;
-        obj.tag = normalizedTags;
     }
     return obj;
 }

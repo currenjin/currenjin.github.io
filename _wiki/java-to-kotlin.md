@@ -4,7 +4,7 @@ title   : Java에서 Kotlin으로
 summary :
 date    : 2024-09-11 13:00:00 +0900
 updated : 2024-09-11 13:00:00 +0900
-tag     : kotlin
+tags     : kotlin
 toc     : true
 public  : true
 parent  : [[how-to]]

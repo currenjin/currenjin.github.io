@@ -4,7 +4,7 @@ title   : JVM(Java Virtual Machine)
 summary :
 date    : 2025-03-26 10:00:00 +0900
 updated : 2025-03-26 10:00:00 +0900
-tag     : java
+tags     : java
 toc     : true
 public  : true
 parent  : [[how-to]]

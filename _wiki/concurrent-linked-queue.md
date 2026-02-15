@@ -4,7 +4,7 @@ title   : ConcurrentLinkedQueue
 summary :
 date    : 2025-07-15 14:00:00 +0900
 updated : 2025-07-15 14:00:00 +0900
-tag     : data-structure
+tags     : data-structure
 toc     : true
 public  : true
 parent  : [[how-to]]

@@ -4,7 +4,7 @@ title   : 프로그래밍 언어론
 summary :
 date    : 2025-12-15 21:00:00 +0900
 updated : 2025-12-15 21:00:00 +0900
-tag     : programming-language
+tags     : programming-language
 toc     : true
 public  : true
 parent  : [[how-to]]

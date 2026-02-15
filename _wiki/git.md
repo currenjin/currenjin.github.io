@@ -4,7 +4,7 @@ title   : Git
 summary :
 date    : 2025-01-17 20:00:00 +0900
 updated : 2025-01-17 20:00:00 +0900
-tag     : git
+tags     : git
 toc     : true
 public  : true
 parent  : [[how-to]]

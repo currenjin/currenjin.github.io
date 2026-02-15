@@ -4,7 +4,7 @@ title   : Test
 summary :
 date    : 2022-01-22 22:38:00 +0900
 updated : 2025-04-08 19:30:00 +0900
-tag     : test
+tags     : test
 toc     : true
 public  : true
 parent  : [[how-to]]

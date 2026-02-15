@@ -4,7 +4,7 @@ title   : Web-MVC
 summary :
 date    : 2022-01-07 11:30:00 +0900
 updated : 2022-01-14 15:00:00 +0900
-tag     : spring
+tags     : spring
 toc     : true
 public  : true
 parent  : [[how-to]]

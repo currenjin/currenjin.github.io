@@ -4,7 +4,7 @@ title   : GraphQL
 summary :
 date    : 2022-01-31 14:30:00 +0900
 updated : 2022-01-31 22:00:00 +0900
-tag     : graphql
+tags     : graphql
 toc     : true
 public  : true
 parent  : [[how-to]]

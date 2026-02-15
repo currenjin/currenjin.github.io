@@ -4,7 +4,7 @@ title   : Fitnesse
 summary :
 date    : 2022-06-22 09:30:00 +0900
 updated : 2022-06-29 10:00:00 +0900
-tag     : atdd
+tags     : atdd
 toc     : true
 public  : true
 parent  : [[how-to]]

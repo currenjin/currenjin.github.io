@@ -4,7 +4,7 @@ title   : Spring Bean
 summary :
 date    : 2024-10-31 17:00:00 +0900
 updated : 2024-11-03 21:00:00 +0900
-tag     : spring
+tags     : spring
 toc     : true
 public  : true
 parent  : [[how-to]]

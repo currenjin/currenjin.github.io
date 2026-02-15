@@ -4,7 +4,7 @@ title   : TDD(Test Driven Development, 테스트 주도 개발)
 summary :
 date    : 2022-01-04 22:38:00 +0900
 updated : 2022-08-19 22:00:00 +0900
-tag     : tdd
+tags     : tdd
 toc     : true
 public  : true
 parent  : [[how-to]]

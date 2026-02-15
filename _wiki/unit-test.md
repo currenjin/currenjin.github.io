@@ -4,7 +4,7 @@ title   : Unit-Test(단위 테스트)
 summary :
 date    : 2022-03-05 16:00:00 +0900
 updated : 2022-07-01 20:00:00 +0900
-tag     : test
+tags     : test
 toc     : true
 public  : true
 parent  : [[how-to]]

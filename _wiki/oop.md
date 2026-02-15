@@ -4,7 +4,7 @@ title   : 객체 지향 프로그래밍(Object-Oriented Programming, OOP)
 summary :
 date    : 2022-02-22 22:30:00 +0900
 updated : 2022-03-03 23:00:00 +0900
-tag     : programming
+tags     : programming
 toc     : true
 public  : true
 parent  : [[how-to]]

@@ -4,7 +4,7 @@ title   : Mockito
 summary :
 date    : 2022-02-26 12:00:00 +0900
 updated : 2022-07-07 19:00:00 +0900
-tag     : test
+tags     : test
 toc     : true
 public  : true
 parent  : [[how-to]]

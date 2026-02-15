@@ -4,7 +4,7 @@ title   : BPDU(Bridge Protocol Data Unit)
 summary :
 date    : 2022-02-05 14:00:00 +0900
 updated : 2022-02-05 14:00:00 +0900
-tag     : network
+tags     : network
 toc     : true
 public  : true
 parent  : [[how-to]]

@@ -4,7 +4,7 @@ title   : 기본기가 탄탄한 자바 개발자(The well-grounded java develop
 summary :
 date    : 2024-12-21 18:00:00 +0900
 updated : 2025-01-20 13:00:00 +0900
-tag     : java
+tags     : java
 toc     : true
 public  : true
 parent  : [[how-to]]

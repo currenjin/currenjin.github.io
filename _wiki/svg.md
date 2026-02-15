@@ -4,7 +4,7 @@ title   : SVG(Scalable Vector Graphics)
 summary :
 date    : 2022-01-06 11:57:00 +0900
 updated : 2022-01-07 01:55:00 +0900
-tag     : svg
+tags     : svg
 toc     : true
 public  : true
 parent  : [[how-to]]

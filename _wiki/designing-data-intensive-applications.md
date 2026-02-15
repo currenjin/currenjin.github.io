@@ -4,7 +4,7 @@ title   : Designing Data-Intensive Applications(데이터 중심 애플리케이
 summary :
 date    : 2025-09-10 13:00:00 +0900
 updated : 2025-09-18 13:00:00 +0900
-tag     : architecture
+tags     : architecture
 toc     : true
 public  : true
 parent  : [[how-to]]

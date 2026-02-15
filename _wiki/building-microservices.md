@@ -4,7 +4,7 @@ title   : Building Microservices
 summary :
 date    : 2025-10-30 13:00:00 +0900
 updated : 2025-12-07 22:00:00 +0900
-tag     : architecture
+tags     : architecture
 toc     : true
 public  : true
 parent  : [[how-to]]

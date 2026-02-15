@@ -4,7 +4,7 @@ title   : TOSS SLASH 24 정리
 summary :
 date    : 2024-09-15 06:00:00 +0900
 updated : 2024-09-15 06:00:00 +0900
-tag     : conference
+tags     : conference
 toc     : true
 public  : true
 parent  : [[how-to]]

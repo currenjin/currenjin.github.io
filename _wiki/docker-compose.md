@@ -4,7 +4,7 @@ title   : Docker Compose
 summary :
 date    : 2022-01-31 13:00:00 +0900
 updated : 2022-01-31 13:00:00 +0900
-tag     : container
+tags     : container
 toc     : true
 public  : true
 parent  : [[how-to]]

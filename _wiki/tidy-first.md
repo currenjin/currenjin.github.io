@@ -4,7 +4,7 @@ title   : 켄트 벡의 Tidy First?
 summary :
 date    : 2026-01-21 12:00:00 +0900
 updated : 2026-01-22 12:00:00 +0900
-tag     : tidy-first
+tags     : tidy-first
 toc     : true
 public  : true
 parent  : [[how-to]]

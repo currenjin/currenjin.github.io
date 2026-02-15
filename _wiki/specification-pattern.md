@@ -4,7 +4,7 @@ title   : Specification Pattern
 summary :
 date    : 2022-05-13 12:00:00 +0900
 updated : 2022-05-13 12:00:00 +0900
-tag     : pattern
+tags     : pattern
 toc     : true
 public  : true
 parent  : [[how-to]]
