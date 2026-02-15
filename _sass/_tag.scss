@@ -1,9 +1,21 @@
-
 .tag-item {
-    padding: 1px;
-    padding-right: 2px;
-    :hover {
-        background-color: gold;
-    }
+    padding: 0;
 }
 
+.tag-item a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    border: 1px solid var(--line-soft);
+    border-radius: 999px;
+    padding: 0.18rem 0.52rem;
+    background: rgba(255, 255, 255, 0.64);
+    text-decoration: none;
+    color: var(--ink-subtle);
+    font-size: 0.76rem;
+}
+
+.tag-item a:hover {
+    background: rgba(47, 79, 102, 0.11);
+    color: var(--ink-main);
+}

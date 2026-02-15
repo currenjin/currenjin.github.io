@@ -1,32 +1,33 @@
 @media (min-width: 1700px) {
     ul#markdown-toc {
         position: fixed;
-        top: 0;
+        top: 0.6rem;
         bottom: 0;
-        left: calc(50vw + 410px);
-        width: 380px;
-        background-color: white;
-        z-index: 9999;
-        font-size: 0.8em;
-        overflow-y:auto;
-        overflow-x:hidden;
-        border: 0px solid;
+        left: calc(50vw + 450px);
+        width: 310px;
+        background-color: rgba(255, 255, 255, 0.85);
+        z-index: 40;
+        font-size: 0.8rem;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border: 1px solid var(--line-soft);
+        border-radius: 10px;
         line-height: 1.5;
     }
 }
 
 #markdown-toc {
-    border: 1px solid;
-    padding: 10px;
-    padding-left: 30px;
-    background-color: #FFFFFF;
+    border: 1px solid var(--line-soft);
+    padding: 0.7rem 0.8rem 0.7rem 1.4rem;
+    background-color: rgba(255, 255, 255, 0.72);
+    border-radius: 10px;
     line-height: 1.5;
 }
 
-$active-color: red;
+$active-color: var(--accent-warm);
 .active-toc {
-  color: $active-color;
+    color: $active-color;
 }
 .active-toc:visited {
-  color: $active-color;
+    color: $active-color;
 }

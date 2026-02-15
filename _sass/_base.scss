@@ -1,148 +1,160 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto+Slab:300,400,500,600,700,800,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Sans+KR:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500&display=swap');
 
-body {
-    margin: 0;
-    height: 100%;
+:root {
+    --bg-main: #f5f1e7;
+    --bg-layer: #fbf8f1;
+    --bg-card: #fffdf8;
+    --ink-main: #1f2831;
+    --ink-subtle: #5e6975;
+    --line-soft: #d8cfbd;
+    --accent: #2f4f66;
+    --accent-warm: #9a6a3a;
+    --focus: #2a6d92;
 }
 
 body {
-  font: 400 16px 'Roboto Slab',AppleSDGothicNeo,sans-serif;
-  color: rgba(0, 0, 0, 0.84);
-  -webkit-text-size-adjust: 100%;
-  -webkit-font-feature-settings: "kern" 1;
-  -moz-font-feature-settings: "kern" 1;
-  -o-font-feature-settings: "kern" 1;
-  font-feature-settings: "kern" 1;
-  font-kerning: normal;
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
+    margin: 0;
+    min-height: 100vh;
+    font: 400 16px/1.8 'IBM Plex Sans KR', 'Noto Sans KR', sans-serif;
+    color: var(--ink-main);
+    -webkit-text-size-adjust: 100%;
+    font-feature-settings: "kern" 1;
+    background:
+        radial-gradient(circle at 12% 10%, rgba(47, 79, 102, 0.08) 0, rgba(47, 79, 102, 0) 42%),
+        radial-gradient(circle at 84% 18%, rgba(154, 106, 58, 0.1) 0, rgba(154, 106, 58, 0) 38%),
+        var(--bg-main);
 }
 
 body, th, td, div, p, li {
     word-break: keep-all;
 }
 
-$main-font-color: #4D5667;
-
 p, li {
-    color: $main-font-color;
+    color: var(--ink-main);
 }
 
-a:link {
+a {
+    color: var(--accent);
+    text-decoration-color: rgba(47, 79, 102, 0.35);
+    text-underline-offset: 2px;
 }
+
 a:visited {
-    color: #344B83;
+    color: #435968;
+}
+
+a:hover {
+    color: var(--accent-warm);
+}
+
+a:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
 }
 
 .post-content {
-    line-height: 2;
+    line-height: 1.95;
 }
 
 blockquote {
-    font-family: 'Noto Serif KR', serif;
-    background: #FFFFFF;
-    margin:0;
-    padding: 1px 0px 1px 8px;
-    border-left: 4px solid #CCCCCC;
-    p {
-        line-height: 2;
-        color: $second-font-color;
-    }
+    margin: 1.2rem 0;
+    padding: 0.35rem 0 0.35rem 0.9rem;
+    border-left: 3px solid var(--accent-warm);
+    color: var(--ink-subtle);
+    background: rgba(255, 255, 255, 0.45);
 }
-code,pre {
-    font-family:  $coding-font;
+
+code, pre {
+    font-family: 'Source Code Pro', Consolas, monospace;
 }
+
 code {
     color: inherit;
-    background-color: #ebedf0;
-    padding: 1px 3px;
-    border-radius: 3px;
+    background-color: #eae6dc;
+    padding: 1px 4px;
+    border-radius: 4px;
 }
+
 pre {
     overflow-x: auto;
-    padding: 10px 10px;
+    padding: 10px 12px;
 }
+
 pre, pre code {
     color: #fafafa;
-    background-color: #223;
-    // font-weight: 600;
+    background-color: #1c2630;
 }
+
 pre code {
     padding: 0;
 }
+
 .hide {
     display: none;
 }
+
 .center {
     text-align: center;
 }
+
 .language-html table {
     background: transparent;
     margin: 0;
 }
+
 .language-html td {
     padding: 0;
     border: 0;
-
 }
 
-h1 {
-    font-weight: normal;
-}
-h2,h3,h4,h5,h6 {
-    font-weight: normal;
-    color: $main-font-color;
-}
-
-.post-content h1,h2,h3,h4,h5,h6 {
-    &:before { color:$theme-color; }
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cormorant Garamond', 'Noto Serif KR', serif;
+    font-weight: 600;
+    color: var(--ink-main);
+    letter-spacing: 0.01em;
 }
 
 h1 {
-    font-size: 2.2rem;
-    margin: 0px;
+    font-size: 2.45rem;
+    margin: 0;
 }
+
 .post-content h1 {
-    border-bottom: 1px solid $theme-color;
+    border-bottom: 1px solid var(--line-soft);
+    padding-bottom: 0.2rem;
 }
+
 h2 {
-    font-size: 1.8em;
-    border-bottom: 1px solid #d0d0d0;
+    font-size: 2rem;
+    border-bottom: 1px solid var(--line-soft);
 }
-.post-content h2 {
-    &:before { content:"⠁"; }
-}
+
 h3 {
-    font-size: 1.6em;
-    font-style: italic;
+    font-size: 1.7rem;
 }
-.post-content h3 {
-    &:before { content:"⠃"; }
-}
+
 h4 {
-    font-size: 1.4em;
-    padding-left: 5px;
-    font-style: italic;
+    font-size: 1.45rem;
 }
-.post-content h4 {
-    &:before { content:"⠋"; }
-}
+
 h5 {
-    font-size: 1.2em;
-    padding-left: 10px;
-    font-style: italic;
+    font-size: 1.25rem;
 }
-.post-content h5 {
-    &:before { content:"⠛"; }
-}
+
 h6 {
-    font-size: 1.0em;
-    padding-left: 15px;
-    font-weight: bold;
-    font-style: italic;
+    font-size: 1.05rem;
 }
-.post-content h6 {
-    &:before { content:"⠟"; }
+
+.post-content h2::before,
+.post-content h3::before {
+    color: var(--accent-warm);
+    margin-right: 0.3rem;
+}
+
+.post-content h2::before {
+    content: "·";
+}
+
+.post-content h3::before {
+    content: "··";
 }
