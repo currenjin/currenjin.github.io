@@ -90,10 +90,10 @@
     max-width: 1120px;
     margin: 0 auto 1rem;
     background:
-        linear-gradient(120deg, rgba(255, 255, 255, 0.74) 0, rgba(246, 240, 227, 0.88) 61.8%, rgba(239, 235, 225, 0.93) 100%);
+        linear-gradient(120deg, rgba(255, 255, 255, 0.8) 0, rgba(250, 252, 249, 0.86) 61.8%, rgba(247, 250, 246, 0.88) 100%);
     box-shadow: none;
-    border-left: 1px solid rgba(16, 22, 29, 0.08);
-    border-right: 1px solid rgba(16, 22, 29, 0.08);
+    border-left: 1px solid rgba(16, 22, 29, 0.06);
+    border-right: 1px solid rgba(16, 22, 29, 0.06);
 }
 
 .home-content {
@@ -157,8 +157,8 @@ h3.indent {
 }
 
 .post-list > li {
-    border: 1px solid rgba(90, 118, 136, 0.3);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(252, 248, 241, 0.96) 100%);
+    border: 1px solid rgba(92, 121, 101, 0.2);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 252, 248, 0.86) 100%);
     border-radius: 12px;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     position: relative;
@@ -215,15 +215,15 @@ h3.indent {
 }
 
 .post-link:hover .post-meta {
-    color: #596778;
+    color: #4d5f6f;
 }
 
 .post-link:hover .post-title {
-    color: #2f4657;
+    color: #253f4d;
 }
 
 .post-meta {
-    color: #657487;
+    color: #5b6e80;
     font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.05em;
@@ -232,14 +232,14 @@ h3.indent {
 
 .post-title {
     margin-top: 0.18rem;
-    color: #31485a;
+    color: #2a404f;
     font-size: 1.24rem;
     font-weight: 700;
     line-height: 1.35;
 }
 
 .post-excerpt {
-    color: #2c3744;
+    color: #233240;
     margin-top: 0.4rem;
     font-size: 1rem;
     line-height: 1.65;
@@ -276,7 +276,7 @@ ul.tag-list li a,
     border: 1px solid rgba(95, 174, 90, 0.28);
     border-radius: 999px;
     padding: 0.15rem 0.44rem;
-    background: rgba(255, 255, 255, 0.64);
+    background: rgba(255, 255, 255, 0.72);
 }
 
 .no-text-deco a {
@@ -339,7 +339,7 @@ ul.tag-list li a,
 }
 
 div.search {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.76) 0%, rgba(247, 242, 234, 0.82) 61.8%, rgba(247, 242, 232, 0.86) 100%);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.78) 0%, rgba(249, 252, 249, 0.84) 61.8%, rgba(248, 252, 247, 0.86) 100%);
     width: 100%;
     position: relative;
     border-bottom: 1px solid rgba(95, 174, 90, 0.2);
@@ -408,12 +408,29 @@ div.search {
 
     .home-content,
     .page-content {
-        width: 100%;
+        width: calc(100% - 1rem);
         max-width: none;
-        margin: 0;
+        margin: 0 auto 0.6rem;
+        background:
+            linear-gradient(120deg, rgba(255, 255, 255, 0.56) 0, rgba(250, 252, 249, 0.62) 61.8%, rgba(247, 250, 246, 0.64) 100%);
+        backdrop-filter: blur(1.5px) saturate(102%);
+        -webkit-backdrop-filter: blur(1.5px) saturate(102%);
         box-shadow: none;
         border-left: 0;
         border-right: 0;
+    }
+
+    .post-list > li {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, rgba(249, 252, 248, 0.72) 100%);
+    }
+
+    div.search {
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.62) 0%, rgba(249, 252, 249, 0.66) 61.8%, rgba(248, 252, 247, 0.68) 100%);
+    }
+
+    ul.tag-list li a,
+    .post-tag {
+        background: rgba(255, 255, 255, 0.58);
     }
 
     .post {

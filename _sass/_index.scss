@@ -100,3 +100,13 @@
         }
     }
 }
+
+@media (max-width: 780px) {
+    .blog-face {
+        background:
+            linear-gradient(160deg, rgba(12, 15, 28, 0.44) 0%, rgba(20, 17, 30, 0.36) 100%),
+            url('/resource/james_webb.png') center/cover no-repeat;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}
