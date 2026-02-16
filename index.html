@@ -19,7 +19,7 @@ regenerate: true
     <H3 class="indent">최근 업데이트</H3>
     <ul class="post-list">
 {% assign documents = site.wiki | sort: 'updated' | reverse %}
-{% for doc in documents limit: 30 %}
+{% for doc in documents limit: 24 %}
     {% if doc.public == true and doc.title != 'wiki'%}
         <li>
             <div>
@@ -27,16 +27,39 @@ regenerate: true
                     <div class="post-meta">{{ doc.updated | date: "%Y.%m.%d" }}</div>
                     <div class="post-title">{{ doc.title }}</div>
                     <div class="post-excerpt">{{ doc.summary }}</div>
-                {% if doc.tags %}
                     <ul class="tag-list">
+                        <li class="post-tag">wiki</li>
+                {% if doc.tags %}
                         <li class="post-tag">{{ doc.tags }}</li>
-                    </ul>
                 {% endif %}
+                    </ul>
                 </a>
             </div>
         </li>
     {% endif %}
 {% endfor %}
+{% if site.data.medium and site.data.medium.size > 0 %}
+{% for post in site.data.medium limit: 8 %}
+        <li>
+            <a class="post-link" href="{{ post.url }}" target="_blank" rel="noopener noreferrer">
+                <div class="post-meta">
+                    {% if post.published_at and post.published_at != "" %}
+                        {{ post.published_at | date: "%Y.%m.%d" }}
+                    {% else %}
+                        Medium
+                    {% endif %}
+                </div>
+                <div class="post-title">{{ post.title }}</div>
+                {% if post.summary and post.summary != "" %}
+                <div class="post-excerpt">{{ post.summary }}</div>
+                {% endif %}
+                <ul class="tag-list">
+                    <li class="post-tag">medium</li>
+                </ul>
+            </a>
+        </li>
+{% endfor %}
+{% endif %}
     </ul>
     <h4>
         <a href="/recent/">전체 문서 리스트 보기 ({{ site.wiki | size | minus: 1 }} 항목)</a>
