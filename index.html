@@ -18,10 +18,16 @@ regenerate: true
 <div>
     <H3 class="indent">최근 업데이트</H3>
     <ul class="post-list">
-{% assign wiki_docs = site.wiki | where_exp: "doc", "doc.public == true and doc.title != 'wiki'" %}
-{% assign medium_docs = site.data.medium | default: empty %}
+{% assign wiki_docs = site.wiki | where: "public", true %}
+{% assign medium_docs = site.data.medium %}
+{% if medium_docs == nil %}
+{% assign medium_docs = "" | split: "" %}
+{% endif %}
 {% assign updates = wiki_docs | concat: medium_docs | sort: "updated" | reverse %}
 {% for doc in updates limit: 32 %}
+{% if doc.source != 'Medium' and doc.title == 'wiki' %}
+{% continue %}
+{% endif %}
         <li>
             <a class="post-link{% if doc.source == 'Medium' %} post-link--external{% endif %}"
                href="{% if doc.source == 'Medium' %}{{ doc.url }}{% else %}{{ doc.url | prepend: site.baseurl }}{% endif %}"
