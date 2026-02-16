@@ -26,6 +26,12 @@
 }
 
 body {
+    --cosmos-shift-x: 0px;
+    --cosmos-shift-y: 0px;
+    --cosmos-near-x: 0px;
+    --cosmos-near-y: 0px;
+    --cosmos-bg-x: 0px;
+    --cosmos-bg-y: 0px;
     margin: 0;
     min-height: 100vh;
     font: 400 16px/1.8 'IBM Plex Sans KR', 'Noto Sans KR', sans-serif;
@@ -36,7 +42,7 @@ body {
         linear-gradient(135deg, rgba(8, 10, 18, 0.68) 0%, rgba(12, 16, 28, 0.54) 50%, rgba(26, 16, 22, 0.56) 100%),
         radial-gradient(circle at 8% 10%, rgba(102, 191, 104, 0.2) 0, rgba(102, 191, 104, 0) 36%),
         radial-gradient(circle at 86% 14%, rgba(145, 212, 120, 0.2) 0, rgba(145, 212, 120, 0) 40%),
-        url('/resource/james_webb.png') center / cover no-repeat;
+        url('/resource/james_webb.png') calc(50% + var(--cosmos-bg-x)) calc(50% + var(--cosmos-bg-y)) / 125% auto no-repeat;
     background-attachment: fixed;
     position: relative;
 }
@@ -60,8 +66,10 @@ body::before {
         radial-gradient(circle at 76% 16%, rgba(255, 251, 240, 0.93) 0 1.1px, transparent 1.7px),
         radial-gradient(circle at 88% 26%, rgba(255, 251, 240, 0.86) 0 1px, transparent 1.6px);
     background-size: 100% 100%;
-    opacity: 0.5;
+    opacity: 0.78;
     animation: starPulse 7s ease-in-out infinite alternate;
+    transform: translate3d(var(--cosmos-near-x), var(--cosmos-near-y), 0);
+    will-change: transform;
 }
 
 body::after {
@@ -69,7 +77,9 @@ body::after {
         linear-gradient(114deg, rgba(255, 251, 240, 0.26) 0 1px, transparent 1px 100%),
         linear-gradient(47deg, rgba(255, 251, 240, 0.2) 0 1px, transparent 1px 100%);
     background-size: 700px 420px, 760px 460px;
-    opacity: 0.18;
+    opacity: 0.34;
+    transform: translate3d(var(--cosmos-shift-x), var(--cosmos-shift-y), 0);
+    will-change: transform;
 }
 
 @media (max-width: 780px) {
@@ -80,6 +90,12 @@ body::after {
             radial-gradient(circle at 8% 10%, rgba(102, 191, 104, 0.2) 0, rgba(102, 191, 104, 0) 36%),
             radial-gradient(circle at 86% 14%, rgba(145, 212, 120, 0.2) 0, rgba(145, 212, 120, 0) 40%);
         background-size: auto, auto, auto;
+    }
+
+    body::before,
+    body::after {
+        transform: none;
+        will-change: auto;
     }
 }
 
