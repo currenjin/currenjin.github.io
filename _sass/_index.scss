@@ -1,41 +1,22 @@
 .blog-face {
     margin: 1rem 0 1.2rem;
     padding: 1.25rem 1.1rem;
-    border: 1px solid rgba(200, 188, 170, 0.9);
+    border: 1px solid rgba(248, 241, 224, 0.42);
     border-radius: 16px;
     position: relative;
     overflow: hidden;
-    background:
-        linear-gradient(160deg, rgba(12, 15, 28, 0.62) 0%, rgba(20, 17, 30, 0.52) 100%),
-        url('/resource/james_webb.png') center/cover no-repeat,
-        radial-gradient(circle at 88% 18%, rgba(95, 77, 214, 0.22) 0, rgba(95, 77, 214, 0) 38%),
-        radial-gradient(circle at 13% 82%, rgba(209, 166, 78, 0.18) 0, rgba(209, 166, 78, 0) 34%),
-        linear-gradient(160deg, rgba(255, 255, 255, 0.94) 0%, rgba(249, 243, 231, 0.95) 100%);
+    background: rgba(14, 16, 24, 0.12);
+    backdrop-filter: blur(2px) saturate(102%);
+    -webkit-backdrop-filter: blur(2px) saturate(102%);
+    box-shadow: 0 8px 18px rgba(6, 10, 22, 0.16);
 }
 
 .blog-face::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(116deg, rgba(95, 77, 214, 0.14) 0 1px, transparent 1px 100%);
-    background-size: 460px 240px;
-    opacity: 0.18;
+    content: none;
 }
 
 .blog-face::before {
-    content: "";
-    position: absolute;
-    inset: -10% -4% auto auto;
-    width: 240px;
-    height: 240px;
-    border-radius: 50%;
-    background:
-        radial-gradient(circle, rgba(95, 77, 214, 0) 64%, rgba(95, 77, 214, 0.36) 65%, rgba(95, 77, 214, 0) 67%),
-        radial-gradient(circle, rgba(209, 166, 78, 0) 47%, rgba(209, 166, 78, 0.3) 48%, rgba(209, 166, 78, 0) 50%);
-    opacity: 0.45;
-    transform: rotate(-12deg);
-    pointer-events: none;
+    content: none;
 }
 
 .identity-title {

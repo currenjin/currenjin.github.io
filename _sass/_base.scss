@@ -33,12 +33,10 @@ body {
     -webkit-text-size-adjust: 100%;
     font-feature-settings: "kern" 1;
     background:
-        radial-gradient(circle at 6% 8%, var(--nebula-blue) 0, rgba(20, 63, 99, 0) 34%),
-        radial-gradient(circle at 90% 14%, var(--nebula-amber) 0, rgba(162, 93, 34, 0) 36%),
-        linear-gradient(125deg, rgba(20, 63, 99, 0.17) 0 1px, transparent 1px 100%),
-        linear-gradient(58deg, rgba(162, 93, 34, 0.1) 0 1px, transparent 1px 100%),
-        var(--bg-main);
-    background-size: auto, auto, 980px 560px, 940px 540px, auto;
+        linear-gradient(135deg, rgba(8, 10, 18, 0.68) 0%, rgba(12, 16, 28, 0.54) 50%, rgba(26, 16, 22, 0.56) 100%),
+        radial-gradient(circle at 8% 10%, rgba(95, 77, 214, 0.26) 0, rgba(95, 77, 214, 0) 36%),
+        radial-gradient(circle at 86% 14%, rgba(209, 166, 78, 0.2) 0, rgba(209, 166, 78, 0) 40%),
+        url('/resource/james_webb.png') center / cover no-repeat;
     background-attachment: fixed;
     position: relative;
 }
@@ -62,7 +60,7 @@ body::before {
         radial-gradient(circle at 76% 16%, rgba(255, 251, 240, 0.93) 0 1.1px, transparent 1.7px),
         radial-gradient(circle at 88% 26%, rgba(255, 251, 240, 0.86) 0 1px, transparent 1.6px);
     background-size: 100% 100%;
-    opacity: 0.68;
+    opacity: 0.5;
     animation: starPulse 7s ease-in-out infinite alternate;
 }
 
@@ -71,7 +69,13 @@ body::after {
         linear-gradient(114deg, rgba(255, 251, 240, 0.26) 0 1px, transparent 1px 100%),
         linear-gradient(47deg, rgba(255, 251, 240, 0.2) 0 1px, transparent 1px 100%);
     background-size: 700px 420px, 760px 460px;
-    opacity: 0.24;
+    opacity: 0.18;
+}
+
+@media (max-width: 780px) {
+    body {
+        background-attachment: scroll;
+    }
 }
 
 @keyframes starPulse {
