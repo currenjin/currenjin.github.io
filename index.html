@@ -23,41 +23,52 @@ regenerate: true
 {% if medium_docs == nil %}
 {% assign medium_docs = "" | split: "" %}
 {% endif %}
-{% assign updates = wiki_docs | concat: medium_docs | sort: "updated" | reverse %}
-{% for doc in updates limit: 32 %}
-{% if doc.source != 'Medium' and doc.title == 'wiki' %}
+{% assign wiki_updates = wiki_docs | sort: "updated" | reverse %}
+{% for doc in wiki_updates limit: 24 %}
+{% if doc.title == 'wiki' %}
 {% continue %}
 {% endif %}
         <li>
-            <a class="post-link{% if doc.source == 'Medium' %} post-link--external{% endif %}"
-               href="{% if doc.source == 'Medium' %}{{ doc.url }}{% else %}{{ doc.url | prepend: site.baseurl }}{% endif %}"
-               {% if doc.source == 'Medium' %}target="_blank" rel="noopener noreferrer"{% endif %}>
+            <a class="post-link"
+               href="{{ doc.url | prepend: site.baseurl }}">
                 <div class="post-meta">{{ doc.updated | date: "%Y.%m.%d" }}</div>
                 <div class="post-title">
                     {{ doc.title }}
-                    {% if doc.source == 'Medium' %}
-                    <span class="post-title-external" aria-hidden="true">↗</span>
-                    {% endif %}
                 </div>
                 {% if doc.summary and doc.summary != "" %}
                 <div class="post-excerpt">{{ doc.summary }}</div>
                 {% endif %}
-                {% if doc.source == 'Medium' or doc.tags %}
+                {% if doc.tags %}
                 <div class="post-badge-groups">
-                    {% if doc.source == 'Medium' %}
-                    <div class="post-badge-box post-badge-box--platform">
-                        <span class="post-badge-key">platform</span>
-                        <span class="post-badge-value">medium</span>
-                    </div>
-                    {% endif %}
-                    {% if doc.source != 'Medium' and doc.tags %}
                     <div class="post-badge-box post-badge-box--tags">
                         <span class="post-badge-key">tags</span>
                         <span class="post-badge-value">{{ doc.tags }}</span>
                     </div>
-                    {% endif %}
                 </div>
                 {% endif %}
+            </a>
+        </li>
+{% endfor %}
+{% assign medium_updates = medium_docs | sort: "updated" | reverse %}
+{% for doc in medium_updates limit: 8 %}
+        <li>
+            <a class="post-link post-link--external"
+               href="{{ doc.url }}"
+               target="_blank" rel="noopener noreferrer">
+                <div class="post-meta">{{ doc.updated | date: "%Y.%m.%d" }}</div>
+                <div class="post-title">
+                    {{ doc.title }}
+                    <span class="post-title-external" aria-hidden="true">↗</span>
+                </div>
+                {% if doc.summary and doc.summary != "" %}
+                <div class="post-excerpt">{{ doc.summary }}</div>
+                {% endif %}
+                <div class="post-badge-groups">
+                    <div class="post-badge-box post-badge-box--platform">
+                        <span class="post-badge-key">platform</span>
+                        <span class="post-badge-value">medium</span>
+                    </div>
+                </div>
             </a>
         </li>
 {% endfor %}
