@@ -54,7 +54,7 @@
     align-items: center;
     gap: 0.22rem;
     font-size: 0.69rem;
-    border: 1px dashed rgba(95, 77, 214, 0.42);
+    border: 1px dashed rgba(95, 174, 90, 0.4);
     border-radius: 999px;
     padding: 0.14rem 0.48rem;
     color: #f7f3eb;
@@ -67,8 +67,8 @@
 .identity-keywords span::before {
     content: "✦";
     font-size: 0.7em;
-    color: rgba(95, 77, 214, 0.86);
-    text-shadow: 0 0 6px rgba(95, 77, 214, 0.3);
+    color: rgba(95, 174, 90, 0.86);
+    text-shadow: 0 0 6px rgba(95, 174, 90, 0.3);
 }
 
 .indent {
@@ -82,7 +82,7 @@
     gap: 0.45rem;
 
     a {
-        border: 1px solid rgba(95, 77, 214, 0.55);
+        border: 1px solid rgba(95, 174, 90, 0.5);
         color: #fcfbf8;
         padding: 0.24rem 0.62rem;
         text-decoration: none;
@@ -96,7 +96,7 @@
         &:hover {
             transition: all 0.2s ease;
             color: #fff;
-            background: linear-gradient(90deg, #5f4dd6 0%, #25bfd8 61.8%, #d1a64e 100%);
+            background: linear-gradient(90deg, #5fae5a 0%, #66bf68 61.8%, #91d478 100%);
         }
     }
 }

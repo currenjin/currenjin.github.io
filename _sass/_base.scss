@@ -7,16 +7,16 @@
     --ink-main: #10161d;
     --ink-subtle: #4d5b6b;
     --line-soft: #c8bcaa;
-    --accent: #5f4dd6;
-    --accent-warm: #d1a64e;
-    --focus: #25bfd8;
+    --accent: #5fae5a;
+    --accent-warm: #91d478;
+    --focus: #66bf68;
     --cosmos-indigo: #2d2c69;
-    --cosmos-violet: #5f4dd6;
-    --cosmos-cyan: #25bfd8;
-    --cosmos-gold: #d1a64e;
+    --cosmos-violet: #5fae5a;
+    --cosmos-cyan: #66bf68;
+    --cosmos-gold: #91d478;
     --star: rgba(255, 251, 240, 0.95);
     --nebula-blue: rgba(45, 44, 105, 0.26);
-    --nebula-amber: rgba(209, 166, 78, 0.22);
+    --nebula-amber: rgba(145, 212, 120, 0.22);
 }
 
 *,
@@ -34,8 +34,8 @@ body {
     font-feature-settings: "kern" 1;
     background:
         linear-gradient(135deg, rgba(8, 10, 18, 0.68) 0%, rgba(12, 16, 28, 0.54) 50%, rgba(26, 16, 22, 0.56) 100%),
-        radial-gradient(circle at 8% 10%, rgba(95, 77, 214, 0.26) 0, rgba(95, 77, 214, 0) 36%),
-        radial-gradient(circle at 86% 14%, rgba(209, 166, 78, 0.2) 0, rgba(209, 166, 78, 0) 40%),
+        radial-gradient(circle at 8% 10%, rgba(102, 191, 104, 0.2) 0, rgba(102, 191, 104, 0) 36%),
+        radial-gradient(circle at 86% 14%, rgba(145, 212, 120, 0.2) 0, rgba(145, 212, 120, 0) 40%),
         url('/resource/james_webb.png') center / cover no-repeat;
     background-attachment: fixed;
     position: relative;
@@ -102,12 +102,12 @@ p, li {
 
 a {
     color: var(--accent);
-    text-decoration-color: rgba(95, 77, 214, 0.42);
+    text-decoration-color: rgba(102, 191, 104, 0.35);
     text-underline-offset: 2px;
 }
 
 a:visited {
-    color: #3f3b86;
+    color: #4f6373;
 }
 
 a:hover {
@@ -128,7 +128,7 @@ blockquote {
     padding: 0.35rem 0 0.35rem 0.9rem;
     border-left: 3px solid var(--cosmos-gold);
     color: var(--ink-subtle);
-    background: linear-gradient(90deg, rgba(95, 77, 214, 0.08) 0%, rgba(37, 191, 216, 0.06) 61.8%, rgba(209, 166, 78, 0.06) 100%);
+    background: linear-gradient(90deg, rgba(102, 191, 104, 0.08) 0%, rgba(102, 191, 104, 0.06) 61.8%, rgba(145, 212, 120, 0.05) 100%);
 }
 
 code, pre {
