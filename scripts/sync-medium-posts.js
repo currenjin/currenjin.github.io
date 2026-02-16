@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = process.cwd();
-const OUTPUT_PATH = path.join(ROOT, "data", "medium.json");
+const OUTPUT_PATH = path.join(ROOT, "_data", "medium.json");
 const CONFIG_PATH = path.join(ROOT, "_config.yml");
 
 function readConfigValue(key) {
@@ -80,6 +80,7 @@ async function main() {
     return {
       title,
       url,
+      updated: publishedAt,
       published_at: publishedAt,
       summary,
       source: "Medium",
