@@ -3,7 +3,8 @@ title: currenjin's wiki
 url: "https://currenjin.github.io"
 baseurl: ""
 description: >
-    행복합시다, 우리!
+    엔지니어링 세계의 광활함을 사유하고 기록하는 위키
+og_image: "/resource/james_webb.png"
 
 # My information
 email: hyun0524e@naver.com
