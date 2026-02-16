@@ -18,48 +18,38 @@ regenerate: true
 <div>
     <H3 class="indent">최근 업데이트</H3>
     <ul class="post-list">
-{% assign documents = site.wiki | sort: 'updated' | reverse %}
-{% for doc in documents limit: 24 %}
-    {% if doc.public == true and doc.title != 'wiki'%}
+{% assign wiki_docs = site.wiki | where_exp: "doc", "doc.public == true and doc.title != 'wiki'" %}
+{% assign medium_docs = site.data.medium | default: empty %}
+{% assign updates = wiki_docs | concat: medium_docs | sort: "updated" | reverse %}
+{% for doc in updates limit: 32 %}
         <li>
-            <div>
-                <a class="post-link" href="{{ doc.url | prepend: site.baseurl }}">
-                    <div class="post-meta">{{ doc.updated | date: "%Y.%m.%d" }}</div>
-                    <div class="post-title">{{ doc.title }}</div>
-                    <div class="post-excerpt">{{ doc.summary }}</div>
-                    <ul class="tag-list">
-                        <li class="post-tag">wiki</li>
-                {% if doc.tags %}
-                        <li class="post-tag">{{ doc.tags }}</li>
-                {% endif %}
-                    </ul>
-                </a>
-            </div>
-        </li>
-    {% endif %}
-{% endfor %}
-{% if site.data.medium and site.data.medium.size > 0 %}
-{% for post in site.data.medium limit: 8 %}
-        <li>
-            <a class="post-link" href="{{ post.url }}" target="_blank" rel="noopener noreferrer">
-                <div class="post-meta">
-                    {% if post.published_at and post.published_at != "" %}
-                        {{ post.published_at | date: "%Y.%m.%d" }}
-                    {% else %}
-                        Medium
+            <a class="post-link{% if doc.source == 'Medium' %} post-link--external{% endif %}"
+               href="{% if doc.source == 'Medium' %}{{ doc.url }}{% else %}{{ doc.url | prepend: site.baseurl }}{% endif %}"
+               {% if doc.source == 'Medium' %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                <div class="post-meta">{{ doc.updated | date: "%Y.%m.%d" }}</div>
+                <div class="post-title">
+                    {{ doc.title }}
+                    {% if doc.source == 'Medium' %}
+                    <span class="post-title-external" aria-hidden="true">↗</span>
                     {% endif %}
                 </div>
-                <div class="post-title">{{ post.title }}</div>
-                {% if post.summary and post.summary != "" %}
-                <div class="post-excerpt">{{ post.summary }}</div>
+                {% if doc.summary and doc.summary != "" %}
+                <div class="post-excerpt">{{ doc.summary }}</div>
                 {% endif %}
                 <ul class="tag-list">
-                    <li class="post-tag">medium</li>
+                    {% if doc.source == 'Medium' %}
+                    <li class="post-tag post-tag-platform post-tag--medium">medium</li>
+                    <li class="post-tag post-tag-platform post-tag--external">external</li>
+                    {% else %}
+                    <li class="post-tag post-tag-platform post-tag--wiki">wiki</li>
+                    {% if doc.tags %}
+                    <li class="post-tag">{{ doc.tags }}</li>
+                    {% endif %}
+                    {% endif %}
                 </ul>
             </a>
         </li>
 {% endfor %}
-{% endif %}
     </ul>
     <h4>
         <a href="/recent/">전체 문서 리스트 보기 ({{ site.wiki | size | minus: 1 }} 항목)</a>

@@ -238,6 +238,15 @@ h3.indent {
     line-height: 1.35;
 }
 
+.post-title-external {
+    display: inline-block;
+    margin-left: 0.28rem;
+    color: #5fae5a;
+    font-size: 0.86em;
+    font-weight: 700;
+    transform: translateY(-1px);
+}
+
 .post-excerpt {
     color: #233240;
     margin-top: 0.4rem;
@@ -277,6 +286,33 @@ ul.tag-list li a,
     border-radius: 999px;
     padding: 0.15rem 0.44rem;
     background: rgba(255, 255, 255, 0.72);
+}
+
+.post-tag-platform {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-width: 1px;
+    padding: 0.12rem 0.5rem;
+}
+
+.post-tag--wiki {
+    color: #245861;
+    border-color: rgba(36, 88, 97, 0.28);
+    background: rgba(77, 162, 172, 0.14);
+}
+
+.post-tag--medium {
+    color: #19503f;
+    border-color: rgba(25, 80, 63, 0.3);
+    background: rgba(95, 174, 90, 0.16);
+}
+
+.post-tag--external {
+    color: #3e4f5a;
+    border-color: rgba(62, 79, 90, 0.24);
+    background: rgba(255, 255, 255, 0.78);
 }
 
 .no-text-deco a {
