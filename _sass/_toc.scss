@@ -10,14 +10,35 @@
         font-size: 0.8rem;
         overflow-y: auto;
         overflow-x: hidden;
-        border: 1px solid var(--line-soft);
+        scrollbar-gutter: stable;
+        border: 0;
         border-radius: 10px;
+        clip-path: inset(0 round 10px);
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
         line-height: 1.5;
+    }
+
+    ul#markdown-toc::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ul#markdown-toc::-webkit-scrollbar-track {
+        background: rgba(250, 252, 249, 0.28);
+    }
+
+    ul#markdown-toc::-webkit-scrollbar-thumb {
+        background: rgba(95, 174, 90, 0.38);
+        border-radius: 999px;
+        border: 2px solid rgba(255, 255, 255, 0.42);
+    }
+
+    ul#markdown-toc::-webkit-scrollbar-thumb:hover {
+        background: rgba(95, 174, 90, 0.55);
     }
 }
 
 #markdown-toc {
-    border: 1px solid var(--line-soft);
+    border: 0;
     padding: 0.7rem 0.8rem 0.7rem 1.4rem;
     background-color: rgba(255, 255, 255, 0.72);
     border-radius: 10px;
