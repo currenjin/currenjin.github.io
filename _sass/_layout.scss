@@ -74,14 +74,14 @@
 
 .home-content,
 .page-content {
-    width: 100%;
-    max-width: none;
-    margin: 0;
+    width: calc(100% - 2.4rem);
+    max-width: 1120px;
+    margin: 0 auto 1rem;
     background:
         linear-gradient(120deg, rgba(255, 255, 255, 0.74) 0, rgba(246, 240, 227, 0.88) 61.8%, rgba(239, 235, 225, 0.93) 100%);
     box-shadow: none;
     border-left: 1px solid rgba(16, 22, 29, 0.08);
-    border-right: 0;
+    border-right: 1px solid rgba(16, 22, 29, 0.08);
 }
 
 .home-content {
@@ -396,6 +396,9 @@ div.search {
 
     .home-content,
     .page-content {
+        width: 100%;
+        max-width: none;
+        margin: 0;
         box-shadow: none;
         border-left: 0;
         border-right: 0;
