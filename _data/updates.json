@@ -1,0 +1,574 @@
+[
+  {
+    "title": "David Farley의 Modern Software Engineering",
+    "url": "/wiki/modern-software-engineering",
+    "updated": "2026-02-06",
+    "summary": "",
+    "tags": "modern-software-engineering",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "켄트 벡의 Tidy First?",
+    "url": "/wiki/tidy-first",
+    "updated": "2026-01-22",
+    "summary": "",
+    "tags": "tidy-first",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "실증주의적 관점으로 바라본 바이브 코딩",
+    "url": "https://medium.com/@jung23e/%EC%8B%A4%EC%A6%9D%EC%A3%BC%EC%9D%98%EC%A0%81-%EA%B4%80%EC%A0%90%EC%9C%BC%EB%A1%9C-%EB%B0%94%EB%9D%BC%EB%B3%B8-%EB%B0%94%EC%9D%B4%EB%B8%8C-%EC%BD%94%EB%94%A9-a95d7e922737?source=rss-a0ae377eb2b1------2",
+    "published_at": "2026-01-21",
+    "summary": "",
+    "source": "Medium",
+    "updated": "2026-01-21"
+  },
+  {
+    "title": "Open Code",
+    "url": "/wiki/opencode",
+    "updated": "2026-01-19",
+    "summary": "",
+    "tags": "ai-agent",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "SRE by google",
+    "url": "/wiki/sre-google",
+    "updated": "2025-12-20",
+    "summary": "",
+    "tags": "architecture",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "프로그래밍 언어론",
+    "url": "/wiki/programming-language",
+    "updated": "2025-12-15",
+    "summary": "",
+    "tags": "programming-language",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Building Microservices",
+    "url": "/wiki/building-microservices",
+    "updated": "2025-12-07",
+    "summary": "",
+    "tags": "architecture",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)",
+    "url": "/wiki/designing-data-intensive-applications",
+    "updated": "2025-09-18",
+    "summary": "",
+    "tags": "architecture",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "JUnit ConsoleLauncher — 잘못된 classpath root 감지 및 로깅 개선 (#4772)",
+    "url": "https://medium.com/@jung23e/junit-consolelauncher-%EC%9E%98%EB%AA%BB%EB%90%9C-classpath-root-%EA%B0%90%EC%A7%80-%EB%B0%8F-%EB%A1%9C%EA%B9%85-%EA%B0%9C%EC%84%A0-4772-1b07dce63fa9?source=rss-a0ae377eb2b1------2",
+    "published_at": "2025-08-18",
+    "summary": "",
+    "source": "Medium",
+    "updated": "2025-08-18"
+  },
+  {
+    "title": "JUnit",
+    "url": "/wiki/junit",
+    "updated": "2025-08-16",
+    "summary": "",
+    "tags": "test",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "나는 무엇을 두려워했는가",
+    "url": "https://medium.com/@jung23e/%EB%82%98%EB%8A%94-%EB%AC%B4%EC%97%87%EC%9D%84-%EB%91%90%EB%A0%A4%EC%9B%8C%ED%96%88%EB%8A%94%EA%B0%80-d8bc49f87da3?source=rss-a0ae377eb2b1------2",
+    "published_at": "2025-08-12",
+    "summary": "",
+    "source": "Medium",
+    "updated": "2025-08-12"
+  },
+  {
+    "title": "도전은 연결된다. — 5년차 소프트웨어 엔지니어편",
+    "url": "https://medium.com/@jung23e/%EB%8F%84%EC%A0%84%EC%9D%80-%EC%97%B0%EA%B2%B0%EB%90%9C%EB%8B%A4-5%EB%85%84%EC%B0%A8-%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%ED%8E%B8-f26edb188a9f?source=rss-a0ae377eb2b1------2",
+    "published_at": "2025-08-02",
+    "summary": "",
+    "source": "Medium",
+    "updated": "2025-08-02"
+  },
+  {
+    "title": "ConcurrentLinkedQueue",
+    "url": "/wiki/concurrent-linked-queue",
+    "updated": "2025-07-15",
+    "summary": "",
+    "tags": "data-structure",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "GC(Garbage Collection, 가비지 컬렉션)",
+    "url": "/wiki/garbage-collection",
+    "updated": "2025-04-08",
+    "summary": "",
+    "tags": "garbage-collection",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Test",
+    "url": "/wiki/test",
+    "updated": "2025-04-08",
+    "summary": "",
+    "tags": "test",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "JVM(Java Virtual Machine)",
+    "url": "/wiki/java-virtual-machine",
+    "updated": "2025-03-26",
+    "summary": "",
+    "tags": "java",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "ERD(Entity Relationship Diagram, 엔티티 관계 다이어그램)",
+    "url": "/wiki/ERD",
+    "updated": "2025-03-18",
+    "summary": "",
+    "tags": "erd",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "스트리트 코더(Street coder)",
+    "url": "/wiki/street-coder",
+    "updated": "2025-03-16",
+    "summary": "",
+    "tags": "programming",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Implementation patterns",
+    "url": "/wiki/implementation-patterns",
+    "updated": "2025-03-15",
+    "summary": "",
+    "tags": "programming",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "JPA Deep Dive(by currenjin)",
+    "url": "/wiki/jpa-deep-dive-by-currenjin",
+    "updated": "2025-03-04",
+    "summary": "",
+    "tags": "jpa",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "기본기가 탄탄한 자바 개발자(The well-grounded java developer)",
+    "url": "/wiki/the-well-grounded-java-developer",
+    "updated": "2025-01-20",
+    "summary": "",
+    "tags": "java",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Git",
+    "url": "/wiki/git",
+    "updated": "2025-01-17",
+    "summary": "",
+    "tags": "git",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Layered Architecture",
+    "url": "/wiki/layered-architecture",
+    "updated": "2024-11-04",
+    "summary": "",
+    "tags": "architecture",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Spring Bean",
+    "url": "/wiki/spring-bean",
+    "updated": "2024-11-03",
+    "summary": "",
+    "tags": "spring",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Fixture Monkey를 적용해보자 w/JPA Test",
+    "url": "/wiki/fixture-monkey-with-jpa",
+    "updated": "2024-09-26",
+    "summary": "",
+    "tags": "fixture-monkey",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "TOSS SLASH 24 정리",
+    "url": "/wiki/toss-slash-24",
+    "updated": "2024-09-14",
+    "summary": "",
+    "tags": "conference",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Java에서 Kotlin으로",
+    "url": "/wiki/java-to-kotlin",
+    "updated": "2024-09-11",
+    "summary": "",
+    "tags": "kotlin",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Typescript Compile.. 그거 어떻게 동작하는데?",
+    "url": "/wiki/typescript-compile",
+    "updated": "2023-12-15",
+    "summary": "",
+    "tags": "Typescript",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Multithreaded Javascript(Concurrency Beyond the Event Loop)",
+    "url": "/wiki/multithreaded-javascript",
+    "updated": "2023-12-14",
+    "summary": "",
+    "tags": "programming",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "N+1(w/GraphQL)",
+    "url": "/wiki/n+1",
+    "updated": "2023-12-08",
+    "summary": "",
+    "tags": "N+1",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "CDD(Checklist Driven Development, 체크리스트 주도 개발)",
+    "url": "/wiki/CDD",
+    "updated": "2022-08-24",
+    "summary": "",
+    "tags": "documentation",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "TDD(Test Driven Development, 테스트 주도 개발)",
+    "url": "/wiki/TDD",
+    "updated": "2022-08-19",
+    "summary": "",
+    "tags": "tdd",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Refactoring",
+    "url": "/wiki/refactoring",
+    "updated": "2022-07-30",
+    "summary": "",
+    "tags": "refactor",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Using Lambda with API Gateway",
+    "url": "/wiki/lambda-with-api-gateway",
+    "updated": "2022-07-17",
+    "summary": "",
+    "tags": "aws",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Mockito",
+    "url": "/wiki/Mockito",
+    "updated": "2022-07-07",
+    "summary": "",
+    "tags": "test",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "ATDD(Acceptance Test Driven Development, 인수 테스트 주도 개발)",
+    "url": "/wiki/ATDD",
+    "updated": "2022-07-02",
+    "summary": "",
+    "tags": "atdd",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Unit-Test(단위 테스트)",
+    "url": "/wiki/unit-test",
+    "updated": "2022-07-01",
+    "summary": "",
+    "tags": "test",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Fitnesse",
+    "url": "/wiki/fitnesse",
+    "updated": "2022-06-29",
+    "summary": "",
+    "tags": "atdd",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Elasticsearch",
+    "url": "/wiki/elasticsearch",
+    "updated": "2022-05-26",
+    "summary": "",
+    "tags": "elasticsearch",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Sleuth AWS SQS",
+    "url": "/wiki/sleuth-sqs",
+    "updated": "2022-05-26",
+    "summary": "",
+    "tags": "container",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Specification Pattern",
+    "url": "/wiki/specification-pattern",
+    "updated": "2022-05-13",
+    "summary": "",
+    "tags": "pattern",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Vaadin",
+    "url": "/wiki/vaadin",
+    "updated": "2022-05-13",
+    "summary": "",
+    "tags": "view",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "객체 지향 프로그래밍(Object-Oriented Programming, OOP)",
+    "url": "/wiki/oop",
+    "updated": "2022-03-03",
+    "summary": "",
+    "tags": "programming",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Fibonacci",
+    "url": "/wiki/fibonacci",
+    "updated": "2022-02-13",
+    "summary": "",
+    "tags": "Math",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Slack",
+    "url": "/wiki/slack",
+    "updated": "2022-02-09",
+    "summary": "",
+    "tags": "slack",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "BPDU(Bridge Protocol Data Unit)",
+    "url": "/wiki/bpdu",
+    "updated": "2022-02-05",
+    "summary": "",
+    "tags": "network",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "OSI 7 Layer(OSI 7 계층)",
+    "url": "/wiki/osi-7-layer",
+    "updated": "2022-02-05",
+    "summary": "",
+    "tags": "network",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "공인 아이피와 사설 아이피(Public & Private IP Address)",
+    "url": "/wiki/public-ip-private-ip",
+    "updated": "2022-02-05",
+    "summary": "",
+    "tags": "network",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Subnetting & Supernetting",
+    "url": "/wiki/subnetting-and-supernetting",
+    "updated": "2022-02-05",
+    "summary": "",
+    "tags": "network",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "VRRP(Virtual Router Redundancy Protocol)",
+    "url": "/wiki/vrrp",
+    "updated": "2022-02-05",
+    "summary": "",
+    "tags": "network",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Docker Compose",
+    "url": "/wiki/docker-compose",
+    "updated": "2022-01-31",
+    "summary": "",
+    "tags": "container",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Docker Swarm",
+    "url": "/wiki/docker-swarm",
+    "updated": "2022-01-31",
+    "summary": "",
+    "tags": "container",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Docker",
+    "url": "/wiki/docker",
+    "updated": "2022-01-31",
+    "summary": "",
+    "tags": "container",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Dockerfile",
+    "url": "/wiki/dockerfile",
+    "updated": "2022-01-31",
+    "summary": "",
+    "tags": "container",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "GraphQL",
+    "url": "/wiki/graphql",
+    "updated": "2022-01-31",
+    "summary": "",
+    "tags": "graphql",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Kubernetes",
+    "url": "/wiki/kubernetes",
+    "updated": "2022-01-31",
+    "summary": "",
+    "tags": "container",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Openstack",
+    "url": "/wiki/openstack",
+    "updated": "2022-01-31",
+    "summary": "",
+    "tags": "cloud-computing",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "S3(Simple Storage Service)",
+    "url": "/wiki/s3",
+    "updated": "2022-01-31",
+    "summary": "",
+    "tags": "aws",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "다형성(polymorphism)",
+    "url": "/wiki/polymorphism",
+    "updated": "2022-01-14",
+    "summary": "",
+    "tags": "",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Web-MVC",
+    "url": "/wiki/web-mvc",
+    "updated": "2022-01-14",
+    "summary": "",
+    "tags": "spring",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Code Deploy",
+    "url": "/wiki/code-deploy",
+    "updated": "2022-01-08",
+    "summary": "",
+    "tags": "aws",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "SVG(Scalable Vector Graphics)",
+    "url": "/wiki/svg",
+    "updated": "2022-01-06",
+    "summary": "",
+    "tags": "svg",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Annotation",
+    "url": "/wiki/annotation",
+    "updated": "2022-01-04",
+    "summary": "",
+    "tags": "java",
+    "source": "Wiki",
+    "external": false
+  },
+  {
+    "title": "Example",
+    "url": "/wiki/example",
+    "updated": "2022-01-03",
+    "summary": "",
+    "tags": "example",
+    "source": "Wiki",
+    "external": false
+  }
+]
