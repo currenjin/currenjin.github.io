@@ -247,6 +247,50 @@ h3.indent {
     transform: translateY(-1px);
 }
 
+.post-badge-groups {
+    margin-top: 0.42rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.38rem;
+}
+
+.post-badge-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.44rem;
+    border-radius: 999px;
+    border: 1px solid rgba(95, 174, 90, 0.24);
+    background: rgba(255, 255, 255, 0.7);
+    padding: 0.14rem 0.52rem;
+    color: #35505f;
+}
+
+.post-badge-key {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.62rem;
+    font-weight: 700;
+    opacity: 0.72;
+}
+
+.post-badge-value {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.post-badge-box--platform {
+    border-color: rgba(33, 96, 74, 0.26);
+    background: rgba(95, 174, 90, 0.14);
+    color: #214d3f;
+}
+
+.post-badge-box--tags {
+    border-color: rgba(95, 174, 90, 0.24);
+    background: rgba(255, 255, 255, 0.74);
+    color: #2f4655;
+}
+
 .post-excerpt {
     color: #233240;
     margin-top: 0.4rem;
@@ -286,33 +330,6 @@ ul.tag-list li a,
     border-radius: 999px;
     padding: 0.15rem 0.44rem;
     background: rgba(255, 255, 255, 0.72);
-}
-
-.post-tag-platform {
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    border-width: 1px;
-    padding: 0.12rem 0.5rem;
-}
-
-.post-tag--wiki {
-    color: #245861;
-    border-color: rgba(36, 88, 97, 0.28);
-    background: rgba(77, 162, 172, 0.14);
-}
-
-.post-tag--medium {
-    color: #19503f;
-    border-color: rgba(25, 80, 63, 0.3);
-    background: rgba(95, 174, 90, 0.16);
-}
-
-.post-tag--external {
-    color: #3e4f5a;
-    border-color: rgba(62, 79, 90, 0.24);
-    background: rgba(255, 255, 255, 0.78);
 }
 
 .no-text-deco a {

@@ -36,17 +36,22 @@ regenerate: true
                 {% if doc.summary and doc.summary != "" %}
                 <div class="post-excerpt">{{ doc.summary }}</div>
                 {% endif %}
-                <ul class="tag-list">
+                {% if doc.source == 'Medium' or doc.tags %}
+                <div class="post-badge-groups">
                     {% if doc.source == 'Medium' %}
-                    <li class="post-tag post-tag-platform post-tag--medium">medium</li>
-                    <li class="post-tag post-tag-platform post-tag--external">external</li>
-                    {% else %}
-                    <li class="post-tag post-tag-platform post-tag--wiki">wiki</li>
-                    {% if doc.tags %}
-                    <li class="post-tag">{{ doc.tags }}</li>
+                    <div class="post-badge-box post-badge-box--platform">
+                        <span class="post-badge-key">platform</span>
+                        <span class="post-badge-value">medium · external</span>
+                    </div>
                     {% endif %}
+                    {% if doc.source != 'Medium' and doc.tags %}
+                    <div class="post-badge-box post-badge-box--tags">
+                        <span class="post-badge-key">tags</span>
+                        <span class="post-badge-value">{{ doc.tags }}</span>
+                    </div>
                     {% endif %}
-                </ul>
+                </div>
+                {% endif %}
             </a>
         </li>
 {% endfor %}
