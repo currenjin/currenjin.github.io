@@ -3,7 +3,7 @@ layout  : wiki
 title   : OpenClaw
 summary : OpenClaw 설치 및 설정 가이드
 date    : 2026-02-17 18:00:00 +0900
-updated : 2026-02-17 22:10:00 +0900
+updated : 2026-02-17 22:35:00 +0900
 tags    : ai-agent
 toc     : true
 public  : true
@@ -37,11 +37,14 @@ brew install openclaw
 
 ### 2.2 바이너리 직접 설치
 
+공식 릴리즈 페이지에서 `darwin-arm64` 파일을 내려받아 설치한다.
+
 ```bash
-# macOS Apple Silicon 예시 (공식 릴리스 주소/파일명으로 바꿔서 사용)
-curl -LO https://example.com/openclaw/openclaw-darwin-arm64
-chmod +x openclaw-darwin-arm64
-sudo mv openclaw-darwin-arm64 /usr/local/bin/openclaw
+# 1) 공식 릴리즈 페이지에서 darwin-arm64 파일 다운로드
+# 2) 다운로드한 파일명을 아래 변수에 넣고 실행
+FILE="openclaw-darwin-arm64"
+chmod +x "$FILE"
+sudo mv "$FILE" /usr/local/bin/openclaw
 ```
 
 설치 확인:
@@ -86,6 +89,22 @@ defaults:
   response_style: concise
 ```
 
+### 3.1 설정 키 설명 (필수/선택)
+
+| 키 | 필수 여부 | 설명 |
+| --- | --- | --- |
+| `profile` | 선택 | 기본 프로파일 이름 |
+| `provider.name` | 필수 | Provider 식별자 |
+| `provider.model` | 필수 | 사용할 모델 ID |
+| `provider.api_key_env` | 필수 | API 키를 읽어올 환경 변수명 |
+| `runtime.approval_mode` | 선택 | 승인 정책 |
+| `runtime.sandbox_mode` | 선택 | 파일/명령 샌드박스 정책 |
+| `runtime.shell` | 선택 | 기본 셸 |
+| `paths.workspace_root` | 선택 | 작업 루트 경로 |
+| `paths.log_dir` | 선택 | 로그 저장 경로 |
+| `defaults.language` | 선택 | 응답 언어 기본값 |
+| `defaults.response_style` | 선택 | 응답 스타일 기본값 |
+
 ## 4. Apple Silicon 기종별 권장값
 
 아래는 시작점으로 쓰기 좋은 값이다. 실제로는 프로젝트 크기와 사용하는 모델에 맞춰 조정한다.
@@ -113,6 +132,12 @@ profiles:
       max_workers: 5
       request_timeout_sec: 90
 ```
+
+조정 기준:
+
+- 발열/배터리 소모가 빠르면 `max_workers`를 1 낮춘다.
+- 응답 지연이 잦으면 `request_timeout_sec`를 30초 단위로 늘린다.
+- IDE, 브라우저, Docker를 동시에 사용할 때는 Air 계열에서 `max_workers`를 1~2로 유지한다.
 
 ## 5. 프로파일 적용 예시
 
@@ -154,6 +179,21 @@ openclaw run
 - 설정 파일 로드 성공
 - Provider 인증 성공
 - workspace 접근 가능
+
+성공 출력 예시:
+
+```text
+[OK] config loaded: ~/.config/openclaw/config.yaml
+[OK] provider auth: OPENAI_API_KEY
+[OK] workspace access: ~/work
+```
+
+실패 출력 예시:
+
+```text
+[ERR] provider auth failed: OPENAI_API_KEY is empty
+[ERR] config parse error: line 12, column 3
+```
 
 ## 8. 콘텐츠 반영 확인 (GitHub Actions)
 
