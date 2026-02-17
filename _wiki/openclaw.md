@@ -2,8 +2,8 @@
 layout  : wiki
 title   : OpenClaw
 summary : OpenClaw 설치 및 설정 가이드
-date    : 2026-02-17 21:00:00 +0900
-updated : 2026-02-17 21:25:00 +0900
+date    : 2026-02-17 18:00:00 +0900
+updated : 2026-02-17 18:25:00 +0900
 tags    : ai-agent
 toc     : true
 public  : true
