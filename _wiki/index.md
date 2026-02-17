@@ -66,6 +66,6 @@ regenerate: true
 * [[programming-language]]
 * [[sre-google]]
 * [[opencode]]
+* [[openclaw]]
 * [[tidy-first]]
 * [[modern-software-engineering]]
-
