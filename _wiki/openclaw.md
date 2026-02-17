@@ -3,7 +3,7 @@ layout  : wiki
 title   : OpenClaw
 summary : OpenClaw 설치 및 설정 가이드
 date    : 2026-02-17 21:00:00 +0900
-updated : 2026-02-17 21:00:00 +0900
+updated : 2026-02-17 21:25:00 +0900
 tags    : ai-agent
 toc     : true
 public  : true
@@ -83,7 +83,35 @@ defaults:
   response_style: concise
 ```
 
-## 4. 환경 변수 등록
+## 4. Apple Silicon 기종별 권장값
+
+아래는 시작점으로 쓰기 좋은 값이다. 실제로는 프로젝트 크기와 사용하는 모델에 맞춰 조정한다.
+
+| 기종 | 권장 프로파일 | 동시 작업 수(worker) | 요청 타임아웃 | 비고 |
+| --- | --- | --- | --- | --- |
+| MacBook Air M1 (8GB/16GB) | `air-m1` | 1~2 | 120s | 메모리 여유를 우선 |
+| MacBook Air M2 (8GB/16GB/24GB) | `air-m2` | 2~3 | 120s | M1 대비 약간 공격적 |
+| Mac mini M4 (16GB+) | `mini-m4` | 3~5 | 90s | 병렬 작업 중심 |
+
+프로파일 예시:
+
+```yaml
+profiles:
+  air-m1:
+    runtime:
+      max_workers: 2
+      request_timeout_sec: 120
+  air-m2:
+    runtime:
+      max_workers: 3
+      request_timeout_sec: 120
+  mini-m4:
+    runtime:
+      max_workers: 5
+      request_timeout_sec: 90
+```
+
+## 5. 환경 변수 등록
 
 쉘 설정 파일(`~/.zshrc` 또는 `~/.bashrc`)에 추가:
 
@@ -97,7 +125,7 @@ export OPENAI_API_KEY="여기에_키_입력"
 source ~/.zshrc
 ```
 
-## 5. 첫 실행
+## 6. 첫 실행
 
 ```bash
 openclaw doctor
@@ -110,30 +138,30 @@ openclaw run
 - Provider 인증 성공
 - workspace 접근 가능
 
-## 6. 자주 쓰는 운영 팁
+## 7. 자주 쓰는 운영 팁
 
 - 설정 변경 전 `config.yaml` 백업
 - 프로젝트별 profile 분리(`default`, `work`, `personal`)
 - 로그 폴더 용량 주기적 정리
 
-## 7. 트러블슈팅
+## 8. 트러블슈팅
 
-### 7.1 `API key not found`
+### 8.1 `API key not found`
 
 - `echo $OPENAI_API_KEY`로 값 확인
 - 쉘 파일 수정 후 `source` 적용 여부 확인
 
-### 7.2 `permission denied`
+### 8.2 `permission denied`
 
 - 바이너리 실행 권한 확인: `chmod +x /usr/local/bin/openclaw`
 - 작업 디렉터리 권한 확인
 
-### 7.3 `config parse error`
+### 8.3 `config parse error`
 
 - YAML 들여쓰기(스페이스 2칸) 점검
 - 키 이름 오타 점검
 
-## 8. 업데이트 체크리스트
+## 9. 업데이트 체크리스트
 
 업데이트할 때는 아래 순서로 진행한다.
 
