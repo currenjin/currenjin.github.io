@@ -1,5 +1,14 @@
 [
   {
+    "title": "OpenClaw",
+    "url": "/wiki/openclaw",
+    "updated": "2026-02-17",
+    "summary": "OpenClaw 설치 및 설정 가이드",
+    "tags": "ai-agent",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "David Farley의 Modern Software Engineering",
     "url": "/wiki/modern-software-engineering",
     "updated": "2026-02-06",
