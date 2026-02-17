@@ -42,7 +42,7 @@ body {
         linear-gradient(135deg, rgba(8, 10, 18, 0.68) 0%, rgba(12, 16, 28, 0.54) 50%, rgba(26, 16, 22, 0.56) 100%),
         radial-gradient(circle at 8% 10%, rgba(102, 191, 104, 0.2) 0, rgba(102, 191, 104, 0) 36%),
         radial-gradient(circle at 86% 14%, rgba(145, 212, 120, 0.2) 0, rgba(145, 212, 120, 0) 40%),
-        url('/resource/james_webb.png') calc(50% + var(--cosmos-bg-x)) calc(50% + var(--cosmos-bg-y)) / 125% auto no-repeat;
+        url('/resource/james_webb.png') calc(50% + var(--cosmos-bg-x)) calc(50% + var(--cosmos-bg-y)) / var(--cosmos-bg-size, cover) no-repeat;
     background-attachment: fixed;
     position: relative;
 }
