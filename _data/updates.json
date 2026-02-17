@@ -9,6 +9,15 @@
     "external": false
   },
   {
+    "title": "Open Code",
+    "url": "/wiki/opencode",
+    "updated": "2026-02-17",
+    "summary": "",
+    "tags": "ai-agent",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "David Farley의 Modern Software Engineering",
     "url": "/wiki/modern-software-engineering",
     "updated": "2026-02-06",
@@ -35,15 +44,6 @@
     "tags": "",
     "source": "Medium",
     "external": true
-  },
-  {
-    "title": "Open Code",
-    "url": "/wiki/opencode",
-    "updated": "2026-01-19",
-    "summary": "",
-    "tags": "ai-agent",
-    "source": "Wiki",
-    "external": false
   },
   {
     "title": "SRE by google",
