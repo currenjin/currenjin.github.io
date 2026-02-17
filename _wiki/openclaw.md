@@ -3,7 +3,7 @@ layout  : wiki
 title   : OpenClaw
 summary : OpenClaw 설치 및 설정 가이드
 date    : 2026-02-17 18:00:00 +0900
-updated : 2026-02-17 18:25:00 +0900
+updated : 2026-02-17 22:10:00 +0900
 tags    : ai-agent
 toc     : true
 public  : true
@@ -38,17 +38,20 @@ brew install openclaw
 ### 2.2 바이너리 직접 설치
 
 ```bash
-# 예시 (버전/플랫폼에 맞는 파일로 변경)
-curl -LO https://example.com/openclaw/openclaw-linux-amd64
-chmod +x openclaw-linux-amd64
-sudo mv openclaw-linux-amd64 /usr/local/bin/openclaw
+# macOS Apple Silicon 예시 (공식 릴리스 주소/파일명으로 바꿔서 사용)
+curl -LO https://example.com/openclaw/openclaw-darwin-arm64
+chmod +x openclaw-darwin-arm64
+sudo mv openclaw-darwin-arm64 /usr/local/bin/openclaw
 ```
 
 설치 확인:
 
 ```bash
 openclaw --version
+uname -m
 ```
+
+`uname -m` 결과가 `arm64`면 Apple Silicon 환경이 맞다.
 
 ## 3. 설정 파일 만들기
 
@@ -111,7 +114,21 @@ profiles:
       request_timeout_sec: 90
 ```
 
-## 5. 환경 변수 등록
+## 5. 프로파일 적용 예시
+
+`config.yaml`의 기본 프로파일을 기종에 맞게 고정해서 사용한다.
+
+```yaml
+profile: air-m2
+```
+
+혹은 실행 시 프로파일을 명시한다.
+
+```bash
+openclaw run --profile air-m2
+```
+
+## 6. 환경 변수 등록
 
 쉘 설정 파일(`~/.zshrc` 또는 `~/.bashrc`)에 추가:
 
@@ -125,7 +142,7 @@ export OPENAI_API_KEY="여기에_키_입력"
 source ~/.zshrc
 ```
 
-## 6. 첫 실행
+## 7. 첫 실행
 
 ```bash
 openclaw doctor
@@ -138,30 +155,40 @@ openclaw run
 - Provider 인증 성공
 - workspace 접근 가능
 
-## 7. 자주 쓰는 운영 팁
+## 8. 콘텐츠 반영 확인 (GitHub Actions)
+
+이 저장소는 `_wiki/**`가 `main`에 push되면 `Sync Medium Posts` 워크플로우가 실행되고 `_data/updates.json`을 갱신한다.
+
+체크 순서:
+
+1. 위키 문서 커밋 후 `main`에 push
+2. GitHub Actions에서 `Sync Medium Posts` 성공 확인
+3. 홈 화면 `최근 업데이트`에 문서가 노출되는지 확인
+
+## 9. 자주 쓰는 운영 팁
 
 - 설정 변경 전 `config.yaml` 백업
 - 프로젝트별 profile 분리(`default`, `work`, `personal`)
 - 로그 폴더 용량 주기적 정리
 
-## 8. 트러블슈팅
+## 10. 트러블슈팅
 
-### 8.1 `API key not found`
+### 10.1 `API key not found`
 
 - `echo $OPENAI_API_KEY`로 값 확인
 - 쉘 파일 수정 후 `source` 적용 여부 확인
 
-### 8.2 `permission denied`
+### 10.2 `permission denied`
 
 - 바이너리 실행 권한 확인: `chmod +x /usr/local/bin/openclaw`
 - 작업 디렉터리 권한 확인
 
-### 8.3 `config parse error`
+### 10.3 `config parse error`
 
 - YAML 들여쓰기(스페이스 2칸) 점검
 - 키 이름 오타 점검
 
-## 9. 업데이트 체크리스트
+## 11. 업데이트 체크리스트
 
 업데이트할 때는 아래 순서로 진행한다.
 
