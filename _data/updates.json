@@ -1,5 +1,14 @@
 [
   {
+    "title": "Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)",
+    "url": "/wiki/designing-data-intensive-applications",
+    "updated": "2026-02-21",
+    "summary": "",
+    "tags": "architecture",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "OpenClaw",
     "url": "/wiki/openclaw",
     "updated": "2026-02-17",
@@ -67,15 +76,6 @@
     "title": "Building Microservices",
     "url": "/wiki/building-microservices",
     "updated": "2025-12-07",
-    "summary": "",
-    "tags": "architecture",
-    "source": "Wiki",
-    "external": false
-  },
-  {
-    "title": "Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)",
-    "url": "/wiki/designing-data-intensive-applications",
-    "updated": "2025-09-18",
     "summary": "",
     "tags": "architecture",
     "source": "Wiki",
