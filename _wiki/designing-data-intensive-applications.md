@@ -3,7 +3,7 @@ layout  : wiki
 title   : Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)
 summary :
 date    : 2025-09-10 13:00:00 +0900
-updated : 2026-02-21 13:00:00 +0900
+updated : 2026-02-21 13:20:00 +0900
 tags     : architecture
 toc     : true
 public  : true
@@ -15,6 +15,11 @@ latex   : true
 
 # Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)
 - [Alexandria playground](https://github.com/currenjin/alexandria-playground/tree/main/book-designing-data-intensive-applications)
+
+## 운영 보강 자료
+- [DDIA 운영 플레이북](https://github.com/currenjin/alexandria-playground/blob/main/book-designing-data-intensive-applications/runbook.md)
+- [DDIA 플레이북 리허설 가이드](https://github.com/currenjin/alexandria-playground/blob/main/book-designing-data-intensive-applications/runbook-drill.md)
+- 월간 리허설 핵심: Replication Lag / Retry Storm / Stream Lag / CDC 중단
 
 ## Ch01 Reliability, Scalability, Maintainability
 ### TL;DR
