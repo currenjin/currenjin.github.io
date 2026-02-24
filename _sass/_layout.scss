@@ -117,7 +117,8 @@
         border-spacing: 0;
         margin-bottom: 10px;
         background: var(--bg-card);
-        width: 100%;
+        width: max-content;
+        min-width: 100%;
         display: block;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
