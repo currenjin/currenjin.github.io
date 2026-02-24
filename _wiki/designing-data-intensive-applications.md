@@ -86,6 +86,7 @@ latex   : true
 - 무중단 스키마 변경 패턴: Expand → Migrate → Contract(새 컬럼/인덱스 추가 → 백필/듀얼리드 → 구식 제거).
 
 ### Trade-offs
+
 | 선택                  | 장점              | 단점            | 언제               |
 |---------------------|-----------------|---------------|------------------|
 | **문자열 내장 저장**       | 한 번에 읽기, 조인 없음  | 중복/부분 업데이트 비용 | 응답에 항상 필요한 작은 필드 |
@@ -230,6 +231,7 @@ RDB 테이블: orders(id, user_id, status, created_at, total_amount, ...), order
 - **롤링 배포와 호환성**: 배포 중 신/구 버전 공존. 양방향 호환 필수.
 
 ### Trade-offs
+
 | 선택 | 장점 | 단점 | 언제 |
 |---|---|---|---|
 | **JSON** | 범용, 디버그 쉬움, 스키마 유연 | 크기↑, 타입 모호, 스키마 강제 어려움 | 외부 API, 설정, 로그 |
@@ -297,6 +299,7 @@ RDB 테이블: orders(id, user_id, status, created_at, total_amount, ...), order
   - CRDT: 자동 병합 가능 자료구조
 
 ### Trade-offs
+
 | 선택 | 장점 | 단점 | 언제 |
 |---|---|---|---|
 | **단일 리더** | 단순, 일관성 보장 쉬움 | 쓰기 병목, 리더 장애 시 전환 비용 | 대부분의 OLTP |
@@ -386,6 +389,7 @@ RDB 테이블: orders(id, user_id, status, created_at, total_amount, ...), order
   - 코디네이터(ZooKeeper, etcd)로 메타데이터 관리
 
 ### Trade-offs
+
 | 선택 | 장점 | 단점 | 언제 |
 |---|---|---|---|
 | **키 범위 파티셔닝** | 범위 쿼리 효율↑, 지역성↑ | 핫스팟 위험(시계열 등) | 범위 스캔 주도 워크로드 |
@@ -562,6 +566,7 @@ RDB 테이블: orders(id, user_id, status, created_at, total_amount, ...), order
 - **프로세스 스톨**: GC/Stop-the-world → **타임아웃/풀,큐 상한**으로 전파 억제, **관측성**으로 감지.
 
 ### Trade-offs
+
 | 선택             | 장점               | 단점             | 언제           |
 |----------------|------------------|----------------|--------------|
 | **짧은 타임아웃**    | Fail-fast, 빠른 전환 | 오탐↑, 재시도 폭증    | 내부 저지연 링크    |
@@ -654,6 +659,7 @@ RDB 테이블: orders(id, user_id, status, created_at, total_amount, ...), order
   - ZooKeeper, etcd: 합의 기반 코디네이션 서비스
 
 ### Trade-offs
+
 | 선택 | 장점 | 단점 | 언제 |
 |---|---|---|---|
 | **선형성** | 강한 보장, 추론 쉬움 | 지연↑, 파티션 시 불가용 | 분산 락, 유일 제약, 리더 선출 |
@@ -755,6 +761,7 @@ RDB 테이블: orders(id, user_id, status, created_at, total_amount, ...), order
   - 재시도 시 동일 출력 보장(멱등)
 
 ### Trade-offs
+
 | 선택 | 장점 | 단점 | 언제 |
 |---|---|---|---|
 | **MapReduce** | 단순, 내결함성↑, 대용량 | 느림(디스크 I/O), 반복 비효율 | 레거시, 단순 ETL |
@@ -859,6 +866,7 @@ RDB 테이블: orders(id, user_id, status, created_at, total_amount, ...), order
   - Table-Table: 양쪽 변경 시 재계산
 
 ### Trade-offs
+
 | 선택 | 장점 | 단점 | 언제 |
 |---|---|---|---|
 | **At-least-once** | 단순, 유실 없음 | 중복 처리 필요 | 대부분의 스트림 처리 |
@@ -966,6 +974,7 @@ RDB 테이블: orders(id, user_id, status, created_at, total_amount, ...), order
   - 최소 수집, 목적 제한, 삭제 권리
 
 ### Trade-offs
+
 | 선택 | 장점 | 단점 | 언제 |
 |---|---|---|---|
 | **단일 통합 DB** | 단순, 트랜잭션↑ | 확장 한계, 유연성↓ | 소규모, 단순 도메인 |
