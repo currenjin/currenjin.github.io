@@ -118,10 +118,17 @@
         margin-bottom: 10px;
         background: var(--bg-card);
         width: 100%;
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
 
         td, th {
             border: 1px solid var(--line-soft);
             padding: 6px 8px;
+            white-space: normal;
+            word-break: normal;
+            overflow-wrap: anywhere;
+            vertical-align: top;
         }
 
         th {
