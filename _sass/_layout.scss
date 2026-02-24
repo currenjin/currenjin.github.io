@@ -117,11 +117,7 @@
         border-spacing: 0;
         margin-bottom: 10px;
         background: var(--bg-card);
-        width: max-content;
-        min-width: 100%;
-        display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        width: auto;
 
         td, th {
             border: 1px solid var(--line-soft);
