@@ -3,7 +3,7 @@
     "title": "Vim/Neovim 업무환경 표준 세팅 (초보자 버전)",
     "url": "/wiki/vim-workflow",
     "updated": "2026-02-26",
-    "summary": "1) 초기 세팅 2) 사용법 3) 각 툴 단축키 4) 어디서든 재현",
+    "summary": "1) 초기 세팅 2) 초기 실행 확인 3) 사용법(업무 순서 + 툴 사용법) 4) 어디서든 재현",
     "tags": "vim neovim tmux productivity",
     "source": "Wiki",
     "external": false
