@@ -1,10 +1,10 @@
 [
   {
-    "title": "Vim/Neovim 업무환경 표준 세팅",
+    "title": "Vim 업무환경 표준 세팅",
     "url": "/wiki/vim-workflow",
     "updated": "2026-02-26",
     "summary": "",
-    "tags": "vim neovim tmux productivity",
+    "tags": "vim tmux productivity",
     "source": "Wiki",
     "external": false
   },
