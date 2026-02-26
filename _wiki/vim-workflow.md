@@ -1,7 +1,6 @@
 ---
 layout  : wiki
-title   : Vim/Neovim 업무환경 표준 세팅 (초보자 버전)
-summary : 1) 초기 세팅 2) 초기 실행 확인 3) 사용법(업무 순서 + 툴 사용법) 4) 어디서든 재현
+title   : Vim/Neovim 업무환경 표준 세팅
 date    : 2026-02-26 16:50:00 +0900
 updated : 2026-02-26 19:20:00 +0900
 tags    : vim neovim tmux productivity
@@ -13,7 +12,7 @@ latex   : false
 * TOC
 {:toc}
 
-# Vim/Neovim 업무환경 표준 세팅 (초보자 버전)
+# Vim/Neovim 업무환경 표준 세팅
 
 이 문서는 “처음 세팅한 뒤 바로 업무에 쓰는 것”에 집중한다.
 과한 플러그인 없이 **최소 툴**만 사용한다.
