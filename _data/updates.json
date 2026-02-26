@@ -1,9 +1,9 @@
 [
   {
-    "title": "Vim/Neovim 업무환경 표준 세팅",
+    "title": "Vim/Neovim 업무환경 표준 세팅 (초보자 버전)",
     "url": "/wiki/vim-workflow",
     "updated": "2026-02-26",
-    "summary": "새 맥북에서 10~15분 내 재현 가능한 최소 Vim 업무환경 + 툴 사용법",
+    "summary": "1) 초기 세팅 2) 사용법 3) 각 툴 단축키 4) 어디서든 재현",
     "tags": "vim neovim tmux productivity",
     "source": "Wiki",
     "external": false
