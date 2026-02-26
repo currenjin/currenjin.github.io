@@ -1,9 +1,9 @@
 ---
 layout  : wiki
 title   : Vim/Neovim 업무환경 표준 세팅
-summary : 어디서든 빠르게 복구 가능한 Vim/Neovim + tmux + fzf/rg 업무환경 가이드
+summary : 새 맥북에서 10~15분 내 재현 가능한 최소 Vim 업무환경 + 툴 사용법
 date    : 2026-02-26 16:50:00 +0900
-updated : 2026-02-26 16:50:00 +0900
+updated : 2026-02-26 17:35:00 +0900
 tags    : vim neovim tmux productivity
 toc     : true
 public  : true
@@ -16,56 +16,44 @@ latex   : false
 # Vim/Neovim 업무환경 표준 세팅
 
 이 문서는 **Kotlin/Java/Spring + SRE 업무** 기준으로,
-Vim/Neovim 환경을 빠르게 구축하고 다른 컴퓨터에서도 재현 가능하게 만드는 실전 가이드다.
+과한 커스터마이징 없이 **최소 툴**만으로 높은 생산성을 내기 위한 가이드다.
 
-핵심 원칙은 3가지다.
+핵심 원칙:
 
-1. 과한 커스터마이징 금지
-2. 검색/이동/테스트/로그 루프 최적화
-3. dotfiles + bootstrap으로 환경 재현
-
----
-
-## 1. 최종 아키텍처 (권장)
-
-- 편집기: `neovim`
-- 터미널 멀티플렉서: `tmux`
-- 검색/파일 탐색: `ripgrep(rg)`, `fd`, `fzf`
-- Git TUI: `lazygit`
-- 언어도구: `jdtls`, `kotlin-language-server`, `ktlint`, `google-java-format`
-
-이 조합이면 IDE 의존도를 낮추면서도 실무 속도를 유지할 수 있다.
+1. 새 툴을 최소화한다.
+2. 검색/이동/테스트/로그 루프를 빠르게 만든다.
+3. 새 맥북에서도 번호 순서대로 바로 복구 가능해야 한다.
 
 ---
 
-## 2. 10분 설치 (macOS 기준)
+## 1) 최소 툴셋 (필수만)
 
-```bash
-brew install neovim tmux fzf ripgrep fd lazygit
-$(brew --prefix)/opt/fzf/install
-```
+### 필수 (5개)
+- `neovim` : 편집기
+- `tmux` : 터미널 분할/세션 유지
+- `ripgrep (rg)` : 코드 검색
+- `fzf` : 파일/히스토리/검색 선택
+- `fd` : 파일 탐색(빠름)
 
-확인:
+### 선택 (1개)
+- `lazygit` : Git TUI (CLI git가 불편할 때만)
 
-```bash
-nvim --version
-tmux -V
-rg --version
-fd --version
-fzf --version
-```
+> 기준: "설치 부담 < 체감 이득"인 것만 남김.
 
 ---
 
-## 3. Neovim 최소 실전 설정
+## 2) 각 툴 사용법 (실무 기준)
 
-### 3.1 시작점
+## 2.1 Neovim
 
-- kickstart.nvim 스타일(작고 문서화 잘됨)을 권장
-- 처음부터 대형 배포판에 의존하지 말고, 필요한 기능만 추가
+### 자주 쓰는 기본 키
+- 이동: `hjkl`, 단어 이동 `w`, 뒤로 `b`, 단어 끝 `e`
+- 편집: `i`(입력), `A`(행 끝 입력), `o`(아래 줄 추가)
+- 삭제/변경: `dw`, `di(`, `ciw`
+- 반복: `.` (방금 수정 반복)
+- 저장/종료: `:w`, `:q`, `:wq`
 
-### 3.2 최소 `init.lua` 예시
-
+### 추천 최소 설정
 `~/.config/nvim/init.lua`
 
 ```lua
@@ -79,37 +67,33 @@ vim.o.smartcase = true
 vim.o.updatetime = 200
 vim.o.termguicolors = true
 
--- jj로 insert 탈출
 vim.keymap.set('i', 'jj', '<Esc>', { silent = true })
-
--- 창 이동
+vim.keymap.set('n', '<leader>w', ':w<CR>')
+vim.keymap.set('n', '<leader>q', ':q<CR>')
 vim.keymap.set('n', '<C-h>', '<C-w>h')
 vim.keymap.set('n', '<C-j>', '<C-w>j')
 vim.keymap.set('n', '<C-k>', '<C-w>k')
 vim.keymap.set('n', '<C-l>', '<C-w>l')
-
--- 빠른 저장/종료
-vim.keymap.set('n', '<leader>w', ':w<CR>')
-vim.keymap.set('n', '<leader>q', ':q<CR>')
 ```
-
-> 참고: LSP/완성/탐색 플러그인은 kickstart.nvim 기본 구성을 가져와 단계적으로 추가한다.
 
 ---
 
-## 4. tmux 업무 레이아웃 (고정)
+## 2.2 tmux
 
-권장 레이아웃: **좌(코드) / 우상(테스트) / 우하(로그)**
+### 왜 쓰나
+- SSH 끊겨도 작업 유지
+- 코드/테스트/로그를 한 화면에 유지
 
-```bash
-tmux new -s work
-# pane 분할
-# 코드: nvim .
-# 테스트: ./gradlew test --continuous
-# 로그: tail -f app.log
-```
+### 가장 중요한 명령
+(아래는 prefix를 `Ctrl-a`로 바꿨다는 가정)
+- 새 세션: `tmux new -s work`
+- 패널 분할: `Ctrl-a %`(세로), `Ctrl-a "`(가로)
+- 패널 이동: `Ctrl-a` 후 방향키
+- 분리(detach): `Ctrl-a d`
+- 재접속: `tmux a -t work`
 
-`~/.tmux.conf` 최소 예시:
+### 최소 설정
+`~/.tmux.conf`
 
 ```tmux
 set -g mouse on
@@ -119,116 +103,180 @@ setw -g pane-base-index 1
 unbind C-b
 set -g prefix C-a
 bind C-a send-prefix
-
 bind r source-file ~/.tmux.conf \; display-message "tmux reloaded"
 ```
 
 ---
 
-## 5. Kotlin/Spring 실무 동선 표준
+## 2.3 ripgrep (rg)
 
-### 5.1 검색/탐색
+### 핵심 사용
+- 문자열 검색: `rg "OrderService"`
+- 확장자 제한: `rg "timeout" -g "*.kt"`
+- 폴더 제외: `rg "TODO" -g "!build/**"`
 
-- 문자열 검색: `rg "keyword"`
-- 파일 검색: `fd service`
-- Neovim 내부 탐색: fzf 계열 사용
+### 팁
+- 프로젝트 루트에서 검색하기
+- 결과를 보고 바로 nvim으로 열기: `nvim +{line} {file}`
 
-### 5.2 테스트 실행
+---
 
+## 2.4 fzf
+
+### 핵심 사용
+- 파일 선택 열기:
+  - `fd . | fzf`
+- git tracked 파일:
+  - `git ls-files | fzf`
+- 히스토리 검색:
+  - `history | fzf`
+
+### 팁
+- "찾고 싶은 문자열 일부"만 입력해도 빠르게 좁혀짐
+
+---
+
+## 2.5 fd
+
+### 핵심 사용
+- 파일 찾기: `fd service`
+- 확장자 필터: `fd -e kt User`
+- 특정 폴더 제외: `fd controller src`
+
+---
+
+## 2.6 lazygit (선택)
+
+### 핵심 사용
+- 실행: `lazygit`
+- 스테이징/커밋/푸시를 TUI로 간단 처리
+- 충돌/히스토리 확인이 CLI보다 빠름
+
+---
+
+## 3) 새 맥북 세팅 가이드 (번호 순서대로)
+
+아래 순서 그대로 하면 된다.
+
+1. Xcode Command Line Tools 설치
+```bash
+xcode-select --install
+```
+
+2. Homebrew 설치
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+3. 필수 툴 설치
+```bash
+brew install neovim tmux ripgrep fzf fd
+$(brew --prefix)/opt/fzf/install
+```
+
+4. (선택) lazygit 설치
+```bash
+brew install lazygit
+```
+
+5. 설정 파일 생성
+```bash
+mkdir -p ~/.config/nvim
+touch ~/.config/nvim/init.lua
+touch ~/.tmux.conf
+```
+
+6. 이 문서의 예시 설정을 `init.lua`, `.tmux.conf`에 붙여넣기
+
+7. 동작 확인
+```bash
+nvim --version
+tmux -V
+rg --version
+fd --version
+fzf --version
+```
+
+8. tmux 업무 레이아웃 시작
+```bash
+tmux new -s work
+```
+- 좌: `nvim .`
+- 우상: `./gradlew test --continuous`
+- 우하: `tail -f app.log`
+
+9. (권장) dotfiles로 백업
+- `~/.config/nvim/init.lua`
+- `~/.tmux.conf`
+- 셸 설정(`.zshrc`)
+
+10. 첫 주 적응 규칙
+- 마우스 사용 금지
+- 불편 3회 반복될 때만 설정 추가
+
+---
+
+## 4) Kotlin/Spring 실무 동선 표준
+
+### 검색
+- `rg "keyword" -g "*.kt"`
+- `fd -e kt Service`
+
+### 테스트
 - 전체: `./gradlew test`
-- 특정 클래스: `./gradlew test --tests "*UserServiceTest"`
-- 특정 메서드: `./gradlew test --tests "*UserServiceTest.shouldCreateUser"`
+- 클래스: `./gradlew test --tests "*UserServiceTest"`
+- 메서드: `./gradlew test --tests "*UserServiceTest.shouldCreateUser"`
 
-### 5.3 품질 검사
-
+### 품질
 - `./gradlew ktlintCheck detekt`
-- 포맷 자동화는 pre-commit 훅으로 연결 권장
 
 ---
 
-## 6. Vim 학습 로드맵 (2주)
+## 5) 어디서든 빠르게 재현 (dotfiles 최소형)
 
-### 1주차
-
-- 목표: 편집 + 검색 + 이동만 Vim으로 처리
-- 필수 습관: `hjkl`, `w/b/e`, `ciw`, `di(`, `.` 반복
-
-### 2주차
-
-- 목표: Git/테스트/로그까지 tmux+vim에서 처리
-- 필수 습관: quickfix, 매크로(`q`), split 이동
-
-원칙:
-- “불편 1회”는 참기
-- “같은 불편 3회”면 설정 추가
-
----
-
-## 7. 어디서든 빠르게 재현: dotfiles
-
-### 7.1 저장소 구조 예시
+저장소 예시:
 
 ```text
 ~/.dotfiles
   ├─ nvim/.config/nvim/init.lua
   ├─ tmux/.tmux.conf
   ├─ zsh/.zshrc
-  ├─ Brewfile
   └─ scripts/bootstrap.sh
 ```
 
-### 7.2 bootstrap 예시
-
-`scripts/bootstrap.sh`
+`bootstrap.sh`:
 
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
 
-brew bundle --file="$HOME/.dotfiles/Brewfile"
+brew install neovim tmux ripgrep fzf fd
 mkdir -p "$HOME/.config/nvim"
 ln -sf "$HOME/.dotfiles/nvim/.config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
 ln -sf "$HOME/.dotfiles/tmux/.tmux.conf" "$HOME/.tmux.conf"
 ln -sf "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.zshrc"
-
-echo "bootstrap done"
 ```
 
-### 7.3 민감정보 분리
-
-- 토큰/키는 dotfiles에 커밋 금지
-- `~/.env.local`처럼 로컬 전용 파일 사용
+> 토큰/키는 dotfiles에 커밋하지 않는다.
 
 ---
 
-## 8. 실무 KPI (세팅 효과 측정)
+## 6) 성과 측정 (효율 체감용)
 
-- 파일 찾기 시간: 평균 30초 → 8초
-- 테스트 재실행까지 시간: 45초 → 15초
-- 컨텍스트 스위칭 횟수(IDE↔터미널): 일 20회 → 8회
-- 장애 대응 시 로그 접근 시간: 20초 → 5초
+- 파일 찾기 시간: 30초 → 8초
+- 테스트 재실행 시작: 45초 → 15초
+- 컨텍스트 스위칭(에디터↔터미널): 일 20회 → 8회
 
-수치가 줄어들면 세팅이 잘 된 것이다.
-
----
-
-## 9. 자주 발생하는 실패 패턴
-
-1. 플러그인부터 과도하게 설치
-2. 키맵을 한 번에 너무 많이 바꿈
-3. tmux 없이 단일 터미널로만 작업
-4. dotfiles 자동화 없이 수작업 재설정
-
-해결: **작게 시작 + 측정 + 점진적 추가**.
+2주 내 위 수치가 개선되면 세팅이 맞게 된 것이다.
 
 ---
 
-## 10. 추천 레퍼런스
+## 7) 레퍼런스
 
 - Neovim 공식 문서
 - kickstart.nvim
 - tmux wiki
-- fzf.vim / fzf-lua
-- vim-sensible (기본값 참고)
+- fzf 관련 문서
+- vim-sensible
 
-이 문서는 위 레퍼런스의 공통 실전 포인트를 Kotlin/Spring 업무에 맞게 재구성했다.
+이 문서는 위 레퍼런스를 **최소 툴 + 최대 체감 효율** 관점으로 재정리한 버전이다.
