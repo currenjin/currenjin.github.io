@@ -2,7 +2,7 @@
 layout  : wiki
 title   : Vim 업무환경 표준 세팅
 date    : 2026-02-26 16:50:00 +0900
-updated : 2026-02-27 00:02:00 +0900
+updated : 2026-02-27 00:05:00 +0900
 tags    : vim tmux productivity
 toc     : true
 public  : true
@@ -105,6 +105,14 @@ fzf --version
 - `:q` 종료
 - `:wq` 저장 후 종료
 - `:q!` 저장 안 하고 종료
+
+디렉토리 탐색(netrw)
+- `vim .` 현재 디렉토리 탐색 시작
+- `Enter` 파일/디렉토리 열기
+- `-` 상위 디렉토리로 이동
+- `:Ex` 디렉토리 보기로 돌아가기
+- `:Rex` 직전에 보던 디렉토리 창 복귀
+- `Ctrl-^` 이전 버퍼(직전 파일/창)로 전환
 
 이동
 - `h j k l` 좌하상우
