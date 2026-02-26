@@ -1,9 +1,9 @@
 ---
 layout  : wiki
-title   : Vim/Neovim 업무환경 표준 세팅
+title   : Vim 업무환경 표준 세팅
 date    : 2026-02-26 16:50:00 +0900
-updated : 2026-02-26 19:30:00 +0900
-tags    : vim neovim tmux productivity
+updated : 2026-02-26 23:42:00 +0900
+tags    : vim tmux productivity
 toc     : true
 public  : true
 parent  : [[index]]
@@ -12,13 +12,13 @@ latex   : false
 * TOC
 {:toc}
 
-# Vim/Neovim 업무환경 표준 세팅
+# Vim 업무환경 표준 세팅
 
-이 문서는 “처음 세팅한 뒤 바로 업무에 쓰는 것”에 집중한다.
-과한 플러그인 없이 **최소 툴**만 사용한다.
+이 문서는 처음 세팅한 뒤 바로 업무에 쓰는 데 집중한다.
+최소 툴만 사용한다.
 
 최소 툴:
-- neovim
+- vim
 - tmux
 - ripgrep(rg)
 - fzf
@@ -33,38 +33,32 @@ latex   : false
 ```bash
 xcode-select --install
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install neovim tmux ripgrep fzf fd git
+brew install vim tmux ripgrep fzf fd git
 $(brew --prefix)/opt/fzf/install
 ```
 
 ### 1-2. 설정 파일 만들기
 
 ```bash
-mkdir -p ~/.config/nvim
-cat > ~/.config/nvim/init.lua <<'LUA'
-vim.g.mapleader = ' '
-vim.o.number = true
-vim.o.relativenumber = true
-vim.o.mouse = ''
-vim.o.clipboard = 'unnamedplus'
-vim.o.ignorecase = true
-vim.o.smartcase = true
-vim.o.updatetime = 200
-vim.o.termguicolors = true
+cat > ~/.vimrc <<'VIM'
+set nocompatible
+set number
+set relativenumber
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
 
--- insert 모드 탈출
-vim.keymap.set('i', 'jj', '<Esc>', { silent = true })
+" 저장/종료
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
 
--- 저장/종료
-vim.keymap.set('n', '<leader>w', ':w<CR>')
-vim.keymap.set('n', '<leader>q', ':q<CR>')
-
--- 창 이동
-vim.keymap.set('n', '<C-h>', '<C-w>h')
-vim.keymap.set('n', '<C-j>', '<C-w>j')
-vim.keymap.set('n', '<C-k>', '<C-w>k')
-vim.keymap.set('n', '<C-l>', '<C-w>l')
-LUA
+" insert 모드 탈출
+inoremap jj <Esc>
+VIM
 
 cat > ~/.tmux.conf <<'TMUX'
 set -g mouse on
@@ -81,7 +75,7 @@ TMUX
 ### 1-3. 설치 확인
 
 ```bash
-nvim --version
+vim --version
 tmux -V
 rg --version
 fd --version
@@ -99,9 +93,14 @@ tmux new -s work
 ```
 
 패널 구성:
-- 좌: 코드 `nvim .`
+- 좌: 코드 `vim .`
 - 우상: 테스트 `./gradlew test --continuous`
 - 우하: 로그 `tail -f app.log`
+
+패널 분할 방법:
+- 세로 분할: `Ctrl-a %`
+- 가로 분할: `Ctrl-a "`
+- 패널 이동: `Ctrl-a + 방향키`
 
 ### 2-2. 업무 중
 - Jira 티켓 확인
@@ -118,13 +117,13 @@ tmux new -s work
 
 ## 3. 각 툴 사용법
 
-### 3-1. Neovim 단축키 (필수만)
+### 3-1. Vim 단축키 (필수)
 
-### 모드
+모드:
 - Normal 모드: 이동/명령
 - Insert 모드: 입력
 
-### 가장 많이 쓰는 키
+자주 쓰는 키:
 - `i` : 입력 시작
 - `A` : 줄 끝에서 입력
 - `o` : 아래 줄 추가 후 입력
@@ -145,10 +144,6 @@ tmux new -s work
 - `:q` : 종료
 - `:wq` : 저장 후 종료
 
-> 핵심: `ciw`, `.`, `/검색` 3개만 익혀도 체감이 큼.
-
----
-
 ### 3-2. tmux 단축키
 
 (prefix는 `Ctrl-a` 기준)
@@ -159,55 +154,26 @@ tmux new -s work
 - `tmux a -t work` : 세션 복귀
 - `Ctrl-a r` : tmux 설정 리로드
 
----
-
 ### 3-3. ripgrep (rg)
 
-- 텍스트 검색:
 ```bash
 rg "OrderService"
-```
-
-- Kotlin 파일만 검색:
-```bash
 rg "timeout" -g "*.kt"
-```
-
-- build 제외 검색:
-```bash
 rg "TODO" -g "!build/**"
 ```
 
----
-
 ### 3-4. fd
 
-- 파일명 검색:
 ```bash
 fd service
-```
-
-- 확장자 제한:
-```bash
 fd -e kt User
 ```
 
----
-
 ### 3-5. fzf
 
-- 파일 선택기:
 ```bash
 fd . | fzf
-```
-
-- git 파일 선택:
-```bash
 git ls-files | fzf
-```
-
-- 히스토리 검색:
-```bash
 history | fzf
 ```
 
@@ -221,7 +187,7 @@ history | fzf
 
 ```text
 ~/.dotfiles
-  ├─ nvim/.config/nvim/init.lua
+  ├─ vim/.vimrc
   ├─ tmux/.tmux.conf
   ├─ zsh/.zshrc
   └─ scripts/bootstrap.sh
@@ -233,9 +199,8 @@ history | fzf
 #!/usr/bin/env bash
 set -euo pipefail
 
-brew install neovim tmux ripgrep fzf fd git
-mkdir -p "$HOME/.config/nvim"
-ln -sf "$HOME/.dotfiles/nvim/.config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
+brew install vim tmux ripgrep fzf fd git
+ln -sf "$HOME/.dotfiles/vim/.vimrc" "$HOME/.vimrc"
 ln -sf "$HOME/.dotfiles/tmux/.tmux.conf" "$HOME/.tmux.conf"
 ln -sf "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.zshrc"
 ```
@@ -246,25 +211,3 @@ ln -sf "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.zshrc"
 git clone <dotfiles-repo> ~/.dotfiles
 bash ~/.dotfiles/scripts/bootstrap.sh
 ```
-
----
-
-## 5. 1주 적응 체크리스트
-
-- Day 1~2: 이동/검색만 Vim으로
-- Day 3~4: 편집(`ciw`, `di(`, `.`) 적용
-- Day 5~7: tmux + 테스트/로그까지 고정
-
-규칙:
-- 불편 1~2회는 그대로
-- 같은 불편 3회 반복되면 그때 설정 추가
-
----
-
-## 6. 목표 지표
-
-- 파일 찾기: 30초 → 8초
-- 테스트 재실행 시작: 45초 → 15초
-- 에디터↔터미널 전환 횟수: 20회/일 → 8회/일
-
-2주 내 이 수치가 내려가면 세팅이 잘 맞는 것이다.
