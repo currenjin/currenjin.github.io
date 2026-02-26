@@ -2,7 +2,7 @@
 layout  : wiki
 title   : Vim 업무환경 표준 세팅
 date    : 2026-02-26 16:50:00 +0900
-updated : 2026-02-26 23:50:00 +0900
+updated : 2026-02-26 23:58:00 +0900
 tags    : vim tmux productivity
 toc     : true
 public  : true
@@ -84,36 +84,133 @@ fzf --version
 
 ---
 
-## 2. 사용법
+## 2. 사용법 (시나리오별)
 
-### 2-1. 업무 시작
+### 시나리오 1) 특정 에러 코드 원인 찾고 수정하기
 
+상황:
+- 로그에 `B4000-CO-GN001` 에러가 발생함
+
+흐름:
+1. tmux 세션 시작
 ```bash
 tmux new -s work
 ```
-
-패널 구성:
-- 좌: 코드 `vim .`
-- 우상: 테스트 `./gradlew test --continuous`
-- 우하: 로그 `tail -f app.log`
-
-패널 분할 방법:
-- 세로 분할: `Ctrl-a %`
-- 가로 분할: `Ctrl-a "`
+2. 패널 분할
+- `Ctrl-a %` (세로)
+- `Ctrl-a "` (가로)
 - 패널 이동: `Ctrl-a + 방향키`
-
-### 2-2. 업무 중
-- Jira 티켓 확인
-- 코드 수정
-- 테스트 확인
-- 로그 확인
-
-### 2-3. 업무 종료
-- 커밋/푸시
-- tmux 분리: `Ctrl-a d`
-- 다음에 복귀: `tmux a -t work`
+3. 좌측 패널: 코드 열기
+```bash
+vim .
+```
+4. 우상 패널: 테스트 대기
+```bash
+./gradlew test --continuous
+```
+5. 우하 패널: 로그 확인
+```bash
+tail -f app.log
+```
+6. 코드에서 에러 코드 검색
+```bash
+rg "B4000-CO-GN001" -g "*.kt"
+```
+7. 후보 파일 중 하나 열기
+```bash
+vim "$(fd exception | fzf)"
+```
+8. vim에서 수정
+- 검색: `/B4000-CO-GN001`
+- 단어 수정: `ciw`
+- 저장: `:w`
+9. 테스트 통과 확인 후 커밋
 
 ---
+
+### 시나리오 2) 함수 이름은 아는데 파일 위치를 모를 때
+
+상황:
+- `processExcel` 함수 위치를 빠르게 찾고 싶음
+
+흐름:
+1. 함수명으로 내용 검색
+```bash
+rg "fun processExcel|processExcel\(" -g "*.kt"
+```
+2. 파일명이 애매하면 파일명 탐색
+```bash
+fd excel -e kt
+```
+3. 결과가 많으면 fzf로 선택
+```bash
+fd -e kt | fzf
+```
+4. 선택 파일 열기
+```bash
+vim "$(fd -e kt | fzf)"
+```
+5. vim에서 함수로 점프
+- `/processExcel`
+- 다음 결과: `n`
+
+---
+
+### 시나리오 3) 대규모 문자열 치환하기
+
+상황:
+- `transportMessage`를 `loadingMessage`로 바꿔야 함
+
+흐름:
+1. 영향 범위 확인
+```bash
+rg "transportMessage" -g "*.kt"
+```
+2. 하나 파일에서 안전하게 변경
+- 파일 열기: `vim <파일>`
+- 전체 치환: `:%s/transportMessage/loadingMessage/g`
+- 저장: `:w`
+3. 여러 파일 변경은 반복 수행
+- `rg`로 재확인해서 남은 항목 처리
+4. 테스트로 회귀 확인
+```bash
+./gradlew test
+```
+
+---
+
+### 시나리오 4) 커맨드 기억 안 날 때
+
+상황:
+- 예전에 쓴 복잡한 gradle 명령을 다시 쓰고 싶음
+
+흐름:
+1. 히스토리 검색
+```bash
+history | fzf
+```
+2. 선택한 명령 복사/재실행
+3. 결과 확인 후 필요 시 tmux 세션 분리
+- 분리: `Ctrl-a d`
+- 복귀: `tmux a -t work`
+
+---
+
+### 시나리오 5) 하루 작업 다시 이어가기
+
+상황:
+- 터미널 닫았는데 작업 상태를 그대로 이어가고 싶음
+
+흐름:
+1. 세션 목록 확인
+```bash
+tmux ls
+```
+2. 기존 세션 복귀
+```bash
+tmux a -t work
+```
+3. 패널에서 기존 로그/테스트/코드 상태 그대로 이어서 작업
 
 ## 3. 각 툴 사용법
 
