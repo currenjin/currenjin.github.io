@@ -69,3 +69,4 @@ regenerate: true
 * [[openclaw]]
 * [[tidy-first]]
 * [[modern-software-engineering]]
+* [[vim-workflow]]
