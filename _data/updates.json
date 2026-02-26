@@ -1,5 +1,14 @@
 [
   {
+    "title": "Vim/Neovim 업무환경 표준 세팅",
+    "url": "/wiki/vim-workflow",
+    "updated": "2026-02-26",
+    "summary": "어디서든 빠르게 복구 가능한 Vim/Neovim + tmux + fzf/rg 업무환경 가이드",
+    "tags": "vim neovim tmux productivity",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)",
     "url": "/wiki/designing-data-intensive-applications",
     "updated": "2026-02-24",
