@@ -2,7 +2,7 @@
 layout  : wiki
 title   : Vim 업무환경 표준 세팅
 date    : 2026-02-26 16:50:00 +0900
-updated : 2026-02-27 00:12:00 +0900
+updated : 2026-02-28 23:20:00 +0900
 tags    : vim tmux productivity
 toc     : true
 public  : true
@@ -379,3 +379,125 @@ ln -sf "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.zshrc"
 git clone <dotfiles-repo> ~/.dotfiles
 bash ~/.dotfiles/scripts/bootstrap.sh
 ```
+
+---
+
+## 5. 실무 속도 올리는 추가 세팅
+
+### 5-1. `.vimrc` 보강 옵션
+
+기본 세팅 위에 아래를 추가하면 체감이 크다.
+
+```vim
+" 붙여넣기/복사 품질
+set clipboard=unnamed
+
+" 백업/스왑 파일 분리(프로젝트 오염 방지)
+set backupdir=~/.vim/tmp//
+set directory=~/.vim/tmp//
+set undodir=~/.vim/tmp//
+set undofile
+
+" 화면/탐색
+set scrolloff=5
+set wildmenu
+set wildmode=longest:full,full
+set list
+set listchars=tab:»·,trail:·
+
+" 빠른 검색 루프
+nnoremap <leader>h :noh<CR>
+nnoremap <leader>e :Ex<CR>
+```
+
+사전 준비:
+```bash
+mkdir -p ~/.vim/tmp
+```
+
+### 5-2. 자주 쓰는 실전 매핑
+
+```vim
+" 현재 파일 기준 같은 폴더에 복제 후 열기
+" 사용: :Dup 2026-03-01.md
+command! -nargs=1 Dup execute ':!cp % ' . <q-args> | execute ':e ' . <q-args>
+
+" 저장하고 디렉토리 뷰로 복귀
+nnoremap <leader>x :w<CR>:Ex<CR>
+
+" 현재 파일 경로 복사
+nnoremap <leader>p :let @+ = expand('%:p')<CR>
+```
+
+---
+
+## 6. 자주 막히는 구간 트러블슈팅
+
+### 6-1. netrw 복사(`mf`/`mt`/`mc`)가 안 되는 경우
+
+원인 대부분은 Vim 현재 작업 디렉토리(`:pwd`)와 탐색 위치가 어긋난 경우다.
+
+해결 순서:
+1. `:pwd` 확인
+2. 현재 파일 기준으로 디렉토리 고정
+```vim
+:cd %:p:h
+```
+3. 다시 `:Ex` 열고 복사 수행
+
+안 되면 즉시 우회:
+```vim
+:!cp % <new-file>.md
+:e <new-file>.md
+```
+
+### 6-2. 한글 입력 후 ESC 지연/깨짐
+
+터미널 입력기 충돌이 원인일 때가 많다.
+- Insert 종료를 `jj`로 통일
+- iTerm2/Terminal에서 한글 조합 중 ESC 연타 습관 제거
+
+### 6-3. tmux에서 마우스/클립보드 이상
+
+- tmux 설정 리로드: `Ctrl-a r`
+- 세션 완전 재시작:
+```bash
+tmux kill-server
+tmux new -s work
+```
+
+### 6-4. ripgrep/fd 명령이 없다고 뜰 때
+
+```bash
+brew install ripgrep fd
+exec $SHELL -l
+```
+
+---
+
+## 7. Kotlin/Spring 실무용 즉시 실행 루틴
+
+### 7-1. 3패널 고정 레이아웃
+
+1) 좌측: `vim .`
+2) 우상: `./gradlew test --continuous`
+3) 우하: `./gradlew bootRun` 또는 `tail -f build/logs/*.log`
+
+핵심 원칙: **코드/테스트/로그를 동시에 본다.**
+
+### 7-2. 함수 수정 표준 사이클
+
+1. 함수 검색: `rg "fun 함수명|함수명\(" -g "*.kt"`
+2. 파일 선택: `fd -e kt | fzf`
+3. 수정: `ciw`, `di(`, `:%s/old/new/g`
+4. 저장: `:w`
+5. 테스트/로그 확인
+6. 통과 후 커밋
+
+### 7-3. 커밋 분리 규칙 (권장)
+
+- 1커밋: 구조 변경(Tidy)
+- 1커밋: 동작 변경(기능/버그 수정)
+- 1커밋: 테스트 보강
+
+섞지 않으면 리뷰 속도와 롤백 안전성이 올라간다.
