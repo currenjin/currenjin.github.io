@@ -2,7 +2,7 @@
 layout  : wiki
 title   : Vim 업무환경 표준 세팅
 date    : 2026-02-26 16:50:00 +0900
-updated : 2026-03-04 12:10:00 +0900
+updated : 2026-03-04 12:35:00 +0900
 tags    : vim tmux productivity
 toc     : true
 public  : true
@@ -403,6 +403,91 @@ tmux ls
 tmux a -t work
 ```
 3. 패널에서 기존 로그/테스트/코드 상태 그대로 이어서 작업
+
+---
+
+### 시나리오 6) 키워드 포함 파일을 fzf로 골라서 바로 열기/cat 하기
+
+상황:
+- `TRANSITS`가 들어간 Kotlin 파일을 찾고, 하나 골라 바로 열고 싶음
+
+흐름:
+1. 매치된 "파일 목록"만 뽑기
+```bash
+rg --files-with-matches "TRANSITS" -g "*.kt"
+```
+2. fzf로 하나 선택해서 `cat`
+```bash
+cat "$(rg --files-with-matches "TRANSITS" -g "*.kt" | fzf)"
+```
+3. 같은 방식으로 vim 열기
+```bash
+vim "$(rg --files-with-matches "TRANSITS" -g "*.kt" | fzf)"
+```
+
+참고:
+- `rg -n` 결과(`파일:라인:내용`)를 그대로 `cat`에 넣으면 실패한다.
+- `cat (rg ... | fzf)`는 zsh에서 서브쉘 문법이 맞지 않아서 `$(...)`를 써야 한다.
+
+---
+
+### 시나리오 7) 매치된 줄을 보고 선택한 뒤 해당 라인으로 점프해서 열기
+
+상황:
+- 파일만 여는 게 아니라, `TRANSITS`가 나오는 정확한 줄로 점프하고 싶음
+
+흐름:
+1. `파일:라인:내용` 후보를 fzf로 선택
+```bash
+sel="$(rg -n "TRANSITS" -g "*.kt" | fzf)"
+```
+2. 파일/라인 분리
+```bash
+file="$(echo "$sel" | cut -d: -f1)"
+line="$(echo "$sel" | cut -d: -f2)"
+```
+3. vim에서 라인 점프 오픈
+```bash
+vim "+$line" "$file"
+```
+
+원라이너:
+```bash
+sel="$(rg -n "TRANSITS" -g "*.kt" | fzf)"; vim "+$(echo "$sel" | cut -d: -f2)" "$(echo "$sel" | cut -d: -f1)"
+```
+
+---
+
+### 시나리오 8) 자주 쓰는 패턴을 함수/alias로 고정하기
+
+상황:
+- 위 명령을 매번 타이핑하기 귀찮음
+
+`~/.zshrc` 예시:
+```bash
+# 키워드로 파일 골라 vim 열기
+rff() {
+  local q="$1"
+  vim "$(rg --files-with-matches "$q" -g "*.kt" | fzf)"
+}
+
+# 키워드 매치 라인 선택 후 해당 줄로 vim 점프
+rfl() {
+  local q="$1"
+  local sel
+  sel="$(rg -n "$q" -g "*.kt" | fzf)" || return
+  local file line
+  file="$(echo "$sel" | cut -d: -f1)"
+  line="$(echo "$sel" | cut -d: -f2)"
+  vim "+$line" "$file"
+}
+```
+
+사용:
+```bash
+rff TRANSITS
+rfl TRANSITS
+```
 
 ## 4. 언제 어디서든 같은 세팅 적용 (재현)
 
