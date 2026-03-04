@@ -2,7 +2,7 @@
 layout  : wiki
 title   : Vim 업무환경 표준 세팅
 date    : 2026-02-26 16:50:00 +0900
-updated : 2026-02-28 23:20:00 +0900
+updated : 2026-03-04 12:10:00 +0900
 tags    : vim tmux productivity
 toc     : true
 public  : true
@@ -188,13 +188,70 @@ fzf --version
 
 ### 2-2. tmux 단축키
 
-(prefix는 `Ctrl-a` 기준)
+> prefix는 이 문서 기준 `Ctrl-a` (`set -g prefix C-a`)다.
+
+#### 세션(Session)
+- `tmux new -s work` : 새 세션 생성
+- `tmux ls` : 세션 목록
+- `tmux a -t work` : 세션 접속(attach)
+- `Ctrl-a d` : 세션 분리(detach)
+- `Ctrl-a $` : 현재 세션 이름 변경
+- `Ctrl-a s` : 세션 목록에서 선택/전환
+- `tmux kill-session -t work` : 특정 세션 종료
+- `tmux kill-server` : 모든 세션 종료
+
+#### 윈도우(Window)
+- `Ctrl-a c` : 새 윈도우 생성
+- `Ctrl-a ,` : 현재 윈도우 이름 변경
+- `Ctrl-a n` : 다음 윈도우
+- `Ctrl-a p` : 이전 윈도우
+- `Ctrl-a 0~9` : 해당 번호 윈도우로 이동
+- `Ctrl-a w` : 윈도우 목록 표시 후 선택
+- `Ctrl-a &` : 현재 윈도우 닫기
+- `Ctrl-a l` : 직전 윈도우로 이동
+- `Ctrl-a f` : 윈도우 이름 검색
+- `Ctrl-a .` : 현재 윈도우 번호 재배치(move)
+
+#### 패널(Pane)
 - `Ctrl-a %` : 세로 분할
 - `Ctrl-a "` : 가로 분할
-- `Ctrl-a + 방향키` : 패널 이동
-- `Ctrl-a d` : 세션 분리
-- `tmux a -t work` : 세션 복귀
+- `Ctrl-a o` : 다음 패널로 이동
+- `Ctrl-a ;` : 직전 활성 패널로 이동
+- `Ctrl-a + 방향키` : 방향 기준 패널 이동
+- `Ctrl-a q` : 패널 번호 표시
+- `Ctrl-a x` : 현재 패널 닫기
+- `Ctrl-a z` : 현재 패널 확대/복원(zoom)
+- `Ctrl-a {` : 현재 패널을 왼쪽으로 이동
+- `Ctrl-a }` : 현재 패널을 오른쪽으로 이동
+- `Ctrl-a !` : 현재 패널을 새 윈도우로 분리
+- `Ctrl-a Space` : 레이아웃 순환
+- `Ctrl-a Alt-1` : even-horizontal 레이아웃
+- `Ctrl-a Alt-2` : even-vertical 레이아웃
+- `Ctrl-a Alt-3` : main-horizontal 레이아웃
+- `Ctrl-a Alt-4` : main-vertical 레이아웃
+- `Ctrl-a Alt-5` : tiled 레이아웃
+- `Ctrl-a Ctrl-방향키` : 패널 크기 조절(작게/크게)
+
+#### 복사 모드/스크롤/붙여넣기
+- `Ctrl-a [` : copy-mode 진입(스크롤)
+- `q` : copy-mode 종료
+- `Ctrl-a ]` : 버퍼 붙여넣기
+- `Ctrl-a #` : paste buffer 목록
+- `Ctrl-a =` : paste buffer 선택기
+- `Ctrl-a ~` : 직전 버퍼 내용 표시
+- `Ctrl-a PageUp` : copy-mode + 페이지 업
+
+#### 명령/설정/도움
+- `Ctrl-a :` : tmux 명령 프롬프트
+- `Ctrl-a ?` : 키 바인딩 도움말
+- `Ctrl-a t` : 시계 표시
 - `Ctrl-a r` : tmux 설정 리로드
+
+#### 자주 쓰는 운영 조합
+- 작업 시작: `tmux new -s work` → `Ctrl-a %` / `Ctrl-a "`
+- 복귀: `tmux ls` → `tmux a -t <세션명>`
+- 레이아웃 망가졌을 때: `Ctrl-a Space`
+- 패널 정리: `Ctrl-a x` 또는 `Ctrl-a !`
 
 ### 2-3. ripgrep (rg)
 
