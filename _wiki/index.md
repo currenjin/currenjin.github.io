@@ -70,3 +70,4 @@ regenerate: true
 * [[tidy-first]]
 * [[modern-software-engineering]]
 * [[vim-workflow]]
+* [[user-stories-applied]]
