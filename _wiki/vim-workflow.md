@@ -2,7 +2,7 @@
 layout  : wiki
 title   : Vim 업무환경 표준 세팅
 date    : 2026-02-26 16:50:00 +0900
-updated : 2026-03-04 12:35:00 +0900
+updated : 2026-03-10 21:30:00 +0900
 tags    : vim tmux productivity
 toc     : true
 public  : true
@@ -69,6 +69,17 @@ unbind C-b
 set -g prefix C-a
 bind C-a send-prefix
 bind r source-file ~/.tmux.conf \; display-message "tmux reloaded"
+
+# copy-mode (vi)
+setw -g mode-keys vi
+
+# Space 키 충돌 방지: v로 선택 시작, y로 복사
+unbind-key -T copy-mode-vi Space
+bind-key -T copy-mode-vi v send -X begin-selection
+bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel "pbcopy"
+
+# macOS 시스템 클립보드 연동
+set -s set-clipboard on
 TMUX
 ```
 
@@ -235,7 +246,9 @@ fzf --version
 #### 복사 모드/스크롤/붙여넣기
 - `Ctrl-a [` : copy-mode 진입(스크롤)
 - `q` : copy-mode 종료
-- `Ctrl-a ]` : 버퍼 붙여넣기
+- `v` : 선택 시작 (copy-mode-vi)
+- `y` : 복사 + copy-mode 종료 (`pbcopy`로 macOS 클립보드까지 복사)
+- `Ctrl-a ]` : tmux 버퍼 붙여넣기
 - `Ctrl-a #` : paste buffer 목록
 - `Ctrl-a =` : paste buffer 선택기
 - `Ctrl-a ~` : 직전 버퍼 내용 표시
