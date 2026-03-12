@@ -3,7 +3,7 @@ layout  : wiki
 title   : 증강 코딩 운영 기록
 summary : 개인 검증 이후 팀 적용까지, 실제 운영 방식과 판단 기준 정리
 date    : 2026-03-12 11:30:00 +0900
-updated : 2026-03-12 16:30:00 +0900
+updated : 2026-03-12 18:35:00 +0900
 tags    : ai augmented-coding harness engineering review
 toc     : true
 public  : true
@@ -53,6 +53,21 @@ latex   : false
 2. `plan.md` 기준으로 구현을 진행한다.
 3. 테스트 통과를 기준으로 수정 루프를 반복한다.
 4. PR 생성 후 리뷰 단계로 이동한다.
+
+### 운영 흐름 다이어그램
+
+```mermaid
+flowchart LR
+  A[Jira Task] --> B[jira-to-plan]
+  B --> C[plan.md]
+  C --> D[augmented-coding]
+  D --> E[Test Loop]
+  E --> F[push-pr]
+  F --> G[CodeRabbit]
+  G --> H[/review]
+  H --> I[Human Decision]
+  I --> J[Merge to develop]
+```
 
 초기에는 개인 사용 중심이었지만, 효과가 확인되면서 팀원 사용이 늘어났다.
 운영 원칙은 바이브 코딩이 아니라 **테스트 기반 실행**이다.
