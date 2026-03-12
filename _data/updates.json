@@ -1,5 +1,14 @@
 [
   {
+    "title": "증강 코딩 (Augmented Coding)",
+    "url": "/wiki/augmented-coding",
+    "updated": "2026-03-12",
+    "summary": "우리 팀의 증강 코딩 실험과 하네스 관점 정리",
+    "tags": "ai augmented-coding harness engineering review",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Vim 업무환경 표준 세팅",
     "url": "/wiki/vim-workflow",
     "updated": "2026-03-10",
