@@ -71,3 +71,4 @@ regenerate: true
 * [[modern-software-engineering]]
 * [[vim-workflow]]
 * [[user-stories-applied]]
+* [[augmented-coding]]
