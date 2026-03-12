@@ -58,15 +58,15 @@ latex   : false
 
 ```mermaid
 flowchart LR
-  A[Jira Task] --> B[jira-to-plan]
-  B --> C[plan.md]
-  C --> D[augmented-coding]
-  D --> E[Test Loop]
-  E --> F[push-pr]
-  F --> G[CodeRabbit]
-  G --> H[/review]
-  H --> I[Human Decision]
-  I --> J[Merge to develop]
+  A["Jira Task"] --> B["jira-to-plan"]
+  B --> C["plan.md"]
+  C --> D["augmented-coding"]
+  D --> E["Test Loop"]
+  E --> F["push-pr"]
+  F --> G["CodeRabbit"]
+  G --> H["review skill (/review)"]
+  H --> I["Human Decision"]
+  I --> J["Merge to develop"]
 ```
 
 초기에는 개인 사용 중심이었지만, 효과가 확인되면서 팀원 사용이 늘어났다.
