@@ -1,9 +1,9 @@
 [
   {
-    "title": "증강 코딩, 바이브를 넘어서",
+    "title": "증강 코딩 운영 기록",
     "url": "/wiki/augmented-coding",
     "updated": "2026-03-12",
-    "summary": "개인 프롬프트가 아니라 팀 하네스로 생산성 저점을 끌어올리는 방법",
+    "summary": "개인 검증 이후 팀 스킬 적용, 하네스 방식 수렴, kancli 개발 배경 정리",
     "tags": "ai augmented-coding harness engineering review",
     "source": "Wiki",
     "external": false
