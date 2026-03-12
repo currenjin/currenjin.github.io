@@ -3,7 +3,7 @@ layout  : wiki
 title   : 증강 코딩 운영 기록
 summary : 개인 검증 이후 팀 적용까지, 실제 운영 방식과 판단 기준 정리
 date    : 2026-03-12 11:30:00 +0900
-updated : 2026-03-12 19:15:00 +0900
+updated : 2026-03-12 19:40:00 +0900
 tags    : ai augmented-coding harness engineering review
 toc     : true
 public  : true
@@ -58,39 +58,14 @@ latex   : false
 
 ```mermaid
 flowchart LR
-  T["Jira Task"] --> P["jira-to-plan"]
-  P --> M["plan.md"]
-  M --> C["augmented-coding"]
-  C --> X{"All tests pass?"}
-  X -- "No" --> C
-  X -- "Yes" --> PR["push-pr"]
-  PR --> CR["CodeRabbit"]
-  CR --> RV["review skill"]
-  RV --> HD{"Human review pass?"}
-  HD -- "No" --> C
-  HD -- "Yes" --> MG["Merge to develop"]
-```
+  T["Ticket"] --> P["Plan"]
+  P --> A["Augmented Coding"]
+  A --> PR["PR"]
+  PR --> R["Review"]
 
-### 역할 분리 다이어그램
-
-```mermaid
-flowchart TB
-  subgraph HUMAN["Human"]
-    H1["Set direction"]
-    H2["Define constraints"]
-    H3["Final decision"]
-  end
-
-  subgraph AIW["AI Worker"]
-    A1["Read ticket and plan"]
-    A2["Implement changes"]
-    A3["Run/fix test loop"]
-    A4["Prepare PR and review fixes"]
-  end
-
-  H1 --> A1
-  H2 --> A2
-  A4 --> H3
+  A --> GO["go"]
+  A --> COMMIT["commit"]
+  A --> REFACTOR["refactor"]
 ```
 
 초기에는 개인 사용 중심이었지만, 효과가 확인되면서 팀원 사용이 늘어났다.
