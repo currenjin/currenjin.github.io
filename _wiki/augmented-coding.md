@@ -63,9 +63,7 @@ flowchart LR
   A --> PR["PR"]
   PR --> R["Review"]
 
-  A --> GO["go"]
-  A --> COMMIT["commit"]
-  A --> REFACTOR["refactor"]
+  A -- "go / commit / refactor" --> A
 ```
 
 초기에는 개인 사용 중심이었지만, 효과가 확인되면서 팀원 사용이 늘어났다.
