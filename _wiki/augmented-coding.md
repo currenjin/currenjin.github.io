@@ -3,7 +3,7 @@ layout  : wiki
 title   : 증강 코딩 운영 기록
 summary : 개인 검증 이후 팀 적용까지, 실제 운영 방식과 판단 기준 정리
 date    : 2026-03-12 11:30:00 +0900
-updated : 2026-03-13 21:55:00 +0900
+updated : 2026-03-13 22:00:00 +0900
 tags    : ai augmented-coding harness engineering review
 toc     : true
 public  : true
@@ -102,7 +102,7 @@ AI를 도구로만 보지 않고, 작업자로 두고 운영하기 시작했다.
 
 ---
 
-## 4) 증강 코딩 원칙
+## 4) 증강 코딩의 철학
 
 ### 4-1) augmented coding은 vibe coding이 아니다
 
