@@ -3,7 +3,7 @@ layout  : wiki
 title   : 증강 코딩 운영 기록
 summary : 개인 검증 이후 팀 적용까지, 실제 운영 방식과 판단 기준 정리
 date    : 2026-03-12 11:30:00 +0900
-updated : 2026-03-12 20:05:00 +0900
+updated : 2026-03-13 11:10:00 +0900
 tags    : ai augmented-coding harness engineering review
 toc     : true
 public  : true
