@@ -61,8 +61,9 @@ flowchart LR
   T[Ticket] --> P[Plan] --> A[Augmented Coding] --> PR[PR] --> R[Review]
   A -. go · commit · refactor .-> A
 
-  classDef core fill:#f5f7ff,stroke:#5b6cff,stroke-width:1.5px,color:#1f2a44;
+  classDef core fill:transparent,stroke:#111827,stroke-width:1px,color:#111827;
   class T,P,A,PR,R core;
+  linkStyle default stroke:#111827,stroke-width:1px;
 ```
 
 초기에는 개인 사용 중심이었지만, 효과가 확인되면서 팀원 사용이 늘어났다.
