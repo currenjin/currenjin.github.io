@@ -31,6 +31,8 @@ latex   : false
 코드 품질을 중요하게 보던 사람이 AI를 적극적으로 쓰는 방식이 인상적이었다.
 근데 그냥 맡기는 게 아니라, 자기 기준으로 운영 방식을 만들고 있었다.
 
+- <https://tidyfirst.substack.com/p/augmented-coding-beyond-the-vibes>
+
 그때부터 기준을 이렇게 잡았다.
 
 - 방향은 사람이 정한다.
