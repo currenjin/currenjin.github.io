@@ -16,7 +16,21 @@
     window.mermaid.initialize({
       startOnLoad: false,
       securityLevel: 'loose',
-      theme: 'default'
+      theme: 'base',
+      themeVariables: {
+        primaryColor: 'transparent',
+        primaryTextColor: '#111827',
+        primaryBorderColor: '#111827',
+        lineColor: '#111827',
+        tertiaryColor: 'transparent',
+        clusterBkg: 'transparent',
+        clusterBorder: '#111827',
+        edgeLabelBackground: 'transparent',
+        fontFamily: 'Pretendard, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif'
+      },
+      flowchart: {
+        curve: 'linear'
+      }
     });
 
     window.mermaid.run({

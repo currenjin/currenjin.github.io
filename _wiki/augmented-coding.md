@@ -3,7 +3,7 @@ layout  : wiki
 title   : 증강 코딩 운영 기록
 summary : 개인 검증 이후 팀 적용까지, 실제 운영 방식과 판단 기준 정리
 date    : 2026-03-12 11:30:00 +0900
-updated : 2026-03-12 19:40:00 +0900
+updated : 2026-03-12 20:05:00 +0900
 tags    : ai augmented-coding harness engineering review
 toc     : true
 public  : true
@@ -60,10 +60,6 @@ latex   : false
 flowchart LR
   T[Ticket] --> P[Plan] --> A[Augmented Coding] --> PR[PR] --> R[Review]
   A -. go · commit · refactor .-> A
-
-  classDef core fill:transparent,stroke:#111827,stroke-width:1px,color:#111827;
-  class T,P,A,PR,R core;
-  linkStyle default stroke:#111827,stroke-width:1px;
 ```
 
 초기에는 개인 사용 중심이었지만, 효과가 확인되면서 팀원 사용이 늘어났다.
