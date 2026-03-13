@@ -58,12 +58,11 @@ latex   : false
 
 ```mermaid
 flowchart LR
-  T["Ticket"] --> P["Plan"]
-  P --> A["Augmented Coding"]
-  A --> PR["PR"]
-  PR --> R["Review"]
+  T[Ticket] --> P[Plan] --> A[Augmented Coding] --> PR[PR] --> R[Review]
+  A -. go · commit · refactor .-> A
 
-  A -- "go / commit / refactor" --> A
+  classDef core fill:#f5f7ff,stroke:#5b6cff,stroke-width:1.5px,color:#1f2a44;
+  class T,P,A,PR,R core;
 ```
 
 초기에는 개인 사용 중심이었지만, 효과가 확인되면서 팀원 사용이 늘어났다.
