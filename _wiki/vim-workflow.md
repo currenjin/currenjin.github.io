@@ -2,7 +2,7 @@
 layout  : wiki
 title   : Vim 업무환경 표준 세팅
 date    : 2026-02-26 16:50:00 +0900
-updated : 2026-03-10 21:30:00 +0900
+updated : 2026-03-14 15:20:48 +0900
 tags    : vim tmux productivity
 toc     : true
 public  : true
@@ -81,6 +81,12 @@ bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel "pbcopy"
 # macOS 시스템 클립보드 연동
 set -s set-clipboard on
 TMUX
+```
+
+추가/수정한 tmux 설정을 즉시 반영할 때:
+
+```bash
+tmux source-file ~/.tmux.conf
 ```
 
 ### 1-3. 설치 확인
