@@ -1,19 +1,19 @@
 [
   {
+    "title": "Vim 업무환경 표준 세팅",
+    "url": "/wiki/vim-workflow",
+    "updated": "2026-03-14",
+    "summary": "",
+    "tags": "vim tmux productivity",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "증강 코딩 운영 기록",
     "url": "/wiki/augmented-coding",
     "updated": "2026-03-13",
     "summary": "개인 검증 이후 팀 적용까지, 실제 운영 방식과 판단 기준 정리",
     "tags": "ai augmented-coding harness engineering review",
-    "source": "Wiki",
-    "external": false
-  },
-  {
-    "title": "Vim 업무환경 표준 세팅",
-    "url": "/wiki/vim-workflow",
-    "updated": "2026-03-10",
-    "summary": "",
-    "tags": "vim tmux productivity",
     "source": "Wiki",
     "external": false
   },
