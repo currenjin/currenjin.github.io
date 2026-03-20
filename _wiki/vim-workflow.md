@@ -2,7 +2,7 @@
 layout  : wiki
 title   : Vim 업무환경 표준 세팅
 date    : 2026-02-26 16:50:00 +0900
-updated : 2026-03-14 15:20:48 +0900
+updated : 2026-03-20 13:49:24 +0900
 tags    : vim tmux productivity
 toc     : true
 public  : true
@@ -23,6 +23,7 @@ latex   : false
 - ripgrep(rg)
 - fzf
 - fd
+- glow
 
 ---
 
@@ -33,7 +34,7 @@ latex   : false
 ```bash
 xcode-select --install
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install vim tmux ripgrep fzf fd git
+brew install vim tmux ripgrep fzf fd glow git
 $(brew --prefix)/opt/fzf/install
 ```
 
@@ -97,6 +98,7 @@ tmux -V
 rg --version
 fd --version
 fzf --version
+glow --version
 ```
 
 ---
@@ -293,6 +295,13 @@ fd -e kt User
 fd . | fzf
 git ls-files | fzf
 history | fzf
+```
+
+### 2-6. glow (Markdown CLI 뷰어)
+
+```bash
+glow README.md
+glow -p docs/guide.md
 ```
 
 ## 3. 사용법 (시나리오별)
@@ -528,7 +537,7 @@ rfl TRANSITS
 #!/usr/bin/env bash
 set -euo pipefail
 
-brew install vim tmux ripgrep fzf fd git
+brew install vim tmux ripgrep fzf fd glow git
 ln -sf "$HOME/.dotfiles/vim/.vimrc" "$HOME/.vimrc"
 ln -sf "$HOME/.dotfiles/tmux/.tmux.conf" "$HOME/.tmux.conf"
 ln -sf "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.zshrc"
