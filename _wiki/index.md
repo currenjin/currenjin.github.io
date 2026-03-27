@@ -74,4 +74,6 @@ regenerate: true
 * [[augmented-coding]]
 * [[optimizer-and-execution-plan]]
 * [[grafana-loki-tempo]]
-* [[grafana-loki-tempo]]
+* [[grafana]]
+* [[loki]]
+* [[tempo]]
