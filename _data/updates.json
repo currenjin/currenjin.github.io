@@ -1,5 +1,14 @@
 [
   {
+    "title": "Optimizer와 쿼리 실행계획 (MySQL 기준)",
+    "url": "/wiki/optimizer-and-execution-plan",
+    "updated": "2026-03-27",
+    "summary": "RDBMS 공통 개념을 바탕으로 MySQL EXPLAIN/EXPLAIN ANALYZE 읽는 법 정리",
+    "tags": "mysql optimizer execution-plan sql rdbms",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Vim 업무환경 표준 세팅",
     "url": "/wiki/vim-workflow",
     "updated": "2026-03-20",
