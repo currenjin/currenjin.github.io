@@ -1,187 +1,365 @@
 ---
 layout  : wiki
-title   : Kubernetes
-summary :
+title   : Kubernetes (기초부터 운영까지)
+summary : Kubernetes 핵심 개념, 리소스 모델, 운영 포인트, Argo CD(GitOps)까지 정리
 date    : 2022-01-31 13:30:00 +0900
-updated : 2022-01-31 13:30:00 +0900
-tags     : container
+updated : 2026-03-27 15:31:06 +0900
+tags    : kubernetes k8s argocd gitops container
 toc     : true
 public  : true
 parent  : [[index]]
-latex   : true
+latex   : false
 ---
 * TOC
 {:toc}
 
 # Kubernetes
 
-## Kubernetes Cluster Architecture
+이 문서는 Kubernetes를 처음 잡을 때 필요한 핵심부터,
+실무에서 운영할 때 자주 부딪히는 지점까지 한 번에 정리한 문서다.
 
-![image](https://user-images.githubusercontent.com/60500649/151738561-5e8606fc-0c1a-47f4-835e-d36ab4282596.png)
-
-
-**Kubernetes 클러스터**는 물리적, 가상 온프레미스 또는 클라우드에서 컨테이너 형태로 애플리케이션을 호스팅 해요. 필요에 따라 애플리케이션 인스턴스를 쉽게 배포하고 통신하죠.
-
-이 포스팅에서 다루는 내용은 이렇습니다!
-
--   **Master Node**  
-    etcd, controller manager, kube-apiserver, kube-scheduler
--   **Worker Node**  
-    kubelet, kube-proxy, container runtime engine(docker 등)
+마지막에는 Argo CD(GitOps) 챕터를 포함한다.
 
 ---
 
-### Architecture
+## 1) Kubernetes를 왜 쓰는가
 
-![image](https://user-images.githubusercontent.com/60500649/151738570-9c89ac41-bf38-4cbf-a0e6-5b3fabb77959.png)
+Kubernetes는 컨테이너를 "실행"하는 도구가 아니라,
+컨테이너 기반 애플리케이션의 **배포/확장/복구/운영을 자동화**하는 오케스트레이터다.
 
-**Master Node**: Kubernetes 전체를 관리하는 책임, 노드의 정보 저장, 구성요소(메모리, 용량 등) 관리  
-마스터 노드는 'etcd, Controller Manager, kube-apiserver, kube-scheduler'으로 이루어져 있어요.
+핵심 가치:
 
-**Worker Node**: 컨테이너를 로드, 모니터링 정보 저장, 로딩 프로세스 관리  
-워커 노드는 kubelet, kube-proxy, Container Runtime Engine'으로 이루어져 있어요.
+- 원하는 상태(Desired State) 선언
+- 실제 상태(Live State)와 차이 감지
+- 차이를 자동으로 수렴(Reconcile)
 
----
-
-#### Master Node
-
-> **etcd**
-
-정보를 key-value 형식으로 저장하는 데이터베이스, 간편/빠름, 분산 신뢰가 가능한 키-밸류 스토어예요.  
-우리가 kubectl get 명령 입력으로 표시되는 모든 정보는 etcd에서 가져온다는 사실!
-
-ex) 쿠버네티스에 포함된 기능 버전을 업데이트했을 때 etcd에서 변경되면 업데이트 완료되었다고 인식해요.
-
-> **kube-apiserver**
-
-kubernetes의 모든 작업을 오케스트레이션, API의 외부 노출, 노드 간 통신을 담당하죠.  
-kubectl 명령 실행 시 kubectl 유틸리티는 사실 kube-apiserver에 도달합니다. 명령을 수행하기 위해서요!
-
-![image](https://user-images.githubusercontent.com/60500649/151738586-6634f693-67c3-4357-9a7f-4c4d723214e5.png)
-
-**1) Authentication**  
-먼저 사용자에게 명령을 받으면 kube-apiserver는 사용자에 대한 정보를 인증하는 과정을 거쳐요!
-
-**2) Validate Request**  
-api-server에서는 사용자 요청에 대한 유효성을 검증해요!
-
-**3) Retrieve Data**  
-검증된 요청은 etcd의 정보를 통해 응답해요!
-
-이 때문에 kube-apiserver는 데이터 저장소(etcd)와 직접 상호작용하는 유일한 구성요소라고 하죠.
-
-> **Controller Manager**
-
-컨트롤러는 시스템 내 다양한 구성요소의 상태를 지속적으로 모니터링하는 프로세스예요.  
-이를 통해 전체 시스템을 원하는 작동 상태로 가져오는데 효과적이랍니다.
-
-**[Node Controller]**  
-노드 상태를 모니터링하고 필요한 경우 애플리케이션을 계속 실행합니다!
-
--   node monitor period = default/5s  
-    5초마다 노드의 상태를 확인해요.
--   node monitor grace period = default/40s  
-    연결할 수 없는 것으로 표시되고, 연결의 제한이 걸리기까지의 시간이에요.
--   pod eviction timeout = default/5m  
-    연결할 수 없는 것으로 표시되지 않으면 해당 시간 안에 다시 백업이 가능
-
-노드 상태를 지속적으로 모니터링합니다. 기본적으로는 5초 간격으로 상태를 확인하죠.  
-모든 노드 상태가 정상일 때, kubectl get nodes 명령을 입력한다면 모든 노드는 Ready 상태로 표시됩니다.
-
-![image](https://user-images.githubusercontent.com/60500649/151738604-d65bfb60-257e-42d2-998d-69188cf4d785.png)
-
-
-중간에 일부 노드가 사용 불가 상태가 된다면, kubectl get nodes 명령 입력 시 해당 노드는 Not Ready 상태로 표시됩니다.
-
-![image](https://user-images.githubusercontent.com/60500649/151738610-dd03233e-e132-4372-ba89-4276bfbf8653.png)
-
-
-**[Replication Controller]**  
-ReplcaSet 상태를 모니터링하고 원하는 수의 Pod를 보장할 책임을 가지고 있어요!
-
-![image](https://user-images.githubusercontent.com/60500649/151738616-5537db4e-5cf9-4ef9-82de-2bfe84835dbf.png)
-
-
-만약 실행 중인 포드가 죽는다면 Replication Controller는 새로운 POD를 생성할 의무가 있어요.
-
-![image](https://user-images.githubusercontent.com/60500649/151738626-0f92513c-e3bb-4d04-9add-4aab235c44c2.png)
-
-
-**외에도 다양한 컨트롤러들이 많이 있답니다. 이들을 단일 프로세스로 표현한 게 Controller Manager. :)**
-
-> **kube-scheduler**
-
-어떤 노드에서 어떤 포드와 작업이 진행되는지 결정만 하는 친구예요.(작업은 Kubelet가 진행)  
-어떤 포드가 어떤 노드로 가는지.. 올바른 컨테이너가 올바른 노드에서 작동하는지...
-
-예를 들어, CPU 10이 필요한 Container를 실행시키고자한다면! kube-scheduler는 두 단계를 거쳐 적절한 노드를 찾아내요.
-
-![image](https://user-images.githubusercontent.com/60500649/151738634-d58da139-a22b-47a9-a97d-cddcef0180d3.png)
-
-
-**1. Filter Nodes**:처음 스케줄러는 메모리가 충분하지 않은 메모리를 걸러냅니다.
-
-![image](https://user-images.githubusercontent.com/60500649/151738641-b0d58305-dc8c-435b-8c97-1682dfc9593f.png)
-
-
-컨테이너는 CPU가 10만큼 필요하지만 4개밖에 없는 노드를 제외하니 2개의 노드가 남았네요.
-
-**2. Rank Nodes**: 스케줄러가 해당 노드에 대한 순위를 랭크시킵니다.
-
-예를들어, 스케줄러는 컨테이너를 배치 후 사용 가능한 리소스 양을 계산합니다. 이 상황에선 왼쪽의 노드는 2, 오른쪽의 노드는 6만큼 더 사용이 가능하군요.
-
-![image](https://user-images.githubusercontent.com/60500649/151738650-714a4838-65e0-4539-9ac2-42cb4e1136b3.png)
-
-
-**물론 이 작업에서는 사용자가 상황에 따라 임의로 랭크시킬 수 있답니다. 스케줄러를 잘 사용하면 매우 효율적인 컴포넌트를 만들 수 있죠.**
+즉, 운영자가 수동으로 맞추는 대신 시스템이 계속 맞춘다.
 
 ---
 
-#### Worker Node
+## 2) 클러스터 구조
 
-> Kubelet
+Kubernetes 클러스터는 크게 **Control Plane**과 **Worker Node**로 나뉜다.
 
-마스터 노드와의 유일한 접점이라고 할 수 있어요. 노드 상태와 포드의 상태를 지속적으로 보고하는 역할을 하죠.
+### 2-1. Control Plane
 
-**1. Register Node**: kubelet은 kubernetes 클러스터로 노드를 등록합니다!
+- `kube-apiserver`
+  - 모든 요청의 진입점
+  - 인증/인가/검증/리소스 처리
+- `etcd`
+  - 클러스터 상태 저장소 (Key-Value)
+- `kube-scheduler`
+  - 어떤 Pod를 어떤 Node에 배치할지 결정
+- `kube-controller-manager`
+  - 다양한 컨트롤러 실행 (Deployment/Node/Job 등)
 
-**2. Create PODs**: 노드에 컨테이너 또는 POD를 로드하는 명령을 받으면 컨테이너 실행을 요청합니다!
+### 2-2. Worker Node
 
-![image](https://user-images.githubusercontent.com/60500649/151738663-799cf28c-b267-4ff6-8263-a896bbf4fbf4.png)
-
-
-이후 kubelet은 해당 컨테이너 또는 POD를 지속해서 모니터링하고 kube-apiserver에게 보고하는 책임을 갖고 있죠.
-
-> kube-proxy
-
-kubernetes 클러스터의 각 노드에서 실행되는 프로세스에요.  
-아래 POD Network에 대한 설명을 통해 어째서 kube-proxy가 존재해야 하는지 알아보죠!
-
-**일단 클러스터 내의 모든 포드는 다른 포드에 도달할 수 있어요. 이는 POD 네트워킹 솔루션을 클러스터에 배포해 수행이 됩니다.**
-
-![image](https://user-images.githubusercontent.com/60500649/151738668-2f7607da-8345-4915-bb25-57176fbc4f23.png)
-
-
-POD 네트워크는 모든 POD가 연결하는 클러스터의 모든 노드에 걸친 가상 네트워크에요. 이를 통해 서로 통신할 수 있는 것이죠.
-
-예를 들어, 첫 번째 노드에 웹 어플리케이션을, 두 번째 노드에 데이터 베이스를 배포했을 때 웹 어플리케이션은 데이터베이스 POD의 IP를 이용해 데이터베이스에 도달할 수 있습니다. 하지만 데이터베이스의 IP가 항상 동일하게 유지되는 보장은 안되죠.
-
-이 경우 우리는 서비스를 사용하면 좋아요!
-
-![image](https://user-images.githubusercontent.com/60500649/151738675-160b1a0f-56ab-47a2-883d-f5393f788aec.png)
-
-
-클러스터 전체에 (서비스의)데이터베이스 어플리케이션을 노출하면 웹 어플리케이션이 서비스 db의 이름을 사용해 데이터베이스로 액세스할 수 있습니다. 또, 포드를 사용해 서비스에 도달하려 할 때마다 서비스가 할당된 IP를 가져오는 점이 큰 장점이죠.
-
-하지만 서비스는 POD Network에 포함될 수 없어요. 서비스가 클러스터 전체에 액세스해야 한다는 내용을 보면 참 놓기 힘든 결점일 수 있습니다.
-
-**이때, 우리는 해결 방법으로 kube-proxy를 사용합니다.**
-
-![image](https://user-images.githubusercontent.com/60500649/151738682-89bdbae5-667f-44eb-848a-fc84952058c2.png)
-
-
-kube-proxy의 임무는 새로운 서비스를 찾으러 다니는 것이에요. 새 서비스가 생성될 때마다 적절한 서비스를 만들죠.
-
-각 노드는 백엔드 POD로 서비스에게 트래픽을 전달합니다. 이때, IPTABLES를 활용할 수 있는데 깊은 내용이기에 더 세세한 설명은 나중에 따로 포스팅하겠습니다.
+- `kubelet`
+  - 노드 에이전트, Pod 상태 보고/유지
+- `container runtime` (containerd 등)
+  - 실제 컨테이너 실행
+- `kube-proxy`
+  - Service 네트워킹 규칙 관리(iptables/ipvs)
 
 ---
+
+## 3) Kubernetes 동작 원리 (핵심)
+
+### 3-1. 선언형 모델
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  replicas: 3
+```
+
+이 선언은 "Pod 3개를 유지하라"는 의도를 표현한다.
+실제 Pod가 2개가 되면 컨트롤러가 다시 3개로 맞춘다.
+
+### 3-2. Reconciliation Loop
+
+- 현재 상태 관찰
+- 원하는 상태와 비교
+- 차이 발생 시 보정
+
+이 루프 덕분에 장애 복구, 스케일 조정, 롤아웃이 자동화된다.
+
+---
+
+## 4) 핵심 리소스 빠르게 정리
+
+### 4-1. Pod
+
+Kubernetes의 최소 실행 단위.
+보통 "앱 컨테이너 1개 + 사이드카" 형태로 묶어 배포한다.
+
+### 4-2. Deployment
+
+무상태(Stateless) 앱 배포 표준.
+
+- replica 관리
+- 롤링 업데이트
+- 롤백
+
+### 4-3. StatefulSet
+
+상태(State)가 중요한 워크로드용.
+
+- 고정 네트워크 ID
+- 안정적인 스토리지 매핑
+- 순차적 배포/종료
+
+### 4-4. Service
+
+Pod 집합에 대한 안정된 접근 지점.
+
+- `ClusterIP` : 클러스터 내부
+- `NodePort` : 노드 포트 노출
+- `LoadBalancer` : 클라우드 LB 연동
+
+### 4-5. Ingress
+
+L7(HTTP) 라우팅 규칙.
+
+- Host/path 기반 라우팅
+- TLS 종료
+- 다수 Service 통합 진입점
+
+### 4-6. ConfigMap / Secret
+
+- `ConfigMap`: 일반 설정
+- `Secret`: 민감정보
+
+애플리케이션 설정과 이미지를 분리하는 데 핵심.
+
+### 4-7. Job / CronJob
+
+- `Job`: 배치 1회
+- `CronJob`: 스케줄 배치
+
+---
+
+## 5) 스케줄링과 확장
+
+### 5-1. 스케줄링 기준
+
+Scheduler는 다음을 보고 배치한다.
+
+- 요청/제한 리소스 (`requests/limits`)
+- Node selector / affinity / taint-toleration
+- topology spread constraints
+
+### 5-2. 오토스케일
+
+- `HPA` (Horizontal Pod Autoscaler)
+  - CPU/메모리/커스텀 메트릭 기반 Pod 수 조절
+- `VPA`
+  - Pod 리소스 요청값 자동 조정
+- `Cluster Autoscaler`
+  - 노드 수 자체를 증감
+
+---
+
+## 6) 네트워크 모델
+
+Kubernetes 기본 네트워크 전제:
+
+- 모든 Pod는 고유 IP를 가짐
+- Pod 간 직접 통신 가능해야 함
+
+실제 구현은 CNI 플러그인(Calico/Cilium/Flannel 등)이 담당한다.
+
+운영에서 자주 보는 이슈:
+
+- NetworkPolicy 미설정으로 과도한 허용
+- DNS 장애로 서비스 디스커버리 실패
+- Ingress controller 병목
+
+---
+
+## 7) 스토리지 모델
+
+- `PV` (PersistentVolume)
+- `PVC` (PersistentVolumeClaim)
+- `StorageClass`
+
+상태 저장 앱은 PVC를 통해 스토리지를 선언적으로 요청한다.
+
+주의:
+
+- 스토리지 성능(IOPS/latency) 고려
+- 백업/복구 전략 별도 설계
+- StatefulSet과 함께 운영 정책 명확화
+
+---
+
+## 8) 배포 전략
+
+### 8-1. Rolling Update
+
+기본 전략.
+
+- 무중단 배포에 유리
+- `maxUnavailable`, `maxSurge`로 제어
+
+### 8-2. Blue/Green, Canary
+
+리스크를 낮추려면 점진 배포 필요.
+
+- 트래픽 일부만 신규 버전으로 전환
+- 모니터링 후 단계적 확장
+
+보통 Argo Rollouts/서비스메시와 함께 사용한다.
+
+---
+
+## 9) 관측성(Observability)
+
+최소 3가지 축:
+
+- Metrics (Prometheus/Grafana)
+- Logs (Loki/ELK/OpenSearch)
+- Traces (OpenTelemetry/Jaeger/Tempo)
+
+운영 기준으로 꼭 보는 지표:
+
+- Pod restart 수
+- CrashLoopBackOff 비율
+- 요청 지연 p95/p99
+- 에러율(5xx)
+- 노드 리소스 포화
+
+---
+
+## 10) 운영 체크리스트 (실무)
+
+### 10-1. 리소스
+
+- `requests/limits` 없는 Pod 제거
+- 과도한 limit으로 OOM 유발 여부 점검
+
+### 10-2. 안정성
+
+- readiness/liveness probe 필수
+- PDB(PodDisruptionBudget) 설정
+
+### 10-3. 보안
+
+- 최소 권한 RBAC
+- 네임스페이스 분리
+- Secret 관리 정책
+- 이미지 취약점 스캔
+
+### 10-4. 배포
+
+- 롤백 경로 명확화
+- 배포 후 검증 지표 자동화
+
+---
+
+## 11) Argo CD (GitOps)
+
+Argo CD는 Kubernetes 위에서 동작하는 GitOps CD 도구다.
+핵심은 "Git이 배포의 단일 소스"가 되는 것이다.
+
+### 11-1. Argo CD를 왜 쓰는가
+
+- 수동 kubectl 배포 제거
+- Git 변경 이력 = 배포 이력
+- 드리프트(클러스터 수동 변경) 감지/복구
+
+### 11-2. 핵심 개념
+
+- **Desired State**: Git에 있는 매니페스트
+- **Live State**: 현재 클러스터 상태
+- **Sync**: 둘을 일치시키는 작업
+- **Health**: 리소스 상태 평가
+
+### 11-3. App 단위 운영
+
+Argo CD는 Application 단위로 배포 대상을 관리한다.
+
+예시 개념:
+
+- source repo/path
+- target cluster/namespace
+- sync policy (manual/auto)
+
+### 11-4. Sync 전략
+
+- Manual Sync
+  - 사람이 승인하고 동기화
+- Auto Sync
+  - Git 변경 감지 시 자동 반영
+
+운영 초기에선 보통 manual로 시작하고,
+검증 체계가 잡히면 auto로 확장한다.
+
+### 11-5. Drift 대응
+
+클러스터에서 수동 수정이 발생하면 Argo CD가 OutOfSync로 감지한다.
+정책에 따라 다음을 수행한다.
+
+- 경고만
+- 자동 복원(Self-heal)
+
+### 11-6. Argo CD 운영 시 주의
+
+- Git 저장소 구조 표준화 필요
+- 환경(dev/stage/prod) 분리 전략 필요
+- secrets 관리 도구(Vault/External Secrets/SOPS)와 연동 필요
+- 강한 auto sync는 변경 통제 없이 위험할 수 있음
+
+### 11-7. Kubernetes와 Argo CD의 관계 요약
+
+- Kubernetes: 상태 수렴 엔진
+- Argo CD: Git 기반으로 원하는 상태를 공급/통제하는 배포 계층
+
+즉 Argo CD를 이해하려면 Kubernetes의 선언형/수렴 모델 이해가 필수다.
+
+---
+
+## 12) 빠른 시작 학습 루트
+
+1. Pod / Deployment / Service / Ingress
+2. requests/limits + probe
+3. HPA + 모니터링
+4. 배포 전략(rolling/canary)
+5. GitOps(Argo CD)
+
+---
+
+## 13) 참고 레퍼런스
+
+### Kubernetes 공식
+
+- Kubernetes Docs: <https://kubernetes.io/docs/home/>
+- Concepts: <https://kubernetes.io/docs/concepts/>
+- Workloads: <https://kubernetes.io/docs/concepts/workloads/>
+- Services, Load Balancing, Networking: <https://kubernetes.io/docs/concepts/services-networking/>
+- Storage: <https://kubernetes.io/docs/concepts/storage/>
+
+### Argo CD 공식
+
+- Argo CD Docs: <https://argo-cd.readthedocs.io/en/stable/>
+- Getting Started: <https://argo-cd.readthedocs.io/en/stable/getting_started/>
+- Application Spec: <https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/>
+- Sync Options: <https://argo-cd.readthedocs.io/en/stable/user-guide/sync-options/>
+
+### CNCF / GitOps
+
+- GitOps Principles (OpenGitOps): <https://opengitops.dev/>
+- CNCF Cloud Native Landscape: <https://landscape.cncf.io/>
+
+---
+
+## 14) 정리
+
+- Kubernetes 핵심은 "선언 + 수렴"이다.
+- 운영 난이도는 배포보다 관측성/보안/표준화에서 결정된다.
+- Argo CD는 Kubernetes 위에 Git 기반 배포 통제를 얹는 도구다.
+- 결국 중요한 건 도구가 아니라, 팀의 운영 규칙과 변경 통제 수준이다.
