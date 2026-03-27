@@ -1,9 +1,9 @@
 [
   {
-    "title": "Grafana, Loki, Tempo 정리 (관측성 스택)",
+    "title": "Grafana, Loki, Tempo 정리",
     "url": "/wiki/grafana-loki-tempo",
     "updated": "2026-03-27",
-    "summary": "Metrics/Logs/Traces 관점에서 Grafana + Loki + Tempo를 실무 기준으로 정리",
+    "summary": "로그(Loki), 트레이스(Tempo), 시각화/탐색(Grafana)로 구성하는 관측성 스택 실무 정리",
     "tags": "grafana loki tempo observability sre",
     "source": "Wiki",
     "external": false
