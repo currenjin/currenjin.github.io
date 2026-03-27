@@ -3,7 +3,7 @@ layout  : wiki
 title   : Grafana, Loki, Tempo 정리
 summary : 로그(Loki), 트레이스(Tempo), 시각화/탐색(Grafana)로 구성하는 관측성 스택 실무 정리
 date    : 2026-03-27 15:42:53 +0900
-updated : 2026-03-27 16:13:30 +0900
+updated : 2026-03-27 16:31:00 +0900
 tags    : grafana loki tempo observability sre
 toc     : true
 public  : true
@@ -48,6 +48,8 @@ flowchart LR
 ---
 
 ## 2) 구성요소 역할
+
+이 문서 하나에서 각각의 역할을 따로 보려면 아래 소챕터(2-1, 2-2, 2-3)를 보면 된다.
 
 ## 2-1. Grafana
 
