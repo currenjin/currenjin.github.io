@@ -72,3 +72,4 @@ regenerate: true
 * [[vim-workflow]]
 * [[user-stories-applied]]
 * [[augmented-coding]]
+* [[optimizer-and-execution-plan]]
