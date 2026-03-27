@@ -3,7 +3,7 @@ layout  : wiki
 title   : Kubernetes (기초부터 운영까지)
 summary : Kubernetes 핵심 개념, 리소스 모델, 운영 포인트, Argo CD(GitOps)까지 정리
 date    : 2022-01-31 13:30:00 +0900
-updated : 2026-03-27 15:31:06 +0900
+updated : 2026-03-27 15:36:30 +0900
 tags    : kubernetes k8s argocd gitops container
 toc     : true
 public  : true
@@ -40,6 +40,35 @@ Kubernetes는 컨테이너를 "실행"하는 도구가 아니라,
 ## 2) 클러스터 구조
 
 Kubernetes 클러스터는 크게 **Control Plane**과 **Worker Node**로 나뉜다.
+
+```mermaid
+flowchart TB
+  subgraph CP[Control Plane]
+    APIServer[kube-apiserver]
+    Scheduler[kube-scheduler]
+    Controller[kube-controller-manager]
+    ETCD[(etcd)]
+    APIServer --- ETCD
+    Scheduler --> APIServer
+    Controller --> APIServer
+  end
+
+  subgraph N1[Worker Node A]
+    Kubelet1[kubelet]
+    Proxy1[kube-proxy]
+    PodA1[(Pod)]
+    PodA2[(Pod)]
+  end
+
+  subgraph N2[Worker Node B]
+    Kubelet2[kubelet]
+    Proxy2[kube-proxy]
+    PodB1[(Pod)]
+  end
+
+  APIServer <--> Kubelet1
+  APIServer <--> Kubelet2
+```
 
 ### 2-1. Control Plane
 
@@ -88,6 +117,15 @@ spec:
 
 이 루프 덕분에 장애 복구, 스케일 조정, 롤아웃이 자동화된다.
 
+```mermaid
+flowchart LR
+  Desired[Desired State\n(YAML/Spec)] --> Compare[Controller Compare]
+  Live[Live State\n(Cluster)] --> Compare
+  Compare -->|Drift 있음| Act[Create/Update/Delete]
+  Act --> Live
+  Compare -->|일치| Stable[No-op]
+```
+
 ---
 
 ## 4) 핵심 리소스 빠르게 정리
@@ -120,6 +158,15 @@ Pod 집합에 대한 안정된 접근 지점.
 - `ClusterIP` : 클러스터 내부
 - `NodePort` : 노드 포트 노출
 - `LoadBalancer` : 클라우드 LB 연동
+
+```mermaid
+flowchart LR
+  Client[Client] --> Ingress[Ingress / LB]
+  Ingress --> SVC[Service]
+  SVC --> Pod1[Pod A]
+  SVC --> Pod2[Pod B]
+  SVC --> Pod3[Pod C]
+```
 
 ### 4-5. Ingress
 
@@ -278,6 +325,15 @@ Argo CD는 Kubernetes 위에서 동작하는 GitOps CD 도구다.
 - **Live State**: 현재 클러스터 상태
 - **Sync**: 둘을 일치시키는 작업
 - **Health**: 리소스 상태 평가
+
+```mermaid
+flowchart LR
+  Dev[Developer] -->|git push| Repo[(Git Repo)]
+  Repo --> Argo[Argo CD]
+  Argo -->|Sync| Cluster[Kubernetes Cluster]
+  Cluster -->|Live State| Argo
+  Argo -->|Status/Health| Dashboard[Argo UI]
+```
 
 ### 11-3. App 단위 운영
 
