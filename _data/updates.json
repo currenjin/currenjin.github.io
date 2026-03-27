@@ -1,5 +1,14 @@
 [
   {
+    "title": "Grafana, Loki, Tempo 정리 (관측성 스택)",
+    "url": "/wiki/grafana-loki-tempo",
+    "updated": "2026-03-27",
+    "summary": "Metrics/Logs/Traces 관점에서 Grafana + Loki + Tempo를 실무 기준으로 정리",
+    "tags": "grafana loki tempo observability sre",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Kubernetes (기초부터 운영까지)",
     "url": "/wiki/kubernetes",
     "updated": "2026-03-27",
