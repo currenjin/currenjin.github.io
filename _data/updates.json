@@ -9,15 +9,6 @@
     "external": false
   },
   {
-    "title": "Grafana 정리",
-    "url": "/wiki/grafana",
-    "updated": "2026-03-27",
-    "summary": "Grafana의 역할, 데이터소스 모델, 대시보드/알람/운영 패턴 실무 정리",
-    "tags": "grafana observability dashboard alerting",
-    "source": "Wiki",
-    "external": false
-  },
-  {
     "title": "Kubernetes (기초부터 운영까지)",
     "url": "/wiki/kubernetes",
     "updated": "2026-03-27",
@@ -27,29 +18,11 @@
     "external": false
   },
   {
-    "title": "Loki 정리",
-    "url": "/wiki/loki",
-    "updated": "2026-03-27",
-    "summary": "Loki 아키텍처, 라벨 설계, LogQL, 운영 안티패턴과 튜닝 포인트 정리",
-    "tags": "loki logs observability logql",
-    "source": "Wiki",
-    "external": false
-  },
-  {
     "title": "Optimizer와 쿼리 실행계획 (MySQL 기준)",
     "url": "/wiki/optimizer-and-execution-plan",
     "updated": "2026-03-27",
     "summary": "RDBMS 공통 개념을 바탕으로 MySQL EXPLAIN/EXPLAIN ANALYZE 읽는 법 정리",
     "tags": "mysql optimizer execution-plan sql rdbms",
-    "source": "Wiki",
-    "external": false
-  },
-  {
-    "title": "Tempo 정리",
-    "url": "/wiki/tempo",
-    "updated": "2026-03-27",
-    "summary": "Tempo 기반 분산 트레이싱의 핵심 개념, 운영 흐름, 샘플링 전략 정리",
-    "tags": "tempo tracing observability opentelemetry",
     "source": "Wiki",
     "external": false
   },
