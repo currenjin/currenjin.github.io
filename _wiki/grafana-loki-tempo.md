@@ -1,9 +1,9 @@
 ---
 layout  : wiki
-title   : Grafana, Loki, Tempo 정리 (관측성 스택)
-summary : Metrics/Logs/Traces 관점에서 Grafana + Loki + Tempo를 실무 기준으로 정리
+title   : Grafana, Loki, Tempo 정리
+summary : 로그(Loki), 트레이스(Tempo), 시각화/탐색(Grafana)로 구성하는 관측성 스택 실무 정리
 date    : 2026-03-27 15:42:53 +0900
-updated : 2026-03-27 15:42:53 +0900
+updated : 2026-03-27 16:13:30 +0900
 tags    : grafana loki tempo observability sre
 toc     : true
 public  : true
@@ -13,257 +13,244 @@ latex   : false
 * TOC
 {:toc}
 
-# Grafana, Loki, Tempo 정리 (관측성 스택)
+# Grafana, Loki, Tempo 정리
 
-이 문서는 Grafana, Loki, Tempo를 **실무 운영 관점**으로 정리한다.
-핵심은 도구 소개가 아니라 "장애 분석 속도를 어떻게 높일지"다.
+이 문서는 Grafana + Loki + Tempo 조합을 기준으로 관측성(Observability) 스택을 정리한다.
 
----
+핵심:
 
-## 1) 먼저 큰 그림: Observability 3축
-
-운영에서 보는 관측성은 보통 3축이다.
-
-- **Metrics**: 수치 시계열 (CPU, RPS, latency, error rate)
-- **Logs**: 사건의 텍스트 기록
-- **Traces**: 분산 요청의 호출 경로
-
-각 축은 역할이 다르다.
-
-- Metrics: 이상 감지(무슨 일이 터졌는지)
-- Logs: 증거 확인(무엇이 실패했는지)
-- Traces: 원인 경로 추적(어디서 느려졌는지)
+- **Grafana**: 시각화/탐색 UI
+- **Loki**: 로그 저장/검색
+- **Tempo**: 분산 트레이스 저장/검색
 
 ---
 
-## 2) 도구 역할 요약
+## 1) 왜 3개를 같이 쓰는가
 
-### 2-1. Grafana
+운영에서 필요한 질문은 보통 이 3개다.
 
-- 시각화/대시보드/알람 허브
-- Prometheus/Loki/Tempo 같은 여러 데이터소스를 한 화면에서 조회
+1. 지금 얼마나 느린가? (메트릭)
+2. 어떤 로그가 터졌나? (로그)
+3. 어디 구간에서 느려졌나? (트레이스)
 
-### 2-2. Loki
-
-- 로그 저장/검색 시스템
-- 인덱스를 최소화하고 라벨 중심으로 탐색하는 구조
-
-### 2-3. Tempo
-
-- 분산 트레이스 저장소
-- 대규모 트레이스를 비교적 저비용으로 보관/검색
-
----
-
-## 3) 아키텍처 전체 흐름
+Grafana는 이걸 한 화면에서 연결해 본다.
 
 ```mermaid
 flowchart LR
-  App[Application]
-  OTel[OpenTelemetry SDK/Collector]
-
-  App --> OTel
-
-  OTel -->|Metrics| Prom[Prometheus]
-  OTel -->|Logs| Loki[Loki]
-  OTel -->|Traces| Tempo[Tempo]
-
-  Prom --> Grafana[Grafana]
+  App[Application] -->|logs| Loki
+  App -->|traces| Tempo
+  App -->|metrics| Prometheus
   Loki --> Grafana
   Tempo --> Grafana
-
-  Grafana --> User[Engineer/SRE]
+  Prometheus --> Grafana
 ```
 
-실무 포인트:
+---
 
-- Grafana는 저장소가 아니라 "조회/분석 UI"에 가깝다.
-- Loki/Tempo/Prometheus는 데이터 저장 계층이다.
+## 2) 구성요소 역할
+
+## 2-1. Grafana
+
+- 대시보드, 알람, 탐색 UI
+- 여러 데이터소스 통합
+- 로그/트레이스/메트릭 상호 링크
+
+대표 기능:
+
+- Explore로 즉시 질의
+- 알람 룰 + 노티 채널(Slack 등)
+- 대시보드 템플릿 변수
+
+## 2-2. Loki
+
+Loki는 로그 인덱싱 전략이 Elasticsearch와 다르다.
+
+- 전체 로그 본문 인덱싱 X
+- 라벨(Label) 중심 인덱싱 O
+
+장점:
+
+- 운영 비용/인덱스 비용 상대적으로 낮음
+- Kubernetes 라벨과 결합 쉬움
+
+주의:
+
+- 라벨 설계 실패 시 성능 급락
+- high cardinality 라벨 남용 금지 (`userId`, `requestId`를 라벨로 올리는 실수)
+
+## 2-3. Tempo
+
+Tempo는 분산 트레이스를 저장한다.
+
+- Trace ID 기반 조회
+- 서비스 간 호출 경로 추적
+- 병목 구간(span) 확인
+
+장점:
+
+- 장애 시 “어디서 느려졌는지”를 구조적으로 파악 가능
 
 ---
 
-## 4) Grafana
+## 3) 실무 데이터 흐름
 
-## 4-1. 왜 중요한가
+Kubernetes 기준으로 가장 흔한 흐름:
 
-운영 중에는 여러 도구를 오가면 대응 속도가 급격히 떨어진다.
-Grafana는 대시보드/알람/탐색을 통합해 대응 시간을 줄여준다.
+```mermaid
+flowchart TB
+  subgraph K8s[Kubernetes]
+    App1[Service A]
+    App2[Service B]
+    Agent[Grafana Agent / Alloy / OTel Collector]
+  end
 
-### 4-2. 주요 기능
+  App1 -->|logs| Agent
+  App2 -->|logs| Agent
+  App1 -->|OTLP traces| Agent
+  App2 -->|OTLP traces| Agent
 
-- Dashboard: 서비스 상태 보드
-- Alerting: 임계치/조건 기반 경보
-- Explore: 쿼리 즉시 탐색
-- Correlations: 메트릭 ↔ 로그 ↔ 트레이스 연계
+  Agent -->|push logs| Loki
+  Agent -->|push traces| Tempo
+  Agent -->|scrape/push metrics| Prometheus
 
-### 4-3. 실무 대시보드 최소 구성
-
-- RED 지표
-  - Rate (요청량)
-  - Errors (에러율)
-  - Duration (지연)
-- 인프라 지표
-  - CPU/Memory
-  - Pod restart
-  - Node saturation
-- 비즈니스 지표 1~2개
+  Loki --> Grafana
+  Tempo --> Grafana
+  Prometheus --> Grafana
+```
 
 ---
 
-## 5) Loki
+## 4) Loki 핵심 개념
 
-### 5-1. Loki의 핵심 아이디어
-
-Loki는 로그 본문 전체를 강하게 인덱싱하는 방식보다,
-**라벨(label) 중심 인덱스**를 사용해 비용을 줄이는 전략을 택한다.
-
-즉, 라벨 설계가 곧 검색 성능이다.
-
-### 5-2. 라벨 설계 원칙
+### 4-1. 라벨 설계 원칙
 
 좋은 라벨 예시:
 
-- `service`
 - `namespace`
-- `env`
 - `pod`
-- `level`
+- `app`
+- `container`
+- `env`
 
-주의할 라벨:
+피해야 할 라벨:
 
-- 유니크 값이 너무 많은 필드(예: request_id 전체를 라벨로)
-- high cardinality 라벨은 비용/성능에 악영향
+- `requestId`
+- `userId`
+- `sessionId`
 
-### 5-3. LogQL 기본 예시
+이런 값은 라벨이 아니라 로그 본문 필드로 두고, 파싱 후 필터링하는 방식이 안전하다.
+
+### 4-2. LogQL 기본 예시
 
 ```logql
-{service="order-api", level="error"}
+{namespace="prod", app="order-api"}
 ```
 
 ```logql
-{service="order-api"} |= "timeout"
+{app="order-api"} |= "ERROR"
 ```
 
 ```logql
-sum by (service) (rate({level="error"}[5m]))
+{app="order-api"} | json | level="error"
 ```
-
-### 5-4. 운영 팁
-
-- 로그는 "찾기 쉬운 구조"가 중요
-- JSON 구조 로그를 기본으로
-- 공통 필드(trace_id, span_id, request_id)를 일관되게 남기기
 
 ---
 
-## 6) Tempo
+## 5) Tempo 핵심 개념
 
-### 6-1. Tempo가 필요한 이유
-
-마이크로서비스 환경에서 요청은 여러 서비스를 거친다.
-로그만 보면 개별 사건은 보이지만, "요청 전체 경로"는 끊긴다.
-
-Tempo는 분산 트레이스를 통해 경로/지연 병목을 보여준다.
-
-### 6-2. 추적의 핵심 개념
+### 5-1. Trace / Span
 
 - Trace: 하나의 요청 전체 흐름
-- Span: 흐름 안의 개별 작업 단위
-- Parent/Child: 호출 관계
+- Span: 그 흐름 안의 개별 작업 단위
 
-### 6-3. 트레이스 분석에서 보는 것
+예: API 요청 1건
 
-- 어떤 span이 가장 느린지
-- 에러 span이 어디서 시작됐는지
-- 상위 서비스 문제인지, 하위 의존성 문제인지
+- Span 1: Gateway 수신
+- Span 2: Order Service 처리
+- Span 3: DB 질의
+- Span 4: Payment Service 호출
 
-### 6-4. Tempo + OTel 실무 포인트
+### 5-2. 트레이싱이 주는 가치
 
-- 샘플링 전략 결정 필요
-  - 무조건 100% 수집은 비용 부담
-- 중요 엔드포인트 우선 샘플링 고려
-- span attribute 표준화
-  - service name, endpoint, status code, db statement(마스킹)
+- p95 지연이 늘었을 때 원인 구간 추적
+- 외부 API/DB/내부 로직 중 어디가 병목인지 분리
 
 ---
 
-## 7) 세 도구를 같이 쓸 때 진짜 이점
+## 6) Grafana에서 3개 연결해서 보는 패턴
 
-### 7-1. 장애 대응 플로우
+가장 실무적인 흐름:
+
+1. 대시보드에서 에러율/지연 급증 감지
+2. Explore에서 같은 시간대 로그 필터
+3. 로그의 trace_id로 Tempo 이동
+4. 병목 span 확인 후 원인 후보 축소
 
 ```mermaid
 flowchart LR
-  Alert[Grafana Alert] --> Metric[메트릭 확인]
-  Metric --> Logs[Loki 로그 탐색]
-  Logs --> Trace[Tempo 트레이스 확인]
-  Trace --> Root[원인 추정/확정]
+  Alert[Alert 발생] --> M[메트릭 확인]
+  M --> L[로그 확인]
+  L --> T[trace_id로 트레이스 이동]
+  T --> RCA[원인 후보 확정]
 ```
 
-1. 알람 수신
-2. 메트릭으로 이상 구간 확인
-3. 동일 시간대 로그 확인
-4. trace_id로 트레이스 점프
-5. 병목/에러 지점 확정
+---
 
-이 플로우가 안정되면 MTTR이 크게 줄어든다.
+## 7) 운영에서 자주 겪는 실수
+
+1. 라벨 카디널리티 폭발
+- Loki 쿼리 느려지고 비용 상승
+
+2. 로그 포맷 불일치
+- 서비스마다 구조가 달라 집계 실패
+
+3. trace_id 로그 미포함
+- 로그↔트레이스 연결이 안 됨
+
+4. 샘플링 전략 없음
+- 트레이스 저장량 과다 또는 진단 불가
+
+5. 알람 임계치 튜닝 부재
+- 노이즈 알람 과다로 신뢰도 하락
 
 ---
 
-## 8) 도입 순서 추천
+## 8) 도입 순서 (추천)
 
-### 1단계
+1. 공통 로그 포맷(JSON) 통일
+2. Grafana + Loki 먼저 안정화
+3. OpenTelemetry로 trace_id 전파
+4. Tempo 붙여서 trace 탐색
+5. 메트릭-로그-트레이스 연동 알람 구축
 
-- Grafana + Prometheus 대시보드/알람 정착
-
-### 2단계
-
-- Loki 도입
-- 구조 로그 + 라벨 표준화
-
-### 3단계
-
-- Tempo 도입
-- OTel instrumentation + trace 연계
-
-### 4단계
-
-- 대시보드에서 메트릭→로그→트레이스 원클릭 연동
+빠르게 가려면 "모든 걸 한 번에"보다
+**로그 안정화 → 트레이스 연결** 순서가 효율적이다.
 
 ---
 
-## 9) 흔한 실패 패턴
+## 9) 최소 체크리스트
 
-- 도구만 설치하고 라벨/로그 규칙이 없음
-- 알람이 너무 많아 노이즈만 증가
-- trace_id를 로그에 남기지 않아 연계 불가
-- 대시보드가 많기만 하고 운영 의사결정과 연결 안 됨
-
----
-
-## 10) 실무 체크리스트
-
-- [ ] 서비스 공통 라벨 규칙이 문서화되어 있다
-- [ ] 에러 로그에 trace_id/span_id를 남긴다
-- [ ] p95/p99 지연 대시보드가 있다
-- [ ] SLO 기반 알람이 있다
-- [ ] 장애 대응 시 메트릭→로그→트레이스 절차가 팀에 공유되어 있다
+- [ ] 로그에 `timestamp`, `level`, `service`, `trace_id` 포함
+- [ ] Loki 라벨 high cardinality 점검
+- [ ] Tempo 샘플링 정책 합의
+- [ ] Grafana 대시보드 표준 템플릿 확보
+- [ ] 알람 채널/소유자(oncall) 지정
 
 ---
 
-## 11) 참고 레퍼런스
+## 10) 참고 레퍼런스
 
 - Grafana Docs: <https://grafana.com/docs/grafana/latest/>
 - Loki Docs: <https://grafana.com/docs/loki/latest/>
 - Tempo Docs: <https://grafana.com/docs/tempo/latest/>
-- Grafana Alerting: <https://grafana.com/docs/grafana/latest/alerting/>
-- OpenTelemetry Docs: <https://opentelemetry.io/docs/>
-- Prometheus Docs: <https://prometheus.io/docs/introduction/overview/>
+- Grafana Alloy (Agent): <https://grafana.com/docs/alloy/latest/>
+- OpenTelemetry: <https://opentelemetry.io/docs/>
+- Prometheus: <https://prometheus.io/docs/introduction/overview/>
 
 ---
 
-## 12) 정리
+## 11) 정리
 
-- Grafana는 관측의 "조종석"이다.
-- Loki는 로그 증거를 빠르게 찾는 저장소다.
-- Tempo는 분산 요청의 병목 경로를 보여준다.
-- 세 도구를 묶어 쓰면 장애 원인 분석 속도가 확실히 빨라진다.
+- Grafana는 화면, Loki는 로그, Tempo는 요청 경로다.
+- 운영 품질은 도구 도입보다 **로그 포맷/라벨 설계/추적 연결**에서 갈린다.
+- 최종 목표는 "많이 수집"이 아니라 **문제 원인을 빠르게 좁히는 것**이다.
