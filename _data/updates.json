@@ -1,5 +1,14 @@
 [
   {
+    "title": "Kubernetes (기초부터 운영까지)",
+    "url": "/wiki/kubernetes",
+    "updated": "2026-03-27",
+    "summary": "Kubernetes 핵심 개념, 리소스 모델, 운영 포인트, Argo CD(GitOps)까지 정리",
+    "tags": "kubernetes k8s argocd gitops container",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Optimizer와 쿼리 실행계획 (MySQL 기준)",
     "url": "/wiki/optimizer-and-execution-plan",
     "updated": "2026-03-27",
@@ -540,15 +549,6 @@
     "updated": "2022-01-31",
     "summary": "",
     "tags": "graphql",
-    "source": "Wiki",
-    "external": false
-  },
-  {
-    "title": "Kubernetes",
-    "url": "/wiki/kubernetes",
-    "updated": "2022-01-31",
-    "summary": "",
-    "tags": "container",
     "source": "Wiki",
     "external": false
   },
