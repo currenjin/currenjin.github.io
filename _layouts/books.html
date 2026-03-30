@@ -1,0 +1,98 @@
+---
+layout: default
+---
+
+<div class="books-page">
+  <div class="books-header">
+    <h1 class="books-title">서재</h1>
+    <p class="books-subtitle">읽은 책들의 기록</p>
+    <div class="books-stats">
+      {% assign finished = site.data.books | where: "status", "finished" %}
+      {% assign reading = site.data.books | where: "status", "reading" %}
+      {% assign want = site.data.books | where: "status", "want" %}
+      <span>완독 <strong>{{ finished | size }}</strong></span>
+      <span>읽는 중 <strong>{{ reading | size }}</strong></span>
+      <span>읽고 싶음 <strong>{{ want | size }}</strong></span>
+    </div>
+  </div>
+
+  <div class="books-filter">
+    <button class="filter-btn active" data-filter="all">전체</button>
+    <button class="filter-btn" data-filter="finished">완독</button>
+    <button class="filter-btn" data-filter="reading">읽는 중</button>
+    <button class="filter-btn" data-filter="want">읽고 싶음</button>
+  </div>
+
+  <div class="books-grid">
+    {% for book in site.data.books %}
+    <div class="book-card" data-status="{{ book.status }}">
+      {% if book.has_notes %}
+      <a href="/books/{{ book.slug }}/" class="book-card-link">
+      {% endif %}
+        <div class="book-cover-wrap">
+          {% if book.cover %}
+          <img class="book-cover" src="{{ book.cover }}" alt="{{ book.title }}" loading="lazy">
+          {% else %}
+          <img class="book-cover book-cover--fetch"
+               src=""
+               data-title="{{ book.title }}"
+               data-author="{{ book.author }}"
+               alt="{{ book.title }}"
+               loading="lazy">
+          <div class="book-cover-placeholder">
+            <span>{{ book.title }}</span>
+          </div>
+          {% endif %}
+          <div class="book-status-badge book-status-badge--{{ book.status }}">
+            {% if book.status == 'finished' %}완독
+            {% elsif book.status == 'reading' %}읽는 중
+            {% else %}읽고 싶음{% endif %}
+          </div>
+          {% if book.has_notes %}
+          <div class="book-notes-indicator">노트 ↗</div>
+          {% endif %}
+        </div>
+        <div class="book-info">
+          <p class="book-title">{{ book.title }}</p>
+          <p class="book-author">{{ book.author }}</p>
+        </div>
+      {% if book.has_notes %}
+      </a>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+(function() {
+  // 필터
+  const btns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.book-card');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      cards.forEach(c => {
+        c.style.display = (f === 'all' || c.dataset.status === f) ? '' : 'none';
+      });
+    });
+  });
+
+  // Open Library 커버 fetch
+  document.querySelectorAll('.book-cover--fetch').forEach(img => {
+    const title = encodeURIComponent(img.dataset.title);
+    const coverUrl = `https://covers.openlibrary.org/b/title/${title}-M.jpg?default=false`;
+    const placeholder = img.nextElementSibling;
+    fetch(coverUrl, { method: 'HEAD' })
+      .then(r => {
+        if (r.ok) {
+          img.src = coverUrl;
+          img.onload = () => { if (placeholder) placeholder.style.display = 'none'; };
+        }
+      })
+      .catch(() => {});
+  });
+})();
+</script>

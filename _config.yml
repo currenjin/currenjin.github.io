@@ -32,6 +32,9 @@ collections:
     wiki:
         output: true
         permalink: /:collection/:path/
+    books:
+        output: true
+        permalink: /books/:path/
 
 # Comment Service
 disqus:

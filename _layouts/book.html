@@ -1,0 +1,61 @@
+---
+layout: default
+---
+
+<div class="book-detail-page">
+  <a class="book-back-link" href="/books/">← 서재로</a>
+
+  <div class="book-detail-header">
+    <div class="book-detail-cover-wrap">
+      {% if page.cover %}
+      <img class="book-detail-cover" src="{{ page.cover }}" alt="{{ page.title }}">
+      {% else %}
+      <div class="book-detail-cover-placeholder">
+        <img class="book-detail-cover book-cover--fetch-detail"
+             src=""
+             data-title="{{ page.title }}"
+             alt="{{ page.title }}">
+        <div class="book-cover-placeholder-detail">{{ page.title }}</div>
+      </div>
+      {% endif %}
+    </div>
+    <div class="book-detail-meta">
+      <h1 class="book-detail-title">{{ page.title }}</h1>
+      <p class="book-detail-author">{{ page.author }}</p>
+      <div class="book-detail-tags">
+        <span class="book-tag book-tag--type">{{ page.type }}</span>
+        <span class="book-tag book-tag--status book-tag--{{ page.status }}">
+          {% if page.status == 'finished' %}완독
+          {% elsif page.status == 'reading' %}읽는 중
+          {% else %}읽고 싶음{% endif %}
+        </span>
+        {% if page.end_date %}
+        <span class="book-tag book-tag--date">{{ page.end_date }}</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="book-detail-content">
+    {{ content }}
+  </div>
+</div>
+
+<script>
+(function() {
+  const img = document.querySelector('.book-cover--fetch-detail');
+  if (!img) return;
+  const title = encodeURIComponent(img.dataset.title);
+  const coverUrl = `https://covers.openlibrary.org/b/title/${title}-M.jpg?default=false`;
+  const placeholder = img.nextElementSibling;
+  fetch(coverUrl, { method: 'HEAD' })
+    .then(r => {
+      if (r.ok) {
+        img.src = coverUrl;
+        img.style.display = 'block';
+        img.onload = () => { if (placeholder) placeholder.style.display = 'none'; };
+      }
+    })
+    .catch(() => {});
+})();
+</script>
