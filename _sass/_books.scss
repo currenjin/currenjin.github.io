@@ -74,137 +74,97 @@
 /* ── Grid ── */
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 1.4rem 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
 }
 
 /* ── Card ── */
 .book-card {
+  background: rgba(14, 16, 28, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
   display: flex;
   flex-direction: column;
+  gap: 0.3rem;
+  transition: border-color 0.18s, background 0.18s;
+
+  &--finished { border-left: 2px solid rgba(95, 174, 90, 0.5); }
+  &--reading  { border-left: 2px solid rgba(100, 150, 220, 0.5); }
+  &--want     { border-left: 2px solid rgba(120, 120, 150, 0.3); }
 }
 
 .book-card-link {
   display: flex;
   flex-direction: column;
+  gap: 0.3rem;
   text-decoration: none;
   color: inherit;
-
-  &:hover .book-cover-wrap {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
-  }
-
-  &:hover .book-notes-indicator {
-    opacity: 1;
-  }
-}
-
-.book-cover-wrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 2/3;
-  background: rgba(20, 22, 36, 0.8);
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-}
-
-.book-cover {
-  width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: none;
 
-  &.loaded {
-    display: block;
+  &:hover {
+    .book-card-title { color: #fff; }
   }
 }
 
-.book-cover-placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.6rem;
-  background: linear-gradient(135deg, rgba(20, 24, 40, 0.9), rgba(30, 28, 50, 0.95));
-  text-align: center;
-
-  span {
-    font-size: 0.72rem;
-    color: rgba(242, 238, 230, 0.7);
-    line-height: 1.4;
-    word-break: keep-all;
-  }
+.book-card:has(.book-card-link):hover {
+  border-color: rgba(95, 174, 90, 0.3);
+  background: rgba(20, 22, 36, 0.7);
 }
 
-.book-status-badge {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  font-size: 0.6rem;
-  padding: 0.14rem 0.4rem;
-  border-radius: 4px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-
-  &--finished {
-    background: rgba(95, 174, 90, 0.85);
-    color: #fff;
-  }
-
-  &--reading {
-    background: rgba(100, 150, 220, 0.85);
-    color: #fff;
-  }
-
-  &--want {
-    background: rgba(80, 80, 100, 0.75);
-    color: rgba(242, 238, 230, 0.85);
-  }
+.book-card-type {
+  font-size: 0.68rem;
+  color: rgba(242, 238, 230, 0.4);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-.book-notes-indicator {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(95, 174, 90, 0.9), transparent);
-  color: #fff;
-  font-size: 0.65rem;
-  text-align: center;
-  padding: 0.8rem 0.3rem 0.3rem;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.book-info {
-  margin-top: 0.5rem;
-}
-
-.book-title {
-  font-size: 0.78rem;
+.book-card-title {
+  font-size: 0.88rem;
   color: rgba(252, 249, 242, 0.88);
-  margin: 0 0 0.15rem;
-  line-height: 1.35;
+  margin: 0;
+  line-height: 1.4;
   word-break: keep-all;
+  flex: 1;
+  transition: color 0.15s;
 }
 
-.book-author {
-  font-size: 0.7rem;
-  color: rgba(242, 238, 230, 0.5);
+.book-card-author {
+  font-size: 0.75rem;
+  color: rgba(242, 238, 230, 0.45);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.book-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.book-status-badge {
+  font-size: 0.62rem;
+  padding: 0.12rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+
+  &--finished { background: rgba(95, 174, 90, 0.18); color: #a9e390; }
+  &--reading  { background: rgba(100, 150, 220, 0.18); color: rgba(150, 190, 255, 0.9); }
+  &--want     { background: rgba(80, 80, 100, 0.3); color: rgba(242, 238, 230, 0.55); }
+}
+
+.book-notes-badge {
+  font-size: 0.62rem;
+  color: rgba(95, 174, 90, 0.7);
+}
+
 /* ── Book Detail Page ── */
 .book-detail-page {
-  max-width: 780px;
+  max-width: 720px;
   margin: 0 auto;
   padding: 1.5rem 1rem 3rem;
 }
@@ -216,74 +176,20 @@
   font-size: 0.82rem;
   color: rgba(95, 174, 90, 0.85);
   text-decoration: none;
-  margin-bottom: 1.8rem;
+  margin-bottom: 2rem;
 
   &:hover { color: #a9e390; }
 }
 
 .book-detail-header {
-  display: flex;
-  gap: 2rem;
   margin-bottom: 2.5rem;
-  align-items: flex-start;
-}
-
-.book-detail-cover-wrap {
-  flex-shrink: 0;
-  width: 140px;
-}
-
-.book-detail-cover {
-  width: 100%;
-  border-radius: 6px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  display: none;
-
-  &.loaded {
-    display: block;
-  }
-}
-
-.book-detail-cover-placeholder {
-  width: 140px;
-  aspect-ratio: 2/3;
-  background: linear-gradient(135deg, rgba(20, 24, 40, 0.9), rgba(30, 28, 50, 0.95));
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.8rem;
-  text-align: center;
-  font-size: 0.75rem;
-  color: rgba(242, 238, 230, 0.65);
-  line-height: 1.4;
-  word-break: keep-all;
-}
-
-.book-detail-meta {
-  flex: 1;
-  min-width: 0;
-}
-
-.book-detail-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  color: rgba(252, 249, 242, 0.95);
-  margin: 0 0 0.4rem;
-  line-height: 1.25;
-}
-
-.book-detail-author {
-  font-size: 0.9rem;
-  color: rgba(242, 238, 230, 0.6);
-  margin: 0 0 1rem;
 }
 
 .book-detail-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
+  margin-bottom: 0.8rem;
 }
 
 .book-tag {
@@ -292,44 +198,33 @@
   border-radius: 4px;
   letter-spacing: 0.04em;
 
-  &--type {
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(242, 238, 230, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
+  &--type   { background: rgba(255, 255, 255, 0.07); color: rgba(242, 238, 230, 0.65); border: 1px solid rgba(255, 255, 255, 0.1); }
+  &--finished { background: rgba(95, 174, 90, 0.15); color: #a9e390; border: 1px solid rgba(95, 174, 90, 0.25); }
+  &--reading  { background: rgba(100, 150, 220, 0.15); color: rgba(150, 190, 255, 0.85); border: 1px solid rgba(100, 150, 220, 0.25); }
+  &--want     { background: rgba(80, 80, 100, 0.25); color: rgba(242, 238, 230, 0.55); border: 1px solid rgba(255, 255, 255, 0.08); }
+  &--date   { background: transparent; color: rgba(242, 238, 230, 0.4); border: none; padding-left: 0; }
+}
 
-  &--finished {
-    background: rgba(95, 174, 90, 0.2);
-    color: #a9e390;
-    border: 1px solid rgba(95, 174, 90, 0.3);
-  }
+.book-detail-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  color: rgba(252, 249, 242, 0.95);
+  margin: 0 0 0.4rem;
+  line-height: 1.2;
+}
 
-  &--reading {
-    background: rgba(100, 150, 220, 0.2);
-    color: rgba(150, 190, 255, 0.85);
-    border: 1px solid rgba(100, 150, 220, 0.3);
-  }
-
-  &--want {
-    background: rgba(80, 80, 100, 0.3);
-    color: rgba(242, 238, 230, 0.65);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  &--date {
-    background: transparent;
-    color: rgba(242, 238, 230, 0.45);
-    border: none;
-    padding-left: 0;
-  }
+.book-detail-author {
+  font-size: 0.92rem;
+  color: rgba(242, 238, 230, 0.55);
+  margin: 0;
 }
 
 .book-detail-content {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 2rem;
-  color: rgba(242, 238, 230, 0.85);
+  color: rgba(242, 238, 230, 0.82);
   font-size: 0.92rem;
-  line-height: 1.8;
+  line-height: 1.85;
   word-break: keep-all;
 
   p { margin: 0 0 1.2rem; }
@@ -338,21 +233,7 @@
 /* ── Responsive ── */
 @media (max-width: 600px) {
   .books-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem 0.7rem;
-  }
-
-  .book-detail-header {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .book-detail-cover-wrap {
-    width: 120px;
-  }
-
-  .book-detail-tags {
-    justify-content: center;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
   }
 }

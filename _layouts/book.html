@@ -6,67 +6,22 @@ layout: default
   <a class="book-back-link" href="/books/">← 서재로</a>
 
   <div class="book-detail-header">
-    <div class="book-detail-cover-wrap">
-      <div class="book-detail-cover-placeholder">{{ page.title }}</div>
-      <img class="book-detail-cover book-cover--api-detail"
-           src=""
-           data-title="{{ page.title }}"
-           data-author="{{ page.author }}"
-           alt="{{ page.title }}">
+    <div class="book-detail-tags">
+      <span class="book-tag book-tag--type">{{ page.type }}</span>
+      <span class="book-tag book-tag--status book-tag--{{ page.status }}">
+        {% if page.status == 'finished' %}완독
+        {% elsif page.status == 'reading' %}읽는 중
+        {% else %}읽고 싶음{% endif %}
+      </span>
+      {% if page.end_date %}
+      <span class="book-tag book-tag--date">{{ page.end_date }}</span>
+      {% endif %}
     </div>
-    <div class="book-detail-meta">
-      <h1 class="book-detail-title">{{ page.title }}</h1>
-      <p class="book-detail-author">{{ page.author }}</p>
-      <div class="book-detail-tags">
-        <span class="book-tag book-tag--type">{{ page.type }}</span>
-        <span class="book-tag book-tag--status book-tag--{{ page.status }}">
-          {% if page.status == 'finished' %}완독
-          {% elsif page.status == 'reading' %}읽는 중
-          {% else %}읽고 싶음{% endif %}
-        </span>
-        {% if page.end_date %}
-        <span class="book-tag book-tag--date">{{ page.end_date }}</span>
-        {% endif %}
-      </div>
-    </div>
+    <h1 class="book-detail-title">{{ page.title }}</h1>
+    <p class="book-detail-author">{{ page.author }}</p>
   </div>
 
   <div class="book-detail-content">
     {{ content }}
   </div>
 </div>
-
-<script>
-(function () {
-  const img = document.querySelector('.book-cover--api-detail');
-  if (!img) return;
-  const placeholder = img.previousElementSibling;
-
-  const title = encodeURIComponent(img.dataset.title);
-  const author = encodeURIComponent(img.dataset.author);
-
-  fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${title}+inauthor:${author}&maxResults=1&fields=items/volumeInfo/imageLinks`)
-    .then(r => r.json())
-    .then(data => {
-      const thumb = data?.items?.[0]?.volumeInfo?.imageLinks?.thumbnail;
-      if (thumb) {
-        const src = thumb.replace('http://', 'https://').replace('zoom=1', 'zoom=2');
-        img.src = src;
-        img.onload = () => { img.classList.add('loaded'); if (placeholder) placeholder.style.display = 'none'; };
-        img.onerror = () => tryOL();
-      } else { tryOL(); }
-    })
-    .catch(() => tryOL());
-
-  function tryOL() {
-    const t = encodeURIComponent(img.dataset.title);
-    const test = new Image();
-    test.onload = () => {
-      img.src = `https://covers.openlibrary.org/b/title/${t}-M.jpg?default=false`;
-      img.classList.add('loaded');
-      if (placeholder) placeholder.style.display = 'none';
-    };
-    test.src = `https://covers.openlibrary.org/b/title/${t}-M.jpg?default=false`;
-  }
-})();
-</script>
