@@ -9,10 +9,9 @@ layout: default
     <div class="books-stats">
       {% assign finished = site.books | where: "status", "finished" %}
       {% assign reading = site.books | where: "status", "reading" %}
-      {% assign want = site.books | where: "status", "want" %}
+      <span>전체 <strong>{{ site.books | size }}</strong></span>
       <span>완독 <strong>{{ finished | size }}</strong></span>
       <span>읽는 중 <strong>{{ reading | size }}</strong></span>
-      <span>읽을 예정 <strong>{{ want | size }}</strong></span>
     </div>
   </div>
 
