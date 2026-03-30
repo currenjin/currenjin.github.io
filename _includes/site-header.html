@@ -2,7 +2,7 @@
     <a class="site-title" href="{{ site.baseurl }}/">{{ site.title }}</a>
     <nav class="site-nav">
         <a id="random-button" class="site-nav-link" href="/wiki/index/#random" onclick="if(typeof random === 'function')random()">random</a>
-        <a class="site-nav-link{% if page.url contains '/books' %} site-nav-link--active{% endif %}" href="/books/">books</a>
+        <a class="site-nav-link" href="/books/">books</a>
         <a class="site-nav-link" href="https://medium.com/@jung23e" target="_blank" rel="noopener noreferrer">blog</a>
 {% if site.github_username %}
         <a class="site-nav-link" href="https://github.com/{{ site.github_username }}" target="_blank" rel="noopener noreferrer">github</a>
