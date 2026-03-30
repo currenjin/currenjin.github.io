@@ -24,7 +24,9 @@ layout: default
   </div>
 
   <div class="books-grid">
-    {% assign sorted_books = site.books | sort: "rating" | reverse %}
+    {% assign rated_books = site.books | where_exp: "b", "b.rating" | sort: "rating" | reverse %}
+    {% assign unrated_books = site.books | where_exp: "b", "b.rating == nil" %}
+    {% assign sorted_books = rated_books | concat: unrated_books %}
     {% for book in sorted_books %}
     <div class="book-item" data-status="{{ book.status }}" data-type="{{ book.type }}">
       {% if book.content != "" and book.content != nil %}
