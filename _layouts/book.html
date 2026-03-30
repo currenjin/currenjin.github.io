@@ -12,7 +12,7 @@ layout: document
             <span class="book-tag book-tag--status book-tag--{{ page.status }}">
                 {% if page.status == 'finished' %}완독
                 {% elsif page.status == 'reading' %}읽는 중
-                {% else %}읽고 싶음{% endif %}
+                {% else %}읽을 예정{% endif %}
             </span>
             {% if page.end_date %}
             <span class="book-tag book-tag--date">{{ page.end_date }}</span>

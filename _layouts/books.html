@@ -12,7 +12,7 @@ layout: default
       {% assign want = site.data.books | where: "status", "want" %}
       <span>완독 <strong>{{ finished | size }}</strong></span>
       <span>읽는 중 <strong>{{ reading | size }}</strong></span>
-      <span>읽고 싶음 <strong>{{ want | size }}</strong></span>
+      <span>읽을 예정 <strong>{{ want | size }}</strong></span>
     </div>
   </div>
 
@@ -20,7 +20,7 @@ layout: default
     <button class="filter-btn active" data-filter="all">전체</button>
     <button class="filter-btn" data-filter="finished">완독</button>
     <button class="filter-btn" data-filter="reading">읽는 중</button>
-    <button class="filter-btn" data-filter="want">읽고 싶음</button>
+    <button class="filter-btn" data-filter="want">읽을 예정</button>
   </div>
 
   <div class="books-grid">
@@ -41,7 +41,7 @@ layout: default
               <span class="book-card-status book-card-status--{{ book.status }}">
                 {% if book.status == 'finished' %}완독
                 {% elsif book.status == 'reading' %}읽는 중
-                {% else %}읽고 싶음{% endif %}
+                {% else %}읽을 예정{% endif %}
               </span>
               {% if book.has_notes %}<span class="book-card-notes">노트 →</span>{% endif %}
             </div>
