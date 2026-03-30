@@ -23,42 +23,72 @@ layout: default
     <button class="filter-btn" data-filter="want">읽고 싶음</button>
   </div>
 
-  <div class="books-grid">
-    {% for book in site.data.books %}
-    <div class="book-card book-card--{{ book.status }}" data-status="{{ book.status }}">
-      {% if book.has_notes %}
-      <a href="/books/{{ book.slug }}/" class="book-card-link">
-      {% endif %}
-        <div class="book-card-type">{{ book.type }}</div>
-        <p class="book-card-title">{{ book.title }}</p>
-        <p class="book-card-author">{{ book.author }}</p>
-        <div class="book-card-footer">
-          <span class="book-status-badge book-status-badge--{{ book.status }}">
-            {% if book.status == 'finished' %}완독
-            {% elsif book.status == 'reading' %}읽는 중
-            {% else %}읽고 싶음{% endif %}
-          </span>
-          {% if book.has_notes %}<span class="book-notes-badge">노트 ↗</span>{% endif %}
-        </div>
-      {% if book.has_notes %}
-      </a>
-      {% endif %}
+  <div class="bookshelf-wrap">
+    <div class="bookshelf" id="bookshelf">
+      {% for book in site.data.books %}
+      <div class="book-spine-wrap" data-status="{{ book.status }}" data-type="{{ book.type }}">
+        {% if book.has_notes %}
+        <a href="/books/{{ book.slug }}/" class="book-spine-link">
+        {% endif %}
+          <div class="book-spine" data-type="{{ book.type }}">
+            <span class="book-spine-title">{{ book.title }}</span>
+            <span class="book-spine-author">{{ book.author | split: "," | first | strip }}</span>
+          </div>
+          <div class="book-tooltip">
+            <strong>{{ book.title }}</strong>
+            <span>{{ book.author }}</span>
+            <span class="book-tooltip-type">{{ book.type }}</span>
+            {% if book.has_notes %}<span class="book-tooltip-notes">노트 있음 ↗</span>{% endif %}
+          </div>
+        {% if book.has_notes %}
+        </a>
+        {% endif %}
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
+    <div class="shelf-plank"></div>
   </div>
 </div>
 
 <script>
 (function () {
+  // 장르별 색상
+  const typeColors = {
+    '소설':     { bg: '#5c3a1e', spine: '#7a4e2d', text: '#f5e6d0' },
+    'SF':       { bg: '#1a3a5c', spine: '#2a5280', text: '#c8e0f5' },
+    '소프트웨어':{ bg: '#1e2d4a', spine: '#2c4270', text: '#c0d0f0' },
+    '인문':     { bg: '#2d4a1e', spine: '#3d6628', text: '#d0ecc0' },
+    '과학':     { bg: '#1a4a4a', spine: '#226666', text: '#b8e8e8' },
+    '경영':     { bg: '#4a1e1e', spine: '#6e2c2c', text: '#f0c8c8' },
+    '자기계발': { bg: '#4a3a1a', spine: '#6e5420', text: '#f0e0b0' },
+    '에세이':   { bg: '#3a2040', spine: '#5a3060', text: '#e0c8f0' },
+    '역사':     { bg: '#3a3a1a', spine: '#555520', text: '#e8e8b0' },
+    '고전':     { bg: '#3a2a10', spine: '#604818', text: '#eeddb8' },
+    '종교':     { bg: '#2a1a40', spine: '#442888', text: '#d0c0f8' },
+    'default':  { bg: '#282838', spine: '#3c3c58', text: '#d8d8e8' },
+  };
+
+  document.querySelectorAll('.book-spine').forEach(el => {
+    const raw = el.dataset.type || '';
+    // 복합 장르면 첫 번째 꺼
+    const type = raw.split(',')[0].trim().replace(/\s/g, '');
+    const color = typeColors[type] || typeColors['default'];
+    el.style.background = `linear-gradient(to right, ${color.bg} 0%, ${color.spine} 60%, ${color.bg} 100%)`;
+    el.style.color = color.text;
+    el.style.borderLeft = `2px solid ${color.text}22`;
+    el.style.borderRight = `2px solid rgba(0,0,0,0.35)`;
+  });
+
+  // 필터
   const btns = document.querySelectorAll('.filter-btn');
-  const cards = document.querySelectorAll('.book-card');
+  const wraps = document.querySelectorAll('.book-spine-wrap');
   btns.forEach(btn => {
     btn.addEventListener('click', () => {
       btns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const f = btn.dataset.filter;
-      cards.forEach(c => {
-        c.style.display = (f === 'all' || c.dataset.status === f) ? '' : 'none';
+      wraps.forEach(w => {
+        w.style.display = (f === 'all' || w.dataset.status === f) ? '' : 'none';
       });
     });
   });
