@@ -71,8 +71,8 @@
 /* ── Grid ── */
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 1.4rem 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.8rem 1.4rem;
 }
 
 .book-item {
@@ -269,7 +269,7 @@
 /* ── Mobile ── */
 @media (max-width: 600px) {
   .books-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem 0.7rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem 0.9rem;
   }
 }
