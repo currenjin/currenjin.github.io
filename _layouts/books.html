@@ -27,26 +27,30 @@ layout: default
     {% for book in site.data.books %}
     <div class="book-item" data-status="{{ book.status }}" data-type="{{ book.type }}">
       {% if book.has_notes %}
-      <a href="/books/{{ book.slug }}/" class="book-cover-link">
+      <a href="/books/{{ book.slug }}/" class="book-card-link">
+      {% else %}
+      <div class="book-card-link">
       {% endif %}
-        <div class="book-cover" data-type="{{ book.type }}">
-          <div class="book-cover-inner">
-            <span class="book-cover-genre">{{ book.type | split: "," | first | strip }}</span>
-            <p class="book-cover-title">{{ book.title }}</p>
-            <p class="book-cover-author">{{ book.author | split: "," | first | strip }}</p>
+        <div class="book-card" data-type="{{ book.type }}">
+          <div class="book-card-accent"></div>
+          <div class="book-card-body">
+            <p class="book-card-type">{{ book.type | split: "," | first | strip }}</p>
+            <h3 class="book-card-title">{{ book.title }}</h3>
+            <p class="book-card-author">{{ book.author | split: "," | first | strip }}</p>
+            <div class="book-card-footer">
+              <span class="book-card-status book-card-status--{{ book.status }}">
+                {% if book.status == 'finished' %}완독
+                {% elsif book.status == 'reading' %}읽는 중
+                {% else %}읽고 싶음{% endif %}
+              </span>
+              {% if book.has_notes %}<span class="book-card-notes">노트 →</span>{% endif %}
+            </div>
           </div>
-          <div class="book-cover-edge"></div>
-          {% if book.status == 'finished' %}
-          <div class="book-cover-badge">완독</div>
-          {% elsif book.status == 'reading' %}
-          <div class="book-cover-badge book-cover-badge--reading">읽는 중</div>
-          {% endif %}
-          {% if book.has_notes %}
-          <div class="book-cover-notes">노트 ↗</div>
-          {% endif %}
         </div>
       {% if book.has_notes %}
       </a>
+      {% else %}
+      </div>
       {% endif %}
     </div>
     {% endfor %}
@@ -56,29 +60,25 @@ layout: default
 <script>
 (function () {
   const typeColors = {
-    '소설':      ['#3d1f0d', '#6b3a1f', '#e8c9a0'],
-    'SF':        ['#0d1a2e', '#1a3a5c', '#8ec6f0'],
-    '소프트웨어':['#0e1a30', '#1c3060', '#9ab8e8'],
-    '인문':      ['#0f2010', '#1e4020', '#98d898'],
-    '과학':      ['#081e28', '#10384c', '#7ad0e0'],
-    '경영':      ['#280d0d', '#501a1a', '#f0a0a0'],
-    '자기계발':  ['#28200a', '#4e3c10', '#f0d890'],
-    '에세이':    ['#1e0e28', '#3c1a50', '#d8a8f8'],
-    '역사':      ['#1c1c08', '#383810', '#d8d898'],
-    '고전':      ['#201408', '#402c10', '#e8c878'],
-    '종교':      ['#120820', '#261040', '#c0a8f0'],
-    'default':   ['#141424', '#28284a', '#b0b0d8'],
+    '소설':      '#c97c3a',
+    'SF':        '#4a7fb5',
+    '소프트웨어':'#4a7fb5',
+    '인문':      '#5aaa55',
+    '과학':      '#3aacb8',
+    '경영':      '#c95a5a',
+    '자기계발':  '#d4a82a',
+    '에세이':    '#9b6abf',
+    '역사':      '#8a8a3a',
+    '고전':      '#b8903a',
+    '종교':      '#7a5abf',
+    'default':   '#7a8a9a',
   };
 
-  document.querySelectorAll('.book-cover').forEach(el => {
+  document.querySelectorAll('.book-card').forEach(el => {
     const raw = (el.dataset.type || '').split(',')[0].trim();
-    const c = typeColors[raw] || typeColors['default'];
-    el.style.background = `linear-gradient(160deg, ${c[0]} 0%, ${c[1]} 100%)`;
-    el.style.setProperty('--text-color', c[2]);
-    el.querySelectorAll('.book-cover-genre, .book-cover-title, .book-cover-author')
-      .forEach(t => t.style.color = c[2]);
-    el.querySelector('.book-cover-edge').style.background =
-      `linear-gradient(to right, ${c[1]}88, ${c[0]}44)`;
+    const color = typeColors[raw] || typeColors['default'];
+    el.querySelector('.book-card-accent').style.background = color;
+    el.querySelector('.book-card-type').style.color = color;
   });
 
   // 필터
