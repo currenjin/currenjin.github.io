@@ -6,7 +6,7 @@ type     : "경영, 자기계발"
 status   : finished
 end_date : "2022-6-20"
 cover_url: "https://image.aladin.co.kr/product/9918/37/cover500/8968484651_1.jpg"
-rating  :
+rating  : 3.5
 ---
 
 # 가치는 우리가 원하는 것이다. 우리가 원하는 것은 가치일까?

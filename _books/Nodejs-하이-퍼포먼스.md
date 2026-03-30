@@ -5,5 +5,5 @@ author   : "Resende Diogo"
 type     : "소프트웨어"
 status   : finished
 cover_url: "https://image.aladin.co.kr/product/9832/4/cover500/8960779482_1.jpg"
-rating  :
+rating  : 2
 ---
