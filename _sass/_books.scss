@@ -14,13 +14,13 @@
 .books-title {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(2rem, 5vw, 3rem);
-  color: rgba(252, 249, 242, 0.94);
+  color: var(--ink-main);
   margin: 0 0 0.3rem;
   letter-spacing: 0.04em;
 }
 
 .books-subtitle {
-  color: rgba(242, 238, 230, 0.6);
+  color: var(--ink-subtle);
   font-size: 0.9rem;
   margin: 0 0 1rem;
 }
@@ -30,9 +30,9 @@
   justify-content: center;
   gap: 1.4rem;
   font-size: 0.82rem;
-  color: rgba(242, 238, 230, 0.65);
+  color: var(--ink-subtle);
 
-  strong { color: #a9e390; font-weight: 700; }
+  strong { color: var(--accent); font-weight: 700; }
 }
 
 /* ── Filter ── */
@@ -45,9 +45,9 @@
 }
 
 .filter-btn {
-  background: rgba(13, 12, 22, 0.62);
-  border: 1px solid rgba(95, 174, 90, 0.3);
-  color: rgba(242, 238, 230, 0.7);
+  background: transparent;
+  border: 1px solid var(--line-soft);
+  color: var(--ink-subtle);
   padding: 0.3rem 0.9rem;
   border-radius: 999px;
   font-size: 0.8rem;
@@ -55,10 +55,13 @@
   letter-spacing: 0.04em;
   transition: all 0.18s ease;
 
-  &:hover { border-color: rgba(95, 174, 90, 0.6); color: #fff; }
+  &:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
 
   &.active {
-    background: linear-gradient(90deg, #5fae5a, #91d478);
+    background: var(--accent);
     border-color: transparent;
     color: #fff;
     font-weight: 600;
@@ -210,10 +213,10 @@
   display: inline-flex;
   align-items: center;
   font-size: 0.82rem;
-  color: rgba(95, 174, 90, 0.85);
+  color: var(--accent);
   text-decoration: none;
   margin-bottom: 2rem;
-  &:hover { color: #a9e390; }
+  &:hover { color: var(--focus); }
 }
 
 .book-detail-header { margin-bottom: 2.5rem; }
@@ -231,31 +234,31 @@
   border-radius: 4px;
   letter-spacing: 0.04em;
 
-  &--type     { background: rgba(255,255,255,0.07); color: rgba(242,238,230,0.65); border: 1px solid rgba(255,255,255,0.1); }
-  &--finished { background: rgba(95,174,90,0.15); color: #a9e390; border: 1px solid rgba(95,174,90,0.25); }
-  &--reading  { background: rgba(100,150,220,0.15); color: rgba(150,190,255,0.85); border: 1px solid rgba(100,150,220,0.25); }
-  &--want     { background: rgba(80,80,100,0.25); color: rgba(242,238,230,0.55); border: 1px solid rgba(255,255,255,0.08); }
-  &--date     { background: transparent; color: rgba(242,238,230,0.4); border: none; padding-left: 0; }
+  &--type     { background: rgba(0,0,0,0.05); color: var(--ink-subtle); border: 1px solid var(--line-soft); }
+  &--finished { background: rgba(95,174,90,0.12); color: #3a7a36; border: 1px solid rgba(95,174,90,0.3); }
+  &--reading  { background: rgba(60,100,180,0.1); color: #2d5ca8; border: 1px solid rgba(60,100,180,0.25); }
+  &--want     { background: rgba(0,0,0,0.04); color: var(--ink-subtle); border: 1px solid var(--line-soft); }
+  &--date     { background: transparent; color: var(--ink-subtle); border: none; padding-left: 0; }
 }
 
 .book-detail-title {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(1.6rem, 4vw, 2.4rem);
-  color: rgba(252, 249, 242, 0.95);
+  color: var(--ink-main);
   margin: 0 0 0.4rem;
   line-height: 1.2;
 }
 
 .book-detail-author {
   font-size: 0.92rem;
-  color: rgba(242, 238, 230, 0.55);
+  color: var(--ink-subtle);
   margin: 0;
 }
 
 .book-detail-content {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--line-soft);
   padding-top: 2rem;
-  color: rgba(242, 238, 230, 0.82);
+  color: var(--ink-main);
   font-size: 0.92rem;
   line-height: 1.85;
   word-break: keep-all;
