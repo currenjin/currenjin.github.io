@@ -116,6 +116,7 @@
   width: 100%;
   aspect-ratio: 3 / 4;
   overflow: hidden;
+  background: var(--line-soft);
 
   img {
     width: 100%;
@@ -123,6 +124,12 @@
     object-fit: cover;
     display: block;
   }
+}
+
+.book-card-cover--empty {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: rgba(0,0,0,0.04);
 }
 
 .book-card-body {

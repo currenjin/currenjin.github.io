@@ -37,7 +37,7 @@ layout: default
             <img src="{{ book.cover_url }}" alt="{{ book.title }}" loading="lazy">
           </div>
           {% else %}
-          <div class="book-card-accent"></div>
+          <div class="book-card-cover--empty"></div>
           {% endif %}
           <div class="book-card-body">
             <p class="book-card-type">{{ book.type | split: "," | first | strip }}</p>
