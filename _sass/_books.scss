@@ -172,6 +172,7 @@
 .book-card-footer {
   display: flex;
   align-items: center;
+  gap: 0.4rem;
   justify-content: space-between;
   margin-top: 0.6rem;
 }
@@ -186,6 +187,19 @@
   &--finished { background: rgba(95,174,90,0.12); color: #3a7a36; }
   &--reading  { background: rgba(60,100,180,0.1); color: #2d5ca8; }
   &--want     { background: rgba(0,0,0,0.05); color: var(--ink-subtle); }
+}
+
+.book-card-right {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+}
+
+.book-card-rating {
+  font-size: 0.7rem;
+  color: #e8a020;
+  letter-spacing: -0.05em;
 }
 
 .book-card-notes {

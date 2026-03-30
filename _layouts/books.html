@@ -24,7 +24,8 @@ layout: default
   </div>
 
   <div class="books-grid">
-    {% for book in site.books %}
+    {% assign sorted_books = site.books | sort: "rating" | reverse %}
+    {% for book in sorted_books %}
     <div class="book-item" data-status="{{ book.status }}" data-type="{{ book.type }}">
       {% if book.content != "" and book.content != nil %}
       <a href="{{ book.url }}" class="book-card-link">
@@ -49,7 +50,12 @@ layout: default
                 {% elsif book.status == 'reading' %}읽는 중
                 {% else %}읽을 예정{% endif %}
               </span>
-              {% if book.content != "" and book.content != nil %}<span class="book-card-notes">노트 →</span>{% endif %}
+              <span class="book-card-right">
+                {% if book.rating %}
+                <span class="book-card-rating">★ {{ book.rating }}</span>
+                {% endif %}
+                {% if book.content != "" and book.content != nil %}<span class="book-card-notes">노트 →</span>{% endif %}
+              </span>
             </div>
           </div>
         </div>
