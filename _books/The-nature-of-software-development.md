@@ -5,7 +5,6 @@ author   : "Ron Jeffries"
 type     : "경영, 자기계발"
 status   : finished
 end_date : "2022-6-20"
-cover    : "/resource/books/The_nature_of_software_development.png"
 ---
 
 가치는 우리가 원하는 것이다. 우리가 원하는 것은 가치일까?

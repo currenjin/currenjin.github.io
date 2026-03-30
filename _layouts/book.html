@@ -7,17 +7,12 @@ layout: default
 
   <div class="book-detail-header">
     <div class="book-detail-cover-wrap">
-      {% if page.cover %}
-      <img class="book-detail-cover" src="{{ page.cover }}" alt="{{ page.title }}">
-      {% else %}
-      <div class="book-detail-cover-placeholder">
-        <img class="book-detail-cover book-cover--fetch-detail"
-             src=""
-             data-title="{{ page.title }}"
-             alt="{{ page.title }}">
-        <div class="book-cover-placeholder-detail">{{ page.title }}</div>
-      </div>
-      {% endif %}
+      <div class="book-detail-cover-placeholder">{{ page.title }}</div>
+      <img class="book-detail-cover book-cover--api-detail"
+           src=""
+           data-title="{{ page.title }}"
+           data-author="{{ page.author }}"
+           alt="{{ page.title }}">
     </div>
     <div class="book-detail-meta">
       <h1 class="book-detail-title">{{ page.title }}</h1>
@@ -42,20 +37,36 @@ layout: default
 </div>
 
 <script>
-(function() {
-  const img = document.querySelector('.book-cover--fetch-detail');
+(function () {
+  const img = document.querySelector('.book-cover--api-detail');
   if (!img) return;
+  const placeholder = img.previousElementSibling;
+
   const title = encodeURIComponent(img.dataset.title);
-  const coverUrl = `https://covers.openlibrary.org/b/title/${title}-M.jpg?default=false`;
-  const placeholder = img.nextElementSibling;
-  fetch(coverUrl, { method: 'HEAD' })
-    .then(r => {
-      if (r.ok) {
-        img.src = coverUrl;
-        img.style.display = 'block';
-        img.onload = () => { if (placeholder) placeholder.style.display = 'none'; };
-      }
+  const author = encodeURIComponent(img.dataset.author);
+
+  fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${title}+inauthor:${author}&maxResults=1&fields=items/volumeInfo/imageLinks`)
+    .then(r => r.json())
+    .then(data => {
+      const thumb = data?.items?.[0]?.volumeInfo?.imageLinks?.thumbnail;
+      if (thumb) {
+        const src = thumb.replace('http://', 'https://').replace('zoom=1', 'zoom=2');
+        img.src = src;
+        img.onload = () => { img.classList.add('loaded'); if (placeholder) placeholder.style.display = 'none'; };
+        img.onerror = () => tryOL();
+      } else { tryOL(); }
     })
-    .catch(() => {});
+    .catch(() => tryOL());
+
+  function tryOL() {
+    const t = encodeURIComponent(img.dataset.title);
+    const test = new Image();
+    test.onload = () => {
+      img.src = `https://covers.openlibrary.org/b/title/${t}-M.jpg?default=false`;
+      img.classList.add('loaded');
+      if (placeholder) placeholder.style.display = 'none';
+    };
+    test.src = `https://covers.openlibrary.org/b/title/${t}-M.jpg?default=false`;
+  }
 })();
 </script>

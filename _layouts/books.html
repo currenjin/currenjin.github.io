@@ -30,19 +30,15 @@ layout: default
       <a href="/books/{{ book.slug }}/" class="book-card-link">
       {% endif %}
         <div class="book-cover-wrap">
-          {% if book.cover %}
-          <img class="book-cover" src="{{ book.cover }}" alt="{{ book.title }}" loading="lazy">
-          {% else %}
-          <img class="book-cover book-cover--fetch"
+          <div class="book-cover-placeholder">
+            <span>{{ book.title }}</span>
+          </div>
+          <img class="book-cover book-cover--api"
                src=""
                data-title="{{ book.title }}"
                data-author="{{ book.author }}"
                alt="{{ book.title }}"
                loading="lazy">
-          <div class="book-cover-placeholder">
-            <span>{{ book.title }}</span>
-          </div>
-          {% endif %}
           <div class="book-status-badge book-status-badge--{{ book.status }}">
             {% if book.status == 'finished' %}완독
             {% elsif book.status == 'reading' %}읽는 중
@@ -65,7 +61,7 @@ layout: default
 </div>
 
 <script>
-(function() {
+(function () {
   // 필터
   const btns = document.querySelectorAll('.filter-btn');
   const cards = document.querySelectorAll('.book-card');
@@ -80,19 +76,55 @@ layout: default
     });
   });
 
-  // Open Library 커버 fetch
-  document.querySelectorAll('.book-cover--fetch').forEach(img => {
+  // Google Books API로 커버 fetch (IntersectionObserver로 lazy)
+  function fetchCover(img) {
+    if (img.dataset.loaded) return;
+    img.dataset.loaded = '1';
+
     const title = encodeURIComponent(img.dataset.title);
-    const coverUrl = `https://covers.openlibrary.org/b/title/${title}-M.jpg?default=false`;
-    const placeholder = img.nextElementSibling;
-    fetch(coverUrl, { method: 'HEAD' })
-      .then(r => {
-        if (r.ok) {
-          img.src = coverUrl;
-          img.onload = () => { if (placeholder) placeholder.style.display = 'none'; };
+    const author = encodeURIComponent(img.dataset.author);
+    const placeholder = img.previousElementSibling;
+
+    // 1차: Google Books API
+    fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${title}+inauthor:${author}&maxResults=1&fields=items/volumeInfo/imageLinks`)
+      .then(r => r.json())
+      .then(data => {
+        const thumb = data?.items?.[0]?.volumeInfo?.imageLinks?.thumbnail;
+        if (thumb) {
+          const src = thumb.replace('http://', 'https://').replace('zoom=1', 'zoom=2');
+          img.src = src;
+          img.onload = () => { img.classList.add('loaded'); if (placeholder) placeholder.style.display = 'none'; };
+          img.onerror = () => tryOpenLibrary(img, placeholder);
+        } else {
+          tryOpenLibrary(img, placeholder);
         }
       })
-      .catch(() => {});
-  });
+      .catch(() => tryOpenLibrary(img, placeholder));
+  }
+
+  // 2차: Open Library
+  function tryOpenLibrary(img, placeholder) {
+    const title = encodeURIComponent(img.dataset.title);
+    const olUrl = `https://covers.openlibrary.org/b/title/${title}-M.jpg?default=false`;
+    const test = new Image();
+    test.onload = () => {
+      img.src = olUrl;
+      img.classList.add('loaded');
+      if (placeholder) placeholder.style.display = 'none';
+    };
+    test.onerror = () => {}; // placeholder 유지
+    test.src = olUrl;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        fetchCover(e.target);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: '200px' });
+
+  document.querySelectorAll('.book-cover--api').forEach(img => observer.observe(img));
 })();
 </script>

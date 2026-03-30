@@ -116,7 +116,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  display: none;
+
+  &.loaded {
+    display: block;
+  }
 }
 
 .book-cover-placeholder {
@@ -233,11 +237,14 @@
   width: 100%;
   border-radius: 6px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  display: block;
+  display: none;
+
+  &.loaded {
+    display: block;
+  }
 }
 
 .book-detail-cover-placeholder {
-  position: relative;
   width: 140px;
   aspect-ratio: 2/3;
   background: linear-gradient(135deg, rgba(20, 24, 40, 0.9), rgba(30, 28, 50, 0.95));
@@ -252,16 +259,6 @@
   color: rgba(242, 238, 230, 0.65);
   line-height: 1.4;
   word-break: keep-all;
-}
-
-.book-cover--fetch-detail {
-  display: none;
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 6px;
 }
 
 .book-detail-meta {

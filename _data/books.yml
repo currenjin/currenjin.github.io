@@ -3,7 +3,6 @@
   type: "소설"
   status: finished
   end_date: "2020-6-17"
-  cover: "/resource/books/노인과_바다.jpg"
   slug: "노인과-바다"
   has_notes: true
 
@@ -12,7 +11,6 @@
   type: "자기계발"
   status: finished
   end_date: "2020-1-12"
-  cover: "/resource/books/홀로_성장하는_시대는_끝났다.png"
   slug: "홀로-성장하는-시대는-끝났다"
   has_notes: true
 
@@ -20,7 +18,6 @@
   author: "Nancy H. Kleinbaum"
   type: "소설"
   status: finished
-  cover: "/resource/books/죽은_시인의_사회.jpg"
   slug: "죽은-시인의-사회"
   has_notes: false
 
@@ -28,7 +25,6 @@
   author: "Michael J. Sandel"
   type: "인문"
   status: finished
-  cover: "/resource/books/정의란_무엇인가.jpg"
   slug: "정의란-무엇인가"
   has_notes: false
 
@@ -37,7 +33,6 @@
   type: "소설"
   status: finished
   end_date: "2020-1-12"
-  cover: "/resource/books/위대한_개츠비.jpg"
   slug: "위대한-개츠비"
   has_notes: false
 
@@ -46,7 +41,6 @@
   type: "자기계발"
   status: finished
   end_date: "2020-1-19"
-  cover: "/resource/books/인간관계론.jpg"
   slug: "인간관계론"
   has_notes: false
 
@@ -55,7 +49,6 @@
   type: "인문, 자기계발"
   status: finished
   end_date: "2020-1-5"
-  cover: "/resource/books/자기관리론.jpg"
   slug: "자기관리론"
   has_notes: true
 
@@ -64,7 +57,6 @@
   type: "소설"
   status: finished
   end_date: "2020-4-17"
-  cover: "/resource/books/덕스터의_배낭.jpg"
   slug: "덕스터의-배낭"
   has_notes: false
 
@@ -73,7 +65,6 @@
   type: "소설, 인문"
   status: finished
   end_date: "2020-2-29"
-  cover: "/resource/books/사람은_무엇으로_가는가.jpg"
   slug: "사람은-무엇으로-가는가"
   has_notes: false
 
@@ -81,7 +72,6 @@
   author: "Bernard Werber"
   type: "SF, 소설"
   status: finished
-  cover: "/resource/books/잠.jpg"
   slug: "잠"
   has_notes: true
 
@@ -89,7 +79,6 @@
   author: "김윤나"
   type: "자기계발"
   status: finished
-  cover: "/resource/books/말그릇.jpg"
   slug: "말그릇"
   has_notes: false
 
@@ -98,7 +87,6 @@
   type: "소설"
   status: finished
   end_date: "2020-3-2"
-  cover: "/resource/books/괴물.jpg"
   slug: "괴물"
   has_notes: true
 
@@ -106,7 +94,6 @@
   author: "marvin tokayer"
   type: "인문, 자기계발"
   status: finished
-  cover: "/resource/books/유대인_수업.jpg"
   slug: "유대인-수업"
   has_notes: true
 
@@ -114,7 +101,6 @@
   author: "Renee Knight"
   type: "소설"
   status: finished
-  cover: "/resource/books/누군가는_알고있다.jpg"
   slug: "누군가는-알고있다"
   has_notes: false
 
@@ -123,7 +109,6 @@
   type: "SF, 소설"
   status: finished
   end_date: "2020-4-1"
-  cover: "/resource/books/나무.jpg"
   slug: "나무"
   has_notes: true
 
@@ -132,7 +117,6 @@
   type: "SF, 소설"
   status: finished
   end_date: "2020-7-4"
-  cover: "/resource/books/죽음.jpg"
   slug: "죽음"
   has_notes: true
 
@@ -141,7 +125,6 @@
   type: "소설"
   status: finished
   end_date: "2020-3-9"
-  cover: "/resource/books/고래의_맛.jpg"
   slug: "고래의-맛"
   has_notes: false
 
@@ -150,7 +133,6 @@
   type: "인문"
   status: finished
   end_date: "2020-3-1"
-  cover: "/resource/books/프레임.jpg"
   slug: "프레임"
   has_notes: false
 
@@ -158,7 +140,6 @@
   author: "최영관, 곽신환"
   type: "인문"
   status: finished
-  cover: "/resource/books/철학개론.png"
   slug: "철학개론"
   has_notes: false
 
@@ -166,7 +147,6 @@
   author: "Hans Joachim Storig"
   type: "인문"
   status: finished
-  cover: "/resource/books/세계_철학사.jpg"
   slug: "세계-철학사"
   has_notes: true
 
@@ -183,7 +163,6 @@
   type: "소설"
   status: finished
   end_date: "2020-4-28"
-  cover: "/resource/books/냉정과_열정_사이_Rosso.jpg"
   slug: "냉정과-열정-사이_Rosso"
   has_notes: false
 
@@ -192,7 +171,6 @@
   type: "소설"
   status: finished
   end_date: "2020-5-15"
-  cover: "/resource/books/레몽뚜_장의_상상발전소.jpg"
   slug: "레몽뚜-장의-상상발전소"
   has_notes: false
 
@@ -201,7 +179,6 @@
   type: "소설"
   status: finished
   end_date: "2020-5-23"
-  cover: "/resource/books/돈키호테.jpg"
   slug: "돈키호테"
   has_notes: false
 
@@ -210,7 +187,6 @@
   type: "자기계발"
   status: finished
   end_date: "2020-7-16"
-  cover: "/resource/books/하버드_상위_1퍼센트의_비밀.jpg"
   slug: "하버드-상위-1퍼센트의-비밀"
   has_notes: true
 
@@ -219,7 +195,6 @@
   type: "SF, 소설"
   status: finished
   end_date: "2020-8-6"
-  cover: "/resource/books/파피용.jpg"
   slug: "파피용"
   has_notes: false
 
@@ -228,7 +203,6 @@
   type: "자기계발"
   status: finished
   end_date: "2020-8-17"
-  cover: "/resource/books/컨셔스.jpg"
   slug: "컨셔스"
   has_notes: true
 
@@ -237,7 +211,6 @@
   type: "소설"
   status: finished
   end_date: "2020-8-27"
-  cover: "/resource/books/인간_실격.jpg"
   slug: "인간-실격"
   has_notes: true
 
@@ -246,7 +219,6 @@
   type: "소설"
   status: finished
   end_date: "2020-9-2"
-  cover: "/resource/books/고양이.jpg"
   slug: "고양이"
   has_notes: true
 
@@ -255,7 +227,6 @@
   type: "소설"
   status: finished
   end_date: "2020-9-7"
-  cover: "/resource/books/그_환자.jpg"
   slug: "그-환자"
   has_notes: false
 
@@ -264,7 +235,6 @@
   type: "고전"
   status: finished
   end_date: "2020-9-8"
-  cover: "/resource/books/장화홍련전.jpg"
   slug: "장화홍련전"
   has_notes: false
 
@@ -281,7 +251,6 @@
   type: "인문"
   status: finished
   end_date: "2020-9-28"
-  cover: "/resource/books/베르나르_베르베르의_인생소설.jpg"
   slug: "베르나르-베르베르의-인생소설"
   has_notes: true
 
@@ -290,7 +259,6 @@
   type: "소설"
   status: finished
   end_date: "2020-11-1"
-  cover: "/resource/books/나는_고양이로소이다.jpg"
   slug: "나는-고양이로소이다"
   has_notes: true
 
@@ -299,7 +267,6 @@
   type: "소설"
   status: finished
   end_date: "2020-11-8"
-  cover: "/resource/books/냉정과_열정_사이_Blu.jpg"
   slug: "냉정과-열정-사이_Blu"
   has_notes: false
 
@@ -308,7 +275,6 @@
   type: "인문, 자기계발"
   status: finished
   end_date: "2020-12-9"
-  cover: "/resource/books/팩트풀니스.jpg"
   slug: "팩트풀니스"
   has_notes: true
 
@@ -316,7 +282,6 @@
   author: "Shelly Kagan"
   type: "인문"
   status: finished
-  cover: "/resource/books/죽음이란_무엇인가.jpg"
   slug: "죽음이란-무엇인가"
   has_notes: false
 
@@ -325,7 +290,6 @@
   type: "경영"
   status: finished
   end_date: "2021-1-17"
-  cover: "/resource/books/규칙_없음.jpg"
   slug: "규칙-없음"
   has_notes: true
 
@@ -334,7 +298,6 @@
   type: "소설"
   status: finished
   end_date: "2020-12-17"
-  cover: "/resource/books/호모_콘피누스.jpg"
   slug: "호모-콘피누스"
   has_notes: false
 
@@ -343,7 +306,6 @@
   type: "SF, 소설"
   status: finished
   end_date: "2021-1-2"
-  cover: "/resource/books/달러구트_꿈_백화점.jpg"
   slug: "달러구트-꿈-백화점"
   has_notes: false
 
@@ -352,7 +314,6 @@
   type: "에세이"
   status: finished
   end_date: "2021-1-8"
-  cover: "/resource/books/죽은_자의_집_청소.jpg"
   slug: "죽은-자의-집-청소"
   has_notes: false
 
@@ -360,7 +321,6 @@
   author: "Carl Edward Sagan"
   type: "과학"
   status: finished
-  cover: "/resource/books/코스믹_커넥션.jpg"
   slug: "코스믹-커넥션"
   has_notes: false
 
@@ -368,7 +328,6 @@
   author: "Imre Kertesz"
   type: "인문"
   status: finished
-  cover: "/resource/books/운명.jpg"
   slug: "운명"
   has_notes: false
 
@@ -377,7 +336,6 @@
   type: "과학, 역사, 인문"
   status: finished
   end_date: "2024-10-3"
-  cover: "/resource/books/코스모스.jpg"
   slug: "코스모스"
   has_notes: true
 
@@ -385,7 +343,6 @@
   author: "Jeff Bezos"
   type: "경영"
   status: finished
-  cover: "/resource/books/발명과_방황.jpg"
   slug: "발명과-방황"
   has_notes: true
 
@@ -393,7 +350,6 @@
   author: "Takashi Saito"
   type: "역사"
   status: finished
-  cover: "/resource/books/세계사를_움직이는_다섯_가지_힘.jpg"
   slug: "세계사를-움직이는-다섯-가지-힘"
   has_notes: true
 
@@ -401,7 +357,6 @@
   author: "Ken Liu"
   type: "SF, 소설"
   status: finished
-  cover: "/resource/books/종이_동물원.jpg"
   slug: "종이-동물원"
   has_notes: true
 
@@ -409,7 +364,6 @@
   author: "Jonathan Haidt"
   type: "인문"
   status: want
-  cover: "/resource/books/바른_마음.jpg"
   slug: "바른-마음"
   has_notes: false
 
@@ -418,7 +372,6 @@
   type: "경영"
   status: finished
   end_date: "2021-8-16"
-  cover: "/resource/books/순서_파괴.jpg"
   slug: "순서-파괴"
   has_notes: true
 
@@ -427,7 +380,6 @@
   type: "SF, 소설"
   status: finished
   end_date: "2021-8-14"
-  cover: "/resource/books/멋진_신세계.png"
   slug: "멋진-신세계"
   has_notes: true
 
@@ -436,7 +388,6 @@
   type: "소설, 인문"
   status: finished
   end_date: "2021-8-23"
-  cover: "/resource/books/데미안.jpg"
   slug: "데미안"
   has_notes: false
 
@@ -444,7 +395,6 @@
   author: "Ted Chiang"
   type: "SF, 소설"
   status: finished
-  cover: "/resource/books/숨.png"
   slug: "숨"
   has_notes: true
 
@@ -452,7 +402,6 @@
   author: "Augustinus"
   type: "고전, 인문, 종교"
   status: finished
-  cover: "/resource/books/고백록.jpg"
   slug: "고백록"
   has_notes: false
 
@@ -461,7 +410,6 @@
   type: "SF, 소설"
   status: finished
   end_date: "2021-10-7"
-  cover: "/resource/books/지구_끝의_온실.jpg"
   slug: "지구-끝의-온실"
   has_notes: true
 
@@ -493,7 +441,6 @@
   type: "소설"
   status: finished
   end_date: "2022-3-1"
-  cover: "/resource/books/인간관계론.jpg"
   slug: "인간"
   has_notes: true
 
@@ -517,7 +464,6 @@
   type: "경영, 자기계발"
   status: finished
   end_date: "2022-6-20"
-  cover: "/resource/books/The_nature_of_software_development.png"
   slug: "The-nature-of-software-development"
   has_notes: true
 
@@ -581,7 +527,6 @@
   type: "고전, 소설, 인문"
   status: finished
   end_date: "2023-12-12"
-  cover: "/resource/books/연금술사.jpg"
   slug: "연금술사"
   has_notes: true
 
@@ -620,7 +565,6 @@
   type: "과학, 역사, 인문"
   status: finished
   end_date: "2024-10-9"
-  cover: "/resource/books/코스모스_가능한_세계들.jpg"
   slug: "코스모스-가능한-세계들"
   has_notes: true
 
@@ -628,7 +572,6 @@
   author: "Benjamin J. Evans, James Gough, Chris Newland"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/자바_최적화.jpg"
   slug: "자바-최적화"
   has_notes: false
 
@@ -643,7 +586,6 @@
   author: "Kent Beck"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/켄트_벡의_구현패턴.jpg"
   slug: "켄트-벡의-구현패턴"
   has_notes: false
 
@@ -651,7 +593,6 @@
   author: "Robert C. Martin"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/클린_코더.jpg"
   slug: "클린-코더"
   has_notes: false
 
@@ -659,7 +600,6 @@
   author: "Robert C. Martin"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/클린_아키텍처.jpg"
   slug: "클린-아키텍처"
   has_notes: false
 
@@ -667,7 +607,6 @@
   author: "Kent Beck"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/테스트_주도_개발.jpg"
   slug: "테스트-주도-개발"
   has_notes: false
 
@@ -675,7 +614,6 @@
   author: "Vaughn Vernon"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/도메인_주도_설계_구현.jpg"
   slug: "도메인-주도-설계-구현"
   has_notes: false
 
@@ -683,7 +621,6 @@
   author: "Marinescu Floyd , Avram Abel"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/도메인_주도_설계란_무엇인가.jpg"
   slug: "도메인-주도-설계란-무엇인가"
   has_notes: false
 
@@ -691,7 +628,6 @@
   author: "김영한"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/자바_ORM_표준_JPA_프로그래밍.jpg"
   slug: "자바-ORM-표준-JPA-프로그래밍"
   has_notes: false
 
@@ -699,7 +635,6 @@
   author: "이일민"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/토비의_스프링_3_1.jpg"
   slug: "토비의-스프링-31"
   has_notes: false
 
@@ -707,7 +642,6 @@
   author: "사사키 타쿠로, 하야시 신이치로, 코니시 히데카즈, 사토 슌"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/아마존_웹_서비스_AWS_패턴별_구축운용_가이드.jpg"
   slug: "아마존-웹-서비스-AWS-패턴별-구축운용-가이드"
   has_notes: false
 
@@ -722,7 +656,6 @@
   author: "Resende Diogo"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/Node_js_하이_퍼포먼스.jpg"
   slug: "Nodejs-하이-퍼포먼스"
   has_notes: false
 
@@ -730,7 +663,6 @@
   author: "Robert C. Martin"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/클린_코드.jpg"
   slug: "클린-코드"
   has_notes: false
 
@@ -745,7 +677,6 @@
   author: "한정헌,유해식,최은정,이주영"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/도메인_주도_설계로_시작하는_마이크로서비스_개발.jpg"
   slug: "도메인-주도-설계로-시작하는-마이크로서비스-개발"
   has_notes: false
 
@@ -753,7 +684,6 @@
   author: "정철"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/오픈스택_관리_바이블.jpg"
   slug: "오픈스택-관리-바이블"
   has_notes: false
 
@@ -761,7 +691,6 @@
   author: "John Arundel, Justin Domingus"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/쿠버네티스를_활용한_클라우드_네이티브_데브옵스.jpg"
   slug: "쿠버네티스를-활용한-클라우드-네이티브-데브옵스"
   has_notes: false
 
@@ -769,7 +698,6 @@
   author: "고승범, 공용준"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/카프카_데이터_플랫폼의_최강자.jpg"
   slug: "카프카-데이터-플랫폼의-최강자"
   has_notes: false
 
@@ -777,7 +705,6 @@
   author: "이동욱"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/스프링_부트와_AWS로_혼자_구현하는_웹_서비스.jpg"
   slug: "스프링-부트와-AWS로-혼자-구현하는-웹-서비스"
   has_notes: false
 
@@ -785,7 +712,6 @@
   author: "Cohn Mike"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/사용자_스토리.jpg"
   slug: "사용자-스토리"
   has_notes: false
 
@@ -793,7 +719,6 @@
   author: "Ethan Brown"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/러닝_자바스크립트.jpg"
   slug: "러닝-자바스크립트"
   has_notes: false
 
@@ -801,7 +726,6 @@
   author: "우재남"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/이것이_우분투_리눅스다.jpg"
   slug: "이것이-우분투-리눅스다"
   has_notes: false
 
@@ -809,7 +733,6 @@
   author: "Kirupa Chinnathambi"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/리액트_웹앱_제작_총론.jpg"
   slug: "리액트-웹앱-제작-총론"
   has_notes: false
 
@@ -817,7 +740,6 @@
   author: "Umesh Ram Sharma"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/마이크로서비스_아키텍처.jpg"
   slug: "마이크로서비스-아키텍처"
   has_notes: false
 
@@ -825,7 +747,6 @@
   author: "Olaf Zimmermann, Mirko Stocker, Daniel Lubke, Uwe Zdun, Cesare Pautasso"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/마이크로서비스_API_디자인_패턴.jpg"
   slug: "마이크로서비스-API-디자인-패턴"
   has_notes: true
 
@@ -833,7 +754,6 @@
   author: "Dmitry Jemerov, Svetlana Isakova"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/코틀린_인_액션.jpg"
   slug: "코틀린-인-액션"
   has_notes: false
 
@@ -841,7 +761,6 @@
   author: "Lasse Koskela"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/Effective_Unit_Testing.jpg"
   slug: "Effective-Unit-Testing"
   has_notes: false
 
@@ -849,7 +768,6 @@
   author: "이성욱,백은빈"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/Real_MySQL.jpg"
   slug: "Real-MySQL"
   has_notes: false
 
@@ -857,7 +775,6 @@
   author: "Saumont, Pierre-yves"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/The_Joy_of_Kotlin.jpg"
   slug: "The-Joy-of-Kotlin"
   has_notes: false
 
@@ -872,7 +789,6 @@
   author: "Alex Xu"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/가상_면접_사례로_배우는_대규모_시스템_설계_기초_2.jpg"
   slug: "가상-면접-사례로-배우는-대규모-시스템-설계-기초-2"
   has_notes: false
 
@@ -880,7 +796,6 @@
   author: "Noam Nisan, Shimon Schocken"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/밑바닥부터_만드는_컴퓨팅_시스템_2판.jpg"
   slug: "밑바닥부터-만드는-컴퓨팅-시스템-2판"
   has_notes: false
 
@@ -889,7 +804,6 @@
   type: "소프트웨어"
   status: finished
   end_date: "2025-8-31"
-  cover: "/resource/books/실용주의_프로그래머.jpg"
   slug: "실용주의-프로그래머"
   has_notes: false
 
@@ -897,7 +811,6 @@
   author: "조영호"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/객체지향의_사실과_오해.jpg"
   slug: "객체지향의-사실과-오해"
   has_notes: false
 
@@ -905,7 +818,6 @@
   author: "Thomas Nield"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/개발자를_위한_필수_수학.jpg"
   slug: "개발자를-위한-필수-수학"
   has_notes: false
 
@@ -913,7 +825,6 @@
   author: "Etsuji Nakai"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/엔지니어를_위한_선형대수.jpg"
   slug: "엔지니어를-위한-선형대수"
   has_notes: false
 
@@ -921,7 +832,6 @@
   author: "히라오카 카즈유키, 호리 겐"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/프로그래머를_위한_선형대수.jpg"
   slug: "프로그래머를-위한-선형대수"
   has_notes: false
 
@@ -929,7 +839,6 @@
   author: "Vladimir Khorikov"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/단위_테스트.jpg"
   slug: "단위-테스트"
   has_notes: false
 
@@ -937,7 +846,6 @@
   author: "Joshua Bloch"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/이펙티브_자바.jpg"
   slug: "이펙티브-자바"
   has_notes: false
 
@@ -945,7 +853,6 @@
   author: "이상민"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/자바_성능_튜닝_이야기.jpg"
   slug: "자바-성능-튜닝-이야기"
   has_notes: false
 
@@ -953,7 +860,6 @@
   author: "Douglas Noel Adams"
   type: "SF, 소설"
   status: want
-  cover: "/resource/books/은하수를_여행하는_히치하이커를_위한_안내서.jpg"
   slug: "은하수를-여행하는-히치하이커를-위한-안내서"
   has_notes: false
 
@@ -961,7 +867,6 @@
   author: "Kent Beck"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/켄트_벡의_Tidy_First.jpg"
   slug: "켄트-벡의-Tidy-First"
   has_notes: false
 
@@ -969,7 +874,6 @@
   author: "세이노"
   type: "자기계발"
   status: want
-  cover: "/resource/books/세이노의_가르침.jpg"
   slug: "세이노의-가르침"
   has_notes: false
 
@@ -978,7 +882,6 @@
   type: "자기계발"
   status: finished
   end_date: "2025-8-19"
-  cover: "/resource/books/창조적_행위.jpg"
   slug: "창조적-행위"
   has_notes: false
 
@@ -986,7 +889,6 @@
   author: ""
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/JUnit_in_Action.jpg"
   slug: "JUnit-in-Action"
   has_notes: false
 
@@ -994,7 +896,6 @@
   author: ""
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/풀스택_테스트_10가지_테스트_기술.jpg"
   slug: "풀스택-테스트-10가지-테스트-기술"
   has_notes: false
 
@@ -1002,7 +903,6 @@
   author: "Martin Kleppmann"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/데이터_중심_애플리케이션_설계.png"
   slug: "데이터-중심-애플리케이션-설계"
   has_notes: false
 
@@ -1017,7 +917,6 @@
   author: "가자마 마사히로, 아즈카 고지로, 마쓰무라 유야"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/추천_시스템_입문.jpg"
   slug: "추천-시스템-입문"
   has_notes: false
 
@@ -1025,7 +924,6 @@
   author: "Titus Winters, Tom Manshreck, Hyrum Wright"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/구글_엔지니어는_이렇게_일한다.jpg"
   slug: "구글-엔지니어는-이렇게-일한다"
   has_notes: false
 
@@ -1033,7 +931,6 @@
   author: "Vaughn Vernon, Tomasz Jaskuła"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/전략적_모놀리스와_마이크로서비스.jpg"
   slug: "전략적-모놀리스와-마이크로서비스"
   has_notes: false
 
@@ -1041,7 +938,6 @@
   author: "Sam Newman"
   type: "소프트웨어"
   status: finished
-  cover: "/resource/books/마이크로서비스_아키텍처_구축.jpg"
   slug: "마이크로서비스-아키텍처-구축"
   has_notes: false
 
@@ -1049,7 +945,6 @@
   author: "Alexander Tarlinder"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/소프트웨어_개발자_테스팅.jpg"
   slug: "소프트웨어-개발자-테스팅"
   has_notes: false
 
@@ -1064,7 +959,6 @@
   author: "Google"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/사이트_신뢰성_엔지니어링.jpg"
   slug: "사이트-신뢰성-엔지니어링"
   has_notes: false
 
@@ -1073,7 +967,6 @@
   type: "고전, 소설"
   status: finished
   end_date: "2025-12-3"
-  cover: "/resource/books/야간비행.jpg"
   slug: "야간비행"
   has_notes: false
 
@@ -1081,7 +974,6 @@
   author: "Arundhati Roy"
   type: "소설"
   status: finished
-  cover: "/resource/books/작은_것들의_신.jpg"
   slug: "작은-것들의-신"
   has_notes: false
 
@@ -1089,7 +981,6 @@
   author: "Michael Nygard"
   type: "소프트웨어"
   status: want
-  cover: "/resource/books/Release의_모든_것.jpg"
   slug: "Release의-모든-것"
   has_notes: false
 
@@ -1097,7 +988,6 @@
   author: "Dante Alighieri"
   type: "고전, 소설, 인문, 종교"
   status: finished
-  cover: "/resource/books/단테의_신곡.jpg"
   slug: "단테의-신곡"
   has_notes: false
 
@@ -1106,7 +996,6 @@
   type: "인문, 철학"
   status: finished
   end_date: "2026-3-27"
-  cover: "/resource/books/칸트의_순수이성비판.jpg"
   slug: "칸트의-순수이성비판"
   has_notes: true
 
@@ -1114,6 +1003,5 @@
   author: "Rene Descartes"
   type: "인문, 철학"
   status: want
-  cover: "/resource/books/방법서설.jpg"
   slug: "방법서설"
   has_notes: false
