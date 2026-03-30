@@ -84,6 +84,13 @@
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.16) 0%, rgba(102, 191, 104, 0.16) 61.8%, rgba(145, 212, 120, 0.18) 100%);
 }
 
+.site-nav-link--active {
+    border-color: rgba(145, 212, 120, 0.55);
+    color: #a9e390;
+    background: rgba(145, 212, 120, 0.12);
+    text-shadow: 0 0 8px rgba(145, 212, 120, 0.35);
+}
+
 .home-content,
 .page-content {
     width: calc(100% - 2.4rem);
