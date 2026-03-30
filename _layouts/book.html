@@ -1,27 +1,25 @@
 ---
-layout: default
+layout: document
 ---
 
-<div class="book-detail-page">
-  <a class="book-back-link" href="/books/">← 서재로</a>
-
-  <div class="book-detail-header">
-    <div class="book-detail-tags">
-      <span class="book-tag book-tag--type">{{ page.type }}</span>
-      <span class="book-tag book-tag--status book-tag--{{ page.status }}">
-        {% if page.status == 'finished' %}완독
-        {% elsif page.status == 'reading' %}읽는 중
-        {% else %}읽고 싶음{% endif %}
-      </span>
-      {% if page.end_date %}
-      <span class="book-tag book-tag--date">{{ page.end_date }}</span>
-      {% endif %}
-    </div>
-    <h1 class="book-detail-title">{{ page.title }}</h1>
-    <p class="book-detail-author">{{ page.author }}</p>
-  </div>
-
-  <div class="book-detail-content">
-    {{ content }}
-  </div>
+<div class="post">
+    <header class="post-header">
+        <p class="book-back-link"><a href="/books/">← 서재로</a></p>
+        <h1 class="page-title">{{ page.title }}</h1>
+        <p class="title-summary">{{ page.author }}</p>
+        <div class="book-detail-tags">
+            <span class="book-tag book-tag--type">{{ page.type }}</span>
+            <span class="book-tag book-tag--status book-tag--{{ page.status }}">
+                {% if page.status == 'finished' %}완독
+                {% elsif page.status == 'reading' %}읽는 중
+                {% else %}읽고 싶음{% endif %}
+            </span>
+            {% if page.end_date %}
+            <span class="book-tag book-tag--date">{{ page.end_date }}</span>
+            {% endif %}
+        </div>
+    </header>
+    <article class="post-content">
+        {{ content }}
+    </article>
 </div>
