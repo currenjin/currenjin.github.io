@@ -5,6 +5,7 @@ author   : "Olaf Zimmermann, Mirko Stocker, Daniel Lubke, Uwe Zdun, Cesare Pauta
 type     : "소프트웨어"
 status   : want
 cover_url: "https://image.aladin.co.kr/product/35094/77/cover500/k382934502_1.jpg"
+rating  :
 ---
 
 Olaf Zimmermann, Mirko Stocker, Daniel Lubke, Uwe Zdun, Cesare Pautasso
