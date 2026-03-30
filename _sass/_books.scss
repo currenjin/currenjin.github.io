@@ -112,6 +112,19 @@
   width: 100%;
 }
 
+.book-card-cover {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
 .book-card-body {
   padding: 1rem 1rem 0.85rem;
   display: flex;

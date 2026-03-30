@@ -32,7 +32,13 @@ layout: default
       <div class="book-card-link">
       {% endif %}
         <div class="book-card" data-type="{{ book.type }}">
+          {% if book.cover_url and book.cover_url contains "product" %}
+          <div class="book-card-cover">
+            <img src="{{ book.cover_url }}" alt="{{ book.title }}" loading="lazy">
+          </div>
+          {% else %}
           <div class="book-card-accent"></div>
+          {% endif %}
           <div class="book-card-body">
             <p class="book-card-type">{{ book.type | split: "," | first | strip }}</p>
             <h3 class="book-card-title">{{ book.title }}</h3>
@@ -77,8 +83,10 @@ layout: default
   document.querySelectorAll('.book-card').forEach(el => {
     const raw = (el.dataset.type || '').split(',')[0].trim();
     const color = typeColors[raw] || typeColors['default'];
-    el.querySelector('.book-card-accent').style.background = color;
-    el.querySelector('.book-card-type').style.color = color;
+    const accent = el.querySelector('.book-card-accent');
+    if (accent) accent.style.background = color;
+    const typeEl = el.querySelector('.book-card-type');
+    if (typeEl) typeEl.style.color = color;
   });
 
   // 필터
