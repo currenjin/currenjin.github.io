@@ -7,9 +7,9 @@ layout: default
     <h1 class="books-title">서재</h1>
     <p class="books-subtitle">읽은 책들의 기록</p>
     <div class="books-stats">
-      {% assign finished = site.data.books | where: "status", "finished" %}
-      {% assign reading = site.data.books | where: "status", "reading" %}
-      {% assign want = site.data.books | where: "status", "want" %}
+      {% assign finished = site.books | where: "status", "finished" %}
+      {% assign reading = site.books | where: "status", "reading" %}
+      {% assign want = site.books | where: "status", "want" %}
       <span>완독 <strong>{{ finished | size }}</strong></span>
       <span>읽는 중 <strong>{{ reading | size }}</strong></span>
       <span>읽을 예정 <strong>{{ want | size }}</strong></span>
@@ -24,10 +24,10 @@ layout: default
   </div>
 
   <div class="books-grid">
-    {% for book in site.data.books %}
+    {% for book in site.books %}
     <div class="book-item" data-status="{{ book.status }}" data-type="{{ book.type }}">
-      {% if book.has_notes %}
-      <a href="/books/{{ book.slug }}/" class="book-card-link">
+      {% if book.content != "" and book.content != nil %}
+      <a href="{{ book.url }}" class="book-card-link">
       {% else %}
       <div class="book-card-link">
       {% endif %}
@@ -49,11 +49,11 @@ layout: default
                 {% elsif book.status == 'reading' %}읽는 중
                 {% else %}읽을 예정{% endif %}
               </span>
-              {% if book.has_notes %}<span class="book-card-notes">노트 →</span>{% endif %}
+              {% if book.content != "" and book.content != nil %}<span class="book-card-notes">노트 →</span>{% endif %}
             </div>
           </div>
         </div>
-      {% if book.has_notes %}
+      {% if book.content != "" and book.content != nil %}
       </a>
       {% else %}
       </div>
