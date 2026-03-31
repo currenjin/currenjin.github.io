@@ -36,21 +36,39 @@
 }
 
 /* ── Filter ── */
-.books-filter {
+.books-filters {
   display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.6rem;
   margin-bottom: 2rem;
+}
+
+.books-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.filter-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink-subtle);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  min-width: 2.2rem;
+  text-align: right;
+  opacity: 0.6;
 }
 
 .filter-btn {
   background: transparent;
   border: 1px solid var(--line-soft);
   color: var(--ink-subtle);
-  padding: 0.3rem 0.9rem;
+  padding: 0.25rem 0.8rem;
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   cursor: pointer;
   letter-spacing: 0.04em;
   transition: all 0.18s ease;
@@ -66,16 +84,6 @@
     color: #fff;
     font-weight: 600;
   }
-}
-
-.books-filter--type {
-  margin-top: -1.2rem;
-  margin-bottom: 2rem;
-}
-
-.filter-btn--type {
-  font-size: 0.72rem;
-  padding: 0.2rem 0.7rem;
 }
 
 /* ── Grid ── */

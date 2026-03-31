@@ -15,29 +15,32 @@ layout: default
     </div>
   </div>
 
-  <div class="books-filter">
-    <button class="filter-btn active" data-filter-status="all">전체</button>
-    <button class="filter-btn" data-filter-status="finished">완독</button>
-    <button class="filter-btn" data-filter-status="reading">읽는 중</button>
-    <button class="filter-btn" data-filter-status="want">읽을 예정</button>
-  </div>
-
-  <div class="books-filter books-filter--type">
-    <button class="filter-btn filter-btn--type active" data-filter-type="all">전체</button>
-    {% assign all_types = "" | split: "" %}
-    {% for book in site.books %}
-      {% assign types = book.type | split: "," %}
-      {% for t in types %}
-        {% assign t = t | strip %}
-        {% unless all_types contains t %}
-          {% assign all_types = all_types | push: t %}
-        {% endunless %}
+  <div class="books-filters">
+    <div class="books-filter-row">
+      <span class="filter-label">상태</span>
+      <button class="filter-btn active" data-filter-status="all">전체</button>
+      <button class="filter-btn" data-filter-status="finished">완독</button>
+      <button class="filter-btn" data-filter-status="reading">읽는 중</button>
+      <button class="filter-btn" data-filter-status="want">읽을 예정</button>
+    </div>
+    <div class="books-filter-row">
+      <span class="filter-label">분야</span>
+      <button class="filter-btn active" data-filter-type="all">전체</button>
+      {% assign all_types = "" | split: "" %}
+      {% for book in site.books %}
+        {% assign types = book.type | split: "," %}
+        {% for t in types %}
+          {% assign t = t | strip %}
+          {% unless all_types contains t or t == "" %}
+            {% assign all_types = all_types | push: t %}
+          {% endunless %}
+        {% endfor %}
       {% endfor %}
-    {% endfor %}
-    {% assign all_types = all_types | sort %}
-    {% for t in all_types %}
-    <button class="filter-btn filter-btn--type" data-filter-type="{{ t }}">{{ t }}</button>
-    {% endfor %}
+      {% assign all_types = all_types | sort %}
+      {% for t in all_types %}
+      <button class="filter-btn" data-filter-type="{{ t }}">{{ t }}</button>
+      {% endfor %}
+    </div>
   </div>
 
   <div class="books-grid">
@@ -120,7 +123,8 @@ layout: default
   function applyFilters() {
     document.querySelectorAll('.book-item').forEach(c => {
       const matchStatus = activeStatus === 'all' || c.dataset.status === activeStatus;
-      const matchType = activeType === 'all' || c.dataset.type.split(',').map(t => t.trim()).includes(activeType);
+      const types = (c.dataset.type || '').split(',').map(t => t.trim());
+      const matchType = activeType === 'all' || types.includes(activeType);
       c.style.display = (matchStatus && matchType) ? '' : 'none';
     });
   }
