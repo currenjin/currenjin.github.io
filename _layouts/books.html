@@ -28,9 +28,8 @@ layout: default
       <button class="filter-btn active" data-filter-type="all">전체</button>
       {% assign all_types = "" | split: "" %}
       {% for book in site.books %}
-        {% assign types = book.type | split: "," %}
+        {% assign types = book.type | split: ", " %}
         {% for t in types %}
-          {% assign t = t | strip %}
           {% unless all_types contains t or t == "" %}
             {% assign all_types = all_types | push: t %}
           {% endunless %}
@@ -38,7 +37,7 @@ layout: default
       {% endfor %}
       {% assign all_types = all_types | sort %}
       {% for t in all_types %}
-      <button class="filter-btn" data-filter-type="{{ t }}">{{ t }}</button>
+      <button class="filter-btn" data-filter-type="{{ t | strip }}">{{ t | strip }}</button>
       {% endfor %}
     </div>
   </div>
@@ -142,7 +141,7 @@ layout: default
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-filter-type]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      activeType = btn.dataset.filterType;
+      activeType = btn.dataset.filterType.trim();
       applyFilters();
     });
   });
