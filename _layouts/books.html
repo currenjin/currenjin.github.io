@@ -16,10 +16,28 @@ layout: default
   </div>
 
   <div class="books-filter">
-    <button class="filter-btn active" data-filter="all">전체</button>
-    <button class="filter-btn" data-filter="finished">완독</button>
-    <button class="filter-btn" data-filter="reading">읽는 중</button>
-    <button class="filter-btn" data-filter="want">읽을 예정</button>
+    <button class="filter-btn active" data-filter-status="all">전체</button>
+    <button class="filter-btn" data-filter-status="finished">완독</button>
+    <button class="filter-btn" data-filter-status="reading">읽는 중</button>
+    <button class="filter-btn" data-filter-status="want">읽을 예정</button>
+  </div>
+
+  <div class="books-filter books-filter--type">
+    <button class="filter-btn filter-btn--type active" data-filter-type="all">전체</button>
+    {% assign all_types = "" | split: "" %}
+    {% for book in site.books %}
+      {% assign types = book.type | split: "," %}
+      {% for t in types %}
+        {% assign t = t | strip %}
+        {% unless all_types contains t %}
+          {% assign all_types = all_types | push: t %}
+        {% endunless %}
+      {% endfor %}
+    {% endfor %}
+    {% assign all_types = all_types | sort %}
+    {% for t in all_types %}
+    <button class="filter-btn filter-btn--type" data-filter-type="{{ t }}">{{ t }}</button>
+    {% endfor %}
   </div>
 
   <div class="books-grid">
@@ -96,15 +114,32 @@ layout: default
     if (typeEl) typeEl.style.color = color;
   });
 
-  // 필터
-  document.querySelectorAll('.filter-btn').forEach(btn => {
+  let activeStatus = 'all';
+  let activeType = 'all';
+
+  function applyFilters() {
+    document.querySelectorAll('.book-item').forEach(c => {
+      const matchStatus = activeStatus === 'all' || c.dataset.status === activeStatus;
+      const matchType = activeType === 'all' || c.dataset.type.split(',').map(t => t.trim()).includes(activeType);
+      c.style.display = (matchStatus && matchType) ? '' : 'none';
+    });
+  }
+
+  document.querySelectorAll('[data-filter-status]').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('[data-filter-status]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const f = btn.dataset.filter;
-      document.querySelectorAll('.book-item').forEach(c => {
-        c.style.display = (f === 'all' || c.dataset.status === f) ? '' : 'none';
-      });
+      activeStatus = btn.dataset.filterStatus;
+      applyFilters();
+    });
+  });
+
+  document.querySelectorAll('[data-filter-type]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-filter-type]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeType = btn.dataset.filterType;
+      applyFilters();
     });
   });
 })();
