@@ -139,19 +139,25 @@ layout: default
 
   const allTypeBtn = document.querySelector('[data-filter-type="all"]');
   document.querySelectorAll('[data-filter-type]').forEach(btn => {
+    btn.dataset.label = btn.textContent.trim();
     btn.addEventListener('click', () => {
       const type = btn.dataset.filterType.trim();
       if (type === 'all') {
         selectedTypes.clear();
-        document.querySelectorAll('[data-filter-type]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('[data-filter-type]').forEach(b => {
+          b.classList.remove('active');
+          b.textContent = b.dataset.label;
+        });
         allTypeBtn.classList.add('active');
       } else {
         if (selectedTypes.has(type)) {
           selectedTypes.delete(type);
           btn.classList.remove('active');
+          btn.textContent = btn.dataset.label;
         } else {
           selectedTypes.add(type);
           btn.classList.add('active');
+          btn.textContent = '✓ ' + btn.dataset.label;
           allTypeBtn.classList.remove('active');
         }
         if (selectedTypes.size === 0) allTypeBtn.classList.add('active');
