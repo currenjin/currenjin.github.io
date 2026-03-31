@@ -117,13 +117,13 @@ layout: default
   });
 
   let activeStatus = 'all';
-  let activeType = 'all';
+  let selectedTypes = new Set();
 
   function applyFilters() {
     document.querySelectorAll('.book-item').forEach(c => {
       const matchStatus = activeStatus === 'all' || c.dataset.status === activeStatus;
-      const types = (c.dataset.type || '').split(',').map(t => t.trim());
-      const matchType = activeType === 'all' || types.includes(activeType);
+      const bookTypes = (c.dataset.type || '').split(',').map(t => t.trim());
+      const matchType = selectedTypes.size === 0 || bookTypes.some(t => selectedTypes.has(t));
       c.style.display = (matchStatus && matchType) ? '' : 'none';
     });
   }
@@ -137,11 +137,25 @@ layout: default
     });
   });
 
+  const allTypeBtn = document.querySelector('[data-filter-type="all"]');
   document.querySelectorAll('[data-filter-type]').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-filter-type]').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      activeType = btn.dataset.filterType.trim();
+      const type = btn.dataset.filterType.trim();
+      if (type === 'all') {
+        selectedTypes.clear();
+        document.querySelectorAll('[data-filter-type]').forEach(b => b.classList.remove('active'));
+        allTypeBtn.classList.add('active');
+      } else {
+        if (selectedTypes.has(type)) {
+          selectedTypes.delete(type);
+          btn.classList.remove('active');
+        } else {
+          selectedTypes.add(type);
+          btn.classList.add('active');
+          allTypeBtn.classList.remove('active');
+        }
+        if (selectedTypes.size === 0) allTypeBtn.classList.add('active');
+      }
       applyFilters();
     });
   });
