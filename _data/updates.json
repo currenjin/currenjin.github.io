@@ -1,5 +1,14 @@
 [
   {
+    "title": "Claude Code",
+    "url": "/wiki/claude-code",
+    "updated": "2026-04-01",
+    "summary": "소스맵 유출로 드러난 내부 아키텍처 분석",
+    "tags": "ai-agent",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Grafana, Loki, Tempo 정리",
     "url": "/wiki/grafana-loki-tempo",
     "updated": "2026-03-28",
