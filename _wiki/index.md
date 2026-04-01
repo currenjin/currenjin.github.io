@@ -49,6 +49,7 @@ regenerate: true
 * [[n+1]]
 * [[multithreaded-javascript]]
 * [[java-to-kotlin]]
+* [[kotlin-vs-java-tradeoff]]
 * [[toss-slash-24]]
 * [[fixture-monkey-with-jpa]]
 * [[spring-bean]]
