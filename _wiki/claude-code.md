@@ -281,22 +281,24 @@ quadrantChart
 
 ## 5. 보안: 8개 레이어
 
+**L1 ~ L4 (빌드 · 서버 · AI 판정)**
+
 ```mermaid
-flowchart TB
-    subgraph top [" "]
-        direction LR
-        REQ([요청]) --> L1["L1 feature 함수"] --> L2["L2 피처 플래그"] --> L3["L3 설정 규칙"] --> L4["L4 Transcript Classifier"]
-    end
-    subgraph bottom [" "]
-        direction LR
-        L5["L5 위험 패턴 감지"] --> L6["L6 파일시스템 권한"] --> L7["L7 Trust Dialog"] --> L8["L8 Bypass Kill Switch"] --> OK([허용])
-    end
-    L4 --> L5
+flowchart LR
+    REQ([요청]) --> L1["L1\nfeature 함수"] --> L2["L2\n피처 플래그"] --> L3["L3\n설정 규칙"] --> L4["L4\nTranscript Classifier"] --> NEXT(["→ L5"])
 
     style REQ fill:transparent,stroke:#111827
+    style NEXT fill:transparent,stroke:#111827
+```
+
+**L5 ~ L8 (실행 단계)**
+
+```mermaid
+flowchart LR
+    PREV(["L4 →"]) --> L5["L5\n위험 패턴 감지"] --> L6["L6\n파일시스템 권한"] --> L7["L7\nTrust Dialog"] --> L8["L8\nBypass Kill Switch"] --> OK([허용])
+
+    style PREV fill:transparent,stroke:#111827
     style OK fill:transparent,stroke:#111827
-    style top fill:transparent,stroke:transparent
-    style bottom fill:transparent,stroke:transparent
 ```
 
 | 레이어 | 메커니즘 | 특징 |
