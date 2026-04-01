@@ -91,16 +91,16 @@ export async function* query(
 ### 3.1 매 턴의 6단계 파이프라인
 
 ```mermaid
-flowchart TD
-    A([새 턴 시작]) --> B[1. Pre-Request Compaction\n프롬프트 압축]
-    B --> C[2. API 호출 + 스트리밍\n병렬 도구 실행 시작]
-    C --> D[3. 에러 복구 캐스케이드\n무료 → 저비용 → 고비용]
-    D --> E[4. Stop Hooks\n사용자 정의 검증]
-    E --> F[5. 도구 실행\n배치 / 스트리밍]
-    F --> G[6. Post-Tool 상태 전이\nContinue Site 패턴]
+flowchart LR
+    A([새 턴 시작]) --> B[1. Compaction]
+    B --> C[2. API 호출\n+스트리밍]
+    C --> D[3. 에러 복구]
+    D --> E[4. Stop Hooks]
+    E --> F[5. 도구 실행]
+    F --> G[6. 상태 전이]
     G --> H{계속?}
     H -->|next_turn| A
-    H -->|완료 / 중단| Z([루프 종료])
+    H -->|완료/중단| Z([종료])
 
     style A fill:transparent,stroke:#111827
     style Z fill:transparent,stroke:#111827
@@ -172,26 +172,34 @@ isReadOnly() { return false }
 
 `Prompt-Too-Long(413)` 에러와 `Max-Output-Tokens` 에러의 복구 순서:
 
-```mermaid
-flowchart TD
-    E1([Prompt-Too-Long 413]) --> R1[Context Collapse 드레인\nAPI 호출 0회]
-    R1 -->|실패| R2[Reactive Compact\nAPI 호출 1회]
-    R2 -->|실패| R3([에러 표출])
-    R1 -->|성공| OK1([재시도])
-    R2 -->|성공| OK1
+**Prompt-Too-Long (413)**:
 
-    E2([Max-Output-Tokens]) --> S1[토큰 캡 에스컬레이션\n비용 0]
-    S1 -->|실패| S2[Resume 메시지 주입\n최대 3회 재시도]
-    S2 -->|실패| S3([현재 결과로 완료])
-    S1 -->|성공| OK2([재시도])
-    S2 -->|성공| OK2
+```mermaid
+flowchart LR
+    E1([413 에러]) --> R1[Context Collapse 드레인\nAPI 호출 0회]
+    R1 -->|성공| OK1([재시도])
+    R1 -->|실패| R2[Reactive Compact\nAPI 호출 1회]
+    R2 -->|성공| OK1
+    R2 -->|실패| R3([에러 표출])
 
     style E1 fill:transparent,stroke:#111827
-    style E2 fill:transparent,stroke:#111827
-    style R3 fill:transparent,stroke:#111827
-    style S3 fill:transparent,stroke:#111827
     style OK1 fill:transparent,stroke:#111827
+    style R3 fill:transparent,stroke:#111827
+```
+
+**Max-Output-Tokens**:
+
+```mermaid
+flowchart LR
+    E2([Max-Output-Tokens]) --> S1[토큰 캡 에스컬레이션\n비용 0]
+    S1 -->|성공| OK2([재시도])
+    S1 -->|실패| S2[Resume 메시지 주입\n최대 3회]
+    S2 -->|성공| OK2
+    S2 -->|실패| S3([현재 결과로 완료])
+
+    style E2 fill:transparent,stroke:#111827
     style OK2 fill:transparent,stroke:#111827
+    style S3 fill:transparent,stroke:#111827
 ```
 
 첫 번째 시도는 항상 무료다. 사용자는 자동 복구가 일어나는 것을 느끼지 못한다.
@@ -274,34 +282,34 @@ quadrantChart
 ## 5. 보안: 8개 레이어
 
 ```mermaid
-flowchart TD
-    REQ([도구 실행 요청]) --> L1
+flowchart LR
+    REQ([요청]) --> L1
 
     subgraph BUILD ["빌드 타임"]
         L1[L1. feature 함수\n코드 물리 제거]
     end
 
-    subgraph DEPLOY ["배포 / 서버 측"]
-        L2[L2. 피처 플래그\nGrowthBook 킬 스위치]
-        L3[L3. 설정 기반 규칙\n8개 소스 우선순위]
+    subgraph DEPLOY ["배포 / 서버"]
+        L2[L2. 피처 플래그]
+        L3[L3. 설정 규칙]
     end
 
-    subgraph RUNTIME ["런타임 — AI 판정"]
-        L4[L4. Transcript Classifier\nAI가 안전성 판정]
+    subgraph RUNTIME ["AI 판정"]
+        L4[L4. Transcript\nClassifier]
     end
 
-    subgraph EXEC ["런타임 — 실행 단계"]
-        L5[L5. 위험 패턴 감지\nBash 와일드카드 차단]
-        L6[L6. 파일시스템 권한\nsymlink 탈출 방지]
-        L7[L7. Trust Dialog\n사용자 동의]
-        L8[L8. Bypass Kill Switch\n최후 강제 차단]
+    subgraph EXEC ["실행 단계"]
+        L5[L5. 위험 패턴\n감지]
+        L6[L6. 파일시스템\n권한]
+        L7[L7. Trust\nDialog]
+        L8[L8. Bypass\nKill Switch]
     end
 
-    L1 -->|코드 없으면 실행 불가| DEPLOY
+    L1 --> DEPLOY
     L2 --> L3 --> RUNTIME
-    L4 -->|판단 불가 → 사용자 프롬프팅| EXEC
+    L4 -->|판단 불가\n→ 사용자 위임| EXEC
     L5 --> L6 --> L7 --> L8
-    L8 --> OK([실행 허용])
+    L8 --> OK([허용])
 
     style REQ fill:transparent,stroke:#111827
     style OK fill:transparent,stroke:#111827
@@ -438,12 +446,12 @@ OAuth 전용(Claude.ai 계정 필요)으로, API 키나 Bedrock/Vertex로는 사
 메타 오케스트레이터가 워커 에이전트를 관리하는 구조다. Coordinator는 직접 도구를 실행하지 않는다. `AgentTool`, `TaskStop`, `SendMessage`만 허용된다.
 
 ```mermaid
-flowchart TD
-    C[Coordinator\nAgentTool / TaskStop / SendMessage만 허용]
-    C -->|위임| W1[Worker Agent 1\n파일 읽기/쓰기]
-    C -->|위임| W2[Worker Agent 2\n테스트 실행]
-    C -->|위임| W3[Worker Agent 3\nPR 생성]
-    W1 <-->|공유| S[(tengu_scratch\n공유 스크래치패드)]
+flowchart LR
+    C[Coordinator\nAgentTool / TaskStop\nSendMessage만 허용]
+    C -->|위임| W1[Worker 1\n파일 읽기/쓰기]
+    C -->|위임| W2[Worker 2\n테스트 실행]
+    C -->|위임| W3[Worker 3\nPR 생성]
+    W1 <-->|공유| S[(tengu_scratch)]
     W2 <-->|공유| S
     W3 <-->|공유| S
 
@@ -480,12 +488,12 @@ flowchart TD
 CLAUDE.md 파일을 4계층 구조로 관리한다:
 
 ```mermaid
-flowchart BT
-    D[대화 중 동적 메모리] --> MERGE
-    C["~/project/src/CLAUDE.md\n서브디렉터리"] --> MERGE
-    B["~/project/CLAUDE.md\n프로젝트 루트"] --> MERGE
+flowchart LR
     A["~/.claude/CLAUDE.md\n전역"] --> MERGE
-    MERGE[컨텍스트 어셈블리\n@include 병합] --> CTX([모델에 전달되는 컨텍스트])
+    B["~/project/CLAUDE.md\n프로젝트 루트"] --> MERGE
+    C["~/project/src/CLAUDE.md\n서브디렉터리"] --> MERGE
+    D[대화 중 동적 메모리] --> MERGE
+    MERGE[컨텍스트 어셈블리\n@include 병합] --> CTX([모델])
 
     style MERGE fill:transparent,stroke:#111827
     style CTX fill:transparent,stroke:#111827
