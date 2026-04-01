@@ -92,19 +92,18 @@ export async function* query(
 
 ```mermaid
 flowchart LR
-    classDef terminal fill:#DBEAFE,stroke:#3B82F6,color:#1e3a5f
-    classDef process fill:#F0F9FF,stroke:#7DD3FC,color:#0c4a6e
-    classDef decision fill:#FFFBEB,stroke:#F59E0B,color:#78350f
-
-    A([새 턴 시작]):::terminal --> B[1. Compaction]:::process
-    B --> C[2. API 호출\n+스트리밍]:::process
-    C --> D[3. 에러 복구]:::process
-    D --> E[4. Stop Hooks]:::process
-    E --> F[5. 도구 실행]:::process
-    F --> G[6. 상태 전이]:::process
-    G --> H{계속?}:::decision
+    A([새 턴 시작]) --> B[1. Compaction]
+    B --> C[2. API 호출\n+스트리밍]
+    C --> D[3. 에러 복구]
+    D --> E[4. Stop Hooks]
+    E --> F[5. 도구 실행]
+    F --> G[6. 상태 전이]
+    G --> H{계속?}
     H -->|next_turn| A
-    H -->|완료/중단| Z([종료]):::terminal
+    H -->|완료/중단| Z([종료])
+
+    style A fill:transparent,stroke:#111827
+    style Z fill:transparent,stroke:#111827
 ```
 
 #### 1단계: Pre-Request Compaction (프롬프트 최적화)
@@ -113,22 +112,19 @@ API를 호출하기 전에 5개의 압축 메커니즘을 순서대로 시도한
 
 ```mermaid
 flowchart LR
-    classDef trigger fill:#DBEAFE,stroke:#3B82F6,color:#1e3a5f
-    classDef free   fill:#F0FDF4,stroke:#4ADE80,color:#14532d
-    classDef low    fill:#FFFBEB,stroke:#F59E0B,color:#78350f
-    classDef high   fill:#FEF2F2,stroke:#F87171,color:#7f1d1d
-    classDef done   fill:#F5F3FF,stroke:#A78BFA,color:#3b0764
-
-    A([컨텍스트 초과?]):::trigger --> B[Tool Result Budget]:::free
-    B -->|아직 큼| C[Snip Compact\n무료]:::free
-    C -->|아직 큼| D[Microcompact\n무료]:::free
-    D -->|아직 큼| E[Context Collapse\n저비용]:::low
-    E -->|아직 큼| F[Auto-Compact\n고비용]:::high
-    B -->|충분| Z([API 호출]):::done
-    C -->|충분| Z
-    D -->|충분| Z
-    E -->|충분| Z
+    A([컨텍스트 초과?]) --> B[Tool Result Budget\n도구 결과 크기 제한]
+    B -->|아직 큼| C[Snip Compact\n오래된 메시지 제거\n무료]
+    C -->|아직 큼| D[Microcompact\n캐시 블록 피닝\n무료]
+    D -->|아직 큼| E[Context Collapse\n읽기 시점 프로젝션\n저비용]
+    E -->|아직 큼| F[Auto-Compact\nClaude API 요약\n고비용]
+    B -->|충분히 줄었으면| Z([API 호출])
+    C -->|충분히 줄었으면| Z
+    D -->|충분히 줄었으면| Z
+    E -->|충분히 줄었으면| Z
     F --> Z
+
+    style Z fill:transparent,stroke:#111827
+    style A fill:transparent,stroke:#111827
 ```
 
 #### 2단계: API 호출 + 스트리밍
@@ -180,32 +176,30 @@ isReadOnly() { return false }
 
 ```mermaid
 flowchart LR
-    classDef err   fill:#FEE2E2,stroke:#F87171,color:#7f1d1d
-    classDef step  fill:#F0F9FF,stroke:#7DD3FC,color:#0c4a6e
-    classDef ok    fill:#F0FDF4,stroke:#4ADE80,color:#14532d
-    classDef fatal fill:#FEF2F2,stroke:#EF4444,color:#7f1d1d
-
-    E1([413 에러]):::err --> R1[Context Collapse\nAPI 호출 0회]:::step
-    R1 -->|성공| OK1([재시도]):::ok
-    R1 -->|실패| R2[Reactive Compact\nAPI 호출 1회]:::step
+    E1([413 에러]) --> R1[Context Collapse 드레인\nAPI 호출 0회]
+    R1 -->|성공| OK1([재시도])
+    R1 -->|실패| R2[Reactive Compact\nAPI 호출 1회]
     R2 -->|성공| OK1
-    R2 -->|실패| R3([에러 표출]):::fatal
+    R2 -->|실패| R3([에러 표출])
+
+    style E1 fill:transparent,stroke:#111827
+    style OK1 fill:transparent,stroke:#111827
+    style R3 fill:transparent,stroke:#111827
 ```
 
 **Max-Output-Tokens**:
 
 ```mermaid
 flowchart LR
-    classDef err  fill:#FEE2E2,stroke:#F87171,color:#7f1d1d
-    classDef step fill:#F0F9FF,stroke:#7DD3FC,color:#0c4a6e
-    classDef ok   fill:#F0FDF4,stroke:#4ADE80,color:#14532d
-    classDef done fill:#F5F3FF,stroke:#A78BFA,color:#3b0764
-
-    E2([Max-Output-Tokens]):::err --> S1[토큰 캡 에스컬레이션\n비용 0]:::step
-    S1 -->|성공| OK2([재시도]):::ok
-    S1 -->|실패| S2[Resume 메시지 주입\n최대 3회]:::step
+    E2([Max-Output-Tokens]) --> S1[토큰 캡 에스컬레이션\n비용 0]
+    S1 -->|성공| OK2([재시도])
+    S1 -->|실패| S2[Resume 메시지 주입\n최대 3회]
     S2 -->|성공| OK2
-    S2 -->|실패| S3([현재 결과로 완료]):::done
+    S2 -->|실패| S3([현재 결과로 완료])
+
+    style E2 fill:transparent,stroke:#111827
+    style OK2 fill:transparent,stroke:#111827
+    style S3 fill:transparent,stroke:#111827
 ```
 
 첫 번째 시도는 항상 무료다. 사용자는 자동 복구가 일어나는 것을 느끼지 못한다.
@@ -289,37 +283,36 @@ quadrantChart
 
 ```mermaid
 flowchart LR
-    classDef req  fill:#DBEAFE,stroke:#3B82F6,color:#1e3a5f
-    classDef ok   fill:#F0FDF4,stroke:#4ADE80,color:#14532d
-    classDef node fill:#F8FAFC,stroke:#94A3B8,color:#1e293b
+    REQ([요청]) --> L1
 
-    REQ([요청]):::req --> L1
-
-    subgraph BUILD ["🔨 빌드 타임"]
-        L1[feature 함수\n코드 물리 제거]:::node
+    subgraph BUILD ["빌드 타임"]
+        L1[L1. feature 함수\n코드 물리 제거]
     end
 
-    subgraph DEPLOY ["🚀 배포 / 서버"]
-        L2[피처 플래그]:::node
-        L3[설정 규칙]:::node
+    subgraph DEPLOY ["배포 / 서버"]
+        L2[L2. 피처 플래그]
+        L3[L3. 설정 규칙]
     end
 
-    subgraph RUNTIME ["🤖 AI 판정"]
-        L4[Transcript\nClassifier]:::node
+    subgraph RUNTIME ["AI 판정"]
+        L4[L4. Transcript\nClassifier]
     end
 
-    subgraph EXEC ["⚙️ 실행 단계"]
-        L5[위험 패턴\n감지]:::node
-        L6[파일시스템\n권한]:::node
-        L7[Trust\nDialog]:::node
-        L8[Bypass\nKill Switch]:::node
+    subgraph EXEC ["실행 단계"]
+        L5[L5. 위험 패턴\n감지]
+        L6[L6. 파일시스템\n권한]
+        L7[L7. Trust\nDialog]
+        L8[L8. Bypass\nKill Switch]
     end
 
     L1 --> DEPLOY
     L2 --> L3 --> RUNTIME
     L4 -->|판단 불가\n→ 사용자 위임| EXEC
     L5 --> L6 --> L7 --> L8
-    L8 --> OK([허용]):::ok
+    L8 --> OK([허용])
+
+    style REQ fill:transparent,stroke:#111827
+    style OK fill:transparent,stroke:#111827
 ```
 
 | 레이어 | 메커니즘 | 특징 |
@@ -454,17 +447,16 @@ OAuth 전용(Claude.ai 계정 필요)으로, API 키나 Bedrock/Vertex로는 사
 
 ```mermaid
 flowchart LR
-    classDef coord fill:#DBEAFE,stroke:#3B82F6,color:#1e3a5f
-    classDef worker fill:#F0F9FF,stroke:#7DD3FC,color:#0c4a6e
-    classDef shared fill:#FFFBEB,stroke:#F59E0B,color:#78350f
-
-    C[Coordinator\nAgentTool / TaskStop\nSendMessage만 허용]:::coord
-    C -->|위임| W1[Worker 1\n파일 읽기/쓰기]:::worker
-    C -->|위임| W2[Worker 2\n테스트 실행]:::worker
-    C -->|위임| W3[Worker 3\nPR 생성]:::worker
-    W1 <-->|공유| S[(tengu_scratch)]:::shared
+    C[Coordinator\nAgentTool / TaskStop\nSendMessage만 허용]
+    C -->|위임| W1[Worker 1\n파일 읽기/쓰기]
+    C -->|위임| W2[Worker 2\n테스트 실행]
+    C -->|위임| W3[Worker 3\nPR 생성]
+    W1 <-->|공유| S[(tengu_scratch)]
     W2 <-->|공유| S
     W3 <-->|공유| S
+
+    style C fill:transparent,stroke:#111827
+    style S fill:transparent,stroke:#111827
 ```
 
 **최소 권한 원칙(Least Privilege)**의 극단적 적용이다. 오케스트레이터에게 실행 권한을 주지 않고 위임만 허용한다. 권한이 없으면 실수로 파괴적인 작업을 직접 실행하는 사고를 원천 차단한다.
@@ -497,16 +489,14 @@ CLAUDE.md 파일을 4계층 구조로 관리한다:
 
 ```mermaid
 flowchart LR
-    classDef source fill:#F0F9FF,stroke:#7DD3FC,color:#0c4a6e
-    classDef dynamic fill:#FFFBEB,stroke:#F59E0B,color:#78350f
-    classDef merge  fill:#F5F3FF,stroke:#A78BFA,color:#3b0764
-    classDef model  fill:#DBEAFE,stroke:#3B82F6,color:#1e3a5f
+    A["~/.claude/CLAUDE.md\n전역"] --> MERGE
+    B["~/project/CLAUDE.md\n프로젝트 루트"] --> MERGE
+    C["~/project/src/CLAUDE.md\n서브디렉터리"] --> MERGE
+    D[대화 중 동적 메모리] --> MERGE
+    MERGE[컨텍스트 어셈블리\n@include 병합] --> CTX([모델])
 
-    A["~/.claude/CLAUDE.md\n전역"]:::source --> MERGE
-    B["~/project/CLAUDE.md\n루트"]:::source --> MERGE
-    C["~/project/src/CLAUDE.md\n서브디렉터리"]:::source --> MERGE
-    D[대화 중\n동적 메모리]:::dynamic --> MERGE
-    MERGE[컨텍스트 어셈블리\n@include 병합]:::merge --> CTX([모델]):::model
+    style MERGE fill:transparent,stroke:#111827
+    style CTX fill:transparent,stroke:#111827
 ```
 
 `@include` 지시자로 파일을 포함할 수 있고, 컨텍스트 어셈블리 단계에서 이 4계층이 병합된다. `Auto-Compact` 압축이 일어난 뒤에도 CLAUDE.md 기반 메모리는 보존된다.

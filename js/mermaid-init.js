@@ -18,25 +18,18 @@
       securityLevel: 'loose',
       theme: 'base',
       themeVariables: {
-        primaryColor: '#EFF6FF',
-        primaryTextColor: '#1e3a5f',
-        primaryBorderColor: '#93C5FD',
-        secondaryColor: '#F0FDF4',
-        secondaryTextColor: '#14532d',
-        secondaryBorderColor: '#86EFAC',
-        tertiaryColor: '#FFFBEB',
-        tertiaryTextColor: '#78350f',
-        tertiaryBorderColor: '#FCD34D',
-        lineColor: '#6B7280',
-        edgeLabelBackground: '#F9FAFB',
-        clusterBkg: '#F8FAFC',
-        clusterBorder: '#CBD5E1',
-        fontFamily: 'Pretendard, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
-        fontSize: '14px'
+        primaryColor: 'transparent',
+        primaryTextColor: '#111827',
+        primaryBorderColor: '#111827',
+        lineColor: '#111827',
+        tertiaryColor: 'transparent',
+        clusterBkg: 'transparent',
+        clusterBorder: '#111827',
+        edgeLabelBackground: 'transparent',
+        fontFamily: 'Pretendard, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif'
       },
       flowchart: {
-        curve: 'basis',
-        padding: 16
+        curve: 'linear'
       }
     });
 
