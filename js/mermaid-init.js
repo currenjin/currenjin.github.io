@@ -15,7 +15,7 @@
 
     window.mermaid.initialize({
       startOnLoad: false,
-      look: 'handDrawn',
+
       securityLevel: 'loose',
       theme: 'base',
       themeVariables: {
