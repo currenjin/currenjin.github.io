@@ -35,13 +35,16 @@
       }
     });
 
-    // v11이 SVG에 tabindex="0"을 자동 추가 → Chrome 트랙패드 스크롤 버그 유발
-    // 렌더 완료 후 제거
+    // v11이 SVG 및 내부 요소에 tabindex="0"을 자동 추가 → Chrome 트랙패드 스크롤 버그 유발
+    // 렌더 완료 후 mermaid 컨테이너 내 모든 tabindex 제거
     window.mermaid.run({
       querySelector: '.mermaid'
     }).then(function () {
+      document.querySelectorAll('.mermaid [tabindex]').forEach(function (el) {
+        el.removeAttribute('tabindex');
+      });
       document.querySelectorAll('.mermaid svg').forEach(function (svg) {
-        svg.removeAttribute('tabindex');
+        svg.setAttribute('focusable', 'false');
       });
     });
   }
