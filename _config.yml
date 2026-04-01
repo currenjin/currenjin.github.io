@@ -47,7 +47,7 @@ utterances:
   branch: main
 
 google_analytics:
-  ua: #FIXME
+  ua: G-3NNF9TB2DY
 
 google_adsense:
   client: #FIXME
