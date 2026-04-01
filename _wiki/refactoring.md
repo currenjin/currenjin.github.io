@@ -4,7 +4,7 @@ title   : Refactoring
 summary :
 date    : 2022-07-30 14:00:00 +0900
 updated : 2022-07-30 14:00:00 +0900
-tags     : refactor
+tags    : refactoring design
 toc     : true
 public  : true
 parent  : [[index]]

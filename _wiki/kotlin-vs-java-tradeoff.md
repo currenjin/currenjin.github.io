@@ -4,7 +4,7 @@ title   : Kotlin vs Java 트레이드오프 정리
 summary : Kotlin/Java 핵심 차이, 장단점, 상황별 선택 기준을 실무 관점으로 정리
 date    : 2026-04-01 18:41:01 +0900
 updated : 2026-04-01 12:00:00 +0900
-tags    : kotlin java tradeoff language engineering
+tags    : kotlin java
 toc     : true
 public  : true
 parent  : [[index]]

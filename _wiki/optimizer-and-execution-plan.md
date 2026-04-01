@@ -4,7 +4,7 @@ title   : Optimizer와 쿼리 실행계획 (MySQL 기준)
 summary : RDBMS 공통 개념을 바탕으로 MySQL EXPLAIN/EXPLAIN ANALYZE 읽는 법 정리
 date    : 2026-03-27 15:20:33 +0900
 updated : 2026-03-27 15:27:00 +0900
-tags    : mysql optimizer execution-plan sql rdbms
+tags    : database sql
 toc     : true
 public  : true
 parent  : [[index]]

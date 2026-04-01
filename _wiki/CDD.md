@@ -4,7 +4,7 @@ title   : CDD(Checklist Driven Development, 체크리스트 주도 개발)
 summary :
 date    : 2022-01-12 22:38:00 +0900
 updated : 2022-08-24 15:00:00 +0900
-tags     : documentation
+tags    : architecture documentation
 toc     : true
 public  : true
 parent  : [[index]]

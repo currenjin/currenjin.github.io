@@ -4,7 +4,7 @@ title   : Sleuth AWS SQS
 summary :
 date    : 2022-05-03 13:30:00 +0900
 updated : 2022-05-26 13:00:00 +0900
-tags     : container
+tags    : aws observability
 toc     : true
 public  : true
 parent  : [[index]]

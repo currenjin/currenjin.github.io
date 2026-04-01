@@ -4,7 +4,7 @@ title   : JUnit
 summary :
 date    : 2022-06-29 20:00:00 +0900
 updated : 2025-08-16 23:00:00 +0900
-tags     : test
+tags    : test java
 toc     : true
 public  : true
 parent  : [[index]]

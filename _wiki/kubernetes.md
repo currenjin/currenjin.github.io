@@ -4,7 +4,7 @@ title   : Kubernetes (기초부터 운영까지)
 summary : Kubernetes 핵심 개념, 리소스 모델, 운영 포인트, Argo CD(GitOps)까지 정리
 date    : 2022-01-31 13:30:00 +0900
 updated : 2026-03-27 15:36:30 +0900
-tags    : kubernetes k8s argocd gitops container
+tags    : kubernetes container devops
 toc     : true
 public  : true
 parent  : [[index]]

@@ -4,7 +4,7 @@ title   : Openstack
 summary :
 date    : 2022-01-31 13:50:00 +0900
 updated : 2022-01-31 13:50:00 +0900
-tags     : cloud-computing
+tags    : cloud
 toc     : true
 public  : true
 parent  : [[index]]

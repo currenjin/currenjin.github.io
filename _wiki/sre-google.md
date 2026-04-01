@@ -4,7 +4,7 @@ title   : SRE by google
 summary :
 date    : 2025-12-20 21:00:00 +0900
 updated : 2025-12-20 21:00:00 +0900
-tags     : architecture
+tags    : sre devops
 toc     : true
 public  : true
 parent  : [[index]]
