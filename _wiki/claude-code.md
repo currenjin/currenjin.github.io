@@ -282,32 +282,33 @@ quadrantChart
 ## 5. 보안: 8개 레이어
 
 ```mermaid
+%%{init: {'flowchart': {'nodeSpacing': 40, 'rankSpacing': 80}}}%%
 flowchart LR
     REQ([요청]) --> L1
 
-    subgraph BUILD ["빌드 타임"]
-        L1[L1. feature 함수\n코드 물리 제거]
+    subgraph BUILD ["🔨 빌드 타임"]
+        L1[feature 함수\n코드 물리 제거]
     end
 
-    subgraph DEPLOY ["배포 / 서버"]
-        L2[L2. 피처 플래그]
-        L3[L3. 설정 규칙]
+    subgraph DEPLOY ["🚀 배포 / 서버"]
+        L2[피처 플래그]
+        L3[설정 규칙]
     end
 
-    subgraph RUNTIME ["AI 판정"]
-        L4[L4. Transcript\nClassifier]
+    subgraph RUNTIME ["🤖 AI 판정"]
+        L4[Transcript\nClassifier]
     end
 
-    subgraph EXEC ["실행 단계"]
-        L5[L5. 위험 패턴\n감지]
-        L6[L6. 파일시스템\n권한]
-        L7[L7. Trust\nDialog]
-        L8[L8. Bypass\nKill Switch]
+    subgraph EXEC ["⚙️ 실행 단계"]
+        L5[위험 패턴 감지]
+        L6[파일시스템 권한]
+        L7[Trust Dialog]
+        L8[Bypass Kill Switch]
     end
 
     L1 --> DEPLOY
     L2 --> L3 --> RUNTIME
-    L4 -->|판단 불가\n→ 사용자 위임| EXEC
+    L4 -->|판단 불가 → 사용자 위임| EXEC
     L5 --> L6 --> L7 --> L8
     L8 --> OK([허용])
 
