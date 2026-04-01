@@ -9,6 +9,15 @@
     "external": false
   },
   {
+    "title": "Kotlin vs Java 트레이드오프 정리",
+    "url": "/wiki/kotlin-vs-java-tradeoff",
+    "updated": "2026-04-01",
+    "summary": "Kotlin/Java 핵심 차이, 장단점, 상황별 선택 기준을 실무 관점으로 정리",
+    "tags": "kotlin java tradeoff language engineering",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Grafana, Loki, Tempo 정리",
     "url": "/wiki/grafana-loki-tempo",
     "updated": "2026-03-28",
