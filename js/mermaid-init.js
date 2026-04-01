@@ -15,7 +15,7 @@
 
     window.mermaid.initialize({
       startOnLoad: false,
-
+      look: 'handDrawn',
       securityLevel: 'loose',
       theme: 'base',
       themeVariables: {
@@ -35,8 +35,14 @@
       }
     });
 
+    // v11이 SVG에 tabindex="0"을 자동 추가 → Chrome 트랙패드 스크롤 버그 유발
+    // 렌더 완료 후 제거
     window.mermaid.run({
       querySelector: '.mermaid'
+    }).then(function () {
+      document.querySelectorAll('.mermaid svg').forEach(function (svg) {
+        svg.removeAttribute('tabindex');
+      });
     });
   }
 
