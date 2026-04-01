@@ -26,7 +26,7 @@
         tertiaryColor: 'transparent',
         clusterBkg: 'transparent',
         clusterBorder: '#111827',
-        edgeLabelBackground: 'transparent',
+        edgeLabelBackground: '#ffffff',
         fontFamily: 'Pretendard, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif'
       },
       flowchart: {
