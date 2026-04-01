@@ -4,7 +4,7 @@ title   : Claude Code
 summary : 소스맵 유출로 드러난 내부 아키텍처 분석
 date    : 2026-04-01 12:00:00 +0900
 updated : 2026-04-01 12:00:00 +0900
-tags    : ai-agent
+tags    : [ai-agent]
 toc     : true
 public  : true
 parent  : [[index]]

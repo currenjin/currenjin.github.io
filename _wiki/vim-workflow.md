@@ -3,7 +3,7 @@ layout  : wiki
 title   : Vim 업무환경 표준 세팅
 date    : 2026-02-26 16:50:00 +0900
 updated : 2026-03-20 13:49:24 +0900
-tags    : productivity
+tags    : [productivity]
 toc     : true
 public  : true
 parent  : [[index]]

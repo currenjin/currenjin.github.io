@@ -4,7 +4,7 @@ title   : 사용자 스토리 (마이클 콘)
 summary : User Stories Applied 핵심 + 실무 시나리오 정리
 date    : 2026-03-05 11:10:00 +0900
 updated : 2026-03-05 12:20:00 +0900
-tags    : agile
+tags    : [agile]
 toc     : true
 public  : true
 parent  : [[index]]

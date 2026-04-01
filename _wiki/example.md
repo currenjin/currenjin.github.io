@@ -4,7 +4,7 @@ title   : Example
 summary :
 date    : 2022-01-03 11:37:00 +0900
 updated : 2022-01-03 11:37:00 +0900
-tags    : example
+tags    : [example]
 toc     : true
 public  : true
 parent  : [[index]]

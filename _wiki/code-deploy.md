@@ -4,7 +4,7 @@ title   : Code Deploy
 summary :
 date    : 2022-01-08 15:28:00 +0900
 updated : 2022-01-08 15:28:00 +0900
-tags    : aws devops
+tags    : [aws, devops]
 toc     : true
 public  : true
 parent  : [[index]]

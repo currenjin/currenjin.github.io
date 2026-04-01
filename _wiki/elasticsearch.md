@@ -4,7 +4,7 @@ title   : Elasticsearch
 summary :
 date    : 2022-05-25 19:00:00 +0900
 updated : 2022-05-26 12:00:00 +0900
-tags    : elasticsearch database
+tags    : [elasticsearch, database]
 toc     : true
 public  : true
 parent  : [[index]]

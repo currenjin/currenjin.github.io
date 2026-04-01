@@ -4,7 +4,7 @@ title   : GC(Garbage Collection, 가비지 컬렉션)
 summary :
 date    : 2025-04-8 19:00:00 +0900
 updated : 2025-04-8 19:00:00 +0900
-tags    : java jvm
+tags    : [java, jvm]
 toc     : true
 public  : true
 parent  : [[index]]

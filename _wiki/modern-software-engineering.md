@@ -4,7 +4,7 @@ title   : David Farley의 Modern Software Engineering
 summary :
 date    : 2026-02-06 12:00:00 +0900
 updated : 2026-02-06 12:00:00 +0900
-tags    : engineering
+tags    : [engineering]
 toc     : true
 public  : true
 parent  : [[index]]

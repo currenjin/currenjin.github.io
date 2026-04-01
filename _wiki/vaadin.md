@@ -4,7 +4,7 @@ title   : Vaadin
 summary :
 date    : 2022-05-13 14:30:00 +0900
 updated : 2022-05-13 15:30:00 +0900
-tags    : frontend java
+tags    : [frontend, java]
 toc     : true
 public  : true
 parent  : [[index]]

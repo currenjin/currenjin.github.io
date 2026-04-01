@@ -4,7 +4,7 @@ title   : Using Lambda with API Gateway
 summary :
 date    : 2022-07-17 15:00:00 +0900
 updated : 2022-07-17 15:00:00 +0900
-tags    : aws
+tags    : [aws]
 toc     : true
 public  : true
 parent  : [[index]]
