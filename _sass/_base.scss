@@ -246,3 +246,12 @@ h6 {
 .post-content h3::before {
     content: "··";
 }
+
+.mermaid {
+    width: 100%;
+    svg {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+    }
+}

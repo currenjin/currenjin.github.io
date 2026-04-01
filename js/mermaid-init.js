@@ -30,7 +30,8 @@
         fontFamily: 'Pretendard, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif'
       },
       flowchart: {
-        curve: 'linear'
+        curve: 'linear',
+        useMaxWidth: true
       }
     });
 
