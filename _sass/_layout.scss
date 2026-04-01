@@ -120,8 +120,9 @@
         width: auto;
 
         td, th {
-            border: 1px solid var(--line-soft);
-            padding: 6px 8px;
+            border: none;
+            border-bottom: 1px solid var(--line-soft);
+            padding: 8px 14px;
             white-space: normal;
             word-break: normal;
             overflow-wrap: anywhere;
@@ -130,16 +131,18 @@
 
         th {
             font-weight: 600;
-            color: #fff;
-            background: var(--accent);
+            color: var(--star);
+            background: var(--ink-main);
+            border-bottom: 2px solid var(--ink-main);
+            letter-spacing: 0.02em;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f5eb;
+        tr:nth-child(even) td {
+            background-color: var(--bg-layer);
         }
 
-        tr:hover {
-            background: #e7f0f6;
+        tr:hover td {
+            background: #e8e2d6;
         }
     }
 }
