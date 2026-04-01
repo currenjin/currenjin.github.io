@@ -72,5 +72,6 @@ regenerate: true
 * [[vim-workflow]]
 * [[user-stories-applied]]
 * [[augmented-coding]]
+* [[claude-code]]
 * [[optimizer-and-execution-plan]]
 * [[grafana-loki-tempo]]
