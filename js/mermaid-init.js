@@ -10,6 +10,7 @@
       var container = document.createElement('div');
       container.className = 'mermaid';
       container.textContent = code.textContent;
+      // 교체 전 높이를 잡아두어 렌더링 후 레이아웃 점프 방지
       pre.parentNode.replaceChild(container, pre);
     });
 
