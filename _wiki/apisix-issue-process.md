@@ -3,7 +3,7 @@ layout  : wiki
 title   : APISIX Issue Process
 summary : APISIX 이슈 1개를 재현부터 머지까지 처리하는 실전 프로세스
 date    : 2026-04-02 15:32:56 +0900
-updated : 2026-04-02 15:39:30 +0900
+updated : 2026-04-02 16:38:40 +0900
 tags    : apisix oss process pr
 toc     : true
 public  : true
@@ -186,73 +186,4 @@ PR 본문 템플릿:
 - 머지율 70%+
 - 신뢰 자산(리뷰 품질/응답 속도) 축적
 
----
-
-## 12) Claude Code 시작 프롬프트 템플릿
-
-아래 프롬프트를 그대로 붙여 넣으면, 세션 시작 시 방향성을 빠르게 고정할 수 있다.
-
-```text
-You are helping me contribute to Apache APISIX.
-
-Work mode rules:
-- One issue = one intent.
-- Do not start implementation until reproduction is documented.
-- Do not submit code changes without tests.
-- Keep PR small and focused.
-- AI can draft, but final judgment/validation/documentation must be human-reviewed.
-
-Execution process (must follow in order):
-1) Issue selection
-   - Must be reproducible locally
-   - Scope should be small and clear
-   - Success/failure must be testable
-   - Define one-line success condition
-
-2) Reproduction
-   - Document environment/version, input scenario, actual result, expected result
-   - If not reproducible within 30 minutes, stop and switch issue
-
-3) Root cause
-   - Summarize root cause in one sentence before coding
-
-4) Fix strategy
-   - Prefer minimal fix
-   - Separate refactor PR from bugfix PR when possible
-
-5) Tests
-   - Include at least one reproduction test
-   - Add normal case and boundary case if possible
-
-6) Implementation + local validation
-   - Run related tests and baseline checks
-   - Ensure no unintended diff
-
-7) PR writing format
-   - Problem
-   - Root cause
-   - Fix
-   - Tests
-   - Risk / Compatibility
-
-8) Review response rules
-   - Restate reviewer concern first
-   - Apply fix or provide evidence-based rebuttal
-   - Split follow-up commits clearly
-   - First response within 24h
-
-9) Post-merge notes
-   - One line: what I learned
-   - One line: rule to apply next time
-
-When I provide an issue URL or issue text, first return:
-- Reproduction checklist
-- Root-cause hypothesis candidates
-- Minimal test plan
-- Minimal PR scope
-
-Do not jump to code first.
-```
-
-필요하면 위 프롬프트를 한국어 버전으로도 함께 만들어 사용한다.
 
