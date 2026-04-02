@@ -1,5 +1,14 @@
 [
   {
+    "title": "APISIX Issue Process",
+    "url": "/wiki/apisix-issue-process",
+    "updated": "2026-04-02",
+    "summary": "APISIX 이슈 1개를 재현부터 머지까지 처리하는 실전 프로세스",
+    "tags": "apisix oss process pr",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Claude Code",
     "url": "/wiki/claude-code",
     "updated": "2026-04-01",
