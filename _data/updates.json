@@ -1,5 +1,14 @@
 [
   {
+    "title": "Apache SkyWalking",
+    "url": "/wiki/skywalking",
+    "updated": "2026-04-02",
+    "summary": "분산 시스템을 위한 APM 오픈소스에 기여한 기록",
+    "tags": "skywalking oss apm java",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Claude Code",
     "url": "/wiki/claude-code",
     "updated": "2026-04-01",
