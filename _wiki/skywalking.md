@@ -1,7 +1,7 @@
 ---
 layout  : wiki
 title   : Apache SkyWalking
-summary : 분산 시스템을 위한 APM 오픈소스에 기여한 기록
+summary : 마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스
 date    : 2026-04-03 00:00:00 +0900
 updated : 2026-04-03 00:00:00 +0900
 tags    : skywalking oss apm java
