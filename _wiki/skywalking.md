@@ -109,10 +109,39 @@ capturedParams.set(Arrays.copyOfRange(allArgs, 2, allArgs.length));
 
 ---
 
+### Remove GroupBy.field_name from BanyanDB MeasureQuery
+
+> [apache/skywalking#13786](https://github.com/apache/skywalking/pull/13786) · PR 오픈 중
+
+#### Finding the Issue
+
+이슈 목록을 보다가 #13779를 발견했다. `QueryRequest.GroupBy.field_name`이 BanyanDB 쿼리 실행 경로에서 실제로 쓰이지 않는다는 내용이었다.
+
+BanyanDB는 그룹핑을 `tag_projection`으로 처리하는데, SkyWalking 쪽에서는 계속 `field_name`을 함께 보내고 있었다. 사용하지 않는 필드를 proto에 실어 보내는 셈이다.
+
+이슈 작성자가 단계적 제거 계획(3 phase)을 정리해뒀고, Phase 1이 SkyWalking main repo에서 해당 필드 사용을 제거하는 것이었다.
+
+#### Fix
+
+`MeasureQuery.java`의 `build()` 메서드에서 `GroupBy.Builder`에 `field_name`을 세팅하는 한 줄을 제거했다.
+
+```java
+// 제거된 코드
+groupByBuilder.setFieldName(this.aggregation.fieldName);
+```
+
+`GroupBy`는 이제 `tag_projection`만 담아서 전송한다. `Aggregation.field_name`과 `Top.field_name`은 어떤 필드를 집계/정렬할지 지정하는 별개의 필드라 그대로 유지했다.
+
+변경은 한 줄이지만 이유가 있는 제거다. Phase 2(client proto에서 필드 삭제), Phase 3(BanyanDB server에서 제거)는 각각 다른 레포 작업이다.
+
+---
+
 ## References
 
 - [Apache SkyWalking GitHub](https://github.com/apache/skywalking)
 - [Apache SkyWalking 공식 문서](https://skywalking.apache.org/docs/)
 - [PR #13785 - Fix missing taskId filter and incorrect IN clause in JDBC profiling query DAOs](https://github.com/apache/skywalking/pull/13785)
+- [PR #13786 - Remove GroupBy.field_name from BanyanDB MeasureQuery request building](https://github.com/apache/skywalking/pull/13786)
+- [Issue #13779 - Deprecate and remove QueryRequest.GroupBy.field_name in staged rollout](https://github.com/apache/skywalking/issues/13779)
 - [Async Profiler 기능 추가 PR #12671](https://github.com/apache/skywalking/pull/12671)
 - [pprof 기능 추가 PR #13502](https://github.com/apache/skywalking/pull/13502)
