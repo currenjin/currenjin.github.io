@@ -8,12 +8,60 @@
   "size": 1
  },
  {
+  "name": "Bill-Atkinson",
+  "size": 1
+ },
+ {
+  "name": "Fred-Brooks",
+  "size": 3
+ },
+ {
+  "name": "Gerald-Weinberg",
+  "size": 4
+ },
+ {
+  "name": "IEEE",
+  "size": 1
+ },
+ {
+  "name": "Math",
+  "size": 1
+ },
+ {
+  "name": "N+1",
+  "size": 1
+ },
+ {
+  "name": "Steve-Jobs",
+  "size": 1
+ },
+ {
+  "name": "TIL",
+  "size": 2
+ },
+ {
+  "name": "Think-Bayes",
+  "size": 7
+ },
+ {
+  "name": "Typescript",
+  "size": 1
+ },
+ {
+  "name": "Uncle-Bob",
+  "size": 3
+ },
+ {
   "name": "agile",
-  "size": 5
+  "size": 1
+ },
+ {
+  "name": "ai",
+  "size": 1
  },
  {
   "name": "ai-agent",
-  "size": 1
+  "size": 3
  },
  {
   "name": "alfred-aho",
@@ -25,7 +73,7 @@
  },
  {
   "name": "algorithm",
-  "size": 14
+  "size": 1
  },
  {
   "name": "alignment",
@@ -40,8 +88,12 @@
   "size": 1
  },
  {
+  "name": "api",
+  "size": 1
+ },
+ {
   "name": "architecture",
-  "size": 4
+  "size": 5
  },
  {
   "name": "asciidoc",
@@ -65,7 +117,7 @@
  },
  {
   "name": "aws",
-  "size": 3
+  "size": 4
  },
  {
   "name": "bash",
@@ -77,10 +129,6 @@
  },
  {
   "name": "bell-labs",
-  "size": 1
- },
- {
-  "name": "Bill-Atkinson",
   "size": 1
  },
  {
@@ -140,6 +188,10 @@
   "size": 2
  },
  {
+  "name": "cloud",
+  "size": 1
+ },
+ {
   "name": "cloud-computing",
   "size": 1
  },
@@ -160,6 +212,10 @@
   "size": 1
  },
  {
+  "name": "concurrency",
+  "size": 1
+ },
+ {
   "name": "conference",
   "size": 1
  },
@@ -173,7 +229,7 @@
  },
  {
   "name": "container",
-  "size": 6
+  "size": 5
  },
  {
   "name": "conway-s-law",
@@ -204,16 +260,20 @@
   "size": 1
  },
  {
+  "name": "database",
+  "size": 6
+ },
+ {
   "name": "db",
   "size": 9
  },
  {
   "name": "design",
-  "size": 1
+  "size": 7
  },
  {
   "name": "devops",
-  "size": 5
+  "size": 3
  },
  {
   "name": "diary",
@@ -250,6 +310,10 @@
  {
   "name": "encryption",
   "size": 8
+ },
+ {
+  "name": "engineering",
+  "size": 4
  },
  {
   "name": "erd",
@@ -308,8 +372,8 @@
   "size": 1
  },
  {
-  "name": "Fred-Brooks",
-  "size": 3
+  "name": "frontend",
+  "size": 2
  },
  {
   "name": "fzf",
@@ -326,10 +390,6 @@
  {
   "name": "gc",
   "size": 9
- },
- {
-  "name": "Gerald-Weinberg",
-  "size": 4
  },
  {
   "name": "git",
@@ -416,10 +476,6 @@
   "size": 1
  },
  {
-  "name": "IEEE",
-  "size": 1
- },
- {
   "name": "index",
   "size": 1
  },
@@ -441,10 +497,14 @@
  },
  {
   "name": "java",
-  "size": 3
+  "size": 11
  },
  {
   "name": "javadoc",
+  "size": 1
+ },
+ {
+  "name": "javascript",
   "size": 1
  },
  {
@@ -465,7 +525,11 @@
  },
  {
   "name": "jpa",
-  "size": 1
+  "size": 3
+ },
+ {
+  "name": "jvm",
+  "size": 2
  },
  {
   "name": "jvm-lang",
@@ -481,6 +545,10 @@
  },
  {
   "name": "kotlin",
+  "size": 2
+ },
+ {
+  "name": "kubernetes",
   "size": 1
  },
  {
@@ -540,10 +608,6 @@
   "size": 1
  },
  {
-  "name": "Math",
-  "size": 1
- },
- {
   "name": "media",
   "size": 1
  },
@@ -576,10 +640,6 @@
   "size": 1
  },
  {
-  "name": "N+1",
-  "size": 1
- },
- {
   "name": "naming",
   "size": 1
  },
@@ -596,6 +656,10 @@
   "size": 1
  },
  {
+  "name": "observability",
+  "size": 2
+ },
+ {
   "name": "oop",
   "size": 7
  },
@@ -605,7 +669,7 @@
  },
  {
   "name": "pattern",
-  "size": 1
+  "size": 4
  },
  {
   "name": "pentium",
@@ -640,8 +704,12 @@
   "size": 1
  },
  {
+  "name": "productivity",
+  "size": 2
+ },
+ {
   "name": "programming",
-  "size": 4
+  "size": 1
  },
  {
   "name": "programming-language",
@@ -666,6 +734,10 @@
  {
   "name": "refactor",
   "size": 1
+ },
+ {
+  "name": "refactoring",
+  "size": 2
  },
  {
   "name": "reflect",
@@ -732,6 +804,14 @@
   "size": 2
  },
  {
+  "name": "sql",
+  "size": 1
+ },
+ {
+  "name": "sre",
+  "size": 1
+ },
+ {
   "name": "start-up",
   "size": 1
  },
@@ -741,10 +821,6 @@
  },
  {
   "name": "statistics",
-  "size": 1
- },
- {
-  "name": "Steve-Jobs",
   "size": 1
  },
  {
@@ -765,7 +841,7 @@
  },
  {
   "name": "tdd",
-  "size": 1
+  "size": 2
  },
  {
   "name": "terminal",
@@ -773,7 +849,7 @@
  },
  {
   "name": "test",
-  "size": 4
+  "size": 8
  },
  {
   "name": "testing",
@@ -784,16 +860,8 @@
   "size": 5
  },
  {
-  "name": "Think-Bayes",
-  "size": 7
- },
- {
   "name": "tidy-first",
   "size": 1
- },
- {
-  "name": "TIL",
-  "size": 2
  },
  {
   "name": "time",
@@ -848,7 +916,7 @@
   "size": 1
  },
  {
-  "name": "Typescript",
+  "name": "typescript",
   "size": 1
  },
  {
@@ -858,10 +926,6 @@
  {
   "name": "ultisnips",
   "size": 1
- },
- {
-  "name": "Uncle-Bob",
-  "size": 3
  },
  {
   "name": "unit",
