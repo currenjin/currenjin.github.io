@@ -106,3 +106,13 @@ capturedParams.set(Arrays.copyOfRange(allArgs, 2, allArgs.length));
 - SQL에 `task_id = ?`가 포함되고 파라미터에 taskId가 있는가
 - 인스턴스가 3개면 `in (?,?,?)`가 생성되는가
 - taskId가 빈 문자열이면 빈 리스트를 반환하는가
+
+---
+
+## 참고
+
+- [Apache SkyWalking GitHub](https://github.com/apache/skywalking)
+- [Apache SkyWalking 공식 문서](https://skywalking.apache.org/docs/)
+- [PR #13785 - Fix missing taskId filter and incorrect IN clause in JDBC profiling query DAOs](https://github.com/apache/skywalking/pull/13785)
+- [Async Profiler 기능 추가 PR #12671](https://github.com/apache/skywalking/pull/12671) — 버그가 처음 유입된 커밋
+- [pprof 기능 추가 PR #13502](https://github.com/apache/skywalking/pull/13502) — 같은 버그를 복사해온 커밋
