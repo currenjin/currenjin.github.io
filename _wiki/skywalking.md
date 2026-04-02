@@ -13,7 +13,7 @@ latex   : false
 * TOC
 {:toc}
 
-## Apache SkyWalking
+# Apache SkyWalking
 
 마이크로서비스, 클라우드 네이티브 환경에서 분산 추적과 성능 모니터링을 담당하는 APM(Application Performance Monitoring) 오픈소스다. Alibaba, Tencent 등에서 실제 운영 환경에 사용하고 있고, Apache 재단의 top-level 프로젝트이기도 하다.
 
@@ -23,13 +23,13 @@ latex   : false
 
 ---
 
-## 기여
+## Contributions
 
-### JDBC 프로파일링 쿼리 버그 수정
+### Fix JDBC Profiling Query Bugs
 
 > [apache/skywalking#13785](https://github.com/apache/skywalking/pull/13785) · 2026-04-03 머지
 
-#### 이슈를 찾기까지
+#### Finding the Issue
 
 이슈 목록을 살펴봤는데 대부분 good first issue 레이블이 붙어 있어도 이미 누군가 진행 중이거나, 프론트엔드나 프로토콜 서브모듈이 얽혀 있어서 바로 손대기 어려운 것들이 많았다.
 
@@ -62,13 +62,13 @@ WHERE instance_id IN ('id1,id2,id3')
 
 이건 `instance_id` 컬럼을 리터럴 문자열 `'id1,id2,id3'`와 비교하는 거라 인스턴스가 여러 개면 항상 결과가 없다.
 
-#### 원인 추적
+#### Root Cause
 
 커밋 히스토리를 보니 두 버그 모두 Async Profiler 기능을 처음 추가한 PR(#12671, 2024년 10월)에서 시작됐다. 그리고 pprof 기능을 추가한 PR(#13502, 2025년 10월)이 JFR DAO 코드를 그대로 복사하면서 같은 버그를 가져왔다.
 
 기존에 보고된 이슈도 없었다. 이 코드 경로가 실제로 실행됐을 때 데이터가 안 나와도 태스크 자체는 동작하니까 티가 잘 안 났던 것 같다.
 
-#### 수정
+#### Fix
 
 `taskId` 필터는 단순히 WHERE 절에 추가하면 됐다.
 
@@ -85,7 +85,7 @@ if (CollectionUtils.isNotEmpty(instanceIds)) {
 }
 ```
 
-#### 테스트 작성에서 막힌 부분
+#### Testing Trouble
 
 `JDBCClient`를 Mockito로 모킹해서 SQL을 캡처하려고 했는데 varargs 때문에 한참 헤맸다.
 
@@ -109,7 +109,7 @@ capturedParams.set(Arrays.copyOfRange(allArgs, 2, allArgs.length));
 
 ---
 
-## 참고
+## References
 
 - [Apache SkyWalking GitHub](https://github.com/apache/skywalking)
 - [Apache SkyWalking 공식 문서](https://skywalking.apache.org/docs/)
