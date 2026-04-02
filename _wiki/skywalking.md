@@ -114,5 +114,5 @@ capturedParams.set(Arrays.copyOfRange(allArgs, 2, allArgs.length));
 - [Apache SkyWalking GitHub](https://github.com/apache/skywalking)
 - [Apache SkyWalking 공식 문서](https://skywalking.apache.org/docs/)
 - [PR #13785 - Fix missing taskId filter and incorrect IN clause in JDBC profiling query DAOs](https://github.com/apache/skywalking/pull/13785)
-- [Async Profiler 기능 추가 PR #12671](https://github.com/apache/skywalking/pull/12671) — 버그가 처음 유입된 커밋
-- [pprof 기능 추가 PR #13502](https://github.com/apache/skywalking/pull/13502) — 같은 버그를 복사해온 커밋
+- [Async Profiler 기능 추가 PR #12671](https://github.com/apache/skywalking/pull/12671)
+- [pprof 기능 추가 PR #13502](https://github.com/apache/skywalking/pull/13502)
