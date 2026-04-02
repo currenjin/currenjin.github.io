@@ -1,5 +1,5 @@
-<div class="post-tag">
+<ul class="tag-list">
     {% for tag in page.tags %}
-        <a href="/tag/{{ tag }}">#{{ tag }}</a>
+        <li><a href="/tag/#{{ tag }}">#{{ tag }}</a></li>
     {% endfor %}
-</div>
+</ul>
