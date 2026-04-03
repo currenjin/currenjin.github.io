@@ -15,17 +15,17 @@ latex   : false
 
 # Apache SkyWalking
 
-마이크로서비스, 클라우드 네이티브 환경에서 distributed tracing과 성능 모니터링을 담당하는 APM(Application Performance Monitoring) 오픈소스다. Alibaba, Tencent 등에서 실제 운영 환경에 사용하고 있고, Apache 재단의 top-level 프로젝트이기도 하다.
+마이크로서비스, 클라우드 네이티브 환경에서 distributed tracing과 성능 모니터링을 담당하는 APM(Application Performance Monitoring) 오픈소스다. Alibaba, Tencent 등에서 실제 production 환경에 사용하고 있고, Apache 재단의 top-level 프로젝트이기도 하다.
 
 한마디로 설명하면 "내 서비스가 언제 어디서 느려지는지 알고 싶을 때 쓰는 도구"다.
 
-agent를 붙이면 서비스 간 요청 흐름을 추적할 수 있고, MAL/OAL 같은 자체 DSL로 metric을 정의해서 집계할 수도 있다. 백엔드는 OAP(Observability Analysis Platform) 서버가 담당하고, storage는 BanyanDB, Elasticsearch, 혹은 JDBC 기반 RDB를 선택해서 붙일 수 있다.
+agent를 붙이면 서비스 간 요청 흐름을 추적할 수 있고, MAL/OAL 같은 자체 DSL로 metric을 정의해서 aggregation할 수도 있다. 백엔드는 OAP(Observability Analysis Platform) 서버가 담당하고, storage는 BanyanDB, Elasticsearch, 혹은 JDBC 기반 RDB를 선택해서 붙일 수 있다.
 
 ## Architecture
 
 코드를 읽으면서 파악한 전체 구조다.
 
-데이터 흐름은 크게 세 단계다. agent가 서비스에서 데이터를 수집하고, OAP가 받아서 분석/집계한 뒤 storage에 저장한다. UI는 OAP의 GraphQL API를 통해 데이터를 가져온다.
+데이터 흐름은 크게 세 단계다. agent가 서비스에서 데이터를 수집하고, OAP가 받아서 분석/aggregation한 뒤 storage에 저장한다. UI는 OAP의 GraphQL API를 통해 데이터를 가져온다.
 
 ```mermaid
 flowchart TD
@@ -45,26 +45,26 @@ flowchart TD
 
 ### OAP 내부
 
-**Receiver**는 들어오는 데이터를 내부 Source 객체로 변환한다. SkyWalking 자체 프로토콜뿐 아니라 OpenTelemetry, Zipkin, Kafka도 여기서 처리된다.
+**Receiver**는 들어오는 데이터를 내부 Source 객체로 변환한다. SkyWalking native protocol뿐 아니라 OpenTelemetry, Zipkin, Kafka도 여기서 처리된다.
 
 **Analyzer**가 핵심이다. 세 가지 DSL로 분석 규칙을 정의한다.
 
-- **OAL**: trace/metrics 집계 규칙. `.oal` 파일에 이렇게 쓰면
+- **OAL**: trace/metrics aggregation 규칙. `.oal` 파일에 이렇게 쓰면
   ```
   service_resp_time = from(Service.latency).longAvg();
   ```
-  컴파일 시점에 Java 코드가 자동으로 생성된다. 생성된 코드는 `oal-rt` 모듈이 담당하고, 결과물은 target 디렉토리에 `.class`로 떨어진다. OAL 파일을 수정하면 generated class도 다시 만들어야 하니 주의.
-- **MAL**: Prometheus 같은 외부 메트릭을 SkyWalking metric 형식으로 변환
-- **LAL**: 로그 파싱, trace ID 추출
+  compile 시점에 Java 코드가 자동으로 생성된다. 생성된 코드는 `oal-rt` 모듈이 담당하고, 결과물은 target 디렉토리에 `.class`로 떨어진다. OAL 파일을 수정하면 generated class도 다시 만들어야 하니 주의.
+- **MAL**: Prometheus 같은 외부 metric을 SkyWalking metric 형식으로 변환
+- **LAL**: log parsing, trace ID 추출
 
-**Storage**는 DAO 인터페이스만 core에 있고 구현체는 plugin이 담당한다. `application.yml`에서 storage를 선택하면 그에 맞는 구현체가 로드된다. 이 덕분에 storage를 갈아끼워도 비즈니스 로직은 건드릴 필요가 없다.
+**Storage**는 DAO interface만 core에 있고 implementation은 plugin이 담당한다. `application.yml`에서 storage를 선택하면 그에 맞는 implementation이 로드된다. 이 덕분에 storage를 갈아끼워도 business logic은 건드릴 필요가 없다.
 
 새 DAO를 추가할 때 건드려야 하는 파일이 정해져 있다. 기여하면서 직접 겪은 순서라 남겨둔다.
 
-1. DAO 인터페이스 (`server-core/.../storage/`)
-2. `StorageModule.services()`에 인터페이스 추가
+1. DAO interface (`server-core/.../storage/`)
+2. `StorageModule.services()`에 interface 추가
 3. `JDBCStorageProvider`, `ElasticSearchStorageProvider`, `BanyanDBStorageProvider` 각각 `prepare()`에 `registerServiceImplementation()` 추가
-4. 각 구현체 파일 작성
+4. 각 implementation 파일 작성
 
 3번에서 빠뜨리면 startup 시점에 `ServiceNotProvidedException`이 터진다.
 
@@ -73,7 +73,7 @@ flowchart TD
 저장되는 데이터는 크게 두 종류다.
 
 - **Record**: trace span, log처럼 원본 그대로 저장하는 데이터
-- **Metrics**: 집계된 지표. 분/시/일 단위로 다운샘플링되어 저장된다. `combine()`, `toHour()`, `toDay()` 같은 추상 메서드를 구현해야 한다.
+- **Metrics**: aggregation된 지표. 분/시/일 단위로 downsampling되어 저장된다. `combine()`, `toHour()`, `toDay()` 같은 abstract method를 구현해야 한다.
 
 오래된 데이터일수록 세밀함이 줄어드는 구조인데, time-series 특성상 자연스러운 설계다.
 
@@ -99,15 +99,15 @@ classDiagram
 
 ### Module 시스템
 
-OAP 전체가 모듈로 쪼개져 있고 SPI로 연결된다. `ModuleDefine`이 인터페이스 목록을 선언하면, `ModuleProvider`가 `prepare()` 단계에서 `registerServiceImplementation()`으로 구현체를 등록한다.
+OAP 전체가 모듈로 쪼개져 있고 SPI로 연결된다. `ModuleDefine`이 interface 목록을 선언하면, `ModuleProvider`가 `prepare()` 단계에서 `registerServiceImplementation()`으로 implementation을 등록한다.
 
-다른 모듈이 필요하면 구현체를 직접 참조하는 게 아니라 `moduleManager.find(...).provider().getService(인터페이스.class)` 형태로 인터페이스를 통해 가져온다. 모듈 간 결합이 없으니 storage나 cluster 모듈을 교체해도 나머지 코드가 안 바뀐다.
+다른 모듈이 필요하면 implementation을 직접 참조하는 게 아니라 `moduleManager.find(...).provider().getService(Interface.class)` 형태로 interface를 통해 가져온다. 모듈 간 coupling이 없으니 storage나 cluster 모듈을 교체해도 나머지 코드가 안 바뀐다.
 
 ```mermaid
 flowchart LR
     MD["ModuleDefine\n(services() 선언)"]
-    MP["ModuleProvider\n(prepare()에서 구현체 등록)"]
-    SV["Service\n(비즈니스 로직)"]
+    MP["ModuleProvider\n(prepare()에서 implementation 등록)"]
+    SV["Service\n(business logic)"]
     CM["ModuleManager"]
 
     MD --> MP --> SV
@@ -251,13 +251,13 @@ private List<AsyncProfilerTaskLog> findMatchedLogs(final String taskID, final Li
 }
 ```
 
-`getTaskLogList()`가 taskId 없이 storage에서 모든 task log를 조회한 뒤, service layer에서 stream으로 걸러내는 구조다. interface 시그니처도 그냥 `getTaskLogList()`로, parameter가 아예 없었다.
+`getTaskLogList()`가 taskId 없이 storage에서 모든 task log를 조회한 뒤, service layer에서 stream으로 걸러내는 구조다. interface signature도 그냥 `getTaskLogList()`로, parameter가 아예 없었다.
 
-JDBC, Elasticsearch, BanyanDB 구현체 세 개가 모두 같은 패턴이었다.
+JDBC, Elasticsearch, BanyanDB implementation 세 개가 모두 같은 패턴이었다.
 
 #### Fix
 
-interface에 `taskId`를 추가하고, 각 storage 구현체에서 DB 레벨로 필터링하도록 수정했다. 변경이 필요한 파일이 많아서 커밋을 6개로 쪼갰다.
+interface에 `taskId`를 추가하고, 각 storage implementation에서 DB 레벨로 필터링하도록 수정했다. 변경이 필요한 파일이 많아서 commit을 6개로 쪼갰다.
 
 ```mermaid
 flowchart LR
@@ -265,7 +265,7 @@ flowchart LR
         direction TB
         S1[Service] -->|"getTaskLogList()\n전체 조회"| D1[(Storage)]
         D1 --> S1
-        S1 -->|"stream filter\n인메모리 필터링"| R1[Result]
+        S1 -->|"stream filter\nin-memory 필터링"| R1[Result]
     end
 
     subgraph After
@@ -279,7 +279,7 @@ flowchart LR
 - JDBC: `WHERE task_id = ?` 추가
 - Elasticsearch: `term` query on `task_id` 추가
 - BanyanDB: `query.and(eq(TASK_ID, taskId))` 추가
-- service: taskId를 DAO에 직접 전달, `findMatchedLogs()` 인메모리 필터 제거
+- service: taskId를 DAO에 직접 전달, `findMatchedLogs()` in-memory filter 제거
 
 ```java
 public List<AsyncProfilerTaskLog> queryAsyncProfilerTaskLogs(String taskId) throws IOException {
