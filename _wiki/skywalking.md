@@ -204,7 +204,7 @@ capturedParams.set(Arrays.copyOfRange(allArgs, 2, allArgs.length));
 
 ### Remove GroupBy.field_name from BanyanDB MeasureQuery
 
-> [apache/skywalking#13786](https://github.com/apache/skywalking/pull/13786) · PR 오픈 중
+> [apache/skywalking#13786](https://github.com/apache/skywalking/pull/13786) · 2026-04-03 머지
 
 #### Finding the Issue
 
