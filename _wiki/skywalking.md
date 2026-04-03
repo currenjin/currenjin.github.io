@@ -68,11 +68,42 @@ flowchart TD
 
 오래된 데이터일수록 세밀함이 줄어드는 구조인데, time-series 특성상 자연스러운 설계다.
 
+```mermaid
+classDiagram
+    class StorageData {
+        <<interface>>
+        +id() StorageID
+    }
+    class Record {
+        +timeBucket long
+    }
+    class Metrics {
+        +timeBucket long
+        +combine(Metrics)*
+        +calculate()*
+        +toHour()*
+        +toDay()*
+    }
+    StorageData <|.. Record
+    StorageData <|.. Metrics
+```
+
 ### Module 시스템
 
 OAP 전체가 모듈로 쪼개져 있고 SPI로 연결된다. `ModuleDefine`이 인터페이스 목록을 선언하면, `ModuleProvider`가 `prepare()` 단계에서 `registerServiceImplementation()`으로 구현체를 등록한다.
 
 다른 모듈이 필요하면 구현체를 직접 참조하는 게 아니라 `moduleManager.find(...).provider().getService(인터페이스.class)` 형태로 인터페이스를 통해 가져온다. 모듈 간 결합이 없으니 storage나 cluster 모듈을 교체해도 나머지 코드가 안 바뀐다.
+
+```mermaid
+flowchart LR
+    MD["ModuleDefine\n(services() 선언)"]
+    MP["ModuleProvider\n(prepare()에서 구현체 등록)"]
+    SV["Service\n(비즈니스 로직)"]
+    CM["ModuleManager"]
+
+    MD --> MP --> SV
+    CM -->|"getService(Interface.class)"| SV
+```
 
 ---
 
@@ -218,6 +249,22 @@ JDBC, Elasticsearch, BanyanDB 구현체 세 개가 모두 같은 패턴이었다
 #### Fix
 
 interface에 `taskId`를 추가하고, 각 storage 구현체에서 DB 레벨로 필터링하도록 수정했다. 변경이 필요한 파일이 많아서 커밋을 6개로 쪼갰다.
+
+```mermaid
+flowchart LR
+    subgraph Before
+        direction TB
+        S1[Service] -->|"getTaskLogList()\n전체 조회"| D1[(Storage)]
+        D1 --> S1
+        S1 -->|"stream filter\n인메모리 필터링"| R1[Result]
+    end
+
+    subgraph After
+        direction TB
+        S2[Service] -->|"getTaskLogList(taskId)\ntaskId 조건 포함"| D2[(Storage)]
+        D2 --> R2[Result]
+    end
+```
 
 - interface: `getTaskLogList()` → `getTaskLogList(String taskId)`
 - JDBC: `WHERE task_id = ?` 추가
