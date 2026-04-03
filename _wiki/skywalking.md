@@ -64,7 +64,7 @@ WHERE instance_id IN ('id1,id2,id3')
 
 #### Root Cause
 
-커밋 히스토리를 보니 두 버그 모두 Async Profiler 기능을 처음 추가한 PR(#12671, 2024년 10월)에서 시작됐다. 그리고 pprof 기능을 추가한 PR(#13502, 2025년 10월)이 JFR DAO 코드를 그대로 복사하면서 같은 버그를 가져왔다.
+커밋 히스토리를 보니 두 버그 모두 [Async Profiler 기능을 처음 추가한 PR](https://github.com/apache/skywalking/pull/12671)(2024년 10월)에서 시작됐다. 그리고 [pprof 기능을 추가한 PR](https://github.com/apache/skywalking/pull/13502)(2025년 10월)이 JFR DAO 코드를 그대로 복사하면서 같은 버그를 가져왔다.
 
 기존에 보고된 이슈도 없었다. 이 코드 경로가 실제로 실행됐을 때 데이터가 안 나와도 태스크 자체는 동작하니까 티가 잘 안 났던 것 같다.
 
@@ -115,7 +115,7 @@ capturedParams.set(Arrays.copyOfRange(allArgs, 2, allArgs.length));
 
 #### Finding the Issue
 
-이슈 목록을 보다가 #13779를 발견했다. `QueryRequest.GroupBy.field_name`이 BanyanDB 쿼리 실행 경로에서 실제로 쓰이지 않는다는 내용이었다.
+이슈 목록을 보다가 [#13779](https://github.com/apache/skywalking/issues/13779)를 발견했다. `QueryRequest.GroupBy.field_name`이 BanyanDB 쿼리 실행 경로에서 실제로 쓰이지 않는다는 내용이었다.
 
 BanyanDB는 그룹핑을 `tag_projection`으로 처리하는데, SkyWalking 쪽에서는 계속 `field_name`을 함께 보내고 있었다. 사용하지 않는 필드를 proto에 실어 보내는 셈이다.
 
@@ -140,8 +140,3 @@ groupByBuilder.setFieldName(this.aggregation.fieldName);
 
 - [Apache SkyWalking GitHub](https://github.com/apache/skywalking)
 - [Apache SkyWalking 공식 문서](https://skywalking.apache.org/docs/)
-- [PR #13785 - Fix missing taskId filter and incorrect IN clause in JDBC profiling query DAOs](https://github.com/apache/skywalking/pull/13785)
-- [PR #13786 - Remove GroupBy.field_name from BanyanDB MeasureQuery request building](https://github.com/apache/skywalking/pull/13786)
-- [Issue #13779 - Deprecate and remove QueryRequest.GroupBy.field_name in staged rollout](https://github.com/apache/skywalking/issues/13779)
-- [Async Profiler 기능 추가 PR #12671](https://github.com/apache/skywalking/pull/12671)
-- [pprof 기능 추가 PR #13502](https://github.com/apache/skywalking/pull/13502)
