@@ -120,7 +120,7 @@ flowchart LR
 
 ### Fix JDBC Profiling Query Bugs
 
-> [apache/skywalking#13785](https://github.com/apache/skywalking/pull/13785) · 2026-04-03 머지
+> [apache/skywalking#13785](https://github.com/apache/skywalking/pull/13785) · merged on 2026-04-03
 
 #### Finding the Issue
 
@@ -204,7 +204,7 @@ capturedParams.set(Arrays.copyOfRange(allArgs, 2, allArgs.length));
 
 ### Remove GroupBy.field_name from BanyanDB MeasureQuery
 
-> [apache/skywalking#13786](https://github.com/apache/skywalking/pull/13786) · 2026-04-03 머지
+> [apache/skywalking#13786](https://github.com/apache/skywalking/pull/13786) · merged on 2026-04-03
 
 #### Finding the Issue
 
@@ -231,7 +231,7 @@ groupByBuilder.setFieldName(this.aggregation.fieldName);
 
 ### Push taskId Filter Down to Storage Layer in AsyncProfilerTaskLog Query
 
-> [apache/skywalking#13787](https://github.com/apache/skywalking/pull/13787) · PR 오픈 중
+> [apache/skywalking#13787](https://github.com/apache/skywalking/pull/13787) · open
 
 #### Finding the Issue
 
