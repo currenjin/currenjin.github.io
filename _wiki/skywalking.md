@@ -23,90 +23,56 @@ agent를 붙이면 서비스 간 요청 흐름을 추적할 수 있고, MAL/OAL 
 
 ## Architecture
 
-### 전체 구조
+코드를 읽으면서 파악한 전체 구조다.
 
-```
-┌──────────────────────────────────────────────────────────┐
-│                      데이터 수집 계층                       │
-│                                                          │
-│   Java Agent    Go Agent    Node.js Agent    OTEL SDK    │
-│   (바이트코드 조작)                          (표준 프로토콜) │
-└────────────────────────┬─────────────────────────────────┘
-                         │ gRPC / HTTP
-┌────────────────────────▼─────────────────────────────────┐
-│                   OAP Server (핵심 백엔드)                  │
-│                                                          │
-│   ┌─────────────┐  ┌──────────────┐  ┌───────────────┐  │
-│   │  Receiver   │→ │   Analyzer   │→ │ Query Plugin  │  │
-│   │  (데이터 수신) │  │  (분석/집계)  │  │ (GraphQL API) │  │
-│   └─────────────┘  └──────────────┘  └───────────────┘  │
-│                          │                               │
-│                          ▼                               │
-│                  ┌───────────────┐                       │
-│                  │ Storage Layer │                       │
-│                  └───────────────┘                       │
-└──────────────────────────┬───────────────────────────────┘
-                           │
-               ┌───────────┼───────────┐
-               ▼           ▼           ▼
-           BanyanDB  Elasticsearch  JDBC (MySQL/PG)
+데이터 흐름은 크게 세 단계다. agent가 서비스에서 데이터를 수집하고, OAP가 받아서 분석/집계한 뒤 storage에 저장한다. UI는 OAP의 GraphQL API를 통해 데이터를 가져온다.
+
+```mermaid
+flowchart TD
+    A[Java Agent / Go Agent / OTEL SDK]
+    A -->|gRPC / HTTP| B
+
+    subgraph B[OAP Server]
+        R[Receiver] --> AN[Analyzer]
+        AN --> ST[Storage Layer]
+        ST --> Q[Query Plugin / GraphQL API]
+    end
+
+    ST --> D1[(BanyanDB)]
+    ST --> D2[(Elasticsearch)]
+    ST --> D3[(JDBC)]
 ```
 
-### OAP Server 내부 흐름
+### OAP 내부
 
-Agent에서 수집된 raw data는 OAP 안에서 세 단계를 거친다.
+**Receiver**는 들어오는 데이터를 내부 Source 객체로 변환한다. SkyWalking 자체 프로토콜뿐 아니라 OpenTelemetry, Zipkin, Kafka도 여기서 처리된다.
 
-**1. Receiver** — 프로토콜 수신 및 변환
+**Analyzer**가 핵심이다. 세 가지 DSL로 분석 규칙을 정의한다.
 
-SkyWalking 자체 프로토콜 외에 OpenTelemetry, Zipkin, Kafka도 지원한다. 수신한 데이터를 내부 Source 객체로 변환해서 다음 단계로 넘긴다.
+- **OAL** — trace/metrics 집계 규칙. `.oal` 파일에 이렇게 쓰면
+  ```
+  service_resp_time = from(Service.latency).longAvg();
+  ```
+  컴파일 시점에 Java 코드가 자동으로 생성된다.
+- **MAL** — Prometheus 같은 외부 메트릭을 SkyWalking metric 형식으로 변환
+- **LAL** — 로그 파싱, trace ID 추출
 
-**2. Analyzer** — DSL 기반 분석/집계
-
-세 가지 분석 언어가 사용 목적에 따라 나뉜다.
-
-| DSL | 역할 |
-|-----|------|
-| **OAL** (Observability Analysis Language) | trace/metrics 집계 규칙. `.oal` 파일을 컴파일하면 Java 코드가 자동 생성된다. |
-| **MAL** (Meter Analysis Language) | Prometheus-like 메트릭을 SkyWalking metric으로 변환 |
-| **LAL** (Log Analysis Language) | 로그 파싱, trace ID 추출, 서비스 매핑 |
-
-OAL 예시:
-```
-service_resp_time = from(Service.latency).longAvg();
-service_sla = from(Service.*).percent(status == true);
-```
-
-**3. Storage** — DAO 인터페이스 기반 영속화
-
-core 모듈은 DAO 인터페이스만 정의하고, 구현은 storage plugin이 담당한다. `application.yml`에서 storage 종류를 선택하면 해당 구현체가 로드된다.
+**Storage**는 DAO 인터페이스만 core에 있고 구현체는 plugin이 담당한다. `application.yml`에서 storage를 선택하면 그에 맞는 구현체가 로드된다. 이 덕분에 storage를 갈아끼워도 비즈니스 로직은 건드릴 필요가 없다.
 
 ### 데이터 모델
 
-```
-StorageData (interface)
-    │
-    ├── Record          ← 원본 데이터 (trace span, log 등). 집계 없이 그대로 저장
-    │
-    └── Metrics         ← 집계 지표 (응답시간 평균, 에러율 등)
-            combine()   ← 같은 시간대 데이터 병합
-            calculate() ← 최종 값 계산
-            toHour()    ← 시간 단위 다운샘플링
-            toDay()
-```
+저장되는 데이터는 크게 두 종류다.
 
-`Metrics`는 분/시/일 단위로 다운샘플링되어 저장된다. 오래된 데이터일수록 세밀함이 줄어드는 구조다.
+- **Record** — trace span, log처럼 원본 그대로 저장하는 데이터
+- **Metrics** — 집계된 지표. 분/시/일 단위로 다운샘플링되어 저장된다. `combine()`, `toHour()`, `toDay()` 같은 추상 메서드를 구현해야 한다.
+
+오래된 데이터일수록 세밀함이 줄어드는 구조인데, time-series 특성상 자연스러운 설계다.
 
 ### Module 시스템
 
-OAP 전체가 모듈로 분리되어 있고, SPI(ServiceLoader)로 연결된다.
+OAP 전체가 모듈로 쪼개져 있고 SPI로 연결된다. `ModuleDefine`이 인터페이스 목록을 선언하면, `ModuleProvider`가 `prepare()` 단계에서 `registerServiceImplementation()`으로 구현체를 등록한다.
 
-```
-ModuleDefine       ← 이 모듈이 노출하는 Service 인터페이스 선언
-    └── ModuleProvider  ← 실제 구현체 등록 (prepare() 단계)
-            └── Service ← 비즈니스 로직 객체
-```
-
-다른 모듈의 기능이 필요할 때는 구현체를 직접 참조하지 않고, `moduleManager.find(StorageModule.NAME).provider().getService(ITraceQueryDAO.class)` 형태로 인터페이스를 통해 조회한다. 모듈 간 결합도를 낮추는 핵심 원칙이다.
+다른 모듈이 필요하면 구현체를 직접 참조하는 게 아니라 `moduleManager.find(...).provider().getService(인터페이스.class)` 형태로 인터페이스를 통해 가져온다. 모듈 간 결합이 없으니 storage나 cluster 모듈을 교체해도 나머지 코드가 안 바뀐다.
 
 ---
 
