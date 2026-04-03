@@ -136,6 +136,52 @@ groupByBuilder.setFieldName(this.aggregation.fieldName);
 
 ---
 
+### Push taskId Filter Down to Storage Layer in AsyncProfilerTaskLog Query
+
+> [apache/skywalking#13787](https://github.com/apache/skywalking/pull/13787) · PR 오픈 중
+
+#### Finding the Issue
+
+[#13593](https://github.com/apache/skywalking/issues/13593)을 보다가 backend 코드를 살펴봤다. 이슈 자체는 UI에서 taskId가 null로 전달되는 문제였는데, service layer 코드에서 이상한 패턴이 눈에 들어왔다.
+
+```java
+public List<AsyncProfilerTaskLog> queryAsyncProfilerTaskLogs(String taskId) throws IOException {
+    List<AsyncProfilerTaskLog> taskLogList = getTaskLogQueryDAO().getTaskLogList();
+    return findMatchedLogs(taskId, taskLogList);
+}
+
+private List<AsyncProfilerTaskLog> findMatchedLogs(final String taskID, final List<AsyncProfilerTaskLog> allLogs) {
+    return allLogs.stream()
+            .filter(l -> Objects.equals(l.getId(), taskID))
+            .map(this::extendTaskLog)
+            .collect(Collectors.toList());
+}
+```
+
+`getTaskLogList()`가 taskId 없이 storage에서 모든 task log를 조회한 뒤, service layer에서 stream으로 걸러내는 구조다. interface 시그니처도 그냥 `getTaskLogList()`로, parameter가 아예 없었다.
+
+JDBC, Elasticsearch, BanyanDB 구현체 세 개가 모두 같은 패턴이었다.
+
+#### Fix
+
+interface에 `taskId`를 추가하고, 각 storage 구현체에서 DB 레벨로 필터링하도록 수정했다. 변경이 필요한 파일이 많아서 커밋을 6개로 쪼갰다.
+
+- interface: `getTaskLogList()` → `getTaskLogList(String taskId)`
+- JDBC: `WHERE task_id = ?` 추가
+- Elasticsearch: `term` query on `task_id` 추가
+- BanyanDB: `query.and(eq(TASK_ID, taskId))` 추가
+- service: taskId를 DAO에 직접 전달, `findMatchedLogs()` 인메모리 필터 제거
+
+```java
+public List<AsyncProfilerTaskLog> queryAsyncProfilerTaskLogs(String taskId) throws IOException {
+    return getTaskLogQueryDAO().getTaskLogList(taskId).stream()
+            .map(this::extendTaskLog)
+            .collect(Collectors.toList());
+}
+```
+
+---
+
 ## References
 
 - [Apache SkyWalking GitHub](https://github.com/apache/skywalking)
