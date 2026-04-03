@@ -231,7 +231,7 @@ groupByBuilder.setFieldName(this.aggregation.fieldName);
 
 ### Push taskId Filter Down to Storage Layer in AsyncProfilerTaskLog Query
 
-> [apache/skywalking#13787](https://github.com/apache/skywalking/pull/13787) · open
+> [apache/skywalking#13787](https://github.com/apache/skywalking/pull/13787) · merged on 2026-04-03
 
 #### Finding the Issue
 
