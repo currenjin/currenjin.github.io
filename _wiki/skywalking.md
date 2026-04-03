@@ -53,11 +53,20 @@ flowchart TD
   ```
   service_resp_time = from(Service.latency).longAvg();
   ```
-  컴파일 시점에 Java 코드가 자동으로 생성된다.
+  컴파일 시점에 Java 코드가 자동으로 생성된다. 생성된 코드는 `oal-rt` 모듈이 담당하고, 결과물은 target 디렉토리에 `.class`로 떨어진다. OAL 파일을 수정하면 generated class도 다시 만들어야 하니 주의.
 - **MAL** — Prometheus 같은 외부 메트릭을 SkyWalking metric 형식으로 변환
 - **LAL** — 로그 파싱, trace ID 추출
 
 **Storage**는 DAO 인터페이스만 core에 있고 구현체는 plugin이 담당한다. `application.yml`에서 storage를 선택하면 그에 맞는 구현체가 로드된다. 이 덕분에 storage를 갈아끼워도 비즈니스 로직은 건드릴 필요가 없다.
+
+새 DAO를 추가할 때 건드려야 하는 파일이 정해져 있다. 기여하면서 직접 겪은 순서라 남겨둔다.
+
+1. DAO 인터페이스 (`server-core/.../storage/`)
+2. `StorageModule.services()`에 인터페이스 추가
+3. `JDBCStorageProvider`, `ElasticSearchStorageProvider`, `BanyanDBStorageProvider` 각각 `prepare()`에 `registerServiceImplementation()` 추가
+4. 각 구현체 파일 작성
+
+3번에서 빠뜨리면 startup 시점에 `ServiceNotProvidedException`이 터진다.
 
 ### 데이터 모델
 
