@@ -3,7 +3,7 @@ layout  : wiki
 title   : Apache SkyWalking
 summary : 마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스
 date    : 2026-04-03 00:00:00 +0900
-updated : 2026-04-03 20:00:00 +0900
+updated : 2026-04-04 20:00:00 +0900
 tags    : skywalking oss apm java
 toc     : true
 public  : true
@@ -288,6 +288,105 @@ public List<AsyncProfilerTaskLog> queryAsyncProfilerTaskLogs(String taskId) thro
             .collect(Collectors.toList());
 }
 ```
+
+---
+
+### Fix Missing AND Keyword in JDBCEBPFProfilingTaskDAO SQL
+
+> [apache/skywalking#13789](https://github.com/apache/skywalking/pull/13789) · 2026-04-04
+
+#### Finding the Issue
+
+JDBC DAO 쪽 코드를 계속 읽고 있었는데, `JDBCEBPFProfilingTaskDAO.getTaskRecord()`에서 눈에 띄는 문제가 있었다.
+
+```java
+String sql = "select * from " + table +
+    " where " + JDBCTableInstaller.TABLE_COLUMN + " = ?" +
+    EBPFProfilingTaskRecord.LOGICAL_ID + " = ?";
+```
+
+상수를 대입하면 이렇게 된다.
+
+```sql
+select * from ebpf_profiling_task where table_name = ?logical_id = ?
+```
+
+`?` 바로 뒤에 `logical_id`가 붙는다. `and` 키워드가 빠져 있어서 SQL syntax error가 난다. 이 메서드는 호출될 때마다 무조건 실패하는 완전히 깨진 코드다.
+
+같은 파일의 다른 메서드들(`queryTasksByServices`, `queryTasksByTargets`)은 `appendCondition()` 헬퍼를 통해 `and`를 자동으로 붙이는데, `getTaskRecord()`만 직접 문자열을 조립하면서 빠뜨린 것이다.
+
+#### Fix
+
+`" = ?"` 뒤에 `" and "`를 추가했다.
+
+```java
+String sql = "select * from " + table +
+    " where " + JDBCTableInstaller.TABLE_COLUMN + " = ? and " +
+    EBPFProfilingTaskRecord.LOGICAL_ID + " = ?";
+```
+
+테스트는 Mockito로 `JDBCClient.executeQuery`를 캡처해서 생성된 SQL에 `where`, `and`, `logical_id = ?`가 모두 포함되는지, 파라미터가 올바르게 바인딩되는지 확인한다.
+
+---
+
+### Fix Missing Parentheses in JDBCZipkinQueryDAO Trace ID Filter
+
+> [apache/skywalking#13790](https://github.com/apache/skywalking/pull/13790) · 2026-04-04
+
+#### Finding the Issue
+
+같은 JDBC DAO 디렉토리에서 `JDBCZipkinQueryDAO.getTraces(Set<String>, Duration)`를 보다가 발견했다.
+
+```java
+int i = 0;
+sql.append(" and ");
+for (final String traceId : traceIds) {
+    sql.append(ZipkinSpanRecord.TRACE_ID).append(" = ?");
+    condition.add(traceId);
+    if (i != traceIds.size() - 1) {
+        sql.append(" or ");
+    }
+    i++;
+}
+```
+
+trace ID가 3개면 생성되는 SQL은 이렇다.
+
+```sql
+WHERE table_name = ? and trace_id = ? or trace_id = ? or trace_id = ?
+```
+
+SQL에서 `AND`가 `OR`보다 우선순위가 높다. 그래서 실제로는 이렇게 해석된다.
+
+```sql
+WHERE (table_name = ? AND trace_id = ?) OR trace_id = ? OR trace_id = ?
+```
+
+첫 번째 trace ID만 `table_name` 필터와 함께 걸리고, 나머지는 테이블 구분 없이 전체 row에서 매칭된다. 결과적으로 관련 없는 테이블의 데이터까지 반환될 수 있다.
+
+#### Fix
+
+OR 체인을 `IN` 절로 교체했다. 이전 PR(#13785)에서도 썼던 `Collections.nCopies` 패턴이다.
+
+```java
+sql.append(" and ").append(ZipkinSpanRecord.TRACE_ID)
+   .append(" in (").append(String.join(",", Collections.nCopies(traceIds.size(), "?"))).append(")");
+condition.addAll(traceIds);
+```
+
+생성되는 SQL:
+
+```sql
+WHERE table_name = ? and trace_id in (?,?,?)
+```
+
+괄호를 추가하는 것만으로도 해결되지만, `IN`이 의미도 명확하고 같은 프로젝트의 다른 DAO들(`JDBCEBPFProfilingTaskDAO.appendListCondition()` 등)과도 일관된 패턴이라 이쪽으로 맞췄다.
+
+테스트는 세 가지를 확인한다.
+
+- trace ID 3개 전달 시 `in (?,?,?)`가 생성되는가
+- SQL에 `or`가 포함되지 않는가
+- 빈 Set 전달 시 DB 호출 없이 빈 리스트를 반환하는가
 
 ---
 
