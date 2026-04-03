@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nanum+Myeongjo:wght@400;700;800&family=Source+Code+Pro:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Noto+Serif+KR:wght@400;500;700&family=Source+Code+Pro:wght@400;500&display=swap');
 
 :root {
     --bg-main: #ece7dc;
@@ -34,7 +34,7 @@ body {
     --cosmos-bg-y: 0px;
     margin: 0;
     min-height: 100vh;
-    font: 400 20px/1.8 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    font: 400 20px/1.8 'Noto Serif KR', serif;
     color: var(--ink-main);
     -webkit-text-size-adjust: 100%;
     font-feature-settings: "kern" 1;
