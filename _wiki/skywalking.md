@@ -21,6 +21,93 @@ latex   : false
 
 agent를 붙이면 서비스 간 요청 흐름을 추적할 수 있고, MAL/OAL 같은 자체 DSL로 metric을 정의해서 집계할 수도 있다. 백엔드는 OAP(Observability Analysis Platform) 서버가 담당하고, storage는 BanyanDB, Elasticsearch, 혹은 JDBC 기반 RDB를 선택해서 붙일 수 있다.
 
+## Architecture
+
+### 전체 구조
+
+```
+┌──────────────────────────────────────────────────────────┐
+│                      데이터 수집 계층                       │
+│                                                          │
+│   Java Agent    Go Agent    Node.js Agent    OTEL SDK    │
+│   (바이트코드 조작)                          (표준 프로토콜) │
+└────────────────────────┬─────────────────────────────────┘
+                         │ gRPC / HTTP
+┌────────────────────────▼─────────────────────────────────┐
+│                   OAP Server (핵심 백엔드)                  │
+│                                                          │
+│   ┌─────────────┐  ┌──────────────┐  ┌───────────────┐  │
+│   │  Receiver   │→ │   Analyzer   │→ │ Query Plugin  │  │
+│   │  (데이터 수신) │  │  (분석/집계)  │  │ (GraphQL API) │  │
+│   └─────────────┘  └──────────────┘  └───────────────┘  │
+│                          │                               │
+│                          ▼                               │
+│                  ┌───────────────┐                       │
+│                  │ Storage Layer │                       │
+│                  └───────────────┘                       │
+└──────────────────────────┬───────────────────────────────┘
+                           │
+               ┌───────────┼───────────┐
+               ▼           ▼           ▼
+           BanyanDB  Elasticsearch  JDBC (MySQL/PG)
+```
+
+### OAP Server 내부 흐름
+
+Agent에서 수집된 raw data는 OAP 안에서 세 단계를 거친다.
+
+**1. Receiver** — 프로토콜 수신 및 변환
+
+SkyWalking 자체 프로토콜 외에 OpenTelemetry, Zipkin, Kafka도 지원한다. 수신한 데이터를 내부 Source 객체로 변환해서 다음 단계로 넘긴다.
+
+**2. Analyzer** — DSL 기반 분석/집계
+
+세 가지 분석 언어가 사용 목적에 따라 나뉜다.
+
+| DSL | 역할 |
+|-----|------|
+| **OAL** (Observability Analysis Language) | trace/metrics 집계 규칙. `.oal` 파일을 컴파일하면 Java 코드가 자동 생성된다. |
+| **MAL** (Meter Analysis Language) | Prometheus-like 메트릭을 SkyWalking metric으로 변환 |
+| **LAL** (Log Analysis Language) | 로그 파싱, trace ID 추출, 서비스 매핑 |
+
+OAL 예시:
+```
+service_resp_time = from(Service.latency).longAvg();
+service_sla = from(Service.*).percent(status == true);
+```
+
+**3. Storage** — DAO 인터페이스 기반 영속화
+
+core 모듈은 DAO 인터페이스만 정의하고, 구현은 storage plugin이 담당한다. `application.yml`에서 storage 종류를 선택하면 해당 구현체가 로드된다.
+
+### 데이터 모델
+
+```
+StorageData (interface)
+    │
+    ├── Record          ← 원본 데이터 (trace span, log 등). 집계 없이 그대로 저장
+    │
+    └── Metrics         ← 집계 지표 (응답시간 평균, 에러율 등)
+            combine()   ← 같은 시간대 데이터 병합
+            calculate() ← 최종 값 계산
+            toHour()    ← 시간 단위 다운샘플링
+            toDay()
+```
+
+`Metrics`는 분/시/일 단위로 다운샘플링되어 저장된다. 오래된 데이터일수록 세밀함이 줄어드는 구조다.
+
+### Module 시스템
+
+OAP 전체가 모듈로 분리되어 있고, SPI(ServiceLoader)로 연결된다.
+
+```
+ModuleDefine       ← 이 모듈이 노출하는 Service 인터페이스 선언
+    └── ModuleProvider  ← 실제 구현체 등록 (prepare() 단계)
+            └── Service ← 비즈니스 로직 객체
+```
+
+다른 모듈의 기능이 필요할 때는 구현체를 직접 참조하지 않고, `moduleManager.find(StorageModule.NAME).provider().getService(ITraceQueryDAO.class)` 형태로 인터페이스를 통해 조회한다. 모듈 간 결합도를 낮추는 핵심 원칙이다.
+
 ---
 
 ## Contributions
