@@ -49,13 +49,13 @@ flowchart TD
 
 **Analyzer**가 핵심이다. 세 가지 DSL로 분석 규칙을 정의한다.
 
-- **OAL** — trace/metrics 집계 규칙. `.oal` 파일에 이렇게 쓰면
+- **OAL**: trace/metrics 집계 규칙. `.oal` 파일에 이렇게 쓰면
   ```
   service_resp_time = from(Service.latency).longAvg();
   ```
   컴파일 시점에 Java 코드가 자동으로 생성된다. 생성된 코드는 `oal-rt` 모듈이 담당하고, 결과물은 target 디렉토리에 `.class`로 떨어진다. OAL 파일을 수정하면 generated class도 다시 만들어야 하니 주의.
-- **MAL** — Prometheus 같은 외부 메트릭을 SkyWalking metric 형식으로 변환
-- **LAL** — 로그 파싱, trace ID 추출
+- **MAL**: Prometheus 같은 외부 메트릭을 SkyWalking metric 형식으로 변환
+- **LAL**: 로그 파싱, trace ID 추출
 
 **Storage**는 DAO 인터페이스만 core에 있고 구현체는 plugin이 담당한다. `application.yml`에서 storage를 선택하면 그에 맞는 구현체가 로드된다. 이 덕분에 storage를 갈아끼워도 비즈니스 로직은 건드릴 필요가 없다.
 
@@ -72,8 +72,8 @@ flowchart TD
 
 저장되는 데이터는 크게 두 종류다.
 
-- **Record** — trace span, log처럼 원본 그대로 저장하는 데이터
-- **Metrics** — 집계된 지표. 분/시/일 단위로 다운샘플링되어 저장된다. `combine()`, `toHour()`, `toDay()` 같은 추상 메서드를 구현해야 한다.
+- **Record**: trace span, log처럼 원본 그대로 저장하는 데이터
+- **Metrics**: 집계된 지표. 분/시/일 단위로 다운샘플링되어 저장된다. `combine()`, `toHour()`, `toDay()` 같은 추상 메서드를 구현해야 한다.
 
 오래된 데이터일수록 세밀함이 줄어드는 구조인데, time-series 특성상 자연스러운 설계다.
 
