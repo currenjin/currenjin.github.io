@@ -21,7 +21,7 @@
 
 .books-subtitle {
   color: var(--ink-subtle);
-  font-size: 0.9rem;
+  font-size: 1rem;
   margin: 0 0 1rem;
 }
 
@@ -29,7 +29,7 @@
   display: flex;
   justify-content: center;
   gap: 1.4rem;
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   color: var(--ink-subtle);
 
   strong { color: var(--accent); font-weight: 700; }
@@ -52,14 +52,14 @@
 }
 
 .filter-label {
-  font-size: 0.72rem;
+  font-size: 0.80rem;
   font-weight: 600;
   color: var(--ink-subtle);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   min-width: 2.2rem;
   text-align: right;
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 .filter-btn {
@@ -68,7 +68,7 @@
   color: var(--ink-subtle);
   padding: 0.25rem 0.8rem;
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   cursor: pointer;
   letter-spacing: 0.04em;
   transition: all 0.18s ease;
@@ -158,7 +158,7 @@
 }
 
 .book-card-type {
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -179,7 +179,7 @@
 }
 
 .book-card-author {
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   color: var(--ink-subtle);
   margin: 0;
   white-space: nowrap;
@@ -196,7 +196,7 @@
 }
 
 .book-card-status {
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 600;
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
@@ -215,13 +215,13 @@
 }
 
 .book-card-rating {
-  font-size: 0.7rem;
+  font-size: 0.80rem;
   color: #e8a020;
   letter-spacing: -0.05em;
 }
 
 .book-card-notes {
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   color: var(--ink-subtle);
 }
 
@@ -244,7 +244,7 @@
 }
 
 .book-tag {
-  font-size: 0.72rem;
+  font-size: 0.80rem;
   padding: 0.18rem 0.55rem;
   border-radius: 4px;
   letter-spacing: 0.04em;
