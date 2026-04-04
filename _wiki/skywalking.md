@@ -293,7 +293,7 @@ public List<AsyncProfilerTaskLog> queryAsyncProfilerTaskLogs(String taskId) thro
 
 ### Fix Missing AND Keyword in JDBCEBPFProfilingTaskDAO SQL
 
-> [apache/skywalking#13789](https://github.com/apache/skywalking/pull/13789) · 2026-04-04
+> [apache/skywalking#13789](https://github.com/apache/skywalking/pull/13789) · merged on 2026-04-04
 
 #### Finding the Issue
 
@@ -331,7 +331,7 @@ String sql = "select * from " + table +
 
 ### Fix Missing Parentheses in JDBCZipkinQueryDAO Trace ID Filter
 
-> [apache/skywalking#13790](https://github.com/apache/skywalking/pull/13790) · 2026-04-04
+> [apache/skywalking#13790](https://github.com/apache/skywalking/pull/13790) · merged on 2026-04-04
 
 #### Finding the Issue
 
