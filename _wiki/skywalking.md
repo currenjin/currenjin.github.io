@@ -3,7 +3,7 @@ layout  : wiki
 title   : Apache SkyWalking
 summary : 마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스
 date    : 2026-04-03 00:00:00 +0900
-updated : 2026-04-06 00:00:00 +0900
+updated : 2026-04-06 20:00:00 +0900
 tags    : skywalking oss apm java
 toc     : true
 public  : true
@@ -512,7 +512,7 @@ WHERE table_name = ? and trace_id in (?,?,?)
 
 ### Fix Duplicate TABLE_COLUMN Condition in JDBCMetadataQueryDAO.findEndpoint()
 
-> [apache/skywalking#13794](https://github.com/apache/skywalking/pull/13794) · open
+> [apache/skywalking#13794](https://github.com/apache/skywalking/pull/13794) · merged on 2026-04-06
 
 #### Finding the Issue
 
@@ -555,6 +555,29 @@ JDBCMetadataQueryDAO(JDBCClient jdbcClient, int metadataQueryMaxSize, TableHelpe
 #### Fix
 
 중복된 두 번째 `TABLE_COLUMN = ?` 조건과 해당 parameter binding을 제거했다.
+
+---
+
+### Add Unit Tests for JDBC Query DAO SQL Building
+
+> [apache/skywalking#13800](https://github.com/apache/skywalking/pull/13800) · open
+
+#### Motivation
+
+앞선 PR들에서 JDBC DAO의 SQL 조립 버그를 여러 건 발견했는데, 이 DAO들에는 SQL이 올바르게 만들어지는지 확인하는 단위 테스트가 없었다. 버그가 있어도 실제 DB를 붙여서 e2e 테스트를 돌리지 않는 한 발견이 어려운 구조다.
+
+SQL 조립 로직만 검증하는 단위 테스트를 추가해서 regression을 잡을 수 있게 했다.
+
+#### Coverage
+
+4개 DAO에 대해 테스트를 작성했다.
+
+- **JDBCAlarmQueryDAO**: scope/keyword/duration/tag 필터 조합별 SQL 확인, `TABLE_COLUMN` 조건 단일성 검증, limit/offset 처리
+- **JDBCLogQueryDAO**: serviceId/instanceId/endpointId/traceId/segmentId 필터 조합, ASC/DESC 정렬, tag join, limit/offset
+- **JDBCTraceQueryDAO**: `queryByTraceId`, `queryBySegmentIdList`, `queryByTraceIdWithInstanceId`의 IN 절 생성 검증
+- **JDBCTopologyQueryDAO**: service relation의 OR 조건 괄호 처리, instance relation의 양방향 조건 검증
+
+처음에는 PR 4개로 나눠서 올렸는데, 메인테이너(wu-sheng)가 CI 리소스 절약을 위해 하나로 합쳐달라고 요청해서 통합했다.
 
 ---
 
