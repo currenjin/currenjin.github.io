@@ -120,7 +120,7 @@ flowchart LR
 
 ### Fix JDBC Profiling Query Bugs
 
-> [apache/skywalking#13785](https://github.com/apache/skywalking/pull/13785) · merged on 2026-04-03
+> [apache/skywalking#13785](https://github.com/apache/skywalking/pull/13785) · merged on 2026-04-02
 
 #### Finding the Issue
 
