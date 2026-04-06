@@ -390,6 +390,54 @@ WHERE table_name = ? and trace_id in (?,?,?)
 
 ---
 
+### Fix Duplicate TABLE_COLUMN Condition in JDBCMetadataQueryDAO.findEndpoint()
+
+> [apache/skywalking#13794](https://github.com/apache/skywalking/pull/13794) · open
+
+#### Finding the Issue
+
+`JDBCMetadataQueryDAO`의 다른 메서드들(`listInstances`, `listProcesses` 등)을 읽다가 `findEndpoint()`에서 이상한 패턴을 발견했다.
+
+```java
+sql.append("select * from ").append(table).append(" where ")
+    .append(JDBCTableInstaller.TABLE_COLUMN).append(" = ?");
+condition.add(EndpointTraffic.INDEX_NAME);
+sql.append(" and ").append(EndpointTraffic.SERVICE_ID).append("=?");
+condition.add(serviceId);
+sql.append(" and ").append(JDBCTableInstaller.TABLE_COLUMN).append(" = ?"); // 중복
+condition.add(EndpointTraffic.INDEX_NAME);                                   // 중복
+```
+
+`TABLE_COLUMN = ?` 조건이 두 번 들어간다. 생성되는 SQL은 이렇다.
+
+```sql
+select * from endpoint_traffic
+where table_name = ? and service_id = ? and table_name = ? ...
+```
+
+SQL syntax error는 아니라서 쿼리 자체는 실행된다. 하지만 같은 조건을 두 번 체크하고 parameter도 두 번 binding하는 명백한 copy-paste 버그다.
+
+같은 클래스의 다른 모든 메서드는 `TABLE_COLUMN = ?`를 정확히 한 번만 추가한다. `findEndpoint()`만 예외적으로 두 번 들어갔다.
+
+#### Verification
+
+테스트를 먼저 작성해서 버그를 확인했다.
+
+`JDBCMetadataQueryDAO`는 생성자에서 `ModuleManager`를 받아 내부적으로 `TableHelper`를 만드는 구조라서, 테스트를 위해 `TableHelper`를 직접 주입받는 package-private 생성자를 추가했다.
+
+```java
+// 테스트용 생성자
+JDBCMetadataQueryDAO(JDBCClient jdbcClient, int metadataQueryMaxSize, TableHelper tableHelper) { ... }
+```
+
+테스트에서 `findEndpoint()` 호출 후 생성된 SQL을 캡처해 `table_name = ?`의 등장 횟수를 세면, 수정 전에는 `expected: 1, but was: 2`가 나온다.
+
+#### Fix
+
+중복된 두 번째 `TABLE_COLUMN = ?` 조건과 해당 parameter binding을 제거했다.
+
+---
+
 ## References
 
 - [Apache SkyWalking GitHub](https://github.com/apache/skywalking)
