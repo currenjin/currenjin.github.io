@@ -116,6 +116,126 @@ flowchart LR
 
 ---
 
+## JDBC Storage Plugin
+
+SQL 기반 storage(`storage-jdbc-hikaricp-plugin`)를 집중적으로 보면서 파악한 내용이다.
+
+### 구조
+
+플러그인은 `oap-server/server-storage-plugin/storage-jdbc-hikaricp-plugin/`에 있다. 핵심 DAO 파일은 `src/main/java/.../jdbc/common/dao/` 아래에 있다.
+
+각 DAO는 `JDBCClient`와 `TableHelper`를 받아서 동작한다.
+
+- `JDBCClient`: SQL 실행. `executeQuery(sql, resultHandler, params...)`가 주요 메서드.
+- `TableHelper`: TTL 기준으로 유효한 테이블 목록을 반환. `getTablesWithinTTL(INDEX_NAME)`으로 호출.
+
+SkyWalking의 JDBC storage는 데이터를 time-sharding 방식으로 저장한다. 예를 들어 endpoint traffic은 `endpoint_traffic_20260401`, `endpoint_traffic_20260402` 같은 이름으로 날짜별 테이블이 생긴다. `getTablesWithinTTL()`은 TTL 안에 있는 테이블만 골라서 반환한다. 대부분의 DAO는 이 목록을 순회하면서 각 테이블에 쿼리를 보낸다.
+
+### TABLE_COLUMN 패턴
+
+time-sharding 테이블들은 용도별로 이름이 다르지만, 실제 쿼리 시에는 `table_name` 컬럼으로 한 번 더 필터링한다. 이게 `JDBCTableInstaller.TABLE_COLUMN`이다.
+
+```java
+sql.append("select * from ").append(table).append(" where ")
+    .append(JDBCTableInstaller.TABLE_COLUMN).append(" = ?");
+condition.add(SomeRecord.INDEX_NAME);  // 예: "endpoint_traffic"
+```
+
+모든 SELECT 쿼리에서 이 패턴이 첫 번째 WHERE 조건으로 들어간다. 이게 없으면 다른 레코드 타입의 데이터가 섞인다.
+
+### IN 절 parameter binding
+
+JDBC의 `?`는 값 하나를 binding하는 자리다. 리스트를 IN 절에 넣으려면 `?`를 개수만큼 만들어야 한다.
+
+```java
+// 잘못된 방식 — String.join으로 만든 문자열을 하나의 ?에 binding
+sql.append(" in (?)");
+condition.add(String.join(",", ids));  // IN ('id1,id2,id3') — 리터럴 문자열 비교
+
+// 올바른 방식 — ? 자리를 개수만큼 생성
+sql.append(" in (")
+   .append(String.join(",", Collections.nCopies(ids.size(), "?")))
+   .append(")");
+condition.addAll(ids);  // IN (?,?,?) — 각각 binding
+```
+
+IN 절을 직접 문자열 조합으로 만드는 코드가 보이면 의심해볼 것.
+
+### SQL 생성 패턴
+
+대부분의 DAO는 이 패턴을 따른다.
+
+```java
+StringBuilder sql = new StringBuilder();
+List<Object> condition = new ArrayList<>();
+
+sql.append("select * from ").append(table).append(" where ")
+   .append(JDBCTableInstaller.TABLE_COLUMN).append(" = ?");
+condition.add(SomeRecord.INDEX_NAME);
+
+// 조건 추가
+if (someValue != null) {
+    sql.append(" and ").append(COLUMN_NAME).append(" = ?");
+    condition.add(someValue);
+}
+
+// 실행
+jdbcClient.executeQuery(sql.toString(), resultHandler, condition.toArray(new Object[0]));
+```
+
+`condition.toArray(new Object[0])`가 varargs로 넘어가는 부분이 Mockito 테스트에서 varargs 처리 이슈의 원인이 되기도 한다.
+
+### 버그 패턴 체크리스트
+
+코드를 읽다가 아래 항목에 걸리면 버그일 가능성이 높다.
+
+**1. 메서드 이름과 WHERE 절 불일치**
+
+메서드 이름에 `ByXxx`가 들어가 있는데 WHERE 절에 해당 컬럼이 없으면 filter가 누락된 것.
+
+```java
+// 메서드 이름: getByTaskId
+// WHERE절에 task_id가 없으면 버그
+```
+
+**2. IN 절에 단일 파라미터**
+
+`in (?)`에 `String.join(",", list)` 결과를 binding하는 경우. 쿼리가 실행되지만 항상 결과가 없다.
+
+**3. AND/OR 키워드 누락**
+
+조건 문자열을 직접 조합할 때 `and`/`or`가 빠지는 경우. `appendCondition()` 같은 헬퍼를 쓰지 않고 직접 string을 붙이는 코드에서 자주 발생한다.
+
+```java
+" = ?" + NEXT_COLUMN + " = ?"  // and 없음 → syntax error
+```
+
+**4. 동일 조건 중복**
+
+같은 `WHERE` 조건이 두 번 들어가는 경우. SQL은 실행되지만 같은 parameter를 두 번 binding한다. copy-paste로 생기는 버그.
+
+### 테스트 방식
+
+DAO 테스트는 `JDBCClient`와 `TableHelper`를 Mockito로 mock해서 SQL을 캡처하는 방식으로 작성한다.
+
+```java
+final AtomicReference<String> capturedSql = new AtomicReference<>();
+final AtomicReference<Object[]> capturedParams = new AtomicReference<>();
+
+doAnswer(invocation -> {
+    capturedSql.set(invocation.getArgument(0));
+    final Object[] allArgs = invocation.getArguments();
+    capturedParams.set(Arrays.copyOfRange(allArgs, 2, allArgs.length));
+    return new ArrayList<>();
+}).when(jdbcClient).executeQuery(anyString(), any(), any(Object[].class));
+```
+
+varargs 캡처 시 `invocation.getArgument(2)`를 쓰면 배열이 아니라 첫 번째 원소가 나온다. `Arrays.copyOfRange(allArgs, 2, allArgs.length)`로 잘라야 한다.
+
+DAO 생성자가 `ModuleManager`를 받아서 내부에서 `TableHelper`를 만드는 구조면, `TableHelper`를 주입받는 package-private 생성자를 따로 추가해서 테스트에서 mock을 넣는다.
+
+---
+
 ## Contributions
 
 ### Fix JDBC Profiling Query Bugs
