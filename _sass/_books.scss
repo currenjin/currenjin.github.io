@@ -257,9 +257,85 @@
 }
 
 /* ── Mobile ── */
-@media (max-width: 600px) {
+@media (max-width: 780px) {
+  .books-page {
+    padding: 1rem 0.6rem 2.5rem;
+  }
+
+  .books-title {
+    font-size: 1.8rem;
+  }
+
+  .books-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .books-stats {
+    gap: 0.8rem;
+    font-size: 0.82rem;
+  }
+
+  .books-filters {
+    margin-bottom: 1.2rem;
+  }
+
+  .filter-btn {
+    font-size: 0.76rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .filter-label {
+    font-size: 0.72rem;
+    min-width: auto;
+  }
+
   .books-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    gap: 0.6rem;
+  }
+
+  .book-card-cover {
+    aspect-ratio: 3 / 4;
+  }
+
+  .book-card-cover--empty {
+    aspect-ratio: 3 / 4;
+  }
+
+  .book-card-body {
+    padding: 0.6rem 0.55rem 0.5rem;
+    gap: 0.15rem;
+  }
+
+  .book-card-type {
+    font-size: 0.68rem;
+  }
+
+  .book-card-title {
+    font-size: 0.82rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .book-card-author {
+    font-size: 0.75rem;
+  }
+
+  .book-card-footer {
+    margin-top: 0.35rem;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .book-card-status {
+    font-size: 0.68rem;
+    padding: 0.1rem 0.35rem;
+  }
+
+  .book-card-rating {
+    font-size: 0.7rem;
+  }
+
+  .book-card-notes {
+    font-size: 0.68rem;
   }
 }
