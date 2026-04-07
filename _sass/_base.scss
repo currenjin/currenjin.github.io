@@ -84,6 +84,8 @@ body::after {
 
 @media (max-width: 780px) {
     body {
+        font-size: 16px;
+        line-height: 1.7;
         background-attachment: scroll;
         background-image:
             linear-gradient(135deg, rgba(8, 10, 18, 0.68) 0%, rgba(12, 16, 28, 0.54) 50%, rgba(26, 16, 22, 0.56) 100%),
@@ -96,6 +98,27 @@ body::after {
     body::after {
         transform: none;
         will-change: auto;
+    }
+
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.3rem; }
+    h4 { font-size: 1.15rem; }
+    h5 { font-size: 1.05rem; }
+    h6 { font-size: 0.95rem; }
+
+    .post-content {
+        line-height: 1.75;
+    }
+
+    pre {
+        padding: 8px 10px;
+        font-size: 0.82rem;
+    }
+
+    blockquote {
+        margin: 0.8rem 0;
+        padding-left: 0.7rem;
     }
 }
 

@@ -137,6 +137,9 @@
     .blog-face {
         --tilt-x: 0deg;
         --tilt-y: 0deg;
+        margin: 0.7rem 0 0.9rem;
+        padding: 1rem 0.9rem;
+        border-radius: 12px;
         background:
             linear-gradient(160deg, rgba(12, 15, 28, 0.44) 0%, rgba(20, 17, 30, 0.36) 100%),
             url('/resource/james_webb.png') center/cover no-repeat;
@@ -151,9 +154,28 @@
         transform: none;
     }
 
-    .identity-title,
-    .identity-lead,
+    .identity-title {
+        font-size: 1.8rem;
+        transform: none;
+    }
+
+    .identity-lead {
+        font-size: 0.95rem;
+        transform: none;
+    }
+
     .identity-keywords {
         transform: none;
+        max-width: 100%;
+        gap: 0.28rem;
+    }
+
+    .identity-keywords span {
+        font-size: 0.72rem;
+        padding: 0.1rem 0.4rem;
+    }
+
+    .indent {
+        margin-left: 2px;
     }
 }
