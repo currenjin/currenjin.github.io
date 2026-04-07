@@ -9,6 +9,15 @@
     "external": false
   },
   {
+    "title": "Terraform (Infrastructure as Code)",
+    "url": "/wiki/terraform",
+    "updated": "2026-04-06",
+    "summary": "Terraform 핵심 개념, HCL 문법, 주요 명령어, AWS 튜토리얼까지 정리",
+    "tags": "terraform, iac, devops, aws",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Claude Code",
     "url": "/wiki/claude-code",
     "updated": "2026-04-01",
