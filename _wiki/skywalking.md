@@ -3,7 +3,7 @@ layout  : wiki
 title   : Apache SkyWalking
 summary : 마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스
 date    : 2026-04-03 00:00:00 +0900
-updated : 2026-04-06 20:00:00 +0900
+updated : 2026-04-08 00:00:00 +0900
 tags    : skywalking oss apm java
 toc     : true
 public  : true
@@ -578,6 +578,20 @@ SQL 조립 로직만 검증하는 단위 테스트를 추가해서 regression을
 - **JDBCTopologyQueryDAO**: service relation의 OR 조건 괄호 처리, instance relation의 양방향 조건 검증
 
 처음에는 PR 4개로 나눠서 올렸는데, 메인테이너(wu-sheng)가 CI 리소스 절약을 위해 하나로 합쳐달라고 요청해서 통합했다.
+
+---
+
+### Add Unit Tests for JDBC Query DAOs (2)
+
+> [apache/skywalking#13802](https://github.com/apache/skywalking/pull/13802) · open
+
+#### Scope
+
+이전 PR에 이어서 세 개 DAO를 추가로 테스트했다.
+
+- **JDBCEventQueryDAOTest** — `buildQuery()` 테스트. 이 DAO는 다른 것들과 구조가 다르다. `StringBuilder` 대신 `Stream.Builder`로 조건을 쌓고, `Tuple2<Stream<String>, Stream<Object>>`를 반환한다. TABLE_COLUMN, uuid, source(service/instance/endpoint), eventType 조건 검증.
+- **JDBCBrowserLogQueryDAOTest** — `buildSQL()` 테스트. serviceId, serviceVersionId, pagePathId, BrowserErrorCategory, duration time bucket range, limit+offset 조합 검증.
+- **JDBCProfileThreadSnapshotQueryDAOTest** — `querySegments()` 테스트. Mockito SQL 캡처 방식. TABLE_COLUMN 조건, taskId 필터, `sequence = 0` 조건 검증. 이 DAO는 첫 번째 snapshot(sequence=0)만 조회해서 segment 목록을 만드는 구조다.
 
 ---
 
