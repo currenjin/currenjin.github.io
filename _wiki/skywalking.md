@@ -562,7 +562,7 @@ JDBCMetadataQueryDAO(JDBCClient jdbcClient, int metadataQueryMaxSize, TableHelpe
 
 > [apache/skywalking#13800](https://github.com/apache/skywalking/pull/13800) · merged on 2026-04-06
 > 
-> [apache/skywalking#13802](https://github.com/apache/skywalking/pull/13802) · open
+> [apache/skywalking#13802](https://github.com/apache/skywalking/pull/13802) · merged on 2026-04-08
 
 #### Motivation
 
