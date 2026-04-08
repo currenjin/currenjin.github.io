@@ -3,7 +3,7 @@ layout  : wiki
 title   : Apache SkyWalking
 summary : 마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스
 date    : 2026-04-03 00:00:00 +0900
-updated : 2026-04-08 00:00:00 +0900
+updated : 2026-04-08 20:00:00 +0900
 tags    : skywalking oss apm java
 toc     : true
 public  : true
@@ -581,6 +581,44 @@ SQL 조립 로직만 검증하는 단위 테스트를 추가해서 regression을
 - **JDBCEventQueryDAO**: `buildQuery()` 테스트. 이 DAO는 `StringBuilder` 대신 `Stream.Builder`로 조건을 쌓고, `Tuple2<Stream<String>, Stream<Object>>`를 반환하는 구조. TABLE_COLUMN, uuid, source(service/instance/endpoint), eventType 조건 검증
 - **JDBCBrowserLogQueryDAO**: serviceId, serviceVersionId, pagePathId, BrowserErrorCategory, duration time bucket range, limit+offset 조합 검증
 - **JDBCProfileThreadSnapshotQueryDAO**: Mockito SQL 캡처 방식. TABLE_COLUMN 조건, taskId 필터, `sequence = 0` 조건 검증. 첫 번째 snapshot(sequence=0)만 조회해서 segment 목록을 만드는 구조
+
+---
+
+### Fix Wrong Merged Table Check in JFRDataQueryEsDAO
+
+> [apache/skywalking#13805](https://github.com/apache/skywalking/pull/13805) - open
+
+#### Finding the Issue
+
+JDBC 쪽 버그를 다 잡고 나서 Elasticsearch storage plugin도 같은 패턴이 있는지 훑어봤다. ES는 쿼리 빌더 패턴(`Query.bool()`, `Query.term()`)을 쓰기 때문에 JDBC처럼 AND 누락이나 괄호 빠짐 같은 버그는 구조적으로 발생하지 않는다.
+
+대신 다른 종류의 버그를 하나 발견했다. `JFRDataQueryEsDAO.getByTaskIdAndInstancesAndEvent()`에서 merged table 체크를 할 때 잘못된 index name을 넘기고 있었다.
+
+```java
+// jfr_profiling_data를 조회하는 메서드인데
+if (IndexController.LogicIndicesRegister.isMergedTable(AsyncProfilerTaskRecord.INDEX_NAME)) {
+    // async_profiler_task의 merge 여부를 체크하고 있다
+```
+
+프로젝트 전체에서 `isMergedTable()` 호출 50개 이상을 grep해봤는데, 이 한 곳만 자기 자신이 아닌 다른 레코드의 INDEX_NAME을 넘기고 있었다. `AsyncProfilerTaskQueryEsDAO`에서 복사하면서 바꾸지 않은 것.
+
+#### Impact 분석
+
+`isMergedTable()`의 구현은 단순하다.
+
+```java
+public static boolean isMergedTable(String logicName) {
+    return !getPhysicalTableName(logicName).equals(logicName);
+}
+```
+
+물리 테이블명이 논리명과 다르면 merged로 판단한다. 기본 설정(`logicSharding=false`)에서는 `JFRProfilingDataRecord`(Record, non-superDataset)과 `AsyncProfilerTaskRecord`(NoneStream extends Record) 둘 다 `"records-all"`로 merge되기 때문에 `isMergedTable()`이 둘 다 `true`를 반환한다. 결과적으로 동작은 맞다.
+
+하지만 `logicSharding=true`로 설정하면 두 테이블이 다른 물리 테이블로 분리될 수 있고, 그 경우 잘못된 결과를 반환한다.
+
+#### Fix
+
+`AsyncProfilerTaskRecord.INDEX_NAME`을 `JFRProfilingDataRecord.INDEX_NAME`으로 교체하고, 사용하지 않게 된 `AsyncProfilerTaskRecord` import를 제거했다.
 
 ---
 
