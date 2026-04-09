@@ -631,7 +631,7 @@ JDBCMetadataQueryDAO(JDBCClient jdbcClient, int metadataQueryMaxSize, TableHelpe
 
 앞선 PR들에서 JDBC DAO의 SQL 조립 버그를 여러 건 발견했는데, 이 DAO들에는 SQL이 올바르게 만들어지는지 확인하는 단위 테스트가 없었다. 버그가 있어도 실제 DB를 붙여서 e2e 테스트를 돌리지 않는 한 발견이 어려운 구조다.
 
-SQL 조립 로직만 검증하는 단위 테스트를 추가해서 regression을 잡을 수 있게 했다.
+SQL 조립 로직만 검증하는 단위 테스트를 추가해서 regression을 잡을 수 있게 했다. 기존 테스트 파일 5개(전체 39개 DAO 대비 13%)에서 12개(31%)로, DAO 테스트 커버리지가 2.4배 증가했다.
 
 #### Coverage
 
