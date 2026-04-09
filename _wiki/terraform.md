@@ -889,9 +889,9 @@ learn-terraform-docker-container/
 
 ```
 project/
-├── terraform.tf      # required_providers, backend 설정
-├── main.tf           # 리소스 정의
-├── variables.tf      # 입력 변수
+├── versions.tf       # Terraform 및 Provider 버전 요구사항
+├── main.tf           # 리소스, 모듈, 데이터 소스 호출
+├── variables.tf      # 입력 변수 선언
 ├── outputs.tf        # 출력 값
 ├── terraform.tfvars  # 변수 값 (gitignore 권장)
 └── modules/          # 로컬 모듈
@@ -899,6 +899,225 @@ project/
         ├── main.tf
         ├── variables.tf
         └── outputs.tf
+```
+
+- `versions.tf` 에 `required_providers`, `required_version`, `backend` 설정을 분리한다
+- `main.tf` 는 리소스를 직접 정의하기보다 모듈과 데이터 소스를 **호출하는** 역할에 집중한다
+
+---
+
+## 15) 인프라 계층 구조
+
+인프라를 설계할 때 다음 4개 계층으로 사고하면 모듈 경계가 명확해진다.
+
+```mermaid
+flowchart TB
+    R["Resource\n(원자 단위)\naws_vpc, aws_instance ..."]
+    RM["Resource Module\n(분자 단위)\n연관 리소스의 모음"]
+    IM["Infrastructure Module\n(논리적 경계 단위)\n단일 리전 또는 서비스 범위"]
+    C["Composition\n(전사/프로젝트 단위)\n여러 Infrastructure Module 조합"]
+    R --> RM --> IM --> C
+```
+
+| 계층 | 설명 | 예시 |
+|------|------|------|
+| **Resource** | 개별 클라우드 오브젝트 | `aws_vpc`, `aws_db_instance` |
+| **Resource Module** | 공동 목적을 달성하는 리소스 묶음 | VPC + Subnet + NAT Gateway |
+| **Infrastructure Module** | 논리적 경계 안의 Resource Module 집합 | 특정 서비스의 전체 인프라 |
+| **Composition** | 여러 경계에 걸친 Infrastructure Module 조합 | 전사 인프라, 멀티 리전 |
+
+> **핵심**: Resource를 원자로, Resource Module을 분자로 보는 사고방식. Module은 버전이 붙은 재사용 단위가 된다.
+
+---
+
+## 16) 네이밍 컨벤션
+
+일관된 이름 규칙은 코드를 읽을 때 인지 부담을 줄인다.
+
+### 기본 규칙
+
+- 모든 Terraform 식별자에는 **언더스코어(`_`)** 를 사용한다 — 대시(`-`)는 DNS나 태그처럼 외부에 노출되는 값에 예약
+- 소문자와 숫자만 사용한다
+- 리소스 이름에 **리소스 타입을 반복하지 않는다**
+- 모듈 안에 해당 타입의 리소스가 하나뿐이고 적절한 이름이 없을 때만 `this` 를 사용한다
+- 긍정형 이름을 사용한다: `encryption_disabled` 대신 `encryption_enabled`
+
+```hcl
+# 나쁜 예
+resource "aws_security_group" "aws_security_group_web" { ... }  # 타입 반복
+resource "aws_vpc" "main-vpc" { ... }                           # 대시 사용
+
+# 좋은 예
+resource "aws_security_group" "web" { ... }
+resource "aws_vpc" "main" { ... }
+```
+
+### 인자 순서
+
+블록 안에서 인자를 아래 순서로 작성한다:
+
+```hcl
+resource "aws_instance" "app" {
+  count = 2                     # 1. count / for_each
+
+  ami           = "ami-xxx"     # 2. 핵심 인자
+  instance_type = "t3.micro"
+
+  tags = { Name = "app" }      # 3. tags
+
+  depends_on = [...]            # 4. depends_on (빈 줄 구분)
+
+  lifecycle {                   # 5. lifecycle (빈 줄 구분)
+    ignore_changes = [tags]
+  }
+}
+```
+
+### 변수 네이밍
+
+```hcl
+variable "vpc_cidr_blocks" {   # list/map 타입은 복수형
+  description = "VPC CIDR 블록 목록"
+  type        = list(string)
+  default     = []
+  nullable    = false           # null을 허용하지 않을 때 명시
+}
+```
+
+- `description`, `type`, `default`, `validation` 순서로 작성한다
+- `nullable = false` 를 통해 null 허용 여부를 명시한다
+- 복잡한 객체 타입보다 단순 타입을 선호한다
+
+### 출력 네이밍
+
+패턴: `{name}_{type}_{attribute}`
+
+```hcl
+output "security_group_id" {       # aws_security_group 의 id
+  description = "웹 보안 그룹 ID"
+  value       = aws_security_group.web.id
+}
+
+output "db_instance_address" {     # aws_db_instance 의 address
+  description = "RDS 인스턴스 엔드포인트"
+  value       = try(aws_db_instance.main.address, "")  # try()로 안전하게 접근
+}
+```
+
+- 항상 `description` 을 포함한다
+- 리소스가 하나일 때 `this` 는 출력 이름에서 생략한다
+- `try()` 함수로 아직 존재하지 않는 속성에 안전하게 접근한다
+- 리스트를 반환할 때는 복수형을 쓴다
+
+---
+
+## 17) 코드 스타일
+
+### 포맷팅
+
+```bash
+terraform fmt          # 코드 자동 포맷팅
+terraform fmt -check   # CI에서 포맷 검사 (수정 없이 검증만)
+```
+
+Terraform 공식 스타일은 `terraform fmt` 가 강제한다. 설정 불가. PR 전에 반드시 실행.
+
+### .editorconfig
+
+루트에 `.editorconfig` 를 추가해 에디터 간 일관성을 유지한다:
+
+```ini
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+end_of_line = lf
+charset = utf-8
+insert_final_newline = true
+
+[Makefile]
+indent_style = tab
+```
+
+### 주석
+
+```hcl
+# 이 방식만 사용한다
+# // 이나 /* */ 는 쓰지 않는다
+
+# ──────────────────────────────────────────
+# 섹션 구분선으로 큰 모듈을 시각적으로 나눌 수 있다
+# ──────────────────────────────────────────
+```
+
+- `#` 만 사용한다
+- 주석은 "무엇"이 아닌 **"왜"** 를 설명한다
+
+### terraform-docs
+
+모듈의 변수/출력을 자동으로 README 문서로 생성한다:
+
+```bash
+terraform-docs markdown . > README.md
+```
+
+pre-commit 훅과 연동해 코드 변경 시 문서를 자동 동기화할 수 있다.
+
+---
+
+## 18) State 관리 모범 사례
+
+State에 관한 가장 중요한 규칙들이다.
+
+```mermaid
+flowchart LR
+    LOCAL["로컬 State\n❌ 협업 불가\n❌ 레이스 컨디션\n❌ 분실 위험"]
+    REMOTE["원격 State\n✅ ACL\n✅ 버전 관리\n✅ 암호화\n✅ 재해 복구"]
+    LOCAL -- "처음부터 이걸로" --> REMOTE
+```
+
+- `terraform.tfstate` 는 **절대 Git에 커밋하지 않는다**
+- 원격 백엔드(HCP Terraform, S3+DynamoDB 등)를 **처음부터** 사용한다
+- 여러 개발자가 동시에 `terraform apply` 를 실행하면 State 충돌이 생긴다 — 원격 백엔드의 State locking이 이를 방지한다
+- `terraform_remote_state` 데이터 소스로 다른 State의 output을 읽어올 수 있다
+
+### .gitignore 필수 항목
+
+```gitignore
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars          # 민감한 변수 값
+.terraform.lock.hcl  # 선택 (팀 공유 시에는 커밋)
+```
+
+---
+
+## 19) 추천 도구
+
+| 도구 | 용도 |
+|------|------|
+| **[tflint](https://github.com/terraform-linters/tflint)** | Terraform 린터. 에러, 사용 중단 문법, 모범 사례 검사 |
+| **[pre-commit-terraform](https://github.com/antonbabenko/pre-commit-terraform)** | Git pre-commit 훅 모음. `fmt`, `validate`, `tflint`, `docs` 자동화 |
+| **[Atlantis](https://www.runatlantis.io/)** | PR 기반 Terraform 워크플로우. PR에 `terraform plan` 결과를 댓글로 |
+| **[Infracost](https://www.infracost.io/)** | PR마다 인프라 비용 변화 예측 |
+| **[Terragrunt](https://terragrunt.gruntwork.io/)** | Terraform 래퍼. DRY 설정, 원격 State 관리, 다중 모듈 orchestration |
+| **[tfenv](https://github.com/tfutils/tfenv)** | Terraform 버전 관리 |
+
+### pre-commit 예시
+
+```yaml
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.96.1
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_validate
+      - id: terraform_tflint
+      - id: terraform_docs
 ```
 
 ---
