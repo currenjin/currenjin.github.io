@@ -649,7 +649,7 @@ SQL 조립 로직만 검증하는 단위 테스트를 추가해서 regression을
 
 ### Fix Wrong Merged Table Check in JFRDataQueryEsDAO
 
-> [apache/skywalking#13805](https://github.com/apache/skywalking/pull/13805) - open
+> [apache/skywalking#13805](https://github.com/apache/skywalking/pull/13805) - merged on 2026-04-08
 
 #### Finding the Issue
 
