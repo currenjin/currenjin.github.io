@@ -626,6 +626,8 @@ JDBCMetadataQueryDAO(JDBCClient jdbcClient, int metadataQueryMaxSize, TableHelpe
 > [apache/skywalking#13800](https://github.com/apache/skywalking/pull/13800) · merged on 2026-04-06
 > 
 > [apache/skywalking#13802](https://github.com/apache/skywalking/pull/13802) · merged on 2026-04-08
+> 
+> [apache/skywalking#13808](https://github.com/apache/skywalking/pull/13808) · open
 
 #### Motivation
 
@@ -633,11 +635,11 @@ JDBCMetadataQueryDAO(JDBCClient jdbcClient, int metadataQueryMaxSize, TableHelpe
 
 SQL 조립 로직만 검증하는 단위 테스트를 추가해서 regression을 잡을 수 있게 했다.
 
-> **기존 테스트 파일 5개(전체 39개 DAO 대비 13%)에서 12개(31%)로, DAO 테스트 커버리지가 2.4배 증가했다.**
+> **기존 테스트 파일 5개(전체 39개 DAO 대비 13%)에서 18개(46%)로, DAO 테스트 커버리지가 3.6배 증가했다.**
 
 #### Coverage
 
-7개 DAO에 대해 테스트를 작성했다. 처음에는 PR 4개로 나눠서 올렸다가 메인테이너(wu-sheng)가 CI 리소스 절약을 위해 하나로 합쳐달라고 요청해서 #13800으로 통합했고, 이후 추가분은 #13802로 이어서 올렸다.
+13개 DAO에 대해 테스트를 작성했다. 처음에는 PR 4개로 나눠서 올렸다가 메인테이너(wu-sheng)가 CI 리소스 절약을 위해 하나로 합쳐달라고 요청해서 #13800으로 통합했고, 이후 추가분은 #13802, #13808로 이어서 올렸다.
 
 - **JDBCAlarmQueryDAO**: scope/keyword/duration/tag 필터 조합별 SQL 확인, `TABLE_COLUMN` 조건 단일성 검증, limit/offset 처리
 - **JDBCLogQueryDAO**: serviceId/instanceId/endpointId/traceId/segmentId 필터 조합, ASC/DESC 정렬, tag join, limit/offset
@@ -646,6 +648,12 @@ SQL 조립 로직만 검증하는 단위 테스트를 추가해서 regression을
 - **JDBCEventQueryDAO**: `buildQuery()` 테스트. 이 DAO는 `StringBuilder` 대신 `Stream.Builder`로 조건을 쌓고, `Tuple2<Stream<String>, Stream<Object>>`를 반환하는 구조. TABLE_COLUMN, uuid, source(service/instance/endpoint), eventType 조건 검증
 - **JDBCBrowserLogQueryDAO**: serviceId, serviceVersionId, pagePathId, BrowserErrorCategory, duration time bucket range, limit+offset 조합 검증
 - **JDBCProfileThreadSnapshotQueryDAO**: Mockito SQL 캡처 방식. TABLE_COLUMN 조건, taskId 필터, `sequence = 0` 조건 검증. 첫 번째 snapshot(sequence=0)만 조회해서 segment 목록을 만드는 구조
+- **JDBCAggregationQueryDAO**: subquery 구조(avg + group by + order by), TABLE_COLUMN + time bucket range, ASC/DESC 정렬, additionalConditions 파라미터 검증
+- **JDBCRecordsQueryDAO**: static `buildSQL()`. entity_id + time_bucket range, ASC/DESC 정렬, limit 검증
+- **JDBCHierarchyQueryDAO**: service relations (TABLE_COLUMN + limit), instance relations의 bidirectional OR `((A and B) or (C and D))` 구조, 파라미터 바인딩 순서 검증
+- **JDBCTagAutoCompleteQueryDAO**: `buildSQLForQueryKeys()`의 distinct + tag type, `buildSQLForQueryValues()`의 tag key + tag type 조건 검증
+- **JDBCEBPFProfilingDataDAO**: schedule ID IN 절, upload time range (>= / <) 검증
+- **JDBCEBPFProfilingScheduleDAO**: TABLE_COLUMN + taskId 필터, WHERE 절 구조 검증
 
 ---
 
