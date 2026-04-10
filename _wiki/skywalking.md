@@ -628,6 +628,8 @@ JDBCMetadataQueryDAO(JDBCClient jdbcClient, int metadataQueryMaxSize, TableHelpe
 > [apache/skywalking#13802](https://github.com/apache/skywalking/pull/13802) · merged on 2026-04-08
 > 
 > [apache/skywalking#13808](https://github.com/apache/skywalking/pull/13808) · merged on 2026-04-09
+> 
+> [apache/skywalking#13809](https://github.com/apache/skywalking/pull/13809) · open
 
 #### Motivation
 
@@ -635,11 +637,11 @@ JDBCMetadataQueryDAO(JDBCClient jdbcClient, int metadataQueryMaxSize, TableHelpe
 
 SQL 조립 로직만 검증하는 단위 테스트를 추가해서 regression을 잡을 수 있게 했다.
 
-> **기존 테스트 파일 5개(전체 39개 DAO 대비 13%)에서 18개(46%)로, DAO 테스트 커버리지가 3.6배 증가했다.**
+> **기존 테스트 파일 5개(전체 39개 DAO 대비 13%)에서 24개(62%)로, DAO 테스트 커버리지가 4.8배 증가했다.**
 
 #### Coverage
 
-13개 DAO에 대해 테스트를 작성했다. 처음에는 PR 4개로 나눠서 올렸다가 메인테이너(wu-sheng)가 CI 리소스 절약을 위해 하나로 합쳐달라고 요청해서 #13800으로 통합했고, 이후 추가분은 #13802, #13808로 이어서 올렸다.
+19개 DAO에 대해 테스트를 작성했다. 처음에는 PR 4개로 나눠서 올렸다가 메인테이너(wu-sheng)가 CI 리소스 절약을 위해 하나로 합쳐달라고 요청해서 #13800으로 통합했고, 이후 추가분은 #13802, #13808, #13809로 이어서 올렸다. #13809부터는 `buildSQL()` protected 메서드가 없는 inline SQL DAO들도 Mockito SQL 캡처 방식으로 검증했다.
 
 - **JDBCAlarmQueryDAO**: scope/keyword/duration/tag 필터 조합별 SQL 확인, `TABLE_COLUMN` 조건 단일성 검증, limit/offset 처리
 - **JDBCLogQueryDAO**: serviceId/instanceId/endpointId/traceId/segmentId 필터 조합, ASC/DESC 정렬, tag join, limit/offset
@@ -654,6 +656,12 @@ SQL 조립 로직만 검증하는 단위 테스트를 추가해서 regression을
 - **JDBCTagAutoCompleteQueryDAO**: `buildSQLForQueryKeys()`의 distinct + tag type, `buildSQLForQueryValues()`의 tag key + tag type 조건 검증
 - **JDBCEBPFProfilingDataDAO**: schedule ID IN 절, upload time range (>= / <) 검증
 - **JDBCEBPFProfilingScheduleDAO**: TABLE_COLUMN + taskId 필터, WHERE 절 구조 검증
+- **JDBCMetricsQueryDAO**: protected `buildMetricsValueSql()`로 select + 집계 함수 구조 검증, `readLabeledMetricsValuesWithoutEntity()`의 TABLE_COLUMN + TIME_BUCKET range + limit 검증
+- **JDBCServiceLabelQueryDAO**: Mockito 캡처. TABLE_COLUMN + SERVICE_ID 필터, select LABEL 컬럼 검증
+- **JDBCSpanAttachedEventQueryDAO**: Mockito 캡처. ZK/SW 두 가지 메서드의 TABLE_COLUMN + trace ID IN 절, order by start_time 검증
+- **JDBCProfileTaskLogQueryDAO**: protected `buildSQL()`. TABLE_COLUMN, ORDER BY operation_time DESC 검증
+- **JDBCPprofTaskLogQueryDAO**: Mockito 캡처. TABLE_COLUMN + TASK_ID 필터, order by DESC, blank taskId 시 빈 리스트 반환 검증
+- **JDBCContinuousProfilingPolicyDAO**: Mockito 캡처. TABLE_COLUMN + SERVICE_ID IN 절, 단일/복수 placeholder 검증
 
 ---
 
