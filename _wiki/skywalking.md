@@ -3,7 +3,7 @@ layout  : wiki
 title   : Apache SkyWalking
 summary : 마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스
 date    : 2026-04-03 00:00:00 +0900
-updated : 2026-04-10 00:07:00 +0900
+updated : 2026-04-11 10:26:00 +0900
 tags    : skywalking oss apm java
 toc     : true
 public  : true
@@ -629,7 +629,7 @@ JDBCMetadataQueryDAO(JDBCClient jdbcClient, int metadataQueryMaxSize, TableHelpe
 > 
 > [apache/skywalking#13808](https://github.com/apache/skywalking/pull/13808) · merged on 2026-04-09
 > 
-> [apache/skywalking#13809](https://github.com/apache/skywalking/pull/13809) · open
+> [apache/skywalking#13809](https://github.com/apache/skywalking/pull/13809) · merged on 2026-04-10
 
 #### Motivation
 
