@@ -2,7 +2,7 @@
   {
     "title": "Apache SkyWalking",
     "url": "/wiki/skywalking",
-    "updated": "2026-04-10",
+    "updated": "2026-04-09",
     "summary": "마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스",
     "tags": "skywalking oss apm java",
     "source": "Wiki",
@@ -11,8 +11,8 @@
   {
     "title": "Terraform (Infrastructure as Code)",
     "url": "/wiki/terraform",
-    "updated": "2026-04-06",
-    "summary": "Terraform 핵심 개념, HCL 문법, 주요 명령어, AWS 튜토리얼까지 정리",
+    "updated": "2026-04-09",
+    "summary": "핵심 개념, 실무 모범 사례, AWS · Docker 튜토리얼",
     "tags": "terraform, iac, devops, aws",
     "source": "Wiki",
     "external": false
