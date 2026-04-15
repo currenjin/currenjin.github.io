@@ -54,10 +54,9 @@ layout: default
       <div class="book-card-link">
       {% endif %}
         <div class="book-card" data-type="{{ book.type }}">
-          {% assign book_cover = book.cover | default: book.cover_url %}
-          {% if book_cover %}
+          {% if book.cover_url and book.cover_url contains "product" %}
           <div class="book-card-cover">
-            <img src="{{ book_cover }}" alt="{{ book.title }}" loading="lazy">
+            <img src="{{ book.cover_url }}" alt="{{ book.title }}" loading="lazy">
           </div>
           {% else %}
           <div class="book-card-cover--empty"></div>
