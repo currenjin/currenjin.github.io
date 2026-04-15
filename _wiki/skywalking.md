@@ -705,6 +705,54 @@ public static boolean isMergedTable(String logicName) {
 
 ---
 
+### Fix Missing isMergedTable Check in ProfileTaskQueryEsDAO.getById()
+
+> [apache/skywalking#13813](https://github.com/apache/skywalking/pull/13813) - merged on 2026-04-15
+
+#### Finding the Issue
+
+#13805에서 `JFRDataQueryEsDAO`의 잘못된 INDEX_NAME 버그를 잡고 나서, 같은 `isMergedTable()` 패턴이 다른 DAO들에도 올바르게 적용되어 있는지 확인했다.
+
+`ProfileTaskQueryEsDAO`를 보니 `getTaskList()`에는 `isMergedTable()` 체크가 있는데, **`getById()`에는 빠져 있었다**.
+
+```java
+// getTaskList() - 올바르게 체크함
+if (IndexController.LogicIndicesRegister.isMergedTable(ProfileTaskRecord.INDEX_NAME)) {
+    query.must(Query.term(RECORD_TABLE_NAME, ProfileTaskRecord.INDEX_NAME));
+}
+
+// getById() - 체크 없이 바로 TASK_ID로만 검색
+final SearchBuilder search = Search.builder()
+    .query(Query.bool().must(Query.term(ProfileTaskRecord.TASK_ID, id)))
+    .size(1);
+```
+
+`AsyncProfilerTaskQueryEsDAO.getById()`와 `PprofTaskQueryEsDAO.getById()`는 둘 다 올바르게 `isMergedTable()` 체크를 하고 있었다. `ProfileTaskQueryEsDAO`만 누락된 상태였다.
+
+#### Impact 분석
+
+기본 설정(`logicSharding=false`)에서는 `profile_task`(NoneStream → Record)도 `records-all`로 merge되므로, `isMergedTable()` 결과는 항상 `true`다. 이 경우 `RECORD_TABLE_NAME` 필터 없이 검색하면 모든 record 타입 중에서 `TASK_ID`가 일치하는 것을 반환한다.
+
+`TASK_ID`가 UUID 등 고유값이면 실제로 잘못된 결과를 반환할 가능성은 낮지만, 다른 record 타입의 데이터가 섞여 파싱 오류를 낼 수 있고, `logicSharding=true`에서는 더 직접적인 문제가 된다.
+
+#### Fix
+
+`getTaskList()`와 동일한 패턴을 `getById()`에도 적용했다. `AsyncProfilerTaskQueryEsDAO`, `PprofTaskQueryEsDAO`의 `getById()`와 동일한 구조.
+
+```java
+final BoolQueryBuilder query = Query.bool();
+if (IndexController.LogicIndicesRegister.isMergedTable(ProfileTaskRecord.INDEX_NAME)) {
+    query.must(Query.term(RECORD_TABLE_NAME, ProfileTaskRecord.INDEX_NAME));
+}
+query.must(Query.term(ProfileTaskRecord.TASK_ID, id));
+```
+
+#### Test
+
+reflection으로 `LOGIC_INDICES_CATALOG` 정적 맵에 `profile_task → records-all` 매핑을 주입하고, `ArgumentCaptor<Search>`로 ES 클라이언트에 전달된 쿼리를 캡처해 Jackson으로 JSON 직렬화한 뒤 `record_table` 필드 포함 여부를 검증했다. ES DAO에 query-level 단위 테스트가 추가된 첫 번째 사례다.
+
+---
+
 ## References
 
 - [Apache SkyWalking GitHub](https://github.com/apache/skywalking)
