@@ -81,6 +81,31 @@ latex   : true
     - 요청 흐름: DNS → GSLB → GFE(Google Frontend) 리버스 프록시 → Shakespeare 프론트엔드 → 백엔드 → Bigtable 순으로 RPC가 이어진다.
     - 100 QPS 처리 가능한 백엔드를 피크 3,470 QPS에 맞춰 N+2 중복으로 최소 37태스크 산정하고, 지역별(미주 17, 유럽 16, 아시아 6, 남미 4) 분산 및 Bigtable 리전 복제로 지연과 비용을 균형 있게 설계한다.
 
+#### Shakespeare 검색 요청 흐름
+
+```mermaid
+sequenceDiagram
+    participant U as 사용자
+    participant D as DNS
+    participant G as GSLB
+    participant F as GFE (리버스 프록시)
+    participant S as Shakespeare Frontend
+    participant B as Shakespeare Backend
+    participant T as Bigtable
+
+    U->>D: shakespeare.google.com?
+    D->>G: DNS 질의 → 최적 리전
+    G-->>U: 가장 가까운 GFE IP
+    U->>F: HTTPS 요청
+    F->>S: RPC(Stubby)
+    S->>B: 검색어 RPC
+    B->>T: 단어 인덱스 조회
+    T-->>B: Bigtable 응답
+    B-->>S: 매치 리스트
+    S-->>F: 렌더링된 응답
+    F-->>U: HTTP 응답
+```
+
 ## Part II. 원칙 (Principles)
 
 ### Ch03. 리스크 수용
@@ -105,6 +130,19 @@ latex   : true
     - 모든 푸시는 리스크이므로 카나리 기간/규모, 테스트 강도 등을 오차 예산을 기준으로 결정한다.
 - 공동 책임(joint ownership)
     - 네트워크 장애나 데이터센터 장애도 예산을 소모하므로, 가용성에 대한 책임을 팀 전체가 공유하게 만든다.
+
+#### 오차 예산 제어 루프
+
+```mermaid
+flowchart LR
+    SLO[분기 SLO<br/>예: 99.9%] --> Budget[허용 실패 = 0.1%]
+    Budget --> Track{예산 잔여?}
+    Track -- 남음 --> Ship[릴리즈/실험 진행]
+    Track -- 소진 --> Freeze[릴리즈 동결<br/>신뢰성 작업 우선]
+    Ship --> Measure[실측 성공률]
+    Freeze --> Measure
+    Measure --> Track
+```
 
 ### Ch04. 서비스 수준 목표
 
@@ -131,6 +169,14 @@ latex   : true
 - SLA의 보수성
     - SLA는 광범위한 사용자에게 약속하는 만큼 변경/철회가 어려워, 보수적으로 광고하는 것이 안전하다.
 
+#### SLI / SLO / SLA 비교
+
+| 구분 | 정의 | 예시 | 위반 결과 | 결정 주체 |
+|---|---|---|---|---|
+| **SLI** (Indicator) | 측정되는 정량 지표 | p99 지연, 성공률 | — | SRE/개발팀 |
+| **SLO** (Objective) | SLI에 대한 내부 목표 | p99 < 500ms, 99.9% 성공 | 엔지니어링 대응 트리거 | SRE + 개발팀 합의 |
+| **SLA** (Agreement) | 외부 고객과의 계약 | 월 99.5% 미만 시 환불 | 금전적 보상/페널티 | 비즈니스/법무 |
+
 ### Ch05. 삽질 없애기
 
 #### TL;DR
@@ -151,6 +197,14 @@ latex   : true
     - 소프트웨어 엔지니어링, 시스템 엔지니어링, 삽질, 오버헤드 네 가지로 나누고 인간 판단이 필수이고 영구적 개선을 만드는 작업만 엔지니어링으로 친다.
 - 과도한 삽질의 폐해
     - 경력 정체, 사기 저하, 번아웃(burnout)에 더해 조직적으로는 혼란 야기, 진척 둔화, 잘못된 선례, 인재 이탈, 신뢰 파괴를 부른다.
+
+#### 작업 분류
+
+| 분류 | 특징 | 예시 | 목표 비중 |
+|---|---|---|---|
+| **삽질(Toil)** | 수동·반복·자동화 가능·지속 가치 없음·O(n) | 알림 수동 처리, 반복 롤백, 티켓 소화 | **50% 이하** |
+| **오버헤드(Overhead)** | 운영 외 행정 업무 | 회의, HR, 교육, 코드 리뷰 | 자연 발생량 |
+| **엔지니어링(Engineering)** | 인간 판단 필요 + 영구적 개선 | 자동화 도구 개발, 시스템 재설계 | **50% 이상** |
 
 ### Ch06. 분산 시스템 모니터링
 
@@ -176,6 +230,15 @@ latex   : true
     - 모든 페이지는 긴급성, 실행 가능성, 지능적 판단, 새로운 문제일 것이 요구된다.
 - 장기 관점(long term)
     - Bigtable·Gmail 사례처럼 단기 가용성을 의도적으로 낮춰서라도 근본 원인을 고치는 것이 장기적으로 이득이다.
+
+#### 4가지 황금 신호 (Four Golden Signals)
+
+| 신호 | 무엇을 보는가 | 측정 방법 | 알림 임계값 예시 |
+|---|---|---|---|
+| **지연(Latency)** | 요청 처리 시간 | 성공/실패 분리된 p50/p95/p99 | p99 > 500ms 5분 |
+| **트래픽(Traffic)** | 수요 강도 | QPS, 동시 세션 수 | 평소 대비 ±50% |
+| **오류(Errors)** | 실패율 | 명시적(5xx) + 암묵적(잘못된 응답) + 정책 위반 | 성공률 < 99.9% |
+| **포화도(Saturation)** | 가장 제약된 자원의 충만도 | CPU·메모리·디스크·큐 길이 | 사용률 > 80% |
 
 ### Ch07. 구글의 발전된 자동화
 
@@ -204,6 +267,18 @@ latex   : true
 - 신뢰성 우선(reliability is the fundamental feature)
     - 규모가 커질수록 자율적·복원력 있는 동작이 필수이며, 디커플링·API·부수효과 최소화 같은 좋은 SW 엔지니어링이 토대가 된다.
 
+#### 자동화 5단계 진화
+
+```mermaid
+flowchart LR
+    L1["① 무자동화<br/>사람이 매번 수동 실행"]
+    L2["② 외부 시스템별<br/>각 서비스 전용 스크립트"]
+    L3["③ 외부 범용<br/>재사용 가능한 도구"]
+    L4["④ 시스템 내장<br/>서비스가 스스로 처리"]
+    L5["⑤ 자율 시스템<br/>Borg처럼 자가 치유"]
+    L1 --> L2 --> L3 --> L4 --> L5
+```
+
 ### Ch08. 릴리즈 엔지니어링
 
 #### TL;DR
@@ -228,6 +303,19 @@ latex   : true
     - 메인라인 직접 사용, 바이너리에 동봉, 별도 구성 패키지, 외부 저장소(Chubby/Bigtable) 등 여러 모델을 상황별로 선택.
 - 시작 시점의 중요성
     - 릴리즈 엔지니어링은 프로젝트 초기부터 예산과 인력을 잡고, 개발자·SRE·릴리즈 엔지니어가 처음부터 함께 일해야 한다.
+
+#### 릴리즈 파이프라인
+
+```mermaid
+flowchart LR
+    Src[메인라인<br/>monorepo] -->|브랜치| Branch[릴리즈 브랜치]
+    Branch -->|Blaze| Build[Hermetic Build]
+    Build -->|MPM| Pkg[패키지<br/>Midas Package Manager]
+    Pkg -->|Rapid| Test[시스템 테스트]
+    Test -->|Sisyphus| Canary[카나리 클러스터]
+    Canary -->|점진적 롤아웃| Prod[전체 프로덕션]
+    Fix[버그 수정] -.체리픽.-> Branch
+```
 
 ### Ch09. 단순함
 
@@ -306,6 +394,14 @@ latex   : true
 - 운영 저부하(operational underload) 위험
     - 프로덕션과 멀어지면 지식과 자신감이 손실되므로 분기별 온콜 노출과 "Wheel of Misfortune" 같은 훈련을 진행한다.
 
+#### 온콜 부하 진단
+
+| 상태 | 증상 | 주요 신호 | 조치 |
+|---|---|---|---|
+| **과부하** (Overload) | 페이지 > 12h 시프트당 2건, 번아웃 | 야간 호출 다발, 지연된 포스트모템 | 노이즈 튜닝, 개발팀 책임 재협상, 인력 증원 |
+| **적정** (Healthy) | 시프트당 0–2건, 엔지니어링 시간 50%+ | 근본 원인 수정이 전파됨 | 유지 — 분기 리뷰 |
+| **저부하** (Underload) | 시프트당 거의 0건, 연속 한산 | 운영 감각 저하, 절차 망각 | Wheel of Misfortune, 분기 재노출, 팀 범위 확장 |
+
 ### Ch12. 효과적인 장애 조치
 
 #### TL;DR
@@ -381,6 +477,29 @@ latex   : true
     - 신임 커맨더가 상황을 완전히 이해했음을 명시적으로 확인한 뒤에야 전임 커맨더가 이탈한다.
 - 인시던트 선언 기준(when to declare)
     - 다중 팀 조율 필요, 고객 영향 발생, 1시간 집중 분석에도 미해결인 경우 공식 절차를 가동한다.
+
+#### 인시던트 역할 구조
+
+```mermaid
+flowchart TB
+    IC[Incident Commander<br/>전체 지휘 · 위임되지 않은 모든 일]
+    Ops[Operations Lead<br/>시스템 변경 실행]
+    Comm[Communications Lead<br/>이해관계자 업데이트]
+    Plan[Planning Lead<br/>버그·자원·장기 복원]
+    IC --> Ops
+    IC --> Comm
+    IC --> Plan
+    Ops -.상황 공유.-> IC
+    Comm -.상황 공유.-> IC
+    Plan -.상황 공유.-> IC
+```
+
+| 역할 | 핵심 책임 | 하지 않는 것 |
+|---|---|---|
+| **Incident Commander** | 전체 상태 유지, 태스크포스 구성, 장애물 제거 | 직접 명령 실행(시스템 변경) |
+| **Operations Lead** | 시스템을 실제로 바꾸는 유일한 팀 | 외부 커뮤니케이션 |
+| **Communications Lead** | 주기적 상태 공지, 인시던트 문서 갱신 | 기술적 판단 |
+| **Planning Lead** | 버그 등록, 인수인계 준비, 장기 복원 계획 | 실시간 대응 |
 
 ### Ch15. 포스트모템 문화: 실패로부터 배우기
 
@@ -504,6 +623,25 @@ latex   : true
 - 계층화된 부하 분산
     - 프런트엔드 단계에서는 사용자와의 근접성과 가용 용량을 우선시하고, 세밀한 분배는 데이터센터 내부 단계에 위임한다.
 
+#### 부하 분산 계층도
+
+```mermaid
+flowchart TB
+    U[사용자] --> DNS[DNS / GSLB<br/>지리 근접 + 용량 기반]
+    DNS --> VIP[Anycast VIP<br/>BGP로 가장 가까운 사이트]
+    VIP --> NLB[Network LB<br/>일관된 해싱 · GRE 캡슐화]
+    NLB --> GFE[GFE 리버스 프록시]
+    GFE --> Sub[Subsetting<br/>결정적 부분집합]
+    Sub --> BE[백엔드 서버]
+    Sub -.가중 RR.-> BE
+```
+
+| 계층 | 관심사 | 신호 |
+|---|---|---|
+| **프런트엔드** (DNS/Anycast) | 지리적 근접성, 사이트 용량 | 지연, 리전별 QPS |
+| **네트워크 LB** | 연결 어피니티, 장애 격리 | 연결 수, 백엔드 상태 |
+| **L7 (GFE → 백엔드)** | 세밀한 분배 | 활성 요청 수, 활용률, 큐 길이 |
+
 ### Ch20. 데이터센터의 로드 밸런싱
 
 #### TL;DR
@@ -547,6 +685,17 @@ latex   : true
     - 요청당 재시도 예산과 서버측 "오버로드, 재시도 금지" 응답으로 재시도 폭증(retry amplification)을 방지한다.
 - 연결 부하 관리
     - 다수의 작은 클라이언트가 만드는 연결 자체가 부하가 되므로 배칭 프록시(batching proxy) 같은 중간 계층을 둔다.
+
+#### 요청 중요도 (Criticality) 4단계
+
+| 등급 | 의미 | 예시 워크로드 | 과부하 시 |
+|---|---|---|---|
+| **CRITICAL_PLUS** | 절대 거부 금지 | 로그인, 결제 | 마지막까지 처리 |
+| **CRITICAL** | 평시 우선 처리 | 핵심 사용자 요청 | 예산 내 우선 보장 |
+| **SHEDDABLE_PLUS** | 일부 실패 허용 | 비핵심 조회 | 부하 시 선제 거부 |
+| **SHEDDABLE** | 재시도로 커버 가능 | 백그라운드 배치, 분석 | 제일 먼저 버림 |
+
+중요도는 RPC 호출 트리를 따라 **전파**되어 하위 호출이 상위 중요도를 초과하지 않도록 한다.
 
 ### Ch22. 연쇄 장애 대응
 
@@ -597,6 +746,31 @@ latex   : true
     - 합의 그룹 멤버십, 리더 안정성, 복제 지연, 디스크 동기화 시간 등을 핵심 지표로 추적한다.
 - 합의 시스템 사용자(client) 패턴
     - 직접 구현보다는 ZooKeeper, etcd, Chubby 같은 검증된 서비스를 활용하는 것이 권장된다.
+
+#### Paxos 기본 흐름
+
+```mermaid
+sequenceDiagram
+    participant P as Proposer (Leader)
+    participant A1 as Acceptor 1
+    participant A2 as Acceptor 2
+    participant A3 as Acceptor 3
+
+    Note over P,A3: Phase 1 — Prepare
+    P->>A1: Prepare(n)
+    P->>A2: Prepare(n)
+    P->>A3: Prepare(n)
+    A1-->>P: Promise(n)
+    A2-->>P: Promise(n)
+    Note right of A3: 네트워크 지연 허용 — 과반만 응답하면 진행
+
+    Note over P,A3: Phase 2 — Accept
+    P->>A1: Accept(n, v)
+    P->>A2: Accept(n, v)
+    A1-->>P: Accepted
+    A2-->>P: Accepted
+    Note over P: 과반 수락 → 값 v 확정
+```
 
 ### Ch24. Cron을 통한 분산 주기 스케줄링
 
@@ -671,6 +845,25 @@ latex   : true
     - Gmail과 Google Music의 실제 데이터 복구 사례에서 다층 백업과 외부 미디어(테이프)의 가치를 입증.
 - 24가지 조합
     - 데이터 손실(loss), 손상(corruption), 가용성(unavailability) 세 종류 × 다양한 원인의 조합 모두에 대비책을 마련한다.
+
+#### 다층 방어 (Defense in Depth)
+
+```mermaid
+flowchart TB
+    subgraph L1[1계층 — 소프트 삭제]
+        Trash[휴지통 · undelete API<br/>대응: 사용자/개발자 실수]
+    end
+    subgraph L2[2계층 — 백업 / 복원]
+        BK[오프라인 백업 · 체크섬<br/>대응: 앱 버그, 저장소 결함]
+    end
+    subgraph L3[3계층 — 복제 / 지역 분산]
+        Repl[다중 리전 복제<br/>대응: 사이트 장애, 재해]
+    end
+    L1 --> L2 --> L3
+    Probe[데이터 검증기 · 정기 복원 훈련] -.지속 검증.-> L1
+    Probe -.지속 검증.-> L2
+    Probe -.지속 검증.-> L3
+```
 
 ### Ch27. 대규모 제품 출시의 신뢰성
 
@@ -913,8 +1106,16 @@ latex   : true
 ### Appendix A. 가용성 표 (Availability Table)
 - 가용성(availability) 백분율 — 즉 9의 개수(number of nines) — 와 허용 가능한 다운타임(downtime)을 시간 단위별로 매핑한 참조 표.
 - 계획된 다운타임이 0이라고 가정하며, 9가 늘수록 허용 다운타임이 급격히 짧아짐.
-- 예: 99% = 월 7.2시간, 99.9% = 월 43.2분, 99.99% = 월 4.32분, 99.999% = 월 25.9초.
 - 다중 복제본(replica)이나 변동 부하가 있는 서비스에서는 단순 다운타임보다 실패한 요청 비율 같은 집계 가용성 지표(aggregate unavailability) 사용을 권장.
+
+| 가용성 (nines) | 연간 다운타임 | 분기 | 월 | 주 |
+|---|---|---|---|---|
+| **90%** (1-nine) | 36.5 일 | 9 일 | 72 시간 | 16.8 시간 |
+| **99%** (2-nines) | 3.65 일 | 21.6 시간 | 7.2 시간 | 1.68 시간 |
+| **99.9%** (3-nines) | 8.76 시간 | 2.16 시간 | 43.2 분 | 10.1 분 |
+| **99.99%** (4-nines) | 52.56 분 | 12.96 분 | 4.32 분 | 1.01 분 |
+| **99.999%** (5-nines) | 5.26 분 | 1.30 분 | 25.9 초 | 6.05 초 |
+| **99.9999%** (6-nines) | 31.5 초 | 7.78 초 | 2.59 초 | 0.605 초 |
 
 ### Appendix B. 프로덕션 서비스 모범 사례 모음 (Best Practices for Production Services)
 - 장애 처리(failures): 잘못된 입력은 검증하고 이전 설정을 유지하면서 운영을 지속, 알림은 별도로 발송.
