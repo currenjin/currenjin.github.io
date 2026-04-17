@@ -1,5 +1,14 @@
 [
   {
+    "title": "SRE by google",
+    "url": "/wiki/sre-google",
+    "updated": "2026-04-17",
+    "summary": "",
+    "tags": "sre, devops",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Apache SkyWalking",
     "url": "/wiki/skywalking",
     "updated": "2026-04-11",
@@ -152,15 +161,6 @@
     "tags": "",
     "source": "Medium",
     "external": true
-  },
-  {
-    "title": "SRE by google",
-    "url": "/wiki/sre-google",
-    "updated": "2025-12-20",
-    "summary": "",
-    "tags": "sre, devops",
-    "source": "Wiki",
-    "external": false
   },
   {
     "title": "프로그래밍 언어론",
