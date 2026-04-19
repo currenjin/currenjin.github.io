@@ -1,0 +1,32 @@
+---
+layout: null
+permalink: /search-index.json
+---
+[
+{% assign all_entries = "" | split: "" %}
+{% for wiki in site.wiki %}
+  {% unless wiki.public == false %}
+  {% capture wiki_entry %}{
+    "type": "wiki",
+    "title": {{ wiki.title | jsonify }},
+    "url": {{ wiki.url | jsonify }},
+    "tags": {{ wiki.tags | jsonify }},
+    "summary": {{ wiki.summary | default: "" | jsonify }},
+    "updated": {{ wiki.updated | date: "%Y-%m-%d" | jsonify }}
+  }{% endcapture %}
+  {% assign all_entries = all_entries | push: wiki_entry %}
+  {% endunless %}
+{% endfor %}
+{% for book in site.books %}
+  {% capture book_entry %}{
+    "type": "book",
+    "title": {{ book.title | jsonify }},
+    "url": {{ book.url | jsonify }},
+    "tags": {{ book.type | default: "" | jsonify }},
+    "summary": {{ book.author | default: "" | jsonify }},
+    "updated": {{ book.end_date | default: "" | jsonify }}
+  }{% endcapture %}
+  {% assign all_entries = all_entries | push: book_entry %}
+{% endfor %}
+{{ all_entries | join: "," }}
+]
