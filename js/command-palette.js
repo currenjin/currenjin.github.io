@@ -1,4 +1,7 @@
 (function () {
+    const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform || '') || /Mac/i.test(navigator.userAgent || '');
+    if (isMac) document.documentElement.classList.add('is-mac');
+
     const PALETTE_ID = 'command-palette';
     const MAX_RESULTS = 12;
     const QUICK_ACTIONS = [
@@ -227,4 +230,32 @@
             open();
         }
     });
+
+    function wireSearchBoxTriggers() {
+        const triggers = document.querySelectorAll('[data-cp-trigger]');
+        triggers.forEach(function (el) {
+            el.addEventListener('focus', function (e) {
+                e.preventDefault();
+                el.blur();
+                open();
+            });
+            el.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                open();
+            });
+            const form = el.closest('form');
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    open();
+                });
+            }
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wireSearchBoxTriggers);
+    } else {
+        wireSearchBoxTriggers();
+    }
 })();
