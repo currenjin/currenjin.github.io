@@ -1,0 +1,50 @@
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 220ms;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+::view-transition-old(root) {
+    animation-name: vt-fade-out;
+}
+
+::view-transition-new(root) {
+    animation-name: vt-fade-in;
+}
+
+@keyframes vt-fade-out {
+    to {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes vt-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+}
+
+.header {
+    view-transition-name: site-header;
+}
+
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+    animation-duration: 240ms;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root),
+    ::view-transition-old(site-header),
+    ::view-transition-new(site-header) {
+        animation: none;
+    }
+}
