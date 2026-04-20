@@ -3,7 +3,7 @@ layout  : wiki
 title   : Apache SkyWalking
 summary : 마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스
 date    : 2026-04-03 00:00:00 +0900
-updated : 2026-04-11 10:26:00 +0900
+updated : 2026-04-20 22:16:00 +0900
 tags    : skywalking oss apm java
 toc     : true
 public  : true
@@ -750,6 +750,139 @@ query.must(Query.term(ProfileTaskRecord.TASK_ID, id));
 #### Test
 
 reflection으로 `LOGIC_INDICES_CATALOG` 정적 맵에 `profile_task → records-all` 매핑을 주입하고, `ArgumentCaptor<Search>`로 ES 클라이언트에 전달된 쿼리를 캡처해 Jackson으로 JSON 직렬화한 뒤 `record_table` 필드 포함 여부를 검증했다. ES DAO에 query-level 단위 테스트가 추가된 첫 번째 사례다.
+
+---
+
+### Optimize TraceQueryService.sortSpans from O(N^2) to O(N)
+
+> [apache/skywalking#13831](https://github.com/apache/skywalking/pull/13831) · merged on 2026-04-20
+
+#### Finding the Issue
+
+지금까지 JDBC/ES DAO에서 copy-paste 버그들을 잡아왔는데, query 계층의 hot path에 알고리즘 문제가 있는지도 궁금해서 `server-core/query/` 하위를 훑었다.
+
+`TraceQueryService.sortSpans()`에서 명확한 O(N²) 패턴이 나왔다. 이 메서드는 UI에서 trace 상세를 열 때마다 호출되어 span들을 parent-child 트리 순으로 정렬한다.
+
+```java
+// findRoot: N개 span 각각에 대해 전체 N개를 선형 스캔
+private List<Span> findRoot(List<Span> spans) {
+    spans.forEach(span -> {
+        String segmentParentSpanId = span.getSegmentParentSpanId();
+        boolean hasParent = false;
+        for (Span subSpan : spans) {               // O(N) 스캔
+            if (segmentParentSpanId.equals(subSpan.getSegmentSpanId())) {
+                hasParent = true;
+                break;
+            }
+        }
+        if (!hasParent) { ... rootSpans.add(span); }
+    });
+}
+
+// findChildren: 재귀 + 매번 전체 N개 스캔
+private void findChildren(List<Span> spans, Span parentSpan, List<Span> childrenSpan) {
+    spans.forEach(span -> {                         // O(N) 스캔
+        if (span.getSegmentParentSpanId().equals(parentSpan.getSegmentSpanId())) {
+            childrenSpan.add(span);
+            findChildren(spans, span, childrenSpan);  // recurse
+        }
+    });
+}
+```
+
+2018년 PR #1685에서 처음 추가된 뒤로 7년간 수정되지 않았다.
+
+#### Impact 분석
+
+typical 규모별로 정리해봤다.
+
+| spans 개수 | 비교 연산 | 예상 latency (Java) |
+|---|---|---|
+| 50 | 2,500 | < 1ms |
+| 100 | 10,000 | ~1-2ms |
+| 500 | 250,000 | ~10-50ms |
+| 1,000 | 1,000,000 | ~50-200ms |
+| 5,000 | 25,000,000 | ~1-5s |
+
+일반적인 trace는 대부분 100 span 이내라 체감이 안 된다. 다만 깊은 마이크로서비스 체인이나 긴 batch trace에서는 충분히 visible한 latency가 발생한다. 오픈 이슈로 복잡한 trace의 느린 조회 문제가 보고된 건 없지만, scaling 관점에서 명백한 개선 지점.
+
+#### Fix
+
+span 리스트를 한 번만 pre-index하고 O(1) lookup으로 전환했다.
+
+```java
+static List<Span> sortSpans(List<Span> spans) {
+    List<Span> sortedSpans = new LinkedList<>();
+    if (CollectionUtils.isNotEmpty(spans)) {
+        // 한 번의 순회로 두 개의 인덱스 구축
+        final Set<String> segmentSpanIds = new HashSet<>(spans.size());
+        final Map<String, List<Span>> childrenByParentSegmentSpanId = new HashMap<>(spans.size());
+        for (Span span : spans) {
+            segmentSpanIds.add(span.getSegmentSpanId());
+            childrenByParentSegmentSpanId
+                .computeIfAbsent(span.getSegmentParentSpanId(), k -> new ArrayList<>())
+                .add(span);
+        }
+
+        List<Span> rootSpans = findRoot(spans, segmentSpanIds);
+        rootSpans.forEach(span -> {
+            List<Span> childrenSpan = new ArrayList<>();
+            childrenSpan.add(span);
+            findChildren(childrenByParentSegmentSpanId, span, childrenSpan);
+            sortedSpans.addAll(childrenSpan);
+        });
+    }
+    return sortedSpans;
+}
+
+private static List<Span> findRoot(List<Span> spans, Set<String> segmentSpanIds) {
+    List<Span> rootSpans = new ArrayList<>();
+    spans.forEach(span -> {
+        if (!segmentSpanIds.contains(span.getSegmentParentSpanId())) {
+            span.setRoot(true);
+            rootSpans.add(span);
+        }
+    });
+    rootSpans.sort(Comparator.comparing(Span::getStartTime));
+    return rootSpans;
+}
+
+private static void findChildren(Map<String, List<Span>> childrenByParentSegmentSpanId,
+                                 Span parentSpan,
+                                 List<Span> childrenSpan) {
+    List<Span> children = childrenByParentSegmentSpanId.get(parentSpan.getSegmentSpanId());
+    if (children == null) return;
+    for (Span child : children) {
+        childrenSpan.add(child);
+        findChildren(childrenByParentSegmentSpanId, child, childrenSpan);
+    }
+}
+```
+
+세 메서드 모두 instance state를 쓰지 않아서 `private static`으로 바꿨다. 순수 함수였기 때문에 자연스러운 refactoring이고, 덕분에 unit test도 직접 호출 가능해졌다.
+
+**correctness 유지 포인트:**
+
+- `segmentSpanId = segmentId + "S" + spanId` 형식으로 trace 내에서 유일 → HashMap key로 안전
+- root sort는 기존대로 `startTime` 기준 (`rootSpans.sort(...)` 유지)
+- children 순회 순서도 input order 그대로 (ArrayList 삽입 순서 보존)
+- orphan span(parent가 list에 없음)은 기존처럼 root 처리
+- cross-segment ref(다른 segment의 span을 parent로 가리킴)도 동일하게 동작
+
+#### Test
+
+`TraceQueryServiceTest`를 새로 만들었다. TraceQueryService에 대한 단위 테스트는 이게 처음이다.
+
+- empty input → empty result
+- single root → `isRoot=true`로 마킹
+- linear chain (shuffled input) → 순서 재정렬 검증
+- multiple roots → startTime 기준 정렬 검증
+- multiple children of same parent → input order 보존
+- cross-segment ref → 올바른 parent-child 관계
+- orphaned span → root 처리
+- sibling subtrees → DFS 순회 (root → childA → grandChildA → childB)
+
+총 8개 케이스 모두 통과.
 
 ---
 
