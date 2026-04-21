@@ -27,44 +27,6 @@
     return String(raw).split(/[\s,]+/).map(t => t.trim()).filter(Boolean);
   }
 
-  function inferTechTags(title) {
-    const t = title;
-    const tags = new Set();
-    if (/자바|Java/i.test(t))                               tags.add("java");
-    if (/JVM|가비지|GC/i.test(t))                          { tags.add("java"); tags.add("jvm"); }
-    if (/테스트|[Tt]est|TDD|BDD|JUnit|Mockito|픽스처/i.test(t)) tags.add("test");
-    if (/TDD|테스트 주도/i.test(t))                         tags.add("tdd");
-    if (/ATDD|인수 테스트/i.test(t))                        tags.add("atdd");
-    if (/JPA|ORM/i.test(t))                               { tags.add("jpa"); tags.add("database"); }
-    if (/코틀린|Kotlin/i.test(t))                           tags.add("kotlin");
-    if (/스프링|Spring/i.test(t))                          { tags.add("spring"); tags.add("java"); }
-    if (/쿠버네티스|[Kk]ubernetes/i.test(t))               { tags.add("kubernetes"); tags.add("container"); }
-    if (/도커|Docker/i.test(t))                             tags.add("container");
-    if (/컨테이너|[Cc]ontainer/i.test(t))                  tags.add("container");
-    if (/데브옵스|DevOps|배포|릴리스|[Rr]elease/i.test(t))  tags.add("devops");
-    if (/마이크로서비스|MSA|[Mm]icroservice/i.test(t))      tags.add("architecture");
-    if (/아키텍처|[Aa]rchitecture|도메인|DDD/i.test(t))    tags.add("architecture");
-    if (/이벤트 소싱|[Ee]vent [Ss]ourcing/i.test(t))        tags.add("architecture");
-    if (/모놀리스|[Mm]onolith/i.test(t))                   tags.add("architecture");
-    if (/리팩터링|[Rr]efactoring/i.test(t))                tags.add("refactoring");
-    if (/AWS|아마존 웹|클라우드 네이티브/i.test(t))          tags.add("aws");
-    if (/MySQL|SQL/i.test(t))                             { tags.add("database"); tags.add("sql"); }
-    if (/데이터베이스|[Dd]atabase|데이터 중심/i.test(t))    tags.add("database");
-    if (/카프카|Kafka/i.test(t))                           tags.add("database");
-    if (/SRE|신뢰성 엔지니어링/i.test(t))                 { tags.add("sre"); tags.add("devops"); tags.add("engineering"); }
-    if (/[Oo]bservability|모니터링/i.test(t))              tags.add("observability");
-    if (/[Ee]lasticsearch/i.test(t))                       tags.add("elasticsearch");
-    if (/자바스크립트|JavaScript|Node\.js/i.test(t))        tags.add("javascript");
-    if (/객체지향|OOP/i.test(t))                          { tags.add("design"); tags.add("pattern"); }
-    if (/패턴|[Pp]attern/i.test(t))                       { tags.add("pattern"); tags.add("design"); }
-    if (/설계|[Dd]esign/i.test(t))                         tags.add("design");
-    if (/엔지니어|[Ee]ngineer|프로그래머|개발자/i.test(t))  tags.add("engineering");
-    if (/대규모|[Ss]ystem [Dd]esign/i.test(t))             tags.add("architecture");
-    if (/API|GraphQL/i.test(t))                            tags.add("api");
-    if (/[Ss]ecurity|보안/i.test(t))                       tags.add("security");
-    if (/[Gg]it/i.test(t))                                 tags.add("git");
-    return [...tags];
-  }
 
   // ── 엣지 빌드 ────────────────────────────────────────
   function sharedTags(a, b) {
@@ -203,20 +165,8 @@
       const nodes = raw
         .filter(n => n.id && n.title)
         .map(n => {
-          let tags;
-          if (n.type === "book") {
-            const typeArr = normalizeTags(n.tags);
-            if (typeArr.includes("소프트웨어")) {
-              // 소프트웨어 책: 제목에서 기술 태그 추론 (연결 기반)
-              const inferred = inferTechTags(n.title);
-              tags = inferred.length > 0 ? inferred : [];
-            } else {
-              // 소설/인문 등 비기술 책: 연결 없이 고립 노드로 표시
-              tags = [];
-            }
-          } else {
-            tags = normalizeTags(n.tags);
-          }
+          // tags는 front matter에서 직접 관리 (wiki: tags, book: tags)
+          const tags = normalizeTags(n.tags);
           return { ...n, _tags: tags, _val: 1 };
         });
 

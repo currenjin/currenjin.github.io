@@ -7,5 +7,5 @@ permalink: /graph-data.json
 {% for wiki in site.wiki %}{% unless wiki.public == false %}{% unless first %},{% endunless %}{% assign first = false %}
 {"id":{{ wiki.path | remove: "_wiki/" | remove: ".md" | jsonify }},"title":{{ wiki.title | jsonify }},"type":"wiki","tags":{{ wiki.tags | jsonify }},"url":{{ wiki.url | jsonify }},"updated":{{ wiki.updated | date: "%Y-%m-%d" | jsonify }}}{% endunless %}{% endfor %}
 {% for book in site.books %}{% unless first %},{% endunless %}{% assign first = false %}
-{"id":{{ book.path | remove: "_books/" | remove: ".md" | jsonify }},"title":{{ book.title | jsonify }},"type":"book","tags":{{ book.type | default: "" | split: ", " | jsonify }},"url":{{ book.url | jsonify }},"author":{{ book.author | default: "" | jsonify }},"status":{{ book.status | default: "" | jsonify }}}{% endfor %}
+{"id":{{ book.path | remove: "_books/" | remove: ".md" | jsonify }},"title":{{ book.title | jsonify }},"type":"book","tags":{% if book.tags %}{{ book.tags | jsonify }}{% else %}[]{% endif %},"bookType":{{ book.type | default: "" | jsonify }},"url":{{ book.url | jsonify }},"author":{{ book.author | default: "" | jsonify }},"status":{{ book.status | default: "" | jsonify }}}{% endfor %}
 ]
