@@ -274,10 +274,10 @@
         .enablePanInteraction(true)
         .minZoom(0.05)
         .maxZoom(12)
-        .d3AlphaDecay(0.02)
-        .d3VelocityDecay(0.35)
+        .d3AlphaDecay(0.025)
+        .d3VelocityDecay(0.4)
         .d3AlphaMin(0.002)
-        .cooldownTicks(400);
+        .cooldownTicks(Infinity);
 
       updateStats();
     })
