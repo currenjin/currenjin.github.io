@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% include head.html %}
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #0f1117; color: #e2e8f0; font-family: Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+  #graph-root { width: 100vw; height: 100vh; position: relative; }
+  #graph-canvas { width: 100%; height: 100%; }
+
+  #back-btn {
+    position: fixed; top: 16px; left: 16px; z-index: 200;
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(15,17,23,0.85); border: 1px solid #1e293b;
+    border-radius: 8px; padding: 7px 13px;
+    color: #94a3b8; font-size: 13px; text-decoration: none;
+    backdrop-filter: blur(8px);
+    transition: color .15s, border-color .15s;
+  }
+  #back-btn:hover { color: #e2e8f0; border-color: #334155; }
+
+  #panel {
+    position: fixed; top: 16px; right: 16px; z-index: 200;
+    background: rgba(15,17,23,0.88); border: 1px solid #1e293b;
+    border-radius: 12px; padding: 16px 18px;
+    font-size: 12px; backdrop-filter: blur(8px); width: 200px;
+  }
+  #panel h3 { font-size: 11px; color: #475569; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 12px; }
+  .leg { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; color: #94a3b8; }
+  .leg-dot  { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .leg-line { width: 22px; height: 2px; border-radius: 1px; flex-shrink: 0; }
+  .sep { border: none; border-top: 1px solid #1e293b; margin: 10px 0; }
+  #panel button {
+    width: 100%; padding: 6px 10px; border-radius: 6px; font-size: 11px; cursor: pointer;
+    margin-bottom: 5px; border: 1px solid #1e293b; background: transparent;
+    color: #64748b; text-align: left; transition: all .15s;
+    font-family: inherit;
+  }
+  #panel button.on  { color: #e2e8f0; border-color: #334155; background: rgba(255,255,255,.05); }
+  #panel button:hover { border-color: #475569; color: #94a3b8; }
+  #stats { margin-top: 8px; font-size: 11px; color: #334155; line-height: 1.9; }
+
+  #tooltip {
+    position: fixed; z-index: 300;
+    background: rgba(15,17,23,0.93); border: 1px solid #334155;
+    border-radius: 8px; padding: 10px 14px; font-size: 13px;
+    pointer-events: none; display: none; max-width: 240px;
+    backdrop-filter: blur(8px);
+  }
+  #tooltip .tt-type  { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 3px; }
+  #tooltip .tt-title { font-weight: 600; color: #f1f5f9; margin-bottom: 4px; line-height: 1.3; }
+  #tooltip .tt-meta  { color: #94a3b8; font-size: 11px; line-height: 1.6; }
+  .col-wiki { color: #91d478; }
+  .col-book { color: #60a5fa; }
+
+  #zoom-btns {
+    position: fixed; bottom: 24px; right: 16px; z-index: 200;
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  #zoom-btns button {
+    width: 30px; height: 30px;
+    background: rgba(15,17,23,0.85); border: 1px solid #1e293b;
+    border-radius: 7px; color: #64748b; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s; font-family: inherit;
+  }
+  #zoom-btns button:hover { color: #e2e8f0; border-color: #334155; }
+
+  #hint { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: #334155; font-size: 11px; pointer-events: none; z-index: 200; }
+</style>
+<body>
+  <div id="graph-root">
+    <div id="graph-canvas"></div>
+  </div>
+
+  <a id="back-btn" href="/">← 홈으로</a>
+
+  <div id="panel">
+    <h3>Knowledge Graph <span style="color:#334155;font-size:10px">β</span></h3>
+    <div class="leg"><div class="leg-dot" style="background:#91d478"></div> Wiki</div>
+    <div class="leg"><div class="leg-dot" style="background:#60a5fa"></div> Books</div>
+    <hr class="sep">
+    <div class="leg"><div class="leg-line" style="background:rgba(145,212,120,.5)"></div> Wiki ↔ Wiki</div>
+    <div class="leg"><div class="leg-line" style="background:rgba(147,197,253,.5)"></div> Wiki ↔ Book</div>
+    <div class="leg"><div class="leg-line" style="background:rgba(96,165,250,.3)"></div> Book ↔ Book</div>
+    <hr class="sep">
+    <button id="btn-ww" class="on" onclick="toggleKind('wiki-wiki',this)">● Wiki ↔ Wiki</button>
+    <button id="btn-wb" class="on" onclick="toggleKind('wiki-book',this)">● Wiki ↔ Book</button>
+    <button id="btn-bb" class="on" onclick="toggleKind('book-book',this)">● Book ↔ Book</button>
+    <hr class="sep">
+    <button id="btn-labels" onclick="toggleLabels(this)">Aa 노드 이름 표시</button>
+    <button id="btn-tags"   onclick="toggleTags(this)">#  태그 표시</button>
+    <div id="stats"></div>
+  </div>
+
+  <div id="tooltip"></div>
+
+  <div id="zoom-btns">
+    <button onclick="G.zoom(G.zoom()*1.5,300)">+</button>
+    <button onclick="G.zoom(G.zoom()/1.5,300)">−</button>
+    <button onclick="G.zoomToFit(400,50)">⊡</button>
+  </div>
+  <div id="hint">스크롤 줌 · 드래그 이동 · 클릭 시 페이지 이동</div>
+
+  <script src="https://unpkg.com/force-graph@1.43.5/dist/force-graph.min.js"></script>
+  <script src="{{ '/js/graph.js' | prepend: site.baseurl }}"></script>
+</body>
+</html>
