@@ -228,9 +228,9 @@
         .enablePanInteraction(true)
         .minZoom(0.05)
         .maxZoom(12)
-        .d3AlphaDecay(0.025)
+        .d3AlphaDecay(0.03)
         .d3VelocityDecay(0.4)
-        .d3AlphaMin(0.002)
+        .d3AlphaMin(0)
         .cooldownTicks(Infinity);
 
       updateStats();
