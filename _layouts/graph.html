@@ -67,6 +67,31 @@
   #zoom-btns button:hover { color: #e2e8f0; border-color: #334155; }
 
   #hint { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: #334155; font-size: 11px; pointer-events: none; z-index: 200; }
+
+  #node-info {
+    position: fixed; bottom: 24px; left: 16px; z-index: 200;
+    background: rgba(15,17,23,0.92); border: 1px solid #334155;
+    border-radius: 12px; padding: 14px 16px; width: 240px;
+    backdrop-filter: blur(8px); font-size: 13px;
+  }
+  #ni-type  { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+  #ni-title { font-weight: 700; color: #f1f5f9; font-size: 14px; line-height: 1.35; margin-bottom: 6px; }
+  #ni-tags  { color: #94a3b8; font-size: 11px; margin-bottom: 4px; }
+  #ni-meta  { color: #64748b; font-size: 11px; margin-bottom: 10px; }
+  #ni-link  {
+    display: inline-block; padding: 6px 12px;
+    background: rgba(255,255,255,0.06); border: 1px solid #334155;
+    border-radius: 6px; color: #e2e8f0; text-decoration: none;
+    font-size: 12px; transition: all .15s;
+  }
+  #ni-link:hover { background: rgba(255,255,255,0.1); border-color: #475569; }
+  #ni-close {
+    position: absolute; top: 10px; right: 10px;
+    background: none; border: none; color: #475569; cursor: pointer;
+    font-size: 14px; padding: 2px 6px; border-radius: 4px;
+    transition: color .15s;
+  }
+  #ni-close:hover { color: #94a3b8; }
 </style>
 <body>
   <div id="graph-root">
@@ -95,12 +120,21 @@
 
   <div id="tooltip"></div>
 
+  <div id="node-info" style="display:none">
+    <div id="ni-type"></div>
+    <div id="ni-title"></div>
+    <div id="ni-tags"></div>
+    <div id="ni-meta"></div>
+    <a id="ni-link" href="#" target="_blank">→ 페이지 열기</a>
+    <button id="ni-close" onclick="document.getElementById('node-info').style.display='none'">✕</button>
+  </div>
+
   <div id="zoom-btns">
     <button onclick="G.zoom(G.zoom()*1.5,300)">+</button>
     <button onclick="G.zoom(G.zoom()/1.5,300)">−</button>
     <button onclick="G.zoomToFit(400,50)">⊡</button>
   </div>
-  <div id="hint">스크롤 줌 · 드래그 이동 · 클릭 시 페이지 이동</div>
+  <div id="hint">스크롤 줌 · 드래그 이동 · 클릭하면 정보 표시</div>
 
   <script src="https://unpkg.com/force-graph@1.43.5/dist/force-graph.min.js"></script>
   <script src="{{ '/js/graph.js' | prepend: site.baseurl }}"></script>

@@ -158,15 +158,6 @@
     tooltip.style.top  = (e.clientY - 10) + "px";
   });
 
-  // 새 탭 열릴 때 포커스 이탈 → d3-zoom이 drag 상태에 갇히는 현상 방지
-  window.addEventListener("blur", () => {
-    const canvas = document.querySelector("#graph-canvas canvas");
-    if (canvas) {
-      canvas.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
-      canvas.dispatchEvent(new PointerEvent("pointercancel", { bubbles: true }));
-    }
-  });
-
   // ── 초기화 ───────────────────────────────────────────
   fetch("/graph-data.json")
     .then(r => r.json())
@@ -232,7 +223,17 @@
             tooltip.style.display = "none";
           }
         })
-        .onNodeClick(node => { window.open(node.url, "_blank"); })
+        .onNodeClick(node => {
+          const panel = document.getElementById("node-info");
+          const typeColor = node.type === "wiki" ? "#91d478" : "#60a5fa";
+          document.getElementById("ni-type").textContent  = node.type === "wiki" ? "Wiki" : "Book";
+          document.getElementById("ni-type").style.color  = typeColor;
+          document.getElementById("ni-title").textContent = node.title;
+          document.getElementById("ni-tags").textContent  = node._tags.length ? "# " + node._tags.join(" · ") : "";
+          document.getElementById("ni-meta").textContent  = node.author || node.updated || "";
+          document.getElementById("ni-link").href         = node.url;
+          panel.style.display = "block";
+        })
         .enableZoomInteraction(true)
         .enablePanInteraction(true)
         .minZoom(0.05)
