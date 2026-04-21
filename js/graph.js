@@ -206,8 +206,7 @@
         })
         .onNodeHover(node => {
           hoveredNode = node || null;
-          computeNeighbors(node); // 이웃 Set 갱신
-          G.refresh();
+          computeNeighbors(node);
           if (node) {
             const cls = "col-" + node.type;
             const typeLabel = node.type === "wiki" ? "Wiki" : "Book";
