@@ -206,9 +206,14 @@
           let tags;
           if (n.type === "book") {
             const typeArr = normalizeTags(n.tags);
-            tags = typeArr.includes("소프트웨어")
-              ? (inferTechTags(n.title).length > 0 ? inferTechTags(n.title) : typeArr)
-              : typeArr;
+            if (typeArr.includes("소프트웨어")) {
+              // 소프트웨어 책: 제목에서 기술 태그 추론 (연결 기반)
+              const inferred = inferTechTags(n.title);
+              tags = inferred.length > 0 ? inferred : [];
+            } else {
+              // 소설/인문 등 비기술 책: 연결 없이 고립 노드로 표시
+              tags = [];
+            }
           } else {
             tags = normalizeTags(n.tags);
           }
