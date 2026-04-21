@@ -158,6 +158,15 @@
     tooltip.style.top  = (e.clientY - 10) + "px";
   });
 
+  // 새 탭 열릴 때 포커스 이탈 → d3-zoom이 drag 상태에 갇히는 현상 방지
+  window.addEventListener("blur", () => {
+    const canvas = document.querySelector("#graph-canvas canvas");
+    if (canvas) {
+      canvas.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
+      canvas.dispatchEvent(new PointerEvent("pointercancel", { bubbles: true }));
+    }
+  });
+
   // ── 초기화 ───────────────────────────────────────────
   fetch("/graph-data.json")
     .then(r => r.json())
