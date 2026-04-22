@@ -243,6 +243,10 @@
         .d3AlphaMin(0)
         .cooldownTicks(Infinity);
 
+      // 노드 간격 조정: 반발력 강화 + 링크 거리 확장
+      G.d3Force("charge").strength(-500);
+      G.d3Force("link").distance(140).strength(0.25);
+
       updateStats();
     })
     .catch(err => console.error("graph-data.json load failed:", err));
