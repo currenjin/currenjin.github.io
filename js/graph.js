@@ -12,7 +12,7 @@
     edgeFade: "rgba(100,116,139,0.04)",
   };
 
-  const filters = { "wiki-wiki": true, "wiki-book": true, "book-book": true };
+  const filters = { "wiki-wiki": true, "wiki-book": false, "book-book": true };
   let showLabels = false;
   let showTags   = false;
   let hoveredNode = null;
