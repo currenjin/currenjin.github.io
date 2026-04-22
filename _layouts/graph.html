@@ -40,6 +40,19 @@
   #panel button:hover { border-color: #475569; color: #94a3b8; }
   #stats { margin-top: 8px; font-size: 11px; color: #334155; line-height: 1.9; }
 
+  .tag-chip {
+    display: inline-block; padding: 2px 6px; margin: 2px 1px;
+    border-radius: 4px; font-size: 10px; cursor: pointer;
+    border: 1px solid #1e293b; color: #64748b;
+    transition: all .15s; white-space: nowrap;
+  }
+  .tag-chip:hover { border-color: #475569; color: #94a3b8; }
+  .tag-chip.on { border-color: #334155; color: #e2e8f0; background: rgba(255,255,255,.05); }
+  #tag-list { max-height: 148px; overflow-y: auto; }
+  #tag-list::-webkit-scrollbar { width: 3px; }
+  #tag-list::-webkit-scrollbar-track { background: transparent; }
+  #tag-list::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
+
   #tooltip {
     position: fixed; z-index: 300;
     background: rgba(15,17,23,0.93); border: 1px solid #334155;
@@ -116,6 +129,9 @@
     <button id="btn-labels" onclick="toggleLabels(this)">Aa 노드 이름 표시</button>
     <button id="btn-tags"   onclick="toggleTags(this)">#  태그 표시</button>
     <div id="stats"></div>
+    <hr class="sep">
+    <div style="font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">태그 필터</div>
+    <div id="tag-list"></div>
   </div>
 
   <div id="tooltip"></div>
