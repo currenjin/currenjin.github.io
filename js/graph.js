@@ -13,6 +13,7 @@
   };
 
   const filters = { "wiki-wiki": true, "wiki-book": false, "book-book": true };
+  let minWeight  = 2;
   let showLabels = false;
   let showTags   = false;
   let hoveredNode = null;
@@ -62,7 +63,7 @@
   }
 
   function activeLinks() {
-    return allLinks.filter(l => filters[l.kind]);
+    return allLinks.filter(l => filters[l.kind] && l.weight >= minWeight);
   }
 
   // 호버 시 이웃 노드 Set을 미리 계산 — drawNode에서 O(1) 조회
@@ -168,6 +169,17 @@
   window.toggleKind = function (kind, btn) {
     filters[kind] = !filters[kind];
     btn.classList.toggle("on", filters[kind]);
+    const { nodes } = G.graphData();
+    G.graphData({ nodes, links: activeLinks() });
+    hoveredNode = null;
+    neighborSet = new Set();
+    G.d3ReheatSimulation();
+    updateStats();
+  };
+
+  window.toggleMinWeight = function (btn) {
+    minWeight = minWeight === 2 ? 1 : 2;
+    btn.classList.toggle("on", minWeight === 2);
     const { nodes } = G.graphData();
     G.graphData({ nodes, links: activeLinks() });
     hoveredNode = null;
