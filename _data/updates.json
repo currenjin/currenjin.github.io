@@ -4,7 +4,7 @@
     "url": "/wiki/skywalking",
     "updated": "2026-04-20",
     "summary": "마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스",
-    "tags": "skywalking oss apm java",
+    "tags": "observability, java, devops, sre",
     "source": "Wiki",
     "external": false
   },
@@ -13,7 +13,7 @@
     "url": "/wiki/sre-google",
     "updated": "2026-04-17",
     "summary": "",
-    "tags": "sre, devops",
+    "tags": "sre, devops, engineering, observability",
     "source": "Wiki",
     "external": false
   },
@@ -31,7 +31,7 @@
     "url": "/wiki/claude-code",
     "updated": "2026-04-01",
     "summary": "소스맵 유출로 드러난 내부 아키텍처 분석",
-    "tags": "ai-agent",
+    "tags": "ai-agent, ai, productivity, engineering",
     "source": "Wiki",
     "external": false
   },
@@ -40,7 +40,7 @@
     "url": "/wiki/kotlin-vs-java-tradeoff",
     "updated": "2026-04-01",
     "summary": "Kotlin/Java 핵심 차이, 장단점, 상황별 선택 기준을 실무 관점으로 정리",
-    "tags": "kotlin, java",
+    "tags": "kotlin, java, programming",
     "source": "Wiki",
     "external": false
   },
@@ -49,7 +49,7 @@
     "url": "/wiki/grafana-loki-tempo",
     "updated": "2026-03-28",
     "summary": "Grafana/Loki/Tempo를 한 문서에서 역할별로 분리해 보는 관측성 스택 실무 정리",
-    "tags": "observability",
+    "tags": "observability, devops, sre",
     "source": "Wiki",
     "external": false
   },
@@ -85,7 +85,7 @@
     "url": "/wiki/augmented-coding",
     "updated": "2026-03-13",
     "summary": "개인 검증 이후 팀 적용까지, 실제 운영 방식과 판단 기준 정리",
-    "tags": "ai, engineering",
+    "tags": "ai, engineering, ai-agent, productivity",
     "source": "Wiki",
     "external": false
   },
@@ -94,7 +94,7 @@
     "url": "/wiki/user-stories-applied",
     "updated": "2026-03-05",
     "summary": "User Stories Applied 핵심 + 실무 시나리오 정리",
-    "tags": "agile",
+    "tags": "agile, engineering, design",
     "source": "Wiki",
     "external": false
   },
@@ -103,7 +103,7 @@
     "url": "/wiki/git",
     "updated": "2026-03-03",
     "summary": "",
-    "tags": "git",
+    "tags": "git, devops, engineering",
     "source": "Wiki",
     "external": false
   },
@@ -112,7 +112,7 @@
     "url": "/wiki/designing-data-intensive-applications",
     "updated": "2026-02-24",
     "summary": "",
-    "tags": "architecture, database",
+    "tags": "architecture, database, engineering, design",
     "source": "Wiki",
     "external": false
   },
@@ -121,7 +121,7 @@
     "url": "/wiki/openclaw",
     "updated": "2026-02-17",
     "summary": "OpenClaw 설치 및 설정 가이드",
-    "tags": "ai-agent",
+    "tags": "ai-agent, ai, productivity",
     "source": "Wiki",
     "external": false
   },
@@ -130,7 +130,7 @@
     "url": "/wiki/opencode",
     "updated": "2026-02-17",
     "summary": "",
-    "tags": "ai-agent",
+    "tags": "ai-agent, ai, productivity",
     "source": "Wiki",
     "external": false
   },
@@ -139,7 +139,7 @@
     "url": "/wiki/modern-software-engineering",
     "updated": "2026-02-06",
     "summary": "",
-    "tags": "engineering",
+    "tags": "engineering, tdd, devops, design",
     "source": "Wiki",
     "external": false
   },
@@ -148,7 +148,7 @@
     "url": "/wiki/tidy-first",
     "updated": "2026-01-22",
     "summary": "",
-    "tags": "refactoring, design",
+    "tags": "refactoring, design, engineering, tdd",
     "source": "Wiki",
     "external": false
   },
@@ -167,7 +167,7 @@
     "url": "/wiki/programming-language",
     "updated": "2025-12-15",
     "summary": "",
-    "tags": "programming",
+    "tags": "programming, design",
     "source": "Wiki",
     "external": false
   },
@@ -176,7 +176,7 @@
     "url": "/wiki/building-microservices",
     "updated": "2025-12-07",
     "summary": "",
-    "tags": "architecture",
+    "tags": "architecture, design, devops, engineering",
     "source": "Wiki",
     "external": false
   },
@@ -195,7 +195,7 @@
     "url": "/wiki/junit",
     "updated": "2025-08-16",
     "summary": "",
-    "tags": "test, java",
+    "tags": "test, java, tdd",
     "source": "Wiki",
     "external": false
   },
@@ -224,7 +224,7 @@
     "url": "/wiki/concurrent-linked-queue",
     "updated": "2025-07-15",
     "summary": "",
-    "tags": "java, data-structure",
+    "tags": "java, data-structure, concurrency",
     "source": "Wiki",
     "external": false
   },
@@ -242,7 +242,7 @@
     "url": "/wiki/test",
     "updated": "2025-04-08",
     "summary": "",
-    "tags": "test",
+    "tags": "test, tdd, engineering",
     "source": "Wiki",
     "external": false
   },
@@ -260,7 +260,7 @@
     "url": "/wiki/ERD",
     "updated": "2025-03-18",
     "summary": "",
-    "tags": "database, design",
+    "tags": "database, design, sql",
     "source": "Wiki",
     "external": false
   },
@@ -269,7 +269,7 @@
     "url": "/wiki/street-coder",
     "updated": "2025-03-16",
     "summary": "",
-    "tags": "engineering",
+    "tags": "engineering, programming, productivity",
     "source": "Wiki",
     "external": false
   },
@@ -278,7 +278,7 @@
     "url": "/wiki/implementation-patterns",
     "updated": "2025-03-15",
     "summary": "",
-    "tags": "pattern, design",
+    "tags": "pattern, design, java, engineering",
     "source": "Wiki",
     "external": false
   },
@@ -287,7 +287,7 @@
     "url": "/wiki/jpa-deep-dive-by-currenjin",
     "updated": "2025-03-04",
     "summary": "",
-    "tags": "jpa, database",
+    "tags": "jpa, database, java, spring",
     "source": "Wiki",
     "external": false
   },
@@ -296,7 +296,7 @@
     "url": "/wiki/the-well-grounded-java-developer",
     "updated": "2025-01-20",
     "summary": "",
-    "tags": "java",
+    "tags": "java, jvm, engineering",
     "source": "Wiki",
     "external": false
   },
@@ -305,7 +305,7 @@
     "url": "/wiki/layered-architecture",
     "updated": "2024-11-04",
     "summary": "",
-    "tags": "architecture",
+    "tags": "architecture, design, pattern",
     "source": "Wiki",
     "external": false
   },
@@ -314,7 +314,7 @@
     "url": "/wiki/spring-bean",
     "updated": "2024-11-03",
     "summary": "",
-    "tags": "spring, java",
+    "tags": "spring, java, architecture",
     "source": "Wiki",
     "external": false
   },
@@ -323,7 +323,7 @@
     "url": "/wiki/fixture-monkey-with-jpa",
     "updated": "2024-09-26",
     "summary": "",
-    "tags": "test, jpa",
+    "tags": "test, jpa, java, tdd",
     "source": "Wiki",
     "external": false
   },
@@ -332,7 +332,7 @@
     "url": "/wiki/toss-slash-24",
     "updated": "2024-09-14",
     "summary": "",
-    "tags": "conference, engineering",
+    "tags": "conference, engineering, devops, observability",
     "source": "Wiki",
     "external": false
   },
@@ -341,7 +341,7 @@
     "url": "/wiki/java-to-kotlin",
     "updated": "2024-09-11",
     "summary": "",
-    "tags": "kotlin, java",
+    "tags": "kotlin, java, programming",
     "source": "Wiki",
     "external": false
   },
@@ -350,7 +350,7 @@
     "url": "/wiki/typescript-compile",
     "updated": "2023-12-15",
     "summary": "",
-    "tags": "typescript",
+    "tags": "typescript, javascript, programming",
     "source": "Wiki",
     "external": false
   },
@@ -359,7 +359,7 @@
     "url": "/wiki/multithreaded-javascript",
     "updated": "2023-12-14",
     "summary": "",
-    "tags": "javascript, concurrency",
+    "tags": "javascript, concurrency, programming",
     "source": "Wiki",
     "external": false
   },
@@ -368,7 +368,7 @@
     "url": "/wiki/n+1",
     "updated": "2023-12-08",
     "summary": "",
-    "tags": "database, jpa",
+    "tags": "database, jpa, java, graphql, spring",
     "source": "Wiki",
     "external": false
   },
@@ -377,7 +377,7 @@
     "url": "/wiki/CDD",
     "updated": "2022-08-24",
     "summary": "",
-    "tags": "architecture, documentation",
+    "tags": "architecture, documentation, design, engineering",
     "source": "Wiki",
     "external": false
   },
@@ -386,7 +386,7 @@
     "url": "/wiki/TDD",
     "updated": "2022-08-19",
     "summary": "",
-    "tags": "tdd, test",
+    "tags": "tdd, test, engineering",
     "source": "Wiki",
     "external": false
   },
@@ -395,7 +395,7 @@
     "url": "/wiki/refactoring",
     "updated": "2022-07-30",
     "summary": "",
-    "tags": "refactoring, design",
+    "tags": "refactoring, design, engineering, tdd",
     "source": "Wiki",
     "external": false
   },
@@ -404,7 +404,7 @@
     "url": "/wiki/lambda-with-api-gateway",
     "updated": "2022-07-17",
     "summary": "",
-    "tags": "aws",
+    "tags": "aws, devops, api",
     "source": "Wiki",
     "external": false
   },
@@ -413,7 +413,7 @@
     "url": "/wiki/Mockito",
     "updated": "2022-07-07",
     "summary": "",
-    "tags": "test, java",
+    "tags": "test, java, tdd",
     "source": "Wiki",
     "external": false
   },
@@ -431,7 +431,7 @@
     "url": "/wiki/unit-test",
     "updated": "2022-07-01",
     "summary": "",
-    "tags": "test",
+    "tags": "test, tdd, engineering",
     "source": "Wiki",
     "external": false
   },
@@ -440,7 +440,7 @@
     "url": "/wiki/fitnesse",
     "updated": "2022-06-29",
     "summary": "",
-    "tags": "atdd, test",
+    "tags": "atdd, test, tdd, java",
     "source": "Wiki",
     "external": false
   },
@@ -449,7 +449,7 @@
     "url": "/wiki/elasticsearch",
     "updated": "2022-05-26",
     "summary": "",
-    "tags": "elasticsearch, database",
+    "tags": "elasticsearch, database, observability",
     "source": "Wiki",
     "external": false
   },
@@ -458,7 +458,7 @@
     "url": "/wiki/sleuth-sqs",
     "updated": "2022-05-26",
     "summary": "",
-    "tags": "aws, observability",
+    "tags": "aws, observability, spring, devops",
     "source": "Wiki",
     "external": false
   },
@@ -467,7 +467,7 @@
     "url": "/wiki/specification-pattern",
     "updated": "2022-05-13",
     "summary": "",
-    "tags": "pattern, design",
+    "tags": "pattern, design, java, tdd",
     "source": "Wiki",
     "external": false
   },
@@ -476,7 +476,7 @@
     "url": "/wiki/vaadin",
     "updated": "2022-05-13",
     "summary": "",
-    "tags": "frontend, java",
+    "tags": "frontend, java, spring",
     "source": "Wiki",
     "external": false
   },
@@ -485,7 +485,7 @@
     "url": "/wiki/oop",
     "updated": "2022-03-03",
     "summary": "",
-    "tags": "design, pattern",
+    "tags": "design, pattern, java, programming",
     "source": "Wiki",
     "external": false
   },
@@ -494,7 +494,7 @@
     "url": "/wiki/fibonacci",
     "updated": "2022-02-13",
     "summary": "",
-    "tags": "algorithm",
+    "tags": "algorithm, programming, data-structure",
     "source": "Wiki",
     "external": false
   },
@@ -521,7 +521,7 @@
     "url": "/wiki/osi-7-layer",
     "updated": "2022-02-05",
     "summary": "",
-    "tags": "network",
+    "tags": "network, architecture",
     "source": "Wiki",
     "external": false
   },
@@ -557,7 +557,7 @@
     "url": "/wiki/docker-compose",
     "updated": "2022-01-31",
     "summary": "",
-    "tags": "container",
+    "tags": "container, devops",
     "source": "Wiki",
     "external": false
   },
@@ -566,7 +566,7 @@
     "url": "/wiki/docker-swarm",
     "updated": "2022-01-31",
     "summary": "",
-    "tags": "container",
+    "tags": "container, devops",
     "source": "Wiki",
     "external": false
   },
@@ -575,7 +575,7 @@
     "url": "/wiki/docker",
     "updated": "2022-01-31",
     "summary": "",
-    "tags": "container",
+    "tags": "container, devops",
     "source": "Wiki",
     "external": false
   },
@@ -584,7 +584,7 @@
     "url": "/wiki/dockerfile",
     "updated": "2022-01-31",
     "summary": "",
-    "tags": "container",
+    "tags": "container, devops",
     "source": "Wiki",
     "external": false
   },
@@ -593,7 +593,7 @@
     "url": "/wiki/graphql",
     "updated": "2022-01-31",
     "summary": "",
-    "tags": "graphql, api",
+    "tags": "graphql, api, javascript",
     "source": "Wiki",
     "external": false
   },
@@ -602,7 +602,7 @@
     "url": "/wiki/openstack",
     "updated": "2022-01-31",
     "summary": "",
-    "tags": "cloud",
+    "tags": "cloud, devops",
     "source": "Wiki",
     "external": false
   },
@@ -611,7 +611,7 @@
     "url": "/wiki/s3",
     "updated": "2022-01-31",
     "summary": "",
-    "tags": "aws",
+    "tags": "aws, cloud",
     "source": "Wiki",
     "external": false
   },
@@ -620,7 +620,7 @@
     "url": "/wiki/polymorphism",
     "updated": "2022-01-14",
     "summary": "",
-    "tags": "design, pattern",
+    "tags": "design, pattern, java, programming",
     "source": "Wiki",
     "external": false
   },
@@ -629,7 +629,7 @@
     "url": "/wiki/web-mvc",
     "updated": "2022-01-14",
     "summary": "",
-    "tags": "spring, architecture",
+    "tags": "spring, architecture, java, design",
     "source": "Wiki",
     "external": false
   },
@@ -647,7 +647,7 @@
     "url": "/wiki/svg",
     "updated": "2022-01-06",
     "summary": "",
-    "tags": "frontend",
+    "tags": "frontend, javascript, programming",
     "source": "Wiki",
     "external": false
   },
@@ -656,7 +656,7 @@
     "url": "/wiki/annotation",
     "updated": "2022-01-04",
     "summary": "",
-    "tags": "java",
+    "tags": "java, spring, programming",
     "source": "Wiki",
     "external": false
   },
