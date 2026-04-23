@@ -4,7 +4,7 @@ title   : SRE by google
 summary :
 date    : 2025-12-20 21:00:00 +0900
 updated : 2026-04-17 21:00:00 +0900
-tags    : [sre, devops]
+tags    : [sre, devops, engineering, observability]
 toc     : true
 public  : true
 parent  : [[index]]

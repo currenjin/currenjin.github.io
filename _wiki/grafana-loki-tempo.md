@@ -4,7 +4,7 @@ title   : Grafana, Loki, Tempo 정리
 summary : Grafana/Loki/Tempo를 한 문서에서 역할별로 분리해 보는 관측성 스택 실무 정리
 date    : 2026-03-27 15:42:53 +0900
 updated : 2026-03-28 22:58:40 +0900
-tags    : [observability]
+tags    : [observability, devops, sre]
 toc     : true
 public  : true
 parent  : [[index]]

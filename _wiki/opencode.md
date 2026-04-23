@@ -4,7 +4,7 @@ title   : Open Code
 summary :
 date    : 2026-01-19 13:00:00 +0900
 updated : 2026-02-17 22:40:00 +0900
-tags    : [ai-agent]
+tags    : [ai-agent, ai, productivity]
 toc     : true
 public  : true
 parent  : [[index]]

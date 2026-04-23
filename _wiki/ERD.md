@@ -4,7 +4,7 @@ title   : ERD(Entity Relationship Diagram, 엔티티 관계 다이어그램)
 summary :
 date    : 2025-03-18 11:30:00 +0900
 updated : 2025-03-18 11:30:00 +0900
-tags    : [database, design]
+tags    : [database, design, sql]
 toc     : true
 public  : true
 parent  : [[index]]

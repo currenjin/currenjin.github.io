@@ -4,7 +4,7 @@ title   : Apache SkyWalking
 summary : 마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스
 date    : 2026-04-03 00:00:00 +0900
 updated : 2026-04-20 22:16:00 +0900
-tags    : skywalking oss apm java
+tags    : [observability, java, devops, sre]
 toc     : true
 public  : true
 parent  : [[index]]

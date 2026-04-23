@@ -4,7 +4,7 @@ title   : Annotation
 summary :
 date    : 2022-01-04 22:38:00 +0900
 updated : 2022-01-04 23:07:00 +0900
-tags    : [java]
+tags    : [java, spring, programming]
 toc     : true
 public  : true
 parent  : [[index]]

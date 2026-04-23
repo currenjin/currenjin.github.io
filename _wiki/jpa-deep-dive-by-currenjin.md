@@ -4,7 +4,7 @@ title   : JPA Deep Dive(by currenjin)
 summary :
 date    : 2025-03-05 07:00:00 +0900
 updated : 2025-03-05 07:00:00 +0900
-tags    : [jpa, database]
+tags    : [jpa, database, java, spring]
 toc     : true
 public  : true
 parent  : [[index]]

@@ -4,7 +4,7 @@ title   : 증강 코딩 운영 기록
 summary : 개인 검증 이후 팀 적용까지, 실제 운영 방식과 판단 기준 정리
 date    : 2026-03-12 11:30:00 +0900
 updated : 2026-03-13 12:12:00 +0900
-tags    : [ai, engineering]
+tags    : [ai, engineering, ai-agent, productivity]
 toc     : true
 public  : true
 parent  : [[index]]
