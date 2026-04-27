@@ -10,6 +10,7 @@ regenerate: true
 ## wiki items
 
 * [[example]]
+* [[homelab]]
 * [[typescript-compile]]
 * [[refactoring]]
 * [[lambda-with-api-gateway]]
