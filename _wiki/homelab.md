@@ -373,14 +373,14 @@ flowchart LR
 ### 5.2 권한 인계
 
 - **인계 ① bootstrap → Terraform**: bootstrap이 빈 k3d 클러스터와 kubeconfig를 생성한다. Terraform은 클러스터 자체를 생성하지 않으며 이미 존재하는 클러스터의 kubeconfig를 사용한다.
-- **인계 ② Terraform → ArgoCD**: Terraform이 ArgoCD 본체와 root-app 매니페스트를 등록한다. root-app은 homelab-gitops repo의 `apps/*` 폴더 아래 모든 Application을 등록한다. 이후 Terraform은 추가 작업을 하지 않는다.
+- **인계 ② Terraform → ArgoCD**: Terraform이 ArgoCD 본체와 root-app 매니페스트를 등록한다. root-app은 `gitops/apps/*` 경로의 모든 Application을 등록한다. 이후 Terraform은 추가 작업을 하지 않는다.
 
 ### 5.3 App-of-Apps 패턴
 
 ArgoCD는 자기 자신의 매니페스트도 git에서 관리한다.
 
 ```
-homelab-gitops/
+homelab/gitops/
 ├── platform/
 │   ├── argocd/              # ArgoCD 자기 자신의 매니페스트
 │   ├── ingress-nginx/
@@ -432,7 +432,7 @@ apiserver가 다운되어도 평시 사용자 트래픽은 흐른다.
 ```mermaid
 flowchart TB
   Daniel["👨 사용자 IDE"]
-  GH["☁ GitHub<br/>(homelab-gitops repo)"]
+  GH["☁ GitHub<br/>(homelab repo, gitops/ 하위)"]
   Argo["📦 ArgoCD Pod<br/>(워커, platform ns)<br/>desired (git) vs current (cluster) 비교"]
   API["apiserver"]
   ETCD[("etcd")]
@@ -543,14 +543,36 @@ flowchart TB
 
 ## 7. 리포지토리 구조
 
+플랫폼(Terraform)과 앱(ArgoCD watch 대상)을 한 repo 안에서 디렉토리로 분리한다.
+
 ```
-homelab-infra/      # Terraform, 플랫폼 영역, 변경 빈도 낮음
-homelab-gitops/     # ArgoCD watch 대상, 앱 영역, 변경 빈도 높음
-projects/*/         # 사이드 프로젝트 코드 (별도 repo)
+homelab/
+├── infra/                    # Terraform 영역 (ArgoCD watch ❌)
+│   ├── bootstrap/
+│   │   └── install.sh
+│   ├── terraform/
+│   │   ├── modules/
+│   │   └── envs/local/
+│   └── argocd/
+│       └── root-app.yaml     # gitops/apps/* 가리킴
+├── gitops/                   # ArgoCD watch 영역
+│   ├── apps/
+│   └── projects/
+└── docs/
+    └── decisions/
+
+projects/*/                   # 사이드 프로젝트 코드 (별도 repo)
 ```
 
-플랫폼과 앱을 분리하는 이유는 blast radius 격리다.
-일상 push가 플랫폼을 건드리지 않도록 분리한다. 일상 운영의 대부분은 `homelab-gitops`에서 발생한다.
+ArgoCD가 watch하는 path는 `gitops/apps`로 좁힌다. `infra/` 하위 변경(특히 tfstate)이 ArgoCD에 영향을 주지 않도록 한다.
+
+`infra/terraform/` 하위의 state 파일은 `.gitignore`로 보호한다.
+
+```
+infra/terraform/**/.terraform/
+infra/terraform/**/*.tfstate
+infra/terraform/**/*.tfstate.backup
+```
 
 ### 7.1 책임 분리
 
@@ -581,21 +603,19 @@ Terraform이 ArgoCD 설치 + root-app 등록을 담당하면, 그 이후는 Argo
 
 이전 가능성 원칙을 지킨 경우, 새 호스트로 옮겨야 할 항목:
 
-1. homelab-infra repo (GitHub clone)
-2. homelab-gitops repo (GitHub clone)
-3. terraform.tfstate (로컬 파일, 직접 옮김)
-4. ~/srv/data/ (rsync)
-5. sops age 키
+1. homelab repo (GitHub clone)
+2. terraform.tfstate (로컬 파일, 직접 옮김)
+3. ~/srv/data/ (rsync)
+4. sops age 키
 
 새 호스트에서 실행:
 
 ```bash
 brew install orbstack k3d kubectl helm terraform sops age tailscale
-git clone github.com/currenjin/homelab-infra
-git clone github.com/currenjin/homelab-gitops
+git clone github.com/currenjin/homelab
 # tfstate, ~/srv/data, sops key 옮기기
-./bootstrap.sh        # 빈 k3d 클러스터 생성
-terraform apply       # platform 다시 설치
+cd homelab && ./infra/bootstrap/install.sh   # 빈 k3d 클러스터 생성
+cd infra/terraform/envs/local && terraform apply  # platform 다시 설치
 # ArgoCD가 root-app을 sync해 모든 앱 자동 복원
 ```
 
