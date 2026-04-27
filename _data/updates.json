@@ -1,5 +1,14 @@
 [
   {
+    "title": "홈서버 / SRE 학습 멘탈 모델",
+    "url": "/wiki/homelab",
+    "updated": "2026-04-27",
+    "summary": "k3d + Terraform + ArgoCD 기반 개인 홈서버 설계 결정과 운영 감각을 잡기 위한 멘탈 모델 5장",
+    "tags": "homelab, kubernetes, sre, gitops, devops",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Apache SkyWalking",
     "url": "/wiki/skywalking",
     "updated": "2026-04-20",
