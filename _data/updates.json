@@ -1,6 +1,6 @@
 [
   {
-    "title": "홈서버 / SRE 학습 멘탈 모델",
+    "title": "Homelab",
     "url": "/wiki/homelab",
     "updated": "2026-04-27",
     "summary": "k3d + Terraform + ArgoCD 기반 개인 홈서버의 구성과 운영 모델",
