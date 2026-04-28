@@ -3,7 +3,7 @@ layout  : wiki
 title   : Apache SkyWalking
 summary : 마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스
 date    : 2026-04-03 00:00:00 +0900
-updated : 2026-04-20 22:16:00 +0900
+updated : 2026-04-28 00:00:00 +0900
 tags    : [observability, java, devops, sre]
 toc     : true
 public  : true
@@ -753,6 +753,39 @@ reflection으로 `LOGIC_INDICES_CATALOG` 정적 맵에 `profile_task → records
 
 ---
 
+### Add Unit Tests for Elasticsearch Profiling Query DAOs
+
+> [apache/skywalking#13820](https://github.com/apache/skywalking/pull/13820) · merged on 2026-04-15
+
+#### Motivation
+
+#13813에서 `ProfileTaskQueryEsDAOTest`를 처음 ES DAO 단위 테스트로 추가했다. 같은 패턴(reflection으로 `LOGIC_INDICES_CATALOG` 조작 + `ArgumentCaptor<Search>` + Jackson JSON 검증)이 다른 ES profiling DAO에도 그대로 적용 가능했고, 이미 #13805에서 `JFRDataQueryEsDAO`의 잘못된 `INDEX_NAME` 버그를 본 적이 있어 테스트 보호망의 가치가 명확했다.
+
+JDBC 쪽은 #13800 ~ #13809 시리즈로 21개 DAO 커버리지를 확보했지만, ES 쪽은 1개뿐이었다. 같은 결로 ES profiling DAO 5개를 추가했다.
+
+#### Coverage
+
+5개 DAO에 대해 12개 테스트:
+
+- **AsyncProfilerTaskQueryEsDAO**: `getTaskList()` 의 merged-table 필터, `serviceId` 조건부 필터, `getById()` 의 TASK_ID + RECORD_TABLE_NAME 검증 (3 tests)
+- **AsyncProfilerTaskLogQueryEsDAO**: `getTaskLogList()` merged-table + TASK_ID + sort by OPERATION_TIME (2 tests)
+- **PprofTaskQueryEsDAO**: AsyncProfiler와 대칭 (3 tests)
+- **PprofTaskLogQueryEsDAO**: AsyncProfilerTaskLog와 대칭 (2 tests)
+- **JFRDataQueryEsDAO**: `getByTaskIdAndInstancesAndEvent()` 의 RECORD_TABLE_NAME + TASK_ID + EVENT_TYPE, `instanceIds` 비어있지 않을 때 INSTANCE_ID 필터 검증 (2 tests)
+
+이번 작업으로 ES profiling 쪽 테스트 커버리지 1 → 6개. 우리가 직접 발견했던 두 버그(#13805 JFR INDEX_NAME, #13813 ProfileTask getById isMergedTable 누락)와 같은 종류의 regression을 단위 테스트로 잡을 수 있게 됐다.
+
+#### wu-sheng 코멘트 대응
+
+머지 직전에 두 가지 피드백을 받았다.
+
+1. **"Pure UT could be excluded from changes."** — changelog는 사용자에게 영향 있는 변경을 적는 곳이지 단순 테스트 추가는 안 적어도 된다는 가이드. `changes.md` 항목을 제거했다.
+2. **"Please resolve conflicts."** — upstream/master에 새 changelog 항목들이 추가되면서 충돌. `git rebase upstream/master` 후 force-push로 해결.
+
+이전부터 wu-sheng가 PR description / changelog 위생을 까다롭게 본다는 걸 다시 확인. **테스트만 추가하는 PR이면 changelog 항목을 만들지 말 것**이라는 룰을 학습했다.
+
+---
+
 ### Optimize TraceQueryService.sortSpans from O(N^2) to O(N)
 
 > [apache/skywalking#13831](https://github.com/apache/skywalking/pull/13831) · merged on 2026-04-20
@@ -883,6 +916,105 @@ private static void findChildren(Map<String, List<Span>> childrenByParentSegment
 - sibling subtrees → DFS 순회 (root → childA → grandChildA → childB)
 
 총 8개 케이스 모두 통과.
+
+---
+
+### Push Duration Parameter Down to Storage Layer in Trace Detail Queries
+
+> [apache/skywalking#13850](https://github.com/apache/skywalking/pull/13850) · **closed** (2026-04-28) — design intent confirmed, not a bug
+
+#### Finding the Issue
+
+`TraceQueryService.queryTrace(traceId, duration)` 코드를 읽다가 storage DAO에 어떻게 전달되는지 따라갔다. 시그니처는 `@Nullable Duration duration` 을 받는데, 다음 DAO들이 그 파라미터를 받기만 하고 사용하지 않는 패턴이 보였다:
+
+- JDBC: `JDBCTraceQueryDAO.queryByTraceId / queryBySegmentIdList / queryByTraceIdWithInstanceId`
+- JDBC: `JDBCSpanAttachedEventQueryDAO.queryZK / SWSpanAttachedEvents`
+- JDBC: `JDBCZipkinQueryDAO.getTrace`
+- ES: `TraceQueryEsDAO.queryByTraceId / queryBySegmentIdList / queryByTraceIdWithInstanceId`
+- ES: `SpanAttachedEventEsDAO.querySW / queryZKSpanAttachedEvents`
+
+JDBC 쪽은 `tableHelper.getTablesWithinTTL(...)` 으로 TTL 안의 모든 shard 테이블을 스캔하고 있었고, ES 쪽은 `Query.range(TIME_BUCKET)` 필터를 안 걸어서 전체 인덱스 검색이었다.
+
+같은 프로젝트 안의 정상 패턴은 이미 존재했다:
+- `JDBCTraceQueryDAO.queryBasicTraces` (line 113-115): duration이 있으면 `getTablesForRead`, 없으면 `getTablesWithinTTL` ternary
+- `TraceQueryEsDAO.queryBasicTraces` (line 92): `Query.range(TIME_BUCKET).gte(...).lte(...)` 필터
+- `BanyanDBSpanAttachedEventQueryDAO`: `getTimestampRange(duration)` 으로 정상 처리 중
+
+즉 BanyanDB는 정상이고 JDBC/ES만 빠진 패턴.
+
+#### Fix
+
+11개 메서드에 동일 패턴 적용 + null fallback 유지:
+
+```java
+// JDBC
+long startSecondTB = 0, endSecondTB = 0;
+if (duration != null) {
+    startSecondTB = duration.getStartTimeBucketInSec();
+    endSecondTB = duration.getEndTimeBucketInSec();
+}
+final var tables = startSecondTB > 0 && endSecondTB > 0
+    ? tableHelper.getTablesForRead(INDEX_NAME, startSecondTB, endSecondTB)
+    : tableHelper.getTablesWithinTTL(INDEX_NAME);
+// + SQL: " and time_bucket >= ? and time_bucket <= ?"
+
+// ES
+if (duration != null) {
+    query.must(Query.range(TIME_BUCKET)
+        .gte(duration.getStartTimeBucketInSec())
+        .lte(duration.getEndTimeBucketInSec()));
+}
+```
+
+테스트는 JDBC 3개 파일 확장 + ES 2개 신규 파일 (`TraceQueryEsDAOTest`, `SpanAttachedEventEsDAOTest`) 작성. duration 있을 때 `time_bucket` 필터 + `getTablesForRead` 호출 검증, null일 때 fallback 검증.
+
+#### wu-sheng 리뷰 — callsite 검증의 중요성
+
+PR 올린 직후 wu-sheng로부터 매우 정확한 지적을 받았다:
+
+> The PR optimizes a path that, on JDBC/ES, the SkyWalking UI never takes — because the only thing that triggers a non-null `duration` on `queryTrace` (cold-stage mode) is a BanyanDB-exclusive feature. With `coldStageMode = false` (the default and the only sensible state for JDBC/ES), the UI fires `queryTrace(traceId: $traceId)` with no duration variable. So `duration` reaches the new JDBC/ES code as `null`, and the new path takes the null-fallback branch.
+
+검증 결과 wu-sheng의 지적이 맞았다:
+- `Duration.coldStage` 사용처는 `storage-banyandb-plugin/` 에만 있음 (JDBC/ES에 0회 참조)
+- `trace.graphqls:200` 주석: `# duration is optional, and only for BanyanDB. If not provided, means search in the last 1 day.`
+- 기본 UI의 `TraceSpans` fragment는 duration 변수 없이 `queryTrace(traceId)` 만 호출
+
+다만 추가 조사에서 **TraceQL 핸들러는 진짜로 non-null duration 전달**하는 것을 확인:
+- `SkyWalkingTraceQLApiHandler.queryTraceImpl` (line 115-122): `start`/`end` 파라미터로 Duration 만들어서 전달
+- 즉 Tempo/Grafana → SkyWalking TraceQL 엔드포인트 사용자에겐 실제 효과 있음
+
+#### 학습 — "버그 path가 실제로 트리거되는가" 를 검증해야 한다
+
+이번 PR의 교훈:
+
+1. **시그니처 분석만으로는 부족하다.** `@Nullable Duration` 받는 DAO 메서드를 찾는 것은 정적 분석으로 가능하지만, 그 파라미터가 production에서 실제로 non-null 인지는 호출자 사슬을 끝까지 따라가야 알 수 있다.
+2. **GraphQL 스키마 주석을 봐야 한다.** `trace.graphqls:200` 의 `# only for BanyanDB` 주석이 핵심 단서였는데 PR 작성 시점엔 못 봤다.
+3. **UI 하드코딩 동작을 봐야 한다.** UI 코드 (`skywalking-ui` 서브모듈)에서 어떤 변수를 보내는지가 결정적. UI는 별도 repo이니 미리 cross-repo 확인.
+
+이걸 PR 본문에 그대로 반영해서 (a) "storage-side plumbing fix" 로 scope 재정의 + 누가 혜택보고 누가 안 보는지 명시, (b) UI/스키마 변경은 후속 작업으로 분리하겠다고 답변. wu-sheng 응답 대기 중.
+
+#### 후속 코멘트와 PR 닫기
+
+wu-sheng의 추가 응답으로 디자인 의도가 확정됐다:
+
+> "Only attach event query with duration could be meaningful enhancement, right? But we had concerns whether the range is too strict, and attach events are rare cases, which means the query target scale is very limit, so, no condition should be fine. **That was the reason we implemented in this way.**"
+
+핵심 메시지:
+1. **attach event 쿼리** — 비동기로 늦게 도착할 수 있어서 좁은 `time_bucket` 필터가 오히려 누락 위험. attach event 자체가 드물어서 scan 비용도 작음. → 의도적으로 풀스캔
+2. **trace detail 쿼리** (`queryByTraceId` 등) — 같은 논리 적용. `trace_id` 선택성이 충분히 높아서 TTL 풀스캔 비용이 미미함
+3. **"implemented in this way"** = 누락 버그가 아니라 **의도된 디자인**
+
+답변에서 attach event의 async 도착 우려에 동의하고, trace detail 쿼리도 동일 논리로 받아들인 후 PR을 닫았다. **닫힌 결과지만 디자인 의도와 contributor 사고 흐름이 코멘트로 남았다**는 점에서 가치 있는 인터랙션이었다.
+
+#### 학습 정리 (재강조)
+
+이번 PR로 다음이 더 명확해졌다:
+
+1. **시그니처 분석만으로 부족** — `@Nullable Duration` 받는 메서드를 찾는 정적 분석은 쉽지만, production에서 실제 non-null 들어오는지는 호출자 사슬을 끝까지 따라가야 한다.
+2. **GraphQL 스키마 주석** — `trace.graphqls:200` 의 `# only for BanyanDB` 가 결정적 단서였다.
+3. **UI 하드코딩** — `skywalking-ui` 서브모듈에서 어떤 변수를 보내는지 미리 확인.
+4. **"의도된 비대칭"의 가능성** — 패턴 일관성 결여가 항상 버그는 아니다. 한쪽만 다르게 구현된 데에는 이유가 있을 수 있고, 메인테이너 코멘트로 처음 드러나기도 한다.
+5. **메인테이너의 디자인 사고** — wu-sheng는 단순함 / edge case 안전성을 micro-optimization보다 우선시한다. range strictness 우려는 진짜 production 시나리오에서 나오는 통찰이지, 코드 분석으로는 안 보인다.
 
 ---
 
