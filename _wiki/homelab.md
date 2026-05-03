@@ -3,7 +3,7 @@ layout  : wiki
 title   : Homelab
 summary : k3d + Terraform + ArgoCD 기반 개인 홈서버의 구성과 운영 모델
 date    : 2026-04-27 12:00:00 +0900
-updated : 2026-04-27 15:00:00 +0900
+updated : 2026-05-03 12:00:00 +0900
 tags    : [homelab, kubernetes, sre, gitops, devops]
 toc     : true
 public  : true
@@ -91,7 +91,7 @@ Tailscale Control Plane은 좌표 메타데이터만 처리한다. 실제 데이
 
 ```mermaid
 flowchart TB
-  subgraph Mac["🖥 맥북 (Apple M2 / Darwin)"]
+  subgraph Mac["🖥 Mac (Apple Silicon / Darwin)"]
     direction TB
     L1["<b>층1: macOS</b><br/>brew, kubectl, terraform, git, tailscaled<br/>~/srv/data/  ← 영구 데이터"]
 
@@ -651,13 +651,16 @@ cd infra/terraform/envs/local && terraform apply  # platform 다시 설치
 
 ### 9.3 macOS 호스트를 24시간 운영하기
 
-MacBook을 클램쉘 모드로 상시 가동하는 경우의 설정:
+데스크톱(Mac mini 등) / MacBook 클램쉘 공통:
 
-- 외부 모니터 / 키보드 / 전원 상시 연결
 - `pmset -c sleep 0`, `pmset -c disksleep 0`
-- 시스템 설정 → 배터리 → "디스플레이 끄기 후 잠자기 방지"
 - 시스템 설정 → 일반 → 공유 → 원격 로그인 (SSH)
 - 컴퓨터 이름 고정 (예: `homelab`)
+
+MacBook 클램쉘 모드일 때 추가:
+
+- 외부 모니터 / 키보드 / 전원 상시 연결
+- 시스템 설정 → 배터리 → "디스플레이 끄기 후 잠자기 방지"
 
 ---
 
