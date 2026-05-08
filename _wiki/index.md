@@ -77,3 +77,4 @@ regenerate: true
 * [[claude-code]]
 * [[optimizer-and-execution-plan]]
 * [[grafana-loki-tempo]]
+* [[three-color-pen-study]]
