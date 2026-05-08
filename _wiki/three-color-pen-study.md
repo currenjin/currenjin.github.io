@@ -2,8 +2,8 @@
 layout  : wiki
 title   : 삼색볼펜 학습법 (Three-color pen study)
 summary : 사이토 다카시의 객관과 주관을 색으로 구분하는 능동적 학습법
-date    : 2026-05-08 21:00:00 +0900
-updated : 2026-05-08 21:00:00 +0900
+date    : 2026-05-08 12:30:00 +0900
+updated : 2026-05-08 12:30:00 +0900
 tags    : [study, reading, learning, productivity]
 toc     : true
 public  : true
