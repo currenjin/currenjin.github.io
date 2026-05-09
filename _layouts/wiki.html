@@ -19,8 +19,8 @@ layout: document
     {% if char_count > 500 %}
         <p class="reading-time-meta" aria-label="Estimated reading time">
             <span class="reading-time-glyph" aria-hidden="true">✦</span>
-            <span>{{ reading_minutes }}분 읽기</span>
-            <span class="reading-time-sep">·</span>
+            <span>{{ reading_minutes }}분 소요</span>
+            <span class="reading-time-sep">/</span>
             <span class="reading-time-count">{{ char_count }}자</span>
         </p>
     {% endif %}
