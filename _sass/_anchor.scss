@@ -1,0 +1,52 @@
+.post-content {
+    h1, h2, h3, h4, h5, h6 {
+        scroll-margin-top: 1rem;
+    }
+}
+
+.heading-anchor {
+    display: inline-block;
+    margin-left: 0.42rem;
+    font-size: 0.7em;
+    font-weight: 400;
+    color: var(--accent);
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(-1px);
+    transition: opacity 140ms ease, color 140ms ease;
+    user-select: none;
+    vertical-align: middle;
+}
+
+.heading-anchor:visited {
+    color: var(--accent);
+}
+
+.has-anchor:hover .heading-anchor,
+.heading-anchor:focus-visible {
+    opacity: 0.7;
+}
+
+.heading-anchor:hover {
+    opacity: 1;
+    color: var(--cosmos-cyan);
+}
+
+.heading-anchor.is-copied {
+    opacity: 1;
+    color: var(--cosmos-cyan);
+}
+
+.heading-anchor.is-copied::after {
+    content: ' link copied';
+    font-size: 0.78em;
+    color: var(--ink-subtle);
+    margin-left: 0.2rem;
+    letter-spacing: 0.02em;
+}
+
+@media (max-width: 780px) {
+    .heading-anchor {
+        opacity: 0.45;
+    }
+}
