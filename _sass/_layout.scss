@@ -363,6 +363,46 @@ ul.tag-list li a,
     color: var(--ink-subtle);
 }
 
+.reading-time-meta {
+    margin: 0.4rem 0 0.6rem;
+    font-size: 0.82rem;
+    color: var(--ink-subtle);
+    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.18rem 0.62rem;
+    border: 1px solid rgba(95, 174, 90, 0.22);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.reading-time-glyph {
+    color: var(--accent);
+    font-size: 0.9em;
+}
+
+.reading-time-sep {
+    opacity: 0.5;
+}
+
+.reading-time-count {
+    font-family: 'Source Code Pro', Consolas, monospace;
+    font-size: 0.78rem;
+    opacity: 0.78;
+}
+
+@media (max-width: 780px) {
+    .reading-time-meta {
+        font-size: 0.74rem;
+        padding: 0.14rem 0.5rem;
+    }
+
+    .reading-time-count {
+        font-size: 0.7rem;
+    }
+}
+
 .visible {
     display: block;
 }
