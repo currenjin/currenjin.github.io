@@ -1,0 +1,60 @@
+pre.has-copy-btn {
+    position: relative;
+}
+
+.code-copy-btn {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.4rem;
+    padding: 0.16rem 0.55rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    color: rgba(250, 250, 250, 0.7);
+    font-family: 'Source Code Pro', Consolas, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 140ms ease, background 140ms ease, color 140ms ease, border-color 140ms ease;
+    line-height: 1.4;
+}
+
+pre.has-copy-btn:hover .code-copy-btn,
+.code-copy-btn:focus-visible {
+    opacity: 1;
+}
+
+.code-copy-btn:hover {
+    background: rgba(95, 174, 90, 0.18);
+    color: #fff;
+    border-color: rgba(145, 212, 120, 0.4);
+}
+
+.code-copy-success {
+    display: none;
+    color: #91d478;
+}
+
+.code-copy-btn.is-copied {
+    opacity: 1;
+    background: rgba(95, 174, 90, 0.22);
+    border-color: rgba(145, 212, 120, 0.5);
+}
+
+.code-copy-btn.is-copied .code-copy-default {
+    display: none;
+}
+
+.code-copy-btn.is-copied .code-copy-success {
+    display: inline;
+}
+
+@media (max-width: 780px) {
+    .code-copy-btn {
+        opacity: 1;
+        font-size: 0.66rem;
+        padding: 0.12rem 0.45rem;
+    }
+}
