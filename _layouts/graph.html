@@ -116,19 +116,61 @@
   <script>
     if (new URLSearchParams(location.search).get('embed') === '1') {
       document.documentElement.classList.add('is-embed');
+      document.addEventListener('DOMContentLoaded', () => {
+        const html = document.documentElement;
+        document.getElementById('panel-collapse')?.addEventListener('click',
+          () => html.classList.add('panel-collapsed'));
+        document.getElementById('panel-toggle')?.addEventListener('click',
+          () => html.classList.remove('panel-collapsed'));
+      });
     }
   </script>
   <style>
     html.is-embed #back-btn,
-    html.is-embed #panel,
     html.is-embed #hint { display: none !important; }
     html.is-embed #zoom-btns { bottom: 14px; right: 12px; }
     html.is-embed #zoom-btns button { width: 26px; height: 26px; font-size: 14px; }
     html.is-embed #node-info { width: min(220px, calc(100% - 24px)); padding: 12px 14px; }
+
+    /* 임베드(도크) 안에서도 토글이 보이게 하되 컴팩트하게 */
+    html.is-embed #panel {
+      top: 10px; right: 10px;
+      width: 168px;
+      padding: 11px 12px;
+      font-size: 11px;
+      max-height: calc(100vh - 96px);
+      overflow-y: auto;
+    }
+    html.is-embed #panel h3 { font-size: 10px; margin-bottom: 8px; }
+    html.is-embed #panel .leg { font-size: 10px; margin-bottom: 5px; }
+    html.is-embed #panel button { font-size: 10px; padding: 5px 8px; margin-bottom: 4px; }
+    html.is-embed #panel .sep { margin: 8px 0; }
+    html.is-embed #tag-list { max-height: 96px; }
+    html.is-embed #stats { font-size: 10px; line-height: 1.7; }
+
+    /* 패널 접기 토글: 기본 펼침. 사용자가 ≡ 누르면 헤더만 남기고 본문 접힘 */
+    html.is-embed #panel-toggle {
+      position: fixed; top: 10px; right: 10px; z-index: 220;
+      width: 26px; height: 26px;
+      background: rgba(15,17,23,0.92); border: 1px solid #1e293b;
+      border-radius: 6px; color: #94a3b8; font-size: 13px; cursor: pointer;
+      display: none; align-items: center; justify-content: center;
+      backdrop-filter: blur(8px); padding: 0;
+    }
+    html.is-embed #panel-toggle:hover { color: #e2e8f0; border-color: #334155; }
+    html.is-embed.panel-collapsed #panel { display: none; }
+    html.is-embed.panel-collapsed #panel-toggle { display: inline-flex; }
+    html:not(.is-embed) #panel-toggle { display: none; }
   </style>
 
+  <button id="panel-toggle" type="button" aria-label="설정 패널 열기" title="설정 열기">≡</button>
+
   <div id="panel">
-    <h3>Knowledge Graph <span style="color:#334155;font-size:10px">β</span></h3>
+    <h3 style="display:flex;align-items:center;justify-content:space-between">
+      <span>Knowledge Graph <span style="color:#334155;font-size:10px">β</span></span>
+      <button id="panel-collapse" type="button" aria-label="설정 패널 접기" title="접기"
+        style="background:transparent;border:0;color:#475569;cursor:pointer;font-size:13px;padding:0 4px;line-height:1">−</button>
+    </h3>
     <div class="leg"><div class="leg-dot" style="background:#91d478"></div> Wiki</div>
     <div class="leg"><div class="leg-dot" style="background:#60a5fa"></div> Books</div>
     <hr class="sep">
