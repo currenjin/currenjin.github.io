@@ -47,6 +47,10 @@
   body.wg-resizing { user-select: none; cursor: ew-resize; }
   /* 드래그 중 iframe이 포인터 이벤트 가로채지 않도록 */
   body.wg-resizing #wiki-graph-frame { pointer-events: none; }
+  /* 페이지 진입 시 도크가 이미 열려있던 상태라면 슬라이드 애니메이션 없이 즉시 보임 */
+  body.wg-no-anim,
+  body.wg-no-anim #wiki-graph-dock,
+  body.wg-no-anim #wiki-graph-fab { transition: none !important; }
 
   /* 왼쪽 가장자리 리사이즈 핸들 (모바일에선 숨김) */
   #wiki-graph-resize {
@@ -135,6 +139,7 @@
 
     const MIN = 320;
     const STORAGE_KEY = 'wikiGraphDockWidth';
+    const OPEN_KEY = 'wikiGraphDockOpen';
     const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
     const maxW = () => Math.min(800, window.innerWidth - 280);
 
@@ -154,13 +159,25 @@
       dock.setAttribute('aria-hidden', 'false');
       fab.classList.add('is-hidden');
       if (window.innerWidth > 720) body.classList.add('wg-dock-open');
+      try { sessionStorage.setItem(OPEN_KEY, '1'); } catch (e) {}
     }
     function close() {
       dock.classList.remove('is-open');
       dock.setAttribute('aria-hidden', 'true');
       fab.classList.remove('is-hidden');
       body.classList.remove('wg-dock-open');
+      try { sessionStorage.removeItem(OPEN_KEY); } catch (e) {}
     }
+
+    // 이전 페이지에서 도크가 열려있었다면 페이지 이동 후에도 같은 상태로 즉시 복원.
+    // 슬라이드 애니메이션을 한 번만 끄고 두 RAF 후 다시 켜서, 이후 닫기/열기 트랜지션은 정상 동작.
+    try {
+      if (sessionStorage.getItem(OPEN_KEY) === '1') {
+        body.classList.add('wg-no-anim');
+        open();
+        requestAnimationFrame(() => requestAnimationFrame(() => body.classList.remove('wg-no-anim')));
+      }
+    } catch (e) {}
 
     fab.addEventListener('click', open);
     closeB.addEventListener('click', close);
