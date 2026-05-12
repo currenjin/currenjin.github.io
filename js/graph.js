@@ -12,13 +12,20 @@
     edgeFade: "rgba(100,116,139,0.04)",
   };
 
-  const filters = { "wiki-wiki": true, "wiki-book": false, "book-book": true };
-  let minWeight  = 2;
+  const params = new URLSearchParams(location.search);
+  const isEmbed = params.get("embed") === "1";
+  const focusUrl = params.get("focus");
+
+  const filters = { "wiki-wiki": true, "wiki-book": isEmbed, "book-book": !isEmbed };
+  // 임베드(로컬 그래프)에선 1-hop 연결만 봐도 의미 있으므로 weight 1까지 표시
+  let minWeight  = isEmbed ? 1 : 2;
   let showLabels = false;
   let showTags   = false;
   let hoveredNode = null;
   let hoveredLink = null;
   let neighborSet = new Set();
+  let focusedNode = null;
+  let focusedNeighborSet = new Set();
   let activeTagFilter = null;
   let tagMatchSet = new Set();
   let allLinks = [];
@@ -92,39 +99,43 @@
   function drawNode(node, ctx, gs) {
     const r = (node._val || 1) * 2.4;
     const isH = hoveredNode?.id === node.id;
-    const isN = !isH && hoveredNode && neighborSet.has(node.id);
+    const isF = focusedNode?.id === node.id;
+    const isHot = isH || isF;
+    const isN  = !isHot && hoveredNode && neighborSet.has(node.id);
+    const isFN = !isHot && !isN && focusedNode && focusedNeighborSet.has(node.id);
     const tagMiss = activeTagFilter && !tagMatchSet.has(node.id);
-    const dim = tagMiss || (!tagMiss && hoveredNode && !isH && !isN);
+    const anyHot = hoveredNode || focusedNode;
+    const dim = tagMiss || (!tagMiss && anyHot && !isHot && !isN && !isFN);
 
     ctx.beginPath();
     ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
     ctx.fillStyle = dim
       ? (node.type === "wiki" ? COLOR.wikiFade : COLOR.bookFade)
-      : isH ? "#ffffff"
+      : isHot ? "#ffffff"
       : (node.type === "wiki" ? COLOR.wiki : COLOR.book);
     ctx.fill();
 
-    if (isH) {
+    if (isHot) {
       ctx.beginPath();
-      ctx.arc(node.x, node.y, r + 3, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(255,255,255,0.22)";
-      ctx.lineWidth = 1.5;
+      ctx.arc(node.x, node.y, r + (isF && !isH ? 5 : 3), 0, Math.PI * 2);
+      ctx.strokeStyle = isF && !isH ? "rgba(145,212,120,0.55)" : "rgba(255,255,255,0.22)";
+      ctx.lineWidth = isF && !isH ? 2 : 1.5;
       ctx.stroke();
     }
 
-    if ((showLabels || isH || isN || gs > 2.0) && !dim) {
+    if ((showLabels || isHot || isN || isFN || gs > 2.0) && !dim) {
       const fs = Math.max(7.5, 11 / gs);
       ctx.font = `600 ${fs}px Pretendard, 'Segoe UI', sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillStyle = isH ? "#fff" : (node.type === "wiki" ? "#d1fac0" : "#bfdbfe");
+      ctx.fillStyle = isHot ? "#fff" : (node.type === "wiki" ? "#d1fac0" : "#bfdbfe");
       const label = node.title.length > 20 ? node.title.slice(0, 19) + "…" : node.title;
       ctx.fillText(label, node.x, node.y + r + fs * 0.9);
 
-      if ((showTags || isH) && node._tags.length) {
+      if ((showTags || isHot) && node._tags.length) {
         const tfs = Math.max(6, 9 / gs);
         ctx.font = `${tfs}px Pretendard, 'Segoe UI', sans-serif`;
-        ctx.fillStyle = isH
+        ctx.fillStyle = isHot
           ? "rgba(203,213,225,0.85)"
           : (node.type === "wiki" ? "rgba(145,212,120,0.5)" : "rgba(96,165,250,0.5)");
         ctx.fillText(node._tags.map(t => "#" + t).join(" "), node.x, node.y + r + fs * 0.9 + tfs * 1.4);
@@ -211,12 +222,25 @@
   fetch("/graph-data.json")
     .then(r => r.json())
     .then(raw => {
-      const nodes = raw
+      let nodes = raw
         .filter(n => n.id && n.title)
         .map(n => {
           const tags = normalizeTags(n.tags);
           return { ...n, _tags: tags, _val: 1 };
         });
+
+      // 임베드(도크) + focus: 현재 노드 + 태그를 1개라도 공유하는 이웃만 남겨 로컬 그래프로
+      if (isEmbed && focusUrl) {
+        const center = nodes.find(n => n.url === focusUrl);
+        if (center) {
+          const keep = new Set([center.id]);
+          nodes.forEach(other => {
+            if (other.id === center.id) return;
+            if (other._tags.some(t => center._tags.includes(t))) keep.add(other.id);
+          });
+          nodes = nodes.filter(n => keep.has(n.id));
+        }
+      }
 
       allLinks = buildLinks(nodes);
 
@@ -245,16 +269,18 @@
         .linkColor(link => {
           const s = link.source?.id ?? link.source, t = link.target?.id ?? link.target;
           if (activeTagFilter && !tagMatchSet.has(s) && !tagMatchSet.has(t)) return COLOR.edgeFade;
-          if (!hoveredNode) return COLOR.edge[link.kind] || COLOR.edgeFade;
-          return (s === hoveredNode.id || t === hoveredNode.id)
+          const anchor = hoveredNode || focusedNode;
+          if (!anchor) return COLOR.edge[link.kind] || COLOR.edgeFade;
+          return (s === anchor.id || t === anchor.id)
             ? (COLOR.edge[link.kind] || "rgba(255,255,255,0.5)")
             : COLOR.edgeFade;
         })
         .linkWidth(link => {
           const s = link.source?.id ?? link.source, t = link.target?.id ?? link.target;
           if (activeTagFilter && !tagMatchSet.has(s) && !tagMatchSet.has(t)) return 0.25;
-          if (!hoveredNode) return Math.min(link.weight * 0.55, 2);
-          return (s === hoveredNode.id || t === hoveredNode.id) ? Math.min(link.weight + 1, 3.5) : 0.25;
+          const anchor = hoveredNode || focusedNode;
+          if (!anchor) return Math.min(link.weight * 0.55, 2);
+          return (s === anchor.id || t === anchor.id) ? Math.min(link.weight + 1, 3.5) : 0.25;
         })
         .onLinkHover(link => {
           hoveredLink = link || null;
@@ -307,16 +333,40 @@
         .enablePanInteraction(true)
         .minZoom(0.05)
         .maxZoom(12)
-        .d3AlphaDecay(0.03)
+        .d3AlphaDecay(isEmbed ? 0.045 : 0.03)
         .d3VelocityDecay(0.4)
-        .d3AlphaMin(0)
-        .cooldownTicks(Infinity);
+        .d3AlphaMin(0.001)
+        // 시뮬레이션을 영구가 아닌 유한 틱으로 → 안정화 후 캔버스가 idle 상태가 되어 모바일 발열/렉 해소
+        .cooldownTicks(isEmbed ? 120 : 300);
 
       // 노드 간격 조정: 반발력 강화 + 링크 거리 확장
       G.d3Force("charge").strength(-500);
       G.d3Force("link").distance(140).strength(0.25);
 
       updateStats();
+
+      // ?focus=<url> 로 진입한 경우: 노드를 원점에 고정해 안정화시킨 뒤 센터링/줌
+      if (focusUrl) {
+        const target = nodes.find(n => n.url === focusUrl);
+        if (target) {
+          target.fx = 0;
+          target.fy = 0;
+          focusedNode = target;
+          focusedNeighborSet = new Set();
+          allLinks.forEach(l => {
+            const s = l.source?.id ?? l.source;
+            const t = l.target?.id ?? l.target;
+            if (s === target.id) focusedNeighborSet.add(t);
+            if (t === target.id) focusedNeighborSet.add(s);
+          });
+          G.d3ReheatSimulation();
+          setTimeout(() => {
+            G.centerAt(0, 0, 800);
+            G.zoom(3, 800);
+            G.refresh();
+          }, 500);
+        }
+      }
     })
     .catch(err => console.error("graph-data.json load failed:", err));
 })();

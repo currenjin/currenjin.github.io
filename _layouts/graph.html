@@ -113,6 +113,20 @@
 
   <a id="back-btn" href="/">← 홈으로</a>
 
+  <script>
+    if (new URLSearchParams(location.search).get('embed') === '1') {
+      document.documentElement.classList.add('is-embed');
+    }
+  </script>
+  <style>
+    html.is-embed #back-btn,
+    html.is-embed #panel,
+    html.is-embed #hint { display: none !important; }
+    html.is-embed #zoom-btns { bottom: 14px; right: 12px; }
+    html.is-embed #zoom-btns button { width: 26px; height: 26px; font-size: 14px; }
+    html.is-embed #node-info { width: min(220px, calc(100% - 24px)); padding: 12px 14px; }
+  </style>
+
   <div id="panel">
     <h3>Knowledge Graph <span style="color:#334155;font-size:10px">β</span></h3>
     <div class="leg"><div class="leg-dot" style="background:#91d478"></div> Wiki</div>
