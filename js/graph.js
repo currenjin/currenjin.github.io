@@ -231,14 +231,12 @@
         });
 
       // 임베드(도크) + focus: 현재 노드 + 태그를 1개라도 공유하는 이웃만 남겨 로컬 그래프로.
+      // 필터/minWeight는 표준 디폴트(Wiki↔Wiki on, Book↔Book on, 공유 태그 2개 이상) 그대로 사용.
       // focus가 graph-data에 없는 페이지(/books, /tags 등)에선 로컬화 스킵 → 풀 그래프로 표시.
       if (isEmbed && focusUrl) {
         const center = nodes.find(n => n.url === focusUrl);
         if (center) {
           isLocal = true;
-          filters["wiki-book"] = true;
-          filters["book-book"] = false;
-          minWeight = 1;
           const keep = new Set([center.id]);
           nodes.forEach(other => {
             if (other.id === center.id) return;

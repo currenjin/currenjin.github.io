@@ -140,7 +140,13 @@
       font-size: 11px;
       max-height: calc(100vh - 96px);
       overflow-y: auto;
+      /* 기본 스크롤바가 ~15px 자리를 잡아 우상단 × 가 시각적으로 안쪽으로 밀리는 걸 방지 */
+      scrollbar-width: thin;
+      scrollbar-color: #1e293b transparent;
     }
+    html.is-embed #panel::-webkit-scrollbar { width: 4px; }
+    html.is-embed #panel::-webkit-scrollbar-track { background: transparent; }
+    html.is-embed #panel::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
     html.is-embed #panel h3 { font-size: 10px; margin-bottom: 8px; }
     html.is-embed #panel .leg { font-size: 10px; margin-bottom: 5px; }
     html.is-embed #panel button { font-size: 10px; padding: 5px 8px; margin-bottom: 4px; }
@@ -148,29 +154,48 @@
     html.is-embed #tag-list { max-height: 96px; }
     html.is-embed #stats { font-size: 10px; line-height: 1.7; }
 
-    /* 패널 접기 토글: 기본 펼침. 사용자가 ≡ 누르면 헤더만 남기고 본문 접힘 */
+    /* 패널 접기 토글: 기본 펼침. 접힌 상태에선 #panel-toggle만 보임. 톤은 back-btn과 동일 */
     html.is-embed #panel-toggle {
       position: fixed; top: 10px; right: 10px; z-index: 220;
-      width: 26px; height: 26px;
-      background: rgba(15,17,23,0.92); border: 1px solid #1e293b;
-      border-radius: 6px; color: #94a3b8; font-size: 13px; cursor: pointer;
+      width: 28px; height: 28px;
+      background: rgba(15,17,23,0.85);
+      border: 1px solid #1e293b;
+      border-radius: 7px;
+      color: #94a3b8; font-size: 13px; cursor: pointer;
       display: none; align-items: center; justify-content: center;
       backdrop-filter: blur(8px); padding: 0;
+      transition: color .15s, border-color .15s;
     }
     html.is-embed #panel-toggle:hover { color: #e2e8f0; border-color: #334155; }
     html.is-embed.panel-collapsed #panel { display: none; }
     html.is-embed.panel-collapsed #panel-toggle { display: inline-flex; }
     html:not(.is-embed) #panel-toggle { display: none; }
+
+    /* 패널 헤더의 접기 버튼: 패널 우상단 코너에 가능한 한 붙임 */
+    html.is-embed #panel-collapse {
+      position: absolute !important;
+      top: 4px !important; right: 4px !important;
+      width: 22px; height: 22px;
+      background: transparent !important;
+      border: 0 !important;
+      color: #475569 !important;
+      font-size: 16px !important;
+      padding: 0 !important;
+      border-radius: 4px;
+      cursor: pointer;
+      line-height: 22px;
+      text-align: center;
+      transition: color .15s;
+    }
+    html.is-embed #panel-collapse:hover { color: #cbd5e1 !important; }
+    html:not(.is-embed) #panel-collapse { display: none; }
   </style>
 
   <button id="panel-toggle" type="button" aria-label="설정 패널 열기" title="설정 열기">≡</button>
 
   <div id="panel">
-    <h3 style="display:flex;align-items:center;justify-content:space-between">
-      <span>Knowledge Graph <span style="color:#334155;font-size:10px">β</span></span>
-      <button id="panel-collapse" type="button" aria-label="설정 패널 접기" title="접기"
-        style="background:transparent;border:0;color:#475569;cursor:pointer;font-size:13px;padding:0 4px;line-height:1">−</button>
-    </h3>
+    <button id="panel-collapse" type="button" aria-label="설정 패널 접기" title="접기">×</button>
+    <h3>Knowledge Graph <span style="color:#334155;font-size:10px">β</span></h3>
     <div class="leg"><div class="leg-dot" style="background:#91d478"></div> Wiki</div>
     <div class="leg"><div class="leg-dot" style="background:#60a5fa"></div> Books</div>
     <hr class="sep">
