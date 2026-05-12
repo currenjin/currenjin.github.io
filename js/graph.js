@@ -367,10 +367,16 @@
           });
           G.d3ReheatSimulation();
           setTimeout(() => {
-            G.centerAt(0, 0, 800);
-            G.zoom(3, 800);
+            if (isLocal) {
+              // 로컬 모드: 연결된 이웃 노드 전체가 보이도록 자동 fit
+              G.zoomToFit(800, 60);
+            } else {
+              // 풀 그래프에서 특정 노드 focus: 중앙 + 적당한 줌
+              G.centerAt(0, 0, 800);
+              G.zoom(2, 800);
+            }
             G.refresh();
-          }, 500);
+          }, 800);
         }
       }
     })
