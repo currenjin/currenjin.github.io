@@ -15,10 +15,11 @@
   const params = new URLSearchParams(location.search);
   const isEmbed = params.get("embed") === "1";
   const focusUrl = params.get("focus");
+  // 임베드 + focus 노드가 graph-data에 실제로 존재하는 경우에만 로컬 모드(데이터 로드 후 결정)
+  let isLocal = false;
 
-  const filters = { "wiki-wiki": true, "wiki-book": isEmbed, "book-book": !isEmbed };
-  // 임베드(로컬 그래프)에선 1-hop 연결만 봐도 의미 있으므로 weight 1까지 표시
-  let minWeight  = isEmbed ? 1 : 2;
+  const filters = { "wiki-wiki": true, "wiki-book": false, "book-book": true };
+  let minWeight  = 2;
   let showLabels = false;
   let showTags   = false;
   let hoveredNode = null;
@@ -229,10 +230,15 @@
           return { ...n, _tags: tags, _val: 1 };
         });
 
-      // 임베드(도크) + focus: 현재 노드 + 태그를 1개라도 공유하는 이웃만 남겨 로컬 그래프로
+      // 임베드(도크) + focus: 현재 노드 + 태그를 1개라도 공유하는 이웃만 남겨 로컬 그래프로.
+      // focus가 graph-data에 없는 페이지(/books, /tags 등)에선 로컬화 스킵 → 풀 그래프로 표시.
       if (isEmbed && focusUrl) {
         const center = nodes.find(n => n.url === focusUrl);
         if (center) {
+          isLocal = true;
+          filters["wiki-book"] = true;
+          filters["book-book"] = false;
+          minWeight = 1;
           const keep = new Set([center.id]);
           nodes.forEach(other => {
             if (other.id === center.id) return;
@@ -333,11 +339,11 @@
         .enablePanInteraction(true)
         .minZoom(0.05)
         .maxZoom(12)
-        .d3AlphaDecay(isEmbed ? 0.045 : 0.03)
+        .d3AlphaDecay(isLocal ? 0.045 : 0.03)
         .d3VelocityDecay(0.4)
         .d3AlphaMin(0.001)
         // 시뮬레이션을 영구가 아닌 유한 틱으로 → 안정화 후 캔버스가 idle 상태가 되어 모바일 발열/렉 해소
-        .cooldownTicks(isEmbed ? 120 : 300);
+        .cooldownTicks(isLocal ? 120 : 300);
 
       // 노드 간격 조정: 반발력 강화 + 링크 거리 확장
       G.d3Force("charge").strength(-500);
