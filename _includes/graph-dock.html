@@ -1,4 +1,6 @@
 <style>
+  :root { --graph-dock-width: 480px; }
+
   #wiki-graph-fab {
     position: fixed; right: 18px; z-index: 900;
     bottom: calc(22px + env(safe-area-inset-bottom, 0px));
@@ -20,7 +22,7 @@
      html/body에 overflow-x 손대지 않아 iOS의 position:fixed 깨짐 문제 회피. */
   #wiki-graph-stage {
     position: fixed; top: 0; right: 0; bottom: 0; z-index: 1100;
-    width: min(480px, 45vw);
+    width: var(--graph-dock-width);
     overflow: hidden;
     pointer-events: none;
   }
@@ -38,6 +40,31 @@
   #wiki-graph-dock.is-open {
     transform: translateX(0);
     pointer-events: auto;
+  }
+  /* 드래그 중 슬라이드/패딩 애니메이션은 끔 → 즉시 반응, 끊김 없음 */
+  body.wg-resizing #wiki-graph-dock,
+  body.wg-resizing { transition: none !important; }
+  body.wg-resizing { user-select: none; cursor: ew-resize; }
+  /* 드래그 중 iframe이 포인터 이벤트 가로채지 않도록 */
+  body.wg-resizing #wiki-graph-frame { pointer-events: none; }
+
+  /* 왼쪽 가장자리 리사이즈 핸들 (모바일에선 숨김) */
+  #wiki-graph-resize {
+    position: absolute; top: 0; left: 0; bottom: 0;
+    width: 6px; cursor: ew-resize; z-index: 10;
+    background: transparent;
+    transition: background .15s;
+  }
+  #wiki-graph-resize::before {
+    content: ''; position: absolute; top: 50%; left: 2px;
+    width: 2px; height: 32px; border-radius: 2px;
+    background: rgba(148,163,184,0.18);
+    transform: translateY(-50%);
+    transition: background .15s;
+  }
+  #wiki-graph-resize:hover { background: rgba(145,212,120,0.10); }
+  #wiki-graph-resize:hover::before, body.wg-resizing #wiki-graph-resize::before {
+    background: rgba(145,212,120,0.7);
   }
 
   #wiki-graph-dock header {
@@ -67,8 +94,15 @@
     flex: 1; width: 100%; border: 0; background: #0f1117;
   }
 
+  /* 페이지 반응형: 도크가 열리면 본문이 도크 너비만큼 좁아짐 */
+  body { transition: padding-right .28s cubic-bezier(.2,.8,.2,1); }
+  body.wg-dock-open { padding-right: var(--graph-dock-width); }
+
   @media (max-width: 720px) {
     #wiki-graph-stage { width: 100vw; }
+    #wiki-graph-resize { display: none; }
+    /* 모바일에선 도크가 풀폭으로 본문 위를 덮으므로 body 패딩 조정 안 함 */
+    body.wg-dock-open { padding-right: 0; }
   }
 </style>
 
@@ -78,6 +112,7 @@
 
 <div id="wiki-graph-stage">
   <aside id="wiki-graph-dock" role="complementary" aria-label="지식 그래프" aria-hidden="true">
+    <div id="wiki-graph-resize" role="separator" aria-orientation="vertical" aria-label="도크 너비 조정" tabindex="0"></div>
     <header>
       <span class="wg-title">Knowledge Graph</span>
       <button class="wg-close" type="button" aria-label="닫기">✕</button>
@@ -91,26 +126,85 @@
     const fab    = document.getElementById('wiki-graph-fab');
     const dock   = document.getElementById('wiki-graph-dock');
     const closeB = dock.querySelector('.wg-close');
+    const handle = document.getElementById('wiki-graph-resize');
     const frame  = document.getElementById('wiki-graph-frame');
+    const root   = document.documentElement;
+    const body   = document.body;
     const src    = '/graph/?embed=1&focus=' + encodeURIComponent({{ page.url | jsonify }});
     let loaded   = false;
+
+    const MIN = 320;
+    const STORAGE_KEY = 'wikiGraphDockWidth';
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const maxW = () => Math.min(800, window.innerWidth - 280);
+
+    function setWidth(w) {
+      const px = clamp(w, MIN, maxW());
+      root.style.setProperty('--graph-dock-width', px + 'px');
+      return px;
+    }
+
+    // 저장된 너비 복원
+    const stored = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+    if (!isNaN(stored)) setWidth(stored);
 
     function open() {
       if (!loaded) { frame.src = src; loaded = true; }
       dock.classList.add('is-open');
       dock.setAttribute('aria-hidden', 'false');
       fab.classList.add('is-hidden');
+      if (window.innerWidth > 720) body.classList.add('wg-dock-open');
     }
     function close() {
       dock.classList.remove('is-open');
       dock.setAttribute('aria-hidden', 'true');
       fab.classList.remove('is-hidden');
+      body.classList.remove('wg-dock-open');
     }
 
     fab.addEventListener('click', open);
     closeB.addEventListener('click', close);
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && dock.classList.contains('is-open')) close();
+    });
+
+    // 화면 회전/리사이즈 시 모바일 ↔ 데스크탑 전환 동기화
+    window.addEventListener('resize', () => {
+      if (!dock.classList.contains('is-open')) return;
+      if (window.innerWidth <= 720) body.classList.remove('wg-dock-open');
+      else body.classList.add('wg-dock-open');
+    });
+
+    // ── 드래그 리사이즈 ─────────────────────────
+    handle.addEventListener('pointerdown', e => {
+      if (window.innerWidth <= 720) return;  // 모바일은 풀폭 고정
+      e.preventDefault();
+      handle.setPointerCapture(e.pointerId);
+      body.classList.add('wg-resizing');
+
+      const onMove = ev => {
+        setWidth(window.innerWidth - ev.clientX);
+      };
+      const onUp = ev => {
+        handle.releasePointerCapture(ev.pointerId);
+        handle.removeEventListener('pointermove', onMove);
+        handle.removeEventListener('pointerup', onUp);
+        handle.removeEventListener('pointercancel', onUp);
+        body.classList.remove('wg-resizing');
+        const px = parseInt(getComputedStyle(root).getPropertyValue('--graph-dock-width'), 10);
+        if (!isNaN(px)) localStorage.setItem(STORAGE_KEY, String(px));
+      };
+      handle.addEventListener('pointermove', onMove);
+      handle.addEventListener('pointerup', onUp);
+      handle.addEventListener('pointercancel', onUp);
+    });
+
+    // 키보드로도 너비 조정 (← / →, 10px씩)
+    handle.addEventListener('keydown', e => {
+      if (window.innerWidth <= 720) return;
+      const cur = parseInt(getComputedStyle(root).getPropertyValue('--graph-dock-width'), 10) || 480;
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); const w = setWidth(cur + 20); localStorage.setItem(STORAGE_KEY, String(w)); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); const w = setWidth(cur - 20); localStorage.setItem(STORAGE_KEY, String(w)); }
     });
   })();
 </script>
