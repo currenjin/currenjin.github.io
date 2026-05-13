@@ -128,7 +128,7 @@
   }
 </style>
 
-<button id="wiki-graph-fab" type="button" aria-label="지식 그래프 열기">
+<button id="wiki-graph-fab" type="button" aria-label="지식 그래프 열기 (Cmd/Ctrl + G)" title="그래프 열기 — ⌘G / Ctrl+G">
   <span class="dot"></span> 그래프
 </button>
 
@@ -221,6 +221,12 @@
     closeB.addEventListener('click', close);
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && dock.classList.contains('is-open')) close();
+      // Cmd/Ctrl + G — 그래프 도크 토글 (브라우저의 'Find Next' 기본 동작 override)
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'g' || e.key === 'G')) {
+        e.preventDefault();
+        if (dock.classList.contains('is-open')) close();
+        else open();
+      }
     });
 
     // 화면 회전/리사이즈 시 모바일 ↔ 데스크탑 전환 동기화
