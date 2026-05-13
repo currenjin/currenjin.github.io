@@ -86,6 +86,18 @@
     });
   }
 
+  // focus 노드의 "보이는 엣지로 연결된 이웃"만 갱신 — 필터(minWeight, kind) 변경 시 호출
+  function computeFocusedNeighbors() {
+    focusedNeighborSet = new Set();
+    if (!focusedNode) return;
+    activeLinks().forEach(l => {
+      const s = l.source?.id ?? l.source;
+      const t = l.target?.id ?? l.target;
+      if (s === focusedNode.id) focusedNeighborSet.add(t);
+      if (t === focusedNode.id) focusedNeighborSet.add(s);
+    });
+  }
+
   function applyTagFilter(tag) {
     activeTagFilter = tag;
     tagMatchSet = new Set();
@@ -185,6 +197,7 @@
     G.graphData({ nodes, links: activeLinks() });
     hoveredNode = null;
     neighborSet = new Set();
+    computeFocusedNeighbors();
     G.d3ReheatSimulation();
     updateStats();
   };
@@ -196,6 +209,7 @@
     G.graphData({ nodes, links: activeLinks() });
     hoveredNode = null;
     neighborSet = new Set();
+    computeFocusedNeighbors();
     G.d3ReheatSimulation();
     updateStats();
   };
@@ -356,13 +370,7 @@
           target.fx = 0;
           target.fy = 0;
           focusedNode = target;
-          focusedNeighborSet = new Set();
-          allLinks.forEach(l => {
-            const s = l.source?.id ?? l.source;
-            const t = l.target?.id ?? l.target;
-            if (s === target.id) focusedNeighborSet.add(t);
-            if (t === target.id) focusedNeighborSet.add(s);
-          });
+          computeFocusedNeighbors();
           G.d3ReheatSimulation();
           setTimeout(() => {
             if (isLocal) {

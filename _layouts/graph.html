@@ -115,7 +115,9 @@
 
   <script>
     if (new URLSearchParams(location.search).get('embed') === '1') {
+      // 임베드는 기본 접힘 상태로 시작 — 햄버거(≡) 클릭으로 펼침
       document.documentElement.classList.add('is-embed');
+      document.documentElement.classList.add('panel-collapsed');
       document.addEventListener('DOMContentLoaded', () => {
         const html = document.documentElement;
         document.getElementById('panel-collapse')?.addEventListener('click',
