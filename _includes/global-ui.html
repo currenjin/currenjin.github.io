@@ -1,0 +1,8 @@
+{%- comment -%}
+모든 페이지 끝(body 끝)에 들어가는 전역 UI 모음.
+새 전역 컴포넌트(예: 알림 토스트, 단축키 헬프 등)를 추가할 때는 이 한 곳에만 넣으면
+default/home/searchList 어디서나 자동으로 노출됨.
+{%- endcomment -%}
+{%- unless page.layout == 'graph' -%}
+  {%- include graph-dock.html -%}
+{%- endunless -%}

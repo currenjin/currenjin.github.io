@@ -10,8 +10,6 @@
             </div>
         </div>
         {% include footer.html %}
-        {% unless page.layout == 'graph' %}
-            {% include graph-dock.html %}
-        {% endunless %}
+        {% include global-ui.html %}
     </body>
 </html>

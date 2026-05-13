@@ -45,6 +45,14 @@
     width: 7px; height: 7px; border-radius: 50%;
     background: var(--gd-wiki); box-shadow: var(--gd-wiki-glow);
   }
+  #wiki-graph-fab .kbd {
+    margin-left: 4px; padding: 1px 5px;
+    border: 1px solid var(--gd-border-hover);
+    border-radius: 3px;
+    color: var(--gd-text-dim);
+    font: 500 10px/1 'Source Code Pro', 'SF Mono', Menlo, monospace;
+    letter-spacing: .02em;
+  }
   #wiki-graph-fab.is-hidden { opacity: 0; pointer-events: none; transform: scale(.9); }
 
   /* ── 도크 스테이지 & 패널 ────────────────────────
@@ -129,7 +137,7 @@
 </style>
 
 <button id="wiki-graph-fab" type="button" aria-label="지식 그래프 열기 (Cmd/Ctrl + G)" title="그래프 열기 — ⌘G / Ctrl+G">
-  <span class="dot"></span> 그래프
+  <span class="dot"></span> 그래프 <span class="kbd" aria-hidden="true">⌘G</span>
 </button>
 
 <div id="wiki-graph-stage">
@@ -155,6 +163,11 @@
       OPEN_KEY:  'wikiGraphDockOpen',
       VAR_NAME:  '--graph-dock-width',
     };
+
+    // 플랫폼에 맞는 단축키 글리프
+    const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform || '');
+    const fabKbd = document.querySelector('#wiki-graph-fab .kbd');
+    if (fabKbd) fabKbd.textContent = isMac ? '⌘G' : 'Ctrl+G';
 
     const fab    = document.getElementById('wiki-graph-fab');
     const dock   = document.getElementById('wiki-graph-dock');
