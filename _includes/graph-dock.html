@@ -134,7 +134,8 @@
     const frame  = document.getElementById('wiki-graph-frame');
     const root   = document.documentElement;
     const body   = document.body;
-    const src    = '/graph/?embed=1&focus=' + encodeURIComponent({{ page.url | jsonify }});
+    // 페이지 로드마다 cache-busting 파라미터를 붙여 iframe이 항상 최신 /graph/ 가져오게 함
+    const src    = '/graph/?embed=1&focus=' + encodeURIComponent({{ page.url | jsonify }}) + '&_=' + Date.now();
     let loaded   = false;
 
     const MIN = 320;

@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
 {% include head.html %}
+<script>
+  // head 단계에서 가장 먼저 실행 — html에 is-embed/panel-collapsed 클래스를 즉시 부여해
+  // body 렌더 전부터 패널이 숨겨진 상태로 시작하도록 한다.
+  if (new URLSearchParams(location.search).get('embed') === '1') {
+    document.documentElement.classList.add('is-embed', 'panel-collapsed');
+  }
+</script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 100%; height: 100%; overflow: hidden; background: #0f1117; color: #e2e8f0; font-family: Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
