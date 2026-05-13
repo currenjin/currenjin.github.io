@@ -5,8 +5,8 @@
     const PALETTE_ID = 'command-palette';
     const MAX_RESULTS = 12;
     const QUICK_ACTIONS = [
-        { title: 'Random wiki page', kind: 'action', url: '/wiki/index/#random', hint: 'shuffle' },
         { title: 'Go to Wiki index', kind: 'action', url: '/wiki/index/', hint: 'index' },
+        { title: 'Go to Graph', kind: 'action', url: '/graph/', hint: 'graph' },
         { title: 'Go to Books', kind: 'action', url: '/books/', hint: 'books' },
         { title: 'Go to Recent updates', kind: 'action', url: '/recent/', hint: 'recent' },
         { title: 'Go to Tags', kind: 'action', url: '/tag/', hint: 'tags' },
@@ -63,7 +63,9 @@
         if (loaded || loading) return;
         loading = true;
         statusEl.textContent = 'Loading...';
-        fetch('/search-index.json', { cache: 'force-cache' })
+        // 기본 HTTP 캐시 정책으로 — force-cache 시 브라우저가 옛 index를 무조건 재사용해서
+        // 새 위키가 영영 검색에 안 잡히는 문제가 있어 default로 둠 (ETag/Last-Modified 정상 동작).
+        fetch('/search-index.json')
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 entries = Array.isArray(data) ? data : [];
