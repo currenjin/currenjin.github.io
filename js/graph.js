@@ -366,8 +366,16 @@
           G.d3ReheatSimulation();
           setTimeout(() => {
             if (isLocal) {
-              // 로컬 모드: 연결된 이웃 노드 전체가 보이도록 자동 fit
-              G.zoomToFit(800, 60);
+              // 현재 활성화된 필터(minWeight, kind)에서 실제 엣지로 focus와 연결된 노드만 fit 대상으로.
+              // 그래야 weight=1짜리 고립 노드까지 잡아 화면이 과하게 넓어지지 않음.
+              const visible = new Set([target.id]);
+              G.graphData().links.forEach(l => {
+                const s = l.source?.id ?? l.source;
+                const t = l.target?.id ?? l.target;
+                if (s === target.id) visible.add(t);
+                if (t === target.id) visible.add(s);
+              });
+              G.zoomToFit(800, 60, n => visible.has(n.id));
             } else {
               // 풀 그래프에서 특정 노드 focus: 중앙 + 적당한 줌
               G.centerAt(0, 0, 800);
