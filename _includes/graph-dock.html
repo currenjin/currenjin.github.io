@@ -1,105 +1,123 @@
 <style>
-  :root { --graph-dock-width: 480px; }
+  :root {
+    --graph-dock-width: 480px;
+    /* 색 토큰 */
+    --gd-bg: #0f1117;
+    --gd-text: #cbd5e1;
+    --gd-text-strong: #f1f5f9;
+    --gd-text-dim: #64748b;
+    --gd-border: #1e293b;
+    --gd-border-hover: #334155;
+    --gd-surface-fab: rgba(15,17,23,0.88);
+    --gd-surface-dock: rgba(15,17,23,0.94);
+    --gd-overlay: rgba(255,255,255,0.05);
+    --gd-wiki: #91d478;
+    --gd-wiki-bd: rgba(145,212,120,0.32);
+    --gd-wiki-bd-hover: rgba(145,212,120,0.6);
+    --gd-wiki-glow: 0 0 8px rgba(145,212,120,0.7);
+    --gd-wiki-handle-bg: rgba(145,212,120,0.10);
+    --gd-wiki-handle-active: rgba(145,212,120,0.7);
+    --gd-handle-rest: rgba(148,163,184,0.18);
+    /* 타이포 / 모션 */
+    --gd-font: 600 12px/1 Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --gd-ease: cubic-bezier(.2,.8,.2,1);
+    --gd-anim: .28s;
+  }
 
+  /* ── FAB (그래프 열기 버튼) ─────────────────────── */
   #wiki-graph-fab {
     position: fixed; right: 18px; z-index: 900;
     bottom: calc(22px + env(safe-area-inset-bottom, 0px));
     display: inline-flex; align-items: center; gap: 6px;
     padding: 8px 13px; border-radius: 999px;
-    background: rgba(15,17,23,0.88); color: #cbd5e1;
-    border: 1px solid rgba(145,212,120,0.32);
-    font: 600 12px/1 Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    letter-spacing: .02em; cursor: pointer;
+    background: var(--gd-surface-fab); color: var(--gd-text);
+    border: 1px solid var(--gd-wiki-bd);
+    font: var(--gd-font); letter-spacing: .02em; cursor: pointer;
     backdrop-filter: blur(8px);
     box-shadow: 0 6px 18px rgba(0,0,0,.28), 0 0 22px rgba(145,212,120,.08);
     transition: color .15s, border-color .15s, transform .15s, opacity .2s;
   }
-  #wiki-graph-fab:hover { color: #f1f5f9; border-color: rgba(145,212,120,.6); transform: translateY(-1px); }
-  #wiki-graph-fab .dot { width: 7px; height: 7px; border-radius: 50%; background: #91d478; box-shadow: 0 0 8px rgba(145,212,120,.7); }
+  #wiki-graph-fab:hover {
+    color: var(--gd-text-strong); border-color: var(--gd-wiki-bd-hover);
+    transform: translateY(-1px);
+  }
+  #wiki-graph-fab .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gd-wiki); box-shadow: var(--gd-wiki-glow);
+  }
   #wiki-graph-fab.is-hidden { opacity: 0; pointer-events: none; transform: scale(.9); }
 
-  /* fixed 스테이지가 overflow를 클리핑 → off-screen 도크가 페이지 가로 스크롤을 만들지 않음.
+  /* ── 도크 스테이지 & 패널 ────────────────────────
+     fixed 스테이지가 overflow를 클리핑 → off-screen 도크가 페이지 가로 스크롤을 만들지 않음.
      html/body에 overflow-x 손대지 않아 iOS의 position:fixed 깨짐 문제 회피. */
   #wiki-graph-stage {
     position: fixed; top: 0; right: 0; bottom: 0; z-index: 1100;
     width: var(--graph-dock-width);
-    overflow: hidden;
-    pointer-events: none;
+    overflow: hidden; pointer-events: none;
   }
-
   #wiki-graph-dock {
     position: absolute; inset: 0;
     display: flex; flex-direction: column;
-    background: #0f1117;
-    border-left: 1px solid #1e293b;
+    background: var(--gd-bg);
+    border-left: 1px solid var(--gd-border);
     box-shadow: -10px 0 30px rgba(0,0,0,.35);
-    transform: translateX(100%);
-    pointer-events: none;
-    transition: transform .28s cubic-bezier(.2,.8,.2,1);
+    transform: translateX(100%); pointer-events: none;
+    transition: transform var(--gd-anim) var(--gd-ease);
   }
-  #wiki-graph-dock.is-open {
-    transform: translateX(0);
-    pointer-events: auto;
-  }
-  /* 드래그 중 슬라이드/패딩 애니메이션은 끔 → 즉시 반응, 끊김 없음 */
+  #wiki-graph-dock.is-open { transform: translateX(0); pointer-events: auto; }
+
+  /* 드래그 중 / 첫 진입 시 트랜지션 끔 */
+  body.wg-resizing,
   body.wg-resizing #wiki-graph-dock,
-  body.wg-resizing { transition: none !important; }
-  body.wg-resizing { user-select: none; cursor: ew-resize; }
-  /* 드래그 중 iframe이 포인터 이벤트 가로채지 않도록 */
-  body.wg-resizing #wiki-graph-frame { pointer-events: none; }
-  /* 페이지 진입 시 도크가 이미 열려있던 상태라면 슬라이드 애니메이션 없이 즉시 보임 */
   body.wg-no-anim,
   body.wg-no-anim #wiki-graph-dock,
   body.wg-no-anim #wiki-graph-fab { transition: none !important; }
+  body.wg-resizing { user-select: none; cursor: ew-resize; }
+  body.wg-resizing #wiki-graph-frame { pointer-events: none; }
 
-  /* 왼쪽 가장자리 리사이즈 핸들 (모바일에선 숨김) */
+  /* 왼쪽 리사이즈 핸들 */
   #wiki-graph-resize {
     position: absolute; top: 0; left: 0; bottom: 0;
     width: 6px; cursor: ew-resize; z-index: 10;
-    background: transparent;
-    transition: background .15s;
+    background: transparent; transition: background .15s;
   }
   #wiki-graph-resize::before {
     content: ''; position: absolute; top: 50%; left: 2px;
     width: 2px; height: 32px; border-radius: 2px;
-    background: rgba(148,163,184,0.18);
-    transform: translateY(-50%);
+    background: var(--gd-handle-rest); transform: translateY(-50%);
     transition: background .15s;
   }
-  #wiki-graph-resize:hover { background: rgba(145,212,120,0.10); }
-  #wiki-graph-resize:hover::before, body.wg-resizing #wiki-graph-resize::before {
-    background: rgba(145,212,120,0.7);
-  }
+  #wiki-graph-resize:hover { background: var(--gd-wiki-handle-bg); }
+  #wiki-graph-resize:hover::before,
+  body.wg-resizing #wiki-graph-resize::before { background: var(--gd-wiki-handle-active); }
 
+  /* 도크 헤더 */
   #wiki-graph-dock header {
     display: flex; align-items: center; justify-content: space-between;
     padding: 10px 14px;
-    border-bottom: 1px solid #1e293b;
-    background: rgba(15,17,23,0.94);
-    color: #cbd5e1;
-    font: 600 12px/1 Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    letter-spacing: .04em;
-    flex-shrink: 0;
+    border-bottom: 1px solid var(--gd-border);
+    background: var(--gd-surface-dock); color: var(--gd-text);
+    font: var(--gd-font); letter-spacing: .04em; flex-shrink: 0;
   }
   #wiki-graph-dock .wg-title { display: flex; align-items: center; gap: 8px; }
   #wiki-graph-dock .wg-title::before {
     content: ''; width: 7px; height: 7px; border-radius: 50%;
-    background: #91d478; box-shadow: 0 0 8px rgba(145,212,120,.7);
+    background: var(--gd-wiki); box-shadow: var(--gd-wiki-glow);
   }
   #wiki-graph-dock .wg-close {
-    background: transparent; border: 0; color: #64748b;
+    background: transparent; border: 0; color: var(--gd-text-dim);
     cursor: pointer; padding: 4px 9px; border-radius: 4px;
-    font: inherit;
-    transition: color .15s, background .15s;
+    font: inherit; transition: color .15s, background .15s;
   }
-  #wiki-graph-dock .wg-close:hover { color: #f1f5f9; background: rgba(255,255,255,.05); }
-
-  #wiki-graph-frame {
-    flex: 1; width: 100%; border: 0; background: #0f1117;
+  #wiki-graph-dock .wg-close:hover {
+    color: var(--gd-text-strong); background: var(--gd-overlay);
   }
 
-  /* 페이지 반응형: 도크가 열리면 본문이 도크 너비만큼 좁아짐 */
-  body { transition: padding-right .28s cubic-bezier(.2,.8,.2,1); }
+  #wiki-graph-frame { flex: 1; width: 100%; border: 0; background: var(--gd-bg); }
+
+  /* ── 페이지 반응형 ────────────────────────────────
+     도크가 열리면 본문이 도크 너비만큼 좁아짐 */
+  body { transition: padding-right var(--gd-anim) var(--gd-ease); }
   body.wg-dock-open { padding-right: var(--graph-dock-width); }
 
   @media (max-width: 720px) {
@@ -127,6 +145,17 @@
 
 <script>
   (function () {
+    const CFG = {
+      mobileBp: 720,
+      minWidth: 320,
+      maxWidth: 800,
+      reserveLeft: 280,  // 본문이 최소 이 정도는 보이도록
+      keyStep: 20,       // 키보드 ←/→ 한 번에 조정되는 px
+      WIDTH_KEY: 'wikiGraphDockWidth',
+      OPEN_KEY:  'wikiGraphDockOpen',
+      VAR_NAME:  '--graph-dock-width',
+    };
+
     const fab    = document.getElementById('wiki-graph-fab');
     const dock   = document.getElementById('wiki-graph-dock');
     const closeB = dock.querySelector('.wg-close');
@@ -138,20 +167,29 @@
     const src    = '/graph/?embed=1&focus=' + encodeURIComponent({{ page.url | jsonify }}) + '&_=' + Date.now();
     let loaded   = false;
 
-    const MIN = 320;
-    const STORAGE_KEY = 'wikiGraphDockWidth';
-    const OPEN_KEY = 'wikiGraphDockOpen';
     const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-    const maxW = () => Math.min(800, window.innerWidth - 280);
+    const isMobile = () => window.innerWidth <= CFG.mobileBp;
+    const maxW = () => Math.min(CFG.maxWidth, window.innerWidth - CFG.reserveLeft);
+    const currentWidth = () =>
+      parseInt(getComputedStyle(root).getPropertyValue(CFG.VAR_NAME), 10) || 480;
 
     function setWidth(w) {
-      const px = clamp(w, MIN, maxW());
-      root.style.setProperty('--graph-dock-width', px + 'px');
+      const px = clamp(w, CFG.minWidth, maxW());
+      root.style.setProperty(CFG.VAR_NAME, px + 'px');
       return px;
+    }
+    function saveWidth(px) {
+      try { localStorage.setItem(CFG.WIDTH_KEY, String(px)); } catch (e) {}
+    }
+    function setOpenFlag(v) {
+      try {
+        if (v) sessionStorage.setItem(CFG.OPEN_KEY, '1');
+        else   sessionStorage.removeItem(CFG.OPEN_KEY);
+      } catch (e) {}
     }
 
     // 저장된 너비 복원
-    const stored = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+    const stored = parseInt(localStorage.getItem(CFG.WIDTH_KEY), 10);
     if (!isNaN(stored)) setWidth(stored);
 
     function open() {
@@ -159,21 +197,20 @@
       dock.classList.add('is-open');
       dock.setAttribute('aria-hidden', 'false');
       fab.classList.add('is-hidden');
-      if (window.innerWidth > 720) body.classList.add('wg-dock-open');
-      try { sessionStorage.setItem(OPEN_KEY, '1'); } catch (e) {}
+      if (!isMobile()) body.classList.add('wg-dock-open');
+      setOpenFlag(true);
     }
     function close() {
       dock.classList.remove('is-open');
       dock.setAttribute('aria-hidden', 'true');
       fab.classList.remove('is-hidden');
       body.classList.remove('wg-dock-open');
-      try { sessionStorage.removeItem(OPEN_KEY); } catch (e) {}
+      setOpenFlag(false);
     }
 
-    // 이전 페이지에서 도크가 열려있었다면 페이지 이동 후에도 같은 상태로 즉시 복원.
-    // 슬라이드 애니메이션을 한 번만 끄고 두 RAF 후 다시 켜서, 이후 닫기/열기 트랜지션은 정상 동작.
+    // 이전 페이지에서 열려있었으면 같은 상태로 즉시 복원 (애니메이션 한 번만 끔)
     try {
-      if (sessionStorage.getItem(OPEN_KEY) === '1') {
+      if (sessionStorage.getItem(CFG.OPEN_KEY) === '1') {
         body.classList.add('wg-no-anim');
         open();
         requestAnimationFrame(() => requestAnimationFrame(() => body.classList.remove('wg-no-anim')));
@@ -189,40 +226,38 @@
     // 화면 회전/리사이즈 시 모바일 ↔ 데스크탑 전환 동기화
     window.addEventListener('resize', () => {
       if (!dock.classList.contains('is-open')) return;
-      if (window.innerWidth <= 720) body.classList.remove('wg-dock-open');
-      else body.classList.add('wg-dock-open');
+      body.classList.toggle('wg-dock-open', !isMobile());
     });
 
     // ── 드래그 리사이즈 ─────────────────────────
     handle.addEventListener('pointerdown', e => {
-      if (window.innerWidth <= 720) return;  // 모바일은 풀폭 고정
+      if (isMobile()) return;
       e.preventDefault();
       handle.setPointerCapture(e.pointerId);
       body.classList.add('wg-resizing');
 
-      const onMove = ev => {
-        setWidth(window.innerWidth - ev.clientX);
-      };
-      const onUp = ev => {
+      const onMove = ev => setWidth(window.innerWidth - ev.clientX);
+      const onEnd = ev => {
         handle.releasePointerCapture(ev.pointerId);
         handle.removeEventListener('pointermove', onMove);
-        handle.removeEventListener('pointerup', onUp);
-        handle.removeEventListener('pointercancel', onUp);
+        handle.removeEventListener('pointerup', onEnd);
+        handle.removeEventListener('pointercancel', onEnd);
         body.classList.remove('wg-resizing');
-        const px = parseInt(getComputedStyle(root).getPropertyValue('--graph-dock-width'), 10);
-        if (!isNaN(px)) localStorage.setItem(STORAGE_KEY, String(px));
+        saveWidth(currentWidth());
       };
       handle.addEventListener('pointermove', onMove);
-      handle.addEventListener('pointerup', onUp);
-      handle.addEventListener('pointercancel', onUp);
+      handle.addEventListener('pointerup', onEnd);
+      handle.addEventListener('pointercancel', onEnd);
     });
 
-    // 키보드로도 너비 조정 (← / →, 10px씩)
     handle.addEventListener('keydown', e => {
-      if (window.innerWidth <= 720) return;
-      const cur = parseInt(getComputedStyle(root).getPropertyValue('--graph-dock-width'), 10) || 480;
-      if (e.key === 'ArrowLeft')  { e.preventDefault(); const w = setWidth(cur + 20); localStorage.setItem(STORAGE_KEY, String(w)); }
-      if (e.key === 'ArrowRight') { e.preventDefault(); const w = setWidth(cur - 20); localStorage.setItem(STORAGE_KEY, String(w)); }
+      if (isMobile()) return;
+      const delta = e.key === 'ArrowLeft' ? CFG.keyStep
+                  : e.key === 'ArrowRight' ? -CFG.keyStep
+                  : 0;
+      if (!delta) return;
+      e.preventDefault();
+      saveWidth(setWidth(currentWidth() + delta));
     });
   })();
 </script>

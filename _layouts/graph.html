@@ -3,14 +3,65 @@
 {% include head.html %}
 <script>
   // head 단계에서 가장 먼저 실행 — html에 is-embed/panel-collapsed 클래스를 즉시 부여해
-  // body 렌더 전부터 패널이 숨겨진 상태로 시작하도록 한다.
-  if (new URLSearchParams(location.search).get('embed') === '1') {
+  // body 렌더 전부터 패널이 숨겨진 상태로 시작 (깜빡임 방지).
+  (function () {
+    if (new URLSearchParams(location.search).get('embed') !== '1') return;
     document.documentElement.classList.add('is-embed', 'panel-collapsed');
-  }
+    document.addEventListener('DOMContentLoaded', () => {
+      const html = document.documentElement;
+      document.getElementById('panel-collapse')?.addEventListener('click',
+        () => html.classList.add('panel-collapsed'));
+      document.getElementById('panel-toggle')?.addEventListener('click',
+        () => html.classList.remove('panel-collapsed'));
+      document.getElementById('ni-close')?.addEventListener('click',
+        () => { document.getElementById('node-info').style.display = 'none'; });
+    });
+  })();
 </script>
 <style>
+  :root {
+    /* 색 토큰 */
+    --g-bg: #0f1117;
+    --g-text: #e2e8f0;
+    --g-text-strong: #f1f5f9;
+    --g-text-muted: #94a3b8;
+    --g-text-dim: #64748b;
+    --g-text-faint: #475569;
+    --g-text-mute2: #cbd5e1;
+    --g-border: #1e293b;
+    --g-border-hover: #334155;
+    --g-surface: rgba(15,17,23,0.85);
+    --g-surface-mid: rgba(15,17,23,0.88);
+    --g-surface-strong: rgba(15,17,23,0.92);
+    --g-surface-tip: rgba(15,17,23,0.93);
+    --g-overlay: rgba(255,255,255,0.05);
+    --g-overlay-hi: rgba(255,255,255,0.10);
+    --g-wiki: #91d478;
+    --g-book: #60a5fa;
+    --g-wiki-soft: rgba(145,212,120,0.5);
+    --g-wiki-line: rgba(145,212,120,0.5);
+    --g-book-line: rgba(96,165,250,0.3);
+    --g-wb-line: rgba(147,197,253,0.5);
+    /* 텍스트 / 타이포 */
+    --g-font: Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* 모션 / 모양 */
+    --g-ease: cubic-bezier(.2,.8,.2,1);
+    --g-r-sm: 4px; --g-r-md: 7px; --g-r-lg: 8px; --g-r-xl: 12px;
+  }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 100%; height: 100%; overflow: hidden; background: #0f1117; color: #e2e8f0; font-family: Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden;
+    background: var(--g-bg); color: var(--g-text); font-family: var(--g-font);
+  }
+
+  /* 공통 floating chrome 패턴 (back-btn / panel-toggle / zoom 버튼이 공유) */
+  .gfx-chip {
+    background: var(--g-surface); border: 1px solid var(--g-border);
+    color: var(--g-text-muted); backdrop-filter: blur(8px);
+    transition: color .15s, border-color .15s;
+  }
+  .gfx-chip:hover { color: var(--g-text); border-color: var(--g-border-hover); }
 
   #graph-root { width: 100vw; height: 100vh; position: relative; }
   #graph-canvas { width: 100%; height: 100%; }
@@ -18,199 +69,173 @@
   #back-btn {
     position: fixed; top: 16px; left: 16px; z-index: 200;
     display: flex; align-items: center; gap: 6px;
-    background: rgba(15,17,23,0.85); border: 1px solid #1e293b;
-    border-radius: 8px; padding: 7px 13px;
-    color: #94a3b8; font-size: 13px; text-decoration: none;
-    backdrop-filter: blur(8px);
-    transition: color .15s, border-color .15s;
+    border-radius: var(--g-r-lg); padding: 7px 13px;
+    font-size: 13px; text-decoration: none;
   }
-  #back-btn:hover { color: #e2e8f0; border-color: #334155; }
 
   #panel {
     position: fixed; top: 16px; right: 16px; z-index: 200;
-    background: rgba(15,17,23,0.88); border: 1px solid #1e293b;
-    border-radius: 12px; padding: 16px 18px;
+    background: var(--g-surface-mid); border: 1px solid var(--g-border);
+    border-radius: var(--g-r-xl); padding: 16px 18px;
     font-size: 12px; backdrop-filter: blur(8px); width: 200px;
   }
-  #panel h3 { font-size: 11px; color: #475569; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 12px; }
-  .leg { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; color: #94a3b8; }
+  #panel h3 { font-size: 11px; color: var(--g-text-faint); letter-spacing: .07em; text-transform: uppercase; margin-bottom: 12px; }
+  .panel-section-label { font-size: 10px; color: var(--g-text-faint); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
+  .beta { color: var(--g-border-hover); font-size: 10px; }
+
+  .leg { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; color: var(--g-text-muted); }
   .leg-dot  { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
   .leg-line { width: 22px; height: 2px; border-radius: 1px; flex-shrink: 0; }
-  .sep { border: none; border-top: 1px solid #1e293b; margin: 10px 0; }
+  .leg-dot.wiki  { background: var(--g-wiki); }
+  .leg-dot.book  { background: var(--g-book); }
+  .leg-line.ww   { background: var(--g-wiki-line); }
+  .leg-line.wb   { background: var(--g-wb-line); }
+  .leg-line.bb   { background: var(--g-book-line); }
+
+  .sep { border: none; border-top: 1px solid var(--g-border); margin: 10px 0; }
+
   #panel button {
     width: 100%; padding: 6px 10px; border-radius: 6px; font-size: 11px; cursor: pointer;
-    margin-bottom: 5px; border: 1px solid #1e293b; background: transparent;
-    color: #64748b; text-align: left; transition: all .15s;
+    margin-bottom: 5px; border: 1px solid var(--g-border); background: transparent;
+    color: var(--g-text-dim); text-align: left; transition: all .15s;
     font-family: inherit;
   }
-  #panel button.on  { color: #e2e8f0; border-color: #334155; background: rgba(255,255,255,.05); }
-  #panel button:hover { border-color: #475569; color: #94a3b8; }
-  #stats { margin-top: 8px; font-size: 11px; color: #334155; line-height: 1.9; }
+  #panel button.on  { color: var(--g-text); border-color: var(--g-border-hover); background: var(--g-overlay); }
+  #panel button:hover { border-color: var(--g-text-faint); color: var(--g-text-muted); }
+  #stats { margin-top: 8px; font-size: 11px; color: var(--g-border-hover); line-height: 1.9; }
 
   .tag-chip {
     display: inline-block; padding: 2px 6px; margin: 2px 1px;
-    border-radius: 4px; font-size: 10px; cursor: pointer;
-    border: 1px solid #1e293b; color: #64748b;
+    border-radius: var(--g-r-sm); font-size: 10px; cursor: pointer;
+    border: 1px solid var(--g-border); color: var(--g-text-dim);
     transition: all .15s; white-space: nowrap;
   }
-  .tag-chip:hover { border-color: #475569; color: #94a3b8; }
-  .tag-chip.on { border-color: #334155; color: #e2e8f0; background: rgba(255,255,255,.05); }
+  .tag-chip:hover { border-color: var(--g-text-faint); color: var(--g-text-muted); }
+  .tag-chip.on { border-color: var(--g-border-hover); color: var(--g-text); background: var(--g-overlay); }
   #tag-list { max-height: 148px; overflow-y: auto; }
   #tag-list::-webkit-scrollbar { width: 3px; }
   #tag-list::-webkit-scrollbar-track { background: transparent; }
-  #tag-list::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
+  #tag-list::-webkit-scrollbar-thumb { background: var(--g-border); border-radius: 2px; }
 
   #tooltip {
     position: fixed; z-index: 300;
-    background: rgba(15,17,23,0.93); border: 1px solid #334155;
-    border-radius: 8px; padding: 10px 14px; font-size: 13px;
+    background: var(--g-surface-tip); border: 1px solid var(--g-border-hover);
+    border-radius: var(--g-r-lg); padding: 10px 14px; font-size: 13px;
     pointer-events: none; display: none; max-width: 240px;
     backdrop-filter: blur(8px);
   }
   #tooltip .tt-type  { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 3px; }
-  #tooltip .tt-title { font-weight: 600; color: #f1f5f9; margin-bottom: 4px; line-height: 1.3; }
-  #tooltip .tt-meta  { color: #94a3b8; font-size: 11px; line-height: 1.6; }
-  .col-wiki { color: #91d478; }
-  .col-book { color: #60a5fa; }
+  #tooltip .tt-title { font-weight: 600; color: var(--g-text-strong); margin-bottom: 4px; line-height: 1.3; }
+  #tooltip .tt-meta  { color: var(--g-text-muted); font-size: 11px; line-height: 1.6; }
+  .col-wiki { color: var(--g-wiki); }
+  .col-book { color: var(--g-book); }
 
-  #zoom-btns {
-    position: fixed; bottom: 24px; right: 16px; z-index: 200;
-    display: flex; flex-direction: column; gap: 5px;
-  }
+  #zoom-btns { position: fixed; bottom: 24px; right: 16px; z-index: 200; display: flex; flex-direction: column; gap: 5px; }
   #zoom-btns button {
-    width: 30px; height: 30px;
-    background: rgba(15,17,23,0.85); border: 1px solid #1e293b;
-    border-radius: 7px; color: #64748b; font-size: 16px; cursor: pointer;
+    width: 30px; height: 30px; border-radius: var(--g-r-md);
+    font-size: 16px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    transition: all .15s; font-family: inherit;
+    font-family: inherit;
   }
-  #zoom-btns button:hover { color: #e2e8f0; border-color: #334155; }
 
-  #hint { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: #334155; font-size: 11px; pointer-events: none; z-index: 200; }
+  #hint { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: var(--g-border-hover); font-size: 11px; pointer-events: none; z-index: 200; }
 
   #node-info {
     position: fixed; bottom: 24px; left: 16px; z-index: 200;
-    background: rgba(15,17,23,0.92); border: 1px solid #334155;
-    border-radius: 12px; padding: 14px 16px; width: 240px;
+    background: var(--g-surface-strong); border: 1px solid var(--g-border-hover);
+    border-radius: var(--g-r-xl); padding: 14px 16px; width: 240px;
     backdrop-filter: blur(8px); font-size: 13px;
   }
   #ni-type  { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
-  #ni-title { font-weight: 700; color: #f1f5f9; font-size: 14px; line-height: 1.35; margin-bottom: 6px; }
-  #ni-tags  { color: #94a3b8; font-size: 11px; margin-bottom: 4px; }
-  #ni-meta  { color: #64748b; font-size: 11px; margin-bottom: 10px; }
+  #ni-title { font-weight: 700; color: var(--g-text-strong); font-size: 14px; line-height: 1.35; margin-bottom: 6px; }
+  #ni-tags  { color: var(--g-text-muted); font-size: 11px; margin-bottom: 4px; }
+  #ni-meta  { color: var(--g-text-dim); font-size: 11px; margin-bottom: 10px; }
   #ni-link  {
     display: inline-block; padding: 6px 12px;
-    background: rgba(255,255,255,0.06); border: 1px solid #334155;
-    border-radius: 6px; color: #e2e8f0; text-decoration: none;
+    background: rgba(255,255,255,0.06); border: 1px solid var(--g-border-hover);
+    border-radius: 6px; color: var(--g-text); text-decoration: none;
     font-size: 12px; transition: all .15s;
   }
-  #ni-link:hover { background: rgba(255,255,255,0.1); border-color: #475569; }
+  #ni-link:hover { background: var(--g-overlay-hi); border-color: var(--g-text-faint); }
   #ni-close {
     position: absolute; top: 10px; right: 10px;
-    background: none; border: none; color: #475569; cursor: pointer;
-    font-size: 14px; padding: 2px 6px; border-radius: 4px;
+    background: none; border: none; color: var(--g-text-faint); cursor: pointer;
+    font-size: 14px; padding: 2px 6px; border-radius: var(--g-r-sm);
     transition: color .15s;
   }
-  #ni-close:hover { color: #94a3b8; }
+  #ni-close:hover { color: var(--g-text-muted); }
+
+  /* ── 임베드(도크) 모드 ────────────────────────────── */
+  html.is-embed #back-btn,
+  html.is-embed #hint { display: none !important; }
+  html.is-embed #zoom-btns { bottom: 14px; right: 12px; }
+  html.is-embed #zoom-btns button { width: 26px; height: 26px; font-size: 14px; }
+  html.is-embed #node-info { width: min(220px, calc(100% - 24px)); padding: 12px 14px; }
+
+  /* 컴팩트 패널 (도크 내) */
+  html.is-embed #panel {
+    top: 10px; right: 10px;
+    width: 168px; padding: 11px 12px; font-size: 11px;
+    max-height: calc(100vh - 96px); overflow-y: auto;
+    /* 슬림 스크롤바 — 기본 ~15px 게이지가 우상단 × 를 안쪽으로 밀던 문제 회피 */
+    scrollbar-width: thin; scrollbar-color: var(--g-border) transparent;
+  }
+  html.is-embed #panel::-webkit-scrollbar { width: 4px; }
+  html.is-embed #panel::-webkit-scrollbar-track { background: transparent; }
+  html.is-embed #panel::-webkit-scrollbar-thumb { background: var(--g-border); border-radius: 2px; }
+  html.is-embed #panel h3 { font-size: 10px; margin-bottom: 8px; }
+  html.is-embed #panel .leg { font-size: 10px; margin-bottom: 5px; }
+  html.is-embed #panel button { font-size: 10px; padding: 5px 8px; margin-bottom: 4px; }
+  html.is-embed #panel .sep { margin: 8px 0; }
+  html.is-embed #tag-list { max-height: 96px; }
+  html.is-embed #stats { font-size: 10px; line-height: 1.7; }
+
+  /* 패널 펼치기 토글 (햄버거) — 접힌 상태에서만 노출 */
+  html.is-embed #panel-toggle {
+    position: fixed; top: 10px; right: 10px; z-index: 220;
+    width: 28px; height: 28px; border-radius: var(--g-r-md);
+    background: var(--g-surface); border: 1px solid var(--g-border);
+    color: var(--g-text-muted); font-size: 13px; cursor: pointer;
+    display: none; align-items: center; justify-content: center;
+    backdrop-filter: blur(8px); padding: 0;
+    transition: color .15s, border-color .15s;
+  }
+  html.is-embed #panel-toggle:hover { color: var(--g-text); border-color: var(--g-border-hover); }
+  html.is-embed.panel-collapsed #panel { display: none; }
+  html.is-embed.panel-collapsed #panel-toggle { display: inline-flex; }
+  html:not(.is-embed) #panel-toggle,
+  html:not(.is-embed) #panel-collapse { display: none; }
+
+  /* 패널 우상단 코너 닫기(×) */
+  html.is-embed #panel-collapse {
+    position: absolute; top: 4px; right: 4px;
+    width: 22px; height: 22px;
+    background: transparent; border: 0;
+    color: var(--g-text-faint); font-size: 16px;
+    padding: 0; border-radius: var(--g-r-sm);
+    cursor: pointer; line-height: 22px; text-align: center;
+    transition: color .15s;
+  }
+  html.is-embed #panel-collapse:hover { color: var(--g-text-mute2); }
 </style>
 <body>
   <div id="graph-root">
     <div id="graph-canvas"></div>
   </div>
 
-  <a id="back-btn" href="/">← 홈으로</a>
-
-  <script>
-    if (new URLSearchParams(location.search).get('embed') === '1') {
-      // 임베드는 기본 접힘 상태로 시작 — 햄버거(≡) 클릭으로 펼침
-      document.documentElement.classList.add('is-embed');
-      document.documentElement.classList.add('panel-collapsed');
-      document.addEventListener('DOMContentLoaded', () => {
-        const html = document.documentElement;
-        document.getElementById('panel-collapse')?.addEventListener('click',
-          () => html.classList.add('panel-collapsed'));
-        document.getElementById('panel-toggle')?.addEventListener('click',
-          () => html.classList.remove('panel-collapsed'));
-      });
-    }
-  </script>
-  <style>
-    html.is-embed #back-btn,
-    html.is-embed #hint { display: none !important; }
-    html.is-embed #zoom-btns { bottom: 14px; right: 12px; }
-    html.is-embed #zoom-btns button { width: 26px; height: 26px; font-size: 14px; }
-    html.is-embed #node-info { width: min(220px, calc(100% - 24px)); padding: 12px 14px; }
-
-    /* 임베드(도크) 안에서도 토글이 보이게 하되 컴팩트하게 */
-    html.is-embed #panel {
-      top: 10px; right: 10px;
-      width: 168px;
-      padding: 11px 12px;
-      font-size: 11px;
-      max-height: calc(100vh - 96px);
-      overflow-y: auto;
-      /* 기본 스크롤바가 ~15px 자리를 잡아 우상단 × 가 시각적으로 안쪽으로 밀리는 걸 방지 */
-      scrollbar-width: thin;
-      scrollbar-color: #1e293b transparent;
-    }
-    html.is-embed #panel::-webkit-scrollbar { width: 4px; }
-    html.is-embed #panel::-webkit-scrollbar-track { background: transparent; }
-    html.is-embed #panel::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
-    html.is-embed #panel h3 { font-size: 10px; margin-bottom: 8px; }
-    html.is-embed #panel .leg { font-size: 10px; margin-bottom: 5px; }
-    html.is-embed #panel button { font-size: 10px; padding: 5px 8px; margin-bottom: 4px; }
-    html.is-embed #panel .sep { margin: 8px 0; }
-    html.is-embed #tag-list { max-height: 96px; }
-    html.is-embed #stats { font-size: 10px; line-height: 1.7; }
-
-    /* 패널 접기 토글: 기본 펼침. 접힌 상태에선 #panel-toggle만 보임. 톤은 back-btn과 동일 */
-    html.is-embed #panel-toggle {
-      position: fixed; top: 10px; right: 10px; z-index: 220;
-      width: 28px; height: 28px;
-      background: rgba(15,17,23,0.85);
-      border: 1px solid #1e293b;
-      border-radius: 7px;
-      color: #94a3b8; font-size: 13px; cursor: pointer;
-      display: none; align-items: center; justify-content: center;
-      backdrop-filter: blur(8px); padding: 0;
-      transition: color .15s, border-color .15s;
-    }
-    html.is-embed #panel-toggle:hover { color: #e2e8f0; border-color: #334155; }
-    html.is-embed.panel-collapsed #panel { display: none; }
-    html.is-embed.panel-collapsed #panel-toggle { display: inline-flex; }
-    html:not(.is-embed) #panel-toggle { display: none; }
-
-    /* 패널 헤더의 접기 버튼: 패널 우상단 코너에 가능한 한 붙임 */
-    html.is-embed #panel-collapse {
-      position: absolute !important;
-      top: 4px !important; right: 4px !important;
-      width: 22px; height: 22px;
-      background: transparent !important;
-      border: 0 !important;
-      color: #475569 !important;
-      font-size: 16px !important;
-      padding: 0 !important;
-      border-radius: 4px;
-      cursor: pointer;
-      line-height: 22px;
-      text-align: center;
-      transition: color .15s;
-    }
-    html.is-embed #panel-collapse:hover { color: #cbd5e1 !important; }
-    html:not(.is-embed) #panel-collapse { display: none; }
-  </style>
+  <a id="back-btn" href="/" class="gfx-chip">← 홈으로</a>
 
   <button id="panel-toggle" type="button" aria-label="설정 패널 열기" title="설정 열기">≡</button>
 
   <div id="panel">
     <button id="panel-collapse" type="button" aria-label="설정 패널 접기" title="접기">×</button>
-    <h3>Knowledge Graph <span style="color:#334155;font-size:10px">β</span></h3>
-    <div class="leg"><div class="leg-dot" style="background:#91d478"></div> Wiki</div>
-    <div class="leg"><div class="leg-dot" style="background:#60a5fa"></div> Books</div>
+    <h3>Knowledge Graph <span class="beta">β</span></h3>
+    <div class="leg"><div class="leg-dot wiki"></div> Wiki</div>
+    <div class="leg"><div class="leg-dot book"></div> Books</div>
     <hr class="sep">
-    <div class="leg"><div class="leg-line" style="background:rgba(145,212,120,.5)"></div> Wiki ↔ Wiki</div>
-    <div class="leg"><div class="leg-line" style="background:rgba(147,197,253,.5)"></div> Wiki ↔ Book</div>
-    <div class="leg"><div class="leg-line" style="background:rgba(96,165,250,.3)"></div> Book ↔ Book</div>
+    <div class="leg"><div class="leg-line ww"></div> Wiki ↔ Wiki</div>
+    <div class="leg"><div class="leg-line wb"></div> Wiki ↔ Book</div>
+    <div class="leg"><div class="leg-line bb"></div> Book ↔ Book</div>
     <hr class="sep">
     <button id="btn-ww" class="on" onclick="toggleKind('wiki-wiki',this)">● Wiki ↔ Wiki</button>
     <button id="btn-wb" onclick="toggleKind('wiki-book',this)">● Wiki ↔ Book</button>
@@ -221,7 +246,7 @@
     <button id="btn-tags"   onclick="toggleTags(this)">#  태그 표시</button>
     <div id="stats"></div>
     <hr class="sep">
-    <div style="font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">태그 필터</div>
+    <div class="panel-section-label">태그 필터</div>
     <div id="tag-list"></div>
   </div>
 
@@ -233,13 +258,13 @@
     <div id="ni-tags"></div>
     <div id="ni-meta"></div>
     <a id="ni-link" href="#" target="_blank">→ 페이지 열기</a>
-    <button id="ni-close" onclick="document.getElementById('node-info').style.display='none'">✕</button>
+    <button id="ni-close" type="button" aria-label="닫기">✕</button>
   </div>
 
   <div id="zoom-btns">
-    <button onclick="G.zoom(G.zoom()*1.5,300)">+</button>
-    <button onclick="G.zoom(G.zoom()/1.5,300)">−</button>
-    <button onclick="G.zoomToFit(400,50)">⊡</button>
+    <button class="gfx-chip" onclick="G.zoom(G.zoom()*1.5,300)">+</button>
+    <button class="gfx-chip" onclick="G.zoom(G.zoom()/1.5,300)">−</button>
+    <button class="gfx-chip" onclick="G.zoomToFit(400,50)">⊡</button>
   </div>
   <div id="hint">스크롤 줌 · 드래그 이동 · 클릭하면 정보 표시</div>
 
