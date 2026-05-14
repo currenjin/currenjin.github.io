@@ -1,5 +1,14 @@
 [
   {
+    "title": "증강 코딩 운영 기록",
+    "url": "/wiki/augmented-coding",
+    "updated": "2026-05-14",
+    "summary": "개인 검증 이후 팀 적용까지, 실제 운영 방식과 판단 기준 정리",
+    "tags": "ai, engineering, ai-agent, productivity",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "삼색볼펜 학습법 (Three-color pen study)",
     "url": "/wiki/three-color-pen-study",
     "updated": "2026-05-08",
@@ -95,15 +104,6 @@
     "updated": "2026-03-20",
     "summary": "",
     "tags": "productivity",
-    "source": "Wiki",
-    "external": false
-  },
-  {
-    "title": "증강 코딩 운영 기록",
-    "url": "/wiki/augmented-coding",
-    "updated": "2026-03-13",
-    "summary": "개인 검증 이후 팀 적용까지, 실제 운영 방식과 판단 기준 정리",
-    "tags": "ai, engineering, ai-agent, productivity",
     "source": "Wiki",
     "external": false
   },
