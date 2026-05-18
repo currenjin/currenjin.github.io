@@ -1185,10 +1185,10 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 > 해설: 새 창 열기(target="_blank")을 사용할 때는 보안 취약점 방지를 위해 rel="noopener noreferrer"를 함께 사용하는 것이 규칙이다.
 
 **Q5. 동일한 페이지 내의 특정 위치(id="section1")로 이동하는 앵커 링크의 올바른 표현은?**
-1. <a href="section1">이동</a>
-2. <a href="#section1">이동</a>
-3. <a link="#section1">이동</a>
-4. <a target="section1">이동</a>
+1. `<a href="section1">이동</a>`
+2. `<a href="#section1">이동</a>`
+3. `<a link="#section1">이동</a>`
+4. `<a target="section1">이동</a>`
 > 정답: 2
 > 해설: 내부 앵커로 이동할 때는 href 속성에 #을 붙인 이름("#section1")을 값으로 지정하고, 이를 목적지 요소에서 id 속성값으로 사용한다.
 
@@ -1265,10 +1265,10 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 
 ###### 연습문제
 **Q1. audio 요소에서 자동 재생을 시도할 때의 기본 전제로서 가장 적절한 코드 형태는?(단, src 속성 표현은 생략한다.)**
-1. <audio autoplay></audio>
-2. <audio autoplay muted></audio>
-3. <audio autoplay loop></audio>
-4. <audio autoplay preload="auto"></audio>
+1. `<audio autoplay></audio>`
+2. `<audio autoplay muted></audio>`
+3. `<audio autoplay loop></audio>`
+4. `<audio autoplay preload="auto"></audio>`
 > 정답: 2
 > 해설: 최신 브라우저는 브라우저 정책상 미디어의 자동 재생(autoplay)을 강제로 차단한다. 즉 사용자의 조작 없는 자동 재생을 제한한다. 따라서 이를 사용하려면 반드시 muted 속성을 함께 명시해야 한다.
 
@@ -1350,22 +1350,22 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 - fieldset 요소 → form 안에서 관련된 입력 요소들을 하나의 그룹으로 묶고 제목(캡션)을 붙일 때 사용 → 시각적으로 회색 테두리가 표시됨
 - 데이터 입력과 선택(1)
 - 일반 텍스트 입력
-  - 짧은 한 줄 입력 → <input type="text" …>
+  - 짧은 한 줄 입력 → `<input type="text" …>`
   - 긴 여러 줄 입력 → textarea 요소 → 주요 속성(rows, cols, wrap 등)
 - 특정 형식의 데이터 입력
-  - 비밀번호 → <input type="password" …> → 브라우저 저장 기능인 '비밀번호 관리자'와의 연동이 중요(autocomplete="current-password"/"new-password")
-  - 검색어 → <input type="search" …> → 접근성을 위해 aria-label이나 placeholder 사용
-  - 전화번호 → <input type="tel" …> → autocomplete="tel" 함께 사용
-  - URL → <input type="url" …> → 자동 유효성 검사
-  - 이메일 주소 → <input type="email" …> → 자동 유효성 검사
+  - 비밀번호 → `<input type="password" …>` → 브라우저 저장 기능인 '비밀번호 관리자'와의 연동이 중요(autocomplete="current-password"/"new-password")
+  - 검색어 → `<input type="search" …>` → 접근성을 위해 aria-label이나 placeholder 사용
+  - 전화번호 → `<input type="tel" …>` → autocomplete="tel" 함께 사용
+  - URL → `<input type="url" …>` → 자동 유효성 검사
+  - 이메일 주소 → `<input type="email" …>` → 자동 유효성 검사
 - 숫자 입력
-  - 정확한 값 입력 → <input type="number" …> → 우측에 스피너가 표시됨
-  - 대략적인 정도를 조절하는 경우 → <input type="range" …> → 슬라이드 형태 → 현재 선택한 값이 숫자로 보이지 않기 때문에 표시값 동기화가 필요(output 요소 활용 또는 자바스크립트로 처리)
+  - 정확한 값 입력 → `<input type="number" …>` → 우측에 스피너가 표시됨
+  - 대략적인 정도를 조절하는 경우 → `<input type="range" …>` → 슬라이드 형태 → 현재 선택한 값이 숫자로 보이지 않기 때문에 표시값 동기화가 필요(output 요소 활용 또는 자바스크립트로 처리)
   - 주요 속성 → min, max, step, value
   - output 요소 → 실시간으로 계산된 값을 출력할 수 있는 요소 → 속성(name, for) → form 요소의 input 이벤트를 활용하여 출력할 값을 계산
 - 항목 선택
-  - (그룹에서) 단 하나만 선택하는 경우 → <input type="radio" …> → 동그라미 모양
-  - 여러 개의 선택이 가능한 경우 → <input type="checkbox" …> → 네모 모양
+  - (그룹에서) 단 하나만 선택하는 경우 → `<input type="radio" …>` → 동그라미 모양
+  - 여러 개의 선택이 가능한 경우 → `<input type="checkbox" …>` → 네모 모양
   - 접근성을 위해 label 요소와 fieldset 요소를 실무적으로 반드시 사용
 
 ###### 연습문제
@@ -1478,11 +1478,15 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 > 해설: 인라인 스타일은 명시도 점수가 1,000점으로 매우 높아 오히려 다른 스타일로 덮어쓰기가 어렵다.
 
 > 지문:
-> <style>
-> .text { color: blue; }
-> p { color: red; }
-> </style>
-> <p class="text">안녕하세요</p>
+
+```html
+<style>
+.text { color: blue; }
+p { color: red; }
+</style>
+<p class="text">안녕하세요</p>
+```
+
 **Q2. 위 지문의 코드에서 화면에 출력될 "안녕하세요"의 글자 색상은?**
 1. red
 2. blue
@@ -2086,7 +2090,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 > e._________________; // 기본 동작 중지
 > console.log('페이지 이동 없이 JS 로직 실행');
 > });
-**Q6. 사용자가 폼 전송 버튼(<button type="submit">)을 눌렀을 때, 페이지가 새로고침되며 서버로 데이터가 넘어가는 브라우저의 '기본 동작'을 강제로 취소시키는 메서드는?**
+**Q6. 사용자가 폼 전송 버튼(`<button type="submit">`)을 눌렀을 때, 페이지가 새로고침되며 서버로 데이터가 넘어가는 브라우저의 '기본 동작'을 강제로 취소시키는 메서드는?**
 1. stopPropagation( )
 2. cancelEvent( )
 3. preventDefault( )
@@ -2159,7 +2163,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 > 정답: 4
 > 해설: querySelectorAll( )이 반환하는 NodeList는 최신 브라우저에서 forEach 메서드를 자체 지원하여 코드가 훨씬 간결해진다.
 
-**Q2. 개별 <input> 요소 100개에 각각 이벤트를 걸지 않고, 부모인 <form> 요소 하나에만 이벤트를 걸어 동적으로 추가되는 자식들의 이벤트까지 모두 처리하는 기법을 일컫는 표현은?**
+**Q2. 개별 `<input>` 요소 100개에 각각 이벤트를 걸지 않고, 부모인 `<form>` 요소 하나에만 이벤트를 걸어 동적으로 추가되는 자식들의 이벤트까지 모두 처리하는 기법을 일컫는 표현은?**
 1. 이벤트 버블링 차단
 2. 이벤트 위임
 3. 콜백 분리
@@ -2190,7 +2194,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 > 지문:
 > const cart = document.querySelector('#cart');
 > cart.__________________;
-**Q5. 위 지문에서 쇼핑 장바구니처럼 <div> 안의 모든 상품(자식 요소)을 한 번에 싹 지워버리려 한다. 성능이 가장 뛰어나고 깔끔한 최신 메서드 호출 방식은?**
+**Q5. 위 지문에서 쇼핑 장바구니처럼 `<div>` 안의 모든 상품(자식 요소)을 한 번에 싹 지워버리려 한다. 성능이 가장 뛰어나고 깔끔한 최신 메서드 호출 방식은?**
 1. innerHTML = ""
 2. removeChildren( )
 3. replaceChildren( )
@@ -2445,7 +2449,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 
 ###### 시험 포인트
 - 기본 속성 및 정책
-  - <video>와 <audio>는 HTMLMediaElement 인터페이스를 공유하므로 제어 방식이 동일하며, 최신 브라우저 환경에서 자동 재생(autoplay)을 구현하려면 보통 muted(음소거) 속성을 함께 지정해야 함
+  - `<video>`와 `<audio>`는 HTMLMediaElement 인터페이스를 공유하므로 제어 방식이 동일하며, 최신 브라우저 환경에서 자동 재생(autoplay)을 구현하려면 보통 muted(음소거) 속성을 함께 지정해야 함
 - 상태 제어 (속성 및 메서드)
   - 속성 → currentTime(현재 재생 위치), duration(전체 길이), volume(음량), playbackRate(배속) 등을 직접 읽거나 지정
 - 핵심 3요소
@@ -2456,7 +2460,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 ###### 핵심 정리
 - 미디어 제어
 - 기본 속성 및 정책
-  - <video>와 <audio>는 HTMLMediaElement 인터페이스를 공유하므로 제어 방식이 동일하며, 최신 브라우저 환경에서 자동 재생(autoplay)을 구현하려면 보통 muted(음소거) 속성을 함께 지정해야 함
+  - `<video>`와 `<audio>`는 HTMLMediaElement 인터페이스를 공유하므로 제어 방식이 동일하며, 최신 브라우저 환경에서 자동 재생(autoplay)을 구현하려면 보통 muted(음소거) 속성을 함께 지정해야 함
 - 상태 제어 (속성 및 메서드)
   - 속성 → currentTime(현재 재생 위치), duration(전체 길이), volume(음량), playbackRate(배속) 등을 직접 읽거나 지정
   - 미디어 제어 메서드 → play( )와 pause( )를 사용. 별도의 stop( ) 메서드가 없기 때문에 정지를 구현할 때는 pause( ) 호출 후 currentTime을 0으로 초기화함
@@ -2478,8 +2482,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
   - dragenter / dragleave 이벤트 → 사용자가 드롭 가능한 영역을 확실히 인지할 수 있도록 배경색이나 테두리 점선을 바꾸는 시각적 하이라이트(UX 피드백) 제어에 사용
 
 ###### 연습문제
-> 지문:
-> <video src="bgm.mp4" autoplay __________________></video>
+> 지문: `<video src="bgm.mp4" autoplay __________________></video>`
 **Q1. 위 지문에서 모던 브라우저 정책상 오디오나 비디오를 웹페이지 접속 시 자동으로 재생(autoplay)되게 하려면, 사용자 경험을 위해 반드시 함께 명시해야 하는 속성은 무엇인가?**
 1. loop
 2. controls
@@ -2586,7 +2589,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
   - 추적 성공 시 넘어오는 position 객체를 통해 position.coords.latitude(위도)와 position.coords.longitude(경도) 등의 실제 데이터 획득
   - watchPosition( ) → 사용자가 이동할 때마다 실시간으로 위치 변화를 추적할 때 사용. 인자의 종류와 사용 방법은 getCurrentPosition( )과 동일. 위치 추적이 끝나면 반드시 clearWatch( ) 수행
 - 지도 서비스 연동 및 그리기 (Leaflet.js 기반 4단계)
-  - 1단계 (도화지 준비) → HTML 문서에 지도가 그려질 빈 컨테이너(<div id="map">)를 준비하고, 위치를 찾으면 화면에 노출(display: 'block')시킴
+  - 1단계 (도화지 준비) → HTML 문서에 지도가 그려질 빈 컨테이너(`<div id="map">`)를 준비하고, 위치를 찾으면 화면에 노출(display: 'block')시킴
   - 2단계 (지도 객체 생성 및 카메라 이동) → L.map('map').setView([위도, 경도], 줌레벨)을 호출하여 지도를 초기화하고, 중심점을 획득한 내 위치로 맞춤. (단, 이미 지도가 그려진 상태라면 새로 생성하지 않고 setView만 호출하여 화면만 이동시킴)
   - 3단계 (배경 타일 이미지 깔기) → L.tileLayer(...) 메서드를 통해 OpenStreetMap의 오픈 타일 서버에서 실제 지형지물 이미지를 가져와 지도 도화지 위에 격자 타일 형태로 렌더링함
   - 4단계 (마커 렌더링 및 팝업 UI) → 내 위치 좌표에 핀을 꽂는 L.marker([위도, 경도]) 객체를 캔버스에 추가(addTo)하고, bindPopup( ).openPopup( )을 연결하여 마커를 클릭했을 때 '현재 위치!'라는 정보창(말풍선)이 뜨도록 인터랙션을 구현함
