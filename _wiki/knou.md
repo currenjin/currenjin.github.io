@@ -2520,12 +2520,15 @@ p { color: red; }
 | 미디어 | - audio와 video는 외부 플러그인 없이 미디어를 재생한다. (controls 기억) |
 | 폼 | - form은 입력 묶음, input은 입력 요소다. (type별 기능)<br>- label은 입력 요소 설명과 접근성을 높인다. (for-id 연결)<br>- required는 입력 필수 검사를 지정한다. (JS 없이 가능) |
 | CSS 선택자 우선순위 | - inline > id > class/속성/가상클래스 > 요소. (높은 것 우선) |
-| 박스 / 배치 | - 박스 모델은 content → padding → border → margin 순서다. (안에서 밖으로)<br>- block은 한 줄 차지, inline은 내용만큼 차지한다. (inline 크기 제한)<br>- position은 요소 배치 방식을 정한다. (absolute 기준 부모) |
+| 박스 모델 | - 박스 모델은 content → padding → border → margin 순서다. (안에서 밖으로) |
+| display | - block은 한 줄 차지, inline은 내용만큼 차지한다. (inline 크기 제한) |
+| position | - position은 요소 배치 방식을 정한다. (absolute 기준 부모) |
 | 변형·전환·애니메이션 | - transform은 요소 모양/위치를 변형한다. (변화 과정 아님)<br>- transition은 값 변화 과정을 부드럽게 한다. (hover와 자주 사용)<br>- animation은 keyframes 기반 반복 동작이다. (transition과 구분) |
 | DOM / BOM | - DOM은 HTML 문서를 객체로 다루는 모델이다. (요소 조작)<br>- BOM은 브라우저 창/주소/기록 등을 다루는 모델이다. (브라우저 조작) |
 | 이벤트 | - addEventListener는 이벤트 처리 함수를 등록한다. (onclick 대체 가능) |
 | 저장소 | - localStorage는 영구, sessionStorage는 세션 동안 저장이다. (객체는 JSON 변환) |
-| Canvas · API | - canvas 2D는 `getContext('2d')`로 얻는다. (그림판)<br>- Geolocation은 위치 정보를 얻는 API다. (권한 필요) |
+| Canvas | - canvas 2D는 `getContext('2d')`로 얻는다. (그림판) |
+| Geolocation API | - Geolocation은 위치 정보를 얻는 API다. (권한 필요) |
 
 #### 키워드 압축 카드
 
@@ -4569,7 +4572,8 @@ print(Our goal is to predict the future)
 | 하드웨어 요소 | - SoC는 여러 기능을 하나의 칩에 통합한 것이다. (System on Chip)<br>- MEMS는 초소형 기계·전자 시스템이다. (센서/구동)<br>- RFID는 무선 주파수로 대상을 식별한다. (태그/리더)<br>- USN은 유비쿼터스 센서 네트워크다. (센서+네트워크)<br>- 나노기술은 초미세 단위 물질 조작 기술이다. (10^-9)<br>- 차세대 전지는 모바일/센서 기기의 지속성을 높인다. (에너지) |
 | 유비쿼터스 네트워크 | - 유비쿼터스 네트워크는 언제 어디서나 연결되는 네트워크다. (anytime) |
 | 클라우드 | - 클라우드는 컴퓨팅 자원을 네트워크로 제공한다. (소유보다 이용)<br>- 클라우드 장점은 확장성, 비용 효율, 접근성이다.<br>- 클라우드 단점은 보안, 장애 의존성, 개인정보 문제다. |
-| 블록체인 · 핀테크 | - 블록체인은 분산 원장으로 위변조가 어렵다. (탈중앙)<br>- 핀테크는 금융과 IT의 결합이다. (finance+tech) |
+| 블록체인 | - 블록체인은 분산 원장으로 위변조가 어렵다. (탈중앙) |
+| 핀테크 | - 핀테크는 금융과 IT의 결합이다. (finance+tech) |
 | 가상/현실 기술 | - VR은 완전한 가상현실이다. (현실 차단)<br>- AR은 현실 위에 정보를 덧붙인다. (현실 기반)<br>- MR은 현실과 가상을 상호작용하게 섞는다. (혼합)<br>- 메타버스는 지속적 가상 세계와 사회적 상호작용이다. (사회성) |
 | 응용 분야 | - 스마트 자동차는 센서, 통신, AI, 자율주행을 결합한다. (자동차+ICT)<br>- 빅데이터 3V는 Volume, Velocity, Variety다. (크기/속도/다양성)<br>- AI는 학습, 추론, 인식 등 지능형 처리를 수행한다. (머신러닝 포함) |
 | 정보보호 | - 정보보호 3요소는 기밀성, 무결성, 가용성이다.<br>- 인증은 사용자가 누구인지 확인하는 것이다. (Authentication)<br>- 접근통제는 허가된 자원만 사용하게 제한한다. (Authorization) |
