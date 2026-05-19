@@ -706,6 +706,20 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 - 막대그래프는 (     ), 꺾은선그래프는 (     ), 원그래프는 (     ), 산점도는 (     )에 쓴다.
 - `pd.read_csv()`는 (     ), `describe()`는 (     )이다.
 
+<details markdown="1">
+<summary>정답 보기</summary>
+
+1. 문제 정의 / 수집 / 정리·분석 / 평가·해석
+2. 관찰·측정된 값 / 데이터를 목적에 맞게 처리한 결과
+3. 분류값 / 수치값
+4. 관심 대상 전체 / 모집단에서 뽑은 일부
+5. 약함 / 강함
+6. `$A$1`
+7. 범주 비교 / 시간 변화 / 구성비 / 두 변수 관계
+8. CSV 읽기 / 요약 통계 출력
+
+</details>
+
 ---
 ### HTML5웹프로그래밍
 
@@ -1622,6 +1636,20 @@ p { color: red; }
 - DOM은 (     ) 객체 모델, BOM은 (     ) 객체 모델이다.
 - localStorage는 (     ), sessionStorage는 (     ) 저장이다.
 
+<details markdown="1">
+<summary>정답 보기</summary>
+
+1. 구조 / 표현 / 동작
+2. 문자 깨짐
+3. 블록 / 인라인
+4. 행 / 제목 셀 / 데이터 셀
+5. inline / id / class·속성·가상클래스 / 요소
+6. content / padding / border / margin
+7. HTML 문서 / 브라우저 창·주소·기록
+8. 영구 / 세션 동안
+
+</details>
+
 ---
 ### Java프로그래밍
 
@@ -1985,6 +2013,56 @@ p { color: red; }
 - Java 라이브러리는 .class 파일을 묶은 (     ) 형태다.
 - 모듈 의존관계는 (     ) 파일에 (     )와 (     )로 설정한다.
 - java.base는 Java 표준 모듈 중 가장 (     ) 모듈이다.
+
+<details markdown="1">
+<summary>정답 보기</summary>
+
+1. JVM / Java API
+2. 바이트코드 / JVM
+3. 클래스
+4. 인스턴스 / 클래스 / 지역 / 파라미터
+5. byte / short / int / long / float / double / char / boolean
+6. 참조값
+7. `String[] args`
+8. `public` / 생략(package-private)
+9. 같은 패키지
+10. 같다 / 반환형
+11. `배열.length`
+12. 공유
+13. 매개변수
+14. 재정의
+15. 같은 클래스 / 부모
+16. 추상 클래스 / 인터페이스
+17. 객체
+18. 자료형(타입)
+19. 타깃(target)
+20. 클래스 / 인터페이스
+21. 처리(try-catch) / throws 선언
+22. 자동 import
+23. immutable
+24. Wrapper(포장)
+25. 보조
+26. 바이트 / 문자
+27. 입출력
+28. `File`
+29. static
+30. 디렉터리
+31. 컬렉션
+32. 허용하지 않음(중복 X) / 허용(순서·중복 모두 O)
+33. FIFO
+34. key / value
+35. 중간 / 중간 / 최종
+36. `run()`
+37. `start()`
+38. 하나의(한)
+39. 관계형
+40. `executeQuery()` / `ResultSet`
+41. `.jar`
+42. `module-info.java` / `exports` / `requires`
+43. 기본(base)
+
+</details>
+
 ### 파이썬프로그래밍기초
 
 > 우선순위: 제어구조/함수/컬렉션/객체/모듈/파일 처리 문법을 코드 결과 예측 중심으로 훈련
@@ -2314,6 +2392,21 @@ print(Our goal is to predict the future)
 - list는 변경 (     ), tuple은 변경 (     )이다.
 - dict는 (     ), set은 (     ) 구조다.
 - `__init__`은 (     ), self는 (     )이다.
+
+<details markdown="1">
+<summary>정답 보기</summary>
+
+1. 인터프리터 / 동적 타입 / 들여쓰기
+2. 문자열(str)
+3. 대입 / 비교
+4. 미포함
+5. 0 / n-1
+6. 반복문 종료 / 이번 반복만 건너뜀
+7. 가능(mutable) / 불가능(immutable)
+8. key-value / 중복 없음(unique)
+9. 초기화 메서드 / 객체 자기 자신
+
+</details>
 
 ---
 ### 유비쿼터스컴퓨팅개론
@@ -2683,5 +2776,22 @@ print(Our goal is to predict the future)
 - VR은 (     ), AR은 (     ), MR은 (     )이다.
 - 빅데이터 3V는 (     ), (     ), (     )이다.
 - 정보보호 3요소는 (     ), (     ), (     )이다.
+
+<details markdown="1">
+<summary>정답 보기</summary>
+
+1. 언제
+2. 물리공간 / 전자공간
+3. 사용자 / 위치 / 시간 / 환경
+4. 인간-컴퓨터 / 인간-로봇
+5. 여러 기능을 하나의 칩에 통합 / 초소형 기계·전자 시스템
+6. 무선 주파수로 대상 식별 / 유비쿼터스 센서 네트워크
+7. 컴퓨팅 자원
+8. 분산 / 어렵다
+9. 완전한 가상현실 / 현실 위에 정보 덧붙임 / 현실과 가상의 상호작용 혼합
+10. Volume / Velocity / Variety
+11. 기밀성 / 무결성 / 가용성
+
+</details>
 
 ---
