@@ -955,49 +955,14 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 
 #### 키워드 압축 카드
 
-##### 한 줄 공식
-- 데이터 분석 = **문제 정의 → 수집 → 정리/분석 → 평가/해석**.
-- 시험은 **통계자료 검색 + 엑셀 + R/Python 코드 흐름** 중심.
-
-##### 통계/자료
-- 데이터 = 관찰·측정된 값.
-- 정보 = 데이터를 목적에 맞게 처리한 결과.
-- 범주형 = 성별/전공/지역처럼 분류.
-- 양적 = 키/몸무게/점수처럼 수치.
-- 모집단 = 전체, 표본 = 일부.
-- 평균은 이상치에 약함, 중앙값은 이상치에 강함.
-
-##### 통계 패키지
-- SPSS = GUI 중심, 쉬운 분석.
-- SAS = 대용량 자료 처리 강점.
-- R = 오픈소스 통계 분석, 공식 사이트 `www.r-project.org`.
-- Python = 범용 프로그래밍 + 데이터 분석 라이브러리.
-- Anaconda = Python/R 데이터 분석 배포판, `www.anaconda.com`.
-
-##### 엑셀
-- 함수 입력은 `=`로 시작.
-- 상대참조 = 복사 시 변함.
-- 절대참조 = `$A$1`, 복사해도 고정.
-- 혼합참조 = `$A1`, `A$1`.
-- 그래프는 데이터 성격에 맞게 선택.
-  - 막대 = 범주 비교
-  - 꺾은선 = 시간 변화
-  - 원 = 구성 비율
-  - 산점도 = 두 변수 관계
-
-##### R/Python
-- `pip` = Python 패키지 설치.
-- `pd.read_csv()` = CSV 읽기.
-- `pd.read_excel()` = 엑셀 읽기.
-- `describe()` = 요약 통계.
-- `iloc[:, 1:]` = 행 전체, 두 번째 열부터.
-- `plt.bar` = 막대그래프.
-
-##### 시험 감각
-- “반드시 프로그램 언어를 알아야 한다” 같은 절대 표현은 보통 틀림.
-- “전 범위”, “절차”, “그래프 선택 이유”를 같이 묻는 문제 주의.
-
----
+| 주제 | 내용 |
+|---|---|
+| 한 줄 공식 | - 데이터 분석 = **문제 정의 → 수집 → 정리/분석 → 평가/해석**.<br>- 시험은 **통계자료 검색 + 엑셀 + R/Python 코드 흐름** 중심. |
+| 통계/자료 | - 데이터 = 관찰·측정된 값.<br>- 정보 = 데이터를 목적에 맞게 처리한 결과.<br>- 범주형 = 성별/전공/지역처럼 분류.<br>- 양적 = 키/몸무게/점수처럼 수치.<br>- 모집단 = 전체, 표본 = 일부.<br>- 평균은 이상치에 약함, 중앙값은 이상치에 강함. |
+| 통계 패키지 | - SPSS = GUI 중심, 쉬운 분석.<br>- SAS = 대용량 자료 처리 강점.<br>- R = 오픈소스 통계 분석, 공식 사이트 `www.r-project.org`.<br>- Python = 범용 프로그래밍 + 데이터 분석 라이브러리.<br>- Anaconda = Python/R 데이터 분석 배포판, `www.anaconda.com`. |
+| 엑셀 | - 함수 입력은 `=`로 시작.<br>- 상대참조 = 복사 시 변함.<br>- 절대참조 = `$A$1`, 복사해도 고정.<br>- 혼합참조 = `$A1`, `A$1`.<br>- 그래프는 데이터 성격에 맞게 선택.<br>  - 막대 = 범주 비교<br>  - 꺾은선 = 시간 변화<br>  - 원 = 구성 비율<br>  - 산점도 = 두 변수 관계 |
+| R/Python | - `pip` = Python 패키지 설치.<br>- `pd.read_csv()` = CSV 읽기.<br>- `pd.read_excel()` = 엑셀 읽기.<br>- `describe()` = 요약 통계.<br>- `iloc[:, 1:]` = 행 전체, 두 번째 열부터.<br>- `plt.bar` = 막대그래프. |
+| 시험 감각 | - “반드시 프로그램 언어를 알아야 한다” 같은 절대 표현은 보통 틀림.<br>- “전 범위”, “절차”, “그래프 선택 이유”를 같이 묻는 문제 주의. |
 
 ### HTML5웹프로그래밍
 
@@ -2564,62 +2529,15 @@ p { color: red; }
 
 #### 키워드 압축 카드
 
-##### 한 줄 공식
-- 웹 페이지 = **HTML 구조 + CSS 표현 + JavaScript 동작**.
-- 클라이언트 = 요청 보내고 HTML/CSS/JS를 해석해 화면 표시.
-- 관심사의 분리 = 구조/디자인/동작을 나눔.
-
-##### HTML 기본
-- 최소 구조 = `<!DOCTYPE html>`, `<html>`, `<head>`, `<body>`.
-- `meta charset="UTF-8"` = 문자 깨짐 방지.
-- `viewport` = 모바일 반응형 대응.
-- `h1~h6` = 제목 구조. 디자인 용도 X.
-- `hr` = 주제 전환 의미.
-- `br` = 줄바꿈.
-- `div` = 블록 컨테이너.
-- `span` = 인라인 컨테이너.
-
-##### 리스트/링크/표/미디어
-- `ul` = 순서 없는 목록.
-- `ol` = 순서 있는 목록.
-- `dl/dt/dd` = 설명 목록.
-- `a href` = 하이퍼링크.
-- `img src alt` = 이미지와 대체 텍스트.
-- `table` = 표, `tr` 행, `th` 제목 셀, `td` 데이터 셀.
-- `audio`, `video` = 미디어.
-- 시맨틱 = `header nav main section article aside footer`.
-
-##### 폼
-- `form` = 입력 묶음.
-- `input type="text/password/email/tel/radio/checkbox/submit"`.
-- `label` = 입력 요소 설명, 접근성 향상.
-- `required` = 필수 입력.
-- `placeholder` = 입력 힌트.
-
-##### CSS
-- 선택자 우선순위 = **inline > id > class/속성/가상클래스 > 요소**.
-- 박스 모델 = **content → padding → border → margin**.
-- `display: block` = 한 줄 차지.
-- `display: inline` = 내용만큼.
-- `display: inline-block` = inline처럼 흐르지만 크기 조절 가능.
-- `position: static/relative/absolute/fixed/sticky`.
-- `transform` = 변형, `transition` = 변화 과정, `animation` = 키프레임 반복.
-
-##### JavaScript/DOM/BOM
-- DOM = 문서 객체 모델. HTML 요소를 객체처럼 다룸.
-- BOM = 브라우저 객체 모델. `window`, `location`, `history`, `navigator`.
-- `getElementById`, `querySelector`, `addEventListener` 기억.
-- `localStorage` = 영구 저장, `sessionStorage` = 세션 동안 저장.
-- 객체 저장은 `JSON.stringify`, 복원은 `JSON.parse`.
-
-##### Canvas/API
-- Canvas 2D context = `getContext('2d')`.
-- 선 = `beginPath → moveTo → lineTo → stroke`.
-- 사각형 = `fillRect`, `strokeRect`.
-- 위치 API = Geolocation.
-- Drag & Drop, Web Storage, Web Worker 개념 구분.
-
----
+| 주제 | 내용 |
+|---|---|
+| 한 줄 공식 | - 웹 페이지 = **HTML 구조 + CSS 표현 + JavaScript 동작**.<br>- 클라이언트 = 요청 보내고 HTML/CSS/JS를 해석해 화면 표시.<br>- 관심사의 분리 = 구조/디자인/동작을 나눔. |
+| HTML 기본 | - 최소 구조 = `<!DOCTYPE html>`, `<html>`, `<head>`, `<body>`.<br>- `meta charset="UTF-8"` = 문자 깨짐 방지.<br>- `viewport` = 모바일 반응형 대응.<br>- `h1~h6` = 제목 구조. 디자인 용도 X.<br>- `hr` = 주제 전환 의미.<br>- `br` = 줄바꿈.<br>- `div` = 블록 컨테이너.<br>- `span` = 인라인 컨테이너. |
+| 리스트/링크/표/미디어 | - `ul` = 순서 없는 목록.<br>- `ol` = 순서 있는 목록.<br>- `dl/dt/dd` = 설명 목록.<br>- `a href` = 하이퍼링크.<br>- `img src alt` = 이미지와 대체 텍스트.<br>- `table` = 표, `tr` 행, `th` 제목 셀, `td` 데이터 셀.<br>- `audio`, `video` = 미디어.<br>- 시맨틱 = `header nav main section article aside footer`. |
+| 폼 | - `form` = 입력 묶음.<br>- `input type="text/password/email/tel/radio/checkbox/submit"`.<br>- `label` = 입력 요소 설명, 접근성 향상.<br>- `required` = 필수 입력.<br>- `placeholder` = 입력 힌트. |
+| CSS | - 선택자 우선순위 = **inline > id > class/속성/가상클래스 > 요소**.<br>- 박스 모델 = **content → padding → border → margin**.<br>- `display: block` = 한 줄 차지.<br>- `display: inline` = 내용만큼.<br>- `display: inline-block` = inline처럼 흐르지만 크기 조절 가능.<br>- `position: static/relative/absolute/fixed/sticky`.<br>- `transform` = 변형, `transition` = 변화 과정, `animation` = 키프레임 반복. |
+| JavaScript/DOM/BOM | - DOM = 문서 객체 모델. HTML 요소를 객체처럼 다룸.<br>- BOM = 브라우저 객체 모델. `window`, `location`, `history`, `navigator`.<br>- `getElementById`, `querySelector`, `addEventListener` 기억.<br>- `localStorage` = 영구 저장, `sessionStorage` = 세션 동안 저장.<br>- 객체 저장은 `JSON.stringify`, 복원은 `JSON.parse`. |
+| Canvas/API | - Canvas 2D context = `getContext('2d')`.<br>- 선 = `beginPath → moveTo → lineTo → stroke`.<br>- 사각형 = `fillRect`, `strokeRect`.<br>- 위치 API = Geolocation.<br>- Drag & Drop, Web Storage, Web Worker 개념 구분. |
 
 ### Java프로그래밍
 
@@ -3279,49 +3197,14 @@ p { color: red; }
 
 #### 키워드 압축 카드
 
-##### 한 줄 공식
-- Java = **클래스 기반 + 객체지향 + 바이트코드 + JVM + 플랫폼 독립**.
-- Java 플랫폼 = **JVM + Java API**.
-- 프로그램 기본 단위 = **클래스**, 객체 = **클래스의 인스턴스**.
-
-##### 문법 핵심
-- `main` 형식 = `public static void main(String[] args)`.
-- 기본형 8개 = `byte short int long float double char boolean`.
-- 참조형 = **클래스, 배열, 인터페이스**. 값이 아니라 **주소/참조값** 저장.
-- 묵시적 형변환 = 손실 없음, 자동. 명시적 형변환 = 캐스팅 필요.
-- 점프문 = `break`, `continue`, `return`.
-
-##### 클래스/상속
-- 생성자 = **클래스 이름과 같음 + 반환형 없음**.
-- 오버로딩 = 같은 이름, **매개변수 다름**.
-- 오버라이딩 = 상속받은 메서드 **재정의**.
-- `static` = 클래스 소속, 객체 없이 접근 가능.
-- `final` = 변경/상속/재정의 제한.
-- 추상 클래스 = 미완성 설계도. 인터페이스 = 구현 약속.
-
-##### 제네릭/람다/컬렉션
-- 제네릭 = 타입을 나중에 지정, 형변환 감소.
-- 람다 = 함수형 인터페이스의 구현을 간결하게 표현.
-- `List` = 순서 O, 중복 O.
-- `Set` = 중복 X.
-- `Map` = key-value.
-- `Queue` = `offer()` 추가, `poll()` 삭제.
-
-##### 입출력/예외/JDBC
-- 예외처리 = `try-catch-finally`, 직접 던짐 = `throw`, 선언 = `throws`.
-- 바이트 스트림 = `InputStream/OutputStream`.
-- 문자 스트림 = `Reader/Writer`.
-- JDBC 흐름 = **Driver → Connection → Statement/PreparedStatement → ResultSet → close**.
-- 모듈에서 JDBC 사용 = `requires java.sql;`.
-
-##### 헷갈리는 짝
-- `String` = immutable. 문자열 누적 반복에 불리.
-- `StringBuffer` = 동기화 O, 느릴 수 있음.
-- `StringBuilder` = 동기화 X, 단일 스레드에서 빠름.
-- `ArrayList` = 검색/순차 접근 유리.
-- `LinkedList` = 중간 삽입/삭제 유리.
-
----
+| 주제 | 내용 |
+|---|---|
+| 한 줄 공식 | - Java = **클래스 기반 + 객체지향 + 바이트코드 + JVM + 플랫폼 독립**.<br>- Java 플랫폼 = **JVM + Java API**.<br>- 프로그램 기본 단위 = **클래스**, 객체 = **클래스의 인스턴스**. |
+| 문법 핵심 | - `main` 형식 = `public static void main(String[] args)`.<br>- 기본형 8개 = `byte short int long float double char boolean`.<br>- 참조형 = **클래스, 배열, 인터페이스**. 값이 아니라 **주소/참조값** 저장.<br>- 묵시적 형변환 = 손실 없음, 자동. 명시적 형변환 = 캐스팅 필요.<br>- 점프문 = `break`, `continue`, `return`. |
+| 클래스/상속 | - 생성자 = **클래스 이름과 같음 + 반환형 없음**.<br>- 오버로딩 = 같은 이름, **매개변수 다름**.<br>- 오버라이딩 = 상속받은 메서드 **재정의**.<br>- `static` = 클래스 소속, 객체 없이 접근 가능.<br>- `final` = 변경/상속/재정의 제한.<br>- 추상 클래스 = 미완성 설계도. 인터페이스 = 구현 약속. |
+| 제네릭/람다/컬렉션 | - 제네릭 = 타입을 나중에 지정, 형변환 감소.<br>- 람다 = 함수형 인터페이스의 구현을 간결하게 표현.<br>- `List` = 순서 O, 중복 O.<br>- `Set` = 중복 X.<br>- `Map` = key-value.<br>- `Queue` = `offer()` 추가, `poll()` 삭제. |
+| 입출력/예외/JDBC | - 예외처리 = `try-catch-finally`, 직접 던짐 = `throw`, 선언 = `throws`.<br>- 바이트 스트림 = `InputStream/OutputStream`.<br>- 문자 스트림 = `Reader/Writer`.<br>- JDBC 흐름 = **Driver → Connection → Statement/PreparedStatement → ResultSet → close**.<br>- 모듈에서 JDBC 사용 = `requires java.sql;`. |
+| 헷갈리는 짝 | - `String` = immutable. 문자열 누적 반복에 불리.<br>- `StringBuffer` = 동기화 O, 느릴 수 있음.<br>- `StringBuilder` = 동기화 X, 단일 스레드에서 빠름.<br>- `ArrayList` = 검색/순차 접근 유리.<br>- `LinkedList` = 중간 삽입/삭제 유리. |
 
 ### 파이썬프로그래밍기초
 
@@ -3962,55 +3845,15 @@ print(Our goal is to predict the future)
 
 #### 키워드 압축 카드
 
-##### 한 줄 공식
-- Python = **인터프리터 + 동적 타입 + 들여쓰기 블록 + 객체지향 지원**.
-- 시험은 “이 코드의 결과는?” 감각이 중요.
-
-##### 기초
-- 변수는 값을 가리키는 이름.
-- 자료형 = `int`, `float`, `str`, `bool`, `list`, `tuple`, `dict`, `set`.
-- 문자열 인덱스는 0부터.
-- 슬라이싱 = `[start:end:step]`, end는 미포함.
-- 입력 = `input()`, 출력 = `print()`.
-
-##### 제어구조
-- 조건문 = `if / elif / else`.
-- 반복문 = `for`, `while`.
-- `break` = 반복 종료.
-- `continue` = 이번 반복 건너뜀.
-- `range(n)` = 0부터 n-1.
-- `range(a,b)` = a부터 b-1.
-
-##### 함수
-- 함수 정의 = `def name(params):`.
-- 반환 = `return`.
-- 기본값 매개변수는 뒤쪽에 둠.
-- 지역변수 = 함수 내부.
-- 전역변수 변경은 `global` 필요.
-
-##### 컬렉션
-- list = 순서 O, 변경 O.
-- tuple = 순서 O, 변경 X.
-- dict = key-value.
-- set = 중복 X, 순서 의미 약함.
-- list append = 끝에 추가.
-- dict 접근 = `d[key]`, 안전 접근 = `d.get(key)`.
-
-##### 객체/모듈/파일
-- 클래스 = 설계도, 객체 = 인스턴스.
-- 생성자 = `__init__`.
-- 자기 자신 = `self`.
-- 모듈 사용 = `import`.
-- 파일 열기 = `open()`.
-- 파일은 사용 후 닫거나 `with open(...) as f` 사용.
-
-##### 암기 포인트
-- 들여쓰기 틀리면 문법 오류.
-- `=`는 대입, `==`는 비교.
-- 문자열 + 숫자는 바로 더할 수 없음. 형변환 필요.
-- 리스트는 mutable이라 원본 변경 문제 주의.
-
----
+| 주제 | 내용 |
+|---|---|
+| 한 줄 공식 | - Python = **인터프리터 + 동적 타입 + 들여쓰기 블록 + 객체지향 지원**.<br>- 시험은 “이 코드의 결과는?” 감각이 중요. |
+| 기초 | - 변수는 값을 가리키는 이름.<br>- 자료형 = `int`, `float`, `str`, `bool`, `list`, `tuple`, `dict`, `set`.<br>- 문자열 인덱스는 0부터.<br>- 슬라이싱 = `[start:end:step]`, end는 미포함.<br>- 입력 = `input()`, 출력 = `print()`. |
+| 제어구조 | - 조건문 = `if / elif / else`.<br>- 반복문 = `for`, `while`.<br>- `break` = 반복 종료.<br>- `continue` = 이번 반복 건너뜀.<br>- `range(n)` = 0부터 n-1.<br>- `range(a,b)` = a부터 b-1. |
+| 함수 | - 함수 정의 = `def name(params):`.<br>- 반환 = `return`.<br>- 기본값 매개변수는 뒤쪽에 둠.<br>- 지역변수 = 함수 내부.<br>- 전역변수 변경은 `global` 필요. |
+| 컬렉션 | - list = 순서 O, 변경 O.<br>- tuple = 순서 O, 변경 X.<br>- dict = key-value.<br>- set = 중복 X, 순서 의미 약함.<br>- list append = 끝에 추가.<br>- dict 접근 = `d[key]`, 안전 접근 = `d.get(key)`. |
+| 객체/모듈/파일 | - 클래스 = 설계도, 객체 = 인스턴스.<br>- 생성자 = `__init__`.<br>- 자기 자신 = `self`.<br>- 모듈 사용 = `import`.<br>- 파일 열기 = `open()`.<br>- 파일은 사용 후 닫거나 `with open(...) as f` 사용. |
+| 암기 포인트 | - 들여쓰기 틀리면 문법 오류.<br>- `=`는 대입, `==`는 비교.<br>- 문자열 + 숫자는 바로 더할 수 없음. 형변환 필요.<br>- 리스트는 mutable이라 원본 변경 문제 주의. |
 
 ### 유비쿼터스컴퓨팅개론
 
@@ -4733,46 +4576,12 @@ print(Our goal is to predict the future)
 
 #### 키워드 압축 카드
 
-##### 한 줄 공식
-- 유비쿼터스 = **언제 어디서나 자연스럽게 컴퓨팅을 이용하는 환경**.
-- 핵심 = 물리공간 + 전자공간 융합.
-
-##### 기본 개념
-- 유비쿼터스 공간 = 물리공간과 전자공간의 유기적 융합.
-- 상황인식 = 사용자/환경/시간/위치 정보를 바탕으로 서비스 제공.
-- HCI = 인간-컴퓨터 상호작용.
-- HRI = 인간-로봇 상호작용.
-
-##### 디바이스/센서
-- SoC = 여러 기능을 하나의 칩에 통합.
-- MEMS = 초소형 기계·전자 시스템.
-- RFID = 무선 주파수 기반 식별.
-- USN = 유비쿼터스 센서 네트워크.
-- 나노기술 = 초미세 단위 조작.
-- 차세대 전지 = 모바일/센서 지속성 핵심.
-
-##### 네트워크/클라우드
-- 유비쿼터스 네트워크 = 언제 어디서나 연결.
-- 클라우드 = 컴퓨팅 자원을 네트워크로 제공.
-- 장점 = 확장성, 비용 효율, 접근성.
-- 단점 = 보안, 장애 의존성, 개인정보 이슈.
-
-##### 블록체인/핀테크
-- 블록체인 = 분산 원장, 위변조 어려움.
-- 특징 = 탈중앙화, 투명성, 무결성.
-- 핀테크 = 금융 + IT.
-
-##### VR/메타버스/스마트카
-- VR = 가상현실.
-- AR = 현실 위 정보 증강.
-- MR = 현실+가상 혼합.
-- 메타버스 = 지속적 가상 세계/사회적 상호작용.
-- 스마트 자동차 = 센서, 통신, 인공지능, 자율주행.
-
-##### 빅데이터/AI/보안
-- 빅데이터 3V = Volume, Velocity, Variety.
-- AI = 학습/추론/인식 등 지능형 처리.
-- 정보보호 3요소 = 기밀성, 무결성, 가용성.
-- 개인정보보호와 인증/접근통제 중요.
-
----
+| 주제 | 내용 |
+|---|---|
+| 한 줄 공식 | - 유비쿼터스 = **언제 어디서나 자연스럽게 컴퓨팅을 이용하는 환경**.<br>- 핵심 = 물리공간 + 전자공간 융합. |
+| 기본 개념 | - 유비쿼터스 공간 = 물리공간과 전자공간의 유기적 융합.<br>- 상황인식 = 사용자/환경/시간/위치 정보를 바탕으로 서비스 제공.<br>- HCI = 인간-컴퓨터 상호작용.<br>- HRI = 인간-로봇 상호작용. |
+| 디바이스/센서 | - SoC = 여러 기능을 하나의 칩에 통합.<br>- MEMS = 초소형 기계·전자 시스템.<br>- RFID = 무선 주파수 기반 식별.<br>- USN = 유비쿼터스 센서 네트워크.<br>- 나노기술 = 초미세 단위 조작.<br>- 차세대 전지 = 모바일/센서 지속성 핵심. |
+| 네트워크/클라우드 | - 유비쿼터스 네트워크 = 언제 어디서나 연결.<br>- 클라우드 = 컴퓨팅 자원을 네트워크로 제공.<br>- 장점 = 확장성, 비용 효율, 접근성.<br>- 단점 = 보안, 장애 의존성, 개인정보 이슈. |
+| 블록체인/핀테크 | - 블록체인 = 분산 원장, 위변조 어려움.<br>- 특징 = 탈중앙화, 투명성, 무결성.<br>- 핀테크 = 금융 + IT. |
+| VR/메타버스/스마트카 | - VR = 가상현실.<br>- AR = 현실 위 정보 증강.<br>- MR = 현실+가상 혼합.<br>- 메타버스 = 지속적 가상 세계/사회적 상호작용.<br>- 스마트 자동차 = 센서, 통신, 인공지능, 자율주행. |
+| 빅데이터/AI/보안 | - 빅데이터 3V = Volume, Velocity, Variety.<br>- AI = 학습/추론/인식 등 지능형 처리.<br>- 정보보호 3요소 = 기밀성, 무결성, 가용성.<br>- 개인정보보호와 인증/접근통제 중요. |
