@@ -704,6 +704,18 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 | R/Python | - `pip` = Python 패키지 설치.<br>- `pd.read_csv()` = CSV 읽기.<br>- `pd.read_excel()` = 엑셀 읽기.<br>- `describe()` = 요약 통계.<br>- `iloc[:, 1:]` = 행 전체, 두 번째 열부터.<br>- `plt.bar` = 막대그래프. |
 | 시험 감각 | - “반드시 프로그램 언어를 알아야 한다” 같은 절대 표현은 보통 틀림.<br>- “전 범위”, “절차”, “그래프 선택 이유”를 같이 묻는 문제 주의. |
 
+#### 빈칸 테스트
+
+- 데이터 분석 절차는 (     ) → (     ) → (     ) → (     )이다.
+- 데이터는 (     ), 정보는 (     )이다.
+- 범주형은 (     ), 양적은 (     ) 자료다.
+- 모집단은 (     ), 표본은 (     )이다.
+- 평균은 이상치에 (     ), 중앙값은 이상치에 (     ).
+- 절대참조 표기는 (     )이다.
+- 막대그래프는 (     ), 꺾은선그래프는 (     ), 원그래프는 (     ), 산점도는 (     )에 쓴다.
+- `pd.read_csv()`는 (     ), `describe()`는 (     )이다.
+
+---
 ### HTML5웹프로그래밍
 
 > 우선순위: HTML 의미론·CSS 선택자/박스모델·JS DOM/BOM·Canvas/API를 속성/메서드 단위로 구분
@@ -1617,6 +1629,18 @@ p { color: red; }
 | JavaScript/DOM/BOM | - DOM = 문서 객체 모델. HTML 요소를 객체처럼 다룸.<br>- BOM = 브라우저 객체 모델. `window`, `location`, `history`, `navigator`.<br>- `getElementById`, `querySelector`, `addEventListener` 기억.<br>- `localStorage` = 영구 저장, `sessionStorage` = 세션 동안 저장.<br>- 객체 저장은 `JSON.stringify`, 복원은 `JSON.parse`. |
 | Canvas/API | - Canvas 2D context = `getContext('2d')`.<br>- 선 = `beginPath → moveTo → lineTo → stroke`.<br>- 사각형 = `fillRect`, `strokeRect`.<br>- 위치 API = Geolocation.<br>- Drag & Drop, Web Storage, Web Worker 개념 구분. |
 
+#### 빈칸 테스트
+
+- HTML은 (     ), CSS는 (     ), JavaScript는 (     )이다.
+- `<meta charset="UTF-8">`은 (     )을 막는다.
+- `div`는 (     ), `span`은 (     ) 컨테이너다.
+- `tr`은 (     ), `th`는 (     ), `td`는 (     )이다.
+- CSS 우선순위는 (     ) > (     ) > (     ) > (     )이다.
+- 박스 모델은 (     ) → (     ) → (     ) → (     ) 순서다.
+- DOM은 (     ) 객체 모델, BOM은 (     ) 객체 모델이다.
+- localStorage는 (     ), sessionStorage는 (     ) 저장이다.
+
+---
 ### Java프로그래밍
 
 > 우선순위: 객체지향/상속/인터페이스/제네릭/컬렉션/스트림/JDBC를 구분해서 암기
@@ -1943,6 +1967,51 @@ p { color: red; }
 | 입출력/예외/JDBC | - 예외처리 = `try-catch-finally`, 직접 던짐 = `throw`, 선언 = `throws`.<br>- 바이트 스트림 = `InputStream/OutputStream`.<br>- 문자 스트림 = `Reader/Writer`.<br>- JDBC 흐름 = **Driver → Connection → Statement/PreparedStatement → ResultSet → close**.<br>- 모듈에서 JDBC 사용 = `requires java.sql;`. |
 | 헷갈리는 짝 | - `String` = immutable. 문자열 누적 반복에 불리.<br>- `StringBuffer` = 동기화 O, 느릴 수 있음.<br>- `StringBuilder` = 동기화 X, 단일 스레드에서 빠름.<br>- `ArrayList` = 검색/순차 접근 유리.<br>- `LinkedList` = 중간 삽입/삭제 유리. |
 
+#### 빈칸 테스트
+
+- Java 플랫폼은 (     ) + (     )로 구성된다.
+- Java 소스는 컴파일 후 (     )가 되고, (     )에서 실행된다.
+- Java 프로그램의 기본 구성 단위는 (     )다.
+- 변수 4종은 (     ), (     ), (     ), (     )이다.
+- 기본형 8개는 (     )이다.
+- 참조형 변수에는 객체 자체가 아니라 (     )이 저장된다.
+- main의 명령행 인자는 (     )로 전달된다.
+- 최상위 클래스 접근 제어자는 (     ) 또는 (     )만 가능하다.
+- 접근 제어자 생략은 같은 (     )에서 접근 가능하다.
+- 생성자는 클래스 이름과 (     )고 (     )이 없다.
+- 배열 크기는 (     )로 확인한다.
+- static 필드는 모든 객체가 (     )하는 데이터다.
+- 오버로딩은 (     ) 목록으로 구별한다.
+- 오버라이딩은 부모 메서드를 자식에서 (     )하는 것이다.
+- this()는 (     ) 생성자, super()는 (     ) 생성자를 호출한다.
+- 의미적으로 유사한 클래스는 (     ), 기능적으로 유사한 클래스는 (     )로 묶는다.
+- enum의 각 상수값은 하나의 (     )와 같다.
+- 제네릭은 (     )을 매개변수로 가진다.
+- 람다식의 대상 인터페이스를 (     ) 타입이라고 한다.
+- 패키지는 관련 (     )와 (     )의 묶음이다.
+- checked Exception은 반드시 (     )하거나 (     )해야 한다.
+- java.lang 패키지는 import 없이 (     )된다.
+- String은 (     ) 클래스라 내용 변경이 불가능하다.
+- 기본형을 객체로 다루기 위한 클래스는 (     ) 클래스다.
+- Buffered 계열은 (     ) 스트림이며 성능을 높인다.
+- InputStreamReader는 (     ) 입력을 (     ) 입력으로 변환한다.
+- File 클래스는 파일/디렉터리를 표현하지만 (     ) 메서드는 제공하지 않는다.
+- NIO의 Path는 java.io의 (     )보다 풍부한 기능을 제공한다.
+- Files 클래스는 파일 조작과 읽기·쓰기 (     ) 메서드를 제공한다.
+- WatchService는 (     ) 이벤트를 감시한다.
+- JCF는 (     )을 효율적으로 다루기 위한 API 프레임워크다.
+- Set은 중복을 (     ), List는 순서와 중복을 (     ).
+- Queue는 (     ) 방식이다.
+- Map은 (     )와 (     )의 쌍을 관리한다.
+- Stream의 filter는 (     ), map은 (     ), collect는 (     ) 연산이다.
+- 스레드 실행 코드는 (     ) 메서드에 정의한다.
+- 새 스레드 시작은 run()이 아니라 (     )로 한다.
+- synchronized는 공유 객체 접근을 한 번에 (     ) 스레드로 제한한다.
+- JDBC는 Java에서 (     ) DB와 연동하는 표준 API다.
+- SELECT 실행은 (     ), 결과는 (     )이다.
+- Java 라이브러리는 .class 파일을 묶은 (     ) 형태다.
+- 모듈 의존관계는 (     ) 파일에 (     )와 (     )로 설정한다.
+- java.base는 Java 표준 모듈 중 가장 (     ) 모듈이다.
 ### 파이썬프로그래밍기초
 
 > 우선순위: 제어구조/함수/컬렉션/객체/모듈/파일 처리 문법을 코드 결과 예측 중심으로 훈련
@@ -2270,6 +2339,19 @@ print(Our goal is to predict the future)
 | 객체/모듈/파일 | - 클래스 = 설계도, 객체 = 인스턴스.<br>- 생성자 = `__init__`.<br>- 자기 자신 = `self`.<br>- 모듈 사용 = `import`.<br>- 파일 열기 = `open()`.<br>- 파일은 사용 후 닫거나 `with open(...) as f` 사용. |
 | 암기 포인트 | - 들여쓰기 틀리면 문법 오류.<br>- `=`는 대입, `==`는 비교.<br>- 문자열 + 숫자는 바로 더할 수 없음. 형변환 필요.<br>- 리스트는 mutable이라 원본 변경 문제 주의. |
 
+#### 빈칸 테스트
+
+- Python은 (     ), (     ), (     ) 블록 언어다.
+- input은 기본적으로 (     )을 반환한다.
+- `=`는 (     ), `==`는 (     )이다.
+- 슬라이싱 `[start:end]`에서 end는 (     )된다.
+- range(n)은 (     )부터 (     )까지다.
+- break는 (     ), continue는 (     )이다.
+- list는 변경 (     ), tuple은 변경 (     )이다.
+- dict는 (     ), set은 (     ) 구조다.
+- `__init__`은 (     ), self는 (     )이다.
+
+---
 ### 유비쿼터스컴퓨팅개론
 
 > 우선순위: 핵심 기술 용어·구성요소·장단점·적용 사례를 비교형으로 암기
@@ -2631,3 +2713,19 @@ print(Our goal is to predict the future)
 | 블록체인/핀테크 | - 블록체인 = 분산 원장, 위변조 어려움.<br>- 특징 = 탈중앙화, 투명성, 무결성.<br>- 핀테크 = 금융 + IT. |
 | VR/메타버스/스마트카 | - VR = 가상현실.<br>- AR = 현실 위 정보 증강.<br>- MR = 현실+가상 혼합.<br>- 메타버스 = 지속적 가상 세계/사회적 상호작용.<br>- 스마트 자동차 = 센서, 통신, 인공지능, 자율주행. |
 | 빅데이터/AI/보안 | - 빅데이터 3V = Volume, Velocity, Variety.<br>- AI = 학습/추론/인식 등 지능형 처리.<br>- 정보보호 3요소 = 기밀성, 무결성, 가용성.<br>- 개인정보보호와 인증/접근통제 중요. |
+
+#### 빈칸 테스트
+
+- 유비쿼터스는 (     ) 어디서나 자연스럽게 컴퓨팅을 이용하는 환경이다.
+- 유비쿼터스 공간은 (     )과 (     )의 융합이다.
+- 상황인식은 (     ), (     ), (     ), (     ) 정보를 바탕으로 한다.
+- HCI는 (     ), HRI는 (     ) 상호작용이다.
+- SoC는 (     ), MEMS는 (     )이다.
+- RFID는 (     ), USN은 (     )이다.
+- 클라우드는 (     )를 네트워크로 제공한다.
+- 블록체인은 (     ) 원장이고 위변조가 (     ).
+- VR은 (     ), AR은 (     ), MR은 (     )이다.
+- 빅데이터 3V는 (     ), (     ), (     )이다.
+- 정보보호 3요소는 (     ), (     ), (     )이다.
+
+---
