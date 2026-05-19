@@ -66,6 +66,59 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 
 > 우선순위: 통계자료 검색·엑셀 함수/그래프·R/Python 분석 흐름을 절차 중심으로 암기
 
+#### 핵심 암기표
+
+| 주제 | 외울 문장 |
+|---|---|
+| 분석 절차 | - 데이터 분석은 문제 정의 → 수집 → 정리/분석 → 평가/해석 순서다. (순서 암기) |
+| 데이터 vs 정보 | - 데이터는 관찰·측정된 값이다. (원자료)<br>- 정보는 데이터를 목적에 맞게 처리한 결과다. (의미 부여) |
+| 자료 종류 | - 범주형 자료는 성별, 지역처럼 분류값이다. (숫자 연산 X)<br>- 양적 자료는 키, 점수처럼 수치값이다. (계산 가능) |
+| 모집단 vs 표본 | - 모집단은 관심 대상 전체다. (population)<br>- 표본은 모집단에서 뽑은 일부다. (sample) |
+| 중심 측도 | - 평균은 모든 값을 더해 개수로 나눈 값이다. (이상치 약함)<br>- 중앙값은 정렬했을 때 가운데 값이다. (이상치 강함)<br>- 최빈값은 가장 자주 나타나는 값이다. (여러 개 가능) |
+| 산포 측도 | - 분산은 평균에서 얼마나 흩어졌는지를 나타낸다. (제곱 단위)<br>- 표준편차는 분산의 제곱근이다. (원 단위) |
+| 통계 패키지 | - SPSS는 GUI 중심 통계 분석 도구다. (쉬운 조작)<br>- SAS는 대용량 자료 처리에 강하다. (상용)<br>- R은 오픈소스 통계 분석 언어다. (r-project)<br>- Python은 범용 프로그래밍과 데이터 분석에 모두 쓴다. (라이브러리 활용)<br>- Anaconda는 Python/R 데이터 분석 배포판이다. (패키지 포함) |
+| 엑셀 함수 | - 엑셀 함수 입력은 `=`로 시작한다. (수식 표시) |
+| 셀 참조 | - 상대참조는 복사 시 위치가 변한다. (기본 참조)<br>- 절대참조는 복사해도 고정된다. (`$` 고정)<br>- 혼합참조는 열 또는 행만 고정한다. (`$` 위치) |
+| 그래프 종류 | - 막대그래프는 범주별 크기 비교에 쓴다. (category)<br>- 꺾은선그래프는 시간에 따른 변화를 보여준다. (trend)<br>- 원그래프는 전체 대비 구성 비율을 보여준다.<br>- 산점도는 두 변수 관계를 보여준다. (correlation 감각) |
+| pandas 기본 | - `pd.read_csv()`는 CSV 파일을 읽는다. (DataFrame)<br>- `describe()`는 요약 통계를 출력한다. (count/mean/std) |
+
+#### 키워드 압축 카드
+
+| 주제 | 내용 |
+|---|---|
+| 한 줄 공식 | - 데이터 분석 = **문제 정의 → 수집 → 정리/분석 → 평가/해석**.<br>- 시험은 **통계자료 검색 + 엑셀 + R/Python 코드 흐름** 중심. |
+| 통계/자료 | - 데이터 = 관찰·측정된 값.<br>- 정보 = 데이터를 목적에 맞게 처리한 결과.<br>- 범주형 = 성별/전공/지역처럼 분류.<br>- 양적 = 키/몸무게/점수처럼 수치.<br>- 모집단 = 전체, 표본 = 일부.<br>- 평균은 이상치에 약함, 중앙값은 이상치에 강함. |
+| 통계 패키지 | - SPSS = GUI 중심, 쉬운 분석.<br>- SAS = 대용량 자료 처리 강점.<br>- R = 오픈소스 통계 분석, 공식 사이트 `www.r-project.org`.<br>- Python = 범용 프로그래밍 + 데이터 분석 라이브러리.<br>- Anaconda = Python/R 데이터 분석 배포판, `www.anaconda.com`. |
+| 엑셀 | - 함수 입력은 `=`로 시작.<br>- 상대참조 = 복사 시 변함.<br>- 절대참조 = `$A$1`, 복사해도 고정.<br>- 혼합참조 = `$A1`, `A$1`.<br>- 그래프는 데이터 성격에 맞게 선택.<br>  - 막대 = 범주 비교<br>  - 꺾은선 = 시간 변화<br>  - 원 = 구성 비율<br>  - 산점도 = 두 변수 관계 |
+| R/Python | - `pip` = Python 패키지 설치.<br>- `pd.read_csv()` = CSV 읽기.<br>- `pd.read_excel()` = 엑셀 읽기.<br>- `describe()` = 요약 통계.<br>- `iloc[:, 1:]` = 행 전체, 두 번째 열부터.<br>- `plt.bar` = 막대그래프. |
+| 시험 감각 | - “반드시 프로그램 언어를 알아야 한다” 같은 절대 표현은 보통 틀림.<br>- “전 범위”, “절차”, “그래프 선택 이유”를 같이 묻는 문제 주의. |
+
+#### 빈칸 테스트
+
+1. 데이터 분석 절차는 (     ) → (     ) → (     ) → (     )이다.
+2. 데이터는 (     ), 정보는 (     )이다.
+3. 범주형은 (     ), 양적은 (     ) 자료다.
+4. 모집단은 (     ), 표본은 (     )이다.
+5. 평균은 이상치에 (     ), 중앙값은 이상치에 (     ).
+6. 절대참조 표기는 (     )이다.
+7. 막대그래프는 (     ), 꺾은선그래프는 (     ), 원그래프는 (     ), 산점도는 (     )에 쓴다.
+8. `pd.read_csv()`는 (     ), `describe()`는 (     )이다.
+
+<details markdown="1">
+<summary>정답 보기</summary>
+
+1. 문제 정의 / 수집 / 정리·분석 / 평가·해석
+2. 관찰·측정된 값 / 데이터를 목적에 맞게 처리한 결과
+3. 분류값 / 수치값
+4. 관심 대상 전체 / 모집단에서 뽑은 일부
+5. 약함 / 강함
+6. `$A$1`
+7. 범주 비교 / 시간 변화 / 구성비 / 두 변수 관계
+8. CSV 읽기 / 요약 통계 출력
+
+</details>
+
+---
 #### 연습문제
 
 > 지문:
@@ -668,63 +721,72 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 **Q74. 파이썬에서 엑셀 파일을 읽기 위한 명령 ( )는 ?**
 > 정답: pd.read_excel
 
+### HTML5웹프로그래밍
+
+> 우선순위: HTML 의미론·CSS 선택자/박스모델·JS DOM/BOM·Canvas/API를 속성/메서드 단위로 구분
+
 #### 핵심 암기표
 
 | 주제 | 외울 문장 |
 |---|---|
-| 분석 절차 | - 데이터 분석은 문제 정의 → 수집 → 정리/분석 → 평가/해석 순서다. (순서 암기) |
-| 데이터 vs 정보 | - 데이터는 관찰·측정된 값이다. (원자료)<br>- 정보는 데이터를 목적에 맞게 처리한 결과다. (의미 부여) |
-| 자료 종류 | - 범주형 자료는 성별, 지역처럼 분류값이다. (숫자 연산 X)<br>- 양적 자료는 키, 점수처럼 수치값이다. (계산 가능) |
-| 모집단 vs 표본 | - 모집단은 관심 대상 전체다. (population)<br>- 표본은 모집단에서 뽑은 일부다. (sample) |
-| 중심 측도 | - 평균은 모든 값을 더해 개수로 나눈 값이다. (이상치 약함)<br>- 중앙값은 정렬했을 때 가운데 값이다. (이상치 강함)<br>- 최빈값은 가장 자주 나타나는 값이다. (여러 개 가능) |
-| 산포 측도 | - 분산은 평균에서 얼마나 흩어졌는지를 나타낸다. (제곱 단위)<br>- 표준편차는 분산의 제곱근이다. (원 단위) |
-| 통계 패키지 | - SPSS는 GUI 중심 통계 분석 도구다. (쉬운 조작)<br>- SAS는 대용량 자료 처리에 강하다. (상용)<br>- R은 오픈소스 통계 분석 언어다. (r-project)<br>- Python은 범용 프로그래밍과 데이터 분석에 모두 쓴다. (라이브러리 활용)<br>- Anaconda는 Python/R 데이터 분석 배포판이다. (패키지 포함) |
-| 엑셀 함수 | - 엑셀 함수 입력은 `=`로 시작한다. (수식 표시) |
-| 셀 참조 | - 상대참조는 복사 시 위치가 변한다. (기본 참조)<br>- 절대참조는 복사해도 고정된다. (`$` 고정)<br>- 혼합참조는 열 또는 행만 고정한다. (`$` 위치) |
-| 그래프 종류 | - 막대그래프는 범주별 크기 비교에 쓴다. (category)<br>- 꺾은선그래프는 시간에 따른 변화를 보여준다. (trend)<br>- 원그래프는 전체 대비 구성 비율을 보여준다.<br>- 산점도는 두 변수 관계를 보여준다. (correlation 감각) |
-| pandas 기본 | - `pd.read_csv()`는 CSV 파일을 읽는다. (DataFrame)<br>- `describe()`는 요약 통계를 출력한다. (count/mean/std) |
+| 웹 구성 3요소 | - HTML은 구조, CSS는 표현, JavaScript는 동작이다. (역할 구분) |
+| 문서 기본 | - `<!DOCTYPE html>`은 HTML5 문서 선언이다. (태그 아님)<br>- `<meta charset="UTF-8">`은 문자 깨짐을 막는다. (head 안)<br>- viewport는 모바일 화면 크기 대응 설정이다. (CSS 아님) |
+| 텍스트 태그 | - h1~h6은 제목 구조를 나타낸다. (글자 크기용 X)<br>- `br`은 줄바꿈, `hr`은 주제 전환이다. (br은 빈 요소) |
+| 컨테이너 | - div는 블록, span은 인라인 컨테이너다. (의미 없음)<br>- 시맨틱 태그는 영역의 의미를 드러낸다. (div와 구분) |
+| 목록 | - ul은 순서 없음, ol은 순서 있음, dl은 설명 목록이다. (li는 ul/ol 자식) |
+| 링크와 이미지 | - `a href`는 하이퍼링크를 만든다. (href가 목적지)<br>- `img src alt`는 이미지와 대체 텍스트다. (alt 중요) |
+| 표 | - table은 표, tr은 행, th는 제목 셀, td는 데이터 셀이다. (행 먼저) |
+| 미디어 | - audio와 video는 외부 플러그인 없이 미디어를 재생한다. (controls 기억) |
+| 폼 | - form은 입력 묶음, input은 입력 요소다. (type별 기능)<br>- label은 입력 요소 설명과 접근성을 높인다. (for-id 연결)<br>- required는 입력 필수 검사를 지정한다. (JS 없이 가능) |
+| CSS 선택자 우선순위 | - inline > id > class/속성/가상클래스 > 요소. (높은 것 우선) |
+| 박스 모델 | - 박스 모델은 content → padding → border → margin 순서다. (안에서 밖으로) |
+| display | - block은 한 줄 차지, inline은 내용만큼 차지한다. (inline 크기 제한) |
+| position | - position은 요소 배치 방식을 정한다. (absolute 기준 부모) |
+| 변형·전환·애니메이션 | - transform은 요소 모양/위치를 변형한다. (변화 과정 아님)<br>- transition은 값 변화 과정을 부드럽게 한다. (hover와 자주 사용)<br>- animation은 keyframes 기반 반복 동작이다. (transition과 구분) |
+| DOM / BOM | - DOM은 HTML 문서를 객체로 다루는 모델이다. (요소 조작)<br>- BOM은 브라우저 창/주소/기록 등을 다루는 모델이다. (브라우저 조작) |
+| 이벤트 | - addEventListener는 이벤트 처리 함수를 등록한다. (onclick 대체 가능) |
+| 저장소 | - localStorage는 영구, sessionStorage는 세션 동안 저장이다. (객체는 JSON 변환) |
+| Canvas | - canvas 2D는 `getContext('2d')`로 얻는다. (그림판) |
+| Geolocation API | - Geolocation은 위치 정보를 얻는 API다. (권한 필요) |
 
 #### 키워드 압축 카드
 
 | 주제 | 내용 |
 |---|---|
-| 한 줄 공식 | - 데이터 분석 = **문제 정의 → 수집 → 정리/분석 → 평가/해석**.<br>- 시험은 **통계자료 검색 + 엑셀 + R/Python 코드 흐름** 중심. |
-| 통계/자료 | - 데이터 = 관찰·측정된 값.<br>- 정보 = 데이터를 목적에 맞게 처리한 결과.<br>- 범주형 = 성별/전공/지역처럼 분류.<br>- 양적 = 키/몸무게/점수처럼 수치.<br>- 모집단 = 전체, 표본 = 일부.<br>- 평균은 이상치에 약함, 중앙값은 이상치에 강함. |
-| 통계 패키지 | - SPSS = GUI 중심, 쉬운 분석.<br>- SAS = 대용량 자료 처리 강점.<br>- R = 오픈소스 통계 분석, 공식 사이트 `www.r-project.org`.<br>- Python = 범용 프로그래밍 + 데이터 분석 라이브러리.<br>- Anaconda = Python/R 데이터 분석 배포판, `www.anaconda.com`. |
-| 엑셀 | - 함수 입력은 `=`로 시작.<br>- 상대참조 = 복사 시 변함.<br>- 절대참조 = `$A$1`, 복사해도 고정.<br>- 혼합참조 = `$A1`, `A$1`.<br>- 그래프는 데이터 성격에 맞게 선택.<br>  - 막대 = 범주 비교<br>  - 꺾은선 = 시간 변화<br>  - 원 = 구성 비율<br>  - 산점도 = 두 변수 관계 |
-| R/Python | - `pip` = Python 패키지 설치.<br>- `pd.read_csv()` = CSV 읽기.<br>- `pd.read_excel()` = 엑셀 읽기.<br>- `describe()` = 요약 통계.<br>- `iloc[:, 1:]` = 행 전체, 두 번째 열부터.<br>- `plt.bar` = 막대그래프. |
-| 시험 감각 | - “반드시 프로그램 언어를 알아야 한다” 같은 절대 표현은 보통 틀림.<br>- “전 범위”, “절차”, “그래프 선택 이유”를 같이 묻는 문제 주의. |
+| 한 줄 공식 | - 웹 페이지 = **HTML 구조 + CSS 표현 + JavaScript 동작**.<br>- 클라이언트 = 요청 보내고 HTML/CSS/JS를 해석해 화면 표시.<br>- 관심사의 분리 = 구조/디자인/동작을 나눔. |
+| HTML 기본 | - 최소 구조 = `<!DOCTYPE html>`, `<html>`, `<head>`, `<body>`.<br>- `meta charset="UTF-8"` = 문자 깨짐 방지.<br>- `viewport` = 모바일 반응형 대응.<br>- `h1~h6` = 제목 구조. 디자인 용도 X.<br>- `hr` = 주제 전환 의미.<br>- `br` = 줄바꿈.<br>- `div` = 블록 컨테이너.<br>- `span` = 인라인 컨테이너. |
+| 리스트/링크/표/미디어 | - `ul` = 순서 없는 목록.<br>- `ol` = 순서 있는 목록.<br>- `dl/dt/dd` = 설명 목록.<br>- `a href` = 하이퍼링크.<br>- `img src alt` = 이미지와 대체 텍스트.<br>- `table` = 표, `tr` 행, `th` 제목 셀, `td` 데이터 셀.<br>- `audio`, `video` = 미디어.<br>- 시맨틱 = `header nav main section article aside footer`. |
+| 폼 | - `form` = 입력 묶음.<br>- `input type="text/password/email/tel/radio/checkbox/submit"`.<br>- `label` = 입력 요소 설명, 접근성 향상.<br>- `required` = 필수 입력.<br>- `placeholder` = 입력 힌트. |
+| CSS | - 선택자 우선순위 = **inline > id > class/속성/가상클래스 > 요소**.<br>- 박스 모델 = **content → padding → border → margin**.<br>- `display: block` = 한 줄 차지.<br>- `display: inline` = 내용만큼.<br>- `display: inline-block` = inline처럼 흐르지만 크기 조절 가능.<br>- `position: static/relative/absolute/fixed/sticky`.<br>- `transform` = 변형, `transition` = 변화 과정, `animation` = 키프레임 반복. |
+| JavaScript/DOM/BOM | - DOM = 문서 객체 모델. HTML 요소를 객체처럼 다룸.<br>- BOM = 브라우저 객체 모델. `window`, `location`, `history`, `navigator`.<br>- `getElementById`, `querySelector`, `addEventListener` 기억.<br>- `localStorage` = 영구 저장, `sessionStorage` = 세션 동안 저장.<br>- 객체 저장은 `JSON.stringify`, 복원은 `JSON.parse`. |
+| Canvas/API | - Canvas 2D context = `getContext('2d')`.<br>- 선 = `beginPath → moveTo → lineTo → stroke`.<br>- 사각형 = `fillRect`, `strokeRect`.<br>- 위치 API = Geolocation.<br>- Drag & Drop, Web Storage, Web Worker 개념 구분. |
 
 #### 빈칸 테스트
 
-1. 데이터 분석 절차는 (     ) → (     ) → (     ) → (     )이다.
-2. 데이터는 (     ), 정보는 (     )이다.
-3. 범주형은 (     ), 양적은 (     ) 자료다.
-4. 모집단은 (     ), 표본은 (     )이다.
-5. 평균은 이상치에 (     ), 중앙값은 이상치에 (     ).
-6. 절대참조 표기는 (     )이다.
-7. 막대그래프는 (     ), 꺾은선그래프는 (     ), 원그래프는 (     ), 산점도는 (     )에 쓴다.
-8. `pd.read_csv()`는 (     ), `describe()`는 (     )이다.
+1. HTML은 (     ), CSS는 (     ), JavaScript는 (     )이다.
+2. `<meta charset="UTF-8">`은 (     )을 막는다.
+3. `div`는 (     ), `span`은 (     ) 컨테이너다.
+4. `tr`은 (     ), `th`는 (     ), `td`는 (     )이다.
+5. CSS 우선순위는 (     ) > (     ) > (     ) > (     )이다.
+6. 박스 모델은 (     ) → (     ) → (     ) → (     ) 순서다.
+7. DOM은 (     ) 객체 모델, BOM은 (     ) 객체 모델이다.
+8. localStorage는 (     ), sessionStorage는 (     ) 저장이다.
 
 <details markdown="1">
 <summary>정답 보기</summary>
 
-1. 문제 정의 / 수집 / 정리·분석 / 평가·해석
-2. 관찰·측정된 값 / 데이터를 목적에 맞게 처리한 결과
-3. 분류값 / 수치값
-4. 관심 대상 전체 / 모집단에서 뽑은 일부
-5. 약함 / 강함
-6. `$A$1`
-7. 범주 비교 / 시간 변화 / 구성비 / 두 변수 관계
-8. CSV 읽기 / 요약 통계 출력
+1. 구조 / 표현 / 동작
+2. 문자 깨짐
+3. 블록 / 인라인
+4. 행 / 제목 셀 / 데이터 셀
+5. inline / id / class·속성·가상클래스 / 요소
+6. content / padding / border / margin
+7. HTML 문서 / 브라우저 창·주소·기록
+8. 영구 / 세션 동안
 
 </details>
 
 ---
-### HTML5웹프로그래밍
-
-> 우선순위: HTML 의미론·CSS 선택자/박스모델·JS DOM/BOM·Canvas/API를 속성/메서드 단위로 구분
-
 #### 연습문제
 
 **Q1. 서버-클라이언트 구조에서 클라이언트의 역할로 가장 적절한 것은?**
@@ -1589,71 +1651,148 @@ p { color: red; }
 > 정답: 1
 > 해설: 성공 콜백으로 반환된 position 객체 내부의 coords (coordinates) 객체를 통해서 위도, 경도, 정확도 등의 실제 정보를 얻을 수 있다. 단 위치가 파악된 시간 정보(1970.1.1.부터 경과된 밀리초 단위 시간)는 position.timestamp를 통해 얻는다.
 
+### Java프로그래밍
+
+> 우선순위: 객체지향/상속/인터페이스/제네릭/컬렉션/스트림/JDBC를 구분해서 암기
+
 #### 핵심 암기표
 
 | 주제 | 외울 문장 |
 |---|---|
-| 웹 구성 3요소 | - HTML은 구조, CSS는 표현, JavaScript는 동작이다. (역할 구분) |
-| 문서 기본 | - `<!DOCTYPE html>`은 HTML5 문서 선언이다. (태그 아님)<br>- `<meta charset="UTF-8">`은 문자 깨짐을 막는다. (head 안)<br>- viewport는 모바일 화면 크기 대응 설정이다. (CSS 아님) |
-| 텍스트 태그 | - h1~h6은 제목 구조를 나타낸다. (글자 크기용 X)<br>- `br`은 줄바꿈, `hr`은 주제 전환이다. (br은 빈 요소) |
-| 컨테이너 | - div는 블록, span은 인라인 컨테이너다. (의미 없음)<br>- 시맨틱 태그는 영역의 의미를 드러낸다. (div와 구분) |
-| 목록 | - ul은 순서 없음, ol은 순서 있음, dl은 설명 목록이다. (li는 ul/ol 자식) |
-| 링크와 이미지 | - `a href`는 하이퍼링크를 만든다. (href가 목적지)<br>- `img src alt`는 이미지와 대체 텍스트다. (alt 중요) |
-| 표 | - table은 표, tr은 행, th는 제목 셀, td는 데이터 셀이다. (행 먼저) |
-| 미디어 | - audio와 video는 외부 플러그인 없이 미디어를 재생한다. (controls 기억) |
-| 폼 | - form은 입력 묶음, input은 입력 요소다. (type별 기능)<br>- label은 입력 요소 설명과 접근성을 높인다. (for-id 연결)<br>- required는 입력 필수 검사를 지정한다. (JS 없이 가능) |
-| CSS 선택자 우선순위 | - inline > id > class/속성/가상클래스 > 요소. (높은 것 우선) |
-| 박스 모델 | - 박스 모델은 content → padding → border → margin 순서다. (안에서 밖으로) |
-| display | - block은 한 줄 차지, inline은 내용만큼 차지한다. (inline 크기 제한) |
-| position | - position은 요소 배치 방식을 정한다. (absolute 기준 부모) |
-| 변형·전환·애니메이션 | - transform은 요소 모양/위치를 변형한다. (변화 과정 아님)<br>- transition은 값 변화 과정을 부드럽게 한다. (hover와 자주 사용)<br>- animation은 keyframes 기반 반복 동작이다. (transition과 구분) |
-| DOM / BOM | - DOM은 HTML 문서를 객체로 다루는 모델이다. (요소 조작)<br>- BOM은 브라우저 창/주소/기록 등을 다루는 모델이다. (브라우저 조작) |
-| 이벤트 | - addEventListener는 이벤트 처리 함수를 등록한다. (onclick 대체 가능) |
-| 저장소 | - localStorage는 영구, sessionStorage는 세션 동안 저장이다. (객체는 JSON 변환) |
-| Canvas | - canvas 2D는 `getContext('2d')`로 얻는다. (그림판) |
-| Geolocation API | - Geolocation은 위치 정보를 얻는 API다. (권한 필요) |
+| Java 기본 | - Java는 클래스 기반 객체지향 언어이며 JVM 위에서 바이트코드가 실행된다. (플랫폼 독립)<br>- Java 플랫폼은 JVM + Java API다. (JDK는 개발도구 포함)<br>- Java 프로그래밍을 하려면 JDK가 필요하다. (JRE만으로 개발 X) |
+| 클래스와 객체 | - Java 프로그램의 기본 구성 단위는 클래스다. (파일명/public class)<br>- 클래스는 데이터와 메서드로 객체를 추상화한 틀이다. (데이터+행위) |
+| 변수와 타입 | - 변수는 인스턴스 변수, 클래스 변수, 지역 변수, 파라미터로 나뉜다. (위치/소속 구분)<br>- 기본형은 byte, short, int, long, float, double, char, boolean이다. (String은 참조형)<br>- 클래스와 배열은 참조형이고 참조값을 저장한다. (객체 자체 저장 X)<br>- 묵시적 형변환은 손실 없을 때 자동, 명시적 형변환은 캐스팅이다. (큰→작은 강제)<br>- 명령행 매개변수는 main의 String[] args로 전달된다. (실행 시 클래스명 뒤) |
+| 접근 제어 | - 일반 최상위 클래스 접근 제어자는 public 또는 생략만 가능하다. (private 클래스 X)<br>- 접근 제어자 생략은 같은 패키지에서 접근 가능하다. (package-private) |
+| 생성자 | - 생성자는 클래스 이름과 같고 반환형이 없다. (void 쓰면 메서드)<br>- this()는 같은 클래스 생성자, super()는 부모 생성자를 호출한다. (생성자 첫 줄) |
+| 배열과 문자열 + | - 배열은 생성 후 사용하며 `배열.length`로 크기를 얻는다. (length 메서드 아님)<br>- 문자열에 `+`를 적용하면 문자열 연결이다. (숫자+문자 주의) |
+| static과 초기화 | - 모든 객체가 공유하는 데이터는 static 필드로 둔다. (클래스 소속)<br>- 필드 선언문, 초기화 블록, 생성자로 초깃값을 지정한다. (실행 순서 주의) |
+| 오버라이딩 vs 오버로딩 | - 부모 메서드 몸체를 자식 클래스에서 다시 정의하는 것이다. (상속 필요)<br>- 같은 이름의 메서드를 매개변수 목록으로 구별한다. (반환형만 다르면 X) |
+| this vs super | - this는 현재 객체, super는 부모 객체 쪽을 가리킨다. (생성자 호출도 가능) |
+| 인터페이스 vs 추상 클래스 | - 인터페이스는 추상 메서드 중심이며 default/static 메서드는 몸체가 있다. (Java 8 이후)<br>- 의미적으로 유사한 클래스 묶음은 추상 클래스를 쓴다. (일부 구현 가능)<br>- 기능적으로 유사한 클래스 묶음은 인터페이스를 쓴다. (다중 구현 가능) |
+| enum | - 열거형 상수값은 하나의 객체처럼 취급된다. (정해진 상수 집합) |
+| 다형성 | - 다형성은 오버로딩/오버라이딩/상속/형변환/동적 바인딩으로 구현된다. (부모 타입 참조) |
+| 익명 클래스 | - 익명 클래스는 이름 없이 일회성 상속/구현 객체를 만든다. (한 번 쓰는 클래스) |
+| 제네릭 | - 제네릭 타입은 자료형을 매개변수로 가지는 클래스/인터페이스다. (컴파일 시 타입검사)<br>- 타입 파라미터는 필드형, 반환형, 인자형으로 쓰일 수 있다. (`<T>`)<br>- 제네릭 메서드는 자료형을 매개변수로 가지는 메서드다. (메서드 자체 T) |
+| 람다 | - 람다식은 함수형 인터페이스 객체 생성을 간결하게 한다. (추상 메서드 1개)<br>- 람다식의 결과 타입에 해당하는 인터페이스가 타깃 타입이다. (문맥으로 결정) |
+| 패키지와 import | - 패키지는 관련 클래스와 인터페이스의 계층적 묶음이다. (디렉터리 구조)<br>- 다른 패키지 클래스를 편하게 쓰려면 import를 사용한다.<br>- java.lang 패키지는 import 없이 사용할 수 있다. (자동 import)<br>- 필요한 클래스/패키지는 CLASSPATH 경로에서 찾을 수 있어야 한다. (실행 환경) |
+| 예외 처리 | - 예외는 실행 중 정상 흐름을 벗어난 비정상 상황이다. (Error와 구분)<br>- checked Exception은 반드시 처리하거나 throws로 선언해야 한다. (컴파일러 검사)<br>- 직접 처리는 try-catch, 전파는 throws다. (throw는 발생) |
+| Object 클래스 | - 모든 클래스는 Object를 상속한다. (java.lang.Object)<br>- toString()과 equals()는 Object에 정의되어 있고 재정의될 수 있다. (기본 동작은 단순 비교/문자열화) |
+| 문자열 클래스 | - String은 immutable이라 생성 후 내용 변경이 불가능하다. (반복 변경 비효율)<br>- 자주 변경되는 문자열은 StringBuffer나 StringBuilder가 효율적이다. (Buffer 동기화 O)<br>- 기본형 값을 객체로 다루기 위해 포장 클래스가 있다. (int→Integer) |
+| 표준 입출력 | - System은 in, out, err 표준 입출력 객체를 제공한다. (표준 입력/출력/오류) |
+| 스트림 I/O | - 스트림은 생산자/소비자 종류와 무관하게 입출력을 수행하게 한다. (입출력 통로)<br>- Buffered 계열은 보조 스트림으로 버퍼링 성능을 제공한다. (기본 스트림 감쌈)<br>- InputStreamReader는 바이트 입력을 문자 입력으로 변환한다. (bridge stream) |
+| 파일 I/O | - File은 파일/디렉터리를 표현하지만 입출력 메서드는 제공하지 않는다. (경로 조작)<br>- RandomAccessFile은 파일 포인터 위치에서 임의 읽기/쓰기가 가능하다. (순차만 아님) |
+| NIO | - java.nio는 java.io를 개선한 새 입출력 패키지다. (New IO)<br>- Path는 File보다 풍부한 파일 경로 기능을 제공한다. (java.nio.file)<br>- Files는 파일/디렉터리 조작과 읽기·쓰기 static 메서드를 제공한다. (유틸 클래스)<br>- 채널 입출력에서 버퍼는 기본형 데이터 보관소다. (버퍼 단위 IO)<br>- FileChannel은 입출력 모두 제공하고 기본 버퍼링을 사용한다. (멀티스레드 안전 설계)<br>- WatchService는 디렉터리 이벤트를 감시한다. (변경 감시) |
+| 컬렉션 (JCF) | - JCF는 컬렉션을 효율적으로 다루기 위한 API 프레임워크다. (Java Collections Framework)<br>- 컬렉션은 여러 원소를 저장·관리하는 객체다. (Map은 별도 계열)<br>- Set은 순서 의미가 없고 중복을 허용하지 않는다. (중복 제거)<br>- List는 순서 의미가 있고 중복을 허용한다. (인덱스)<br>- Queue는 순서 의미가 있고 FIFO 방식으로 자료를 관리한다. (offer/poll)<br>- Map은 key-value 쌍을 관리한다. (키 중복 X)<br>- LinkedList는 List와 Queue를 모두 구현하고 스택 메서드도 제공한다. (다용도) |
+| 스트림 처리 | - 내부 반복은 반복 코드를 직접 쓰지 않고 처리 코드만 람다로 전달한다. (forEach)<br>- forEach는 원소를 외부로 꺼내지 않고 내부에서 탐색한다. (람다와 사용)<br>- 필터링은 중복 제거 또는 조건 만족 원소만 걸러내는 중간 연산이다. (distinct/filter)<br>- 매핑은 원소를 다른 원소로 변환하는 중간 연산이다. (map)<br>- 매칭은 조건 만족 여부를 확인하는 최종 연산이다. (any/all/noneMatch)<br>- 수집은 결과 원소를 List/Set/Map 등으로 취합하는 최종 연산이다. (collect) |
+| 스레드 | - 스레드 실행 코드는 `public void run()`에 정의한다. (start가 run 호출)<br>- 스레드는 Thread 상속 또는 Runnable 구현으로 만든다. (Runnable 선호)<br>- start()는 새 스레드를 시작하고 run()을 실행하게 한다. (run 직접 호출 X)<br>- start, join, interrupt, yield, sleep, wait, notify를 구분한다. (wait/notify는 Object)<br>- 스레드는 Startable, Runnable, Running, Not Running 등의 상태를 거친다. (상태 전이)<br>- synchronized는 공유 객체 접근을 한 번에 한 스레드로 제한한다. (데이터 무결성) |
+| JDBC | - JDBC는 Java에서 관계형 DB와 연동하는 표준 API다. (java.sql)<br>- MariaDB는 MySQL 호환 오픈소스 RDBMS다. (드라이버 필요)<br>- JDBC 사용에는 DB용 JDBC 드라이버 jar를 Classpath에 추가해야 한다. (.jar)<br>- DBMS 연결은 java.sql.Connection 객체로 표현한다. (연결 객체)<br>- SQL 실행은 execute(), executeQuery(), executeUpdate()를 사용한다. (결과별 구분)<br>- SELECT 실행은 executeQuery()이고 결과는 ResultSet이다. (조회 전용)<br>- INSERT/UPDATE/DELETE는 executeUpdate()를 사용한다. (변경 행 수) |
+| 라이브러리 · 모듈 | - 라이브러리는 자주 쓰는 클래스/인터페이스를 컴파일된 형태로 제공한 것이다. (재사용 코드)<br>- Java 라이브러리는 .class 파일을 묶은 .jar 형태다. (압축 파일)<br>- 모듈은 라이브러리의 업그레이드로 패키지 단위 접근성을 설정한다. (Java 9)<br>- 라이브러리는 Classpath, 모듈은 Modulepath에 추가한다. (경로 구분)<br>- module-info.java에서 exports와 requires로 의존관계를 설정한다. (모듈 선언)<br>- java.base는 Java 표준 모듈 중 가장 기본 모듈이다. (자동 의존) |
 
 #### 키워드 압축 카드
 
 | 주제 | 내용 |
 |---|---|
-| 한 줄 공식 | - 웹 페이지 = **HTML 구조 + CSS 표현 + JavaScript 동작**.<br>- 클라이언트 = 요청 보내고 HTML/CSS/JS를 해석해 화면 표시.<br>- 관심사의 분리 = 구조/디자인/동작을 나눔. |
-| HTML 기본 | - 최소 구조 = `<!DOCTYPE html>`, `<html>`, `<head>`, `<body>`.<br>- `meta charset="UTF-8"` = 문자 깨짐 방지.<br>- `viewport` = 모바일 반응형 대응.<br>- `h1~h6` = 제목 구조. 디자인 용도 X.<br>- `hr` = 주제 전환 의미.<br>- `br` = 줄바꿈.<br>- `div` = 블록 컨테이너.<br>- `span` = 인라인 컨테이너. |
-| 리스트/링크/표/미디어 | - `ul` = 순서 없는 목록.<br>- `ol` = 순서 있는 목록.<br>- `dl/dt/dd` = 설명 목록.<br>- `a href` = 하이퍼링크.<br>- `img src alt` = 이미지와 대체 텍스트.<br>- `table` = 표, `tr` 행, `th` 제목 셀, `td` 데이터 셀.<br>- `audio`, `video` = 미디어.<br>- 시맨틱 = `header nav main section article aside footer`. |
-| 폼 | - `form` = 입력 묶음.<br>- `input type="text/password/email/tel/radio/checkbox/submit"`.<br>- `label` = 입력 요소 설명, 접근성 향상.<br>- `required` = 필수 입력.<br>- `placeholder` = 입력 힌트. |
-| CSS | - 선택자 우선순위 = **inline > id > class/속성/가상클래스 > 요소**.<br>- 박스 모델 = **content → padding → border → margin**.<br>- `display: block` = 한 줄 차지.<br>- `display: inline` = 내용만큼.<br>- `display: inline-block` = inline처럼 흐르지만 크기 조절 가능.<br>- `position: static/relative/absolute/fixed/sticky`.<br>- `transform` = 변형, `transition` = 변화 과정, `animation` = 키프레임 반복. |
-| JavaScript/DOM/BOM | - DOM = 문서 객체 모델. HTML 요소를 객체처럼 다룸.<br>- BOM = 브라우저 객체 모델. `window`, `location`, `history`, `navigator`.<br>- `getElementById`, `querySelector`, `addEventListener` 기억.<br>- `localStorage` = 영구 저장, `sessionStorage` = 세션 동안 저장.<br>- 객체 저장은 `JSON.stringify`, 복원은 `JSON.parse`. |
-| Canvas/API | - Canvas 2D context = `getContext('2d')`.<br>- 선 = `beginPath → moveTo → lineTo → stroke`.<br>- 사각형 = `fillRect`, `strokeRect`.<br>- 위치 API = Geolocation.<br>- Drag & Drop, Web Storage, Web Worker 개념 구분. |
+| 한 줄 공식 | - Java = **클래스 기반 + 객체지향 + 바이트코드 + JVM + 플랫폼 독립**.<br>- Java 플랫폼 = **JVM + Java API**.<br>- 프로그램 기본 단위 = **클래스**, 객체 = **클래스의 인스턴스**. |
+| 문법 핵심 | - `main` 형식 = `public static void main(String[] args)`.<br>- 기본형 8개 = `byte short int long float double char boolean`.<br>- 참조형 = **클래스, 배열, 인터페이스**. 값이 아니라 **주소/참조값** 저장.<br>- 묵시적 형변환 = 손실 없음, 자동. 명시적 형변환 = 캐스팅 필요.<br>- 점프문 = `break`, `continue`, `return`. |
+| 클래스/상속 | - 생성자 = **클래스 이름과 같음 + 반환형 없음**.<br>- 오버로딩 = 같은 이름, **매개변수 다름**.<br>- 오버라이딩 = 상속받은 메서드 **재정의**.<br>- `static` = 클래스 소속, 객체 없이 접근 가능.<br>- `final` = 변경/상속/재정의 제한.<br>- 추상 클래스 = 미완성 설계도. 인터페이스 = 구현 약속. |
+| 제네릭/람다/컬렉션 | - 제네릭 = 타입을 나중에 지정, 형변환 감소.<br>- 람다 = 함수형 인터페이스의 구현을 간결하게 표현.<br>- `List` = 순서 O, 중복 O.<br>- `Set` = 중복 X.<br>- `Map` = key-value.<br>- `Queue` = `offer()` 추가, `poll()` 삭제. |
+| 입출력/예외/JDBC | - 예외처리 = `try-catch-finally`, 직접 던짐 = `throw`, 선언 = `throws`.<br>- 바이트 스트림 = `InputStream/OutputStream`.<br>- 문자 스트림 = `Reader/Writer`.<br>- JDBC 흐름 = **Driver → Connection → Statement/PreparedStatement → ResultSet → close**.<br>- 모듈에서 JDBC 사용 = `requires java.sql;`. |
+| 헷갈리는 짝 | - `String` = immutable. 문자열 누적 반복에 불리.<br>- `StringBuffer` = 동기화 O, 느릴 수 있음.<br>- `StringBuilder` = 동기화 X, 단일 스레드에서 빠름.<br>- `ArrayList` = 검색/순차 접근 유리.<br>- `LinkedList` = 중간 삽입/삭제 유리. |
 
 #### 빈칸 테스트
 
-1. HTML은 (     ), CSS는 (     ), JavaScript는 (     )이다.
-2. `<meta charset="UTF-8">`은 (     )을 막는다.
-3. `div`는 (     ), `span`은 (     ) 컨테이너다.
-4. `tr`은 (     ), `th`는 (     ), `td`는 (     )이다.
-5. CSS 우선순위는 (     ) > (     ) > (     ) > (     )이다.
-6. 박스 모델은 (     ) → (     ) → (     ) → (     ) 순서다.
-7. DOM은 (     ) 객체 모델, BOM은 (     ) 객체 모델이다.
-8. localStorage는 (     ), sessionStorage는 (     ) 저장이다.
+1. Java 플랫폼은 (     ) + (     )로 구성된다.
+2. Java 소스는 컴파일 후 (     )가 되고, (     )에서 실행된다.
+3. Java 프로그램의 기본 구성 단위는 (     )다.
+4. 변수 4종은 (     ), (     ), (     ), (     )이다.
+5. 기본형 8개는 (     )이다.
+6. 참조형 변수에는 객체 자체가 아니라 (     )이 저장된다.
+7. main의 명령행 인자는 (     )로 전달된다.
+8. 최상위 클래스 접근 제어자는 (     ) 또는 (     )만 가능하다.
+9. 접근 제어자 생략은 같은 (     )에서 접근 가능하다.
+10. 생성자는 클래스 이름과 (     )고 (     )이 없다.
+11. 배열 크기는 (     )로 확인한다.
+12. static 필드는 모든 객체가 (     )하는 데이터다.
+13. 오버로딩은 (     ) 목록으로 구별한다.
+14. 오버라이딩은 부모 메서드를 자식에서 (     )하는 것이다.
+15. this()는 (     ) 생성자, super()는 (     ) 생성자를 호출한다.
+16. 의미적으로 유사한 클래스는 (     ), 기능적으로 유사한 클래스는 (     )로 묶는다.
+17. enum의 각 상수값은 하나의 (     )와 같다.
+18. 제네릭은 (     )을 매개변수로 가진다.
+19. 람다식의 대상 인터페이스를 (     ) 타입이라고 한다.
+20. 패키지는 관련 (     )와 (     )의 묶음이다.
+21. checked Exception은 반드시 (     )하거나 (     )해야 한다.
+22. java.lang 패키지는 import 없이 (     )된다.
+23. String은 (     ) 클래스라 내용 변경이 불가능하다.
+24. 기본형을 객체로 다루기 위한 클래스는 (     ) 클래스다.
+25. Buffered 계열은 (     ) 스트림이며 성능을 높인다.
+26. InputStreamReader는 (     ) 입력을 (     ) 입력으로 변환한다.
+27. File 클래스는 파일/디렉터리를 표현하지만 (     ) 메서드는 제공하지 않는다.
+28. NIO의 Path는 java.io의 (     )보다 풍부한 기능을 제공한다.
+29. Files 클래스는 파일 조작과 읽기·쓰기 (     ) 메서드를 제공한다.
+30. WatchService는 (     ) 이벤트를 감시한다.
+31. JCF는 (     )을 효율적으로 다루기 위한 API 프레임워크다.
+32. Set은 중복을 (     ), List는 순서와 중복을 (     ).
+33. Queue는 (     ) 방식이다.
+34. Map은 (     )와 (     )의 쌍을 관리한다.
+35. Stream의 filter는 (     ), map은 (     ), collect는 (     ) 연산이다.
+36. 스레드 실행 코드는 (     ) 메서드에 정의한다.
+37. 새 스레드 시작은 run()이 아니라 (     )로 한다.
+38. synchronized는 공유 객체 접근을 한 번에 (     ) 스레드로 제한한다.
+39. JDBC는 Java에서 (     ) DB와 연동하는 표준 API다.
+40. SELECT 실행은 (     ), 결과는 (     )이다.
+41. Java 라이브러리는 .class 파일을 묶은 (     ) 형태다.
+42. 모듈 의존관계는 (     ) 파일에 (     )와 (     )로 설정한다.
+43. java.base는 Java 표준 모듈 중 가장 (     ) 모듈이다.
 
 <details markdown="1">
 <summary>정답 보기</summary>
 
-1. 구조 / 표현 / 동작
-2. 문자 깨짐
-3. 블록 / 인라인
-4. 행 / 제목 셀 / 데이터 셀
-5. inline / id / class·속성·가상클래스 / 요소
-6. content / padding / border / margin
-7. HTML 문서 / 브라우저 창·주소·기록
-8. 영구 / 세션 동안
+1. JVM / Java API
+2. 바이트코드 / JVM
+3. 클래스
+4. 인스턴스 / 클래스 / 지역 / 파라미터
+5. byte / short / int / long / float / double / char / boolean
+6. 참조값
+7. `String[] args`
+8. `public` / 생략(package-private)
+9. 같은 패키지
+10. 같다 / 반환형
+11. `배열.length`
+12. 공유
+13. 매개변수
+14. 재정의
+15. 같은 클래스 / 부모
+16. 추상 클래스 / 인터페이스
+17. 객체
+18. 자료형(타입)
+19. 타깃(target)
+20. 클래스 / 인터페이스
+21. 처리(try-catch) / throws 선언
+22. 자동 import
+23. immutable
+24. Wrapper(포장)
+25. 보조
+26. 바이트 / 문자
+27. 입출력
+28. `File`
+29. static
+30. 디렉터리
+31. 컬렉션
+32. 허용하지 않음(중복 X) / 허용(순서·중복 모두 O)
+33. FIFO
+34. key / value
+35. 중간 / 중간 / 최종
+36. `run()`
+37. `start()`
+38. 하나의(한)
+39. 관계형
+40. `executeQuery()` / `ResultSet`
+41. `.jar`
+42. `module-info.java` / `exports` / `requires`
+43. 기본(base)
 
 </details>
-
----
-### Java프로그래밍
-
-> 우선순위: 객체지향/상속/인터페이스/제네릭/컬렉션/스트림/JDBC를 구분해서 암기
 
 #### 연습문제
 
@@ -1924,149 +2063,65 @@ p { color: red; }
 **Q45. java.sql 모듈에서 제공하는 java.sql 패키지가 있으며, 여기에 포함된 클래스(또는 인터페이스)를 사용하는 모듈 프로젝트가 있을 때, module-info.java 파일에서 아래 밑줄 부분에 들어가야 할 내용은?**
 > 정답: requires java.sql;
 
+### 파이썬프로그래밍기초
+
+> 우선순위: 제어구조/함수/컬렉션/객체/모듈/파일 처리 문법을 코드 결과 예측 중심으로 훈련
+
 #### 핵심 암기표
 
 | 주제 | 외울 문장 |
 |---|---|
-| Java 기본 | - Java는 클래스 기반 객체지향 언어이며 JVM 위에서 바이트코드가 실행된다. (플랫폼 독립)<br>- Java 플랫폼은 JVM + Java API다. (JDK는 개발도구 포함)<br>- Java 프로그래밍을 하려면 JDK가 필요하다. (JRE만으로 개발 X) |
-| 클래스와 객체 | - Java 프로그램의 기본 구성 단위는 클래스다. (파일명/public class)<br>- 클래스는 데이터와 메서드로 객체를 추상화한 틀이다. (데이터+행위) |
-| 변수와 타입 | - 변수는 인스턴스 변수, 클래스 변수, 지역 변수, 파라미터로 나뉜다. (위치/소속 구분)<br>- 기본형은 byte, short, int, long, float, double, char, boolean이다. (String은 참조형)<br>- 클래스와 배열은 참조형이고 참조값을 저장한다. (객체 자체 저장 X)<br>- 묵시적 형변환은 손실 없을 때 자동, 명시적 형변환은 캐스팅이다. (큰→작은 강제)<br>- 명령행 매개변수는 main의 String[] args로 전달된다. (실행 시 클래스명 뒤) |
-| 접근 제어 | - 일반 최상위 클래스 접근 제어자는 public 또는 생략만 가능하다. (private 클래스 X)<br>- 접근 제어자 생략은 같은 패키지에서 접근 가능하다. (package-private) |
-| 생성자 | - 생성자는 클래스 이름과 같고 반환형이 없다. (void 쓰면 메서드)<br>- this()는 같은 클래스 생성자, super()는 부모 생성자를 호출한다. (생성자 첫 줄) |
-| 배열과 문자열 + | - 배열은 생성 후 사용하며 `배열.length`로 크기를 얻는다. (length 메서드 아님)<br>- 문자열에 `+`를 적용하면 문자열 연결이다. (숫자+문자 주의) |
-| static과 초기화 | - 모든 객체가 공유하는 데이터는 static 필드로 둔다. (클래스 소속)<br>- 필드 선언문, 초기화 블록, 생성자로 초깃값을 지정한다. (실행 순서 주의) |
-| 오버라이딩 vs 오버로딩 | - 부모 메서드 몸체를 자식 클래스에서 다시 정의하는 것이다. (상속 필요)<br>- 같은 이름의 메서드를 매개변수 목록으로 구별한다. (반환형만 다르면 X) |
-| this vs super | - this는 현재 객체, super는 부모 객체 쪽을 가리킨다. (생성자 호출도 가능) |
-| 인터페이스 vs 추상 클래스 | - 인터페이스는 추상 메서드 중심이며 default/static 메서드는 몸체가 있다. (Java 8 이후)<br>- 의미적으로 유사한 클래스 묶음은 추상 클래스를 쓴다. (일부 구현 가능)<br>- 기능적으로 유사한 클래스 묶음은 인터페이스를 쓴다. (다중 구현 가능) |
-| enum | - 열거형 상수값은 하나의 객체처럼 취급된다. (정해진 상수 집합) |
-| 다형성 | - 다형성은 오버로딩/오버라이딩/상속/형변환/동적 바인딩으로 구현된다. (부모 타입 참조) |
-| 익명 클래스 | - 익명 클래스는 이름 없이 일회성 상속/구현 객체를 만든다. (한 번 쓰는 클래스) |
-| 제네릭 | - 제네릭 타입은 자료형을 매개변수로 가지는 클래스/인터페이스다. (컴파일 시 타입검사)<br>- 타입 파라미터는 필드형, 반환형, 인자형으로 쓰일 수 있다. (`<T>`)<br>- 제네릭 메서드는 자료형을 매개변수로 가지는 메서드다. (메서드 자체 T) |
-| 람다 | - 람다식은 함수형 인터페이스 객체 생성을 간결하게 한다. (추상 메서드 1개)<br>- 람다식의 결과 타입에 해당하는 인터페이스가 타깃 타입이다. (문맥으로 결정) |
-| 패키지와 import | - 패키지는 관련 클래스와 인터페이스의 계층적 묶음이다. (디렉터리 구조)<br>- 다른 패키지 클래스를 편하게 쓰려면 import를 사용한다.<br>- java.lang 패키지는 import 없이 사용할 수 있다. (자동 import)<br>- 필요한 클래스/패키지는 CLASSPATH 경로에서 찾을 수 있어야 한다. (실행 환경) |
-| 예외 처리 | - 예외는 실행 중 정상 흐름을 벗어난 비정상 상황이다. (Error와 구분)<br>- checked Exception은 반드시 처리하거나 throws로 선언해야 한다. (컴파일러 검사)<br>- 직접 처리는 try-catch, 전파는 throws다. (throw는 발생) |
-| Object 클래스 | - 모든 클래스는 Object를 상속한다. (java.lang.Object)<br>- toString()과 equals()는 Object에 정의되어 있고 재정의될 수 있다. (기본 동작은 단순 비교/문자열화) |
-| 문자열 클래스 | - String은 immutable이라 생성 후 내용 변경이 불가능하다. (반복 변경 비효율)<br>- 자주 변경되는 문자열은 StringBuffer나 StringBuilder가 효율적이다. (Buffer 동기화 O)<br>- 기본형 값을 객체로 다루기 위해 포장 클래스가 있다. (int→Integer) |
-| 표준 입출력 | - System은 in, out, err 표준 입출력 객체를 제공한다. (표준 입력/출력/오류) |
-| 스트림 I/O | - 스트림은 생산자/소비자 종류와 무관하게 입출력을 수행하게 한다. (입출력 통로)<br>- Buffered 계열은 보조 스트림으로 버퍼링 성능을 제공한다. (기본 스트림 감쌈)<br>- InputStreamReader는 바이트 입력을 문자 입력으로 변환한다. (bridge stream) |
-| 파일 I/O | - File은 파일/디렉터리를 표현하지만 입출력 메서드는 제공하지 않는다. (경로 조작)<br>- RandomAccessFile은 파일 포인터 위치에서 임의 읽기/쓰기가 가능하다. (순차만 아님) |
-| NIO | - java.nio는 java.io를 개선한 새 입출력 패키지다. (New IO)<br>- Path는 File보다 풍부한 파일 경로 기능을 제공한다. (java.nio.file)<br>- Files는 파일/디렉터리 조작과 읽기·쓰기 static 메서드를 제공한다. (유틸 클래스)<br>- 채널 입출력에서 버퍼는 기본형 데이터 보관소다. (버퍼 단위 IO)<br>- FileChannel은 입출력 모두 제공하고 기본 버퍼링을 사용한다. (멀티스레드 안전 설계)<br>- WatchService는 디렉터리 이벤트를 감시한다. (변경 감시) |
-| 컬렉션 (JCF) | - JCF는 컬렉션을 효율적으로 다루기 위한 API 프레임워크다. (Java Collections Framework)<br>- 컬렉션은 여러 원소를 저장·관리하는 객체다. (Map은 별도 계열)<br>- Set은 순서 의미가 없고 중복을 허용하지 않는다. (중복 제거)<br>- List는 순서 의미가 있고 중복을 허용한다. (인덱스)<br>- Queue는 순서 의미가 있고 FIFO 방식으로 자료를 관리한다. (offer/poll)<br>- Map은 key-value 쌍을 관리한다. (키 중복 X)<br>- LinkedList는 List와 Queue를 모두 구현하고 스택 메서드도 제공한다. (다용도) |
-| 스트림 처리 | - 내부 반복은 반복 코드를 직접 쓰지 않고 처리 코드만 람다로 전달한다. (forEach)<br>- forEach는 원소를 외부로 꺼내지 않고 내부에서 탐색한다. (람다와 사용)<br>- 필터링은 중복 제거 또는 조건 만족 원소만 걸러내는 중간 연산이다. (distinct/filter)<br>- 매핑은 원소를 다른 원소로 변환하는 중간 연산이다. (map)<br>- 매칭은 조건 만족 여부를 확인하는 최종 연산이다. (any/all/noneMatch)<br>- 수집은 결과 원소를 List/Set/Map 등으로 취합하는 최종 연산이다. (collect) |
-| 스레드 | - 스레드 실행 코드는 `public void run()`에 정의한다. (start가 run 호출)<br>- 스레드는 Thread 상속 또는 Runnable 구현으로 만든다. (Runnable 선호)<br>- start()는 새 스레드를 시작하고 run()을 실행하게 한다. (run 직접 호출 X)<br>- start, join, interrupt, yield, sleep, wait, notify를 구분한다. (wait/notify는 Object)<br>- 스레드는 Startable, Runnable, Running, Not Running 등의 상태를 거친다. (상태 전이)<br>- synchronized는 공유 객체 접근을 한 번에 한 스레드로 제한한다. (데이터 무결성) |
-| JDBC | - JDBC는 Java에서 관계형 DB와 연동하는 표준 API다. (java.sql)<br>- MariaDB는 MySQL 호환 오픈소스 RDBMS다. (드라이버 필요)<br>- JDBC 사용에는 DB용 JDBC 드라이버 jar를 Classpath에 추가해야 한다. (.jar)<br>- DBMS 연결은 java.sql.Connection 객체로 표현한다. (연결 객체)<br>- SQL 실행은 execute(), executeQuery(), executeUpdate()를 사용한다. (결과별 구분)<br>- SELECT 실행은 executeQuery()이고 결과는 ResultSet이다. (조회 전용)<br>- INSERT/UPDATE/DELETE는 executeUpdate()를 사용한다. (변경 행 수) |
-| 라이브러리 · 모듈 | - 라이브러리는 자주 쓰는 클래스/인터페이스를 컴파일된 형태로 제공한 것이다. (재사용 코드)<br>- Java 라이브러리는 .class 파일을 묶은 .jar 형태다. (압축 파일)<br>- 모듈은 라이브러리의 업그레이드로 패키지 단위 접근성을 설정한다. (Java 9)<br>- 라이브러리는 Classpath, 모듈은 Modulepath에 추가한다. (경로 구분)<br>- module-info.java에서 exports와 requires로 의존관계를 설정한다. (모듈 선언)<br>- java.base는 Java 표준 모듈 중 가장 기본 모듈이다. (자동 의존) |
+| Python 특징 | - Python은 인터프리터, 동적 타입, 들여쓰기 블록 언어다. (세미콜론 중심 X) |
+| 변수와 자료형 | - 변수는 값을 가리키는 이름이다. (타입 선언 없음)<br>- 주요 자료형은 int, float, str, bool, list, tuple, dict, set이다. (컬렉션 구분) |
+| 입출력 | - input은 문자열을 입력받는다. (숫자 변환 필요)<br>- print는 값을 화면에 출력한다. (sep/end 가능) |
+| 대입 vs 비교 | - `=`는 대입, `==`는 비교다. (시험 자주 나옴) |
+| 문자열 | - 문자열 인덱스는 0부터 시작한다. (음수 인덱스 가능)<br>- 슬라이싱은 end를 포함하지 않는다. (끝 미포함) |
+| 조건과 반복 | - 조건문은 if, elif, else로 분기한다. (elif 오타 주의)<br>- for는 정해진 반복, while은 조건 반복에 주로 쓴다. (무한루프 주의)<br>- range(n)은 0부터 n-1까지다. (끝 미포함)<br>- break는 반복문을 종료한다. (전체 반복 종료)<br>- continue는 이번 반복만 건너뛴다. (다음 반복 진행) |
+| 함수 | - 함수는 `def name(params):`로 정의한다. (들여쓰기 필수)<br>- return은 값을 반환하고 함수를 끝낸다. (print와 구분)<br>- 지역변수는 함수 안에서만 유효하다. (밖에서 접근 X)<br>- 전역변수 변경은 global 선언이 필요하다. (읽기와 변경 구분) |
+| 컬렉션 | - list는 순서가 있고 변경 가능하다. (mutable)<br>- tuple은 순서가 있고 변경 불가능하다. (immutable)<br>- dict는 key-value 구조다. (key로 접근)<br>- set은 중복을 허용하지 않는다. (순서 의미 약함) |
+| 클래스 | - 클래스는 객체의 설계도다. (객체지향)<br>- `__init__`은 객체 생성 시 초기화 메서드다. (언더바 2개)<br>- self는 객체 자기 자신을 가리킨다. (첫 매개변수) |
+| 모듈과 파일 | - import는 모듈을 가져온다. (별칭 as 가능)<br>- 파일은 `with open(...) as f`로 열면 자동으로 닫힌다. (close 생략 가능) |
 
 #### 키워드 압축 카드
 
 | 주제 | 내용 |
 |---|---|
-| 한 줄 공식 | - Java = **클래스 기반 + 객체지향 + 바이트코드 + JVM + 플랫폼 독립**.<br>- Java 플랫폼 = **JVM + Java API**.<br>- 프로그램 기본 단위 = **클래스**, 객체 = **클래스의 인스턴스**. |
-| 문법 핵심 | - `main` 형식 = `public static void main(String[] args)`.<br>- 기본형 8개 = `byte short int long float double char boolean`.<br>- 참조형 = **클래스, 배열, 인터페이스**. 값이 아니라 **주소/참조값** 저장.<br>- 묵시적 형변환 = 손실 없음, 자동. 명시적 형변환 = 캐스팅 필요.<br>- 점프문 = `break`, `continue`, `return`. |
-| 클래스/상속 | - 생성자 = **클래스 이름과 같음 + 반환형 없음**.<br>- 오버로딩 = 같은 이름, **매개변수 다름**.<br>- 오버라이딩 = 상속받은 메서드 **재정의**.<br>- `static` = 클래스 소속, 객체 없이 접근 가능.<br>- `final` = 변경/상속/재정의 제한.<br>- 추상 클래스 = 미완성 설계도. 인터페이스 = 구현 약속. |
-| 제네릭/람다/컬렉션 | - 제네릭 = 타입을 나중에 지정, 형변환 감소.<br>- 람다 = 함수형 인터페이스의 구현을 간결하게 표현.<br>- `List` = 순서 O, 중복 O.<br>- `Set` = 중복 X.<br>- `Map` = key-value.<br>- `Queue` = `offer()` 추가, `poll()` 삭제. |
-| 입출력/예외/JDBC | - 예외처리 = `try-catch-finally`, 직접 던짐 = `throw`, 선언 = `throws`.<br>- 바이트 스트림 = `InputStream/OutputStream`.<br>- 문자 스트림 = `Reader/Writer`.<br>- JDBC 흐름 = **Driver → Connection → Statement/PreparedStatement → ResultSet → close**.<br>- 모듈에서 JDBC 사용 = `requires java.sql;`. |
-| 헷갈리는 짝 | - `String` = immutable. 문자열 누적 반복에 불리.<br>- `StringBuffer` = 동기화 O, 느릴 수 있음.<br>- `StringBuilder` = 동기화 X, 단일 스레드에서 빠름.<br>- `ArrayList` = 검색/순차 접근 유리.<br>- `LinkedList` = 중간 삽입/삭제 유리. |
+| 한 줄 공식 | - Python = **인터프리터 + 동적 타입 + 들여쓰기 블록 + 객체지향 지원**.<br>- 시험은 “이 코드의 결과는?” 감각이 중요. |
+| 기초 | - 변수는 값을 가리키는 이름.<br>- 자료형 = `int`, `float`, `str`, `bool`, `list`, `tuple`, `dict`, `set`.<br>- 문자열 인덱스는 0부터.<br>- 슬라이싱 = `[start:end:step]`, end는 미포함.<br>- 입력 = `input()`, 출력 = `print()`. |
+| 제어구조 | - 조건문 = `if / elif / else`.<br>- 반복문 = `for`, `while`.<br>- `break` = 반복 종료.<br>- `continue` = 이번 반복 건너뜀.<br>- `range(n)` = 0부터 n-1.<br>- `range(a,b)` = a부터 b-1. |
+| 함수 | - 함수 정의 = `def name(params):`.<br>- 반환 = `return`.<br>- 기본값 매개변수는 뒤쪽에 둠.<br>- 지역변수 = 함수 내부.<br>- 전역변수 변경은 `global` 필요. |
+| 컬렉션 | - list = 순서 O, 변경 O.<br>- tuple = 순서 O, 변경 X.<br>- dict = key-value.<br>- set = 중복 X, 순서 의미 약함.<br>- list append = 끝에 추가.<br>- dict 접근 = `d[key]`, 안전 접근 = `d.get(key)`. |
+| 객체/모듈/파일 | - 클래스 = 설계도, 객체 = 인스턴스.<br>- 생성자 = `__init__`.<br>- 자기 자신 = `self`.<br>- 모듈 사용 = `import`.<br>- 파일 열기 = `open()`.<br>- 파일은 사용 후 닫거나 `with open(...) as f` 사용. |
+| 암기 포인트 | - 들여쓰기 틀리면 문법 오류.<br>- `=`는 대입, `==`는 비교.<br>- 문자열 + 숫자는 바로 더할 수 없음. 형변환 필요.<br>- 리스트는 mutable이라 원본 변경 문제 주의. |
 
 #### 빈칸 테스트
 
-1. Java 플랫폼은 (     ) + (     )로 구성된다.
-2. Java 소스는 컴파일 후 (     )가 되고, (     )에서 실행된다.
-3. Java 프로그램의 기본 구성 단위는 (     )다.
-4. 변수 4종은 (     ), (     ), (     ), (     )이다.
-5. 기본형 8개는 (     )이다.
-6. 참조형 변수에는 객체 자체가 아니라 (     )이 저장된다.
-7. main의 명령행 인자는 (     )로 전달된다.
-8. 최상위 클래스 접근 제어자는 (     ) 또는 (     )만 가능하다.
-9. 접근 제어자 생략은 같은 (     )에서 접근 가능하다.
-10. 생성자는 클래스 이름과 (     )고 (     )이 없다.
-11. 배열 크기는 (     )로 확인한다.
-12. static 필드는 모든 객체가 (     )하는 데이터다.
-13. 오버로딩은 (     ) 목록으로 구별한다.
-14. 오버라이딩은 부모 메서드를 자식에서 (     )하는 것이다.
-15. this()는 (     ) 생성자, super()는 (     ) 생성자를 호출한다.
-16. 의미적으로 유사한 클래스는 (     ), 기능적으로 유사한 클래스는 (     )로 묶는다.
-17. enum의 각 상수값은 하나의 (     )와 같다.
-18. 제네릭은 (     )을 매개변수로 가진다.
-19. 람다식의 대상 인터페이스를 (     ) 타입이라고 한다.
-20. 패키지는 관련 (     )와 (     )의 묶음이다.
-21. checked Exception은 반드시 (     )하거나 (     )해야 한다.
-22. java.lang 패키지는 import 없이 (     )된다.
-23. String은 (     ) 클래스라 내용 변경이 불가능하다.
-24. 기본형을 객체로 다루기 위한 클래스는 (     ) 클래스다.
-25. Buffered 계열은 (     ) 스트림이며 성능을 높인다.
-26. InputStreamReader는 (     ) 입력을 (     ) 입력으로 변환한다.
-27. File 클래스는 파일/디렉터리를 표현하지만 (     ) 메서드는 제공하지 않는다.
-28. NIO의 Path는 java.io의 (     )보다 풍부한 기능을 제공한다.
-29. Files 클래스는 파일 조작과 읽기·쓰기 (     ) 메서드를 제공한다.
-30. WatchService는 (     ) 이벤트를 감시한다.
-31. JCF는 (     )을 효율적으로 다루기 위한 API 프레임워크다.
-32. Set은 중복을 (     ), List는 순서와 중복을 (     ).
-33. Queue는 (     ) 방식이다.
-34. Map은 (     )와 (     )의 쌍을 관리한다.
-35. Stream의 filter는 (     ), map은 (     ), collect는 (     ) 연산이다.
-36. 스레드 실행 코드는 (     ) 메서드에 정의한다.
-37. 새 스레드 시작은 run()이 아니라 (     )로 한다.
-38. synchronized는 공유 객체 접근을 한 번에 (     ) 스레드로 제한한다.
-39. JDBC는 Java에서 (     ) DB와 연동하는 표준 API다.
-40. SELECT 실행은 (     ), 결과는 (     )이다.
-41. Java 라이브러리는 .class 파일을 묶은 (     ) 형태다.
-42. 모듈 의존관계는 (     ) 파일에 (     )와 (     )로 설정한다.
-43. java.base는 Java 표준 모듈 중 가장 (     ) 모듈이다.
+1. Python은 (     ), (     ), (     ) 블록 언어다.
+2. input은 기본적으로 (     )을 반환한다.
+3. `=`는 (     ), `==`는 (     )이다.
+4. 슬라이싱 `[start:end]`에서 end는 (     )된다.
+5. range(n)은 (     )부터 (     )까지다.
+6. break는 (     ), continue는 (     )이다.
+7. list는 변경 (     ), tuple은 변경 (     )이다.
+8. dict는 (     ), set은 (     ) 구조다.
+9. `__init__`은 (     ), self는 (     )이다.
 
 <details markdown="1">
 <summary>정답 보기</summary>
 
-1. JVM / Java API
-2. 바이트코드 / JVM
-3. 클래스
-4. 인스턴스 / 클래스 / 지역 / 파라미터
-5. byte / short / int / long / float / double / char / boolean
-6. 참조값
-7. `String[] args`
-8. `public` / 생략(package-private)
-9. 같은 패키지
-10. 같다 / 반환형
-11. `배열.length`
-12. 공유
-13. 매개변수
-14. 재정의
-15. 같은 클래스 / 부모
-16. 추상 클래스 / 인터페이스
-17. 객체
-18. 자료형(타입)
-19. 타깃(target)
-20. 클래스 / 인터페이스
-21. 처리(try-catch) / throws 선언
-22. 자동 import
-23. immutable
-24. Wrapper(포장)
-25. 보조
-26. 바이트 / 문자
-27. 입출력
-28. `File`
-29. static
-30. 디렉터리
-31. 컬렉션
-32. 허용하지 않음(중복 X) / 허용(순서·중복 모두 O)
-33. FIFO
-34. key / value
-35. 중간 / 중간 / 최종
-36. `run()`
-37. `start()`
-38. 하나의(한)
-39. 관계형
-40. `executeQuery()` / `ResultSet`
-41. `.jar`
-42. `module-info.java` / `exports` / `requires`
-43. 기본(base)
+1. 인터프리터 / 동적 타입 / 들여쓰기
+2. 문자열(str)
+3. 대입 / 비교
+4. 미포함
+5. 0 / n-1
+6. 반복문 종료 / 이번 반복만 건너뜀
+7. 가능(mutable) / 불가능(immutable)
+8. key-value / 중복 없음(unique)
+9. 초기화 메서드 / 객체 자기 자신
 
 </details>
 
-### 파이썬프로그래밍기초
-
-> 우선순위: 제어구조/함수/컬렉션/객체/모듈/파일 처리 문법을 코드 결과 예측 중심으로 훈련
-
+---
 #### 연습문제
 
 **Q1. 기계를 바꾸지 않고 처리 방법의 교체만으로 무엇이든 할 수 있도록 다음과 같이 입력, 기억 ·저장, 제어, 연산, 출력 장치로 역할을 구분한 구조는?**
@@ -2354,65 +2409,69 @@ print(Our goal is to predict the future)
 4. 딕셔너리
 > 정답: 4
 
+### 유비쿼터스컴퓨팅개론
+
+> 우선순위: 핵심 기술 용어·구성요소·장단점·적용 사례를 비교형으로 암기
+
 #### 핵심 암기표
 
 | 주제 | 외울 문장 |
 |---|---|
-| Python 특징 | - Python은 인터프리터, 동적 타입, 들여쓰기 블록 언어다. (세미콜론 중심 X) |
-| 변수와 자료형 | - 변수는 값을 가리키는 이름이다. (타입 선언 없음)<br>- 주요 자료형은 int, float, str, bool, list, tuple, dict, set이다. (컬렉션 구분) |
-| 입출력 | - input은 문자열을 입력받는다. (숫자 변환 필요)<br>- print는 값을 화면에 출력한다. (sep/end 가능) |
-| 대입 vs 비교 | - `=`는 대입, `==`는 비교다. (시험 자주 나옴) |
-| 문자열 | - 문자열 인덱스는 0부터 시작한다. (음수 인덱스 가능)<br>- 슬라이싱은 end를 포함하지 않는다. (끝 미포함) |
-| 조건과 반복 | - 조건문은 if, elif, else로 분기한다. (elif 오타 주의)<br>- for는 정해진 반복, while은 조건 반복에 주로 쓴다. (무한루프 주의)<br>- range(n)은 0부터 n-1까지다. (끝 미포함)<br>- break는 반복문을 종료한다. (전체 반복 종료)<br>- continue는 이번 반복만 건너뛴다. (다음 반복 진행) |
-| 함수 | - 함수는 `def name(params):`로 정의한다. (들여쓰기 필수)<br>- return은 값을 반환하고 함수를 끝낸다. (print와 구분)<br>- 지역변수는 함수 안에서만 유효하다. (밖에서 접근 X)<br>- 전역변수 변경은 global 선언이 필요하다. (읽기와 변경 구분) |
-| 컬렉션 | - list는 순서가 있고 변경 가능하다. (mutable)<br>- tuple은 순서가 있고 변경 불가능하다. (immutable)<br>- dict는 key-value 구조다. (key로 접근)<br>- set은 중복을 허용하지 않는다. (순서 의미 약함) |
-| 클래스 | - 클래스는 객체의 설계도다. (객체지향)<br>- `__init__`은 객체 생성 시 초기화 메서드다. (언더바 2개)<br>- self는 객체 자기 자신을 가리킨다. (첫 매개변수) |
-| 모듈과 파일 | - import는 모듈을 가져온다. (별칭 as 가능)<br>- 파일은 `with open(...) as f`로 열면 자동으로 닫힌다. (close 생략 가능) |
+| 기본 개념 | - 유비쿼터스는 언제 어디서나 자연스럽게 컴퓨팅을 이용하는 환경이다. (ubiquitous)<br>- 유비쿼터스 공간은 물리공간과 전자공간의 융합이다. (핵심 문장)<br>- 상황인식은 사용자, 위치, 시간, 환경 정보를 바탕으로 서비스한다. (맥락 기반) |
+| HCI / HRI | - HCI는 인간과 컴퓨터의 상호작용이다. (computer)<br>- HRI는 인간과 로봇의 상호작용이다. (robot) |
+| 하드웨어 요소 | - SoC는 여러 기능을 하나의 칩에 통합한 것이다. (System on Chip)<br>- MEMS는 초소형 기계·전자 시스템이다. (센서/구동)<br>- RFID는 무선 주파수로 대상을 식별한다. (태그/리더)<br>- USN은 유비쿼터스 센서 네트워크다. (센서+네트워크)<br>- 나노기술은 초미세 단위 물질 조작 기술이다. (10^-9)<br>- 차세대 전지는 모바일/센서 기기의 지속성을 높인다. (에너지) |
+| 유비쿼터스 네트워크 | - 유비쿼터스 네트워크는 언제 어디서나 연결되는 네트워크다. (anytime) |
+| 클라우드 | - 클라우드는 컴퓨팅 자원을 네트워크로 제공한다. (소유보다 이용)<br>- 클라우드 장점은 확장성, 비용 효율, 접근성이다.<br>- 클라우드 단점은 보안, 장애 의존성, 개인정보 문제다. |
+| 블록체인 | - 블록체인은 분산 원장으로 위변조가 어렵다. (탈중앙) |
+| 핀테크 | - 핀테크는 금융과 IT의 결합이다. (finance+tech) |
+| 가상/현실 기술 | - VR은 완전한 가상현실이다. (현실 차단)<br>- AR은 현실 위에 정보를 덧붙인다. (현실 기반)<br>- MR은 현실과 가상을 상호작용하게 섞는다. (혼합)<br>- 메타버스는 지속적 가상 세계와 사회적 상호작용이다. (사회성) |
+| 응용 분야 | - 스마트 자동차는 센서, 통신, AI, 자율주행을 결합한다. (자동차+ICT)<br>- 빅데이터 3V는 Volume, Velocity, Variety다. (크기/속도/다양성)<br>- AI는 학습, 추론, 인식 등 지능형 처리를 수행한다. (머신러닝 포함) |
+| 정보보호 | - 정보보호 3요소는 기밀성, 무결성, 가용성이다.<br>- 인증은 사용자가 누구인지 확인하는 것이다. (Authentication)<br>- 접근통제는 허가된 자원만 사용하게 제한한다. (Authorization) |
 
 #### 키워드 압축 카드
 
 | 주제 | 내용 |
 |---|---|
-| 한 줄 공식 | - Python = **인터프리터 + 동적 타입 + 들여쓰기 블록 + 객체지향 지원**.<br>- 시험은 “이 코드의 결과는?” 감각이 중요. |
-| 기초 | - 변수는 값을 가리키는 이름.<br>- 자료형 = `int`, `float`, `str`, `bool`, `list`, `tuple`, `dict`, `set`.<br>- 문자열 인덱스는 0부터.<br>- 슬라이싱 = `[start:end:step]`, end는 미포함.<br>- 입력 = `input()`, 출력 = `print()`. |
-| 제어구조 | - 조건문 = `if / elif / else`.<br>- 반복문 = `for`, `while`.<br>- `break` = 반복 종료.<br>- `continue` = 이번 반복 건너뜀.<br>- `range(n)` = 0부터 n-1.<br>- `range(a,b)` = a부터 b-1. |
-| 함수 | - 함수 정의 = `def name(params):`.<br>- 반환 = `return`.<br>- 기본값 매개변수는 뒤쪽에 둠.<br>- 지역변수 = 함수 내부.<br>- 전역변수 변경은 `global` 필요. |
-| 컬렉션 | - list = 순서 O, 변경 O.<br>- tuple = 순서 O, 변경 X.<br>- dict = key-value.<br>- set = 중복 X, 순서 의미 약함.<br>- list append = 끝에 추가.<br>- dict 접근 = `d[key]`, 안전 접근 = `d.get(key)`. |
-| 객체/모듈/파일 | - 클래스 = 설계도, 객체 = 인스턴스.<br>- 생성자 = `__init__`.<br>- 자기 자신 = `self`.<br>- 모듈 사용 = `import`.<br>- 파일 열기 = `open()`.<br>- 파일은 사용 후 닫거나 `with open(...) as f` 사용. |
-| 암기 포인트 | - 들여쓰기 틀리면 문법 오류.<br>- `=`는 대입, `==`는 비교.<br>- 문자열 + 숫자는 바로 더할 수 없음. 형변환 필요.<br>- 리스트는 mutable이라 원본 변경 문제 주의. |
+| 한 줄 공식 | - 유비쿼터스 = **언제 어디서나 자연스럽게 컴퓨팅을 이용하는 환경**.<br>- 핵심 = 물리공간 + 전자공간 융합. |
+| 기본 개념 | - 유비쿼터스 공간 = 물리공간과 전자공간의 유기적 융합.<br>- 상황인식 = 사용자/환경/시간/위치 정보를 바탕으로 서비스 제공.<br>- HCI = 인간-컴퓨터 상호작용.<br>- HRI = 인간-로봇 상호작용. |
+| 디바이스/센서 | - SoC = 여러 기능을 하나의 칩에 통합.<br>- MEMS = 초소형 기계·전자 시스템.<br>- RFID = 무선 주파수 기반 식별.<br>- USN = 유비쿼터스 센서 네트워크.<br>- 나노기술 = 초미세 단위 조작.<br>- 차세대 전지 = 모바일/센서 지속성 핵심. |
+| 네트워크/클라우드 | - 유비쿼터스 네트워크 = 언제 어디서나 연결.<br>- 클라우드 = 컴퓨팅 자원을 네트워크로 제공.<br>- 장점 = 확장성, 비용 효율, 접근성.<br>- 단점 = 보안, 장애 의존성, 개인정보 이슈. |
+| 블록체인/핀테크 | - 블록체인 = 분산 원장, 위변조 어려움.<br>- 특징 = 탈중앙화, 투명성, 무결성.<br>- 핀테크 = 금융 + IT. |
+| VR/메타버스/스마트카 | - VR = 가상현실.<br>- AR = 현실 위 정보 증강.<br>- MR = 현실+가상 혼합.<br>- 메타버스 = 지속적 가상 세계/사회적 상호작용.<br>- 스마트 자동차 = 센서, 통신, 인공지능, 자율주행. |
+| 빅데이터/AI/보안 | - 빅데이터 3V = Volume, Velocity, Variety.<br>- AI = 학습/추론/인식 등 지능형 처리.<br>- 정보보호 3요소 = 기밀성, 무결성, 가용성.<br>- 개인정보보호와 인증/접근통제 중요. |
 
 #### 빈칸 테스트
 
-1. Python은 (     ), (     ), (     ) 블록 언어다.
-2. input은 기본적으로 (     )을 반환한다.
-3. `=`는 (     ), `==`는 (     )이다.
-4. 슬라이싱 `[start:end]`에서 end는 (     )된다.
-5. range(n)은 (     )부터 (     )까지다.
-6. break는 (     ), continue는 (     )이다.
-7. list는 변경 (     ), tuple은 변경 (     )이다.
-8. dict는 (     ), set은 (     ) 구조다.
-9. `__init__`은 (     ), self는 (     )이다.
+1. 유비쿼터스는 (     ) 어디서나 자연스럽게 컴퓨팅을 이용하는 환경이다.
+2. 유비쿼터스 공간은 (     )과 (     )의 융합이다.
+3. 상황인식은 (     ), (     ), (     ), (     ) 정보를 바탕으로 한다.
+4. HCI는 (     ), HRI는 (     ) 상호작용이다.
+5. SoC는 (     ), MEMS는 (     )이다.
+6. RFID는 (     ), USN은 (     )이다.
+7. 클라우드는 (     )를 네트워크로 제공한다.
+8. 블록체인은 (     ) 원장이고 위변조가 (     ).
+9. VR은 (     ), AR은 (     ), MR은 (     )이다.
+10. 빅데이터 3V는 (     ), (     ), (     )이다.
+11. 정보보호 3요소는 (     ), (     ), (     )이다.
 
 <details markdown="1">
 <summary>정답 보기</summary>
 
-1. 인터프리터 / 동적 타입 / 들여쓰기
-2. 문자열(str)
-3. 대입 / 비교
-4. 미포함
-5. 0 / n-1
-6. 반복문 종료 / 이번 반복만 건너뜀
-7. 가능(mutable) / 불가능(immutable)
-8. key-value / 중복 없음(unique)
-9. 초기화 메서드 / 객체 자기 자신
+1. 언제
+2. 물리공간 / 전자공간
+3. 사용자 / 위치 / 시간 / 환경
+4. 인간-컴퓨터 / 인간-로봇
+5. 여러 기능을 하나의 칩에 통합 / 초소형 기계·전자 시스템
+6. 무선 주파수로 대상 식별 / 유비쿼터스 센서 네트워크
+7. 컴퓨팅 자원
+8. 분산 / 어렵다
+9. 완전한 가상현실 / 현실 위에 정보 덧붙임 / 현실과 가상의 상호작용 혼합
+10. Volume / Velocity / Variety
+11. 기밀성 / 무결성 / 가용성
 
 </details>
 
 ---
-### 유비쿼터스컴퓨팅개론
-
-> 우선순위: 핵심 기술 용어·구성요소·장단점·적용 사례를 비교형으로 암기
-
 #### 연습문제
 
 **Q1. 물리공간과 전자공간을 유기적으로 융합한 것을 무엇이라고 하는가 ?**
@@ -2735,63 +2794,3 @@ print(Our goal is to predict the future)
 3. 군집화 모델
 4. 마르코프 의사결정 과정 모델
 > 정답: 1
-
-#### 핵심 암기표
-
-| 주제 | 외울 문장 |
-|---|---|
-| 기본 개념 | - 유비쿼터스는 언제 어디서나 자연스럽게 컴퓨팅을 이용하는 환경이다. (ubiquitous)<br>- 유비쿼터스 공간은 물리공간과 전자공간의 융합이다. (핵심 문장)<br>- 상황인식은 사용자, 위치, 시간, 환경 정보를 바탕으로 서비스한다. (맥락 기반) |
-| HCI / HRI | - HCI는 인간과 컴퓨터의 상호작용이다. (computer)<br>- HRI는 인간과 로봇의 상호작용이다. (robot) |
-| 하드웨어 요소 | - SoC는 여러 기능을 하나의 칩에 통합한 것이다. (System on Chip)<br>- MEMS는 초소형 기계·전자 시스템이다. (센서/구동)<br>- RFID는 무선 주파수로 대상을 식별한다. (태그/리더)<br>- USN은 유비쿼터스 센서 네트워크다. (센서+네트워크)<br>- 나노기술은 초미세 단위 물질 조작 기술이다. (10^-9)<br>- 차세대 전지는 모바일/센서 기기의 지속성을 높인다. (에너지) |
-| 유비쿼터스 네트워크 | - 유비쿼터스 네트워크는 언제 어디서나 연결되는 네트워크다. (anytime) |
-| 클라우드 | - 클라우드는 컴퓨팅 자원을 네트워크로 제공한다. (소유보다 이용)<br>- 클라우드 장점은 확장성, 비용 효율, 접근성이다.<br>- 클라우드 단점은 보안, 장애 의존성, 개인정보 문제다. |
-| 블록체인 | - 블록체인은 분산 원장으로 위변조가 어렵다. (탈중앙) |
-| 핀테크 | - 핀테크는 금융과 IT의 결합이다. (finance+tech) |
-| 가상/현실 기술 | - VR은 완전한 가상현실이다. (현실 차단)<br>- AR은 현실 위에 정보를 덧붙인다. (현실 기반)<br>- MR은 현실과 가상을 상호작용하게 섞는다. (혼합)<br>- 메타버스는 지속적 가상 세계와 사회적 상호작용이다. (사회성) |
-| 응용 분야 | - 스마트 자동차는 센서, 통신, AI, 자율주행을 결합한다. (자동차+ICT)<br>- 빅데이터 3V는 Volume, Velocity, Variety다. (크기/속도/다양성)<br>- AI는 학습, 추론, 인식 등 지능형 처리를 수행한다. (머신러닝 포함) |
-| 정보보호 | - 정보보호 3요소는 기밀성, 무결성, 가용성이다.<br>- 인증은 사용자가 누구인지 확인하는 것이다. (Authentication)<br>- 접근통제는 허가된 자원만 사용하게 제한한다. (Authorization) |
-
-#### 키워드 압축 카드
-
-| 주제 | 내용 |
-|---|---|
-| 한 줄 공식 | - 유비쿼터스 = **언제 어디서나 자연스럽게 컴퓨팅을 이용하는 환경**.<br>- 핵심 = 물리공간 + 전자공간 융합. |
-| 기본 개념 | - 유비쿼터스 공간 = 물리공간과 전자공간의 유기적 융합.<br>- 상황인식 = 사용자/환경/시간/위치 정보를 바탕으로 서비스 제공.<br>- HCI = 인간-컴퓨터 상호작용.<br>- HRI = 인간-로봇 상호작용. |
-| 디바이스/센서 | - SoC = 여러 기능을 하나의 칩에 통합.<br>- MEMS = 초소형 기계·전자 시스템.<br>- RFID = 무선 주파수 기반 식별.<br>- USN = 유비쿼터스 센서 네트워크.<br>- 나노기술 = 초미세 단위 조작.<br>- 차세대 전지 = 모바일/센서 지속성 핵심. |
-| 네트워크/클라우드 | - 유비쿼터스 네트워크 = 언제 어디서나 연결.<br>- 클라우드 = 컴퓨팅 자원을 네트워크로 제공.<br>- 장점 = 확장성, 비용 효율, 접근성.<br>- 단점 = 보안, 장애 의존성, 개인정보 이슈. |
-| 블록체인/핀테크 | - 블록체인 = 분산 원장, 위변조 어려움.<br>- 특징 = 탈중앙화, 투명성, 무결성.<br>- 핀테크 = 금융 + IT. |
-| VR/메타버스/스마트카 | - VR = 가상현실.<br>- AR = 현실 위 정보 증강.<br>- MR = 현실+가상 혼합.<br>- 메타버스 = 지속적 가상 세계/사회적 상호작용.<br>- 스마트 자동차 = 센서, 통신, 인공지능, 자율주행. |
-| 빅데이터/AI/보안 | - 빅데이터 3V = Volume, Velocity, Variety.<br>- AI = 학습/추론/인식 등 지능형 처리.<br>- 정보보호 3요소 = 기밀성, 무결성, 가용성.<br>- 개인정보보호와 인증/접근통제 중요. |
-
-#### 빈칸 테스트
-
-1. 유비쿼터스는 (     ) 어디서나 자연스럽게 컴퓨팅을 이용하는 환경이다.
-2. 유비쿼터스 공간은 (     )과 (     )의 융합이다.
-3. 상황인식은 (     ), (     ), (     ), (     ) 정보를 바탕으로 한다.
-4. HCI는 (     ), HRI는 (     ) 상호작용이다.
-5. SoC는 (     ), MEMS는 (     )이다.
-6. RFID는 (     ), USN은 (     )이다.
-7. 클라우드는 (     )를 네트워크로 제공한다.
-8. 블록체인은 (     ) 원장이고 위변조가 (     ).
-9. VR은 (     ), AR은 (     ), MR은 (     )이다.
-10. 빅데이터 3V는 (     ), (     ), (     )이다.
-11. 정보보호 3요소는 (     ), (     ), (     )이다.
-
-<details markdown="1">
-<summary>정답 보기</summary>
-
-1. 언제
-2. 물리공간 / 전자공간
-3. 사용자 / 위치 / 시간 / 환경
-4. 인간-컴퓨터 / 인간-로봇
-5. 여러 기능을 하나의 칩에 통합 / 초소형 기계·전자 시스템
-6. 무선 주파수로 대상 식별 / 유비쿼터스 센서 네트워크
-7. 컴퓨팅 자원
-8. 분산 / 어렵다
-9. 완전한 가상현실 / 현실 위에 정보 덧붙임 / 현실과 가상의 상호작용 혼합
-10. Volume / Velocity / Variety
-11. 기밀성 / 무결성 / 가용성
-
-</details>
-
----
