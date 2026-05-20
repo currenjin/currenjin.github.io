@@ -22,16 +22,16 @@ latex   : false
 
 올해 AWS Summit Seoul은 COEX에서 이틀에 걸쳐 열렸다. 첫째 날은 산업별로 묶인 Industry Day, 둘째 날은 AI에 초점을 맞춘 AI Day로 구성됐다. 100개 이상의 세션, 70여 개의 고객 사례, 워크숍, 라이트닝 토크가 한꺼번에 돌아가서 동선을 짜는 것부터 작은 미션이었다.
 
-> 스크린샷: 행사장 전경 / 입장 게이트
+![AWS Summit Seoul 메인홀 입장 게이트](https://github.com/user-attachments/assets/3a9d6589-3951-4910-b860-a0a1ccec976f)
 
 ## 현장 이야기
 
 ### 스탬프 미션과 가챠
 행사장 곳곳의 부스에서 스탬프를 받을 수 있었다. 총 16개를 모두 모으면 가챠 머신을 한 번 돌릴 수 있는 이벤트였고, 자연스럽게 부스를 골고루 돌아보게 만드는 장치였다.
 
-> 스크린샷: 스탬프 카드 (16칸)
+![16개 스탬프 미션 카드](https://github.com/user-attachments/assets/736252a2-2c56-45f4-9e0f-35349328f404)
 
-> 스크린샷: 가챠 머신과 결과물
+![가챠 경품 줄](https://github.com/user-attachments/assets/29313f5c-4433-4512-b80d-f41b330cec2c)
 
 ### 설문 참여 굿즈
 세션이나 부스에서 설문에 응하면 티셔츠를 받을 수 있었다. 사이즈가 금방 빠지니 일찍 들르는 편이 유리하다.
@@ -69,7 +69,7 @@ latex   : false
 - KMS vs CloudHSM
 - 대부분의 워크로드는 KMS, 규제가 있고 직접 구축할 수 있다면 CloudHSM
 
-> 스크린샷: KMS vs CloudHSM 비교 장표
+![KMS vs CloudHSM 비교 슬라이드](https://github.com/user-attachments/assets/93c5a5a0-8161-41b9-8d98-1a90e02744d7)
 
 ---
 
@@ -77,7 +77,7 @@ latex   : false
 
 #### 기존 아키텍처의 한계
 
-> 스크린샷: 기존 서명 아키텍처
+![기존 아키텍처의 한계 슬라이드](https://github.com/user-attachments/assets/3fcdf0c3-910f-4fe8-a547-b2ce5916c472)
 
 - 촘촘한 접근 제어 기법이 필요했다
 - 의도치 않은 토큰 서명이 발생할 수 있는 구조였다
@@ -103,7 +103,7 @@ latex   : false
 
 ### CloudHSM 선택과 도입기
 
-> 스크린샷: 전체 아키텍처
+![CloudHSM Architecture Overview](https://github.com/user-attachments/assets/1286b164-c8a8-4975-836e-380bc9149cd1)
 
 #### 접근 제어 흐름
 - HSM 담당자: HSM 관리 인스턴스에서 CLI로 HSM 접근
@@ -120,7 +120,7 @@ latex   : false
 
 #### Access Controller
 
-> 스크린샷: Access Controller 구성도
+![CloudHSM Access Control 흐름](https://github.com/user-attachments/assets/082f6bf7-c121-41c5-9216-1c2d4bef1ada)
 
 - Kyverno로 정책 적용
 - CloudTrail로 감사
@@ -196,6 +196,22 @@ flowchart LR
 3. 기존 키로의 서명 중단
 4. 기존 키로 서명된 토큰 만료 대기
 5. 공개키 제거
+
+---
+
+### Wrap-Up: 하이브리드 전략
+
+저트래픽 환경은 KMS를 Primary로, 고트래픽 환경은 CloudHSM을 Primary로 두는 Active-StandBy 조합으로 보안, 성능, 안정성을 모두 달성한다.
+
+![Wrap-Up: 하이브리드 전략 슬라이드](https://github.com/user-attachments/assets/12cb479d-25ca-4c9f-8913-74eed31b9c75)
+
+### Key Takeaways
+
+- Private Key의 안전한 격리: HSM/KMS 안에서만 서명, 키는 절대 밖으로 나오지 않는 구조
+- 장애에 대비한 안정성 확보: Failover 구조 설계를 통한 단일 벤더 SPOF 제거
+- 더욱 안전하게 당근 서비스를 제공: 하루 수천만 건의 인증 토큰을 더 안전한 기반 위에서 발급
+
+![Wrap-Up: Key Takeaways 슬라이드](https://github.com/user-attachments/assets/aa80e838-5e31-4d7f-a024-6b54eead57e5)
 
 ## 새벽 3시, 18만 개의 모델이 대신 판단한다 : 넥슨의 에이전틱 Ops
 
