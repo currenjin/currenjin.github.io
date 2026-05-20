@@ -1,5 +1,14 @@
 [
   {
+    "title": "AWS Summit Seoul 2026 정리",
+    "url": "/wiki/aws-summit-seoul-2026",
+    "updated": "2026-05-19",
+    "summary": "직접 들은 세션 정리 (피지컬 AI, 당근 CloudHSM/KMS, 넥슨 에이전틱 Ops, 요기요 AIOps)",
+    "tags": "conference, aws, devops, ai",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "한국방송통신대학교(Korea National Open University)",
     "url": "/wiki/knou",
     "updated": "2026-05-18",
