@@ -228,13 +228,13 @@ flowchart LR
 
 ### 전방위적 상황 분석을 위한 대규모 이상 탐지 백본
 
-> 스크린샷: 전방위적 상황 분석 백본 슬라이드
+![전방위적 상황 분석 백본 슬라이드](https://github.com/user-attachments/assets/1598ad34-ee31-4272-8497-b730005b34d1)
 
 지금까지의 모든 얘기를 한 마디로 응축하면, "전방위적 상황 분석을 위한 대규모 이상 탐지 백본"이다. 18만 개 모델은 이 백본 위에서 동시에 돌아간다.
 
 ### ContextLake Flow
 
-> 스크린샷: ContextLake Flow 다이어그램
+![ContextLake Flow 다이어그램](https://github.com/user-attachments/assets/18d588a2-d53a-4dac-9cc0-72d23b14f7d6)
 
 숫자가 그저 한글로 번역되는 수준이 아니라, **의미론적으로 묶이고 분류되는** 흐름이 필요했다. ContextLake는 Backend Layer → ContextLake → Harvesting 의 3단으로 실시간 의미를 흘려보낸다.
 
@@ -244,13 +244,13 @@ flowchart LR
 
 ### THE ANOMALY TIMES
 
-> 스크린샷: THE ANOMALY TIMES 신문 형식 알림
+![THE ANOMALY TIMES 신문 형식 알림](https://github.com/user-attachments/assets/1c4e4e42-3869-4a11-a799-55f84d202ebe)
 
 이상 탐지 결과는 단순한 경보가 아니라 신문(THE ANOMALY TIMES) 형식의 기사로 전달된다. 99% 이상의 동시 접속자가 감소한 큰 사건부터, 다양한 상황에서 놀라움을 주는 작은 케이스까지 같은 톤으로 정리된다.
 
 ### 성과 지표
 
-> 스크린샷: 성과 지표 슬라이드
+![성과 지표 슬라이드](https://github.com/user-attachments/assets/09020a7c-5227-494c-b2ea-4ff258c0b32a)
 
 발표 슬라이드에 표시된 수치는 다음과 같다 (자세한 정의는 공식 자료 공개 시 갱신).
 
@@ -286,7 +286,7 @@ flowchart LR
 
 ### 기존 운영의 현실
 
-> 스크린샷: 기존 운영의 현실 (통합 모니터링 + 그 바깥의 지표들)
+![기존 운영의 현실 슬라이드](https://github.com/user-attachments/assets/32aea01b-cae2-4ae4-b370-34a10756d1b1)
 
 - 통합 모니터링 솔루션에서 관리되는 지표: APM, Infra, K8s, Log, Redis/RDS
 - 그 바깥에서 추가로 봐야 하는 지표: ArgoCD, Grafana, Elasticsearch, CDN
@@ -303,7 +303,7 @@ flowchart LR
 
 ### AIOps 아키텍처
 
-> 스크린샷: AIOps Architecture 다이어그램
+![AIOps Architecture 다이어그램](https://github.com/user-attachments/assets/efe3c9e6-f805-48fb-aec6-61f164ccf8d9)
 
 - 사용자 요청은 ALB를 거쳐 Frontend/Backend (ECS)로 들어간다
 - 핵심은 Amazon Bedrock 위에 올린 **AgentCore**. Network / Compute / Storage / Auditing / Security / Memory 자원을 다루는 MCP Tool Functions를 호출한다
@@ -317,7 +317,7 @@ flowchart LR
 
 ### 시나리오 2: Resource Optimizing
 
-> 스크린샷: 시나리오 2 - Resource Optimizing
+![시나리오 2 - Resource Optimizing](https://github.com/user-attachments/assets/ee95dea5-180b-4d1b-b119-b232b61faca5)
 
 피크 대비 오버프로비저닝을 식별한다.
 
@@ -335,7 +335,7 @@ flowchart LR
 
 ### AIOps 도입 후 효과
 
-> 스크린샷: 도입 후 효과 슬라이드 (55% 비용 절감 / 10x 작업 효율)
+![도입 후 효과 (55% 비용 절감 / 10x 작업 효율)](https://github.com/user-attachments/assets/f966f0ba-dab3-41fb-a31a-478da0faa323)
 
 - Right-Sizing 47%, 리소스 제거 23%, Valkey 전환 19%, 세대교체 11%
 - **Amazon ElastiCache 비용 55% 절감**
@@ -349,7 +349,7 @@ flowchart LR
 
 ### 앞으로의 계획
 
-> 스크린샷: AIOps Agent (Observe / Understand / Optimize) 사이클
+![AIOps Agent (Observe / Understand / Optimize) 사이클](https://github.com/user-attachments/assets/00b7b4e8-114b-4531-9a64-eabce4f6ec27)
 
 운영 → AI 분석 → 조치 제안 → 승인 → 운영의 사이클을 다음 단계로 본다. 즉, **승인 기반의 자동화**(AWS가 조치를 제안하고 운영자가 승인하면 적용)가 그 시작점이다.
 
