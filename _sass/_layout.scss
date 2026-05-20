@@ -108,6 +108,27 @@
     }
 }
 
+.post-content {
+    img {
+        display: block;
+        width: auto;
+        max-width: 720px;
+        max-height: 70vh;
+        height: auto;
+        margin: 1.1rem auto;
+        border-radius: 6px;
+        box-shadow: 0 1px 6px rgba(16, 22, 29, 0.16);
+    }
+}
+
+@media (max-width: 780px) {
+    .post-content img {
+        max-width: 100%;
+        max-height: 65vh;
+        margin: 0.8rem auto;
+    }
+}
+
 .post {
     overflow-x: auto;
     padding: 0.9rem 1rem 1.2rem;
