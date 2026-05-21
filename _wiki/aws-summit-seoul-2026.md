@@ -1,7 +1,7 @@
 ---
 layout  : wiki
 title   : AWS Summit Seoul 2026 정리
-summary : 행사 현장, 부스 탐방, 직접 들은 세션 정리
+summary : 행사 현장, 부스 탐방, 직접 들은 1일차/2일차 세션 정리
 date    : 2026-05-20 00:00:00 +0900
 updated : 2026-05-20 00:00:00 +0900
 tags    : [conference, aws, devops, ai]
@@ -356,6 +356,370 @@ flowchart LR
 ![AIOps Agent (Observe / Understand / Optimize) 사이클](/resource/aws-summit-seoul-2026/yogiyo-05-future-plan.jpg)
 
 운영 → AI 분석 → 조치 제안 → 승인 → 운영의 사이클을 다음 단계로 본다. 즉, **승인 기반의 자동화**(AWS가 조치를 제안하고 운영자가 승인하면 적용)가 그 시작점이다.
+
+## 21억 사용자 스케일의 삼성 어카운트의 Agentic AIOps 사례
+
+Amazon Bedrock AgentCore 위에서 21억 사용자 스케일의 운영을 어떻게 에이전트가 받쳐주는지에 대한 사례.
+앞부분은 AgentCore 관점의 4가지 축, 뒷부분은 삼성 계정 사례라는 2단 구성으로 진행됐다.
+
+### 1. 운영 우수성
+
+> 필요한 규모로 프로덕션에서 이를 운영할 수 있는가?
+
+- 관찰 가능성
+- 비용
+- 규모 및 지연 시간
+
+OTEL 추적을 활용해 Trace / Span / Sub-Span 단위로 관찰한다.
+
+> 스크린샷: Observability 슬라이드
+
+또 다른 가시성, 재사용성, 거버넌스를 단순화하기 위한 도구로 **AWS Agent Registry**가 소개됐다.
+
+> 스크린샷: AWS Agent Registry
+
+### 2. 데이터 및 컨텍스트
+
+> 에이전트가 올바른 정보를 가지고 있는가?
+
+- **데이터 품질**: 잘못된 입력은 잘못된 출력으로 이어진다
+- **검색 및 RAG**: 적절한 맥락을 적절한 시점에
+- **메모리**: 중요한 것만 기억
+- **그라운딩**: 환각 방지
+
+대부분의 실패는 결국 데이터 실패다. 잘못된 문서, 오래된 컨텍스트, 인덱싱 불가한 정보 등이 그 사례다.
+
+#### 메모리는 필수
+
+꼭 필요한 정보만 저장하고 다시 활용한다. 모든 걸 다 때려박는다고 좋은 게 아니다. (참고: *Context Rot: How Increasing Input Tokens Impacts LLM Performance*)
+
+| 종류 | 예시 |
+|------|------|
+| 단기 메모리 | 대화 기록, 현재 세션 컨텍스트, 작업 메모리 |
+| 장기 메모리 | 사용자 선호도, 과거 상호작용, 사실 및 지식 |
+
+이를 받쳐주는 **AgentCore Memory**는 완전 관리형, 사용자 네임스페이스, 영구 저장을 제공한다.
+
+### 3. 신뢰
+
+> 사용자들이 자신의 데이터가 보호되고 에이전트가 경계 내에서 작동한다고 신뢰할 수 있는가?
+
+- AgentCore Identity
+- AgentCore Policy
+- AgentCore Runtime
+
+### 4. 안정성
+
+> 에이전트가 일관되게 동작하며, 이를 증명할 수 있는가?
+
+- 일관성
+- 평가: **AgentCore Evaluations** (데이터 기반 모델 전환, 품질/비용/지연 시간 균형 조정, 데이터로 평가)
+- 테스팅
+- 복구
+
+### 프론티어 랩
+
+- 앤트로픽 (Claude 사용 가능)
+- 오픈AI (곧 출시)
+
+### Key Take-home Messages
+
+> 스크린샷: Key Take-home Messages 슬라이드
+
+### 삼성 계정 규모
+
+- 사용자 21억 명
+- 280만 RPS
+- 4개 리전 운영
+- 핵심 지표로 MTTD, MTTR, MTBF 추적
+
+### 대규모 서비스 운영의 어려움
+
+- 끝없는 대시보드 탐색
+- 개인 역량에 종속된 분석 시간
+- 글로벌 서비스 On Call 대응
+
+→ 이 부담을 AI Agent에 위임한 것이 AIOps Agent의 출발점.
+
+### AIOps Agent
+
+> 스크린샷: AIOps Agent POC Diagram
+
+POC 결과:
+
+- 20분 이상 걸리던 분석이 5분 이하로 단축
+- 특정 시간대 한정이던 분석이 365일 24시간 가능
+- 다만 정확도는 사람(90%) > Agent(50%) 로 사람이 더 높았다
+
+#### 프로덕션화의 벽
+
+- 가시성의 부재
+- 파편화된 표준
+- 스케일의 딜레마
+
+#### 해결 접근
+
+- 로그 수집 인프라를 새로 구성
+- 태그 정규화 및 불필요 태그 수집 제외
+- 멀티 Agent 구성 + 표준 운영 절차(SOP)에 따른 프롬프트 엔지니어링
+
+> 스크린샷: AI 기반 자동 분석으로의 진화
+
+### 사례
+
+#### 사례 1: 자연 회복
+
+| 시각 | 이벤트 |
+|------|--------|
+| 10.20 20:45 | 최초 알람 발생 |
+| 10.20 20:48 | AIOps Agent 분석 완료 |
+| 10.20 20:50 | 자연 회복 |
+| 10.21 | AWS Case 답변 완료 |
+
+#### 사례 2: us-east-1 장애 → AP Failover
+
+| 시각 | 이벤트 |
+|------|--------|
+| 10.20 15:59 | us-east-1 최초 알람 발생 |
+| 10.20 16:05 | AIOps Agent 분석 완료 후 강제 종료 |
+| 10.20 16:30 | US → AP Region Failover 진행 |
+| 10.20 18:00 | AWS 공식 발표 |
+
+AWS 공식 발표보다 빠르게 자체 판단으로 Failover를 결정한 케이스.
+
+### Agentic AI Platform
+
+> 스크린샷: Agentic AI Platform 아키텍처
+
+## Strands Agent + AWS Lambda + Bedrock
+
+서버리스 환경에서 Agentic 시스템을 어떻게 만들고 운영했는지에 대한 사례.
+
+### 당면 과제
+
+- 예측 불가능한 수요
+- 빠른 변화
+- 비용 효율성
+
+### Strands Agent
+
+- Multi-Agent 시스템 구축을 위한 오픈소스 SDK
+- AWS와의 자연스러운 연동
+- Model Driven 방식
+
+#### Agent Loop
+
+```mermaid
+flowchart LR
+    A["1. Context"] --> B["2. Reasoning (LLM)"]
+    B --> C["3. Tool Selection"]
+    C --> D["4. Tool Execution"]
+    D --> E["5. Response"]
+```
+
+### Strands Agent + AWS Lambda
+
+- 가볍고 비용 효율적
+- 기존 아키텍처 호환
+- 다양한 요소도 구현 가능
+
+> 스크린샷: Strands Agent on Lambda 아키텍처
+
+#### Lambda Web Adapter
+
+프레임워크들을 Lambda 위에서 그대로 돌릴 수 있게 해주는 어댑터.
+
+### 당면 문제
+
+- **리소스 제한**: 람다 시간 제한 15분, 전체 코드 용량 제한
+- **세션 영속성**: 세션 히스토리 관리의 비효율성, Stateless라 임시 스토리지 활용 어려움
+- 다양한 실험 및 구현의 어려움
+
+### with Bedrock AgentCore
+
+이러한 한계를 보완하는 옵션으로 AgentCore가 등장.
+
+- **서버리스**: 사용한 만큼 비용 지불
+- **세션 관리** 내장
+- **보안**: Cognito 연동 기반
+- **확장성**
+- **배포**: zip 기반 배포
+- **모니터링** 제공
+
+#### AgentCore 구성
+
+| 구성요소 | 역할 |
+|----------|------|
+| Runtime | 에이전트 실행 환경 |
+| Identity | 인증/권한 |
+| Gateway | 진입점 |
+| Memory | 메모리 관리 |
+
+#### Runtime 호출 방식
+
+- **API Gateway + Lambda**
+  - 기본 29초 제한
+  - API Gateway 인증 가능
+  - Lambda ColdStart + AgentCore ColdStart 가 합쳐짐
+- **Lambda URL**
+  - 15분 제한
+  - Lambda ColdStart + AgentCore ColdStart
+- **AgentCore Native**
+  - SigV4 API Call
+  - AWS Cognito 연동
+  - AWS Credential 필요
+
+#### TIP: AgentCore CLI
+
+CLI로 빠르게 배포/관리 가능.
+
+### 주의
+
+- 토큰 사용량 관리
+- Cold Start 주의
+- Throttling 주의
+
+### 결론
+
+> 스크린샷: 결론 슬라이드
+
+## 라포랩스의 AX 전환 플랫폼 사례
+
+### 제공하는 기능들
+
+- **Custom Figma Plugin**
+- **라포도알**: 회의 녹음 시 자동 회의록 생성
+- **CX-Seller Agent**
+
+### AX 전환 플랫폼
+
+#### Raploy: 배포를 몰라도 배포할 수 있게 하자
+
+배포 지식이 없는 구성원도 배포할 수 있게 하는 것을 목표로 한 플랫폼.
+
+**AI-DLC (AI-Driven Development Lifecycle)** 3단계로 동작한다.
+
+```mermaid
+flowchart LR
+    A["Inception"] --> B["Construction"] --> C["Operations"]
+```
+
+> 스크린샷: Raploy Architecture
+
+#### Raku: Enterprise-ready OpenClaw
+
+엔터프라이즈 환경에 맞게 다듬은 OpenClaw 기반의 에이전트 플랫폼.
+
+**Case 1: Service Alert**
+
+- Slack 스레드에서 호출하면 알러트 정보 보여줌
+- 이슈 / 로그 / 최근 변경 맥락 자동 수집
+
+**Case 2: Operations**
+
+- PLP 성과 리포트 자동 작성
+- 저성과 배너 자동 식별
+- 교체 대상 ID 전달
+- 배너 카피, 이미지 후보 생성
+
+**Case 3: Daily Reporting**
+
+- 매일 오전 최신 정보 파악
+- 로그 검색으로 오류 이슈 자동 제기
+- 후속 조치 필요 여부 판단
+
+#### 핵심 구성
+
+- Agent Harness
+- Live Artifacts
+- Custom Agents
+
+> 스크린샷: Raku on AWS Architecture
+
+## 누구나 손쉽게 개발 효율 200% 향상시키는 Kiro 활용법
+
+### AI Coding의 진화
+
+```mermaid
+flowchart LR
+    P["Prompt"] --> C["Context\n(지식, 도구, 자율성)"] --> H["Harness\n(가드레일, 평가)"]
+```
+
+### 컨텍스트가 전부다
+
+> 컨텍스트가 메시지 배열의 전부다. 자율 실행이 길어질수록 많은 메시지가 축적된다.
+>
+> 컨텍스트 엔지니어링은 다음 단계에 필요한 정확한 정보로 컨텍스트 윈도우를 채우는 섬세한 기술이자 과학이다.
+> - 안드레 카파시
+
+#### 컨텍스트 유형
+
+| 유형 | 설명 |
+|------|------|
+| 시스템 컨텍스트 | 시스템 프롬프트, 정책 |
+| 검색 컨텍스트 | RAG로 가져온 외부 지식 |
+| 대화 컨텍스트 | 사용자와 주고받은 메시지 |
+| 도구 컨텍스트 | 도구 호출 결과 |
+
+### SweetSpot을 위한 도구
+
+#### MCP (Model Context Protocol)
+
+- 표준화
+- 외부 데이터 소스와의 통합
+- 향상된 기능성
+- 유연성 및 확장성
+
+**모범 사례**
+
+- 전송 방식 선택 (stdio / http 등)
+- 레벨 분리
+- 사전 구축된 것을 우선
+- 권한 최소화
+
+Kiro에서 MCP를 native로 사용 가능하다.
+
+#### Steering
+
+> 컨텍스트가 없다면, LLM은 가정을 한다.
+
+Steering은 프로젝트에 대한 추가 컨텍스트를 제공한다.
+
+> 스크린샷: Steering 예시 (컨텍스트 없음 vs 있음)
+
+- **Foundational Steering**: 자동 생성
+- **Custom Steering**: 사용자가 직접 정의
+
+**모범 사례**
+
+- 워크스페이스 단위로
+- 글로벌은 글로벌답게
+- 양보다 질
+- Kiro가 모르는 것만 정의
+
+#### Kiro Powers
+
+핵심 키워드:
+
+- Powers
+- Just In Time
+- 협업
+
+**구성요소**
+
+- POWER.md
+- MCP Server
+- Steering
+
+#### 에이전트가 스스로 검증하는 구조
+
+```mermaid
+flowchart LR
+    R["1. 추론"] --> E["2. 실행"]
+    E --> O["3. 관찰"]
+    O --> P["4. 반복"]
+    P -.-> R
+```
 
 ## 참고
 - [AWS Summit Seoul 2026 공식](https://aws.amazon.com/ko/events/summits/seoul/ )
