@@ -34,7 +34,7 @@ latex   : false
 ![가챠 경품 줄](/resource/aws-summit-seoul-2026/gacha-line.jpg)
 
 ### 설문 참여 굿즈
-세션이나 부스에서 설문에 응하면 티셔츠를 받을 수 있었다.
+세션이나 부스에서 설문에 응하면 굿즈를 받을 수 있었다.
 
 ![1일차 굿즈](/resource/aws-summit-seoul-2026/day1-goods.jpg)
 
