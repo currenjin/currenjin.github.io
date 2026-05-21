@@ -38,6 +38,8 @@ latex   : false
 
 ![1일차 굿즈](/resource/aws-summit-seoul-2026/day1-goods.jpg)
 
+![2일차 굿즈](/resource/aws-summit-seoul-2026/day2-goods.jpg)
+
 ## 부스 탐방
 
 파트너 기업 부스는 거의 다 둘러봤다. 자체 솔루션 데모와 굿즈 이벤트가 함께 진행되어서 동선을 짜는 재미가 있었다.
