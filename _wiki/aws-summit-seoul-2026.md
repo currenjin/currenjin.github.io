@@ -67,9 +67,72 @@ latex   : false
 
 ## AWS 피지컬 AI로 실현하는 기업의 차세대 혁신 전략
 
-- Publisher: TBD
+피지컬 AI를 한 종류의 로봇으로 풀려는 시도는 거의 다 한계에 부딪힌다. 발표의 큰 메시지는 한 줄이다. "하나의 임바디먼트가 아니라 이종 로봇 플릿이 협력해서 풀어야 하는 문제"라는 것. Amazon 내부 사례, 고객 사례, AWS가 미는 프레임워크를 한꺼번에 풀어 보여줬다.
 
-(정리 예정)
+### Amazon이 직접 굴리는 피지컬 AI
+
+- **Vulcan**: 압력과 민감도를 학습한 pick-and-place 로봇. 박스든 소켓이든 미리 정해 두지 않은 물건도 잡는다. tactile intelligence를 처음으로 디바이스 시스템에 들였다.
+- **AMR 플릿 오케스트레이션**: 수백 시간 운영 데이터로 튜닝한 모델. 배달 작업을 자기들끼리 조직화하는 단계까지 갔다.
+- **Sequoia**: Hercules / Sparrow / Vulcan / Proteus 같은 이종 플릿을 하나의 AI 워크플로 아래로 묶어주는 통합 오케스트레이션 계층.
+
+휴머노이드가 매력적인 건 맞지만, 실제 현장의 답은 여러 임바디먼트가 함께 도는 플릿이라는 점을 반복해서 강조했다.
+
+### Physical AI Fellowship과 고객 사례
+
+스타트업 코호트에 투자하는 Physical AI Fellowship 프로그램. 2차 코호트에는 한국의 Config Intelligence, WeRobotics, Teleexistence도 포함됐다. 발표에서 짚어준 고객은 세 곳.
+
+- **Diligent Robotics**: 병원에서 도는 Moxie 로봇. 자율 배달 누적 120만 건 이상, 배달 한 건당 45분 절약, 60만+ 시간 절약.
+- **Bedrock Robotics**: 데이터센터 부지 정비용 중장비 자동화. 65,000 cubic yard 이상 자율 이동, 센서 한 대가 하루에 1TB 이상 데이터 생성, 130 acre 운영.
+- **Robco**: 산업용 로봇 팔의 "스위스 아미 나이프" 접근. SageMaker HyperPod on EKS로 모델을 개발해 생산성 11% 향상, 배포 속도 업계 대비 10배, 작업 시간 80% 절감.
+
+### Neura Robotics 알라이언스
+
+Hannover Messe에서 발표된 파트너십. sim-to-real gap을 줄이기 위해 세 갈래로 협업한다.
+
+- **VLA 모델 학습**: SageMaker HyperPod + S3 위에서 NeuroGems가 모은 egocentric 데이터로 vision-language-action 모델을 키운다.
+- **NeuroVerse + Gems**: 시뮬레이션 데이터와 실제 데이터를 한 곳에서 섞어 shared intelligence를 만든다. 물리적으로는 재현할 수 없는 조건도 시뮬레이션으로 채운다.
+- **현장 배포**: AWS IoT 스택을 얹어 edge 성능을 끌어올리고, 사람과 협업하면서 데이터를 계속 수집하는 루프를 만든다.
+
+### 고객들이 공통으로 겪는 네 가지 벽
+
+- **World data capture와 데이터 플라이휠**: LiDAR, 비디오, 시계열, IoT 데이터를 한 맥락으로 묶어 compute에 던지는 일이 가장 큰 벽. 엔터프라이즈 대부분이 여기서 멈춘다.
+- **모델 선택**: 오픈소스 파인튜닝이냐, 자체 데이터로 커스텀 모델 개발이냐. 데이터 상태부터 점검해야 한다.
+- **모델 튜닝**: 인프라 선택, 임바디먼트별 최적화, sim-to-real gap 좁히기, 그라운드 트루스와 시뮬레이션 데이터 결합.
+- **이종 플릿 운영**: 서로 다른 임바디먼트들 위에서 지능을 어떻게 오케스트레이션할 것인가.
+
+결국 모든 고객이 향하는 한 가지 꿈은 같다. 피지컬 AI 플라이휠을 돌리는 것.
+
+### AWS Physical AI Framework
+
+발표의 뼈대. 데이터를 맥락으로 묶고, 모델을 개발하고, 시뮬레이션으로 검증하고, 엣지에서 굴리는 네 단계가 하나의 루프를 이룬다.
+
+```mermaid
+flowchart LR
+    A["Contextualize Data\n(데이터 플라이휠)"] --> B["Physical AI\nModel Development"]
+    B --> C["Simulation\n& Validation"]
+    C --> D["Edge\nOperations"]
+    D -.-> A
+```
+
+| 단계 | 핵심 내용 | AWS / 파트너 |
+|------|-----------|-------------|
+| Contextualize Data | 멀티모달 데이터 통합, 데이터 플라이휠 가동 | IoT Greengrass, Kinesis Video Streams, 시계열 DB, NVIDIA, OpenUSD, Cognite, SiMA |
+| Model Development | Frontier/임바디드 모델 학습 | Bedrock, SageMaker AI, 가속 컴퓨팅 |
+| Simulation & Validation | 디지털 트윈, what-if 시뮬레이션 | Siemens, Ansys, NVIDIA |
+| Edge Operations | 자기 개선형 모델 배포, 실시간 추론, 신규 데이터 수집 | Avnet, Qualcomm |
+
+이 위에 에이전틱 접근을 얹어 4단계 사이의 사람 손이 가는 부분을 자동화한다는 게 발표의 결.
+
+### 두 개의 루프
+
+프레임워크 안에서 두 개의 루프가 동시에 돈다.
+
+- **Reinforcement & Training Loop**: 클라우드에서만 가능한 대규모 시뮬레이션. 에이전트가 시뮬레이션 환경과 모델을 같이 굴리며 학습을 가속한다.
+- **Learning Loop**: 엣지 디바이스가 실제 세계에서 sense → act 하며 데이터를 다시 클라우드로 올린다. 이 두 루프가 닫히는 순간이 피지컬 AI가 실제로 살아나는 지점이다.
+
+### Amazon이 직접 적용한 사례: Sustainability Lab
+
+데이터센터 인프라에서 희토류를 회수하는 일은 지금까지 사람이 직접 해체하는 방식이라 확장이 안 됐다. 머신 비전으로도 어떤 부품이 회수 가치가 있는지 식별하기가 까다롭다. 새 규제까지 더해지면서, smart teardown을 자동화해 보자는 협업이 시작됐다. 발표는 이 사례를 프레임워크가 추상적인 그림이 아니라 Amazon이 자기 문제에 그대로 적용 중인 도구임을 보여주는 근거로 들었다.
 
 ## 당근의 CloudHSM/KMS 기반 대규모 서명키 관리 시스템 구축기
 
