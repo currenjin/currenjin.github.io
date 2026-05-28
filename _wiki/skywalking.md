@@ -3,7 +3,7 @@ layout  : wiki
 title   : Apache SkyWalking
 summary : 마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스
 date    : 2026-04-03 00:00:00 +0900
-updated : 2026-04-28 00:00:00 +0900
+updated : 2026-05-28 00:00:00 +0900
 tags    : [observability, java, devops, sre]
 toc     : true
 public  : true
@@ -1004,7 +1004,93 @@ attach event는 비동기로 늦게 도착할 수 있어서 좁은 `time_bucket`
 
 ---
 
+### Improve Korean Locale Wording in Horizon UI
+
+> [apache/skywalking-horizon-ui#26](https://github.com/apache/skywalking-horizon-ui/pull/26) · merged on 2026-05-28
+
+#### Context
+
+`skywalking-horizon-ui`는 SkyWalking의 차세대 UI repo다. wu-sheng가 새 UI에 Korean i18n이 들어갔다고 직접 멘션해줬고, 한국어 사용자 관점에서 한 번 확인해보기로 했다.
+
+처음에는 전체 UI를 다 보려 했지만, PR diff가 컸다. 그래서 범위를 줄여 `apps/ui/src/i18n/locales/en.json`과 `ko.json`만 먼저 비교했다.
+
+검증 기준은 세 가지였다.
+
+- key와 placeholder가 깨지지 않는가
+- 한국어 SaaS/admin UI 문체로 자연스러운가
+- 기술 용어를 과하게 번역하지 않았는가
+
+#### Finding
+
+구조 자체는 좋았다.
+
+- `en.json` / `ko.json` key 수 일치
+- 누락 key 없음
+- 추가 key 없음
+- placeholder 불일치 없음
+
+문제는 기능 버그가 아니라 한국어 표현의 자연스러움이었다.
+
+대표적으로 이런 패턴이 있었다.
+
+```text
+OAP 구성 → OAP 설정
+도달 가능 → 연결 가능
+가관측성 화면 → 옵저버빌리티 화면
+데이터를 노화시킵니다 → 데이터를 단계별로 보관/이관합니다
+게시 실패 → 게시하지 못했습니다
+{url} 을(를) → {url}을(를)
+```
+
+기계번역처럼 크게 틀린 건 아니지만, 실제 한국어 관리자 화면에서 보면 딱딱하거나 어색한 표현들이었다. 특히 placeholder나 영문 토큰 뒤 조사 앞에 공백이 들어가는 경우가 많았다.
+
+#### Fix
+
+`ko.json`만 수정했다. 기능 변경은 없다.
+
+변경 방향은 다음과 같다.
+
+- 오류 메시지는 명사형보다 문장형으로 변경
+- `configuration` 계열은 사용자-facing 문맥에서 `설정`으로 정리
+- 네트워크 상태의 `reachable/unreachable`은 `연결 가능/불가`로 정리
+- `observability`는 `가관측` 대신 `옵저버빌리티`로 유지
+- placeholder와 기술 토큰 뒤 조사는 붙여 쓰도록 정리
+
+최종 변경 규모는 작게 유지했다.
+
+```text
+apps/ui/src/i18n/locales/ko.json | 154 +++++++++++++++++++--------------------
+1 file changed, 77 insertions(+), 77 deletions(-)
+```
+
+#### Validation
+
+PR 전에 로컬에서 확인했다.
+
+- JSON parse 성공
+- `en.json` / `ko.json` key 수 동일
+- missing key 0
+- extra key 0
+- placeholder mismatch 0
+
+#### 학습
+
+오픈소스에서 i18n 기여는 “번역을 많이 고치는 것”보다 “깨지지 않는 작은 단위로 자연스러움을 개선하는 것”이 더 안전하다.
+
+특히 AI로 생성된 locale은 전체 품질이 그럴듯해 보여도, 실제 사용자가 보는 UI 문체에서는 다음 문제가 남기 쉽다.
+
+- 조사 공백
+- 직역투
+- 오류 메시지 명사형
+- 기술 용어의 과번역
+- 화면 맥락과 맞지 않는 단어 선택
+
+이번 PR은 한국어 i18n/UX polish 쪽으로 작은 신뢰를 쌓는 첫 Horizon UI 기여로 볼 수 있다. 다음 기여도 큰 전수 수정이 아니라, 화면을 직접 보면서 작고 검증 가능한 단위로 보내는 게 좋다.
+
+---
+
 ## References
 
 - [Apache SkyWalking GitHub](https://github.com/apache/skywalking)
+- [Apache SkyWalking Horizon UI GitHub](https://github.com/apache/skywalking-horizon-ui)
 - [Apache SkyWalking 공식 문서](https://skywalking.apache.org/docs/)
