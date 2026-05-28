@@ -1,5 +1,14 @@
 [
   {
+    "title": "Apache SkyWalking",
+    "url": "/wiki/skywalking",
+    "updated": "2026-05-27",
+    "summary": "마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스",
+    "tags": "observability, java, devops, sre",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "AWS Summit Seoul 2026 정리",
     "url": "/wiki/aws-summit-seoul-2026",
     "updated": "2026-05-19",
@@ -41,15 +50,6 @@
     "updated": "2026-05-03",
     "summary": "k3d + Terraform + ArgoCD 기반 개인 홈서버의 구성과 운영 모델",
     "tags": "homelab, kubernetes, sre, gitops, devops",
-    "source": "Wiki",
-    "external": false
-  },
-  {
-    "title": "Apache SkyWalking",
-    "url": "/wiki/skywalking",
-    "updated": "2026-04-27",
-    "summary": "마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스",
-    "tags": "observability, java, devops, sre",
     "source": "Wiki",
     "external": false
   },
