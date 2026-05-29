@@ -3,7 +3,7 @@ layout  : wiki
 title   : Claude Code
 summary : 소스맵 유출로 드러난 내부 아키텍처 분석
 date    : 2026-04-01 12:00:00 +0900
-updated : 2026-04-01 12:00:00 +0900
+updated : 2026-05-29 09:39:17 +0900
 tags    : [ai-agent, ai, productivity, engineering]
 toc     : true
 public  : true
@@ -21,6 +21,7 @@ Anthropic이 만든 터미널 기반 에이전틱 코딩 도구. 2026년 3월 31
 > - [Learn Claude Code (9bow)](https://9bow.github.io/learn-claude-code/)
 > - [Claude Code Source Map Leak Analysis](https://bits-bytes-nn.github.io/insights/agentic-ai/2026/03/31/claude-code-source-map-leak-analysis.html)
 > - [claude-code-sourcemap (GitHub)](https://github.com/leeyeel/claude-code-sourcemap/tree/main)
+> - [Introducing dynamic workflows in Claude Code](https://claude.com/blog/introducing-dynamic-workflows-in-claude-code)
 
 ---
 
@@ -439,7 +440,100 @@ flowchart LR
 
 ---
 
-## 8. 메모리 시스템
+## 8. Dynamic Workflows
+
+2026년 5월 28일 Anthropic은 Claude Code의 **Dynamic Workflows**를 공식 발표했다. 핵심은 Claude가 한 세션 안에서 오케스트레이션 스크립트를 동적으로 작성하고, 수십~수백 개의 병렬 subagent를 실행하며, 결과를 사용자에게 전달하기 전에 독립 검증까지 수행하는 방식이다.
+
+기존의 Claude Code가 "단일 에이전트가 여러 턴에 걸쳐 도구를 사용하는 구조"였다면, Dynamic Workflows는 **에이전트 팀을 임시로 생성해 문제를 분해·병렬 실행·교차 검증하는 구조**에 가깝다.
+
+### 8.1 사용 가능 범위와 실행 방식
+
+출시 시점 기준으로 research preview이며 다음 환경에서 제공된다.
+
+| 항목 | 내용 |
+|------|------|
+| 제품 | Claude Code CLI, Desktop, VS Code extension |
+| 플랜 | Max, Team, Enterprise(admin enabled) |
+| API 경로 | Claude API, Amazon Bedrock, Vertex AI, Microsoft Foundry |
+| 기본값 | Max/Team/API는 기본 활성화, Enterprise는 기본 비활성화 |
+
+시작 방법은 두 가지다.
+
+1. Claude에게 직접 workflow 생성을 요청한다. 예: `Create a workflow`
+2. Claude Code 전용 설정인 `ultracode`를 켠다. effort level을 `xhigh`로 설정하고, Claude가 workflow 사용 여부를 자동 판단한다.
+
+Anthropic은 auto mode 사용을 권장한다. 첫 workflow 실행 시 Claude Code는 실행될 작업을 보여주고 사용자 확인을 받는다. 조직 관리자는 managed settings로 workflow를 비활성화할 수 있다.
+
+### 8.2 적합한 작업
+
+Dynamic Workflows는 단일 agent 한 번의 pass로는 부족한 작업을 겨냥한다.
+
+| 유형 | 작동 방식 |
+|------|-----------|
+| 코드베이스 전역 버그 헌트 | repo/service를 병렬 검색하고, 각 finding을 독립 검증하여 실제 이슈만 보고 |
+| 성능 최적화 감사 | profiler-guided audit를 여러 영역으로 나눠 실행 |
+| 보안 감사 | auth check, input validation, unsafe pattern을 전역 스캔 |
+| 대규모 migration | framework 교체, API deprecation 대응, 언어 포팅처럼 수백~수천 파일을 변경 |
+| 고위험 의사결정 | 독립 시도와 adversarial agent 검증으로 결론을 깨뜨려 본 뒤 수렴 |
+
+핵심은 "많이 시킨다"가 아니라 **검증 구조를 함께 만든다**는 점이다. agent들이 독립 각도에서 문제를 풀고, 다른 agent들이 결과를 반박하려 시도하며, 답이 수렴할 때까지 반복한다.
+
+### 8.3 내부 동작 모델
+
+공식 설명에서 드러난 실행 모델은 다음 흐름이다.
+
+```mermaid
+flowchart LR
+    A([사용자 요청]) --> B[동적 계획 수립]
+    B --> C[작업 분해]
+    C --> D[병렬 subagent fan-out]
+    D --> E[결과 검증]
+    E --> F[반박/adversarial 검토]
+    F --> G{수렴했는가?}
+    G -->|아니오| C
+    G -->|예| H[단일 조율 응답]
+
+    style A fill:transparent,stroke:#111827
+    style H fill:transparent,stroke:#111827
+```
+
+중요한 설계 포인트는 coordination이 대화 바깥에서 일어난다는 것이다. 대화 컨텍스트 하나에 모든 중간 상태를 우겨 넣지 않고, 긴 실행의 progress를 저장하면서 중단된 작업도 이어서 재개할 수 있게 한다. 그래서 실행 시간이 hours~days 단위로 늘어나도 plan이 흐트러지지 않는다.
+
+이는 앞서 유출 소스에서 보인 `Coordinator Mode`, `AgentTool`, `TaskStop`, `SendMessage`, `tengu_scratch`류의 흔적과 방향성이 맞다. 당시에는 피처 플래그 뒤의 미출시 기능으로 보였던 "오케스트레이터 + 워커 에이전트" 구조가 공식 제품 기능으로 드러난 셈이다.
+
+### 8.4 Bun 포팅 사례
+
+Anthropic이 든 대표 사례는 Jarred Sumner의 Bun 포팅이다.
+
+| 항목 | 수치/내용 |
+|------|-----------|
+| 작업 | Bun을 Zig에서 Rust로 포팅 |
+| 결과 | 기존 test suite 99.8% 통과 |
+| 규모 | 약 750,000 lines of Rust |
+| 기간 | 첫 commit부터 merge까지 11일 |
+| 방식 | struct field별 Rust lifetime 매핑 → `.zig` 대응 `.rs` 파일 생성 → build/test fix loop → 불필요한 data copy PR 생성 |
+
+특히 "hundreds of agents working in parallel with two reviewers on each file"이라는 설명이 중요하다. Dynamic Workflows는 단순 병렬 생성기가 아니라, 파일 단위 작업자와 reviewer를 함께 붙이는 **생산 + 검토 파이프라인**으로 쓰였다.
+
+다만 Anthropic은 이 Bun 포팅이 아직 production에는 적용되지 않았다고 명시했다. 사례는 기능의 잠재력을 보여주지만, 운영 안정성까지 입증한 것은 아니다.
+
+### 8.5 비용과 리스크
+
+Dynamic Workflows는 일반 Claude Code 세션보다 훨씬 많은 token을 소비할 수 있다. Anthropic도 처음에는 scope가 좁은 task로 사용량 감각을 잡으라고 권장한다.
+
+실무 적용 시 체크포인트:
+
+- **작업 경계**: repo 전체가 아니라 module/service 단위로 시작
+- **검증 기준**: 테스트, lint, typecheck, benchmark처럼 기계적으로 확인 가능한 성공 조건 명시
+- **변경 단위**: 대규모 migration도 review 가능한 PR 단위로 쪼개기
+- **비용 상한**: long-running workflow는 token budget과 실행 시간 상한을 먼저 정하기
+- **권한 통제**: auto mode라도 destructive command, deploy, credential 접근은 별도 승인 필요
+
+결론적으로 Dynamic Workflows는 Claude Code를 "코딩 도구"에서 **임시 agent 조직을 구성하는 실행 플랫폼**으로 확장한다. 가치가 큰 영역은 기능 구현보다 discovery, audit, migration, review처럼 병렬성과 독립 검증이 성능을 좌우하는 작업이다.
+
+---
+
+## 9. 메모리 시스템
 
 CLAUDE.md 파일을 4계층 구조로 관리한다:
 
@@ -459,7 +553,7 @@ flowchart LR
 
 ---
 
-## 9. 아키텍처 관통 원칙
+## 10. 아키텍처 관통 원칙
 
 유출된 소스에서 드러난 가장 중요한 설계 철학은 하나다: **비용 인식(Cost Awareness)**.
 
@@ -473,7 +567,7 @@ flowchart LR
 
 ---
 
-## 10. 교훈
+## 11. 교훈
 
 8겹의 보안 레이어, 정교한 압축 시스템, 비용 인식 아키텍처를 갖췄음에도, `source map을 .npmignore에 추가`하는 기초적인 빌드 프로세스 체크리스트를 두 번 연속 놓쳤다.
 
