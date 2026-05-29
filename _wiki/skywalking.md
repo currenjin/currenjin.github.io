@@ -3,7 +3,7 @@ layout  : wiki
 title   : Apache SkyWalking
 summary : 마이크로서비스, 클라우드 네이티브 환경을 위한 분산 추적 및 APM 오픈소스
 date    : 2026-04-03 00:00:00 +0900
-updated : 2026-05-28 00:00:00 +0900
+updated : 2026-05-29 00:00:00 +0900
 tags    : [observability, java, devops, sre]
 toc     : true
 public  : true
@@ -1086,6 +1086,75 @@ PR 전에 로컬에서 확인했다.
 - 화면 맥락과 맞지 않는 단어 선택
 
 이번 PR은 한국어 i18n/UX polish 쪽으로 작은 신뢰를 쌓는 첫 Horizon UI 기여로 볼 수 있다. 다음 기여도 큰 전수 수정이 아니라, 화면을 직접 보면서 작고 검증 가능한 단위로 보내는 게 좋다.
+
+---
+
+### Polish Korean Locale Follow-up in Horizon UI
+
+> [apache/skywalking-horizon-ui#31](https://github.com/apache/skywalking-horizon-ui/pull/31) · merged on 2026-05-29
+
+#### Context
+
+첫 Korean locale PR이 merge된 뒤, 같은 파일을 다시 보면서 “단어 하나하나”보다 실제 렌더링 문장 조합을 확인했다. 특히 `<i18n-t>`처럼 앞뒤 문자열과 slot이 합쳐지는 구조는 catalog 값만 보면 맞아 보여도 한국어 문장으로는 깨질 수 있다.
+
+#### Finding
+
+두 번째로 남아 있던 문제는 번역 품질 전반이 아니라 조합형 문장의 edge case였다.
+
+```text
+이 설정의 {not} 영향을 받습니다
+not → not
+```
+
+이 조합은 실제 UI에서 `이 설정의 not 영향을 받습니다`처럼 보일 수 있다. 영어의 `not`은 짧은 부사로 slot에 넣기 쉽지만, 한국어에서는 부정 표현이 문장 끝으로 가는 경우가 많다.
+
+또 translator note의 `{placeholder}` 예시는 런타임 placeholder가 아닌데, 단순 placeholder parity 검사에서는 mismatch로 잡혔다. 검증 script가 실제 UI 문자열과 메타데이터를 구분해야 한다는 신호였다.
+
+#### Fix
+
+범위는 여전히 `apps/ui/src/i18n/locales/ko.json` 하나로 제한했다.
+
+주요 수정은 다음과 같다.
+
+```text
+not → 받지 않습니다
+이 설정의 {not} 영향을 받습니다 → 이 설정의 영향을 {not}.
+{placeholder} 예시 → `placeholder` 예시
+horizon.yaml 의 → horizon.yaml의
+apply 를 → apply를
+updateTime 을 → updateTime을
+```
+
+변경 규모는 작은 follow-up으로 유지했다.
+
+```text
+apps/ui/src/i18n/locales/ko.json | 32 ++++++++++++++++----------------
+1 file changed, 16 insertions(+), 16 deletions(-)
+```
+
+#### Validation
+
+PR 전에 최신 `upstream/main` 기준인지 확인하고, fork의 `main`도 fast-forward했다. 이후 PR branch가 `apache:main` 기준으로 mergeable한지 다시 확인했다.
+
+검증 결과는 다음과 같았다.
+
+```text
+en/ko key count: 1215 / 1215
+missing key: 0
+extra key: 0
+placeholder mismatch: 0
+git diff --check: pass
+```
+
+#### 학습
+
+두 번째 PR에서 얻은 교훈은 “locale file 검증은 구조 검증과 렌더링 문장 검증을 나눠야 한다”는 점이다.
+
+- key/placeholder parity는 기능 안전성 검증이다.
+- split sentence, slot, 조사, 부정문은 실제 렌더링 문장 검증이다.
+- translator note 같은 메타데이터는 런타임 문자열과 분리해서 봐야 한다.
+
+작은 follow-up PR이 바로 merge된 건, 첫 PR의 방향이 과하지 않았고 두 번째 PR도 구체적인 렌더링 문제에만 집중했기 때문으로 볼 수 있다.
 
 ---
 
