@@ -3,7 +3,7 @@ layout  : wiki
 title   : Claude Code
 summary : Claude Code의 에이전틱 루프, 도구 실행, 메모리, Dynamic Workflows 분석
 date    : 2026-04-01 12:00:00 +0900
-updated : 2026-05-29 10:10:20 +0900
+updated : 2026-05-29 10:28:41 +0900
 tags    : [ai-agent, ai, productivity, engineering]
 toc     : true
 public  : true
@@ -442,94 +442,104 @@ flowchart LR
 
 ## 8. Dynamic Workflows
 
-2026년 5월 28일 Anthropic은 Claude Code의 **Dynamic Workflows**를 공식 발표했다. 핵심은 Claude가 한 세션 안에서 오케스트레이션 스크립트를 동적으로 작성하고, 수십~수백 개의 병렬 subagent를 실행하며, 결과를 사용자에게 전달하기 전에 독립 검증까지 수행하는 방식이다.
+> 레퍼런스 문서
+> - 원문: [Introducing dynamic workflows in Claude Code](https://claude.com/blog/introducing-dynamic-workflows-in-claude-code)
+> - 발행: 2026-05-28, Anthropic Product announcements
+> - 주제: Claude Code가 하나의 세션 안에서 수십~수백 개의 병렬 subagent를 실행하고, 결과를 사용자에게 전달하기 전에 자체 검증하는 workflow 기능
 
-기존의 Claude Code가 "단일 에이전트가 여러 턴에 걸쳐 도구를 사용하는 구조"였다면, Dynamic Workflows는 **에이전트 팀을 임시로 생성해 문제를 분해·병렬 실행·교차 검증하는 구조**에 가깝다.
+2026년 5월 28일 Anthropic은 Claude Code에 **Dynamic Workflows**를 도입했다. 목적은 Claude가 어려운 작업을 끝까지 처리할 수 있게 하는 것이다. 보통 분기 단위로 계획하던 작업을 며칠 안에 끝내는 것을 목표로 하며, Claude는 한 세션 안에서 오케스트레이션 스크립트를 동적으로 작성하고 수십~수백 개의 병렬 subagent를 실행한다. 결과가 사용자에게 도달하기 전에는 Claude가 먼저 자기 작업을 검토한다.
 
-### 8.1 사용 가능 범위와 실행 방식
+단일 agent가 한 번에 처리하기에는 너무 큰 문제가 있다. 복잡한 legacy codebase 전체에서 버그를 찾는 일, 수백 개 파일에 걸친 migration, 실행하기 전에 여러 각도에서 검증받고 싶은 계획이 여기에 해당한다. Dynamic Workflows는 이런 작업을 end-to-end로 처리하기 위해 만들어졌다.
 
-출시 시점 기준으로 research preview이며 다음 환경에서 제공된다.
+### 8.1 제공 범위
+
+출시 시점의 상태는 **research preview**다.
 
 | 항목 | 내용 |
 |------|------|
 | 제품 | Claude Code CLI, Desktop, VS Code extension |
 | 플랜 | Max, Team, Enterprise(admin enabled) |
 | API 경로 | Claude API, Amazon Bedrock, Vertex AI, Microsoft Foundry |
-| 기본값 | Max/Team/API는 기본 활성화, Enterprise는 기본 비활성화 |
+| 기본값 | Max/Team/API는 기본 활성화, Enterprise는 출시 시점 기본 비활성화 |
 
-시작 방법은 두 가지다.
+Dynamic Workflows는 일반 Claude Code 세션보다 훨씬 많은 token을 사용할 수 있다. Anthropic은 처음부터 큰 범위를 맡기기보다, 먼저 좁은 task로 사용량 감각을 잡으라고 권한다.
 
-1. Claude에게 직접 workflow 생성을 요청한다. 예: `Create a workflow`
-2. Claude Code 전용 설정인 `ultracode`를 켠다. effort level을 `xhigh`로 설정하고, Claude가 workflow 사용 여부를 자동 판단한다.
+가장 좋은 사용 경험을 위해서는 auto mode를 켜는 것이 권장된다. workflow를 시작하는 방법은 두 가지다.
 
-Anthropic은 auto mode 사용을 권장한다. 첫 workflow 실행 시 Claude Code는 실행될 작업을 보여주고 사용자 확인을 받는다. 조직 관리자는 managed settings로 workflow를 비활성화할 수 있다.
+1. Claude에게 직접 dynamic workflow를 만들라고 요청한다. 예: `Create a workflow`
+2. Claude Code 전용 설정인 `ultracode`를 켠다. 이 설정은 effort level을 `xhigh`로 올리고, Claude가 task에 workflow가 필요한지 자동 판단하게 한다.
 
-### 8.2 적합한 작업
+첫 workflow 실행 시 Claude Code는 앞으로 무엇을 실행할지 보여주고 사용자 확인을 요청한다. 조직 관리자는 managed settings를 통해 workflow를 비활성화할 수 있다.
 
-Dynamic Workflows는 단일 agent 한 번의 pass로는 부족한 작업을 겨냥한다.
+### 8.2 Dynamic Workflows가 겨냥하는 작업
 
-| 유형 | 작동 방식 |
-|------|-----------|
-| 코드베이스 전역 버그 헌트 | repo/service를 병렬 검색하고, 각 finding을 독립 검증하여 실제 이슈만 보고 |
-| 성능 최적화 감사 | profiler-guided audit를 여러 영역으로 나눠 실행 |
-| 보안 감사 | auth check, input validation, unsafe pattern을 전역 스캔 |
-| 대규모 migration | framework 교체, API deprecation 대응, 언어 포팅처럼 수백~수천 파일을 변경 |
-| 고위험 의사결정 | 독립 시도와 adversarial agent 검증으로 결론을 깨뜨려 본 뒤 수렴 |
+초기 사용자와 Anthropic 내부 팀은 다음 유형의 작업에 Dynamic Workflows를 사용했다.
 
-핵심은 "많이 시킨다"가 아니라 **검증 구조를 함께 만든다**는 점이다. agent들이 독립 각도에서 문제를 풀고, 다른 agent들이 결과를 반박하려 시도하며, 답이 수렴할 때까지 반복한다.
+| 유형 | 원문이 강조한 방식 |
+|------|--------------------|
+| 코드베이스 전역 버그 헌트 | service/repo를 병렬로 검색하고, 각 발견 사항을 독립 검증한 뒤 실제 이슈만 보고 |
+| profiler 기반 최적화 감사 | 성능 병목을 여러 영역으로 나눠 병렬 조사 |
+| 보안 감사 | auth check, input validation, unsafe pattern을 codebase 전체에서 점검 |
+| 대규모 migration/modernization | framework 교체, API deprecation 대응, 언어 포팅처럼 수천 파일에 걸친 변경 처리 |
+| 두 번 확인해야 하는 중요 작업 | 독립 시도와 adversarial agent를 통해 결과를 깨뜨려 본 뒤 사용자에게 전달 |
 
-### 8.3 내부 동작 모델
+원문의 핵심은 병렬성 자체보다 **검증 구조**다. Claude는 문제를 여러 독립 각도에서 풀고, 다른 agent가 그 결과를 반박하게 하며, 답이 수렴할 때까지 반복한다. 그래서 단일 pass로는 도달하기 어려운 결과를 노린다.
 
-공식 설명에서 드러난 실행 모델은 다음 흐름이다.
+### 8.3 작동 방식
+
+workflow가 시작되면 Claude는 prompt를 바탕으로 동적으로 계획을 세운다. 그 다음 작업을 subtask로 쪼개고, 병렬 subagent에게 fan-out한다. 각 결과는 바로 합쳐지지 않고 먼저 검증된다. 사용자는 마지막에 하나의 조율된 답을 받는다.
 
 ```mermaid
 flowchart LR
-    A([사용자 요청]) --> B[동적 계획 수립]
-    B --> C[작업 분해]
-    C --> D[병렬 subagent fan-out]
+    A([사용자 요청]) --> B[동적 계획]
+    B --> C[Subtask 분해]
+    C --> D[병렬 subagent 실행]
     D --> E[결과 검증]
-    E --> F[반박/adversarial 검토]
-    F --> G{수렴했는가?}
+    E --> F[반박/검토 agent]
+    F --> G{답이 수렴했는가?}
     G -->|아니오| C
-    G -->|예| H[단일 조율 응답]
+    G -->|예| H[조율된 최종 답변]
 
     style A fill:transparent,stroke:#111827
     style H fill:transparent,stroke:#111827
 ```
 
-중요한 설계 포인트는 coordination이 대화 바깥에서 일어난다는 것이다. 대화 컨텍스트 하나에 모든 중간 상태를 우겨 넣지 않고, 긴 실행의 progress를 저장하면서 중단된 작업도 이어서 재개할 수 있게 한다. 그래서 실행 시간이 hours~days 단위로 늘어나도 plan이 흐트러지지 않는다.
+Dynamic Workflows는 hours~days 단위로 이어지는 병렬·장기 작업을 전제로 한다. 실행 중 progress가 저장되므로 중단된 job은 처음부터 다시 시작하지 않고 이어서 진행할 수 있다. 또 coordination은 대화 바깥에서 일어나므로, task가 커져도 plan이 대화 컨텍스트에 묻혀 흐트러지는 문제를 줄인다.
 
-이는 앞서 유출 소스에서 보인 `Coordinator Mode`, `AgentTool`, `TaskStop`, `SendMessage`, `tengu_scratch`류의 흔적과 방향성이 맞다. 당시에는 피처 플래그 뒤의 미출시 기능으로 보였던 "오케스트레이터 + 워커 에이전트" 구조가 공식 제품 기능으로 드러난 셈이다.
+이 구조는 앞서 유출 소스에서 보였던 `Coordinator Mode`, `AgentTool`, `TaskStop`, `SendMessage`, `tengu_scratch`류의 흔적과 방향이 맞다. 당시에는 feature flag 뒤에 있던 미출시 구조가, 공식적으로는 Dynamic Workflows라는 제품 기능으로 드러난 셈이다.
 
-### 8.4 Bun 포팅 사례
+### 8.4 Bun rewrite 사례
 
-Anthropic이 든 대표 사례는 Jarred Sumner의 Bun 포팅이다.
+원문이 제시한 대표 사례는 Jarred Sumner의 Bun rewrite다. Dynamic Workflows를 사용해 Bun을 Zig에서 Rust로 porting했다.
 
-| 항목 | 수치/내용 |
-|------|-----------|
-| 작업 | Bun을 Zig에서 Rust로 포팅 |
-| 결과 | 기존 test suite 99.8% 통과 |
+| 항목 | 내용 |
+|------|------|
+| 작업 | Bun을 Zig에서 Rust로 porting |
+| 테스트 | 기존 test suite 99.8% 통과 |
 | 규모 | 약 750,000 lines of Rust |
 | 기간 | 첫 commit부터 merge까지 11일 |
-| 방식 | struct field별 Rust lifetime 매핑 → `.zig` 대응 `.rs` 파일 생성 → build/test fix loop → 불필요한 data copy PR 생성 |
+| 첫 workflow | Zig codebase의 각 struct field에 적절한 Rust lifetime 매핑 |
+| 다음 workflow | 각 `.zig` 파일에 대응하는 behavior-identical `.rs` 파일 작성 |
+| 검토 방식 | 수백 개 agent가 병렬 작업하고, 각 파일에 reviewer 2개를 붙임 |
+| 수습 loop | build/test suite가 깨끗하게 통과할 때까지 fix loop 실행 |
+| 후속 작업 | merge 후 overnight workflow로 불필요한 data copy를 찾아 PR 생성 |
 
-특히 "hundreds of agents working in parallel with two reviewers on each file"이라는 설명이 중요하다. Dynamic Workflows는 단순 병렬 생성기가 아니라, 파일 단위 작업자와 reviewer를 함께 붙이는 **생산 + 검토 파이프라인**으로 쓰였다.
+이 사례에서 중요한 점은 “생성”만 한 것이 아니라는 점이다. workflow는 파일 단위 구현자와 reviewer를 함께 배치했고, build/test loop로 결과를 계속 수렴시켰다. 즉 Dynamic Workflows는 대규모 작업을 병렬로 흩뿌리는 기능이라기보다, **생산·검토·수정 loop를 묶은 임시 agent 조직**에 가깝다.
 
-다만 Anthropic은 이 Bun 포팅이 아직 production에는 적용되지 않았다고 명시했다. 사례는 기능의 잠재력을 보여주지만, 운영 안정성까지 입증한 것은 아니다.
+단, 원문은 이 Bun rewrite가 아직 production에는 적용되지 않았다고 밝힌다. 따라서 이 사례는 가능성을 보여주는 강한 데모이지, 운영 안정성까지 완전히 입증한 사례는 아니다.
 
-### 8.5 비용과 리스크
+### 8.5 해석
 
-Dynamic Workflows는 일반 Claude Code 세션보다 훨씬 많은 token을 소비할 수 있다. Anthropic도 처음에는 scope가 좁은 task로 사용량 감각을 잡으라고 권장한다.
+Dynamic Workflows는 Claude Code를 “터미널에서 명령을 수행하는 단일 coding agent”에서 **작업을 분해하고, 여러 agent를 실행하고, 검증 결과를 수렴시키는 실행 플랫폼**으로 확장한다.
 
-실무 적용 시 체크포인트:
+실무에서 바로 쓸 만한 영역은 단순 기능 구현보다 다음에 가깝다.
 
-- **작업 경계**: repo 전체가 아니라 module/service 단위로 시작
-- **검증 기준**: 테스트, lint, typecheck, benchmark처럼 기계적으로 확인 가능한 성공 조건 명시
-- **변경 단위**: 대규모 migration도 review 가능한 PR 단위로 쪼개기
-- **비용 상한**: long-running workflow는 token budget과 실행 시간 상한을 먼저 정하기
-- **권한 통제**: auto mode라도 destructive command, deploy, credential 접근은 별도 승인 필요
+- 넓은 codebase에서 놓친 문제를 찾는 discovery
+- security/performance audit처럼 독립 검증이 중요한 작업
+- 대규모 migration처럼 파일 수가 많고 반복 패턴이 있는 작업
+- 중요한 계획을 여러 관점에서 반박해 보는 review
 
-결론적으로 Dynamic Workflows는 Claude Code를 "코딩 도구"에서 **임시 agent 조직을 구성하는 실행 플랫폼**으로 확장한다. 가치가 큰 영역은 기능 구현보다 discovery, audit, migration, review처럼 병렬성과 독립 검증이 성능을 좌우하는 작업이다.
+적용할 때는 범위와 검증 기준을 먼저 좁혀야 한다. repo 전체를 한 번에 맡기기보다 module/service 단위로 시작하고, tests/lint/typecheck/benchmark처럼 기계적으로 판정 가능한 완료 조건을 명시해야 한다. long-running workflow에는 token budget과 시간 상한이 필요하며, deploy·credential 접근·destructive command는 auto mode에서도 별도 승인 대상으로 남겨두는 편이 안전하다.
 
 ---
 
