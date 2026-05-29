@@ -3,7 +3,7 @@
     "title": "Claude Code",
     "url": "/wiki/claude-code",
     "updated": "2026-05-29",
-    "summary": "소스맵 유출로 드러난 내부 아키텍처 분석",
+    "summary": "Claude Code의 에이전틱 루프, 도구 실행, 메모리, Dynamic Workflows 분석",
     "tags": "ai-agent, ai, productivity, engineering",
     "source": "Wiki",
     "external": false
