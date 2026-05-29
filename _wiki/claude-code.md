@@ -1,9 +1,9 @@
 ---
 layout  : wiki
 title   : Claude Code
-summary : 소스맵 유출로 드러난 내부 아키텍처 분석
+summary : Claude Code의 에이전틱 루프, 도구 실행, 메모리, Dynamic Workflows 분석
 date    : 2026-04-01 12:00:00 +0900
-updated : 2026-05-29 09:39:17 +0900
+updated : 2026-05-29 10:10:20 +0900
 tags    : [ai-agent, ai, productivity, engineering]
 toc     : true
 public  : true
@@ -15,7 +15,7 @@ latex   : false
 
 # Claude Code
 
-Anthropic이 만든 터미널 기반 에이전틱 코딩 도구. 2026년 3월 31일, npm 패키지에 소스맵이 실수로 포함되어 내부 TypeScript 소스코드가 공개되었다.
+Anthropic이 만든 터미널 기반 에이전틱 코딩 도구. 소스맵 유출로 드러난 내부 아키텍처와, 이후 공식 발표된 Dynamic Workflows를 함께 정리한다.
 
 > 참고 자료
 > - [Learn Claude Code (9bow)](https://9bow.github.io/learn-claude-code/)
