@@ -3,7 +3,7 @@ layout  : wiki
 title   : 한국방송통신대학교(Korea National Open University)
 summary : KNOU 컴퓨터과학과 학교·학과 안내와 주요 과목 강의별 정리, 핵심 암기표
 date    : 2026-05-18 12:00:00 +0900
-updated : 2026-05-31 12:00:00 +0900
+updated : 2026-06-02 12:00:00 +0900
 tags    : [knou, computer-science, exam-prep]
 toc     : true
 public  : true
@@ -128,6 +128,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. a : 설문지 작성, b : 데이터의 정리, 분석
 3. a : 전문가와의 상담, b : 데이터의 분석
 4. a : 문제의 정의, b : 데이터의 정리, 분석
+
 > 정답: 4
 
 **Q2. 컴퓨터를 통하여 데이터 정보를 효율적으로 처리하기 위해 요구되는 사항이 아닌 것은?**
@@ -135,6 +136,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 정보를 검색하고 수집․분석하기 위해서는 반드시 컴퓨터 프로그램 언어를 알아야 한다.
 3. 데이터 분석에 대한 기본개념과 방법론들을 숙지하여야 한다.
 4. 데이터 분석을 위한 다양한 소프트웨어의 활용법을 숙지하여야 한다.
+
 > 정답: 2
 
 **Q3. 다음 중 범용 통계패키지에 대한 설명으로 잘못된 것은?**
@@ -142,6 +144,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. SAS는 방대한 양의 자료 처리 기능이 뛰어나며 다양한 통계 분석 절차를 제공하고 있다.
 3. 파이썬은 미국에서 개발된 프로그램 언어로 스프레드시트 형태의 데이터 입력을 취하고 있다.
 4. R은 객체지향 프로그래밍 언어로서 대화형 통계분석과 그래프 기능이 뛰어나다.
+
 > 정답: 3
 
 **Q4. 오늘날과 같이 효율적인 정보의 수집, 수집된 정보의 가치판단, 정보활용 능력이 필수적으로 요구되는 사회를 가장 잘 나타낸 말은?**
@@ -149,6 +152,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 전자정보화사회
 3. 지식정보화사회
 4. 전자통신사회
+
 > 정답: 3
 
 **Q5. R 통계패키지를 다운받고자 한다. R 공식 사이트는 ?**
@@ -156,6 +160,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. www.r-project.org
 3. www.r-package.com
 4. www.r-project.com
+
 > 정답: 2
 
 **Q6. 설문문항에서 명목척도에 해당하는 것은?**
@@ -163,6 +168,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 문항2, 문항3
 3. 문항2, 문항4
 4. 문항3, 문항4
+
 > 정답: 3
 
 **Q7. 주어진 설문지를 이용하여 100명의 학생들에게 응답을 얻었다. 데이터의 구성에 대한 올바른 설명은?**
@@ -170,6 +176,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 100개의 케이스와 4개의 변수로 구성된다.
 3. 50개의 케이스와 4개의 변수로 구성된다.
 4. 4개의 케이스와 50개의 변수로 구성된다.
+
 > 정답: 2
 
 > 지문:
@@ -181,6 +188,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. Ⅰ, Ⅲ
 3. Ⅱ, Ⅲ
 4. Ⅰ, Ⅱ, Ⅲ
+
 > 정답: 1
 
 **Q9. 다음 측정 수준에 대한 설명 중 옳지 않은 것은?**
@@ -188,6 +196,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 섭씨온도, 습도, 지능지수 등은 구간척도로 측정된 값이다.
 3. 변수의 측정수준이 적합한 통계 분석 기법의 선택에 영향을 미치지는 않는다.
 4. 계란을 크기에 따라 대․중․소로 구분하면 순서척도로 측정된 것이다.
+
 > 정답: 3
 
 **Q10. 데이터를 입력한 후, 제대로 입력되었는지 점검하고자 한다. 데이터의 오류를 점검하기 위한 방법이 아닌 것은?**
@@ -195,6 +204,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 변수간의 논리적 연관성을 고려하여 확인한다.
 3. 각 케이스를 조사된 설문지와 비교하면서 점검한다.
 4. 설문항목 중 하나라도 응답하지 않은 경우가 있다면 해당 설문지는 분석에서 제외한다.
+
 > 정답: 4
 
 > 지문:
@@ -206,6 +216,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 1개
 3. 2개
 4. 3개
+
 > 정답: 3
 
 **Q12. 한국사회과학데이터센터 사이트는?**
@@ -213,6 +224,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. http://ecos.bok.or.kr/
 3. http://lib.stat.cmu.edu/DASL
 4. http://www.itl.nist.gov/div898/strd/
+
 > 정답: 1
 
 **Q13. 국가경제에 관한 통계들을 제공하는 한국은행 경제시스템 사이트는?**
@@ -220,6 +232,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. http://ecos.bok.or.kr/
 3. http://kostat.go.kr/
 4. http://laborstat.molab.go.kr/
+
 > 정답: 2
 
 **Q14. 통계청 사이트는?**
@@ -227,6 +240,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. http://ecos.bok.or.kr/
 3. http://kostat.go.kr/
 4. http://laborstat.molab.go.kr/
+
 > 정답: 3
 
 **Q15. 다음 중 카네기 멜론 통계학과에서 운영하는 사이트로서 다양한 데이터를 제공하는 사이트는?**
@@ -234,6 +248,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. http://ecos.bok.or.kr/
 3. http://lib.stat.cmu.edu/DASL
 4. http://www.itl.nist.gov/div898/strd/
+
 > 정답: 3
 
 **Q16. NIST(National Institute of Standards and Technology)에서 여러 통계 분석 등과 관련하여 유용한 데이터를 제공하는 사이트는?**
@@ -241,9 +256,11 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. http://ecos.bok.or.kr/
 3. http://lib.stat.cmu.edu/DASL
 4. http://www.itl.nist.gov/div898/strd/
+
 > 정답: 4
 
 **Q17. 다음 중 표본분산을 구하는 공식은?**
+
 > 정답: 4
 
 **Q18. 자료의 개수나 측정단위가 다른 두 개 이상의 자료에 대한 표본집단 간의 상대적인 산포를 비교할 때 이용되는 측도로, 두 집단의 단위가 다르거나, 단위는 같지만 평균의 차이가 클 때 두 그룹의 산포를 비교하는 데 유용하게 이용되는 측도는?**
@@ -251,9 +268,11 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 표준편차
 3. 표준오차
 4. 변동계수
+
 > 정답: 4
 
 **Q19. 다음 중 표본평균을 구하는 공식은?**
+
 > 정답: 3
 
 > 지문:
@@ -263,6 +282,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 21
 3. 22
 4. 23
+
 > 정답: 3
 
 **Q21. 탐색적 자료분석의 관점에서 살펴볼 때 한 묶음의 자료를 정리하는 숫자로서 다섯숫자요약이란 다음 중 무엇인가?**
@@ -270,6 +290,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 중앙값, 평균, 표준편차, 제1사분위수, 제3사분위수
 3. 최소값, 최대값, 중앙값, 제1사분위수, 제3사분위수
 4. 최소값, 최대값, 평균, 제1사분위수, 제3사분위수
+
 > 정답: 3
 
 > 지문:
@@ -279,6 +300,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. ㉠ : 미주 ㉡ : 각주
 3. ㉠ : 장평 ㉡ : 간격
 4. ㉠ : 간격 ㉡ : 장평
+
 > 정답: 1
 
 > 지문:
@@ -290,6 +312,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. ㉠ : chi, ㉡ : &, ㉢ : over
 3. ㉠ : theta, ㉡ : #, ㉢ : vert
 4. ㉠ : theta, ㉡ : &, ㉢ : over
+
 > 정답: 2
 
 > 지문:
@@ -301,6 +324,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. a=vert, b=&
 3. a=cases, b=#
 4. a=vert, b=#
+
 > 정답: 3
 
 > 지문:
@@ -312,6 +336,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. Ⅰ, Ⅲ
 3. Ⅱ, Ⅲ
 4. Ⅰ, Ⅱ, Ⅲ
+
 > 정답: 3
 
 > 지문:
@@ -323,6 +348,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. Ⅰ, Ⅲ
 3. Ⅱ, Ⅲ
 4. Ⅰ, Ⅱ, Ⅲ
+
 > 정답: 2
 
 > 지문:
@@ -334,6 +360,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 가, 다
 3. 나, 다
 4. 가, 나, 다
+
 > 정답: 1
 
 **Q28. 다음은 엑셀의 통합문서(workbook)와 워크시트(worksheet)에 대한 내용이다. 잘못된 것은?**
@@ -341,6 +368,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 통합문서는 워크시트(worksheet), 차트시트(chart sheet), 매크로시트(macro sheet)를 포함한다.
 3. 통합문서를 한 권의 책에 비유한다면 하나의 워크시트는 한 페이지를 의미한다.
 4. 워크시트는 항상 고정된 이름을 가지며, 한번 정해지면 바꿀 수 없다.
+
 > 정답: 4
 
 **Q29. 선택된 셀의 정보를 보여주고, 데이터를 입력하거나 수정할 수 있으며, 계산을 위해서 수식을 입력할 수 있는 부분을 무엇이라 하는가?**
@@ -348,6 +376,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 도구모음
 3. 워크시트
 4. 수식입력줄
+
 > 정답: 4
 
 **Q30. 데이터를 입력한 후 이웃하지 않은 셀들을 선택하고자 한다. 올바른 방법은?**
@@ -355,6 +384,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. CTRL 키를 누른 상태에서 마우스로 원하는 셀들을 선택한다.
 3. SHIFT 키를 누른 상태에서 마우스로 원하는 셀들을 선택한다.
 4. TAB 키를 누른 상태에서 마우스로 원하는 셀들을 선택한다.
+
 > 정답: 2
 
 **Q31. 다음 중 엑셀의 중요한 기능이라고 할 수 없는 것은?**
@@ -362,6 +392,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 통계분석 기능을 가지고 있다.
 3. 인터넷 검색기능을 가지고 있다.
 4. 데이터베이스의 관리도구 기능을 가지고 있다.
+
 > 정답: 3
 
 **Q32. 엑셀에서 B2셀의 값이 60보다 작으면 “불합격”, 60이상이면 “합격”을 D2셀에 표시하고자 한다. 적합한 엑셀함수 사용은?**
@@ -369,6 +400,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. =(IF(B2<60) "불합격“ ELSE "합격”)
 3. =IF(B2<60, "합격“, ”불합격“)
 4. =IF(B2<60, "불합격“, ”합격“)
+
 > 정답: 4
 
 **Q33. B2와 C2 셀에 데이터를 입력한 후 두 값의 평균점수를 구하고자 한다. 적합한 수식입력은?**
@@ -376,6 +408,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. =AVERAGE(B2:C2)
 3. STDEV(B2:C2)
 4. =STDEV(B2:C2)
+
 > 정답: 2
 
 > 지문:
@@ -385,6 +418,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. =AVERAGE(B2:C2)
 3. MEDIAN(B2:C2)
 4. =MEDIAN(B2:C2)
+
 > 정답: 2
 
 > 지문:
@@ -394,6 +428,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 70
 3. 합격
 4. 불합격
+
 > 정답: 3
 
 > 지문:
@@ -403,6 +438,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 121
 3. 오류 발생
 4. 알 수 없음
+
 > 정답: 1
 
 **Q37. 다음과 같은 성별 도수분포를 그래프로 나타내고자 한다. 적합한 그래프끼리 묶인 것은?**
@@ -410,6 +446,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 히스토그램, 원그래프
 3. 막대그래프, 방사형 차트
 4. 원그래프, 분산형 차트
+
 > 정답: 1
 
 **Q38. 통계청 홈페이지를 방문하여 최근 5년간의 매월 소비자 물가지수 데이터를 구하여 적합한 그래프를 엑셀로 그려서 전체적인 경향을 파악하고자 한다. 가장 알맞은 차트의 종류는 무엇인가?**
@@ -417,6 +454,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 히스토그램
 3. 방사형
 4. 꺾은선형
+
 > 정답: 4
 
 **Q39. 시간의 흐름에 따라 관측된 시계열 데이터의 추세 변화나 경향을 파악하고자 한다. 다음 중 이와 같은 분석 목적에 가장 적합하지 않은 그래프는?**
@@ -424,6 +462,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 원 그래프
 3. 세로 막대형 그래프
 4. 분산형 그래프
+
 > 정답: 2
 
 > 지문:
@@ -433,6 +472,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 산점도
 3. 원 그래프
 4. 꺾은선 그래프
+
 > 정답: 3
 
 **Q41. 엑셀을 이용하여 간격이 일정한 시계열 데이터의 경향을 파악하고자 한다. 엑셀 차트 중에서 가장 적합한 차트 유형은?**
@@ -440,6 +480,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 영역형
 3. 분산형
 4. 꺾은선형
+
 > 정답: 4
 
 **Q42. 엑셀 함수를 이용하여 구한 시간의 흐름에 따른 전압 값을 다음과 같은 그래프로 표시하였다. 이와 같은 그래프를 얻기 위해서 사용된 엑셀 차트의 유형은 무엇인가?**
@@ -447,6 +488,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 세로 막대형
 3. 원형
 4. 분산형
+
 > 정답: 4
 
 **Q43. 두 연속인 변수 X와 Y 사이의 상관계수를 구했더니 0.9가 나왔다. 올바른 해석은?**
@@ -454,6 +496,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. X값이 커지면 Y값은 직선관계를 가지고 작아진다.
 3. X값이 커지면 Y값은 곡선관계를 가지고 커진다.
 4. X값이 커져도 Y값은 변화가 없다.
+
 > 정답: 1
 
 **Q44. 두 변수들 사이의 관계를 살펴보기 위해 산점도를 그리고자 한다. 차트마법사의 차트 종류 입력상자에서 선택할 차트 종류는?**
@@ -461,6 +504,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 영역형
 3. 분산형
 4. 꺾은선형
+
 > 정답: 3
 
 **Q45. 도수분포표에 대한 다음 설명 중 옳지 않은 것은?**
@@ -468,6 +512,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 연속형 데이터에 대한 분석에서 도수분포표를 기초로 히스토그램을 그릴 수 있다.
 3. 연속형 데이터에 대해 도수분포표를 작성할 때는 계급의 개수와 폭을 결정하는 것이 중요하다.
 4. 정성적 데이터에 대한 분석에는 활용할 수 없다.
+
 > 정답: 4
 
 **Q46. 다음의 산점도에 대한 상관계수로 가장 적합할 것으로 생각되는 값은?**
@@ -475,6 +520,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. r = 0.25
 3. r = 0.92
 4. r = 1.02
+
 > 정답: 3
 
 **Q47. A2 셀에 “대한민국”이라고 입력되어 있다. "=MID(A2, 2, 2)"의 결과로 알맞은 것은?**
@@ -482,6 +528,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 대한
 3. 한민
 4. 민국
+
 > 정답: 3
 
 **Q48. G2 셀에 어떤 사람의 생년월일이 “1980-12-5”로 같이 입력되어 있다고 한다. 엑셀 함수 “=YEAR(NOW())-YEAR(G2))"의 결과를 바르게 설명한 것은?**
@@ -489,6 +536,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 현재 시점의 나이를 구한다.
 3. 위의 함수식에 NOW()는 인수가 없기 때문에 잘못된 함수이다.
 4. 이 사람의 생년월일 중에서 연도에 해당하는 1980이 표시된다.
+
 > 정답: 2
 
 > 지문:
@@ -498,6 +546,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. =IF(RIGHT(A2,1)=“A”, “컴퓨터”, “통계·데이터과학”)
 3. =IF(LEFT(A2,1)=“A”, “통계·데이터과학”, “컴퓨터”)
 4. =IF(LEFT(A2,1)=“A”, “컴퓨터”, “통계·데이터과학”)
+
 > 정답: 3
 
 > 지문:
@@ -507,6 +556,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. =AVERAGE(D2:F2)+5*G2
 3. =SUM(D2:F2)-5*G2
 4. =SUM(D2:F2)+5*G2
+
 > 정답: 3
 
 **Q51. 다음과 같이 워크시트에 값이 입력되어 있을 때 ‘=SUMPRODUCT(A1:A3, B1:B3)’을 D1 셀에 입력하면 얻게 되는 계산값은 얼마인가?**
@@ -514,6 +564,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 12
 3. 14
 4. 16
+
 > 정답: 1
 
 **Q52. 함수 f(x) = -x³ + 2x² - 2x + 3의 개형을 (-3, 3) 범위에서 그렸더니 2 근처에서 축을 통과한다는 것을 알았다. 엑셀을 활용하여 (-3, 3) 범위에서 f(x) = 0의 정확한 해를 구하고자 한다면 어떤 기능을 이용해야 하는가?**
@@ -521,6 +572,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 꺾은선형 그래프
 3. 데이터분석 기능
 4. 목표값 찾기 기능
+
 > 정답: 4
 
 **Q53. 다음과 같이 셀 C7에 입력되어 있는 수식을 드래그 & 드롭으로 C11까지 채워서 1월부터 6월까지의 미달러($) 기준의 수출액을 원화(￦) 기준으로 바꾸고자 한다. 셀 C6에 입력할 수식으로 맞는 것은?**
@@ -528,6 +580,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. =B$6*B2
 3. =B6*B$2
 4. =B$6*B$2
+
 > 정답: 3
 
 **Q54. 함수 f(x) = -x³ + 2x² - 2x + 3의 개형을 (-3, 3) 범위에서 그리고자 한다. 차트마법사의 차트 종류 입력상자에서 선택할 차트 종류로 알맞은 것은?**
@@ -535,6 +588,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 영역형
 3. 분산형
 4. 꺾은선형
+
 > 정답: 3
 
 **Q55. 복리로 계산될 때 연이율 r, 기간이 n인 경우 현재 금액 p에 대한 일정 기간 후의 원리합계는 p × (1 + r)^n으로 계산할 수 있다. 원금이 1,000만원인 경우에 연 4.5%와 연 5.0%로 향후 20년까지 경과하였을 때 원리합계가 얼마인지 계산하고자 한다. 채워넣기를 이용해서 계산한다고 할 때 B5 셀에 알맞은 함수식은?**
@@ -542,6 +596,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. =$B$1*(1+B$2)^$A5
 3. =$B$1*(1+B$2)^A$5
 4. =$B$1*(1+$B2)^$A$5
+
 > 정답: 2
 
 **Q56. 데이터 객체 ex.data의 변수들을 직접 사용하고자 한다. 유용한 명령은 ?**
@@ -549,6 +604,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. detach(ex.data)
 3. unload(data)
 4. attach(ex.data)
+
 > 정답: 4
 
 **Q57. 그룹변수인 성별(sex)의 값에 따라 변수 salary의 평균(mean)을 구하는 명령은 ?**
@@ -556,6 +612,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. sapply(mean, sex, salary)
 3. tapply(salary, sex, mean)
 4. tapply(mean, sex, salary)
+
 > 정답: 3
 
 **Q58. > ( b )(ex.data)**
@@ -563,6 +620,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. list
 3. print
 4. output
+
 > 정답: 1
 
 > 지문:
@@ -572,6 +630,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. read.table
 3. data.frame
 4. read.xlsx
+
 > 정답: 2
 
 **Q60. package xlsx를 인스톨하였다. 이를 가동시키기 위한 명령은 ?**
@@ -579,50 +638,60 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. use(xlsx)
 3. library(xlsx)
 4. load(xlsx)
+
 > 정답: 3
 
-> 지문:
-> power.value <- function(x,n1,n2,n3=5)
-> { n1.val = x^n1
-> n2.val = x^n2
-> n3.val = x^n3
-> value = list(v1=n1.val, v2=n2.val, v3=n3.val)
-> return(value)
-> }
-> > aval = power.value(2, 1/2, 2)
-> > aval$v3
+```r
+power.value <- function(x,n1,n2,n3=5)
+{ n1.val = x^n1
+n2.val = x^n2
+n3.val = x^n3
+value = list(v1=n1.val, v2=n2.val, v3=n3.val)
+return(value)
+}
+> aval = power.value(2, 1/2, 2)
+> aval$v3
+```
+
 **Q61. 다음 R 명령 수행결과는 ?**
 1. 1.414
 2. 8
 3. 16
 4. 32
+
 > 정답: 4
 
-> 지문:
-> power.value <- function(x,n1,n2,n3=5)
-> { n1.val = x^n1
-> n2.val = x^n2
-> n3.val = x^n3
-> value = list(v1=n1.val, v2=n2.val, v3=n3.val)
-> return(value)
-> }
-> > aval = power.value(2, 1/2, 2)
-> > aval$v1
+```r
+power.value <- function(x,n1,n2,n3=5)
+{ n1.val = x^n1
+n2.val = x^n2
+n3.val = x^n3
+value = list(v1=n1.val, v2=n2.val, v3=n3.val)
+return(value)
+}
+> aval = power.value(2, 1/2, 2)
+> aval$v1
+```
+
 **Q62. 다음 R 명령 수행결과는 ?**
 1. 1.414
 2. 8
 3. 16
 4. 32
+
 > 정답: 1
 
-> 지문:
-> > sq.value <- (function(x) { x*x }
-> > sq.value(2)
+```r
+> sq.value <- (function(x) { x*x }
+> sq.value(2)
+```
+
 **Q63. 다음 R 명령 수행결과는 ?**
 1. 1.414
 2. 2
 3. 4
 4. 8
+
 > 정답: 3
 
 **Q64. 상자그림을 그리는 명령은 ?**
@@ -630,6 +699,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. boxplot(ex.data)
 3. box(data)
 4. box.plot(ex.data)
+
 > 정답: 2
 
 **Q65. 파이썬에서 딕셔너리로 선언하고자 한다. 적합한 것은 ?**
@@ -637,88 +707,114 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. me = {‘height’ : 180, ‘weight’: 70 }
 3. me = {‘height’ = 180, ‘weight’ = 70 }
 4. me = [‘height’ = 180, ‘weight’ = 70 ]
+
 > 정답: 2
 
-> 지문:
-> C:\anaconda3>( ) install tensorflow
+```
+C:\anaconda3>( ) install tensorflow
+```
+
 **Q66. Python 패키지를 설치하고 관리하는 프로그램이다. Dos 창에서 ( ) 안에 맞는 명령은 ?**
+
 > 정답: pip
 
 **Q67. [문제 누락]**
+
 > 정답: www.anaconda.com
 
-> 지문:
-> >>> a = [1,2,3,4,5]
-> >>> a[4]
+```python
+>>> a = [1,2,3,4,5]
+>>> a[4]
+```
+
 **Q68. 다음 파이썬 프로그래밍에서 a[4] 의 결과는 ?**
+
 > 정답: 5
 
-> 지문:
-> def hello2(object):
-> print("Hello " + object + " !")
-> hello2("Jeong")
+```python
+def hello2(object):
+print("Hello " + object + " !")
+hello2("Jeong")
+```
+
 **Q69. 다음과 같이 파이썬 함수문을 작성하였다. hello2("Jeong") 의 결과는 ?**
+
 > 정답: Hello Jeong !
 
-> 지문:
-> nex8.head(3)
-> Out:
-> id sex age edu salary
-> 0 1 1 21 2 150
-> 1 2 2 22 1 100
-> 2 3 1 33 2 200
-> edu_freq = pd.crosstab(index=nex8["edu"], columns="count")
-> import matplotlib.pyplot as plt
-> ( )(edu_freq.index, edu_freq["count"] )
+```python
+nex8.head(3)
+Out:
+id sex age edu salary
+0 1 1 21 2 150
+1 2 2 22 1 100
+2 3 1 33 2 200
+edu_freq = pd.crosstab(index=nex8["edu"], columns="count")
+import matplotlib.pyplot as plt
+( )(edu_freq.index, edu_freq["count"] )
+```
+
 **Q70. 변수 edu 의 막대그림을 그리고자 한다. ( ) 명령은 ?**
+
 > 정답: plt.bar
 
-> 지문:
-> import pandas as pd
-> nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
+```python
+import pandas as pd
+nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
+```
+
 **Q71. 파이썬에서 csv 텍스트 파일을 읽기 위한 명령 ( )는 ?**
+
 > 정답: pd.read_csv
 
-> 지문:
-> nex8.head(3)
-> Out:
-> id sex age edu salary
-> 0 1 1 21 2 150
-> 1 2 2 22 1 100
-> 2 3 1 33 2 200
-> ( )
-> Out:
-> sex age edu salary
-> count 10.000000 10.000000 10.000000 10.000000
-> mean 1.400000 34.800000 2.200000 243.000000
-> std 0.516398 10.347302 0.788811 98.211789
-> min 1.000000 21.000000 1.000000 100.000000
-> 25% 1.000000 29.000000 2.000000 177.500000
-> 50% 1.000000 33.000000 2.000000 220.000000
-> 75% 2.000000 40.500000 3.000000 297.500000
-> max 2.000000 55.000000 3.000000 410.000000
+```python
+nex8.head(3)
+Out:
+id sex age edu salary
+0 1 1 21 2 150
+1 2 2 22 1 100
+2 3 1 33 2 200
+( )
+Out:
+sex age edu salary
+count 10.000000 10.000000 10.000000 10.000000
+mean 1.400000 34.800000 2.200000 243.000000
+std 0.516398 10.347302 0.788811 98.211789
+min 1.000000 21.000000 1.000000 100.000000
+25% 1.000000 29.000000 2.000000 177.500000
+50% 1.000000 33.000000 2.000000 220.000000
+75% 2.000000 40.500000 3.000000 297.500000
+max 2.000000 55.000000 3.000000 410.000000
+```
+
 **Q72. 다음 출력결과와 같이 데이터객체 nex8의 각 변수의 기술통계량을 구하고자 한다. ( ) 명령은 ?**
+
 > 정답: nex8.describe()
 
-> 지문:
-> nex8.head(2)
-> Out:
-> id sex age edu salary
-> 0 1 1 21 2 150
-> 1 2 2 22 1 100
-> nex8 = ( )
-> nex8.head(2)
-> Out:
-> sex age edu salary
-> 0 1 21 2 150
-> 1 2 22 1 100
+```python
+nex8.head(2)
+Out:
+id sex age edu salary
+0 1 1 21 2 150
+1 2 2 22 1 100
+nex8 = ( )
+nex8.head(2)
+Out:
+sex age edu salary
+0 1 21 2 150
+1 2 22 1 100
+```
+
 **Q73. 파이썬에서 nex8.head( ) 의 결과가 다음과 같다. 여기서 변수 id를 제거하고 나머지 변수를 가져오기 위한 명령 ( )은 ?**
+
 > 정답: nex8.iloc[:, 1:]
 
-> 지문:
-> import pandas as pd
-> nex8 = ( )("c:/data/dataintro/nex8-1.xlsx, header=0)
+```python
+import pandas as pd
+nex8 = ( )("c:/data/dataintro/nex8-1.xlsx, header=0)
+```
+
 **Q74. 파이썬에서 엑셀 파일을 읽기 위한 명령 ( )는 ?**
+
 > 정답: pd.read_excel
 
 ### HTML5웹프로그래밍
@@ -794,6 +890,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. HTTP 규약을 정의하는 역할을 한다.
 3. DNS 서버를 직접 운영한다.
 4. 요청을 보내고, 받은 HTML 코드를 해석해 화면에 표시한다.
+
 > 정답: 4
 > 해설: 클라이언트(브라우저)는 요청을 보내고, 서버가 응답한 HTML을 파싱/렌더링하여 화면에 표시한다.
 
@@ -802,6 +899,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. viewport 설정은 모바일 반응형 웹 환경 대응을 위한 필수 설정이다.
 3. keywords 속성은 현대 검색엔진 최적화(SEO)에서 가장 중요한 요소이다.
 4. og:title 등의 Open Graph는 SNS 공유 시 미리보기 정보를 정의한다.
+
 > 정답: 3
 > 해설: meta 요소의 keywords 속성은 현대 SEO 관점에서 사실상 사용되지 않고, 대신에 OG가 훨씬 중요하게 사용된다.
 
@@ -810,6 +908,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. hr
 3. line
 4. border
+
 > 정답: 2
 > 해설: hr 요소는 단순히 수평선을 그리는 것이 아니라, 주제의 전환이라는 의미적 구분선 기능을 수행한다. 따라서 단순히 시각적인 수평선을 그리는 경우라면 CSS border-bottom 속성을 사용한다.
 
@@ -818,6 +917,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. h2 다음에 h4로 건너뛰어도 SEO에 유리하다.
 3. h1은 대표 제목으로 페이지당 1개 사용을 원칙으로 한다.
 4. 제목 요소의 스타일은 HTML에서만 변경해야 한다.
+
 > 정답: 3
 > 해설: 헤딩 요소는 사용 규칙(h1은 페이지당 오직 1개 사용, 순서를 건너뛰지 말고 순차적으로 사용, 디자인 용도(글씨를 크게 하는 용도)로 사용 금지)을 준수하여 사용한다. HTML 요소의 스타일 변경은 CSS로 처리하는 것이 기본적인 원칙이다.
 
@@ -826,6 +926,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. i - em
 3. s - del
 4. span - div
+
 > 정답: 4
 > 해설: b-strong, i-em, s-del, u-ins는 각각 표현 중심(물리적)과 의미 중심(논리적)의 대응 관계이다. 하지만 span과 div는 인라인 컨테이너와 블록 컨테이너의 차이일 뿐 논리/물리적 관계가 아니다.
 
@@ -838,6 +939,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. span
 3. a
 4. strong
+
 > 정답: 1
 > 해설: 주어진 특징은 블록 요소에 대한 설명이다. div는 블록 요소이고, 나머지(span, a, strong)는 모두 인라인 요소이다.
 
@@ -846,6 +948,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. list-style: none;
 3. text-decoration: none;
 4. display: none;
+
 > 정답: 2
 > 해설: 'list-style: none;'을 사용하여 불릿을 제거하는 것이 내비게이션 등을 만들 때 사용하는 기본 패턴이다.
 
@@ -854,19 +957,23 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. dd
 3. ol
 4. caption
+
 > 정답: 2
 > 해설: dl은 "정의-설명" 구조의 리스트를 만들기 위한 것으로, 자식 요소로 '용어/키'를 표시하는 dt 요소와 '설명/값'을 나타내는 dd를 사용한다.
 
-> 지문:
-> img {
-> ( 가 ): 100%;
-> height: ( 나 );
-> }
+```css
+img {
+( 가 ): 100%;
+height: ( 나 );
+}
+```
+
 **Q9. 위 지문 중 img 요소의 srcset 속성이나 picture 요소를 언급하지 않았을 때, 반응형 환경에서 이미지를 유연하게 만드는 CSS 설정에서 (가)와 (나)에 알맞은 내용은?**
 1. (가) width, (나) 100%
 2. (가) max-width, (나) auto
 3. (가) min-width, (나) auto
 4. (가) width, (나) fixed
+
 > 정답: 2
 > 해설: 'max-width: 100%;'는 이미지가 부모 영역보다 커지는 것을 방지하고, 'height: auto;'는 이미지의 비율이 찌그러지는 것을 방지하기 위한 것이다. 이 속성들을 사용하면 화면 크기에 따라 이미지의 크기가 자동으로 늘어나고/줄어드는 기능을 만들 수 있다.
 
@@ -875,6 +982,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. download 속성을 반드시 함께 사용한다.
 3. rel="noopener noreferrer"를 반드시 함께 사용한다.
 4. aria-hidden="true"를 반드시 함께 사용한다.
+
 > 정답: 3
 > 해설: 새 창 열기(target="_blank")을 사용할 때는 보안 취약점 방지를 위해 rel="noopener noreferrer"를 함께 사용하는 것이 규칙이다.
 
@@ -883,6 +991,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. `<a href="#section1">이동</a>`
 3. `<a link="#section1">이동</a>`
 4. `<a target="section1">이동</a>`
+
 > 정답: 2
 > 해설: 내부 앵커로 이동할 때는 href 속성에 #을 붙인 이름("#section1")을 값으로 지정하고, 이를 목적지 요소에서 id 속성값으로 사용한다.
 
@@ -891,6 +1000,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. td
 3. caption
 4. head
+
 > 정답: 1
 > 해설: th(table header) 요소는 열이나 행의 제목을 나타내는 셀이다. 반면 caption은 표 전체의 제목을 기본적으로 표 상단 중앙에 나타내는 것으로, 표 의미를 요약해 주는 접근성 핵심 요소이다.
 
@@ -899,6 +1009,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 표의 행을 의미적으로 그룹핑해 구조 이해 및 스타일링과 출력에 도움을 준다,
 3. 표를 렌더링하기 위해서 반드시 사용해야 한다.
 4. 각 영역으로 구분한 후 영역 제목을 부여하기 위한 요소이다.
+
 > 정답: 2
 > 해설: thead/tbody/tfoot 요소는 표에서 행 단위 콘텐츠를 각각 머리글, 본문, 바닥글 영역으로 명시적인 구분/그룹핑을 위한 것으로, 시각적인 "장식"이 아니라 구조 구분용이다.
 
@@ -907,6 +1018,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. `<audio autoplay muted></audio>`
 3. `<audio autoplay loop></audio>`
 4. `<audio autoplay preload="auto"></audio>`
+
 > 정답: 2
 > 해설: 최신 브라우저는 브라우저 정책상 미디어의 자동 재생(autoplay)을 강제로 차단한다. 즉 사용자의 조작 없는 자동 재생을 제한한다. 따라서 이를 사용하려면 반드시 muted 속성을 함께 명시해야 한다.
 
@@ -915,6 +1027,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. autoplay를 강제하기 위해
 3. 서로 다른 포맷을 제공해 브라우저 호환성을 확보하기 위해
 4. controls 속성의 UI를 숨기기 위해
+
 > 정답: 3
 > 해설: 브라우저마다 미디어 파일의 지원 상황이 다를 수 있으므로 audio/video 요소의 단일 src 속성 대신 source 요소로 사용하여 대체 소스를 제공하며, 이는 브라우저 호환성을 확보하기 위한 실무적 접근 방법이다.
 
@@ -923,6 +1036,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 파일 용량을 줄이기 위해
 3. 자동 재생을 보장하기 위해
 4. 브라우저/검색엔진/개발자에게 역할(의미)을 명확히 전달하기 위해
+
 > 정답: 4
 > 해설: 시멘틱 요소는 브라우저, 검색엔진, 개발자에게 이 부분이 어떤 역할을 하는지 명확한 의미를 전달하기 위한 것이며, 이는 접근성, 검색엔진 최적화(SEO) 및 유지보수와 밀접하게 연결되어 있다.
 
@@ -931,6 +1045,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 이미지를 크게 보이게 한다.
 3. 이미지가 깨지면 자동 복구한다.
 4. alt를 대신한다.
+
 > 정답: 1
 > 해설: figure는 '독립적인 콘텐츠+캡션'이라는 결합의 의미를 브라우저/검색엔진에 전달한다. 따라서 캡션이 필요 없는 경우에는 현실적으로 figure를 사용하지 않으며, 이미지, 코드 블록, 도표, 인용문 등이 독립적인 콘텐츠에 해당한다.
 
@@ -939,6 +1054,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. datetime
 3. value
 4. content
+
 > 정답: 2
 > 해설: time은 날짜/시간에 의미를 부여하기 위한 요소로서, 검색엔진이 이를 정확히 인식하게 하여 검색 결과에 날짜를 표시할 때 주로 사용한다. 이때 요소의 텍스트는 단순히 사람의 이해를 돕기 위한 것이고, 속성 datetime="YYYY-MM-DD"를 사용하면 검색엔진이나 캘린더 앱이 날짜를 정확히 인식할 수 있다.
 
@@ -947,6 +1063,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 진행률이 기본값인 0%로 표시된다.
 3. 파란 막대가 좌우로 움직이는 불확정 상태 애니메이션이 재생된다.
 4. 무조건 진행률 100%로 표시되어 작업의 완료를 알려준다.
+
 > 정답: 3
 > 해설: progress 요소는 진행 중인 작업의 진행률을 표시하기 위한 것으로, 자바스크립트와의 연동을 통해서 value의 지속적인 업데이트가 필수적이다. 만약 요소에서 value 속성을 사용하지 않으면 작업 완료 시간을 예측할 수 없는 '불확정 상태'로 간주하여, 브라우저는 자동으로 파란 막대가 좌우로 왔다 갔다 하는 애니메이션이 재생된다.
 
@@ -955,6 +1072,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 로그인 처리
 3. 게시글 작성
 4. 상품 목록 검색 및 필터링
+
 > 정답: 4
 > 해설: 검색이나 조회 기능은 URL 공유가 가능해야 하므로 속성값 get이 적합하며, 데이터 변경이나 민감 정보(예: 로그인, 글쓰기, 회원가입, 결제, 대량 데이터 등)는 post 값을 사용한다.
 
@@ -963,6 +1081,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. alt
 3. placeholder
 4. value
+
 > 정답: 3
 > 해설: placeholder 속성은 입력하기 전에 희미하게 보이는 예시/힌트 텍스트를 제공하지만, 입력 시 사라지므로 label 요소를 대체하는 방법으로 사용하면 안 된다. 참고로 alt 속성은 이미지 버튼(type="image")의 대체 텍스트를 나타낸다. value 속성은 입력창에 미리 채워져 있을 초기값 또는 현재값을 의미하며, 버튼(submit, button 등)에서는 버튼 위에 표시될 글자(‘버튼 이름’)가 된다.
 
@@ -971,6 +1090,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 모바일에서 적절한 키보드 레이아웃을 유도하는 것
 3. 자동 검증을 끄는 것
 4. 텍스트 입력에 사용하려는 언어의 종류를 지정하기 것
+
 > 정답: 2
 > 해설: inputmode 속성은 모바일 키보드의 모양을 결정하는 속성이다. 즉 모바일 기기(아이폰, 안드로이드)에서 입력창을 눌렀을 때 어떤 모양의 가상 키보드를 띄울지를 브라우저에게 알려준다. 신용카드 번호나 인증 번호처럼 순수 숫자만 필요한 경우, type="number" 대신 type="text"와 inputmode="numeric" 조합을 실무적으로 선호한다.
 
@@ -979,6 +1099,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 입력을 숨긴다.
 3. 전송을 차단한다.
 4. 자동완성을 끈다.
+
 > 정답: 1
 > 해설: 폼 안에서 관련된 입력 요소들을 하나의 그룹으로 묶고, 그 그룹의 제목을 붙여주는 요소이다. 특히 체크박스나 라디오 버튼을 사용할 때는 접근성을 위해 반드시 사용해야 한다. 그룹의 제목 지정은 legend 요소를 사용하며, 이 요소는 fieldset 요소의 첫 번째 자식 요소로 사용해야 한다.
 
@@ -987,6 +1108,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. name이 같아야 한다.
 3. pattern이 같아야 한다.
 4. group이 같아야 한다.
+
 > 정답: 2
 > 해설: radio 버튼은 같은 그룹에서 오직 하나의 항목만 선택("배타적 선택") 가능하며, 그룹이 여러 개이면 그룹마다 하나씩 그룹 수만큼 선택할 수 있다. 이때 동일한 그룹에 속하는 항목들은 동일한 name 속성값으로 지정해야 한다.
 
@@ -995,6 +1117,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. data
 3. list
 4. options
+
 > 정답: 3
 > 해설: 선택 리스트인 datalist 요소를 사용하기 위해서는 input 요소와의 연동이 필수적이며, 이를 위해서는 input 요소의 list 속성과 datalist 요소의 id 속성을 동일한 값으로 지정한다.
 
@@ -1003,6 +1126,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 2. 스타일의 재사용이 불가능하기 때문이다.
 3. 외부 스타일 시트보다 명시도 점수가 낮아 적용이 안 되기 때문이다.
 4. 구조(HTML)와 표현(CSS)의 분리 원칙에 어긋나기 때문이다.
+
 > 정답: 3
 > 해설: 인라인 스타일은 명시도 점수가 1,000점으로 매우 높아 오히려 다른 스타일로 덮어쓰기가 어렵다.
 
@@ -1021,6 +1145,7 @@ p { color: red; }
 2. blue
 3. black
 4. red와 blue의 혼합색
+
 > 정답: 2
 > 해설: 클래스 선택자(.text)와 요소/타입 선택자(p)가 충돌된 경우이다. 이때 명시도 점수를 계산하면 클래스 선택자는 10점, 타입 선택자는 1점이므로 점수가 더 높은 클래스 스타일이 적용된다.
 
@@ -1029,6 +1154,7 @@ p { color: red; }
 2. input[required] { ... }
 3. input.required { ... }
 4. input #required { ... }
+
 > 정답: 2
 > 해설: 속성 선택자는 기본적으로 '[ ]'를 사용해서 표현하며, 특정 속성의 존재 여부만으로 선택할 때는 '[속성명]' 문법을 사용한다. 이 밖의 주요 속성 표현 패턴으로는 '[속성="값"]', '[속성*="값"]', '[속성^="값"]', '[속성$="값"]' 등이 있다.
 
@@ -1037,6 +1163,7 @@ p { color: red; }
 2. ul li
 3. ul + li
 4. ul ~ li
+
 > 정답: 1
 > 해설: ul 바로 밑에 있는 li들만 선택한다는 것은 직계 자식 요소만 골라낸다는 의미이며, 자식 결합자는 > 기호를 사용한다. ② 자손 결합자, ③ 인접 형제 결합자, ④ 일반 형제 결합자에 해당한다.
 
@@ -1045,6 +1172,7 @@ p { color: red; }
 2. auto
 3. transparent
 4. currentColor
+
 > 정답: 4
 > 해설: 키워드 currentColor를 사용하면 글자 색상이 바뀔 때 테두리나 아이콘 색도 자동으로 함께 바뀐다. transparent는 완전 투명한 검정색을 나타낸다.
 
@@ -1053,6 +1181,7 @@ p { color: red; }
 2. 부모 요소 기준 상대 단위
 3. 색상 단위
 4. 화면 너비 기준 상대 단위
+
 > 정답: 1
 > 해설: rem은 최상위 요소(루트 요소, html) 크기에 비례하는 단위로서, 보통 1rem=16px이다. 반면 em은 부모 요소 크기에 비례하는 단위이며, 이는 버튼 내부의 패딩/마진 같이 컴포넌트 내부 미세 조정에 제한적으로 사용하는 것이 바람직하다.
 
@@ -1061,6 +1190,7 @@ p { color: red; }
 2. font-size: 16px; line-height: 1.5;
 3. font-size: 40px; line-height: 0.8;
 4. font-size: 8px; line-height: 1;
+
 > 정답: 2
 > 해설: 본문을 기준으로 글자 크기 1rem 그리고 줄간격 1.5~1.6(한글 기준)이 가독성 원칙에 가장 부합한다.
 
@@ -1069,6 +1199,7 @@ p { color: red; }
 2. border-collapse
 3. line-height
 4. list-style
+
 > 정답: 3
 > 해설: font는 글꼴 관련 font-*의 단축 속성으로, "font: [스타일] [변형] [두께] 크기 / 줄간격 서체;" 형식을 사용한다. 이때 폰트와 직접 관련된 속성 이외에 line-height 값이 함께 지정될 수 있으며, 이때에는 반드시 font-size 값 뒤에 슬래시를 사용해서 값을 표현해야 한다.
 
@@ -1077,6 +1208,7 @@ p { color: red; }
 2. text-transform
 3. text-decoration
 4. text-overflow
+
 > 정답: 4
 > 해설: 기본적으로 말줄임(...) 표시를 위한 속성은 text-overflow이다. 실제 한 줄 말줄임을 위해서는 "white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"와 같이 3가지 속성을 하나의 공식처럼 반드시 함께 사용한다.
 
@@ -1085,6 +1217,7 @@ p { color: red; }
 2. ul { list-style: none; padding: 0; margin: 0; }
 3. ul { display: inline; border: 1px solid black; }
 4. ul { vertical-align: middle; }
+
 > 정답: 2
 > 해설: 리스트의 기본 기호와 들여쓰기를 모두 제거해야 메뉴 디자인을 자유롭게 할 수 있다. 기본 불릿/기호를 없애기 위해서는 "ul, ol { list-style-type: none; }"을 사용한다.
 
@@ -1093,49 +1226,59 @@ p { color: red; }
 2. table-layout: nowrap
 3. table-layout: hidden
 4. table-layout: ellipsis
+
 > 정답: 1
 > 해설: table-layout 속성은 테이블 각 셀의 너비를 계산하는 방식과 관련된 속성으로, 테이블의 렌더링 속도와 디자인 고정을 위해 매우 중요하게 사용된다. 이때 속성값으로 fixed로 지정(실무 추천)하면 내용물의 길이에 상관없이 지정한 폭을 강제로 유지할 수 있어 테이블의 안정성을 높일 수 있다. 한편 auto로 지정하면 내용물의 길이에 따라 각 칸의 너비가 자동으로 조정된다.
 
-> 지문:
-> .box {
-> width: 200px;
-> padding-left: 10px;
-> padding-right: 10px;
-> border: 1px solid black;
-> }
+```css
+.box {
+width: 200px;
+padding-left: 10px;
+padding-right: 10px;
+border: 1px solid black;
+}
+```
+
 **Q37. 브라우저의 기본 box-sizing 설정("box-sizing: content-box;")에서 주어진 스타일이 적용되는 요소의 실제 렌더링 가로 너비는 얼마인가?**
 1. 200px
 2. 202px
 3. 220px
 4. 222px
+
 > 정답: 4
 > 해설: 기본값인 content-box에서는 width(200) + 좌우 패딩(20) + 좌우 테두리(2) = 222px이 실제 차지하는 가로 너비가 된다. 한편, 속성값 border-box의 경우에는 지정한 width 값에 콘텐츠, 패딩, 테두리의 크기까지 모두 포함되므로 실제 렌더링 가로 너비는 width의 크기와 같다.
 
-> 지문:
-> div {
-> _______ : 30px;
-> }
+```css
+div {
+_______ : 30px;
+}
+```
+
 **Q38. 요소의 왼쪽 바깥쪽 여백을 30px 벌려서 다른 요소를 오른쪽으로 밀어내고 싶을 때 사용하는 속성은?**
 1. margin-left
 2. padding-left
 3. border-left
 4. spacing-left
+
 > 정답: 1
 > 해설: 바깥 여백'은 margin이고, '왼쪽'은 left이므로 margin-left을 사용해야 한다. margin은 요소와 다른 요소 사이의 간격을 벌릴 때 사용하며, padding은 콘텐츠와 테두리 사이의 공간으로, 요소의 배경색이나 테두리 안쪽 공간을 넓힐 때 사용한다.
 
-> 지문:
-> .container {
-> width: 800px;
-> }
-> .box {
-> width: 400px;
-> ___________
-> }
+```css
+.container {
+width: 800px;
+}
+.box {
+width: 400px;
+___________
+}
+```
+
 **Q39. 특정 블록 요소(.box)를 부모 컨테이너(.container)의 '가로 중앙'에 오도록 정렬할 때 margin 속성을 활용하려고 한다. 이에 알맞은 코드 표현은?**
 1. margin: auto 0;
 2. margin: 0 auto;
 3. margin-left: 50%;
 4. padding: 0 auto;
+
 > 정답: 2
 > 해설: 'margin: 0 auto;'는 위아래 마진을 0으로, 좌우 마진을 브라우저가 남은 공간을 반씩 나누어 갖도록(auto) 해서 블록 요소를 가로 중앙에 배치하는 가장 고전적이고 확실한 방법으로 실무에서 많이 사용된다. 이 방법은 인라인 요소나 width가 없는 요소에서는 동작하지 않는다.
 
@@ -1144,6 +1287,7 @@ p { color: red; }
 2. grid-columns: 3;
 3. columns: grid(3);
 4. grid-template-rows: 1fr 1fr 1fr;
+
 > 정답: 1
 > 해설: 'grid-template-columns: 1fr 1fr 1fr;'는 열의 개수와 크기를 정의한다. 크기를 지정하는 fr 단위는 남은 공간의 비율을 의미하며, '1fr 1fr 1fr'은 남은 공간을 1:1:1 비율로 3등분한다.
 
@@ -1152,6 +1296,7 @@ p { color: red; }
 2. border-radius: 100%;
 3. border-radius: 9999px; (또는 매우 큰 px 값)
 4. border-radius: auto;
+
 > 정답: 3
 > 해설: 속성값 50%을 지정하면 완전한 원/타원이 되고, 9999px 처럼 요소의 실제 높이보다 훨씬 큰 px 값을 지정하면 브라우저가 그릴 수 있는 최대치의 반원을 그려 양쪽 끝이 둥근 캡슐/알약 모양이 된다.
 
@@ -1160,6 +1305,7 @@ p { color: red; }
 2. inset
 3. inner
 4. internal
+
 > 정답: 2
 > 해설: inset 키워드를 쓰면 안쪽으로 파고드는 내부 그림자가 만들어진다. 참고로, text-shadow 속성은 inset 키워드를 지원하지 않는다.
 
@@ -1168,6 +1314,7 @@ p { color: red; }
 2. contain
 3. 100% 100%
 4. auto
+
 > 정답: 2
 > 해설: contain은 이미지가 잘리지 않는 한도 내에서 요소를 꽉 채우도록 비율을 유지하며 늘어난다. 하지만, 빈 여백이 생길 수 있다. cover는 빈틈없이 박스를 꽉 채우지만 이미지가 잘릴 수 있으며, 100% 100%는 박스 크기에 억지로 끼워 맞추기 때문에 찌그러짐이 발생할 수 있다.
 
@@ -1176,6 +1323,7 @@ p { color: red; }
 2. background-attachment
 3. background-clip
 4. box-sizing
+
 > 정답: 3
 > 해설: background-clip은 배경색이나 이미지가 그려지는(칠해지는) 범위를 지정한다. padding-box로 설정하면 투명한 테두리나 점선 테두리 밑으로 배경이 비치지 않는다.
 
@@ -1184,6 +1332,7 @@ p { color: red; }
 2. 왼쪽에서 오른쪽으로 (to right)
 3. 오른쪽에서 왼쪽으로 (to left)
 4. 위쪽에서 아래쪽으로 (to bottom)
+
 > 정답: 2
 > 해설: CSS 선형 그라디언트에서 0deg는 위쪽(12시)이며, 시계 방향으로 증가한다. 따라서 90deg는 오른쪽(3시 방향, to right)을 의미하며, 기본값은 180deg(to bottom)이다.
 
@@ -1192,45 +1341,55 @@ p { color: red; }
 2. rotate-gradient
 3. sweep-gradient
 4. conic-gradient
+
 > 정답: 4
 > 해설: conic-gradient( )는 원뿔(cone)을 위에서 내려다본 것처럼 각도(deg, turn)를 기준으로 색상이 회전하는 그라디언트 함수입니다. linear-gradient( )는 색상이 한 방향으로 변하며, radial-gradient( )는 중심점에서 바깥쪽으로 퍼저 나가는 원형/타원형의 그라디언트이다.
 
-> 지문:
-> .modal {
-> position: absolute;
-> top: 50%; left: 50%;
-> transform: ___(A)___;
-> }
+```css
+.modal {
+position: absolute;
+top: 50%; left: 50%;
+transform: ___(A)___;
+}
+```
+
 **Q47. 위 지문에서 요소를 화면의 정중앙에 완벽하게 배치할 때, 'top: 50%; left: 50%;' 로 밀어낸 후 요소 자기 자신의 크기 절반만큼 다시 위/왼쪽으로 당겨오기 위해 사용하는 (A)에 알맞은 것은?**
 1. translate(-50%, -50%)
 2. translate(50%, 50%)
 3. translate(-50vw, -50vh)
 4. margin(-50%, -50%)
+
 > 정답: 1
 > 해설: translate 내부의 % 값은 부모가 아닌 요소 자기 자신의 너비와 높이를 기준으로 한다. 따라서 각 방향으로 -50%를 주면 자신의 크기 절반만큼 정확히 역이동하여 완벽한 중앙 정렬이 이룰 수 있다.
 
-> 지문:
-> .card-face {
-> _________: hidden;
-> }
+```css
+.card-face {
+_________: hidden;
+}
+```
+
 **Q48. CSS로 카드를 뒤집는 효과(Flip Card)를 만들었을 때, 카드가 180도 회전하여 뒷면을 보이고 있을 때 그 뒷면의 내용(거울처럼 뒤집힌 글자)이 보이지 않게 숨겨주는 속성은?**
 1. visibility
 2. opacity
 3. display
 4. backface-visibility
+
 > 정답: 4
 > 해설: 요소가 3D 회전하여 사용자와 등지게(뒷면이 보이게) 되었을 때, 해당 면을 렌더링하지 않고 투명하게 처리하는 속성 표현은 'backface-visibility: hidden;'이다.
 
-> 지문:
-> .box {
-> _________: background-color;
-> transition-duration: 1s;
-> }
+```css
+.box {
+_________: background-color;
+transition-duration: 1s;
+}
+```
+
 **Q49. 위 지문에서 요소의 상태가 변할 때, 특정 CSS 속성에만 부드러운 애니메이션 효과를 주고자 할 때 대상을 지정하기 위해 밑줄 친 부분에 들어갈 속성은?**
 1. transition-target
 2. transition-type
 3. transition-property
 4. transition-name
+
 > 정답: 3
 > 해설: 전환 효과를 적용할 CSS 속성(예: width, opacity 등)을 지정할 때는 transition-property를 사용하며, 이와 함께 transition-duration 속성을 0이 아닌 값으로 지정해야 전환 효과를 부여할 수 있다.
 
@@ -1239,30 +1398,37 @@ p { color: red; }
 2. transition-speed-curve
 3. transition-pace
 4. transition-flow
+
 > 정답: 1
 > 해설: transition-timing-function은 애니메이션의 속도 변화(가속과 감속)를 제어하는 속성이며, 보기에서 언급한 나머지 것들은 실제로 존재하지 않는다.
 
-> 지문:
-> .box {
-> animation-direction: ________;
-> }
+```css
+.box {
+animation-direction: ________;
+}
+```
+
 **Q51. 위 지문에서 애니메이션이 정방향(0→100)으로 실행된 후, 다시 툭 끊겨 처음으로 돌아가지 않고 역방향(100→0)으로 부드럽게 되돌아오는 '요요 효과'를 주는 속성값은?**
 1. reverse
 2. alternate
 3. normal
 4. backwards
+
 > 정답: 2
 > 해설: 속성값 alternate는 반복 실행될 때 홀수 번째는 정방향, 짝수 번째는 역방향으로 진행하여 매끄러운 왕복 효과를 연출한다.
 
-> 지문:
-> .box:hover {
-> _________: paused;
-> }
+```css
+.box:hover {
+_________: paused;
+}
+```
+
 **Q52. 위 지문에서 진행 중인 애니메이션을 마우스 오버 시 일시 정지하고 싶을 때 사용하는 속성은?**
 1. animation-stop
 2. animation-play-state
 3. animation-status
 4. animation-control
+
 > 정답: 2
 > 해설: animation-play-state은 애니메이션의 재생 상태를 paused(일시 정지) 또는 running(재생)으로 제어하는 속성이다.
 
@@ -1271,6 +1437,7 @@ p { color: red; }
 2. min-width: 300px;
 3. column-min: 300px;
 4. column-size: 300px;
+
 > 정답: 1
 > 해설: column-width는 단의 최적 너비(가이드라인)를 지정하는 속성으로, 공간이 허락하는 한 이 너비 이상을 유지하며 단의 개수를 자동으로 늘리거나 줄여서 반응형 다단을 구성할 수 있다.
 
@@ -1279,87 +1446,109 @@ p { color: red; }
 2. columns: equal;
 3. column-distribute: even;
 4. column-fill: balance;
+
 > 정답: 4
 > 해설: column-fill 속성의 기본값인 balance는 내용이 부족하더라도 모든 단의 높이를 균형 있게 맞추기 위해 내용을 적절히 쪼갠다.
 
-> 지문:
-> ________ score = 100;
-> score = 80;
+```
+________ score = 100;
+score = 80;
+```
+
 **Q55. 위 지문의 자바스크립트에서 값이 중간에 변할 수 있는 일반적인 변수를 선언할 때 사용하는 가장 모던하고 올바른 키워드는?**
 1. const
 2. let
 3. var
 4. int
+
 > 정답: 2
 > 해설: ES6 이후부터는 값이 변할 수 있는 변수를 만들 때 버그가 많은 var 대신 안전한 let을 사용하는 것이 표준이다. 한편 변하지 않는 고정된 값(상수)을 선언할 때는 const 키워드를 사용한다.
 
-> 지문:
-> const userMsg = "";
-> const defaultMsg = "환영합니다";
-> const result = userMsg || defaultMsg;
+```javascript
+const userMsg = "";
+const defaultMsg = "환영합니다";
+const result = userMsg || defaultMsg;
+```
+
 **Q56. 위 지문에서 논리 연산자의 단축 평가를 활용한 코드이다. 변수 result에 할당되는 값은?**
 1. "" (빈 문자열)
 2. undefined
 3. true
 4. "환영합니다"
+
 > 정답: 4
 > 해설: 논리합(||) 연산자는 왼쪽 피연산자가 falsy 값("", 0, null, undefined 등)이면 오른쪽 피연산자를 그대로 반환합니다. 빈 문자열은 falsy이므로 defaultMsg가 변수에 할당된다. 이는 매개변수 기본값 설정에 자주 쓰이는 패턴이다.
 
-> 지문:
-> console.log(10 == "10"); // (A)
-> console.log(10 === "10"); // (B)
+```javascript
+console.log(10 == "10"); // (A)
+console.log(10 === "10"); // (B)
+```
+
 **Q57. 위 지문에서 자바스크립트의 비교 연산자 '=='와 '==='를 적용하였을 때 (A)와 (B) 문장의 결과값으로 올바른 것은?**
 1. (A) true, (B) false
 2. (A) false, (B) false
 3. (A) true, (B) true
 4. (A) false, (B) true
+
 > 정답: 1
 > 해설: '=='(느슨한 비교)는 브라우저가 값의 타입을 강제로 변환하여 비교하므로 true가 나온다. 하지만 '==='(엄격한 비교)는 타입과 값이 모두 일치해야 하므로 false가 된다. 실무에서는 버그 방지를 위해 항상 ===를 사용한다.
 
-> 지문:
-> const fruits = ["Apple", "Banana"];
-> fruits.push("Cherry");
-> fruits.pop( );
+```javascript
+const fruits = ["Apple", "Banana"];
+fruits.push("Cherry");
+fruits.pop( );
+```
+
 **Q58. 위 지문의 배열에 데이터를 추가하고 삭제하는 내장 메서드들의 동작을 바르게 설명한 것은?**
 1. push는 배열의 맨 앞에 요소를 추가하고, pop은 맨 앞의 요소를 제거한다.
 2. push는 배열의 맨 뒤에 요소를 추가하고, pop은 맨 뒤의 요소를 제거한다.
 3. 위 동작을 마치면 원본 배열은 ["Cherry"]가 된다.
 4. 배열의 원본은 유지되며 새로운 배열이 반환된다.
+
 > 정답: 2
 > 해설: push( )와 pop( )은 햄버거 통(스택)처럼 배열의 맨 마지막 꼬리 부분을 다루는 메서드이며, 맨 앞부분을 다루는 것은 unshift( )와 shift( )이다. 이 메서드들은 원본 배열 자체를 변경한다.
 
-> 지문:
-> const nums = [1, 2, 3];
-> const doubled = nums.________(n => n * 2); // [2, 4, 6]
+```javascript
+const nums = [1, 2, 3];
+const doubled = nums.________(n => n * 2); // [2, 4, 6]
+```
+
 **Q59. 위 지문의 배열에서 기존 원본을 훼손(수정)하지 않고, 각 요소를 콜백 함수로 가공하여 완전히 새로운 똑같은 길이의 배열을 만들어 반환하는 함수형 메서드는?**
 1. forEach( )
 2. filter( )
 3. map( )
 4. reduce( )
+
 > 정답: 3
 > 해설: map( )은 배열의 모든 요소를 순회하며 가공한 결괏값들로 꽉 채워진 '새로운 배열'을 반환하는 메서드이다.
 
-> 지문:
-> form.addEventListener('submit', function(e) {
-> e._________________; // 기본 동작 중지
-> console.log('페이지 이동 없이 JS 로직 실행');
-> });
+```javascript
+form.addEventListener('submit', function(e) {
+e._________________; // 기본 동작 중지
+console.log('페이지 이동 없이 JS 로직 실행');
+});
+```
+
 **Q60. 사용자가 폼 전송 버튼(`<button type="submit">`)을 눌렀을 때, 페이지가 새로고침되며 서버로 데이터가 넘어가는 브라우저의 '기본 동작'을 강제로 취소시키는 메서드는?**
 1. stopPropagation( )
 2. cancelEvent( )
 3. preventDefault( )
 4. stopBubbling( )
+
 > 정답: 3
 > 해설: e.preventDefault( )를 호출하면 요소가 가진 원래의 기능(&lt;a&gt;의 링크 이동이나 &lt;form&gt;의 제출 등)이 작동하지 않고 취소하여 JS가 통제권을 쥐게 한다.
 
-> 지문:
-> const items = document.__________________('li');
-> items.forEach(item => console.log(item));
+```javascript
+const items = document.__________________('li');
+items.forEach(item => console.log(item));
+```
+
 **Q61. 위 지문 중 배열 순회 시 최신 브라우저에서 forEach 메서드를 별도의 변환 없이 바로 사용할 수 있는 DOM 컬렉션은?**
 1. getElementsByTagName
 2. getElementById
 3. getElementsByClassName
 4. querySelectorAll
+
 > 정답: 4
 > 해설: querySelectorAll( )이 반환하는 NodeList는 최신 브라우저에서 forEach 메서드를 자체 지원하여 코드가 훨씬 간결해진다.
 
@@ -1368,48 +1557,61 @@ p { color: red; }
 2. 이벤트 위임
 3. 콜백 분리
 4. 클로저
+
 > 정답: 2
 > 해설: 부모 요소에 단 하나의 리스너만 등록하여, 새로 추가되는 동적 자식 요소의 이벤트까지 메모리 낭비 없이 한 번에 자동 관리하는 방식을 이벤트 위임(event delegation)이라 한다.
 
-> 지문:
-> box.classList.____________('active');
+```javascript
+box.classList.____________('active');
+```
+
 **Q63. 위 지문에서 classList를 사용하여 요소에 특정 클래스가 있으면 제거하고, 없으면 추가하기 위해 사용하는 메서드는?**
 1. switch
 2. replace
 3. toggle
 4. contains
+
 > 정답: 3
 > 해설: classList.toggle('클래스명')은 스위치처럼 클래스의 존재 여부를 파악해 가감(Add/Remove)을 알아서 처리해 주는 핵심 메서드이다.
 
-> 지문:
-> box.style.___________________ = "gold";
+```
+box.style.___________________ = "gold";
+```
+
 **Q64. 위 지문에서 DOM 요소의 인라인 스타일을 직접 수정할 때, 하이픈이 포함된 CSS 속성명(background-color)은 자바스크립트에서 어떻게 작성해야 하는가?**
 1. background-color
 2. background_color
 3. BackgroundColor
 4. backgroundColor
+
 > 정답: 4
 > 해설: 자바스크립트 객체의 속성으로 CSS 속성을 제어할 때는 마이너스(-) 기호 연산과 헷갈리지 않게 하이픈을 빼고 카멜케이스(낙타체)인 backgroundColor로 작성해야 합니다.
 
-> 지문:
-> const cart = document.querySelector('#cart');
-> cart.__________________;
+```javascript
+const cart = document.querySelector('#cart');
+cart.__________________;
+```
+
 **Q65. 위 지문에서 쇼핑 장바구니처럼 `<div>` 안의 모든 상품(자식 요소)을 한 번에 싹 지워버리려 한다. 성능이 가장 뛰어나고 깔끔한 최신 메서드 호출 방식은?**
 1. innerHTML = ""
 2. removeChildren( )
 3. replaceChildren( )
 4. clearAll( )
+
 > 정답: 3
 > 해설: element.replaceChildren( ) 메서드에 인자를 넣지 않고 호출하면, 내부의 모든 자식 요소가 가장 빠르고 안전하게 삭제된다.
 
-> 지문:
-> // 방송대로 페이지 이동
-> ________________ = 'https://www.knou.ac.kr';
+```
+// 방송대로 페이지 이동
+________________ = 'https://www.knou.ac.kr';
+```
+
 **Q66. 위 지문에서 현재 웹 페이지의 주소(URL) 정보를 읽거나, 다른 페이지로 강제 이동시킬 때 사용하는 BOM의 핵심 객체와 속성은?**
 1. window.navigator.href
 2. window.history.move
 3. location.href
 4. document.move
+
 > 정답: 3
 > 해설: location 객체의 href 속성에 새로운 URL을 대입하면 해당 주소로 페이지가 이동한다.
 
@@ -1418,6 +1620,7 @@ p { color: red; }
 2. fillStyle, strokeStyle, globalAlpha 등의 색상 속성
 3. 캔버스 도화지에 이미 색칠된 픽셀(그림) 데이터
 4. lineWidth와 lineCap 등의 선 스타일
+
 > 정답: 3
 > 해설: "캔버스(도화지)에 그려진 그림(픽셀)은 저장되지 않는다. 오직 '붓의 상태'와 '도화지의 상태'만 저장된다." save( )와 restore( )는 Undo 기능이 아니다. 스타일링 설정이 꼬이는 부작용 없이 안전하게 그림을 그리기 위해서는, 그리기 전에 ctx.save( )를 호출하고, 그림을 다 그린 직후 ctx.restore( )로 마무리하는 것이 중요하다.
 
@@ -1426,6 +1629,7 @@ p { color: red; }
 2. ctx.closePath( )
 3. ctx.beginPath( )
 4. ctx.resetPath( )
+
 > 정답: 3
 > 해설: 패스 기반 방식을 시작할 때 beginPath( )를 생략하면 이전 경로를 계속 기억하여 의도치 않은 그림이 그려지게 된다. 따라서 다른 그림을 그릴 때마다 beginPath( )로 시작하는 것은 새로운 설계도의 시작을 알린다는 의미를 갖는 매우 중요한 선언이다.
 
@@ -1434,6 +1638,7 @@ p { color: red; }
 2. ctx.fill( ); 후 ctx.stroke( );
 3. 순서는 전혀 상관없다.
 4. ctx.closePath( );를 생략하면 된다.
+
 > 정답: 2
 > 해설: 캔버스에서 선은 경로의 중앙을 기준으로 양옆으로 퍼집니다. 테두리를 먼저 그리고(stroke) 면을 채우면(fill), 채우는 색상이 테두리의 안쪽 절반을 덮어버려 선이 얇아 보인다. 따라서 채우기를 먼저 한 뒤 테두리를 그리는 것이 정석이다.
 
@@ -1442,80 +1647,102 @@ p { color: red; }
 2. 12시 방향 기준, 시계 반대 방향
 3. 3시 방향 기준, 시계 방향
 4. 3시 방향 기준, 시계 반대 방향
+
 > 정답: 3
 > 해설: 캔버스에서 0라디안은 시계의 3시 방향이며, counterclockwise 속성이 기본값 false일 때 각도는 시계 방향(아래쪽)으로 증가한다.
 
-> 지문:
-> ctx.______________ = "round";
+```javascript
+ctx.______________ = "round";
+```
+
 **Q71. 위 지문에서 굵은 선을 그렸을 때 선의 끝부분 모서리 형태를 지정하는 속성으로, 둥근 버튼 형태 UI를 그릴 때 주로 사용하는 스타일 값은 무엇인가?**
 1. lineJoin
 2. lineShape
 3. lineCap
 4. strokeType
+
 > 정답: 3
 > 해설: 선의 시작점과 끝점 양끝 모양을 결정하는 속성은 lineCap이며, "round"로 설정하면 선의 굵기 반만큼 둥근 반원이 끝에 추가된다.
 
-> 지문:
-> ctx.setLineDash([10, 5]);
-> ctx._________________ = offset; // 패턴 시작 위치를 당기거나 밈
+```javascript
+ctx.setLineDash([10, 5]);
+ctx._________________ = offset; // 패턴 시작 위치를 당기거나 밈
+```
+
 **Q72. 위 지문 중 포토샵처럼 점선이 스르륵 흐르는 듯한 애니메이션을 구현할 때, 점선의 패턴 설계도를 왼쪽이나 오른쪽으로 미세하게 밀어주는 역할을 하는 속성은?**
 1. lineWidth
 2. lineDashOffset
 3. linePatternStart
 4. strokeOffset
+
 > 정답: 2
 > 해설: lineDashOffset 속성은 지정된 점선 패턴이 어디서부터 시작할지 오프셋 거리를 지정한다. 애니메이션 함수에서 이 값을 계속 증가/감소시키면 선이 움직이는 듯한 시각적 환상을 줄 수 있다.
 
-> 지문:
-> const grad = ctx.createLinearGradient(0, 0, 200, 0);
-> grad.addColorStop(0, "black");
-> grad.addColorStop(1, "white");
+```javascript
+const grad = ctx.createLinearGradient(0, 0, 200, 0);
+grad.addColorStop(0, "black");
+grad.addColorStop(1, "white");
+```
+
 **Q73. 위 지문은 선형 그라디언트를 생성하는 코드의 일부이다. 그라디언트가 그려지는 방향은 어떻게 되는가?**
 1. 왼쪽에서 오른쪽으로 (수평)
 2. 위에서 아래로 (수직)
 3. 좌상단에서 우하단으로 (대각선)
 4. 중앙에서 바깥쪽으로 (방사형)
+
 > 정답: 1
 > 해설: createLinearGradient(x0, y0, x1, y1)에서 y좌표는 0으로 고정이고 x좌표만 0에서 200으로 변하므로, 왼쪽에서 오른쪽으로 변하는 수평 그라디언트가 된다.
 
-> 지문:
-> const pattern = ctx.__________________(img, 'repeat');
+```javascript
+const pattern = ctx.__________________(img, 'repeat');
+```
+
 **Q74. 위 지문의 캔버스에서 외부 이미지를 불러와 타일처럼 반복되는 패턴 객체를 생성하는 메서드는?**
 1. createPattern
 2. makePattern
 3. buildPattern
 4. drawPattern
+
 > 정답: 1
 > 해설: 이미지를 반복 패턴으로 만들어주는 메서드는 createPattern(이미지변수, 반복방식)이다.
 
-> 지문:
-> ctx.______________ = 10; // 10픽셀만큼 흐려짐
+```javascript
+ctx.______________ = 10; // 10픽셀만큼 흐려짐
+```
+
 **Q75. 위 지문에서 그림자의 경계선을 칼같이 자르지 않고, 뿌옇게 퍼지도록 만드는 속성은 무엇인가?**
 1. shadowSpread
 2. shadowOpacity
 3. shadowRadius
 4. shadowBlur
+
 > 정답: 4
 > 해설: 그림자의 흐림 정도(가우시안 블러 반경)를 설정하는 속성은 shadowBlur이다.
 
-> 지문:
-> ctx.__________________ = "center";
-> ctx.fillText("가운데 정렬", 150, 100);
+```javascript
+ctx.__________________ = "center";
+ctx.fillText("가운데 정렬", 150, 100);
+```
+
 **Q76. 위 지문에서 지정된 X 좌표를 기준으로 텍스트를 "가운데 정렬(수평 중앙)" 시키기 위해 사용하는 속성은?**
 1. textBaseline
 2. textAlign
 3. horizontalAlign
 4. justifyContent
+
 > 정답: 2
 > 해설: 텍스트의 수평 정렬(좌, 우, 중앙 등)을 담당하는 속성은 textAlign이다.
 
-> 지문:
-> ctx.________(img, 0, 0);
+```javascript
+ctx.________(img, 0, 0);
+```
+
 **Q77. 위 지문의 캔버스에 외부에서 가져온 사진이나 이미지를 그려넣는 가장 기본적이고 널리 쓰이는 메서드는 무엇인가?**
 1. paintImage( )
 2. insertImage( )
 3. showImage( )
 4. drawImage( )
+
 > 정답: 4
 > 해설: 이미지를 캔버스에 렌더링하는 내장 메서드의 이름은 drawImage이다.
 
@@ -1524,6 +1751,7 @@ p { color: red; }
 2. 선의 두께
 3. 그림자 반경
 4. 채우기 색상
+
 > 정답: 2
 > 해설: scale( )은 캔버스 그리드 픽셀 자체를 확대하므로, 명시된 선 두께(lineWidth=1)도 똑같이 스케일(두 배 확대)이 적용되어 2픽셀 두께로 굵게 렌더링된다.
 
@@ -1533,55 +1761,68 @@ p { color: red; }
 2. controls
 3. muted
 4. preload
+
 > 정답: 3
 > 해설: 사용자 동의 없는 소리 자동 재생은 브라우저가 차단하므로, autoplay는 반드시 소리를 끄는 muted 속성과 함께 사용해야 동작한다.
 
-> 지문:
-> if (video.__________) {
-> console.log("현재 영상이 멈춰있습니다.");
-> }
+```javascript
+if (video.__________) {
+console.log("현재 영상이 멈춰있습니다.");
+}
+```
+
 **Q80. 위 지문의 자바스크립트에서 비디오나 오디오 객체를 선택하여 현재 '일시정지' 상태인지 아닌지를 확인하기 위해 사용하는 프로퍼티는 무엇인가?**
 1. isPaused
 2. paused
 3. stopped
 4. notPlaying
+
 > 정답: 2
 > 해설: 미디어의 일시정지 상태 여부를 true 또는 false로 반환하는 속성은 paused이다.
 
-> 지문:
-> function stopVideo( ) {
-> video.pause( );
-> ________________;
-> }
+```javascript
+function stopVideo( ) {
+video.pause( );
+________________;
+}
+```
+
 **Q81. 위 지문의 HTML5 미디어 API에는 stop( ) 메서드가 존재하지 않는다. 자바스크립트로 영상을 완전히 정지시키고 재생 위치를 맨 처음(0초)으로 되돌리는 로직으로 올바른 것은?**
 1. video.reset( );
 2. video.time = 0;
 3. video.currentTime = 0;
 4. video.reload( );
+
 > 정답: 3
 > 해설: 미디어를 멈추고(pause) 현재 재생 시점을 의미하는 currentTime 속성에 0을 대입하여 재생 헤드를 맨 앞으로 옮기는 것이 정지(stop)의 구현 방식이다.
 
-> 지문:
-> card.addEventListener('dragstart', (e) => {
-> e._____________.setData('text/plain', card.id);
-> });
+```javascript
+card.addEventListener('dragstart', (e) => {
+e._____________.setData('text/plain', card.id);
+});
+```
+
 **Q82. 위 지문에서 드래그 앤 드롭 통신의 핵심으로, 드래그가 시작될 때 데이터를 담고 드롭될 때 데이터를 꺼낼 수 있게 해주는 '수레(바구니)' 역할을 하는 이벤트 객체 내부의 프로퍼티 이름은 무엇인가?**
 1. dataObject
 2. dataTransfer
 3. dragBasket
 4. payload
+
 > 정답: 2
 > 해설: 출발지와 목적지 사이에서 데이터를 운반하는 핵심 객체는 이벤트 객체 내의 dataTransfer이다.
 
-> 지문:
-> column.addEventListener('dragover', (e) => {
-> _____________________;
-> });
+```javascript
+column.addEventListener('dragover', (e) => {
+_____________________;
+});
+```
+
 **Q83. 위 지문에서 드래그 앤 드롭 구현 시, 목적지 영역에 요소를 내려놓기 위해 타겟의 dragover와 drop 핸들러에서 기본 동작의 차단 목적으로 반드시 사용해야 하는 메서드는?**
 1. e.allowDrop( )
 2. e.preventDefault( )
 3. e.stopPropagation( )
 4. e.accept( )
+
 > 정답: 2
 > 해설: 브라우저는 기본적으로 다른 요소 위에 데이터를 떨어뜨리는 것을 거부한다. 따라서 dragover 이벤트에서 e.preventDefault( )를 호출해 기본 거부 동작을 취소해야만 drop 이벤트가 정상적으로 발생한다.
 
@@ -1590,17 +1831,21 @@ p { color: red; }
 2. e.dataTransfer.getData('file')
 3. e.target.files
 4. e.dataTransfer.files
+
 > 정답: 4
 > 해설: 운영체제에서 브라우저로 드롭된 파일들은 텍스트 데이터가 아니므로, dataTransfer 객체의 files 프로퍼티(배열 형태의 FileList)에 고스란히 담겨 들어온다.
 
-> 지문:
-> const user = { name: '홍길동' };
-> (가) // 객체 저장
+```javascript
+const user = { name: '홍길동' };
+(가) // 객체 저장
+```
+
 **Q85. 위 지문에서 자바스크립트 객체를 웹 스토리지에 에러 없이 온전하게 보관하기 위한 실무 표준 코드로 (가)에 적합한 것은?**
 1. localStorage.setItem('user', user);
 2. localStorage.setItem('user', JSON.parse(user));
 3. localStorage.setItem('user', JSON.stringify(user));
 4. localStorage.setItem('user', user.toString());
+
 > 정답: 3
 > 해설: 웹 스토리지는 "오직 문자열로만 저장할 수 있다"라는 데이터 타입의 한계가 존재한다. 따라서 객체나 배열을 문자열로 안전하게 변환하여 스토리지에 넣으려면 무조건 JSON.stringify( )를 사용해야 한다. 반대로 스토리지에서 꺼내와서 자바스크립트 객체로 변환하기 위해서는 JSON.parse( )를 사용한다.
 
@@ -1609,6 +1854,7 @@ p { color: red; }
 2. const mode = localStorage.getItem('theme');
 3. const mode = localStorage.get('theme');
 4. const mode = localStorage.fetchItem('theme');
+
 > 정답: 2
 > 해설: 웹 스토리지에서 데이터를 읽어오는 표준 메서드는 getItem(key)이다. 물론 내장 메서드가 아닌 객체 속성(점 표기)이나 대괄호( [ ] )를 사용하는 방법도 존재하지만, 스토리지 자체 메서드/속성과 이름이 겹칠 위험이 있으므로 실무에서는 사용하지 않는다.
 
@@ -1617,6 +1863,7 @@ p { color: red; }
 2. 스토리지 저장 용량 한도를 초과하여 데이터를 저장하려고 할 때
 3. 웹 페이지가 로드되어 클라이언트에 스토리지가 생성될 때
 4. 같은 스토리지 영역을 사용하는 다른 탭이나 창에서 스토리지가 변경되었을 때
+
 > 정답: 4
 > 해설: storage 이벤트는 데이터를 변경한 '현재 탭'에서는 절대 발생하지 않고, 오직 같은 도메인을 공유하는 '다른 탭/창'에서만 발생한다. 이는 탭 간의 통신을 위해 만들어졌기 때문이다.
 
@@ -1625,29 +1872,36 @@ p { color: red; }
 2. navigator.geolocation.observeLocation( )
 3. navigator.geolocation.watchPosition( )
 4. navigator.geolocation.liveTracking( )
+
 > 정답: 3
 > 해설: 사용자의 위치가 변경될 때마다 계속해서 위치를 가져오는 실시간 추적 메서드는 watchPosition( )이며, 목적지에 도착했거나 백그라운드 전환 시에는 반드시 clearWatch( )를 수행하여 추적을 종료한다.
 
-> 지문:
-> const options = {
-> _____________________: true
-> };
+```javascript
+const options = {
+_____________________: true
+};
+```
+
 **Q89. 위 지문에서 위치 정보를 얻어올 때 3번째 인자로 옵션(options) 객체를 전달한다. 이 중 배터리 소모가 심해지더라도 기지국 대신 GPS 센서를 강제로 깨워 최대한 오차 없는 정밀한 위치를 원할 때 사용하는 속성은?**
 1. enableHighAccuracy
 2. useGPS
 3. highPrecision
 4. maximumAccuracy
+
 > 정답: 1
 > 해설: 더 많은 배터리가 소모되고 속도가 좀 느리더라도 매우 정확한 위치 측정이 필요한 경우에는 ‘enableHighAccuracy : true’ 옵션을 사용한다.
 
-> 지문:
-> const lat = position._________.latitude;
-> const lng = position._________.longitude;
+```javascript
+const lat = position._________.latitude;
+const lng = position._________.longitude;
+```
+
 **Q90. 위 지문에서 getCurrentPosition( )이 성공해서 position 객체를 콜백으로 받았고, 여기서 가장 핵심적인 위도와 경도 데이터를 뽑아내려고 한다. 이때 밑줄 친 부분에 들어갈 객체는?**
 1. coords
 2. location
 3. data
 4. gps
+
 > 정답: 1
 > 해설: 성공 콜백으로 반환된 position 객체 내부의 coords (coordinates) 객체를 통해서 위도, 경도, 정확도 등의 실제 정보를 얻을 수 있다. 단 위치가 파악된 시간 정보(1970.1.1.부터 경과된 밀리초 단위 시간)는 position.timestamp를 통해 얻는다.
 
@@ -1803,19 +2057,24 @@ p { color: red; }
 2. 플랫폼에 독립적
 3. 예외처리 기능의 지원
 4. 멀티 스레딩의 지원
+
 > 정답: 2
 
-> 지문:
-> public class A { }
-> class B { }
+```java
+public class A { }
+class B { }
+```
+
 **Q2. 다음 파일의 이름은 A.java 이다. 이 파일을 컴파일할 때 결과로 만들어지는 것을 정확히 설명한 것은?**
 1. A.class만 생성된다.
 2. B.class만 생성된다.
 3. A.class와 B.class가 생성된다.
 4. 오류가 있어 컴파일되지 않는다.
+
 > 정답: 3
 
 **Q3. [문제 누락]**
+
 > 정답: 서술형/공식 정답 미제공
 
 **Q4. 다음 중 클래스 이름에 해당하지 않는 것은?**
@@ -1823,6 +2082,7 @@ p { color: red; }
 2. String
 3. System
 4. boolean
+
 > 정답: 4
 
 **Q5. 다음 정수 리터럴 중 값이 다른 하나는 무엇인가?**
@@ -1830,9 +2090,11 @@ p { color: red; }
 2. 00001010
 3. 0x0A
 4. 0b0000_1010
+
 > 정답: 2
 
 **Q6. 위의 for문을 향상된 for문을 이용해 다시 작성하여라.**
+
 > 정답: (답)
 
 **Q7. 다음 중 문법적으로 올바른 문장은 무엇인가?**
@@ -1840,6 +2102,7 @@ p { color: red; }
 2. int b[ ] = new int(10);
 3. int[ ][ ] c = new int[5][ ];
 4. int[5] d = {1, 2, 3, 4, 5};
+
 > 정답: 3
 
 **Q8. int형 변수 i와 j의 값을 각각 출력하기 위해 적당한 출력문은 무엇인가?**
@@ -1847,6 +2110,7 @@ p { color: red; }
 2. System.out.println( i + " " + j );
 3. System.out.println( i + j );
 4. System.out.println( i + ‘=’ + j );
+
 > 정답: 2
 
 **Q9. 퍼블릭 Alpha 클래스에서 protected 데이터 필드가 정의되었다고 가정할 때, 아래 4개의 클래스 중에서 이 데이터 필드를 사용할 수 없는 클래스는 무엇인가?**
@@ -1854,6 +2118,7 @@ p { color: red; }
 2. AlphaSub
 3. Beta
 4. Gamma
+
 > 정답: 4
 
 **Q10. 키워드 final에 관한 설명으로 틀린 것은?**
@@ -1861,6 +2126,7 @@ p { color: red; }
 2. 부모 클래스의 final 메소드는 자식 클래스로 상속될 때 재정의될 수 없다.
 3. final 변수는 상수로 사용된다.
 4. final 클래스의 객체를 생성할 수 없다.
+
 > 정답: 4
 
 **Q11. Circle 클래스에서 원주율 PI를 상수로 선언하기 위해 ㉠에 들어갈 적당한 내용은 무엇인가?**
@@ -1868,9 +2134,11 @@ p { color: red; }
 2. final double PI = 3.14;
 3. const double PI = 3.14;
 4. static final double PI = 3.14;
+
 > 정답: 4
 
 **Q12. Circle 클래스의 생성자에서 밑줄 친 ㉡에 들어갈 적당한 내용을 작성하시오**
+
 > 정답: this.radius = radius;
 
 **Q13. 다음 프로그램을 실행했을 때 예상되는 출력은?**
@@ -1878,6 +2146,7 @@ p { color: red; }
 2. B
 3. 컴파일 오류
 4. 실행 오류
+
 > 정답: 2
 
 **Q14. 밑줄 친 ㉠, ㉡에 들어갈 키워드는 순서대로 무엇인가?**
@@ -1885,9 +2154,11 @@ p { color: red; }
 2. extends, implements
 3. implements, implements
 4. implements, extends
+
 > 정답: 2
 
 **Q15. 밑줄 친 부분의 의미를 정확히 설명하시오. 단, CSuper는 클래스 이름이다.**
+
 > 정답: CSuper 클래스를 상속받는 익명 클래스를 정의하고, 동시에 익명 클래스의 객체를 생성한다.
 
 **Q16. 다음과 같은 제네릭 클래스가 있다고 가정하자. 보기에서 문법적으로 오류가 있는 것은?**
@@ -1895,6 +2166,7 @@ p { color: red; }
 2. Data<Integer> d = new Data<>( );
 3. Data<String> d = new Data<String>( );
 4. Data d = new Data( );
+
 > 정답: 1
 
 **Q17. 다음과 같은 인터페이스가 있다고 가정할 때, 보기에서 람다식 사용이 잘못된 것은?**
@@ -1902,9 +2174,11 @@ p { color: red; }
 2. Addable ad = (int a, int b) -> a + b;
 3. Addable ad = (a, b) -> return (a + b);
 4. Addable ad = (a, b) -> (a + b);
+
 > 정답: 3
 
 **Q18. [문제 누락]**
+
 > 정답: T get( )
 
 **Q19. Client 클래스를 myprogram.game 패키지에 위치시키려고 한다. Client 클래스를 정의하는 소스 파일의 맨 위에 포함시켜야 코드는 무엇인가?**
@@ -1912,6 +2186,7 @@ p { color: red; }
 2. package myprogram.game.Client;
 3. import myprogram.game;
 4. import myprogram.game.Client;
+
 > 정답: 1
 
 **Q20. 밑줄 부분에 들어가야 할 내용은 무엇인가?**
@@ -1919,9 +2194,11 @@ p { color: red; }
 2. throws IOException
 3. throw FileNotFoundException
 4. throws FileNotFoundException
+
 > 정답: 2
 
 **Q21. [문제 누락]**
+
 > 정답: import java.util.Scanner; 또는 import java.util.*;
 
 **Q22. 다음 프로그램의 출력 결과는 무엇인가?**
@@ -1929,6 +2206,7 @@ p { color: red; }
 2. Java
 3. JovoExam
 4. JavaExam
+
 > 정답: 1
 
 **Q23. Object 클래스와 String 클래스에 대한 설명이다. 잘못된 것은 무엇인가?**
@@ -1936,9 +2214,11 @@ p { color: red; }
 2. Object 클래스에 toString()과 equals() 메소드가 정의되어 있다.
 3. String 클래스에 toString()과 equals() 메소드가 재정의되어 있다.
 4. String 클래스는 표준 입출력 스트림을 위한 static 필드를 제공한다.
+
 > 정답: 4
 
 **Q24. [문제 누락]**
+
 > 정답: String 클래스는 immutable 클래스여서 반복이 진행될수록 계속해서 기존 문자열은 버려지고 새로운 문자열이 새롭게 만들어지기 때문이다(버려지거나 만들어지는 문자열의 길이도 점점 커진다). StringBuffer 클래스를 사용한 경우가 StringBuilder 클래스를 사용한 경우보다 시간이 더 걸리는 이유는 동시성 제어를 고려하여 메소드가 구현되었기 때문이다.
 
 **Q25. 입력 스트림은 기본 스트림과 보조 스트림으로 나뉜다. 다음 중 기본 스트림에 해당하지 않는 것은?**
@@ -1946,6 +2226,7 @@ p { color: red; }
 2. FileReader
 3. ByteArrayInputStream
 4. BufferedReader
+
 > 정답: 4
 
 **Q26. BufferedReader 클래스에 관한 설명으로 틀린 것은 무엇인가?**
@@ -1953,9 +2234,11 @@ p { color: red; }
 2. read()와 readLine() 등 다양한 입력 메소드를 제공한다.
 3. 바이트 단위의 입력 기능을 제공한다.
 4. 입력 과정에 버퍼링 기능을 제공한다.
+
 > 정답: 3
 
 **Q27. 키보드에서 한글을 입력받기 위해서 바이트 단위의 표준 입력 스트림(System.in)을 캐릭터 스트림으로 변환하는 것이 필요하다. 다음 밑줄 부분에 공통으로 들어갈 클래스 이름은 무엇인가?**
+
 > 정답: InputStreamReader
 
 **Q28. Path 인터페이스에 관한 설명이다. 잘못된 것은?**
@@ -1963,6 +2246,7 @@ p { color: red; }
 2. 파일시스템에 존재하는 파일 또는 디렉터리의 경로를 표현한다.
 3. 경로의 생성, 경로의 조작/비교, 경로의 요소를 조회하는 기능을 제공한다.
 4. 파일 내용의 읽기와 쓰기 기능을 제공한다.
+
 > 정답: 4
 
 **Q29. FileChannel 클래스에 관한 설명으로 틀린 것은 무엇인가?**
@@ -1970,9 +2254,11 @@ p { color: red; }
 2. FileChannel.open(path)으로 객체 생성을 하면 해당 파일을 읽기용으로 열게 된다.
 3. 파일 입력을 위해 FileChannelReader, 파일 출력을 위해 FileChannelWriter를 사용한다.
 4. 멀티 스레드 환경에서도 안전하게 사용할 수 있게 설계되었다.
+
 > 정답: 3
 
 **Q30. [문제 누락]**
+
 > 정답: WatchKey는 등록된 디렉터리에 어떤 관심 이벤트가 등록되어 있으며, 실제 어떤 이벤트가 일어났는지에 관한 상태 정보를 가지고 있다.
 
 **Q31. ArrayList 클래스에 관한 설명으로 적당하지 않은 것은?**
@@ -1980,6 +2266,7 @@ p { color: red; }
 2. 여러 원소를 저장하기 위해 내부적으로 배열을 사용한다.
 3. 원소의 순서가 의미를 가진다.
 4. 같은 자료를 중복으로 저장할 수 없다.
+
 > 정답: 4
 
 **Q32. (key, value) 형태의 원소로 구성되는 자료 묶음을 다루기 위한 인터페이스나 클래스가 아닌 것은?**
@@ -1987,9 +2274,11 @@ p { color: red; }
 2. HashSet
 3. Hashtable
 4. Map
+
 > 정답: 2
 
 **Q33. [문제 누락]**
+
 > 정답: 추가 시 boolean offer(E), 삭제 시 E poll( )을 사용함
 > 해설: (또는 추가 시 boolean add(E), 삭제 시 E remove( )를 사용할 수 있음)
 
@@ -1998,6 +2287,7 @@ p { color: red; }
 2. Arrays.stream(numbers)
 3. numbers.stream( )
 4. numbers.getStream( )
+
 > 정답: 2
 
 **Q35. 주어진 문자열 배열에서 길이가 6 이상인 단어를 대문자로 변환한 후 정렬하여 출력하려고 한다. 밑줄 부분에 들어갈 메소드는 무엇인가?**
@@ -2005,9 +2295,11 @@ p { color: red; }
 2. map
 3. match
 4. filter
+
 > 정답: 4
 
 **Q36. [문제 누락]**
+
 > 정답: 중간연산은 스트림을 변환하거나 필터링 하는 등의 작업을 수행하며, 다음 단계 처리를 위해 새로운 스트림을 리턴하는데, 체인 형태로 연속해 여러 번 호출될 수 있다. 종료연산은 스트림의 원소를 이용해 최종 결과를 만들어 리턴한다.
 
 **Q37. 스레드 동기화와 관련된 다음 설명 중 올바른 것은?**
@@ -2015,6 +2307,7 @@ p { color: red; }
 2. 메소드 notify()는 현재 실행 중인 스레드를 정해진 시간 동안 중지시킨다.
 3. 메소드 wait()는 대기 상태의 스레드들 가운데 하나를 기다리게 한다.
 4. 메소드 join()은 this 스레드가 종료될 때까지 현재 스레드가 기다린다.
+
 > 정답: 4
 
 **Q38. 스레드 동기화의 의미를 가장 잘 설명한 것은?**
@@ -2022,11 +2315,13 @@ p { color: red; }
 2. 공유 객체에 여러 스레드들이 동시 접근할 수 있게 하는 것
 3. 한순간에 한 스레드만 공유 객체에 접근할 수 있게 하는 것
 4. 여러 개의 스레드들이 순서대로 하나씩 수행되게 하는 것
+
 > 정답: 3
 
 > 지문:
 > 여러 스레드가 공유 객체를 사용할 때, 한 스레드가 공유 객체의 메소드를 실행 중이라면 다른 스레드가 동일 객체에 접근할 수 없다.
 **Q39. 밑줄 부분에 들어갈 스레드 동기화를 위한 자바 키워드는 무엇인가?**
+
 > 정답: synchronized
 
 **Q40. JDBC 프로그래밍에 사용되는 클래스나 인터페이스가 아닌 것은?**
@@ -2034,6 +2329,7 @@ p { color: red; }
 2. DriverManager
 3. Statement
 4. Runnable
+
 > 정답: 4
 
 **Q41. PreparedStatement 객체에 대한 설명으로 잘못된 것은?**
@@ -2041,9 +2337,11 @@ p { color: red; }
 2. 객체를 생성할 때 SQL 구문을 지정해야 한다.
 3. 같은 SQL 구문을 여러 번 실행할 때 효율적으로 활용될 수 있다.
 4. 매개 변수를 가지는 SQL 구문을 저장할 수 있다.
+
 > 정답: 1
 
 **Q42. [문제 누락]**
+
 > 정답: ResultSet
 
 **Q43. .jar 파일 형식으로 배포된 라이브러리를 사용하고자 할 때, 이러한 .jar 파일을 어떤 환경 변수에 추가해야 하는가?**
@@ -2051,6 +2349,7 @@ p { color: red; }
 2. Modulepath
 3. Javadoc
 4. Jarpath
+
 > 정답: 1
 
 **Q44. Java의 표준 모듈 중 requires 키워드로 사용 선언을 하지 않아도 사용이 가능한 모듈은 무엇인가?**
@@ -2058,9 +2357,11 @@ p { color: red; }
 2. jdk.lang
 3. java.lang
 4. java.base
+
 > 정답: 4
 
 **Q45. java.sql 모듈에서 제공하는 java.sql 패키지가 있으며, 여기에 포함된 클래스(또는 인터페이스)를 사용하는 모듈 프로젝트가 있을 때, module-info.java 파일에서 아래 밑줄 부분에 들어가야 할 내용은?**
+
 > 정답: requires java.sql;
 
 ### 파이썬프로그래밍기초
@@ -2129,6 +2430,7 @@ p { color: red; }
 2. 하버드 구조
 3. 컴파일러
 4. 알고리즘
+
 > 정답: 1
 > 해설: 자세한 내용은 강의를 참고하세요
 
@@ -2137,6 +2439,7 @@ p { color: red; }
 2. 범주적 데이터
 3. 양적 데이터
 4. 반정형 데이터
+
 > 정답: 2
 > 해설: 자세한 내용은 강의를 참고하세요
 
@@ -2145,6 +2448,7 @@ p { color: red; }
 2. 2세대 프로그래밍 언어
 3. 3세대 프로그래밍 언어
 4. 4세대 프로그래밍 언어
+
 > 정답: 3
 > 해설: 자세한 내용은 강의를 참고하세요
 
@@ -2153,6 +2457,7 @@ p { color: red; }
 2. 빠른 실행 속도
 3. 대형 개발자 커뮤니티
 4. 직관적 문법
+
 > 정답: 2
 > 해설: 강의를 참고하세요
 
@@ -2161,6 +2466,7 @@ p { color: red; }
 2. 어셈블러 코드
 3. 파이썬 소스 코드
 4. 기계어 코드
+
 > 정답: 1
 > 해설: 강의를 참고하세요
 
@@ -2169,6 +2475,7 @@ p { color: red; }
 2. VS Code
 3. 주피터 노트북
 4. 구글 코랩
+
 > 정답: 3
 > 해설: 강의를 참고하세요
 
@@ -2185,6 +2492,7 @@ print(Our goal is to predict the future)
 4. "Computer science is the best"
 
 "Our goal is to predict the future"
+
 > 정답: 2
 > 해설: 강의를 참고하세요
 
@@ -2193,20 +2501,24 @@ print(Our goal is to predict the future)
 2. graduate130
 3. 44size
 4. 부피
+
 > 정답: 3
 > 해설: 강의와 강의록을 참고하세요
 
-> 지문:
-> apple = 2
-> banana = 3
-> cranberry = 1
-> detox = (banana ** 2 - 4 * apple * cranberry) // apple
-> print(detox)
+```python
+apple = 2
+banana = 3
+cranberry = 1
+detox = (banana ** 2 - 4 * apple * cranberry) // apple
+print(detox)
+```
+
 **Q9. 다음 프로그램의 실행 결과로 올바른 것은?**
 1. 0
 2. 1
 3. 9
 4. 3
+
 > 정답: 1
 > 해설: 강의를 참고하세요
 
@@ -2215,6 +2527,7 @@ print(Our goal is to predict the future)
 2. 반복 구조
 3. 순차 구조
 4. 명령 구조
+
 > 정답: 1
 
 **Q11. number 변수에 저장되어 있는 정수를 사용하여 “상자에사과가n개들어있습니다.”라는 메시지를 출력하려고 한다. 올바른 명령문은? (단, n은 number 변수에 저장된 정수를 의미한다.)**
@@ -2222,6 +2535,7 @@ print(Our goal is to predict the future)
 2. print("상자에사과가number개들어있습니다.")
 3. print("상자에""사과가"number"개""들어있습니다.")
 4. print("상자에", "사과가", number, "개", "들어있습니다.", sep="")
+
 > 정답: 4
 > 해설: 강의를 참고하세요
 
@@ -2230,6 +2544,7 @@ print(Our goal is to predict the future)
 2. 실행 오류
 3. 구문 오류
 4. 구조 오류
+
 > 정답: 2
 > 해설: 강의를 참고하세요
 
@@ -2238,34 +2553,41 @@ print(Our goal is to predict the future)
 2. 들여쓰기
 3. 콜론(:)
 4. 중괄호( { } )
+
 > 정답: 2
 > 해설: 자세한 내용은 강의를 참고하세요
 
-> 지문:
-> temp = int(input("온도를 입력하세요: "))
->
-> (____________________)
->     print("겨울입니다.")
+```python
+temp = int(input("온도를 입력하세요: "))
+
+(____________________)
+    print("겨울입니다.")
+```
+
 **Q14. 다음은 온도(temp)가 0 이하일 경우, “겨울입니다.”를 출력하는 프로그램의 일부이다. 밑줄 친 빈 칸에 들어갈 명령문은?**
 1. temp > 0
 2. temp <= 0
 3. if temp > 0
 4. if temp <= 0 :
+
 > 정답: 4
 > 해설: 자세한 내용은 강의를 참고하세요
 
-> 지문:
-> guess = int(input("온도를 입력하세요: "))
->
-> if guess % 3 == 0 (____) guess % 5 == 0 :
->     print("3과 5의 공배수입니다.")
-> else
->     print("3과 5의 공배수가 아닙니다.")
+```python
+guess = int(input("온도를 입력하세요: "))
+
+if guess % 3 == 0 (____) guess % 5 == 0 :
+    print("3과 5의 공배수입니다.")
+else
+    print("3과 5의 공배수가 아닙니다.")
+```
+
 **Q15. 다음은 사용자가 입력한 수가 3과 5의 공배수일 경우 “3과 5의 공배수입니다”를, 아닐 경우 “3과 5의 공배수가 아닙니다.”를 출력하는 프로그램의 일부이다. 밑줄 친 빈 칸에 들어갈 연산자는?**
 1. and
 2. or
 3. True
 4. False
+
 > 정답: 1
 > 해설: 자세한 내용은 강의를 참고하세요
 
@@ -2274,6 +2596,7 @@ print(Our goal is to predict the future)
 2. 정수
 3. 시퀀스
 4. 식별자
+
 > 정답: 3
 
 **Q17. 다음과 같이 반복 구조 내부에 또 다른 반복 구조가 포함되어 실행 흐름을 만드는 구조를 무엇이라고 하는가?**
@@ -2281,17 +2604,21 @@ print(Our goal is to predict the future)
 2. 조건 제어 반복 구조
 3. 계수 제어 반복 구조
 4. 중첩 반복 구조
+
 > 정답: 4
 > 해설: 강의 및 강의록을 참고하세요
 
-> 지문:
-> for i in range(1, 11) :
->     print(i, end = " ")
+```python
+for i in range(1, 11) :
+    print(i, end = " ")
+```
+
 **Q18. 다음 코드의 출력값으로 옳은 것은?**
 1. 2 3 4 5 6 7 8 9 10 11
 2. 2 3 4 5 6 7 8 9 10
 3. 1 2 3 4 5 6 7 8 9 10 11
 4. 1 2 3 4 5 6 7 8 9 10
+
 > 정답: 4
 > 해설: 강의 및 강의록을 참고하세요
 
@@ -2300,33 +2627,40 @@ print(Our goal is to predict the future)
 2. input
 3. format
 4. int
+
 > 정답: 1
 
-> 지문:
-> temp, season = 27, 'summer'
-> season, temp = temp, season
-> print(season)
+```python
+temp, season = 27, 'summer'
+season, temp = temp, season
+print(season)
+```
+
 **Q20. 다음 코드의 실행 결과는?**
 1. 'summer'
 2. 27
 3. season
 4. print
+
 > 정답: 2
 
-> 지문:
-> x = 1
->
-> def updatex():
->     x = 2
->     x = x + 1
->
-> updatex()
-> print(x)
+```python
+x = 1
+
+def updatex():
+    x = 2
+    x = x + 1
+
+updatex()
+print(x)
+```
+
 **Q21. 다음 코드의 실행 결과는?**
 1. 1
 2. 2
 3. 3
 4. 오류발생
+
 > 정답: 1
 
 **Q22. 다음 중 key-value의 쌍으로 데이터를 저장하는 매핑 자료형은 무엇인가?**
@@ -2334,27 +2668,34 @@ print(Our goal is to predict the future)
 2. tuple
 3. set
 4. dictionary
+
 > 정답: 4
 
-> 지문:
-> hei_list = [1, 5, 14, 26, 31]
-> print(hei_list[:3])
+```python
+hei_list = [1, 5, 14, 26, 31]
+print(hei_list[:3])
+```
+
 **Q23. 다음 코드의 실행 결과로 옳은 것은?**
 1. [1, 5, 14]
 2. [14, 26, 31]
 3. [1, 14, 31]
 4. [31, 26, 14]
+
 > 정답: 1
 
-> 지문:
-> hei_list = [1, 5, 14, 26, 31]
-> hei_even = [h for h in hei_list if h % 2 == 0]
-> print(hei_even)
+```python
+hei_list = [1, 5, 14, 26, 31]
+hei_even = [h for h in hei_list if h % 2 == 0]
+print(hei_even)
+```
+
 **Q24. 다음 코드의 출력값으로 옳은 것은?**
 1. [1, 5, 31]
 2. [14, 26]
 3. [1, 14, 31]
 4. [26, 31]
+
 > 정답: 2
 
 **Q25. 다음 중 튜플에 대한 설명으로 옳은 것은?**
@@ -2362,16 +2703,20 @@ print(Our goal is to predict the future)
 2. 중복을 허용하지 않는 비순서 컬렉션
 3. key-value의 쌍으로 데이터를 저장하는 자료형
 4. 원소의 순서를 유지하는 불변 시퀀스
+
 > 정답: 4
 
-> 지문:
-> msg = "I do love python"
-> print(msg.split(" "))
+```python
+msg = "I do love python"
+print(msg.split(" "))
+```
+
 **Q26. 다음 코드의 출력값으로 옳은 것은?**
 1. "I do love python"
 2. ['I', 'do', 'love', 'python']
 3. ('I', 'do', 'love', 'python')
 4. ['I do love python']
+
 > 정답: 2
 
 **Q27. 다음 중 세트에 사용할 수 없는 연산자는 무엇인가?**
@@ -2379,28 +2724,33 @@ print(Our goal is to predict the future)
 2. not in
 3. +
 4. ==
+
 > 정답: 3
 
 **Q28. 객체의 상태를 초기화하기 위해 사용하는 특수 메소드는 무엇인가?**
-1. __main__
-2. __init__
+1. `__main__`
+2. `__init__`
 3. class
 4. return
+
 > 정답: 2
 
-> 지문:
-> class Cone :
->     def __init__(self, radius = 20, height = 30):
->         self.r = radius
->         self.h = height
->
-> unitcone = Cone(50, 100)
-> print(unitcone.h)
+```python
+class Cone :
+    def __init__(self, radius = 20, height = 30):
+        self.r = radius
+        self.h = height
+
+unitcone = Cone(50, 100)
+print(unitcone.h)
+```
+
 **Q29. 다음 코드의 출력값으로 옳은 것은?**
 1. 20
 2. 30
 3. 50
 4. 100
+
 > 정답: 4
 
 **Q30. 다음 중 접근자와 변경자에 대한 설명으로 옳은 것은?**
@@ -2408,6 +2758,7 @@ print(Our goal is to predict the future)
 2. 접근자는 private 데이터 필드를 반환하고, 변경자는 private 데이터 필드를 설정한다.
 3. 접근자와 변경자는 모두 클래스 외부에서만 정의된다.
 4. 접근자는 객체를 복사하고, 변경자는 객체를 정렬한다.
+
 > 정답: 2
 
 **Q31. 파이썬에서 관련된 함수, 변수, 클래스 등을 하나의 파일로 묶어 재사용성과 유지보수성을 높이는 기본 단위는 무엇인가?**
@@ -2415,6 +2766,7 @@ print(Our goal is to predict the future)
 2. 모듈 (Module)
 3. 인터페이스 (Interface)
 4. 네임스페이스 (Namespace)
+
 > 정답: 2
 
 **Q32. 특정 모듈(math)에서 특정 함수(sqrt)만을 가져오기 위한 올바른 구문 형식은?**
@@ -2422,6 +2774,7 @@ print(Our goal is to predict the future)
 2. import sqrt from math
 3. from math import sqrt
 4. math import sqrt
+
 > 정답: 3
 
 **Q33. 코드의 실행을 잠시 3초 동안 멈추고자 할 때 사용하는 time 모듈의 함수는?**
@@ -2429,6 +2782,7 @@ print(Our goal is to predict the future)
 2. time.pause(3)
 3. time.wait(3)
 4. time.sleep(3)
+
 > 정답: 4
 
 **Q34. 현재 작업 디렉토리의 위치가 /var/home/user/docs라고 가정하자. 부모 디렉토리에 있는 lib 폴더 내의 config.txt 파일을 상대 경로로 열고자 할 때, 가장 적절한 경로는?**
@@ -2436,6 +2790,7 @@ print(Our goal is to predict the future)
 2. ./lib/config.txt
 3. ../lib/config.txt
 4. ~/lib/config.txt
+
 > 정답: 3
 
 **Q35. 프로그램이 데이터가 누적되도록 파일을 다루고자 할 때, open() 함수에 지정해야 할 가장 적절한 모드는?**
@@ -2443,6 +2798,7 @@ print(Our goal is to predict the future)
 2. "w"
 3. "a"
 4. "x"
+
 > 정답: 3
 
 **Q36. 대용량의 파일 분석 프로그램 작성 시, 다음 중 데이터를 안전하게 처리할 수 있는 방법은?**
@@ -2450,6 +2806,7 @@ print(Our goal is to predict the future)
 2. readlines() 메소드를 사용하여 파일의 모든 줄을 메모리에 리스트 구조로 한 번에 적재한다.
 3. 한 번에 한 줄(line)씩만 메모리에 읽어 들여 정제 처리를 수행한 후 다음 줄로 넘어가는 반복문(for line in file:)을 구성한다.
 4. 데이터를 읽기 전 close() 함수를 선제적으로 호출하여 메모리를 비운다.
+
 > 정답: 3
 
 **Q37. 원시 데이터가 가치 있는 정보로 변환되기까지 거치는 표준화된 흐름을 뜻하는 것은?**
@@ -2457,6 +2814,7 @@ print(Our goal is to predict the future)
 2. 컴포넌트
 3. 인코딩
 4. 네임스페이스
+
 > 정답: 1
 
 **Q38. 텍스트 분석 시 문법적으로는 쓰이나 분석적 의미가 없어 제거하는 단어(예: a, the, of)를 무엇이라 하는가?**
@@ -2464,6 +2822,7 @@ print(Our goal is to predict the future)
 2. 예약어
 3. 식별자
 4. 상수
+
 > 정답: 1
 
 **Q39. 단어와 빈도수를 쌍으로 묶어 카운팅 데이터를 저장하고 관리하기에 가장 적합한 자료구조는?**
@@ -2471,6 +2830,7 @@ print(Our goal is to predict the future)
 2. 튜플
 3. 세트
 4. 딕셔너리
+
 > 정답: 4
 
 **Q40. 대량의 데이터를 수집해 두었다가 특정 시간에 지정된 방식에 따라 한꺼번에 일괄 처리하는 프로그램 구동 방식은 무엇인가?**
@@ -2478,6 +2838,7 @@ print(Our goal is to predict the future)
 2. 실시간 프로그램
 3. 인터랙티브 프로그램
 4. 배치 프로그램
+
 > 정답: 4
 
 **Q41. 이벤트 기반 프로그래밍의 구동 구조에 속하는 구성 요소라고 할 수 없는 것은?**
@@ -2485,6 +2846,7 @@ print(Our goal is to predict the future)
 2. 이벤트 루프
 3. 컴파일러
 4. 이벤트 핸들러
+
 > 정답: 3
 
 **Q42. 게임 프로그램에서, 게임이 종료될 때까지 '이벤트 검사 → 게임 업데이트 → 화면 생성 및 업데이트'의 과정을 끊임없이 반복하는 구조는?**
@@ -2492,6 +2854,7 @@ print(Our goal is to predict the future)
 2. 이벤트 큐
 3. 데이터 파이프라인
 4. 컴포넌트 기반 개발
+
 > 정답: 1
 
 **Q43. 숫자, 문자열, 또 다른 리스트까지 중복에 구애받지 않고 여러 데이터를 순서대로 묶어서 저장할 수 있는 파이썬의 자료구조는?**
@@ -2499,6 +2862,7 @@ print(Our goal is to predict the future)
 2. 리스트
 3. 실수
 4. 세트
+
 > 정답: 2
 
 **Q44. 이름이 distance인 2차원 리스트에서 원하는 데이터 위치를 접근하기 위해 사용하는 인덱스 표기법은?**
@@ -2506,6 +2870,7 @@ print(Our goal is to predict the future)
 2. distance[행, 열]
 3. distance[[행][열]]
 4. distance[행][열]
+
 > 정답: 4
 
 **Q45. 2차원 리스트 내부에 있는 모든 항목을 순회하며 값을 출력하려고 할 때, 필수적으로 작성해야 하는 제어 구조는?**
@@ -2513,6 +2878,7 @@ print(Our goal is to predict the future)
 2. 다중 예외 처리
 3. 단일 반복문
 4. 중첩 반복문
+
 > 정답: 4
 
 #### 강의 체크포인트
@@ -2558,9 +2924,11 @@ print(Our goal is to predict the future)
 3. 가격은 계산 대상이므로 숫자형, 주문 번호는 식별 목적이므로 문자열이 적절하다.
 4. 인용 부호를 붙여도 값의 연산 방식은 달라지지 않는다.
 
-> 지문:
-> amount = "53000000"
-> print(amount + 1000)
+```python
+amount = "53000000"
+print(amount + 1000)
+```
+
 **2번. 위 코드가 의도대로 실행되지 않는 가장 적절한 이유는?**
 1. 변수 이름 amount가 식별자 규칙에 맞지 않는다.
 2. print() 함수는 표현식을 출력할 수 없다.
@@ -2569,20 +2937,24 @@ print(Our goal is to predict the future)
 
 **4강. 구조적 프로그래밍**
 
-> 지문:
-> rad = 10
-> vol = rad * 2
-> rad = 20
+```python
+rad = 10
+vol = rad * 2
+rad = 20
+```
+
 **1번. 위 코드에 대한 설명으로 가장 적절한 것은?**
 1. vol은 20으로 계산되고, 이후 rad만 20으로 바뀐다.
 2. rad는 10과 20을 동시에 저장한다.
 3. rad가 20으로 바뀌면 vol도 자동으로 40이 된다.
 4. rad = 20은 rad와 20이 같은지 비교하는 문장이다.
 
-> 지문:
-> rad = input("반지름: ")
-> hei = input("높이: ")
-> print(rad + hei)
+```python
+rad = input("반지름: ")
+hei = input("높이: ")
+print(rad + hei)
+```
+
 **2번. 위 코드 실행 후 사용자가 10과 24를 각각 입력했더니 결과가 1024로 출력되었다. 가장 적절한 원인은?**
 1. print()는 숫자를 출력할 수 없다.
 2. + 연산자는 항상 숫자 덧셈만 수행한다.
@@ -2591,28 +2963,32 @@ print(Our goal is to predict the future)
 
 **5강. 선택 구조**
 
-> 지문:
-> temp = 30
-> season = "spring"
-> fruit = "apple"
->
-> if temp >= 27 and season == "summer" or fruit == "apple":
->     print("선택")
-> else:
->     print("보류")
+```python
+temp = 30
+season = "spring"
+fruit = "apple"
+
+if temp >= 27 and season == "summer" or fruit == "apple":
+    print("선택")
+else:
+    print("보류")
+```
+
 **1번. 위 코드를 실행했을 때 출력은?**
 1. 보류
 2. 선택
 3. 오류 발생
 4. 아무것도 출력되지 않음
 
-> 지문:
-> x = 0
->
-> if x != 0 and 10 / x > 2:
->     print("A")
-> else:
->     print("B")
+```python
+x = 0
+
+if x != 0 and 10 / x > 2:
+    print("A")
+else:
+    print("B")
+```
+
 **2번. 위 코드에 대해 한 학생이 "10 / x 때문에 오류가 난다"고 말했다. 가장 적절한 설명은?**
 1. 맞다. and는 항상 양쪽 조건을 모두 평가한다.
 2. 맞다. if 조건식에는 나눗셈을 쓸 수 없다.
@@ -2621,26 +2997,30 @@ print(Our goal is to predict the future)
 
 **6강. 반복 구조**
 
-> 지문:
-> count = 1
->
-> while count <= 5:
->     print(count)
+```python
+count = 1
+
+while count <= 5:
+    print(count)
+```
+
 **1번. 위 코드는 의도한 대로 종료되지 않는다. 가장 적절한 원인은?**
 1. while문에는 숫자 조건을 사용할 수 없다.
 2. print() 때문에 반복문이 종료되지 않는다.
 3. count가 증가하지 않아 조건이 계속 참이다.
 4. count의 초기값이 1이라서 오류가 난다.
 
-> 지문:
-> sum = 0
-> i = 1
->
-> while i <= 4:
->     sum += i
->     i += 1
->
-> print(sum)
+```python
+sum = 0
+i = 1
+
+while i <= 4:
+    sum += i
+    i += 1
+
+print(sum)
+```
+
 **2번. 위 코드의 실행 결과는?**
 1. 4
 2. 6
@@ -2655,13 +3035,15 @@ print(Our goal is to predict the future)
 3. `r = 10; h = 20; print(1 / 3 * 3.14 * r ** 2 * h)` (함수 아님)
 4. `def cone_vol(r, h): print("원뿔의 부피")`
 
-> 지문:
-> def prt_cone_vol(r, h):
->     print(r, h)
->
-> rad = 30
-> hei = 50
-> prt_cone_vol(rad, hei)
+```python
+def prt_cone_vol(r, h):
+    print(r, h)
+
+rad = 30
+hei = 50
+prt_cone_vol(rad, hei)
+```
+
 **2번. 위 코드에 대한 설명으로 가장 적절한 것은?**
 1. 이름이 다르므로 rad는 r에 전달될 수 없다.
 2. r과 h는 함수 밖에서도 계속 사용할 수 있다.
@@ -2676,12 +3058,14 @@ print(Our goal is to predict the future)
 3. 리스트
 4. 불리언 타입 변수
 
-> 지문:
-> hei = [1, 5, 14, 26, 31]
-> hei.append(27)
-> x = hei.pop(1)
-> hei.insert(2, x)
-> print(hei)
+```python
+hei = [1, 5, 14, 26, 31]
+hei.append(27)
+x = hei.pop(1)
+hei.insert(2, x)
+print(hei)
+```
+
 **2번. 위 코드의 실행 결과로 올바른 것은?**
 1. [1, 5, 14, 26, 31, 27]
 2. [1, 14, 5, 26, 31, 27]
@@ -2696,11 +3080,13 @@ print(Our goal is to predict the future)
 3. 세트
 4. 딕셔너리
 
-> 지문:
-> d1 = {"a": 10, "b": 20, "c": 30, "d": 40}
->
-> print(d1["a"])
-> print(d1[40])
+```python
+d1 = {"a": 10, "b": 20, "c": 30, "d": 40}
+
+print(d1["a"])
+print(d1[40])
+```
+
 **2번. 위 코드에서 오류가 발생하는 이유로 가장 적절한 것은?**
 1. 딕셔너리에는 숫자 값을 저장할 수 없기 때문
 2. 40은 값이지 키가 아니기 때문
@@ -2715,9 +3101,11 @@ print(Our goal is to predict the future)
 3. 책 한 권마다 같은 코드를 복사해 작성한다.
 4. 대출 여부는 출력문 안에서만 계산한다.
 
-> 지문:
-> unit = Cone(10, 20)
-> unit.r = -50
+```python
+unit = Cone(10, 20)
+unit.r = -50
+```
+
 **2번. 위 코드 때문에 원뿔의 반지름에 음수가 저장될 수 있다. 가장 적절한 대응은?**
 1. 반지름을 아예 저장하지 않고 계산할 때마다 새로 입력받는다.
 2. 모든 데이터 필드를 전역 변수로 바꾼다.
@@ -2732,9 +3120,11 @@ print(Our goal is to predict the future)
 3. `import math` / `pick = math.sample(students, 2)`
 4. `students.sample(2)`
 
-> 지문:
-> import math
-> print(factorial(5))
+```python
+import math
+print(factorial(5))
+```
+
 **2번. 위 코드에서 발생하는 오류 원인으로 가장 적절한 것은?**
 1. math 모듈에는 factorial() 함수가 없다.
 2. import math 후에는 math.factorial(5)처럼 호출해야 한다.
@@ -2749,11 +3139,13 @@ print(Our goal is to predict the future)
 3. `fp = open("survey.txt", "utf-8", "a",)`
 4. `fp = open("C:/", "r", encoding="utf-8")`
 
-> 지문:
-> fp = open("out.txt", "w")
-> fp.write("A")
-> fp.write("B")
-> fp.close()
+```python
+fp = open("out.txt", "w")
+fp.write("A")
+fp.write("B")
+fp.close()
+```
+
 **2번. 위 코드를 보고 한 학생이 말했다. "write()를 두 번 썼으니 A와 B가 두 줄에 저장된다."**
 1. 맞다. write()는 호출할 때마다 자동 줄바꿈한다.
 2. 틀리다. 줄바꿈 문자가 없으므로 'AB'로 저장된다.
@@ -2768,19 +3160,21 @@ print(Our goal is to predict the future)
 3. 틀리다. 자주 나오지만 분석 목적과 관련이 약한 단어는 불용어로 처리할 수 있다.
 4. 틀리다. 빈도 분석에서는 모든 단어를 삭제해야 한다.
 
-> 지문:
-> text = "Great! great, slow."
-> stopwords = {"slow"}
->
-> clean = text.lower().replace("!", "").replace(",", "").replace(".", "")
-> words = clean.split()
->
-> counts = {}
-> for w in words:
->     if w not in stopwords:
->         counts[w] = counts.get(w, 0) + 1
->
-> print(counts)
+```python
+text = "Great! great, slow."
+stopwords = {"slow"}
+
+clean = text.lower().replace("!", "").replace(",", "").replace(".", "")
+words = clean.split()
+
+counts = {}
+for w in words:
+    if w not in stopwords:
+        counts[w] = counts.get(w, 0) + 1
+
+print(counts)
+```
+
 **2번. 위 코드의 실행 결과로 가장 적절한 것은?**
 1. {'Great': 1, 'great': 1, 'slow': 1}
 2. {'great': 2}
@@ -2799,19 +3193,21 @@ print(Our goal is to predict the future)
 3. 구현 단계
 4. 유지보수 단계
 
-> 지문:
-> events = ["RIGHT", "RIGHT", "QUIT", "LEFT"]
-> x = 0
->
-> for e in events:
->     if e == "QUIT":
->         break
->     if e == "RIGHT":
->         x += 1
->     if e == "LEFT":
->         x -= 1
->
-> print(x)
+```python
+events = ["RIGHT", "RIGHT", "QUIT", "LEFT"]
+x = 0
+
+for e in events:
+    if e == "QUIT":
+        break
+    if e == "RIGHT":
+        x += 1
+    if e == "LEFT":
+        x -= 1
+
+print(x)
+```
+
 **2번. 위 코드의 실행 결과로 가장 적절한 것은?**
 1. 0
 2. 1
@@ -2826,13 +3222,15 @@ print(Our goal is to predict the future)
 3. 세트와 리스트를 사용해 이름을 저장한다.
 4. 학생 이름을 하나의 변수에 여러 번 저장한다.
 
-> 지문:
-> grid = [
->     [1, 2, 3],
->     [4, 5, 6]
-> ]
->
-> print(grid[1, 2])
+```python
+grid = [
+    [1, 2, 3],
+    [4, 5, 6]
+]
+
+print(grid[1, 2])
+```
+
 **2번. 위 코드에 대해 한 학생이 "2행 3열 값에 접근하는 올바른 코드"라고 말했다. 이에 대한 가장 적절한 설명은?**
 1. 맞다. 2차원 리스트는 grid[행, 열]로 접근한다.
 2. 틀리다. 2차원 리스트는 grid[1][2]처럼 두 번 접근해야 한다.
@@ -3003,6 +3401,7 @@ print(Our goal is to predict the future)
 2. 유비쿼터스 공간
 3. 사이버 공간
 4. 초현실 공간
+
 > 정답: 2
 
 **Q2. 물리공간과 전자공간의 연계를 위한 관점에 포함되지 않는 것은 무엇인가 ?**
@@ -3010,6 +3409,7 @@ print(Our goal is to predict the future)
 2. 사물의 인식
 3. 물리적 속성과 전자적 특성 간의 연계
 4. 인공지능 기반의 전자공간
+
 > 정답: 4
 
 > 지문:
@@ -3019,6 +3419,7 @@ print(Our goal is to predict the future)
 2. 사람, 사물(센서/칩/태그), 컴퓨터
 3. 사람, 컴퓨터, 사물(센서/칩/태그)
 4. 사물(센서/칩/태그), 컴퓨터, 사람
+
 > 정답: 4
 
 **Q4. 유비쿼터스 컴퓨팅의 특징으로 틀리는 것은 무엇인가 ?**
@@ -3026,6 +3427,7 @@ print(Our goal is to predict the future)
 2. 물리공간을 가상공간으로 이동
 3. 모든 사물의 지능화
 4. 사물들의 유기적 연결
+
 > 정답: 2
 
 **Q5. 유비쿼터스 컴퓨팅 환경을 구현하기 위한 관심 분야로서 전자공간 사이의 좀 더 개선된 결합의 모습을 추구하는 개념은 무엇인가 ?**
@@ -3033,11 +3435,13 @@ print(Our goal is to predict the future)
 2. 복잡성
 3. 추상화
 4. 연결성
+
 > 정답: 4
 
 > 지문:
 > ( )은 1988년 PARC의 마크 와이저에 의해 “사람을 포함한 현실공간에 존재하는 모든 대상물을 기능적 공간적으로 연결하여 사용자에게 필요한 정보나 서비스를 즉시에 제공할 수 있는 기반 기술”로 정의되었다.
 **Q6. 위 내용의 괄호 안에 알맞은 내용을 넣으시오**
+
 > 정답: 유비쿼터스 컴퓨팅
 
 **Q7. 실제로 존재하지 않은 환경이나 상황을 컴퓨터 등으로 구현한 후 인간의 감각을 이용하여 체험하게 하는 기술은 무엇인가 ?**
@@ -3045,6 +3449,7 @@ print(Our goal is to predict the future)
 2. 혼합현실
 3. 메타버스
 4. 증강현실
+
 > 정답: 1
 
 **Q8. 미래 가속화 연구재단(ASF; Acceleration Studies Foundation)에서 정의한 메타버스 구성의 네 가지 시나리오가 아닌 것은 무엇인가 ?**
@@ -3052,6 +3457,7 @@ print(Our goal is to predict the future)
 2. 일상기록
 3. 혼합현실
 4. 증강현실
+
 > 정답: 3
 
 **Q9. 소셜 미디어가 모임, 쇼핑, 게임 등이 가능한 메타버스로 발전한 형태인 소셜 기반 메타버스가 아닌 것은 무엇인가 ?**
@@ -3059,6 +3465,7 @@ print(Our goal is to predict the future)
 2. 게더타운(Gather.town)
 3. 호라이즌 월드(Horizon World)
 4. 로블록스(Roblox)
+
 > 정답: 4
 
 **Q10. SoC의 특징이 아닌 것은 무엇인가 ?**
@@ -3066,6 +3473,7 @@ print(Our goal is to predict the future)
 2. 마이크로프로세서, 디지털 신호 처리장치, 메모리 등을 직접시킨 칩이다.
 3. 기능마다 별개의 칩으로 구성된다.
 4. 부품의 개수와 부피를 줄일 수 있다.
+
 > 정답: 3
 
 **Q11. SoC 제작과정중에서 펌웨어등의 개발이 관여되는 과정은 무엇인가 ?**
@@ -3073,6 +3481,7 @@ print(Our goal is to predict the future)
 2. 전문가에 의한 구조 결정 단계
 3. 시제품 제작 및 테스트 단계
 4. SoC 제품 생산 단계
+
 > 정답: 3
 
 **Q12. 다음 중 MEMS 기술의 특징이 아닌 것은 무엇인가 ?**
@@ -3080,6 +3489,7 @@ print(Our goal is to predict the future)
 2. 효율적인 소형화
 3. 제작의 융합화
 4. 생산공정의 단순화
+
 > 정답: 4
 
 **Q13. 나노 기술의 특징이 아닌 것은 무엇인가 ?**
@@ -3087,6 +3497,7 @@ print(Our goal is to predict the future)
 2. 원자나 분자를 적절하게 결합시켜 새로운 미세한 구조를 만들어내어 기존 물질을 변형하거나 새로운 물질을 창출하는 것을 가능하게 하는 초미세기술
 3. 기술의 핵심은 기존의 구조물들을 융합하여 구조물을 만드는 기술
 4. 입자의 질량이 너무 작아서 중력의 영향은 덜 받고, 상대적으로 넓은 표면적으로 인하여 흡착력이 커지게 됨
+
 > 정답: 3
 
 **Q14. 화학전지에 속하지 않는 것은 ?**
@@ -3094,6 +3505,7 @@ print(Our goal is to predict the future)
 2. Ni-MH 전지
 3. 태양 전지
 4. 리튬이온 전지
+
 > 정답: 3
 
 **Q15. 나노미터 수준의 가공을 통해 나노미터 크기의 구조체를 인공적으로 형성하는 나노 기술의 접근 기술은 ?**
@@ -3101,6 +3513,7 @@ print(Our goal is to predict the future)
 2. 상향식 접근 방식
 3. 다측면 접근 방식
 4. 입체 접근 방식
+
 > 정답: 1
 
 **Q16. 유비쿼터스 네트워킹을 위한 구조적 모델에서 사물의 수행 환경과 상황정보는 통신하는 단말이나 사용자의 이동, 실행 환경의 변화 등 여러 통신 환경 변화에 따라 영향을 받기 때문에 각 사물은 예측할 수 없는 실행 상황에도 대처하는 계층은 무엇인가?**
@@ -3108,6 +3521,7 @@ print(Our goal is to predict the future)
 2. 차세대 네트워크 전송층
 3. 최종 사용자
 4. 유비쿼터스 네트워킹 응용 프로그램
+
 > 정답: 1
 
 **Q17. 사물인터넷에서 서버상의 콘텐츠 같은 객체의 사물 유형은 무엇인가?**
@@ -3115,6 +3529,7 @@ print(Our goal is to predict the future)
 2. 이동 사물
 3. 체 사물
 4. 논리적 사물
+
 > 정답: 4
 
 > 지문:
@@ -3124,6 +3539,7 @@ print(Our goal is to predict the future)
 2. 플랫폼, 사물, 응용 프로그램
 3. 플랫폼, 응용 프로그램, 사물
 4. 사물, 응용 프로그램, 플랫폼
+
 > 정답: 1
 
 **Q19. 블록체인의 특징이 아닌 것은 무엇인가?**
@@ -3131,6 +3547,7 @@ print(Our goal is to predict the future)
 2. 투명성
 3. 자동성
 4. 가용성
+
 > 정답: 3
 
 **Q20. 승인된참여자만 참여할 수 있는 폐쇄형 블록체인 플랫폼은 무엇인가?**
@@ -3138,6 +3555,7 @@ print(Our goal is to predict the future)
 2. 동적 블록체인
 3. 퍼블릭 블록체인
 4. 프라이빗 블록체인
+
 > 정답: 4
 
 **Q21. 블록체인 플랫폼에서 특정 블록을 찾기 위해서는 식별자가 필요하며, 블록의 식별자는 ( )과 ( )으로 정의된다.**
@@ -3145,6 +3563,7 @@ print(Our goal is to predict the future)
 2. 블록 높이값, 블록 해시값
 3. 논스, 블록 해시값
 4. 블록 높이값, 난이도
+
 > 정답: 1
 
 **Q22. 클라우드 서비스에 대한 설명으로 옳지 않은 것은 무엇인가?**
@@ -3152,6 +3571,7 @@ print(Our goal is to predict the future)
 2. 사용자가 신청하여 즉시 사용할 수 있고, 사용한 만큼 비용을 지불하는 컴퓨팅
 3. 사용자의 필요 용도에 따라 클라우드 컴퓨팅에서 제공하는 서비스의 성능도 가변적으로 변경 가능한 서비스
 4. 고정적인 컴퓨팅 리소스에 대한 포털을 제공하는 서비스
+
 > 정답: 4
 
 **Q23. 클라우드에서 제공되는 가상 인프라를 제공하는 영역은 클라우드 아키텍처의 어느 부분인가?**
@@ -3159,6 +3579,7 @@ print(Our goal is to predict the future)
 2. 물리적 시스템 계층
 3. 가상화 계층
 4. 클라우드 컴퓨팅 서비스 관리 체계 계층
+
 > 정답: 3
 
 **Q24. 클라우드 사용자에게 통신 네트워크를 통해 소프트웨어를 가상화하여 제공하는 클라우드 서비스 모델은 무엇인가?**
@@ -3166,6 +3587,7 @@ print(Our goal is to predict the future)
 2. IaaS 모델
 3. PaaS 모델
 4. DaaS 모델
+
 > 정답: 1
 
 **Q25. 일반적으로 측정 대상물을 감지 또는 측정하거나 전파의 강도를 감지/측정하여 유용한 신호로 변환하고, 그 측정량을 전기신호로 변환하는 장치는 무엇인가?**
@@ -3173,6 +3595,7 @@ print(Our goal is to predict the future)
 2. 사물
 3. USN 미들웨어
 4. USN 응용 프로그램
+
 > 정답: 1
 
 **Q26. 센서 네트워크의 센서 네트워크 프로토콜 아키텍처의 기능 측면에 해당되지 않는 것은 무엇인가?**
@@ -3180,6 +3603,7 @@ print(Our goal is to predict the future)
 2. 이동성 관리 측면
 3. 업무 관리 측면
 4. 자원 분배 측면
+
 > 정답: 4
 
 **Q27. USN 미들웨어의 기능이 아닌 것은 무엇인가?**
@@ -3187,6 +3611,7 @@ print(Our goal is to predict the future)
 2. 다양한 질의 유형 지원
 3. 센싱 정보 관리
 4. 서로 다른 기종의 센서 네트워크 통합 지원
+
 > 정답: 1
 
 **Q28. 상황의 분류에 포함되지 않는 것은 무엇인가?**
@@ -3194,6 +3619,7 @@ print(Our goal is to predict the future)
 2. 컴퓨팅 상황
 3. 사용자 상황
 4. 물리적 상황
+
 > 정답: 1
 
 **Q29. 상황(또는 상황정보, Context)의 정의에 포함되지 않는 것은 무엇인가?**
@@ -3201,6 +3627,7 @@ print(Our goal is to predict the future)
 2. 실세계에 존재하는 실체의 상태를 특징화하여 정의한 정보
 3. 사용자의 상황을 특징지을 수 있는 정보
 4. 사용자의 주변을 구성하는 가상화된 자원 정보
+
 > 정답: 4
 
 **Q30. 상황인식 서비스 요소 기술이 아닌 것은 무엇인가?**
@@ -3208,6 +3635,7 @@ print(Our goal is to predict the future)
 2. 상황정보 모델링 기술
 3. 상황정보 추론 기술
 4. 상황정보 관리 기술
+
 > 정답: 1
 
 **Q31. HCI(Human-Computer Interaction)의 구성요소에 포함되지 않는 것은 무엇인가?**
@@ -3215,6 +3643,7 @@ print(Our goal is to predict the future)
 2. 인간
 3. 컴퓨터
 4. 상호작용
+
 > 정답: 1
 
 **Q32. 음성을 통한 HCI에 포함되지 않는 것은 무엇인가?**
@@ -3222,6 +3651,7 @@ print(Our goal is to predict the future)
 2. 음성 합성
 3. 자연어처리
 4. 상황인식
+
 > 정답: 4
 
 **Q33. 착용 컴퓨팅 기반의 HCI에서 운영체제, 미들웨어, 장치 관리/보안, 음성인식, 응용 프로그램 등의 기술 분류는 무엇에 해당하는가?**
@@ -3229,6 +3659,7 @@ print(Our goal is to predict the future)
 2. 디바이스 / 컴포넌트 기술
 3. 소프트웨어 기술
 4. 착용 솔루션 기술
+
 > 정답: 3
 
 **Q34. 유비쿼터스 시대의 정보보호 요구사항에 포함되지 않는 것은 무엇인가?**
@@ -3236,6 +3667,7 @@ print(Our goal is to predict the future)
 2. 신원정보 및 위치정보 노출에 대한 대처
 3. IP 위장하기(IP Spoofing)에 대한 대처
 4. 사용자 익명 사용에 대한 대처
+
 > 정답: 4
 
 **Q35. 메시지의 송‧수신이나 교환 후, 또는 통신이나 처리가 실행된 후에 그 사실을 사후에 증명함으로써 사실 부인을 방지하는 보안 기술은 무엇인가?**
@@ -3243,6 +3675,7 @@ print(Our goal is to predict the future)
 2. 패킷 엿보기(Packet Sniffing)
 3. 부적절한 개인정보 유통
 4. 부인방지(Non-repudiation)
+
 > 정답: 4
 
 **Q36. 정상적인 기능을 하는 시스템으로 가장하여 프로그램 내에 숨어서 의도하지 않은 기능을 수행하는 백도어(backdoor) 프로그램 코드는 무엇인가?**
@@ -3250,6 +3683,7 @@ print(Our goal is to predict the future)
 2. 페러데이케이지(Faraday Cage) 코드
 3. 트로이 목마(Trojan Horse) 코드
 4. 킬 태그(Kill Tag) 코드
+
 > 정답: 3
 
 **Q37. 일부 기능을 제외하면 정상적인 주행 혹은 사고나 충돌 임박 상황에서 자동차 제어권을 운전자가 소유하는 자동차의 자동화 단계는 무엇인가?**
@@ -3257,6 +3691,7 @@ print(Our goal is to predict the future)
 2. 조합 기능 자동화
 3. 제한된 자율주행
 4. 특정 기능 자동화
+
 > 정답: 4
 
 **Q38. 차량 상태의 위험 상황과 운전자 상태를 감지하여 사고 발생 가능성이 있는 경우, 사고를 회피시키는 차량 제어 기술은 무엇인가?**
@@ -3264,6 +3699,7 @@ print(Our goal is to predict the future)
 2. 사고피해경감
 3. 사고예방
 4. 사고회피
+
 > 정답: 4
 
 **Q39. 차량과 주변 인프라망이 유무선 통신에 의해 접속되는 단말과 서버 간에 이루어지는 무선통신. 차량에 인터넷 프로토콜(IP) 기반의 교통정보 및 안전운행 정보를 내려받을 수 있는 서비스는 무엇인가?**
@@ -3271,6 +3707,7 @@ print(Our goal is to predict the future)
 2. 협력 · 지능형 교통 체계(C-ITS; Cooperative Intelligent Transport Systems)
 3. 차량 인프라 간 통신(V2I; Vehicle to Infrastructure communication)
 4. 차선 유지 보조 시스템(LKAS; Lane Keeping Assistance System)
+
 > 정답: 3
 
 **Q40. 저장될 데이터에 대하여 미리 정해진 규칙(혹은 스키마)을 정의한 후, 그에 따라 저장된 데이터는 무엇인가?**
@@ -3278,6 +3715,7 @@ print(Our goal is to predict the future)
 2. 비정형 데이터
 3. 반정형 데이터
 4. 추상형 데이터
+
 > 정답: 1
 
 > 지문:
@@ -3287,6 +3725,7 @@ print(Our goal is to predict the future)
 2. 빅데이터 수집
 3. 빅데이터 처리
 4. 빅데이터 분석
+
 > 정답: 1
 
 **Q42. 여러 서버를 연결하여 대용량 빅데이터를 분산처리할 수 있도록 지원하는 자바(Java) 기반의 오픈소스 프레임워크는 무엇인가?**
@@ -3294,6 +3733,7 @@ print(Our goal is to predict the future)
 2. 네임노드(NameNode)
 3. 하둡(Hadoop)
 4. 맵리듀스(MapReduce)
+
 > 정답: 3
 
 **Q43. 모든 학습 데이터(x)에 적당한 레이블(y)을 부여한 후, 기계가 입력집합 x를 모델에 넣어 결과에 해당하는 y값과 비교함으로써 모델의 성능을 높이는 학습 방식은 무엇인가?**
@@ -3301,6 +3741,7 @@ print(Our goal is to predict the future)
 2. 비지도학습(Unsupervised Learning)
 3. 강화학습(Reinforcement Learning)
 4. 반지도학습(Semi-supervised Learning)
+
 > 정답: 1
 
 > 지문:
@@ -3310,6 +3751,7 @@ print(Our goal is to predict the future)
 2. 머신러닝
 3. 딥러닝
 4. 튜링 테스트
+
 > 정답: 3
 
 **Q45. 출력되는 값이 분류 문제처럼 N개의 값 중 하나를 예측하는 것이 아니라, 연속된 값 중 하나를 출력하는 것은 무엇인가?**
@@ -3317,4 +3759,5 @@ print(Our goal is to predict the future)
 2. 분류 모델
 3. 군집화 모델
 4. 마르코프 의사결정 과정 모델
+
 > 정답: 1
