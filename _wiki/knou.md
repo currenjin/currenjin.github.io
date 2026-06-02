@@ -274,10 +274,22 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 > 0, & 아닐 ~때 }
 > 한글 2018의 수식편집기창을 이용하여 다음 수식을 작성하고자 한다.
 **Q24. 수식편집창의 다음 ( ) 안의 a, b 에 적합한 것은?**
-1. a=cases, b=&
-2. a=vert, b=&
-3. a=cases, b=#
-4. a=vert, b=#
+1.
+   ```text
+   a=cases, b=&
+   ```
+2.
+   ```text
+   a=vert, b=&
+   ```
+3.
+   ```text
+   a=cases, b=#
+   ```
+4.
+   ```text
+   a=vert, b=#
+   ```
 
 > 지문:
 > Ⅰ. 복사나 이동을 위한 블록 지정에서 F3는 칸 단위 블록 설정, F4는 줄 단위 블록을 지정할 수 있다.
@@ -334,24 +346,60 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 4. 데이터베이스의 관리도구 기능을 가지고 있다.
 
 **Q32. 엑셀에서 B2셀의 값이 60보다 작으면 “불합격”, 60이상이면 “합격”을 D2셀에 표시하고자 한다. 적합한 엑셀함수 사용은?**
-1. =(IF(B2<60) "합격“ ELSE "불합격”)
-2. =(IF(B2<60) "불합격“ ELSE "합격”)
-3. =IF(B2<60, "합격“, ”불합격“)
-4. =IF(B2<60, "불합격“, ”합격“)
+1.
+   ```excel
+   =(IF(B2<60) "합격“ ELSE "불합격”)
+   ```
+2.
+   ```excel
+   =(IF(B2<60) "불합격“ ELSE "합격”)
+   ```
+3.
+   ```excel
+   =IF(B2<60, "합격“, ”불합격“)
+   ```
+4.
+   ```excel
+   =IF(B2<60, "불합격“, ”합격“)
+   ```
 
 **Q33. B2와 C2 셀에 데이터를 입력한 후 두 값의 평균점수를 구하고자 한다. 적합한 수식입력은?**
-1. AVERAGE(B2:C2)
-2. =AVERAGE(B2:C2)
-3. STDEV(B2:C2)
-4. =STDEV(B2:C2)
+1.
+   ```excel
+   AVERAGE(B2:C2)
+   ```
+2.
+   ```excel
+   =AVERAGE(B2:C2)
+   ```
+3.
+   ```excel
+   STDEV(B2:C2)
+   ```
+4.
+   ```excel
+   =STDEV(B2:C2)
+   ```
 
 > 지문:
 > ※ (3 ~ 5) 학생들 30명에 대한 통계학 점수와 수학 점수 자료를 다음과 같이 입력하였다. 물음에 답하시오.
 **Q34. 데이터를 입력한 후 그림과 같이 각 케이스에 대하여 평균점수를 구하고자 한다. (A) 부분에 적합한 수식입력은?**
-1. AVERAGE(B2:C2)
-2. =AVERAGE(B2:C2)
-3. MEDIAN(B2:C2)
-4. =MEDIAN(B2:C2)
+1.
+   ```excel
+   AVERAGE(B2:C2)
+   ```
+2.
+   ```excel
+   =AVERAGE(B2:C2)
+   ```
+3.
+   ```excel
+   MEDIAN(B2:C2)
+   ```
+4.
+   ```excel
+   =MEDIAN(B2:C2)
+   ```
 
 > 지문:
 > ※ (3 ~ 5) 학생들 30명에 대한 통계학 점수와 수학 점수 자료를 다음과 같이 입력하였다. 물음에 답하시오.
@@ -426,10 +474,22 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 4. 정성적 데이터에 대한 분석에는 활용할 수 없다.
 
 **Q46. 다음의 산점도에 대한 상관계수로 가장 적합할 것으로 생각되는 값은?**
-1. r = -0.87
-2. r = 0.25
-3. r = 0.92
-4. r = 1.02
+1.
+   ```text
+   r = -0.87
+   ```
+2.
+   ```text
+   r = 0.25
+   ```
+3.
+   ```text
+   r = 0.92
+   ```
+4.
+   ```text
+   r = 1.02
+   ```
 
 **Q47. A2 셀에 “대한민국”이라고 입력되어 있다. "=MID(A2, 2, 2)"의 결과로 알맞은 것은?**
 1. 대
@@ -446,18 +506,42 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 > 지문:
 > ※ 학과별 학생의 성적 데이터를 워크시트에 입력하였다. 다음 물음에 답하여라.
 **Q49. 학과코드의 첫 번째 자리 알파벳이 A이면 통계·데이터과학과, B이면 컴퓨터학과 학생이다. 학과 셀에 학과를 표기하고자 한다. C2 셀에 알맞은 함수식은?**
-1. =IF(RIGHT(A2,1)=“A”, “통계·데이터과학”, “컴퓨터”)
-2. =IF(RIGHT(A2,1)=“A”, “컴퓨터”, “통계·데이터과학”)
-3. =IF(LEFT(A2,1)=“A”, “통계·데이터과학”, “컴퓨터”)
-4. =IF(LEFT(A2,1)=“A”, “컴퓨터”, “통계·데이터과학”)
+1.
+   ```excel
+   =IF(RIGHT(A2,1)=“A”, “통계·데이터과학”, “컴퓨터”)
+   ```
+2.
+   ```excel
+   =IF(RIGHT(A2,1)=“A”, “컴퓨터”, “통계·데이터과학”)
+   ```
+3.
+   ```excel
+   =IF(LEFT(A2,1)=“A”, “통계·데이터과학”, “컴퓨터”)
+   ```
+4.
+   ```excel
+   =IF(LEFT(A2,1)=“A”, “컴퓨터”, “통계·데이터과학”)
+   ```
 
 > 지문:
 > ※ 학과별 학생의 성적 데이터를 워크시트에 입력하였다. 다음 물음에 답하여라.
 **Q50. 최종 점수는 시험점수와 과제물, 태도점수의 합계에서 결석일수에 5를 곱한 수를 뺀 것으로 계산하고자 한다. H2 셀에 알맞은 함수식은?**
-1. =AVERAGE(D2:F2)-5*G2
-2. =AVERAGE(D2:F2)+5*G2
-3. =SUM(D2:F2)-5*G2
-4. =SUM(D2:F2)+5*G2
+1.
+   ```excel
+   =AVERAGE(D2:F2)-5*G2
+   ```
+2.
+   ```excel
+   =AVERAGE(D2:F2)+5*G2
+   ```
+3.
+   ```excel
+   =SUM(D2:F2)-5*G2
+   ```
+4.
+   ```excel
+   =SUM(D2:F2)+5*G2
+   ```
 
 **Q51. 다음과 같이 워크시트에 값이 입력되어 있을 때 ‘=SUMPRODUCT(A1:A3, B1:B3)’을 D1 셀에 입력하면 얻게 되는 계산값은 얼마인가?**
 1. 10
@@ -472,10 +556,22 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 4. 목표값 찾기 기능
 
 **Q53. 다음과 같이 셀 C7에 입력되어 있는 수식을 드래그 & 드롭으로 C11까지 채워서 1월부터 6월까지의 미달러($) 기준의 수출액을 원화(￦) 기준으로 바꾸고자 한다. 셀 C6에 입력할 수식으로 맞는 것은?**
-1. =B6*B2
-2. =B$6*B2
-3. =B6*B$2
-4. =B$6*B$2
+1.
+   ```excel
+   =B6*B2
+   ```
+2.
+   ```excel
+   =B$6*B2
+   ```
+3.
+   ```excel
+   =B6*B$2
+   ```
+4.
+   ```excel
+   =B$6*B$2
+   ```
 
 **Q54. 함수 f(x) = -x³ + 2x² - 2x + 3의 개형을 (-3, 3) 범위에서 그리고자 한다. 차트마법사의 차트 종류 입력상자에서 선택할 차트 종류로 알맞은 것은?**
 1. 세로 막대형이나 가로 막대형
@@ -484,22 +580,58 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 4. 꺾은선형
 
 **Q55. 복리로 계산될 때 연이율 r, 기간이 n인 경우 현재 금액 p에 대한 일정 기간 후의 원리합계는 p × (1 + r)^n으로 계산할 수 있다. 원금이 1,000만원인 경우에 연 4.5%와 연 5.0%로 향후 20년까지 경과하였을 때 원리합계가 얼마인지 계산하고자 한다. 채워넣기를 이용해서 계산한다고 할 때 B5 셀에 알맞은 함수식은?**
-1. =$B$1*(1+B2)^A5
-2. =$B$1*(1+B$2)^$A5
-3. =$B$1*(1+B$2)^A$5
-4. =$B$1*(1+$B2)^$A$5
+1.
+   ```excel
+   =$B$1*(1+B2)^A5
+   ```
+2.
+   ```excel
+   =$B$1*(1+B$2)^$A5
+   ```
+3.
+   ```excel
+   =$B$1*(1+B$2)^A$5
+   ```
+4.
+   ```excel
+   =$B$1*(1+$B2)^$A$5
+   ```
 
 **Q56. 데이터 객체 ex.data의 변수들을 직접 사용하고자 한다. 유용한 명령은 ?**
-1. load(ex.data)
-2. detach(ex.data)
-3. unload(data)
-4. attach(ex.data)
+1.
+   ```r
+   load(ex.data)
+   ```
+2.
+   ```r
+   detach(ex.data)
+   ```
+3.
+   ```text
+   unload(data)
+   ```
+4.
+   ```r
+   attach(ex.data)
+   ```
 
 **Q57. 그룹변수인 성별(sex)의 값에 따라 변수 salary의 평균(mean)을 구하는 명령은 ?**
-1. sapply(salary, sex, mean)
-2. sapply(mean, sex, salary)
-3. tapply(salary, sex, mean)
-4. tapply(mean, sex, salary)
+1.
+   ```r
+   sapply(salary, sex, mean)
+   ```
+2.
+   ```r
+   sapply(mean, sex, salary)
+   ```
+3.
+   ```r
+   tapply(salary, sex, mean)
+   ```
+4.
+   ```r
+   tapply(mean, sex, salary)
+   ```
 
 **Q58. > ( b )(ex.data)**
 1. head
@@ -516,10 +648,22 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 4. read.xlsx
 
 **Q60. package xlsx를 인스톨하였다. 이를 가동시키기 위한 명령은 ?**
-1. system(xlsx)
-2. use(xlsx)
-3. library(xlsx)
-4. load(xlsx)
+1.
+   ```text
+   system(xlsx)
+   ```
+2.
+   ```text
+   use(xlsx)
+   ```
+3.
+   ```r
+   library(xlsx)
+   ```
+4.
+   ```r
+   load(xlsx)
+   ```
 
 ```r
 power.value <- function(x,n1,n2,n3=5)
@@ -569,16 +713,40 @@ return(value)
 4. 8
 
 **Q64. 상자그림을 그리는 명령은 ?**
-1. stem(ex.data)
-2. boxplot(ex.data)
-3. box(data)
-4. box.plot(ex.data)
+1.
+   ```r
+   stem(ex.data)
+   ```
+2.
+   ```r
+   boxplot(ex.data)
+   ```
+3.
+   ```r
+   box(data)
+   ```
+4.
+   ```r
+   box.plot(ex.data)
+   ```
 
 **Q65. 파이썬에서 딕셔너리로 선언하고자 한다. 적합한 것은 ?**
-1. me = [‘height’ : 180, ‘weight’: 70 ]
-2. me = {‘height’ : 180, ‘weight’: 70 }
-3. me = {‘height’ = 180, ‘weight’ = 70 }
-4. me = [‘height’ = 180, ‘weight’ = 70 ]
+1.
+   ```python
+   me = [‘height’ : 180, ‘weight’: 70 ]
+   ```
+2.
+   ```python
+   me = {‘height’ : 180, ‘weight’: 70 }
+   ```
+3.
+   ```python
+   me = {‘height’ = 180, ‘weight’ = 70 }
+   ```
+4.
+   ```python
+   me = [‘height’ = 180, ‘weight’ = 70 ]
+   ```
 
 ```
 C:\anaconda3>( ) install tensorflow
@@ -788,7 +956,10 @@ nex8 = ( )("c:/data/dataintro/nex8-1.xlsx, header=0)
 
 #### 빈칸 테스트
 
-1. HTML은 (     ), CSS는 (     ), JavaScript는 (     )이다.
+1.
+   ```javascript
+   HTML은 (     ), CSS는 (     ), JavaScript는 (     )이다.
+   ```
 2. `<meta charset="UTF-8">`은 (     )을 막는다.
 3. `div`는 (     ), `span`은 (     ) 컨테이너다.
 4. `tr`은 (     ), `th`는 (     ), `td`는 (     )이다.
@@ -821,7 +992,10 @@ nex8 = ( )("c:/data/dataintro/nex8-1.xlsx, header=0)
 4. 요청을 보내고, 받은 HTML 코드를 해석해 화면에 표시한다.
 
 **Q2. 다음 중 meta 요소의 설명으로 틀린 것은?**
-1. charset="utf-8"은 다국어 깨짐을 방지하기 위한 필수 설정이다.
+1.
+   ```javascript
+   charset="utf-8"은 다국어 깨짐을 방지하기 위한 필수 설정이다.
+   ```
 2. viewport 설정은 모바일 반응형 웹 환경 대응을 위한 필수 설정이다.
 3. keywords 속성은 현대 검색엔진 최적화(SEO)에서 가장 중요한 요소이다.
 4. og:title 등의 Open Graph는 SNS 공유 시 미리보기 정보를 정의한다.
@@ -855,10 +1029,22 @@ nex8 = ( )("c:/data/dataintro/nex8-1.xlsx, header=0)
 4. strong
 
 **Q7. 다음 중 리스트의 불릿(기호)을 없애기 위해 실무에서 가장 많이 사용하는 CSS 속성은?**
-1. list-style-type: disc;
-2. list-style: none;
-3. text-decoration: none;
-4. display: none;
+1.
+   ```css
+   list-style-type: disc;
+   ```
+2.
+   ```css
+   list-style: none;
+   ```
+3.
+   ```css
+   text-decoration: none;
+   ```
+4.
+   ```css
+   display: none;
+   ```
 
 **Q8. 정의-설명 리스트에서 "설명/값"에 해당하는 요소는?**
 1. dt
@@ -880,16 +1066,37 @@ height: ( 나 );
 4. (가) width, (나) fixed
 
 **Q10. a 요소에서 target="_blank" 속성을 사용할 때 실무 보안 규칙으로 가장 적절한 것은?**
-1. rel="nofollow"를 반드시 함께 사용한다.
+1.
+   ```javascript
+   rel="nofollow"를 반드시 함께 사용한다.
+   ```
 2. download 속성을 반드시 함께 사용한다.
-3. rel="noopener noreferrer"를 반드시 함께 사용한다.
-4. aria-hidden="true"를 반드시 함께 사용한다.
+3.
+   ```javascript
+   rel="noopener noreferrer"를 반드시 함께 사용한다.
+   ```
+4.
+   ```javascript
+   aria-hidden="true"를 반드시 함께 사용한다.
+   ```
 
 **Q11. 동일한 페이지 내의 특정 위치(id="section1")로 이동하는 앵커 링크의 올바른 표현은?**
-1. `<a href="section1">이동</a>`
-2. `<a href="#section1">이동</a>`
-3. `<a link="#section1">이동</a>`
-4. `<a target="section1">이동</a>`
+1.
+   ```html
+   <a href="section1">이동</a>
+   ```
+2.
+   ```html
+   <a href="#section1">이동</a>
+   ```
+3.
+   ```html
+   <a link="#section1">이동</a>
+   ```
+4.
+   ```html
+   <a target="section1">이동</a>
+   ```
 
 **Q12. 표의 '제목 셀'을 생성하며, 기본적으로 굵게 표시되고 가운데 정렬되는 요소는?**
 1. th
@@ -904,10 +1111,22 @@ height: ( 나 );
 4. 각 영역으로 구분한 후 영역 제목을 부여하기 위한 요소이다.
 
 **Q14. audio 요소에서 자동 재생을 시도할 때의 기본 전제로서 가장 적절한 코드 형태는?(단, src 속성 표현은 생략한다.)**
-1. `<audio autoplay></audio>`
-2. `<audio autoplay muted></audio>`
-3. `<audio autoplay loop></audio>`
-4. `<audio autoplay preload="auto"></audio>`
+1.
+   ```html
+   <audio autoplay></audio>
+   ```
+2.
+   ```html
+   <audio autoplay muted></audio>
+   ```
+3.
+   ```html
+   <audio autoplay loop></audio>
+   ```
+4.
+   ```html
+   <audio autoplay preload="auto"></audio>
+   ```
 
 **Q15. 미디어 표현에서 source 요소를 사용하는 가장 핵심적인 목적은?**
 1. CSS 적용을 쉽게 하려고
@@ -998,13 +1217,19 @@ p { color: red; }
 4. red와 blue의 혼합색
 
 **Q28. 다음 중 필수 입력 속성(required)이 있는 input 요소만 골라내어 스타일을 적용하기 위한 올바른 CSS 선택자 표현은?**
-1. input:required { ... }
+1.
+   ```css
+   input:required { ... }
+   ```
 2. input[required] { ... }
 3. input.required { ... }
 4. input #required { ... }
 
 **Q29. 다음 코드 중 ul 바로 밑에 있는 li들만 선택하기 위한 결합자의 표현으로 올바른 것은?**
-1. ul > li
+1.
+   ```css
+   ul > li
+   ```
 2. ul li
 3. ul + li
 4. ul ~ li
@@ -1022,13 +1247,28 @@ p { color: red; }
 4. 화면 너비 기준 상대 단위
 
 **Q32. 다음 중 한글의 문단 가독성이라는 관점에서 기본적인 설정 조합으로 가장 적절한 것은?**
-1. font-size: 12px; line-height: 1;
-2. font-size: 16px; line-height: 1.5;
-3. font-size: 40px; line-height: 0.8;
-4. font-size: 8px; line-height: 1;
+1.
+   ```css
+   font-size: 12px; line-height: 1;
+   ```
+2.
+   ```css
+   font-size: 16px; line-height: 1.5;
+   ```
+3.
+   ```css
+   font-size: 40px; line-height: 0.8;
+   ```
+4.
+   ```css
+   font-size: 8px; line-height: 1;
+   ```
 
 **Q33. 폰트 단축 속성(font)에 포함될 수 있는 속성은?**
-1. letter-spacing
+1.
+   ```javascript
+   letter-spacing
+   ```
 2. border-collapse
 3. line-height
 4. list-style
@@ -1040,10 +1280,22 @@ p { color: red; }
 4. text-overflow
 
 **Q35. 내비게이션 메뉴(GNB) 등을 만들 때 리스트 초기화 코드로 가장 적절한 것은?**
-1. ul { list-style: disc; }
-2. ul { list-style: none; padding: 0; margin: 0; }
-3. ul { display: inline; border: 1px solid black; }
-4. ul { vertical-align: middle; }
+1.
+   ```css
+   ul { list-style: disc; }
+   ```
+2.
+   ```css
+   ul { list-style: none; padding: 0; margin: 0; }
+   ```
+3.
+   ```css
+   ul { display: inline; border: 1px solid black; }
+   ```
+4.
+   ```css
+   ul { vertical-align: middle; }
+   ```
 
 **Q36. 테이블에서 열 너비 계산을 단순화해 레이아웃을 안정화할 때 쓰는 속성은?**
 1. table-layout: fixed
@@ -1089,22 +1341,58 @@ ___________
 ```
 
 **Q39. 특정 블록 요소(.box)를 부모 컨테이너(.container)의 '가로 중앙'에 오도록 정렬할 때 margin 속성을 활용하려고 한다. 이에 알맞은 코드 표현은?**
-1. margin: auto 0;
-2. margin: 0 auto;
-3. margin-left: 50%;
-4. padding: 0 auto;
+1.
+   ```css
+   margin: auto 0;
+   ```
+2.
+   ```css
+   margin: 0 auto;
+   ```
+3.
+   ```css
+   margin-left: 50%;
+   ```
+4.
+   ```css
+   padding: 0 auto;
+   ```
 
 **Q40. grid에서 열을 3개로 나누는 가장 명확한 선언은?**
-1. grid-template-columns: 1fr 1fr 1fr;
-2. grid-columns: 3;
-3. columns: grid(3);
-4. grid-template-rows: 1fr 1fr 1fr;
+1.
+   ```css
+   grid-template-columns: 1fr 1fr 1fr;
+   ```
+2.
+   ```css
+   grid-columns: 3;
+   ```
+3.
+   ```css
+   columns: grid(3);
+   ```
+4.
+   ```css
+   grid-template-rows: 1fr 1fr 1fr;
+   ```
 
 **Q41. 알약 형태(pill shape)의 둥근 버튼을 만들기 위해, 버튼의 너비가 유동적으로 변해도 양쪽 끝이 항상 완벽한 반원 형태를 유지하도록 실무에서 주로 사용하는 border-radius 속성 값은?**
-1. border-radius: 50%;
-2. border-radius: 100%;
-3. border-radius: 9999px; (또는 매우 큰 px 값)
-4. border-radius: auto;
+1.
+   ```css
+   border-radius: 50%;
+   ```
+2.
+   ```css
+   border-radius: 100%;
+   ```
+3.
+   ```css
+   border-radius: 9999px; (또는 매우 큰 px 값)
+   ```
+4.
+   ```css
+   border-radius: auto;
+   ```
 
 **Q42. box-shadow 속성에서 그림자를 박스 '바깥쪽'이 아니라 박스 '안쪽'으로 생기게 해서, 버튼이 꾹 눌린 듯한 효과를 낼 때 쓰는 단어(키워드)는?**
 1. inside
@@ -1145,10 +1433,22 @@ transform: ___(A)___;
 ```
 
 **Q47. 위 지문에서 요소를 화면의 정중앙에 완벽하게 배치할 때, 'top: 50%; left: 50%;' 로 밀어낸 후 요소 자기 자신의 크기 절반만큼 다시 위/왼쪽으로 당겨오기 위해 사용하는 (A)에 알맞은 것은?**
-1. translate(-50%, -50%)
-2. translate(50%, 50%)
-3. translate(-50vw, -50vh)
-4. margin(-50%, -50%)
+1.
+   ```css
+   translate(-50%, -50%)
+   ```
+2.
+   ```css
+   translate(50%, 50%)
+   ```
+3.
+   ```css
+   translate(-50vw, -50vh)
+   ```
+4.
+   ```css
+   margin(-50%, -50%)
+   ```
 
 ```css
 .card-face {
@@ -1206,16 +1506,40 @@ _________: paused;
 4. animation-control
 
 **Q53. 다단 레이아웃에서 단의 개수를 고정하지 않고, 각 단의 너비가 최소 300px은 되어야 한다라고 브라우저에 최적의 너비를 제시하는 속성은?**
-1. column-width: 300px;
-2. min-width: 300px;
-3. column-min: 300px;
-4. column-size: 300px;
+1.
+   ```css
+   column-width: 300px;
+   ```
+2.
+   ```css
+   min-width: 300px;
+   ```
+3.
+   ```css
+   column-min: 300px;
+   ```
+4.
+   ```css
+   column-size: 300px;
+   ```
 
 **Q54. 텍스트의 분량에 따라 단의 높이가 결정될 때, 브라우저가 알아서 모든 단의 높이를 최대한 비슷하게(균등하게) 맞추도록 내용을 재분배하는 속성은?**
-1. column-height: auto;
-2. columns: equal;
-3. column-distribute: even;
-4. column-fill: balance;
+1.
+   ```css
+   column-height: auto;
+   ```
+2.
+   ```css
+   columns: equal;
+   ```
+3.
+   ```css
+   column-distribute: even;
+   ```
+4.
+   ```css
+   column-fill: balance;
+   ```
 
 ```
 ________ score = 100;
@@ -1223,9 +1547,18 @@ score = 80;
 ```
 
 **Q55. 위 지문의 자바스크립트에서 값이 중간에 변할 수 있는 일반적인 변수를 선언할 때 사용하는 가장 모던하고 올바른 키워드는?**
-1. const
-2. let
-3. var
+1.
+   ```javascript
+   const
+   ```
+2.
+   ```javascript
+   let
+   ```
+3.
+   ```javascript
+   var
+   ```
 4. int
 
 ```javascript
@@ -1269,10 +1602,22 @@ const doubled = nums.________(n => n * 2); // [2, 4, 6]
 ```
 
 **Q59. 위 지문의 배열에서 기존 원본을 훼손(수정)하지 않고, 각 요소를 콜백 함수로 가공하여 완전히 새로운 똑같은 길이의 배열을 만들어 반환하는 함수형 메서드는?**
-1. forEach( )
-2. filter( )
-3. map( )
-4. reduce( )
+1.
+   ```javascript
+   forEach( )
+   ```
+2.
+   ```javascript
+   filter( )
+   ```
+3.
+   ```javascript
+   map( )
+   ```
+4.
+   ```javascript
+   reduce( )
+   ```
 
 ```javascript
 form.addEventListener('submit', function(e) {
@@ -1282,10 +1627,22 @@ console.log('페이지 이동 없이 JS 로직 실행');
 ```
 
 **Q60. 사용자가 폼 전송 버튼(`<button type="submit">`)을 눌렀을 때, 페이지가 새로고침되며 서버로 데이터가 넘어가는 브라우저의 '기본 동작'을 강제로 취소시키는 메서드는?**
-1. stopPropagation( )
-2. cancelEvent( )
-3. preventDefault( )
-4. stopBubbling( )
+1.
+   ```javascript
+   stopPropagation( )
+   ```
+2.
+   ```javascript
+   cancelEvent( )
+   ```
+3.
+   ```javascript
+   preventDefault( )
+   ```
+4.
+   ```javascript
+   stopBubbling( )
+   ```
 
 ```javascript
 const items = document.__________________('li');
@@ -1330,10 +1687,22 @@ cart.__________________;
 ```
 
 **Q65. 위 지문에서 쇼핑 장바구니처럼 `<div>` 안의 모든 상품(자식 요소)을 한 번에 싹 지워버리려 한다. 성능이 가장 뛰어나고 깔끔한 최신 메서드 호출 방식은?**
-1. innerHTML = ""
-2. removeChildren( )
-3. replaceChildren( )
-4. clearAll( )
+1.
+   ```javascript
+   innerHTML = ""
+   ```
+2.
+   ```javascript
+   removeChildren( )
+   ```
+3.
+   ```javascript
+   replaceChildren( )
+   ```
+4.
+   ```javascript
+   clearAll( )
+   ```
 
 ```
 // 방송대로 페이지 이동
@@ -1353,16 +1722,37 @@ ________________ = 'https://www.knou.ac.kr';
 4. lineWidth와 lineCap 등의 선 스타일
 
 **Q68. 패스(Path) 기반 방식으로 그림을 그릴 때 새로운 밑그림을 시작하겠다는 의미의 선언으로 이전 경로들과의 연결을 끊는 리셋 버튼 역할을 하는 필수 메서드는?**
-1. ctx.moveTo( )
-2. ctx.closePath( )
-3. ctx.beginPath( )
-4. ctx.resetPath( )
+1.
+   ```javascript
+   ctx.moveTo( )
+   ```
+2.
+   ```javascript
+   ctx.closePath( )
+   ```
+3.
+   ```javascript
+   ctx.beginPath( )
+   ```
+4.
+   ```javascript
+   ctx.resetPath( )
+   ```
 
 **Q69. 다각형의 내부 색상(노란색)과 테두리(파란색, 두께 5)를 모두 그릴 때, 테두리 두께가 색상에 덮이지 않고 온전하게 5px 굵기를 유지하기 위한 올바른 메서드 호출 순서는?**
-1. ctx.stroke( ); 후 ctx.fill( );
-2. ctx.fill( ); 후 ctx.stroke( );
+1.
+   ```javascript
+   ctx.stroke( ); 후 ctx.fill( );
+   ```
+2.
+   ```javascript
+   ctx.fill( ); 후 ctx.stroke( );
+   ```
 3. 순서는 전혀 상관없다.
-4. ctx.closePath( );를 생략하면 된다.
+4.
+   ```javascript
+   ctx.closePath( );를 생략하면 된다.
+   ```
 
 **Q70. 원이나 부채꼴을 그리는 ctx.arc( ) 함수에서 기본적으로 각도를 재는 방향과 기준점(0라디안)은 어디인가?**
 1. 12시 방향 기준, 시계 방향
@@ -1439,10 +1829,22 @@ ctx.________(img, 0, 0);
 ```
 
 **Q77. 위 지문의 캔버스에 외부에서 가져온 사진이나 이미지를 그려넣는 가장 기본적이고 널리 쓰이는 메서드는 무엇인가?**
-1. paintImage( )
-2. insertImage( )
-3. showImage( )
-4. drawImage( )
+1.
+   ```javascript
+   paintImage( )
+   ```
+2.
+   ```javascript
+   insertImage( )
+   ```
+3.
+   ```javascript
+   showImage( )
+   ```
+4.
+   ```javascript
+   drawImage( )
+   ```
 
 **Q78. ctx.scale(2,2)를 적용한 후 도형을 그렸다. 도형의 크기가 2배 커지는 것 외에 또 어떤 속성이 2배로 영향을 받아 시각적으로 달라지는가?**
 1. 도형 내부의 투명도
@@ -1450,7 +1852,11 @@ ctx.________(img, 0, 0);
 3. 그림자 반경
 4. 채우기 색상
 
-> 지문: `<video src="bgm.mp4" autoplay __________________></video>`
+> 지문:
+
+```html
+<video src="bgm.mp4" autoplay __________________></video>
+```
 **Q79. 위 지문에서 모던 브라우저 정책상 오디오나 비디오를 웹페이지 접속 시 자동으로 재생(autoplay)되게 하려면, 사용자 경험을 위해 반드시 함께 명시해야 하는 속성은 무엇인가?**
 1. loop
 2. controls
@@ -1477,10 +1883,22 @@ ________________;
 ```
 
 **Q81. 위 지문의 HTML5 미디어 API에는 stop( ) 메서드가 존재하지 않는다. 자바스크립트로 영상을 완전히 정지시키고 재생 위치를 맨 처음(0초)으로 되돌리는 로직으로 올바른 것은?**
-1. video.reset( );
-2. video.time = 0;
-3. video.currentTime = 0;
-4. video.reload( );
+1.
+   ```javascript
+   video.reset( );
+   ```
+2.
+   ```javascript
+   video.time = 0;
+   ```
+3.
+   ```javascript
+   video.currentTime = 0;
+   ```
+4.
+   ```javascript
+   video.reload( );
+   ```
 
 ```javascript
 card.addEventListener('dragstart', (e) => {
@@ -1501,16 +1919,37 @@ _____________________;
 ```
 
 **Q83. 위 지문에서 드래그 앤 드롭 구현 시, 목적지 영역에 요소를 내려놓기 위해 타겟의 dragover와 drop 핸들러에서 기본 동작의 차단 목적으로 반드시 사용해야 하는 메서드는?**
-1. e.allowDrop( )
-2. e.preventDefault( )
-3. e.stopPropagation( )
-4. e.accept( )
+1.
+   ```javascript
+   e.allowDrop( )
+   ```
+2.
+   ```javascript
+   e.preventDefault( )
+   ```
+3.
+   ```javascript
+   e.stopPropagation( )
+   ```
+4.
+   ```javascript
+   e.accept( )
+   ```
 
 **Q84. 컴퓨터 바탕화면에 있는 이미지 파일을 끌어다가 브라우저 화면 안으로 떨어뜨렸다. 이때 목적지의 drop 이벤트 내에서 넘어온 파일 데이터를 꺼내보려면 어떤 객체를 확인해야 하는가?**
 1. window.droppedFiles
-2. e.dataTransfer.getData('file')
-3. e.target.files
-4. e.dataTransfer.files
+2.
+   ```javascript
+   e.dataTransfer.getData('file')
+   ```
+3.
+   ```javascript
+   e.target.files
+   ```
+4.
+   ```javascript
+   e.dataTransfer.files
+   ```
 
 ```javascript
 const user = { name: '홍길동' };
@@ -1518,16 +1957,40 @@ const user = { name: '홍길동' };
 ```
 
 **Q85. 위 지문에서 자바스크립트 객체를 웹 스토리지에 에러 없이 온전하게 보관하기 위한 실무 표준 코드로 (가)에 적합한 것은?**
-1. localStorage.setItem('user', user);
-2. localStorage.setItem('user', JSON.parse(user));
-3. localStorage.setItem('user', JSON.stringify(user));
-4. localStorage.setItem('user', user.toString());
+1.
+   ```javascript
+   localStorage.setItem('user', user);
+   ```
+2.
+   ```javascript
+   localStorage.setItem('user', JSON.parse(user));
+   ```
+3.
+   ```javascript
+   localStorage.setItem('user', JSON.stringify(user));
+   ```
+4.
+   ```javascript
+   localStorage.setItem('user', user.toString());
+   ```
 
 **Q86. 웹 스토리지에 저장된 캔버스 환경설정 정보를 가져오려고 한다. 이를 위한 메서드의 올바른 사용은?**
-1. const mode = localStorage.getValue('theme');
-2. const mode = localStorage.getItem('theme');
-3. const mode = localStorage.get('theme');
-4. const mode = localStorage.fetchItem('theme');
+1.
+   ```javascript
+   const mode = localStorage.getValue('theme');
+   ```
+2.
+   ```javascript
+   const mode = localStorage.getItem('theme');
+   ```
+3.
+   ```javascript
+   const mode = localStorage.get('theme');
+   ```
+4.
+   ```javascript
+   const mode = localStorage.fetchItem('theme');
+   ```
 
 **Q87. window.addEventListener('storage', ...) 이벤트가 브라우저에서 발생하는 정확한 시점은 언제인가?**
 1. 현재 보고 있는 탭에서 데이터가 저장/수정/삭제되었을 때
@@ -1536,10 +1999,22 @@ const user = { name: '홍길동' };
 4. 같은 스토리지 영역을 사용하는 다른 탭이나 창에서 스토리지가 변경되었을 때
 
 **Q88. 배달 라이더 앱에서처럼 사용자가 이동할 때마다 브라우저가 알아서 연속적으로 위치 변화를 감지해서 콜백을 실행해 주는 실시간 위치 추적 메서드는?**
-1. navigator.geolocation.getCurrentPosition( )
-2. navigator.geolocation.observeLocation( )
-3. navigator.geolocation.watchPosition( )
-4. navigator.geolocation.liveTracking( )
+1.
+   ```javascript
+   navigator.geolocation.getCurrentPosition( )
+   ```
+2.
+   ```javascript
+   navigator.geolocation.observeLocation( )
+   ```
+3.
+   ```javascript
+   navigator.geolocation.watchPosition( )
+   ```
+4.
+   ```javascript
+   navigator.geolocation.liveTracking( )
+   ```
 
 ```javascript
 const options = {
@@ -1930,14 +2405,32 @@ class B { }
 **Q7. 다음 중 문법적으로 올바른 문장은 무엇인가?**
 1. int a[10] = new int[ ];
 2. int b[ ] = new int(10);
-3. int[ ][ ] c = new int[5][ ];
-4. int[5] d = {1, 2, 3, 4, 5};
+3.
+   ```java
+   int[ ][ ] c = new int[5][ ];
+   ```
+4.
+   ```java
+   int[5] d = {1, 2, 3, 4, 5};
+   ```
 
 **Q8. int형 변수 i와 j의 값을 각각 출력하기 위해 적당한 출력문은 무엇인가?**
-1. System.out.println( i , j );
-2. System.out.println( i + " " + j );
-3. System.out.println( i + j );
-4. System.out.println( i + ‘=’ + j );
+1.
+   ```java
+   System.out.println( i , j );
+   ```
+2.
+   ```java
+   System.out.println( i + " " + j );
+   ```
+3.
+   ```java
+   System.out.println( i + j );
+   ```
+4.
+   ```java
+   System.out.println( i + ‘=’ + j );
+   ```
 
 **Q9. 퍼블릭 Alpha 클래스에서 protected 데이터 필드가 정의되었다고 가정할 때, 아래 4개의 클래스 중에서 이 데이터 필드를 사용할 수 없는 클래스는 무엇인가?**
 1. Alpha
@@ -1946,16 +2439,37 @@ class B { }
 4. Gamma
 
 **Q10. 키워드 final에 관한 설명으로 틀린 것은?**
-1. final 클래스의 자식 클래스를 정의할 수 없다.
+1.
+   ```java
+   final 클래스의 자식 클래스를 정의할 수 없다.
+   ```
 2. 부모 클래스의 final 메소드는 자식 클래스로 상속될 때 재정의될 수 없다.
-3. final 변수는 상수로 사용된다.
-4. final 클래스의 객체를 생성할 수 없다.
+3.
+   ```java
+   final 변수는 상수로 사용된다.
+   ```
+4.
+   ```java
+   final 클래스의 객체를 생성할 수 없다.
+   ```
 
 **Q11. Circle 클래스에서 원주율 PI를 상수로 선언하기 위해 ㉠에 들어갈 적당한 내용은 무엇인가?**
-1. double PI = 3.14;
-2. final double PI = 3.14;
-3. const double PI = 3.14;
-4. static final double PI = 3.14;
+1.
+   ```java
+   double PI = 3.14;
+   ```
+2.
+   ```java
+   final double PI = 3.14;
+   ```
+3.
+   ```java
+   const double PI = 3.14;
+   ```
+4.
+   ```java
+   static final double PI = 3.14;
+   ```
 
 **Q12. Circle 클래스의 생성자에서 밑줄 친 ㉡에 들어갈 적당한 내용을 작성하시오**
 
@@ -1974,24 +2488,60 @@ class B { }
 **Q15. 밑줄 친 부분의 의미를 정확히 설명하시오. 단, CSuper는 클래스 이름이다.**
 
 **Q16. 다음과 같은 제네릭 클래스가 있다고 가정하자. 보기에서 문법적으로 오류가 있는 것은?**
-1. Data<int> d = new Data<>( );
-2. Data<Integer> d = new Data<>( );
-3. Data<String> d = new Data<String>( );
-4. Data d = new Data( );
+1.
+   ```java
+   Data<int> d = new Data<>( );
+   ```
+2.
+   ```java
+   Data<Integer> d = new Data<>( );
+   ```
+3.
+   ```java
+   Data<String> d = new Data<String>( );
+   ```
+4.
+   ```java
+   Data d = new Data( );
+   ```
 
 **Q17. 다음과 같은 인터페이스가 있다고 가정할 때, 보기에서 람다식 사용이 잘못된 것은?**
-1. Addable ad = (int a, int b) -> { return (a + b); };
-2. Addable ad = (int a, int b) -> a + b;
-3. Addable ad = (a, b) -> return (a + b);
-4. Addable ad = (a, b) -> (a + b);
+1.
+   ```java
+   Addable ad = (int a, int b) -> { return (a + b); };
+   ```
+2.
+   ```java
+   Addable ad = (int a, int b) -> a + b;
+   ```
+3.
+   ```java
+   Addable ad = (a, b) -> return (a + b);
+   ```
+4.
+   ```java
+   Addable ad = (a, b) -> (a + b);
+   ```
 
 **Q18. [문제 누락]**
 
 **Q19. Client 클래스를 myprogram.game 패키지에 위치시키려고 한다. Client 클래스를 정의하는 소스 파일의 맨 위에 포함시켜야 코드는 무엇인가?**
-1. package myprogram.game;
-2. package myprogram.game.Client;
-3. import myprogram.game;
-4. import myprogram.game.Client;
+1.
+   ```java
+   package myprogram.game;
+   ```
+2.
+   ```java
+   package myprogram.game.Client;
+   ```
+3.
+   ```java
+   import myprogram.game;
+   ```
+4.
+   ```java
+   import myprogram.game.Client;
+   ```
 
 **Q20. 밑줄 부분에 들어가야 할 내용은 무엇인가?**
 1. throw IOException
@@ -2023,7 +2573,10 @@ class B { }
 
 **Q26. BufferedReader 클래스에 관한 설명으로 틀린 것은 무엇인가?**
 1. Reader의 자식 클래스이다.
-2. read()와 readLine() 등 다양한 입력 메소드를 제공한다.
+2.
+   ```java
+   read()와 readLine() 등 다양한 입력 메소드를 제공한다.
+   ```
 3. 바이트 단위의 입력 기능을 제공한다.
 4. 입력 과정에 버퍼링 기능을 제공한다.
 
@@ -2037,7 +2590,10 @@ class B { }
 
 **Q29. FileChannel 클래스에 관한 설명으로 틀린 것은 무엇인가?**
 1. java.io 패키지의 파일 관련 스트림 클래스를 대체하기 위한 클래스이다.
-2. FileChannel.open(path)으로 객체 생성을 하면 해당 파일을 읽기용으로 열게 된다.
+2.
+   ```java
+   FileChannel.open(path)으로 객체 생성을 하면 해당 파일을 읽기용으로 열게 된다.
+   ```
 3. 파일 입력을 위해 FileChannelReader, 파일 출력을 위해 FileChannelWriter를 사용한다.
 4. 멀티 스레드 환경에서도 안전하게 사용할 수 있게 설계되었다.
 
@@ -2058,10 +2614,22 @@ class B { }
 **Q33. [문제 누락]**
 
 **Q34. 주어진 배열을 스트림으로 만들려고 한다. 밑줄 부분에 들어갈 적당한 내용은?**
-1. IntStream.range(numbers)
-2. Arrays.stream(numbers)
-3. numbers.stream( )
-4. numbers.getStream( )
+1.
+   ```java
+   IntStream.range(numbers)
+   ```
+2.
+   ```java
+   Arrays.stream(numbers)
+   ```
+3.
+   ```java
+   numbers.stream( )
+   ```
+4.
+   ```java
+   numbers.getStream( )
+   ```
 
 **Q35. 주어진 문자열 배열에서 길이가 6 이상인 단어를 대문자로 변환한 후 정렬하여 출력하려고 한다. 밑줄 부분에 들어갈 메소드는 무엇인가?**
 1. peek
@@ -2197,7 +2765,10 @@ class B { }
 
 #### 빈칸 테스트
 
-1. Python은 (     ), (     ), (     ) 블록 언어다.
+1.
+   ```python
+   Python은 (     ), (     ), (     ) 블록 언어다.
+   ```
 2. input은 기본적으로 (     )을 반환한다.
 3. `=`는 (     ), `==`는 (     )이다.
 4. 슬라이싱 `[start:end]`에서 end는 (     )된다.
@@ -2262,13 +2833,22 @@ class B { }
 4. 구글 코랩
 
 **Q7. 'Our goal is to predict the future'**
-1. print("Computer science is the best")
+1.
+   ```python
+   print("Computer science is the best")
+   ```
 
  print("Our goal is to predict the future")
-2. print("Computer science is the best")
+2.
+   ```python
+   print("Computer science is the best")
+   ```
 
 print("Our goal is to predict the future")
-3. print(Computer science is the best)
+3.
+   ```python
+   print(Computer science is the best)
+   ```
 
 print(Our goal is to predict the future)
 4. "Computer science is the best"
@@ -2302,10 +2882,22 @@ print(detox)
 4. 명령 구조
 
 **Q11. number 변수에 저장되어 있는 정수를 사용하여 “상자에사과가n개들어있습니다.”라는 메시지를 출력하려고 한다. 올바른 명령문은? (단, n은 number 변수에 저장된 정수를 의미한다.)**
-1. print("상자에", "사과가", number, "개", "들어있습니다.")
-2. print("상자에사과가number개들어있습니다.")
-3. print("상자에""사과가"number"개""들어있습니다.")
-4. print("상자에", "사과가", number, "개", "들어있습니다.", sep="")
+1.
+   ```python
+   print("상자에", "사과가", number, "개", "들어있습니다.")
+   ```
+2.
+   ```python
+   print("상자에사과가number개들어있습니다.")
+   ```
+3.
+   ```python
+   print("상자에""사과가"number"개""들어있습니다.")
+   ```
+4.
+   ```python
+   print("상자에", "사과가", number, "개", "들어있습니다.", sep="")
+   ```
 
 **Q12. ‘논리적으로 실행 불가능한 명령문 작성 시 발생’ 오류를 무엇이라고 하는가?**
 1. 의미 오류
@@ -2327,8 +2919,14 @@ temp = int(input("온도를 입력하세요: "))
 ```
 
 **Q14. 다음은 온도(temp)가 0 이하일 경우, “겨울입니다.”를 출력하는 프로그램의 일부이다. 밑줄 친 빈 칸에 들어갈 명령문은?**
-1. temp > 0
-2. temp <= 0
+1.
+   ```python
+   temp > 0
+   ```
+2.
+   ```python
+   temp <= 0
+   ```
 3. if temp > 0
 4. if temp <= 0 :
 
@@ -2417,10 +3015,22 @@ print(hei_list[:3])
 ```
 
 **Q23. 다음 코드의 실행 결과로 옳은 것은?**
-1. [1, 5, 14]
-2. [14, 26, 31]
-3. [1, 14, 31]
-4. [31, 26, 14]
+1.
+   ```python
+   [1, 5, 14]
+   ```
+2.
+   ```python
+   [14, 26, 31]
+   ```
+3.
+   ```python
+   [1, 14, 31]
+   ```
+4.
+   ```python
+   [31, 26, 14]
+   ```
 
 ```python
 hei_list = [1, 5, 14, 26, 31]
@@ -2429,10 +3039,22 @@ print(hei_even)
 ```
 
 **Q24. 다음 코드의 출력값으로 옳은 것은?**
-1. [1, 5, 31]
-2. [14, 26]
-3. [1, 14, 31]
-4. [26, 31]
+1.
+   ```python
+   [1, 5, 31]
+   ```
+2.
+   ```python
+   [14, 26]
+   ```
+3.
+   ```python
+   [1, 14, 31]
+   ```
+4.
+   ```python
+   [26, 31]
+   ```
 
 **Q25. 다음 중 튜플에 대한 설명으로 옳은 것은?**
 1. 원소를 자유롭게 수정할 수 있는 가변 시퀀스
@@ -2447,19 +3069,37 @@ print(msg.split(" "))
 
 **Q26. 다음 코드의 출력값으로 옳은 것은?**
 1. "I do love python"
-2. ['I', 'do', 'love', 'python']
-3. ('I', 'do', 'love', 'python')
-4. ['I do love python']
+2.
+   ```python
+   ['I', 'do', 'love', 'python']
+   ```
+3.
+   ```python
+   ('I', 'do', 'love', 'python')
+   ```
+4.
+   ```python
+   ['I do love python']
+   ```
 
 **Q27. 다음 중 세트에 사용할 수 없는 연산자는 무엇인가?**
 1. in
 2. not in
 3. +
-4. ==
+4.
+   ```excel
+   ==
+   ```
 
 **Q28. 객체의 상태를 초기화하기 위해 사용하는 특수 메소드는 무엇인가?**
-1. `__main__`
-2. `__init__`
+1.
+   ```python
+   __main__
+   ```
+2.
+   ```python
+   __init__
+   ```
 3. class
 4. return
 
@@ -2492,19 +3132,40 @@ print(unitcone.h)
 4. 네임스페이스 (Namespace)
 
 **Q32. 특정 모듈(math)에서 특정 함수(sqrt)만을 가져오기 위한 올바른 구문 형식은?**
-1. import math.sqrt
-2. import sqrt from math
+1.
+   ```python
+   import math.sqrt
+   ```
+2.
+   ```python
+   import sqrt from math
+   ```
 3. from math import sqrt
 4. math import sqrt
 
 **Q33. 코드의 실행을 잠시 3초 동안 멈추고자 할 때 사용하는 time 모듈의 함수는?**
-1. time.stop(3)
-2. time.pause(3)
-3. time.wait(3)
-4. time.sleep(3)
+1.
+   ```python
+   time.stop(3)
+   ```
+2.
+   ```python
+   time.pause(3)
+   ```
+3.
+   ```python
+   time.wait(3)
+   ```
+4.
+   ```python
+   time.sleep(3)
+   ```
 
 **Q34. 현재 작업 디렉토리의 위치가 /var/home/user/docs라고 가정하자. 부모 디렉토리에 있는 lib 폴더 내의 config.txt 파일을 상대 경로로 열고자 할 때, 가장 적절한 경로는?**
-1. /var/home/lib/config.txt
+1.
+   ```python
+   /var/home/lib/config.txt
+   ```
 2. ./lib/config.txt
 3. ../lib/config.txt
 4. ~/lib/config.txt
@@ -2516,8 +3177,14 @@ print(unitcone.h)
 4. "x"
 
 **Q36. 대용량의 파일 분석 프로그램 작성 시, 다음 중 데이터를 안전하게 처리할 수 있는 방법은?**
-1. read() 메소드를 사용하여 파일 전체를 하나의 문자열 변수에 담아 분석한다.
-2. readlines() 메소드를 사용하여 파일의 모든 줄을 메모리에 리스트 구조로 한 번에 적재한다.
+1.
+   ```python
+   read() 메소드를 사용하여 파일 전체를 하나의 문자열 변수에 담아 분석한다.
+   ```
+2.
+   ```python
+   readlines() 메소드를 사용하여 파일의 모든 줄을 메모리에 리스트 구조로 한 번에 적재한다.
+   ```
 3. 한 번에 한 줄(line)씩만 메모리에 읽어 들여 정제 처리를 수행한 후 다음 줄로 넘어가는 반복문(for line in file:)을 구성한다.
 4. 데이터를 읽기 전 close() 함수를 선제적으로 호출하여 메모리를 비운다.
 
@@ -2564,7 +3231,10 @@ print(unitcone.h)
 4. 세트
 
 **Q44. 이름이 distance인 2차원 리스트에서 원하는 데이터 위치를 접근하기 위해 사용하는 인덱스 표기법은?**
-1. distance(행, 열)
+1.
+   ```python
+   distance(행, 열)
+   ```
 2. distance[행, 열]
 3. distance[[행][열]]
 4. distance[행][열]
@@ -2625,7 +3295,10 @@ print(amount + 1000)
 
 **2번. 위 코드가 의도대로 실행되지 않는 가장 적절한 이유는?**
 1. 변수 이름 amount가 식별자 규칙에 맞지 않는다.
-2. print() 함수는 표현식을 출력할 수 없다.
+2.
+   ```python
+   print() 함수는 표현식을 출력할 수 없다.
+   ```
 3. 53000000은 너무 큰 숫자라서 계산할 수 없다.
 4. amount는 문자열이고 1000은 정수이므로 바로 더할 수 없다.
 
@@ -2641,7 +3314,10 @@ rad = 20
 1. vol은 20으로 계산되고, 이후 rad만 20으로 바뀐다.
 2. rad는 10과 20을 동시에 저장한다.
 3. rad가 20으로 바뀌면 vol도 자동으로 40이 된다.
-4. rad = 20은 rad와 20이 같은지 비교하는 문장이다.
+4.
+   ```python
+   rad = 20은 rad와 20이 같은지 비교하는 문장이다.
+   ```
 
 ```python
 rad = input("반지름: ")
@@ -2650,10 +3326,19 @@ print(rad + hei)
 ```
 
 **2번. 위 코드 실행 후 사용자가 10과 24를 각각 입력했더니 결과가 1024로 출력되었다. 가장 적절한 원인은?**
-1. print()는 숫자를 출력할 수 없다.
+1.
+   ```python
+   print()는 숫자를 출력할 수 없다.
+   ```
 2. + 연산자는 항상 숫자 덧셈만 수행한다.
-3. input()의 안내 문구 때문에 값이 바뀐다.
-4. input()은 입력값을 문자열로 반환한다.
+3.
+   ```python
+   input()의 안내 문구 때문에 값이 바뀐다.
+   ```
+4.
+   ```python
+   input()은 입력값을 문자열로 반환한다.
+   ```
 
 **5강. 선택 구조**
 
@@ -2700,7 +3385,10 @@ while count <= 5:
 
 **1번. 위 코드는 의도한 대로 종료되지 않는다. 가장 적절한 원인은?**
 1. while문에는 숫자 조건을 사용할 수 없다.
-2. print() 때문에 반복문이 종료되지 않는다.
+2.
+   ```python
+   print() 때문에 반복문이 종료되지 않는다.
+   ```
 3. count가 증가하지 않아 조건이 계속 참이다.
 4. count의 초기값이 1이라서 오류가 난다.
 
@@ -2725,9 +3413,15 @@ print(sum)
 
 **1번. 원뿔의 부피를 여러 반지름과 높이에 대해 계산하려고 할 때, 적절한 함수 설계는?**
 1. `def cone_vol(): r = 10; h = 20; print(1 / 3 * 3.14 * r ** 2 * h)` (인자 없이 값 고정)
-2. `def cone_vol(r, h): return 1 / 3 * 3.14 * r ** 2 * h`
+2.
+   ```python
+   def cone_vol(r, h): return 1 / 3 * 3.14 * r ** 2 * h
+   ```
 3. `r = 10; h = 20; print(1 / 3 * 3.14 * r ** 2 * h)` (함수 아님)
-4. `def cone_vol(r, h): print("원뿔의 부피")`
+4.
+   ```python
+   def cone_vol(r, h): print("원뿔의 부피")
+   ```
 
 ```python
 def prt_cone_vol(r, h):
@@ -2761,10 +3455,22 @@ print(hei)
 ```
 
 **2번. 위 코드의 실행 결과로 올바른 것은?**
-1. [1, 5, 14, 26, 31, 27]
-2. [1, 14, 5, 26, 31, 27]
-3. [1, 14, 26, 31, 27, 5]
-4. [5, 1, 14, 26, 31, 27]
+1.
+   ```python
+   [1, 5, 14, 26, 31, 27]
+   ```
+2.
+   ```python
+   [1, 14, 5, 26, 31, 27]
+   ```
+3.
+   ```python
+   [1, 14, 26, 31, 27, 5]
+   ```
+4.
+   ```python
+   [5, 1, 14, 26, 31, 27]
+   ```
 
 **9강. 컬렉션 2**
 
@@ -2809,10 +3515,22 @@ unit.r = -50
 **11강. 모듈**
 
 **1번. 학생 명단에서 발표자 2명을 중복 없이 뽑으려고 한다. 가장 적절한 코드는?**
-1. `import random` / `pick = random.choice(students)`
-2. `import random` / `pick = random.sample(students, 2)`
-3. `import math` / `pick = math.sample(students, 2)`
-4. `students.sample(2)`
+1.
+   ```python
+   import random` / `pick = random.choice(students)
+   ```
+2.
+   ```python
+   import random` / `pick = random.sample(students, 2)
+   ```
+3.
+   ```python
+   import math` / `pick = math.sample(students, 2)
+   ```
+4.
+   ```python
+   students.sample(2)
+   ```
 
 ```python
 import math
@@ -2821,17 +3539,38 @@ print(factorial(5))
 
 **2번. 위 코드에서 발생하는 오류 원인으로 가장 적절한 것은?**
 1. math 모듈에는 factorial() 함수가 없다.
-2. import math 후에는 math.factorial(5)처럼 호출해야 한다.
-3. factorial()은 정수가 아니라 문자열만 처리한다.
-4. print() 안에서는 모듈 함수를 사용할 수 없다.
+2.
+   ```python
+   import math 후에는 math.factorial(5)처럼 호출해야 한다.
+   ```
+3.
+   ```python
+   factorial()은 정수가 아니라 문자열만 처리한다.
+   ```
+4.
+   ```python
+   print() 안에서는 모듈 함수를 사용할 수 없다.
+   ```
 
 **12강. 파일**
 
 **1번. 현재 작업 폴더 안의 data 폴더에 있는 한글 파일 survey.txt를 읽으려 한다. 가장 적절한 코드는?**
-1. `fp = open("./data/survey.txt", "r", encoding="utf-8")`
-2. `fp = open("./data/survey.txt", "w", encoding="utf-8")`
-3. `fp = open("survey.txt", "utf-8", "a",)`
-4. `fp = open("C:/", "r", encoding="utf-8")`
+1.
+   ```python
+   fp = open("./data/survey.txt", "r", encoding="utf-8")
+   ```
+2.
+   ```python
+   fp = open("./data/survey.txt", "w", encoding="utf-8")
+   ```
+3.
+   ```python
+   fp = open("survey.txt", "utf-8", "a",)
+   ```
+4.
+   ```python
+   fp = open("C:/", "r", encoding="utf-8")
+   ```
 
 ```python
 fp = open("out.txt", "w")
@@ -2870,10 +3609,22 @@ print(counts)
 ```
 
 **2번. 위 코드의 실행 결과로 가장 적절한 것은?**
-1. {'Great': 1, 'great': 1, 'slow': 1}
-2. {'great': 2}
-3. {'great': 1, 'slow': 1}
-4. {}
+1.
+   ```python
+   {'Great': 1, 'great': 1, 'slow': 1}
+   ```
+2.
+   ```python
+   {'great': 2}
+   ```
+3.
+   ```python
+   {'great': 1, 'slow': 1}
+   ```
+4.
+   ```python
+   {}
+   ```
 
 **14강. 실전 프로젝트 2-1**
 
@@ -3125,7 +3876,10 @@ print(grid[1, 2])
 1. 유비쿼터스는 (     ) 어디서나 자연스럽게 컴퓨팅을 이용하는 환경이다.
 2. 유비쿼터스 공간은 (     )과 (     )의 융합이다.
 3. 상황인식은 (     ), (     ), (     ), (     ) 정보를 바탕으로 한다.
-4. HCI는 (     ), HRI는 (     ) 상호작용이다.
+4.
+   ```text
+   HCI는 (     ), HRI는 (     ) 상호작용이다.
+   ```
 5. SoC는 (     ), MEMS는 (     )이다.
 6. RFID는 (     ), USN은 (     )이다.
 7. 클라우드는 (     )를 네트워크로 제공한다.
