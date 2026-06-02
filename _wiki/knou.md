@@ -2832,28 +2832,40 @@ class B { }
 3. 주피터 노트북
 4. 구글 코랩
 
-**Q7. 'Our goal is to predict the future'**
+**Q7. 다음과 같은 실행 결과를 얻기 위한 파이썬 코드로 올바른 것은?**
+
+```text
+'Computer science is the best'
+```
+
+```text
+'Our goal is to predict the future'
+```
+
 1.
    ```python
    print("Computer science is the best")
-   ```
 
- print("Our goal is to predict the future")
+       print("Our goal is to predict the future")
+   ```
 2.
    ```python
    print("Computer science is the best")
-   ```
 
-print("Our goal is to predict the future")
+   print("Our goal is to predict the future")
+   ```
 3.
    ```python
    print(Computer science is the best)
+
+   print(Our goal is to predict the future)
    ```
+4.
+   ```python
+   "Computer science is the best"
 
-print(Our goal is to predict the future)
-4. "Computer science is the best"
-
-"Our goal is to predict the future"
+   "Our goal is to predict the future"
+   ```
 
 **Q8. 다음 중 식별자로 사용할 수 없는 것은?**
 1. _pythonic
