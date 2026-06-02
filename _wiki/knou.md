@@ -3202,11 +3202,20 @@ print(msg.split(" "))
    ```
 
 **Q27. 다음 중 세트에 사용할 수 없는 연산자는 무엇인가?**
-1. in
-2. not in
-3. +
+1.
+   ```python
+   in
+   ```
+2.
+   ```python
+   not in
+   ```
+3.
+   ```python
+   +
+   ```
 4.
-   ```excel
+   ```python
    ==
    ```
 
@@ -3219,8 +3228,14 @@ print(msg.split(" "))
    ```python
    __init__
    ```
-3. class
-4. return
+3.
+   ```python
+   class
+   ```
+4.
+   ```python
+   return
+   ```
 
 **Q29. 다음 코드의 출력값으로 옳은 것은?**
 
