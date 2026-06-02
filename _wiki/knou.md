@@ -3184,7 +3184,10 @@ msg = "I do love python"
 print(msg.split(" "))
 ```
 
-1. "I do love python"
+1.
+   ```python
+   "I do love python"
+   ```
 2.
    ```python
    ['I', 'do', 'love', 'python']
