@@ -767,7 +767,31 @@ return(value)
    box.plot(ex.data)
    ```
 
-**Q65. 파이썬에서 딕셔너리로 선언하고자 한다. 적합한 것은 ?**
+**Q65. 파이썬을 설치하기 위한 아나콘다 사이트는 ?**
+
+**Q66. Python 패키지를 설치하고 관리하는 프로그램이다. Dos 창에서 ( ) 안에 맞는 명령은 ?**
+
+```text
+C:\anaconda3>( ) install tensorflow
+```
+
+**Q67. 다음 파이썬 프로그래밍에서 a[4] 의 결과는 ?**
+
+```python
+>>> a = [1,2,3,4,5]
+>>> a[4]
+```
+
+**Q68. 다음과 같이 파이썬 함수문을 작성하였다. hello2("Jeong") 의 결과는 ?**
+
+```python
+def hello2(object):
+    print("Hello " + object + " !")
+
+hello2("Jeong")
+```
+
+**Q69. 파이썬에서 딕셔너리로 선언하고자 한다. 적합한 것은 ?**
 1.
    ```python
    me = [‘height’ : 180, ‘weight’: 70 ]
@@ -785,33 +809,30 @@ return(value)
    me = [‘height’ = 180, ‘weight’ = 70 ]
    ```
 
-**Q66. Python 패키지를 설치하고 관리하는 프로그램이다. Dos 창에서 ( ) 안에 맞는 명령은 ?**
-
-```
-C:\anaconda3>( ) install tensorflow
-```
-
-
-**Q67. Anaconda 공식 사이트는?**
-
-**Q68. 다음 파이썬 프로그래밍에서 a[4] 의 결과는 ?**
+**Q70. 파이썬에서 nex8.head( ) 의 결과가 다음과 같다. 여기서 변수 id를 제거하고 나머지 변수를 가져오기 위한 명령 ( )은 ?**
 
 ```python
->>> a = [1,2,3,4,5]
->>> a[4]
+nex8.head(2)
+Out:
+id sex age edu salary
+0 1 1 21 2 150
+1 2 2 22 1 100
+nex8 = ( )
+nex8.head(2)
+Out:
+sex age edu salary
+0 1 21 2 150
+1 2 22 1 100
 ```
 
-
-**Q69. 다음과 같이 파이썬 함수문을 작성하였다. hello2("Jeong") 의 결과는 ?**
+**Q71. 파이썬에서 엑셀 파일을 읽기 위한 명령 ( )는 ?**
 
 ```python
-def hello2(object):
-print("Hello " + object + " !")
-hello2("Jeong")
+import pandas as pd
+nex8 = ( )("c:/data/dataintro/nex8-1.xlsx, header=0)
 ```
 
-
-**Q70. 변수 edu 의 막대그림을 그리고자 한다. ( ) 명령은 ?**
+**Q72. 변수 edu 의 막대그림을 그리고자 한다. ( ) 명령은 ?**
 
 ```python
 nex8.head(3)
@@ -825,16 +846,7 @@ import matplotlib.pyplot as plt
 ( )(edu_freq.index, edu_freq["count"] )
 ```
 
-
-**Q71. 파이썬에서 csv 텍스트 파일을 읽기 위한 명령 ( )는 ?**
-
-```python
-import pandas as pd
-nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
-```
-
-
-**Q72. 다음 출력결과와 같이 데이터객체 nex8의 각 변수의 기술통계량을 구하고자 한다. ( ) 명령은 ?**
+**Q73. 다음 출력결과와 같이 데이터객체 nex8의 각 변수의 기술통계량을 구하고자 한다. ( ) 명령은 ?**
 
 ```python
 nex8.head(3)
@@ -856,31 +868,12 @@ min 1.000000 21.000000 1.000000 100.000000
 max 2.000000 55.000000 3.000000 410.000000
 ```
 
-
-**Q73. 파이썬에서 nex8.head( ) 의 결과가 다음과 같다. 여기서 변수 id를 제거하고 나머지 변수를 가져오기 위한 명령 ( )은 ?**
-
-```python
-nex8.head(2)
-Out:
-id sex age edu salary
-0 1 1 21 2 150
-1 2 2 22 1 100
-nex8 = ( )
-nex8.head(2)
-Out:
-sex age edu salary
-0 1 21 2 150
-1 2 22 1 100
-```
-
-
-**Q74. 파이썬에서 엑셀 파일을 읽기 위한 명령 ( )는 ?**
+**Q74. 파이썬에서 csv 텍스트 파일을 읽기 위한 명령 ( )는 ?**
 
 ```python
 import pandas as pd
-nex8 = ( )("c:/data/dataintro/nex8-1.xlsx, header=0)
+nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 ```
-
 
 ##### 정답
 
@@ -948,16 +941,16 @@ nex8 = ( )("c:/data/dataintro/nex8-1.xlsx, header=0)
 62. 1
 63. 3
 64. 2
-65. 2
+65. www.anaconda.com
 66. pip
-67. www.anaconda.com
-68. 5
-69. Hello Jeong !
-70. plt.bar
-71. pd.read_csv
-72. nex8.describe()
-73. nex8.iloc[:, 1:]
-74. pd.read_excel
+67. 5
+68. Hello Jeong !
+69. 2
+70. nex8.iloc[:, 1:]
+71. pd.read_excel
+72. plt.bar
+73. nex8.describe()
+74. pd.read_csv
 
 ### HTML5웹프로그래밍
 
