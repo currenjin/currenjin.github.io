@@ -166,12 +166,36 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 > | 문항4. 당신의 전공분야는 무엇입니까? | 1. 인문학 / 2. 사회과학 / 3. 자연과학 / 4. 공학 / 5. 농학 / 6. 기타 |
 
 **Q6. 설문문항에서 명목척도에 해당하는 것은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1613610072209.jpg&realFileName=1613610072209.jpg&addSavePath=2021/02)
+> 이미지 해석:
+> 위 설문지의 문항은 다음과 같다.
+>
+> | 설문 | 응답 |
+> |---|---|
+> | 문항1. 당신의 나이는 몇 세입니까? | (   ) 세 |
+> | 문항2. 당신의 성별은? | 1. 남자 / 2. 여자 |
+> | 문항3. 당신은 현재의 전공에 만족합니까? | 1. 매우 만족 / 2. 약간 만족 / 3. 약간 불만족 / 4. 매우 불만족 |
+> | 문항4. 당신의 전공분야는 무엇입니까? | 1. 인문학 / 2. 사회과학 / 3. 자연과학 / 4. 공학 / 5. 농학 / 6. 기타 |
 1. 문항1, 문항3
 2. 문항2, 문항3
 3. 문항2, 문항4
 4. 문항3, 문항4
 
 **Q7. 주어진 설문지를 이용하여 100명의 학생들에게 응답을 얻었다. 데이터의 구성에 대한 올바른 설명은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1613610090068.jpg&realFileName=1613610090068.jpg&addSavePath=2021/02)
+> 이미지 해석:
+> 위 설문지의 문항은 다음과 같다. 100명에게 응답을 얻었으므로 `케이스=응답자 100명`, `변수=설문문항 4개`로 본다.
+>
+> | 설문 | 응답 |
+> |---|---|
+> | 문항1. 당신의 나이는 몇 세입니까? | (   ) 세 |
+> | 문항2. 당신의 성별은? | 1. 남자 / 2. 여자 |
+> | 문항3. 당신은 현재의 전공에 만족합니까? | 1. 매우 만족 / 2. 약간 만족 / 3. 약간 불만족 / 4. 매우 불만족 |
+> | 문항4. 당신의 전공분야는 무엇입니까? | 1. 인문학 / 2. 사회과학 / 3. 자연과학 / 4. 공학 / 5. 농학 / 6. 기타 |
 1. 4개의 케이스와 100개의 변수로 구성된다.
 2. 100개의 케이스와 4개의 변수로 구성된다.
 3. 50개의 케이스와 4개의 변수로 구성된다.
@@ -244,6 +268,12 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 4. http://www.itl.nist.gov/div898/strd/
 
 **Q17. 다음 중 표본평균을 구하는 공식은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1614944658902.png&realFileName=1614944658902.png&addSavePath=2021/03)
+> ![원문 이미지 2](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1614944667381.png&realFileName=1614944667381.png&addSavePath=2021/03)
+> ![원문 이미지 3](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1614944674079.png&realFileName=1614944674079.png&addSavePath=2021/03)
+> ![원문 이미지 4](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1614944682169.png&realFileName=1614944682169.png&addSavePath=2021/03)
 1. $\bar{x} = \frac{\sum |x_i|}{n}$
 2. $\bar{x} = \frac{\sum x_i^c}{n}$
 3. $\bar{x} = \frac{\sum x_i}{n}$
@@ -262,6 +292,12 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 4. 최소값, 최대값, 평균, 제1사분위수, 제3사분위수
 
 **Q20. 다음 중 표본분산을 구하는 공식은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1614944721472.png&realFileName=1614944721472.png&addSavePath=2021/03)
+> ![원문 이미지 2](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1614944729184.png&realFileName=1614944729184.png&addSavePath=2021/03)
+> ![원문 이미지 3](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1614944735635.png&realFileName=1614944735635.png&addSavePath=2021/03)
+> ![원문 이미지 4](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1614944742112.png&realFileName=1614944742112.png&addSavePath=2021/03)
 1. $s^2 = \frac{\sum (x_i + \bar{x})}{n - 1}$
 2. $s^2 = \frac{\sum (x_i - \bar{x})}{n - 1}$
 3. $s^2 = \frac{\sum (x_i + \bar{x})^2}{n - 1}$
@@ -421,6 +457,28 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 
 **Q34. 데이터를 입력한 후 그림과 같이 각 케이스에 대하여 평균점수를 구하고자 한다. (A) 부분에 적합한 수식입력은?**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1616674453868.jpg&realFileName=1616674453868.jpg&addSavePath=2021/03)
+> 이미지 해석:
+> 엑셀 표에는 학생별 `번호`, `통계학(B열)`, `수학(C열)`, `평균(D열)` 열이 보인다. A 부분은 D2 셀의 평균 계산칸이다.
+>
+> | 행 | 번호(A) | 통계학(B) | 수학(C) | 평균(D) |
+> |---|---:|---:|---:|---|
+> | 2 | 1 | 71 | 65 | A |
+> | 3 | 2 | 63 | 58 |  |
+> | 4 | 3 | 74 | 88 |  |
+> | 5 | 4 | 65 | 87 |  |
+> | 6 | 5 | 86 | 92 |  |
+> | 7 | 6 | 87 | 80 |  |
+> | 8 | 7 | 84 | 79 |  |
+> | 9 | 8 | 77 | 70 |  |
+> | 10 | 9 | 85 | 77 |  |
+> | 11 | 10 | 59 | 45 |  |
+> | 12 | 11 | 61 | 66 |  |
+> | 13 | 12 | 73 | 72 |  |
+> | 14 | 13 | 68 | 64 |  |
+> | 15 | 14 | 81 | 78 |  |
+
 > 지문:
 > ※ (3 ~ 5) 학생들 30명에 대한 통계학 점수와 수학 점수 자료를 다음과 같이 입력하였다. 물음에 답하시오.
 
@@ -443,6 +501,17 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 
 **Q35. D2 셀에 =IF(SUM(B2:C2)>=130, "합격“, ”불합격“)를 입력하였을 때 그 결과는?**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1616674563551.jpg&realFileName=1616674563551.jpg&addSavePath=2021/03)
+> 이미지 해석:
+> 엑셀 표의 첫 행 데이터는 `B2=71`, `C2=65`이다. 따라서 `SUM(B2:C2)=136`이고, `136 >= 130` 조건은 참이다.
+>
+> | 셀 | 값 |
+> |---|---:|
+> | B2(통계학) | 71 |
+> | C2(수학) | 65 |
+> | SUM(B2:C2) | 136 |
+
 > 지문:
 > ※ (3 ~ 5) 학생들 30명에 대한 통계학 점수와 수학 점수 자료를 다음과 같이 입력하였다. 물음에 답하시오.
 
@@ -453,6 +522,17 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 
 **Q36. D2 셀에 =$B$2+$C$2를 입력한 후 드래그&드롭 기능을 이용하여 D11 셀까지 채워 넣었다. 이 때 D3 셀의 결과는?**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1616674635267.jpg&realFileName=1616674635267.jpg&addSavePath=2021/03)
+> 이미지 해석:
+> 엑셀 표의 첫 행 데이터는 `B2=71`, `C2=65`이다. 수식 `=$B$2+$C$2`는 절대참조라서 아래로 채워 넣어도 계속 `B2+C2`를 계산한다.
+>
+> | 셀 | 값 |
+> |---|---:|
+> | B2(통계학) | 71 |
+> | C2(수학) | 65 |
+> | 복사 후 D3 결과 | 136 |
+
 > 지문:
 > ※ (3 ~ 5) 학생들 30명에 대한 통계학 점수와 수학 점수 자료를 다음과 같이 입력하였다. 물음에 답하시오.
 
@@ -462,6 +542,17 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 4. 알 수 없음
 
 **Q37. 다음과 같은 성별 도수분포를 그래프로 나타내고자 한다. 적합한 그래프끼리 묶인 것은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1617176284387.jpg&realFileName=1617176284387.jpg&addSavePath=2021/03)
+> 이미지 해석:
+> 성별 도수분포표이다.
+>
+> | 구분 | 도수 | 백분율 |
+> |---|---:|---:|
+> | 남자 | 27 | 67.5% |
+> | 여자 | 13 | 32.5% |
+> | 합계 | 40 | 100% |
 1. 막대그래프, 원그래프
 2. 히스토그램, 원그래프
 3. 막대그래프, 방사형 차트
@@ -496,6 +587,11 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 4. 꺾은선형
 
 **Q42. 엑셀 함수를 이용하여 구한 시간의 흐름에 따른 전압 값을 다음과 같은 그래프로 표시하였다. 이와 같은 그래프를 얻기 위해서 사용된 엑셀 차트의 유형은 무엇인가?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1617929595472.jpg&realFileName=1617929595472.jpg&addSavePath=2021/04)
+> 이미지 해석:
+> 그래프 제목은 `시간에 따른 축전지의 전압 변화`이다. 가로축은 `시간(단위: 초)`, 세로축은 `전압`이며, 시간 0초 부근 약 10V에서 시작해 시간이 지날수록 0V에 가까워지는 점들이 선으로 연결되어 있다. 연속적인 두 수치 변수의 변화를 표시한 XY 형태의 그래프이다.
 1. 히스토그램
 2. 세로 막대형
 3. 원형
@@ -520,6 +616,11 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 4. 정성적 데이터에 대한 분석에는 활용할 수 없다.
 
 **Q46. 다음의 산점도에 대한 상관계수로 가장 적합할 것으로 생각되는 값은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1617929343059.jpg&realFileName=1617929343059.jpg&addSavePath=2021/04)
+> 이미지 해석:
+> 산점도에서 x가 커질수록 y도 거의 직선 형태로 함께 증가한다. 점들이 상승 직선 주변에 촘촘히 모여 있으므로 강한 양의 선형 상관에 해당한다. `r`은 1에 가까운 양수로 보는 것이 적절하다.
 1.
    ```text
    r = -0.87
@@ -551,6 +652,20 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 
 **Q49. 학과코드의 첫 번째 자리 알파벳이 A이면 통계·데이터과학과, B이면 컴퓨터학과 학생이다. 학과 셀에 학과를 표기하고자 한다. C2 셀에 알맞은 함수식은?**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1618476512419.jpg&realFileName=1618476512419.jpg&addSavePath=2021/04)
+> 이미지 해석:
+> 학과별 학생 성적표이다. `학과코드(A열)`의 첫 글자를 보고 `학과(C열)`를 채우는 문제이다.
+>
+> | 행 | 학과코드(A) | 학생 이름(B) | 학과(C) | 시험점수(D) | 과제물(E) | 태도점수(F) | 결석일수(G) | 최종점수(H) |
+> |---|---|---|---|---:|---:|---:|---:|---|
+> | 2 | A1 | 김현정 |  | 95 | 100 | 95 | 0 |  |
+> | 3 | A2 | 장승기 |  | 55 | 80 | 82 | 5 |  |
+> | 4 | B1 | 이성혜 |  | 98 | 80 | 85 | 2 |  |
+> | 5 | B2 | 이다정 |  | 95 | 82 | 96 | 0 |  |
+> | 6 | A2 | 박미진 |  | 84 | 64 | 78 | 1 |  |
+> | 7 | B1 | 황대건 |  | 90 | 80 | 75 | 5 |  |
+
 > 지문:
 > ※ 학과별 학생의 성적 데이터를 워크시트에 입력하였다. 다음 물음에 답하여라.
 
@@ -573,6 +688,20 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 
 **Q50. 최종 점수는 시험점수와 과제물, 태도점수의 합계에서 결석일수에 5를 곱한 수를 뺀 것으로 계산하고자 한다. H2 셀에 알맞은 함수식은?**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1618476724112.jpg&realFileName=1618476724112.jpg&addSavePath=2021/04)
+> 이미지 해석:
+> 학과별 학생 성적표이다. `H열 최종점수`는 `시험점수(D열) + 과제물(E열) + 태도점수(F열) - 결석일수(G열) × 5`로 계산해야 한다.
+>
+> | 행 | 학과코드(A) | 학생 이름(B) | 시험점수(D) | 과제물(E) | 태도점수(F) | 결석일수(G) | 최종점수(H) |
+> |---|---|---|---:|---:|---:|---:|---|
+> | 2 | A1 | 김현정 | 95 | 100 | 95 | 0 |  |
+> | 3 | A2 | 장승기 | 55 | 80 | 82 | 5 |  |
+> | 4 | B1 | 이성혜 | 98 | 80 | 85 | 2 |  |
+> | 5 | B2 | 이다정 | 95 | 82 | 96 | 0 |  |
+> | 6 | A2 | 박미진 | 84 | 64 | 78 | 1 |  |
+> | 7 | B1 | 황대건 | 90 | 80 | 75 | 5 |  |
+
 > 지문:
 > ※ 학과별 학생의 성적 데이터를 워크시트에 입력하였다. 다음 물음에 답하여라.
 
@@ -594,6 +723,17 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
    ```
 
 **Q51. 다음과 같이 워크시트에 값이 입력되어 있을 때 ‘=SUMPRODUCT(A1:A3, B1:B3)’을 D1 셀에 입력하면 얻게 되는 계산값은 얼마인가?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1618476799151.jpg&realFileName=1618476799151.jpg&addSavePath=2021/04)
+> 이미지 해석:
+> 워크시트의 값은 다음과 같다. `SUMPRODUCT(A1:A3, B1:B3)`은 같은 행의 값을 곱한 뒤 모두 더한다.
+>
+> | 행 | A열 | B열 |
+> |---|---:|---:|
+> | 1 | 1 | 3 |
+> | 2 | 2 | 2 |
+> | 3 | 3 | 1 |
 1. 10
 2. 12
 3. 14
@@ -606,6 +746,22 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 4. 목표값 찾기 기능
 
 **Q53. 다음과 같이 셀 C7에 입력되어 있는 수식을 드래그 & 드롭으로 C11까지 채워서 1월부터 6월까지의 미달러($) 기준의 수출액을 원화(￦) 기준으로 바꾸고자 한다. 셀 C6에 입력할 수식으로 맞는 것은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1618477317767.jpg&realFileName=1618477317767.jpg&addSavePath=2021/04)
+> 이미지 해석:
+> 환율과 월별 수출액 표이다. `B2`에는 환율 1,090이 있고, `B6:B11`에는 미달러 기준 수출액이 있다. `C6:C11`에는 원화 기준 수출액을 계산한다.
+>
+> | 셀 | 내용 | 값 |
+> |---|---|---:|
+> | B2 | 환율 | 1,090 |
+> | B6 | 1월 미달러($) | 12,000 |
+> | C6 | 1월 원화(￦) | 13,080,000 |
+> | B7 | 2월 미달러($) | 11,000 |
+> | B8 | 3월 미달러($) | 15,000 |
+> | B9 | 4월 미달러($) | 14,500 |
+> | B10 | 5월 미달러($) | 16,000 |
+> | B11 | 6월 미달러($) | 15,000 |
 1.
    ```excel
    =B6*B2
@@ -851,6 +1007,11 @@ nex8 = ( )("c:/data/dataintro/nex8-1.xlsx, header=0)
 ```
 
 **Q72. 변수 edu 의 막대그림을 그리고자 한다. ( ) 명령은 ?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1620388152485.jpg&realFileName=1620388152485.jpg&addSavePath=2021/05)
+> 이미지 해석:
+> `edu` 변수의 빈도 막대그래프이다. x축은 `edu` 값 1, 2, 3이고, y축은 빈도(count)이다. 막대 높이는 대략 `edu=1 → 2`, `edu=2 → 4`, `edu=3 → 4`이다.
 
 ```python
 nex8.head(3)
@@ -2500,6 +2661,9 @@ class B { }
 
 **Q6. 위의 for문을 향상된 for문을 이용해 다시 작성하여라.**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1708663002055.png&realFileName=1708663002055.png&addSavePath=2024/02)
+
 ```java
 int[] a = {32, 87, 3, 589, 12};
 
@@ -2538,6 +2702,9 @@ for (int i = 0; i < a.length; i++)
    ```
 
 **Q9. 퍼블릭 Alpha 클래스에서 protected 데이터 필드가 정의되었다고 가정할 때, 아래 4개의 클래스 중에서 이 데이터 필드를 사용할 수 없는 클래스는 무엇인가?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1709107100671.png&realFileName=1709107100671.png&addSavePath=2024/02)
 1. Alpha
 2. AlphaSub
 3. Beta
@@ -2559,6 +2726,9 @@ for (int i = 0; i < a.length; i++)
    ```
 
 **Q11. Circle 클래스에서 원주율 PI를 상수로 선언하기 위해 ㉠에 들어갈 적당한 내용은 무엇인가?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1709800580794.png&realFileName=1709800580794.png&addSavePath=2024/03)
 1.
    ```java
    double PI = 3.14;
@@ -2578,13 +2748,22 @@ for (int i = 0; i < a.length; i++)
 
 **Q12. Circle 클래스의 생성자에서 밑줄 친 ㉡에 들어갈 적당한 내용을 작성하시오**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1709800737599.png&realFileName=1709800737599.png&addSavePath=2024/03)
+
 **Q13. 다음 프로그램을 실행했을 때 예상되는 출력은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1710469945459.png&realFileName=1710469945459.png&addSavePath=2024/03)
 1. A
 2. B
 3. 컴파일 오류
 4. 실행 오류
 
 **Q14. 밑줄 친 ㉠, ㉡에 들어갈 키워드는 순서대로 무엇인가?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1710470053525.png&realFileName=1710470053525.png&addSavePath=2024/03)
 1. extends, extends
 2. extends, implements
 3. implements, implements
@@ -2592,7 +2771,13 @@ for (int i = 0; i < a.length; i++)
 
 **Q15. 밑줄 친 부분의 의미를 정확히 설명하시오. 단, CSuper는 클래스 이름이다.**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1710475312261.png&realFileName=1710475312261.png&addSavePath=2024/03)
+
 **Q16. 다음과 같은 제네릭 클래스가 있다고 가정하자. 보기에서 문법적으로 오류가 있는 것은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1711091920444.png&realFileName=1711091920444.png&addSavePath=2024/03)
 1.
    ```java
    Data<int> d = new Data<>( );
@@ -2611,6 +2796,9 @@ for (int i = 0; i < a.length; i++)
    ```
 
 **Q17. 다음과 같은 인터페이스가 있다고 가정할 때, 보기에서 람다식 사용이 잘못된 것은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1711092189989.png&realFileName=1711092189989.png&addSavePath=2024/03)
 1.
    ```java
    Addable ad = (int a, int b) -> { return (a + b); };
@@ -2628,7 +2816,7 @@ for (int i = 0; i < a.length; i++)
    Addable ad = (a, b) -> (a + b);
    ```
 
-**Q18. 제네릭 타입 T를 반환하는 `get()` 메소드 선언을 작성하시오.**
+**Q18. Java에서 제공되는 표준 함수형 인터페이스 중 Supplier<T>에서 선언된 추상 메소드의 이름과 형식은 각각 무엇인가?**
 
 **Q19. Client 클래스를 myprogram.game 패키지에 위치시키려고 한다. Client 클래스를 정의하는 소스 파일의 맨 위에 포함시켜야 코드는 무엇인가?**
 1.
@@ -2649,14 +2837,20 @@ for (int i = 0; i < a.length; i++)
    ```
 
 **Q20. 밑줄 부분에 들어가야 할 내용은 무엇인가?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1711674898056.png&realFileName=1711674898056.png&addSavePath=2024/03)
 1. throw IOException
 2. throws IOException
 3. throw FileNotFoundException
 4. throws FileNotFoundException
 
-**Q21. `Scanner` 클래스를 사용하기 위해 필요한 import 문을 작성하시오.**
+**Q21. 프로그램 상에 클래스의 완전한 이름인 java.util.Scanner로 표시하지 않고, 단순히 클래스 이름 Scanner 만으로 표시하기 위해서 소스 파일의 맨 위에 작성해야 코드는 무엇인가?**
 
 **Q22. 다음 프로그램의 출력 결과는 무엇인가?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1712301584097.png&realFileName=1712301584097.png&addSavePath=2024/04)
 1. Jovo
 2. Java
 3. JovoExam
@@ -2668,7 +2862,7 @@ for (int i = 0; i < a.length; i++)
 3. String 클래스에 toString()과 equals() 메소드가 재정의되어 있다.
 4. String 클래스는 표준 입출력 스트림을 위한 static 필드를 제공한다.
 
-**Q24. 문자열 연결을 반복할 때 `String`보다 `StringBuilder` 또는 `StringBuffer`가 더 효율적인 이유와, 두 클래스의 성능 차이가 생기는 이유를 설명하시오.**
+**Q24. 교재의 [소스 7-22]에서 문자열 처리 시간에 차이가 생기는 이유를 설명하라.**
 
 **Q25. 입력 스트림은 기본 스트림과 보조 스트림으로 나뉜다. 다음 중 기본 스트림에 해당하지 않는 것은?**
 1. StringReader
@@ -2687,6 +2881,9 @@ for (int i = 0; i < a.length; i++)
 
 **Q27. 키보드에서 한글을 입력받기 위해서 바이트 단위의 표준 입력 스트림(System.in)을 캐릭터 스트림으로 변환하는 것이 필요하다. 다음 밑줄 부분에 공통으로 들어갈 클래스 이름은 무엇인가?**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1712304885158.png&realFileName=1712304885158.png&addSavePath=2024/04)
+
 **Q28. Path 인터페이스에 관한 설명이다. 잘못된 것은?**
 1. java.io.File 클래스를 대체할 수 있다.
 2. 파일시스템에 존재하는 파일 또는 디렉터리의 경로를 표현한다.
@@ -2702,7 +2899,7 @@ for (int i = 0; i < a.length; i++)
 3. 파일 입력을 위해 FileChannelReader, 파일 출력을 위해 FileChannelWriter를 사용한다.
 4. 멀티 스레드 환경에서도 안전하게 사용할 수 있게 설계되었다.
 
-**Q30. `WatchKey` 객체가 파일 시스템 감시에서 어떤 상태 정보를 가지는지 설명하시오.**
+**Q30. WatchService를 이용해 디렉터리를 감시할 때, take() 메소드를 호출한다. 이후 대기 중에 있다가 이벤트가 발생하면, take()가 WatchKey 객체를 리턴한다. WatchKey에 관해 설명하라.**
 
 **Q31. ArrayList 클래스에 관한 설명으로 적당하지 않은 것은?**
 1. List 인터페이스를 구현한 클래스이다.
@@ -2716,9 +2913,12 @@ for (int i = 0; i < a.length; i++)
 3. Hashtable
 4. Map
 
-**Q33. Queue에서 원소를 추가하고 삭제할 때 사용할 수 있는 메소드를 각각 작성하시오.**
+**Q33. LinkedList<E>를 이용하여 큐 자료구조를 구현할 때, 자료를 추가하는 메소드와 삭제하는 메소드는 무엇인가?**
 
 **Q34. 주어진 배열을 스트림으로 만들려고 한다. 밑줄 부분에 들어갈 적당한 내용은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1713688543769.png&realFileName=1713688543769.png&addSavePath=2024/04)
 1.
    ```java
    IntStream.range(numbers)
@@ -2737,6 +2937,9 @@ for (int i = 0; i < a.length; i++)
    ```
 
 **Q35. 주어진 문자열 배열에서 길이가 6 이상인 단어를 대문자로 변환한 후 정렬하여 출력하려고 한다. 밑줄 부분에 들어갈 메소드는 무엇인가?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1713688816981.png&realFileName=1713688816981.png&addSavePath=2024/04)
 1. peek
 2. map
 3. match
@@ -2774,7 +2977,7 @@ for (int i = 0; i < a.length; i++)
 3. 같은 SQL 구문을 여러 번 실행할 때 효율적으로 활용될 수 있다.
 4. 매개 변수를 가지는 SQL 구문을 저장할 수 있다.
 
-**Q42. JDBC에서 SQL 조회 결과를 행 단위로 저장하고 처리하는 객체는 무엇인가?**
+**Q42. Statement 객체를 이용하여 executeQuery( )를 호출하면 select 구문을 실행할 수 있다. 이때 질의를 만족하는 레코드들이 테이블 형태로 리턴되는데 이것의 데이터 타입은 무엇인가?**
 
 **Q43. .jar 파일 형식으로 배포된 라이브러리를 사용하고자 할 때, 이러한 .jar 파일을 어떤 환경 변수에 추가해야 하는가?**
 1. Classpath
@@ -2789,6 +2992,9 @@ for (int i = 0; i < a.length; i++)
 4. java.base
 
 **Q45. java.sql 모듈에서 제공하는 java.sql 패키지가 있으며, 여기에 포함된 클래스(또는 인터페이스)를 사용하는 모듈 프로젝트가 있을 때, module-info.java 파일에서 아래 밑줄 부분에 들어가야 할 내용은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1715492157302.png&realFileName=1715492157302.png&addSavePath=2024/05)
 
 ##### 정답
 
@@ -2913,6 +3119,9 @@ for (int value : a) { System.out.print(value + " "); }
 
 **Q1. 기계를 바꾸지 않고 처리 방법의 교체만으로 무엇이든 할 수 있도록 다음과 같이 입력, 기억 ·저장, 제어, 연산, 출력 장치로 역할을 구분한 구조는?**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1770946091888.png&realFileName=1770946091888.png&addSavePath=2026/02)
+
 1. 폰 노이만 구조
 2. 하버드 구조
 3. 컴파일러
@@ -2927,6 +3136,9 @@ for (int value : a) { System.out.print(value + " "); }
 
 **Q3. 해석의 모호성을 제거하고 자연어와 유사한 형태의 문법을 처음으로 도입한 프로그래밍 언어는?**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1770947149691.png&realFileName=1770947149691.png&addSavePath=2026/02)
+
 1. 1세대 프로그래밍 언어
 2. 2세대 프로그래밍 언어
 3. 3세대 프로그래밍 언어
@@ -2940,6 +3152,9 @@ for (int value : a) { System.out.print(value + " "); }
 4. 직관적 문법
 
 **Q5. 파이썬 프로그램이 플랫폼 독립적으로 실행될 수 있도록 아래 그림의 (가)와 같이 파이썬 인터프리터가 동작하는 과정에서 중간 언어로 만드는 것은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1771643862884.png&realFileName=1771643862884.png&addSavePath=2026/02)
 
 1. 바이트 코드
 2. 어셈블러 코드
@@ -3019,6 +3234,12 @@ print(detox)
 
 **Q11. number 변수에 저장되어 있는 정수를 사용하여 “상자에사과가n개들어있습니다.”라는 메시지를 출력하려고 한다. 올바른 명령문은? (단, n은 number 변수에 저장된 정수를 의미한다.)**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1772799138586.jpg&realFileName=1772799138586.jpg&addSavePath=2026/03)
+> ![원문 이미지 2](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1772799143549.jpg&realFileName=1772799143549.jpg&addSavePath=2026/03)
+> ![원문 이미지 3](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1772799147949.jpg&realFileName=1772799147949.jpg&addSavePath=2026/03)
+> ![원문 이미지 4](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1772799152119.jpg&realFileName=1772799152119.jpg&addSavePath=2026/03)
+
 1.
    ```python
    print("상자에", "사과가", number, "개", "들어있습니다.")
@@ -3078,6 +3299,13 @@ temp = int(input("온도를 입력하세요: "))
 
 **Q15. 다음은 사용자가 입력한 수가 3과 5의 공배수일 경우 “3과 5의 공배수입니다”를, 아닐 경우 “3과 5의 공배수가 아닙니다.”를 출력하는 프로그램의 일부이다. 밑줄 친 빈 칸에 들어갈 연산자는?**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1773384766221.jpg&realFileName=1773384766221.jpg&addSavePath=2026/03)
+> ![원문 이미지 2](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1773384805039.jpg&realFileName=1773384805039.jpg&addSavePath=2026/03)
+> ![원문 이미지 3](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1773384831580.jpg&realFileName=1773384831580.jpg&addSavePath=2026/03)
+> ![원문 이미지 4](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1773384840457.jpg&realFileName=1773384840457.jpg&addSavePath=2026/03)
+> ![원문 이미지 5](https://ucampus.knou.ac.kr/uploading?pathkey=EDITOR.IMAGE&getthumb=1773384849383.jpg&realFileName=1773384849383.jpg&addSavePath=2026/03)
+
 ```python
 guess = int(input("온도를 입력하세요: "))
 
@@ -3101,12 +3329,18 @@ else
 
 **Q17. 다음과 같이 반복 구조 내부에 또 다른 반복 구조가 포함되어 실행 흐름을 만드는 구조를 무엇이라고 하는가?**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1774154281431.png&realFileName=1774154281431.png&addSavePath=2026/03)
+
 1. 이분 선택 구조
 2. 조건 제어 반복 구조
 3. 계수 제어 반복 구조
 4. 중첩 반복 구조
 
 **Q18. 다음 코드의 출력값으로 옳은 것은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1774154348191.jpg&realFileName=1774154348191.jpg&addSavePath=2026/03)
 
 ```python
 for i in range(1, 11) :
@@ -3127,6 +3361,9 @@ for i in range(1, 11) :
 
 **Q20. 다음 코드의 실행 결과는?**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1774427401092.jpg&realFileName=1774427401092.jpg&addSavePath=2026/03)
+
 ```python
 temp, season = 27, 'summer'
 season, temp = temp, season
@@ -3139,6 +3376,9 @@ print(season)
 4. print
 
 **Q21. 다음 코드의 실행 결과는?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1774427401092.jpg&realFileName=1774427401092.jpg&addSavePath=2026/03)
 
 ```python
 x = 1
@@ -3189,6 +3429,9 @@ print(hei_list[:3])
 
 **Q24. 다음 코드의 출력값으로 옳은 것은?**
 
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1774154348191.jpg&realFileName=1774154348191.jpg&addSavePath=2026/03)
+
 ```python
 hei_list = [1, 5, 14, 26, 31]
 hei_even = [h for h in hei_list if h % 2 == 0]
@@ -3220,6 +3463,9 @@ print(hei_even)
 4. 원소의 순서를 유지하는 불변 시퀀스
 
 **Q26. 다음 코드의 출력값으로 옳은 것은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1774154348191.jpg&realFileName=1774154348191.jpg&addSavePath=2026/03)
 
 ```python
 msg = "I do love python"
@@ -3282,6 +3528,9 @@ print(msg.split(" "))
    ```
 
 **Q29. 다음 코드의 출력값으로 옳은 것은?**
+
+> 원문 이미지:
+> ![원문 이미지 1](https://ucampus.knou.ac.kr/user_uploading?pathkey=EDITOR.IMAGE&getthumb=1774154348191.jpg&realFileName=1774154348191.jpg&addSavePath=2026/03)
 
 ```python
 class Cone :
