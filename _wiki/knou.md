@@ -4494,7 +4494,7 @@ print(grid[1, 2])
 - **메타버스**: Meta(가상·추상)+Universe(현실세계), 현실 같은 사회·경제 활동의 3차원 가상공간
 - 메타버스 시나리오 4가지(ASF): **증강현실 / 일상기록(라이프로깅) / 거울세계 / 가상세계**
 
-<img width="384" height="292" alt="image" src="https://github.com/user-attachments/assets/6542c4d5-cb27-470c-8f5d-8e6419e85205" />
+<img width="384" alt="메타버스 4가지 시나리오와 결합 관계" src="/resource/knou/metaverse-scenarios.png" />
 
 - 플랫폼: 소셜 기반(제페토·게더타운·호라이즌 월드) / 게임 기반(로블록스·마인크래프트·포트나이트) / 생활·산업 기반(홀로렌즈2·링피트)
 
