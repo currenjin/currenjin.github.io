@@ -3,7 +3,7 @@ layout  : wiki
 title   : 한국방송통신대학교(Korea National Open University)
 summary : KNOU 컴퓨터과학과 학교·학과 안내와 주요 과목 강의별 정리, 핵심 암기표
 date    : 2026-05-18 12:00:00 +0900
-updated : 2026-06-02 12:00:00 +0900
+updated : 2026-06-07 12:00:00 +0900
 tags    : [knou, computer-science, exam-prep]
 toc     : true
 public  : true
@@ -65,6 +65,153 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 ### 데이터정보처리입문
 
 > 우선순위: 통계자료 검색·엑셀 함수/그래프·R/Python 분석 흐름을 절차 중심으로 암기
+
+#### 강의별 핵심 정리
+
+> 강의록 PDF·보충자료(1~15강) + 강의노트 + 연습문제 + 기말 기출 기준. 14·15강은 파이썬(아나콘다) 활용 기준.
+
+**1강 데이터 분석과 컴퓨터**
+- 효율적인 정보 수집·가치판단·활용 능력이 필수인 사회 = **지식정보화사회**
+- 데이터분석 절차: **문제의 정의 → 조사·실험의 계획 → 데이터의 수집 → 데이터의 정리·분석 → 분석결과의 평가**
+- 정보처리에 컴퓨터 프로그램 언어를 **반드시 알아야 하는 것은 아니다**(GUI 패키지로 가능) / 다만 기본개념·방법론·소프트웨어 활용법은 숙지해야 함
+- 범용 통계패키지: **SPSS**(GUI 환경, 쉬운 분석처리) / **SAS**(방대한 자료처리·다양한 분석절차) / **R**(객체지향·대화형 통계분석·그래프 강점, 무료) / 파이썬(데이터과학용 프로그래밍 언어)
+- 주의: 스프레드시트 형태 입력은 엑셀 등의 특징이며, 파이썬을 "스프레드시트형 입력 언어"로 설명하면 틀림
+- 주요 사이트: `www.spss.co.kr` / `www.sas.com` / **R 공식 = `www.r-project.org`** / `www.anaconda.com`(파이썬) / `kosis.kr`
+
+**2강 데이터 입력과 점검**
+- **데이터(data)**: 관심 주제에 대해 수집된 **구조화된 정보**(수치·문자·그림 등 표현양식 무관) / 수집법 = 조사·실험·관찰 (데이터가 숫자로만 이루어진 것은 아님)
+- **케이스(case)**: 특정 조사단위로부터 얻어진 정보의 집합체(=행, 응답자) / **변수(variable)**: 각 조사단위에서 측정된 개별 속성(=열, 설문문항)
+  - 예) 4문항 설문을 100명에게 → **케이스 100개 / 변수 4개**
+- 측정의 4가지 수준(척도):
+
+| 척도 | 의미 | 예 |
+|---|---|---|
+| **명목척도** | 분류·확인 목적의 기호, 대소·연산 무의미 | 성별, 전공분야, 소속 지역대학, 좋아하는 과목 |
+| **순서척도** | 서열·대소 구분만 의미, 간격은 모름 | 만족도(매우만족~매우불만족), 계란 대/중/소 |
+| **구간척도** | 차이(간격)는 의미, 비(比)는 무의미, 0이 임의적 | 섭씨온도, 습도, 지능지수 |
+| **비율척도** | 차이와 비(比) 모두 의미, **절대 0** 존재 | 키, 몸무게, 나이, 급여 |
+- 변수의 측정수준은 적합한 **통계분석 기법 선택에 영향을 미친다**(영향 없다 = 틀림)
+- 데이터 오류 점검법: 입력 범위 벗어난 케이스 확인 / 변수 간 논리적 연관성 확인 / 각 케이스를 설문지와 대조 (응답 누락이 있다고 해당 설문지를 무조건 분석에서 제외하지는 않음)
+
+**3강 통계정보의 검색 및 활용 (1)**
+- 국가통계정보·데이터제공 사이트를 인터넷으로 검색하는 강의
+- 주요 사이트 암기:
+
+| 사이트 | 운영/내용 | 주소 |
+|---|---|---|
+| **KOSIS** 통계정보시스템 | 통계청 등 여러 기관 통계정보 종합 제공 | `kosis.kr` |
+| **통계청** | 국가 통계 작성기관 | `kostat.go.kr` |
+| **ECOS**(한국은행 경제통계시스템) | 국가경제·국민소득 등 경제통계 | `ecos.bok.or.kr` |
+| **KSDC**(한국사회과학데이터센터) | 정부·공공 등 사회과학 데이터 DB | `www.ksdc.re.kr` |
+| **DASL** | **카네기 멜론 통계학과** 운영, 다양한 데이터 제공 | `lib.stat.cmu.edu/DASL` |
+| **NIST** | 미 표준기술연구소, 통계분석용 유용 데이터 | `www.itl.nist.gov/div898/strd` |
+
+**4강 통계정보의 검색 및 활용 (2)**
+- 기술통계량과 통계그래프 학습 + 웹 활용 분석
+- **표본평균**: `x̄ = (Σxᵢ) / n` (절댓값·지수 붙은 식은 오답)
+- **표본분산**: `s² = Σ(xᵢ − x̄)² / (n − 1)` — 분모는 **n−1**, 편차를 **제곱**해서 합산
+- **변동계수**: 측정단위·자료 개수가 다른 두 집단의 **상대적 산포**를 비교하는 측도(단위가 다르거나 평균 차이가 클 때 산포 비교에 유용)
+- **다섯숫자요약**: **최솟값 / 제1사분위수(Q1) / 중앙값 / 제3사분위수(Q3) / 최댓값** (평균·분산·표준편차는 포함되지 않음)
+- **중앙값**: 자료를 정렬했을 때 가운데 값 — 이상치(예: 490 같은 극단값)에 영향을 거의 안 받아 평균보다 안정적
+- 연속형 자료 통계그래프: 히스토그램, 줄기-잎 그림, 상자그림, 산점도 등
+
+**5강 문서작성**
+- 한글 2018 사용법(문서·표 작성, 수식편집기)
+- **각주**: 낱말이 있는 페이지 **아래쪽**에 추가 설명 / **미주**: 문서 **맨 마지막**에 위치
+- 블록 지정(F-키): **`F3` = 칸 단위 블록**, **`F4` = 줄 단위 블록**
+- 한자 변환: 한글로 입력 후 [입력]-[한자로 변환], **`F9`**(또는 한자키)로 대신 / 두 글자 이상 단어는 **`F3`로 블록 지정** 후 변환 (`F5`로 한자입력을 대신한다는 설명은 틀림)
+- 다단 편집(신문·잡지식 세로 분단), 그림 삽입 기능 제공
+- 수식편집기 입력어:
+  - 카이제곱 통계량 `chi^2` — 행렬·합 표기에서 **`chi`** 사용
+  - 행 구분(나란히 표기) = **`&`** / 분수 = **`over`** (예: `관측도수 over 기대도수`)
+  - 경우 나눔(중괄호로 조건별 정의) = **`cases`** (예: `f(x) = cases{1, & 0 leq x leq 1 # 0, & 아닐 때}`), 줄 바꿈 = **`#`**
+
+**6강 엑셀을 이용한 데이터 처리 (1)**
+- 엑셀 = 행·열 데이터 분석용 대표 **스프레드시트**: 그래프 표현 / 통계분석 / 데이터베이스 관리도구 기능 보유 (인터넷 검색 기능은 핵심 기능 아님)
+- 함수식은 **등호(`=`)로 시작**, 값·셀참조·함수로 새 값 생성 / 함수 이름은 대문자로만 입력해야 하는 것은 **아님**(대소문자 무관)
+- **통합문서(workbook)** = 하나의 파일(워크시트·차트시트·매크로시트 포함), 책 한 권에 비유 / **워크시트(worksheet)** = 한 페이지 / 시트 이름은 **변경 가능**
+- **셀(cell)**: 열과 행이 만나는 지점, **셀주소**(예: `A1` = A열·1행)를 가짐
+- **수식입력줄**: 선택 셀 정보 표시, 데이터 입력·수정 및 수식 입력 부분
+- 이웃하지 않은 셀 다중 선택 = **`Ctrl` 키**를 누른 채 클릭
+
+**7강 엑셀을 이용한 데이터 처리 (2)**
+- 엑셀 연산자, 함수 기능·형식, IF 함수, 데이터 분석도구 학습
+- **`=IF(조건, 참일때, 거짓일때)`** 형식 — 예) `=IF(B2<60, "불합격", "합격")`(60 미만이면 불합격) / `ELSE`는 사용 안 함
+- 평균: **`=AVERAGE(B2:C2)`** — 반드시 `=`로 시작 (`AVERAGE(...)`만 쓰면 수식 아님)
+- 합계 조건판정: `=IF(SUM(B2:C2)>=130, "합격", "불합격")` — 예) `71+65=136 ≥ 130` → **합격**
+- **절대참조** `=$B$2+$C$2`: 아래로 드래그·복사해도 참조 셀이 **고정**되어 값이 그대로(예: D3에도 `B2+C2=136`)
+- 통계 함수: `SUM` / `AVERAGE` / `MEDIAN`(중앙값) / `STDEV`(표준편차)
+
+**8강 엑셀을 이용한 그래프 그리기 (1)**
+- 그래프 = 데이터의 정보·의미를 **시각적으로 요약**해 분석결과 이해를 도움
+- **정성적 데이터**(명목·순서척도) / **정량적 데이터**(구간·비율척도, 연속형)
+- **원 그래프(pie chart)**: 항목별 **비율**을 면적 비율로 표시, 전체 대비 항목 비교·특정 항목 강조에 적합
+- 성별 등 **범주형 도수분포** 시각화 = **막대그래프 + 원그래프**
+- 시계열(시간 흐름) 데이터의 추세·경향 파악 = **꺾은선 그래프**(시계열에 가장 적합) / 원 그래프는 시계열 추세 파악에 부적합
+- 간격이 일정한 시계열 → 꺾은선형, 두 수치형 변수 관계 → 분산형으로 구분
+
+**9강 엑셀을 이용한 그래프 그리기 (2)**
+- 도수분포표 → 히스토그램, 산점도, 상관분석 학습
+- **도수분포표(frequency table)**: 겹치지 않는 계급(범주)에 속한 관측치 개수 요약 — 정성적·정량적 데이터 **모두** 적용 가능(정성적에 못 쓴다 = 틀림)
+- **히스토그램(histogram)**: 연속형 데이터의 분포·특징, 계급구간 위에 상대도수 비례 직사각형 / 연속형은 계급의 **개수·폭** 결정이 중요
+- **산점도(scatter plot)**: 두 연속형 변수의 관계를 보는 첫 단계 그래프, 차트마법사에서 **분산형** 선택 / 시간-전압처럼 두 수치형 변수의 XY 변화도 분산형
+- **상관계수(r)**: 두 변수의 선형관계 강도·방향
+  - r > 0(예 0.9): x 증가 시 y도 **직선관계로 증가**(양의 상관) / r < 0: x 증가 시 y 감소 / 절댓값이 1에 가까울수록 강함, **−1 ≤ r ≤ 1**(1.02 같은 값은 불가능)
+
+**10강 엑셀 활용 (1)**
+- 엑셀 함수 기능, 날짜/시간 함수, 텍스트 함수 활용
+- **`MID(문자열, 시작, 개수)`**: 중간 추출 — 예) `=MID(A2,2,2)`, A2="대한민국" → **"한민"**
+- **`LEFT(문자열, n)`** = 왼쪽 n글자 / **`RIGHT(문자열, n)`** = 오른쪽 n글자 — 예) 학과코드 첫 글자 판정 `=IF(LEFT(A2,1)="A", "통계·데이터과학", "컴퓨터")`
+- **`YEAR(NOW())−YEAR(G2)`**: 현재 연도에서 생년의 연도를 빼 **나이(만 나이 근사)**를 구함 / `NOW()`는 인수 없이 현재 날짜·시각 반환
+- **`SUM`** 기반 점수계산: 예) `=SUM(D2:F2)-5*G2`(합계에서 결석일수×5 차감)
+- **`SUMPRODUCT(배열1, 배열2)`**: 같은 행끼리 곱한 뒤 모두 합산 — 예) A={1,2,3}, B={3,2,1} → `1·3+2·2+3·1 = 10`
+- **채우기 기능**: 연속·규칙적 숫자를 쉽게 입력 / `DATE(year, month, day)` = 날짜 일련번호
+
+**11강 엑셀 활용 (2)**
+- 원리합계 계산, 함수 그래프, 목표값 찾기, 적분 근사
+- 셀 참조 3종:
+
+| 참조 | 표기 | 복사 시 동작 |
+|---|---|---|
+| **상대참조** | `A1`, `B2` | 행·열 모두 따라 이동 |
+| **절대참조** | `$A$1` | 행·열 모두 고정 |
+| **혼합참조** | `$A1`, `B$2` | `$` 붙은 쪽만 고정 |
+- **목표값 찾기**: 함수가 축과 만나는 점, 즉 `f(x)=0`의 해(방정식 해)를 구하는 기능
+- 함수 `f(x)` 개형 그리기 = 차트마법사에서 **분산형** 선택
+- 환율 변환처럼 고정 셀이 있을 때 혼합참조 사용 — 예) `C6 = B6*B$2`(환율 셀의 행만 고정해 아래로 채움)
+- **복리 원리합계**: `원리합계 = p × (1 + r)^n` (p=원금, r=연이율, n=기간) — 채우기용 셀식 예) `=$B$1*(1+B$2)^$A5`(원금 절대고정, 이율은 행 고정, 기간은 열 고정)
+
+**12강 R을 활용한 자료분석 (1)**
+- R = 무료 통계시스템, 대화형 언어로 통계분석·그래프 함수 다수 내장 (관련 사이트 `www.r-project.org`, `www.rstudio.com`, `www.rcommander.com`)
+- **`attach(ex.data)`**: 데이터 객체의 변수들을 변수명으로 직접 사용 / 해제 = `detach()`
+- **`tapply(분석변수, 그룹변수, 함수)`**: 그룹별 함수 적용 — 예) 성별별 급여 평균 `tapply(salary, sex, mean)`
+- **`read.table("경로", header=T)`**: 텍스트 파일 읽기(첫 줄이 변수명이면 `header=T`)
+- **`head(ex.data)`**: 데이터의 앞부분 미리보기
+- **`library(xlsx)`**: 설치한 패키지를 메모리에 올려 사용(가동) / 설치는 `install.packages()`
+
+**13강 R을 활용한 자료분석 (2)**
+- Function 문, 정규분포, 이산형·연속형 그래프 학습
+- **사용자 정의 함수**: `함수명 <- function(인자, ...) { ... ; return(값) }`, 인자에 기본값 지정 가능(예: `n3=5`)
+- **`list(v1=..., v2=...)`** 로 여러 결과 묶고, `결과$v1` 처럼 `$`로 원소 접근
+  - 예) `power.value(2, 1/2, 2)`에서 `$v3 = 2^5 = 32`(n3 기본값 5), `$v1 = 2^(1/2) = 1.414`
+- 함수 정의 시 괄호 짝이 안 맞으면(예: `(function(x){x*x}`) 오류 발생
+- **`boxplot(ex.data)`**: 상자그림 / **`stem(ex.data)`**: 줄기-잎 그림 / `hist()`: 히스토그램
+
+**14강 파이썬을 활용한 자료분석 (1)**
+- 파이썬 = 객체지향, 문법이 쉽고 확장성 좋아 데이터과학에서 R과 함께 널리 사용
+- 설치: **아나콘다 `www.anaconda.com`** 에서 배포판 내려받기(Spyder·Jupyter Notebook 포함)
+- 패키지 설치·관리: DOS(명령) 창에서 **`pip install 패키지명`** (예: `pip install tensorflow`)
+- **리스트** 인덱스는 0부터 — 예) `a=[1,2,3,4,5]`에서 `a[4]` → **5**
+- **함수 정의**: `def 함수명(인자):` 후 들여쓰기 본문 — 예) `hello2("Jeong")` → `Hello Jeong !`
+- **딕셔너리**: 중괄호 `{}` 와 콜론 `:` 사용 — 올바른 예 `me = {'height':180, 'weight':70}` (대괄호 `[]`나 `=` 사용은 틀림)
+
+**15강 파이썬을 활용한 자료분석 (2)**
+- pandas로 데이터 읽기·기술통계·그래프 작성 (`import pandas as pd`)
+- 파일 읽기: **`pd.read_csv("...csv", header=0)`**(CSV) / **`pd.read_excel("...xlsx", header=0)`**(엑셀)
+- 변수 선택: **`nex8.iloc[:, 1:]`** — 위치 기반 인덱싱으로 첫 변수(id) 제외하고 나머지 가져옴
+- 기술통계량: **`nex8.describe()`** — count/mean/std/min/25%/50%/75%/max 출력
+- 막대그래프: `import matplotlib.pyplot as plt` 후 **`plt.bar(x, height)`** — 예) `plt.bar(edu_freq.index, edu_freq["count"])`
+- 빈도표: `pd.crosstab(index=nex8["edu"], columns="count")`
 
 #### 핵심 암기표
 
@@ -1134,6 +1281,205 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 ### HTML5웹프로그래밍
 
 > 우선순위: HTML 의미론·CSS 선택자/박스모델·JS DOM/BOM·Canvas/API를 속성/메서드 단위로 구분
+
+#### 강의별 핵심 정리
+
+> 강의록(1~15강) + 연습문제 기준. HTML 의미론 / CSS 선택자·박스모델 / JS DOM·BOM / Canvas·Web API를 속성·메서드 단위로 정리.
+
+**1강 웹 프로그래밍 개요 & HTML5 요소: 텍스트**
+- **웹** = 인터넷 위에서 동작하는 하이퍼텍스트 서비스로 "인터넷 ⊃ 웹". 작동 원리는 서버(응답)-클라이언트(요청) 구조이며 **클라이언트(브라우저)는 요청을 보내고 받은 HTML을 파싱·렌더링**해 화면에 표시. 흐름: URL 입력 → DNS 조회 → 요청 → 응답 → 렌더. 실무 표준은 `HTTPS`
+- 웹 페이지 3요소 = `HTML`(구조·내용) / `CSS`(시각적 표현·디자인) / `JavaScript`(동작·상호작용) → **관심사의 분리** 원칙
+- 요소 = `시작 태그 + 내용 + 종료 태그`. 전역 속성: `id`(정체성, 중복 불가) / `class`(스타일 적용) / `title`(툴팁) / `data-*`(숨김 데이터) / `role`·`aria-*`(접근성)
+- 작성 규칙: 대소문자 구분 안 함(소문자 권장) / 확장자 `.html`·`.htm` / 연속 공백은 하나로 처리 / 중첩 순서 준수
+- 기본 구조: `<!DOCTYPE html>`(HTML5 선언), `<html lang="ko">`, `<head>`(메타), `<body>`(화면)
+- `meta charset="UTF-8"`은 다국어 깨짐 방지 필수, `meta viewport`는 모바일 반응형 필수. **`meta keywords`는 현대 SEO에서 사실상 안 씀** — 대신 `og:title` 등 Open Graph가 SNS 공유 미리보기에 중요
+- `hr`은 단순 수평선이 아니라 **주제 전환을 뜻하는 의미적 구분선** / 단순 시각선은 CSS `border-bottom`으로 처리
+- 제목 `h1`~`h6`: **`h1`은 페이지당 1개**, 순서 건너뛰지 말고 순차 사용, 글씨 키우는 디자인 용도 금지(크기는 CSS)
+- 물리(표현) ↔ 논리(의미) 대응: `b`↔`strong` / `i`↔`em` / `s`↔`del` / `u`↔`ins`. (`span`↔`div`는 인라인/블록 컨테이너 차이일 뿐 물리/논리 관계가 아님)
+- **블록 요소**(`div` 등): 한 줄 전체(너비 100%) 차지 / 위아래 줄바꿈 / 폭·높이 조절 가능. **인라인 요소**(`span`·`a`·`strong`·`img`): 내용만큼만 차지
+
+**2강 HTML 요소: 리스트, 그림, 하이퍼링크, 테이블**
+- `ul`+`li`(순서 무의미) / `ol`+`li`(순서 자체가 의미) / `dl`+`dt`/`dd`: **`dt`=용어·키, `dd`=설명·값**
+- 내비게이션 기본 패턴은 `ul > li > a` 구조
+- 리스트 불릿 제거는 `list-style: none;`(메뉴 만들 때 기본 패턴), 추가로 `padding: 0; margin: 0;`로 초기화
+- `img`: `src`(필수) / **`alt`(접근성 필수, 장식용은 `alt=""`)** / `border` 금지(CSS로) / `usemap` 비권장 / `loading="lazy"`(지연 로딩)
+- 반응형 이미지: `max-width: 100%; height: auto;` → 부모보다 커짐 방지 + 비율 찌그러짐 방지. `srcset`/`sizes`(브라우저가 자동 선택), `picture`(포맷·그림 분기)
+- `a`: `href`(필수) / `target` / `download`(동일 출처 파일만). **`target="_blank"`이면 보안 위해 `rel="noopener noreferrer"` 반드시 함께**
+- 앵커 이동: 링크는 `href="#위치이름"`, 목적지는 `id="위치이름"`. 블록 링크는 `a` 안에 블록 요소 가능하나 `a` 안에 또 다른 `a`/`button`은 금지
+- 이미지맵은 좌표 고정 → 반응형 문제로 지양. `iframe`은 외부 페이지 삽입(유튜브·지도·결제창), `title` 속성 권장
+- 테이블: `th`(제목 셀, 굵게·가운데 정렬 기본) / `td`(데이터 셀) / `caption`(표 전체 제목, 상단 중앙, 접근성 핵심)
+- `thead`/`tbody`/`tfoot`은 시각 장식이 아니라 **행을 의미적으로 그룹핑**(머리글·본문·바닥글)해 구조·스타일링·출력에 도움
+
+**3강 HTML 요소: 미디어, 시멘틱 요소**
+- `audio`/`video` 속성: `src` / `autoplay` / `controls` / `loop` / `muted` / `preload`. `controls` 항상 권장, `preload="metadata"` 권장
+- **`autoplay`는 브라우저가 차단하므로 `muted`와 함께 써야 동작** (`<audio autoplay muted>`)
+- `source`: 단일 `src` 대신 여러 포맷 제공 → **브라우저 호환성 확보**. 위에서부터 재생 시도(용량 작고 호환 좋은 것 먼저), `type` 명시 권장
+- `video` 추가 속성: `width` / `height` / `poster`(로딩 중 빈 화면 방지) / `playsinline`(모바일 강제 전체화면 방지)
+- 재생 구간 지정: `src="파일명#t=시:분:초,시:분:초"` (동작 편차로 제한적 사용)
+- `track`: 자막·캡션 제공. `src`(`.vtt`) / `kind`(`subtitles`=번역자막 / `captions`=청각장애인 / `descriptions`=시각장애인) / `srclang` / `label` / `default`
+- **시멘틱 요소의 핵심 목적 = 브라우저/검색엔진/개발자에게 역할·의미를 명확히 전달** (접근성·SEO·유지보수)
+- 문서 구조화 요소: `header`(머리말) / `footer`(꼬리말) / `nav`(내비, 보통 `ul`+`li`+`a`) / `aside`(부가 정보) / `section`(하나의 주제, 헤딩 하나) / `article`(독립 배포·공유 가능 콘텐츠) / `main`(핵심 콘텐츠, **문서당 1번**)
+- `figure`+`figcaption`: **독립 콘텐츠와 캡션이 뗄 수 없는 관계임을 기계에 전달** (이미지·코드블록·도표·인용문 등). `figcaption`은 figure의 첫·마지막 자식
+- `details`+`summary`: 아코디언 UI, `open` 속성으로 기본 펼침
+- `time`: 날짜·시간에 의미 부여. **`datetime="YYYY-MM-DD"`가 기계가 읽는 값**
+- `progress`: `value` 속성을 빼면 **파란 막대가 좌우로 움직이는 불확정(indeterminate) 상태 애니메이션** 표시
+
+**4강 HTML 요소: 웹 폼**
+- 웹 폼 = 프론트엔드와 백엔드의 접점(UX·접근성·보안 고려)
+- `form` 속성: `action` / `method`(`get`/`post`) / `enctype` / `autocomplete` / `novalidate`
+  - **`get`은 검색·필터·조회**(URL 공유 가능), **`post`는 데이터 변경·민감정보**(로그인·회원가입·글쓰기·결제)
+- `input type` 종류: 텍스트(`text`/`password`/`email`/`tel`/`url`/`number`/`search`) / 선택(`checkbox`/`radio`/`file`/`range`/`color`) / 날짜(`date`/`month`/`week`/`time`/`datetime-local`) / 버튼(`submit`/`reset`/`button`/`hidden`)
+- 주요 속성: `type`/`value`/`placeholder`/`id` / `name`/`required`/`checked`/`maxlength`·`minlength`/`min`·`max` / `readonly`/`autofocus`/`accept`
+- **`placeholder`는 입력 시작 시 사라지는 힌트** → `label` 대체 금지. `value`는 초기값(버튼에서는 표시 글자), `alt`는 `type="image"` 버튼의 대체 텍스트
+- **`inputmode`는 모바일 가상 키보드 모양 결정** (인증번호 등은 `type="text"` + `inputmode="numeric"` 선호)
+- `label`(접근성 핵심): `for`+입력요소 `id` 연결(권장) 또는 `label` 안에 입력요소 포함
+- `fieldset`은 관련 입력을 그룹으로 묶음(회색 테두리), 제목은 `legend`(첫 자식). 체크박스·라디오에 실무 필수
+- **라디오 같은 그룹 조건 = 동일한 `name` 값** (배타적 선택)
+- **`datalist` 연동 = `input`의 `list` 속성과 `datalist`의 `id`를 같은 값으로**
+- `textarea`(긴 입력, `rows`/`cols`/`wrap`), `range`(슬라이더, `min`/`max`/`step`/`value`), `output`(실시간 계산값, `name`/`for`), `password`는 `autocomplete="current-password"`/`"new-password"`
+
+**5강 CSS: 개요, 선택자, 색상**
+- 기본 구문: `선택자 { 속성: 값; }`. 적용: 외부 파일(`.css`, 실무 표준) / 내부 `<style>` / 인라인
+- **명시도 점수**: `!important`(무조건 승리, 지양) > 인라인 1000 > `id` 100 > `class`·가상클래스·속성선택자 10 > 타입·가상요소 1 > 전체(`*`) 0
+  - **인라인 지양 이유 = 유지보수·재사용 불가·관심사 분리 위배** (명시도가 낮아서가 아님 — 오히려 1000점으로 높아 덮어쓰기 어려움)
+  - `.text`(10) vs `p`(1) 충돌 시 **클래스가 적용**됨
+- 기본 선택자: 전체(`*`) / 요소(타입) / 클래스(`.`) / 아이디(`#`) / **속성(`[속성]`, `[속성="값"]`, `[속성*=]`, `[속성^=]`, `[속성$=]`)**
+  - `required`만 가진 input 선택은 `input[required]`(속성 선택자)
+- `id`는 유일성 강조 → 스타일보다 앵커·라벨 연결·JS 제어용
+- 가상 클래스(상태): `:hover`/`:focus`/`:checked`/`:nth-child` / 가상 요소(부분): `::before`/`::after`/`::placeholder`
+- 최신 선택자: `:is()`, `:where()`(명시도 0), `:has()`(특정 자식 가진 부모 선택)
+- **결합자: 자손(공백) / 자식(`>`) / 인접 형제(`+`) / 일반 형제(`~`) / 그룹(`,`)**
+  - "바로 밑 직계 자식"은 `ul > li`
+- 색상: 색상명(학습용) / 16진수 `#RRGGBB(AA)`(실무 기본) / `rgb()`·`rgba()` / `hsl()`·`hsla()`(인간 친화적, 테마용)
+- 키워드: **`currentColor`(현재 글자색을 따라감)** / `transparent`(완전 투명한 검은색)
+- CSS 변수: `:root`에 `--변수명` 선언, `var(--변수명)` 호출
+- `opacity`는 자식까지 투명 → 배경만 투명하게 할 땐 `rgba()`/`hsla()`
+
+**6강 CSS: 글꼴, 텍스트, 리스트, 테이블**
+- 폰트 속성: `font-family`(폴백 나열) / `font-size` / `font-style` / `font-variant` / `font-weight`(100~900, 400=normal·700=bold) / `font`(단축) / `@font-face`(`woff2` 권장, `font-display: swap` 필수)
+- **`rem` = 루트(html) 기준 상대 단위(보통 1rem=16px)** / **`em` = 부모 요소 기준** → `font-size`는 접근성 위해 `rem` 권장, `clamp()`로 반응형
+- 한글 본문 가독성: `font-size: 16px(1rem); line-height: 1.5~1.6` 조합
+- **`font` 단축에는 `line-height` 포함 가능** → `font-size` 뒤에 슬래시로 표기 (`font: 두께 크기/줄간격 서체`)
+- 텍스트 속성: `line-height`(단위 없는 숫자 1.5~1.6) / `letter-spacing`(한글은 -0.02em) / `text-align` / `text-decoration` / `text-transform` / `white-space` / `word-break`(한글 `keep-all`) / `overflow-wrap: break-word`(긴 URL)
+- **말줄임은 `text-overflow: ellipsis`** → 한 줄 말줄임 공식 = `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`
+- 리스트 속성: `list-style-type` / `list-style-position` / `list-style-image` / `list-style`(단축). 커스텀 마커는 `::marker` 또는 `::before`
+- 메뉴(GNB) 초기화: `ul { list-style: none; padding: 0; margin: 0; }`
+- 테이블 속성: `border-collapse`(`collapse`=테두리 합침, 실무 필수) / `table-layout` / `border-spacing` / `caption-side` / `empty-cells`
+- **`table-layout: fixed`** = 내용 길이와 무관하게 지정 폭 강제 → 렌더링 속도·안정성↑ (`auto`는 내용에 따라 자동 조정). `colgroup`/`col`로 열 너비 세부 조절
+- 줄무늬: `:nth-child(even)`, 반응형: `overflow-x: auto`(가로 스크롤) 또는 미디어쿼리 카드 전환
+
+**7강 CSS: 박스 모델, 테두리**
+- 박스 4계층: **content → padding → border → margin**
+- **`box-sizing` 계산**: 기본값 `content-box`에서 실제 너비 = `width` + 좌우 `padding` + 좌우 `border` (예: 200+10+10+1+1 = **222px**). `border-box`면 지정 `width`가 곧 실제 너비(콘텐츠+패딩+테두리 포함). 실무는 `box-sizing: border-box` 초기화 필수
+- `margin`(투명한 바깥 여백, 요소 간 간격·중앙정렬, **상하 블록 병합 발생**) vs `padding`(안쪽 여백, 배경색 칠해짐, 병합 없음, 클릭 영역 확장)
+  - 왼쪽 바깥 여백으로 밀어내기 = **`margin-left`**
+  - 블록 가로 중앙 정렬 = **`margin: 0 auto;`** (인라인·width 없는 요소엔 동작 안 함)
+- 크기 보호: `max-width`(상한) / `min-height`(하한)
+- `position`: `static`(기본) / `relative`(자신 기준) / `absolute`(조상 기준, 공중에 뜸) / `fixed`(뷰포트 고정) / `sticky`(스크롤 고정), `z-index`(겹침 순서)
+- `display`: `block`/`inline`/`inline-block`/`none`. 현대 레이아웃: `flex`(1차원), `grid`(2차원)
+  - grid 3열 = **`grid-template-columns: 1fr 1fr 1fr;`** (`fr`=남은 공간 비율)
+- 기타: `overflow` / `visibility` / `float`·`clear` / `resize`
+- `border`(두께·스타일·색상 단축), 투명색(`transparent`)으로 삼각형
+- `border-radius`: `50%`(원/타원), **`9999px`(알약·캡슐 — 너비 가변에도 양끝 반원 유지)**, 슬래시로 타원 곡선
+- `outline`: **공간 차지 안 함**(레이아웃 영향 X) → focus 표시·디버깅
+- `box-shadow`: 가로·세로 오프셋, blur, spread, 색상. **`inset` 키워드 = 안쪽 그림자(눌린 효과)** (`text-shadow`는 inset 미지원)
+
+**8강 CSS: 배경, 그라데이션, 변형**
+- 배경 4대 속성: `background-color` / `background-image` / `background-repeat` / `background-position`
+- `background-size`: **`contain`(잘림 없이 비율 유지하며 최대로, 여백 생길 수 있음)** / `cover`(빈틈없이 채움, 잘릴 수 있음) / `100% 100%`(찌그러짐)
+- `background-attachment`(`scroll`/`fixed`/`local`), **`background-clip`(`border-box`/`padding-box`/`content-box`/`text` — 칠해지는 범위 제한)**, `background-origin`(시작 기준점)
+- 다중 배경(레이어 겹침), `background` 단축
+- `linear-gradient`: 각도·방향(`to bottom` 등). **0deg=위(12시), 시계방향 증가, `90deg`=오른쪽(to right), 기본값 180deg(to bottom)**. 중단점(%)으로 하드 스톱
+- `radial-gradient`(중심→바깥, `circle`/`ellipse`, 비네팅), **`conic-gradient`(중심 기준 시계방향 회전 — 컬러휠·파이차트·도넛차트)**
+- 반복: `repeating-linear/radial/conic-gradient()`(사선·물결·격자 패턴)
+- 2D 변형 함수: `translate`(이동) / `rotate`(회전) / `scale`(크기) / `skew`(비틀기) / `matrix()` — 레이아웃 흐름 안 깸
+  - **정중앙 배치: `top:50%; left:50%; transform: translate(-50%, -50%)`** (translate의 %는 자기 자신 크기 기준)
+- `transform-origin`(변형 기준축), `perspective`(부모에 px, 원근감)·`perspective-origin`
+- **`backface-visibility: hidden`** = 180도 뒤집힌 카드 뒷면 숨김(플립 카드)
+
+**9강 CSS: 전환, 애니메이션, 다단**
+- 전환(transition): 상태 A→B를 일정 시간에 걸쳐 부드럽게. 주로 `:hover`/`:focus`에 반응
+- 구성: **`transition-property`(대상 속성 — `all` 지양, 구체 명시)** / `transition-duration`(0이면 즉시) / **`transition-timing-function`(가감속 곡선 — `ease`/`linear`/`ease-in`/`ease-out`/`steps`)** / `transition-delay`
+- 성능: `width`/`height`/`margin` 변화는 피하고 GPU 가속 `transform`·`opacity` 사용. transition 코드는 `:hover`가 아닌 원본 요소에 작성해야 양방향 전환
+- 애니메이션: `@keyframes`(0%~100% 시나리오) + `animation-*`
+  - `name` / `duration` / `iteration-count`(`infinite`) / **`direction: alternate`(요요·왕복, 짝수회 역방향)** / `fill-mode`(`forwards`=마지막 상태 유지) / `timing-function` / `delay` / **`play-state: paused`(일시정지·`running`)**
+- 최적화: `will-change`, CSS 변수+키프레임 모듈화
+- 다단(column): **`column-width`(최소 너비 제시 → 단 개수 자동 조절, 반응형)** / `column-count`(개수 고정) / `columns`(단축)
+- `column-gap`(단 간격) / `column-rule`(구분선) / `column-span: all`(다단 가로지름) / **`column-fill: balance`(기본값, 모든 단 높이 균등 재분배)**
+
+**10강 자바스크립트 언어**
+- JS = 동적 기능 담당 범용 스크립트 언어, 자바(Java)와는 완전히 다름(동적 타입)
+- 적용: `<head>`에 외부 `.js`를 `<script defer>`로 연결(실무 표준 — 파싱과 병렬 다운로드, 실행은 파싱 후), `type="module"`
+- 변수: **`const`(재할당 불가) 기본, 재할당 필요할 때만 `let`, `var` 금지**. 원시 타입(값 복사) vs 참조 타입(주소 복사)
+- 연산자: **엄격 일치 `===`**(타입+값, 권장) — `10 == "10"`은 `true`(강제 형변환), `10 === "10"`은 `false`. 선택적 체이닝 `?.` / 널 병합 `??`
+  - **단축 평가**: `"" || "환영합니다"` → falsy(`""`/0/null/undefined)면 오른쪽 반환 → `"환영합니다"` (기본값 패턴)
+- 배열 순회·메서드: `for...of`(순서 있는 데이터) / `for...in`(객체 키, 배열엔 비권장) / `forEach`(단순 실행)
+  - **`map`(1:1 가공 새 배열, 원본 보존)** / `filter`(조건 추출) / `reduce`(누적 단일값) / `includes`(존재 확인)
+  - **`push`/`pop`은 배열 뒤를 다루며 원본 변경**, `unshift`/`shift`는 앞을 다룸. 원본 변형 메서드(`splice`/`sort`) 대신 전개 연산자(`...`)로 복제
+- 함수: 호이스팅 부작용 막으려 함수 표현식·화살표 함수(`() => {}`) 권장. 콜백 함수는 비동기·이벤트 처리 기반
+- 객체: 일회성은 리터럴 `{}`, 재사용 템플릿은 `class`. 접근은 점 표기(`.`), 변수 키는 대괄호(`[]`) 필수
+- 내장 객체: `String`(`includes`/`replace`/`slice`/`trim`/`split` 체이닝) / `Array` / `Date`(`getTime`·`toLocaleString`·`toISOString`) / `Math` / `JSON`
+- 이벤트: `addEventListener`로 등록. **`e.preventDefault()` = 기본 동작 취소**(폼 제출·링크 이동 막고 JS가 통제)
+
+**11강 문서 객체 모델과 브라우저 객체 모델**
+- **DOM** = HTML을 객체 트리로 변환한 인터페이스. 브라우저는 DOM(구조)+CSSOM(스타일)을 합쳐 렌더 트리 구성
+- 요소 접근: `querySelector()`(CSS 선택자), **`querySelectorAll()`은 NodeList 반환 → `forEach` 바로 사용 가능**, `getElementById`
+- 내용 조작: **`innerHTML`(스크립트 실행 위험) 대신 `textContent`(순수 텍스트, 안전) 권장**. 속성은 점 표기 또는 `setAttribute()`
+- **`data-*` 속성은 JS에서 `element.dataset.속성명`(카멜케이스 변환)으로 읽음** (예: `data-product-code` → `dataset.productCode`)
+- 스타일 조작: `style` 직접 수정은 지양 → **`classList`의 `add()`/`remove()`/`toggle()`로 클래스 제어**(실무 표준). **`toggle()`은 있으면 제거·없으면 추가**
+  - 인라인 스타일 직접 수정 시 하이픈 CSS 속성은 카멜케이스: `style.backgroundColor`
+- 삽입·삭제: `createElement()`+`append()`, `remove()`. **자식 전체 비우기는 `replaceChildren()`(인자 없이 호출)이 가장 빠르고 안전**
+- 성능: 대량 조작은 `DocumentFragment`(메모리 임시 바구니)에 모은 뒤 한 번만 부착
+- **BOM** = 브라우저 창 제어 API. 최상위 `window` 아래 `document`/`location`/`history`/`navigator`
+  - **`location`**: `location.href`에 URL 대입 시 이동(뒤로 가기 가능), `replace`(덮어쓰기, 뒤로 가기 불가), 쿼리는 `URLSearchParams`
+  - `history`: `back()`/`forward()`/`go()` / `navigator`: 브라우저·기기 정보, `clipboard.writeText()`·`readText()`(공유·복사)
+- 타이머: `setTimeout()`(한 번) / `setInterval()`(반복 — 카운트다운·스톱워치). **메모리 누수 방지 위해 `clearTimeout()`/`clearInterval()` 필수**
+- 이벤트 위임(event delegation): 부모 하나에만 리스너 등록 → 동적 자식 이벤트까지 처리(이벤트 버블링 활용)
+
+**12강 캔버스 (1)**
+- `<canvas>` = JS 고속 픽셀 드로잉 컨테이너. 좌표계는 **좌측 상단 (0,0)**, 오른쪽·아래로 갈수록 x·y 증가. `getContext('2d')`로 컨텍스트 획득
+- 해상도 분리: `canvas.width`/`height`(내부 픽셀 수)와 `style.width`/`height`(표시 크기)가 다르면 흐려짐. **DPR 보정 = `window.devicePixelRatio`만큼 버퍼를 키우고 `ctx.scale()`로 압축**
+- 즉시 실행 사각형: `fillRect(x,y,w,h)`(면) / `strokeRect()`(테두리) / **`clearRect()`(투명하게 지움 — 애니메이션 프레임 초기화 필수)**
+- **상태 머신 `save()`/`restore()`**: 붓 상태(색상·두께·변환)를 스택에 백업·복구. **그려진 픽셀(그림)은 저장 안 됨** — Undo 아님
+- 패스 기반: **`beginPath()`(이전 경로 단절·리셋, 새 시작 선언 — 생략 시 이전 경로 누적)** → `moveTo(x,y)` → `lineTo(x,y)` → `closePath()`(시작·끝 연결) → `fill()`/`stroke()`로 화면 표시
+- **칠+테두리 순서: `fill()` 먼저, `stroke()` 나중** (선은 경로 중앙에서 양옆으로 퍼지므로 채우기를 먼저 해야 테두리 두께가 안 깎임)
+- **`arc(x, y, 반지름, 시작각, 종료각, 방향)`**: 각도는 라디안. **0라디안 = 3시 방향, 기본 시계 방향(counterclockwise=false)**. 부채꼴은 `moveTo`(중심)→`arc`→`closePath`, 파이 차트는 각도 누적
+- `Path2D`(경로 저장·재사용)
+- 색상: `fillStyle`/`strokeStyle`, **`globalAlpha`(0.0~1.0, 전체 일괄 투명도)**
+- 선 스타일: **`lineCap`(끝 모양 — `round`=둥근 끝)** / `lineJoin` / `lineWidth`. **`setLineDash([10,5])`**(점선) + **`lineDashOffset`**(패턴 시작 위치 이동 → 흐르는 점선 애니메이션)
+
+**13강 캔버스 (2)**
+- 그라디언트: `createLinearGradient(x0,y0,x1,y1)` / `createRadialGradient()` / `createConicGradient()` + `addColorStop(offset, 색)`
+  - `createLinearGradient(0,0,200,0)`은 y 고정·x만 변화 → **왼쪽→오른쪽 수평** 방향. 오프셋 동일하게 주면 하드 스톱(파이차트 등)
+- **`createPattern(이미지, 'repeat')`** = 외부 이미지·오프스크린 캔버스를 도장처럼 반복(질감·도트)
+- 그림자: `shadowColor` / **`shadowBlur`(흐림·가우시안 블러 반경)** / `shadowOffsetX` / `shadowOffsetY`. 오프셋 0+밝은색 = 네온
+- 합성: `globalCompositeOperation`(`source-in`=마스킹, `destination-out`=스포트라이트 지우개, `multiply`=색상 필터)
+- 텍스트: `fillText(text,x,y)`(내부 칠) / `strokeText()`(외곽선). `font` / **`textAlign`(수평 정렬, `center`)** / `textBaseline`(수직 기준). `measureText()`로 너비 측정(중앙 정렬·줄바꿈 직접 구현)
+- **`drawImage()`**(반드시 `onload` 후): 인자 **3개** `drawImage(img,dx,dy)`(원본 그대로) / **5개** `(img,dx,dy,dw,dh)`(크기 조절) / **9개** `(img,sx,sy,sw,sh,dx,dy,dw,dh)`(잘라서 늘리기)
+- 도형 변환 = 좌표계 자체를 이동(누적되므로 `save()`/`restore()` 필수)
+  - `translate`(원점 이동) / `rotate`(원점 기준 라디안 회전 — 제자리 회전은 translate로 중심 옮긴 뒤) / **`scale`(비율, `-1` 대입 시 좌우·상하 대칭 거울 모드)**
+  - **`scale(2,2)` 적용 시 선 두께(`lineWidth`)도 2배로 굵어짐** (그리드 자체가 확대되므로)
+
+**14강 HTML API (1)**
+- `<video>`·`<audio>`는 `HTMLMediaElement` 인터페이스 공유 → 제어 동일. **`autoplay`는 `muted` 함께 써야 동작**
+- 속성: `currentTime`(재생 위치) / `duration`(전체 길이) / `volume` / `playbackRate`(배속) / **`paused`(일시정지 여부 true/false)**
+- 메서드: `play()` / `pause()`. **`stop()` 없음** → 정지는 `pause()` 후 **`currentTime = 0`**
+- 이벤트: `timeupdate`(재생 중 지속 발생 — 진행률 바) / `loadedmetadata`(길이 등 로딩 완료) / `waiting`·`playing`(버퍼링 스피너) / `volumechange`(음량 UI 동기화)
+- 드래그앤드롭 3요소: **출발지(`draggable="true"`)** / 목적지(드롭존) / **`dataTransfer`(데이터 운반 임시 바구니)**
+- 출발지: `dragstart` → `e.dataTransfer.setData('text/plain', id)`로 저장
+- 목적지(가장 중요): **`dragover`·`drop`에서 `e.preventDefault()` 필수** (기본은 드롭 거부·새 탭 열기 → 차단해야 정상 드롭)
+- 데이터 추출: drop에서 `getData()`. **`e.dataTransfer.files`(FileList) = 바탕화면에서 끌어온 파일** (텍스트가 아니므로 `getData('file')` 아님). `dragenter`/`dragleave`로 시각적 하이라이트
+
+**15강 HTML API (2)**
+- 웹 스토리지: 클라이언트에 **키-값**으로 저장. 쿠키 단점(매번 서버 전송, 4KB) 극복 → 서버 전송 없이 도메인당 약 5MB
+- **`localStorage`**(브라우저 닫아도 영구, 탭 간 공유 — 다크모드·자동로그인) vs **`sessionStorage`**(탭 종료 시 소멸, 탭마다 격리 — 일회성 폼 백업)
+- 메서드: `setItem(key,value)` / **`getItem(key)`**(읽기 표준) / `removeItem(key)` / `clear()`(전체) / `key()` / `length`
+- **`storage` 이벤트는 변경한 현재 탭이 아니라 같은 영역을 쓰는 다른 탭/창에서만 발생** (탭 간 통신용)
+- **직렬화 필수: 스토리지는 문자열만 저장** → 객체·배열은 `JSON.stringify()`로 넣고 `JSON.parse()`로 꺼냄 (`setItem('user', JSON.stringify(user))`)
+- 위치 정보(Geolocation): GPS·Wi-Fi로 위도·경도 파악. **반드시 HTTPS(또는 localhost) + 사용자 동의** 필요
+- `navigator.geolocation.getCurrentPosition(성공, 실패, 옵션)`(한 번) / **`watchPosition()`(이동 시마다 실시간 추적 — 종료 시 `clearWatch()` 필수)**
+- 성공 콜백 `position`에서 **`position.coords.latitude`(위도)·`position.coords.longitude`(경도)**, 시각은 `position.timestamp`. 옵션 **`enableHighAccuracy: true`**(배터리 소모↑, GPS 강제·정밀)
+- Leaflet.js 연동 4단계: ①빈 컨테이너(`<div id="map">`) 준비 ②`L.map().setView([위도,경도], 줌)`(이미 있으면 `setView`만) ③`L.tileLayer()`(OpenStreetMap 타일) ④`L.marker([위도,경도]).addTo()` + `bindPopup().openPopup()`
 
 #### 핵심 암기표
 
@@ -2481,6 +2827,184 @@ const lng = position._________.longitude;
 ### Java프로그래밍
 
 > 우선순위: 객체지향/상속/인터페이스/제네릭/컬렉션/스트림/JDBC를 구분해서 암기
+
+#### 강의별 핵심 정리
+
+> 강의록(lecture-notes.md 1~15강) + 연습문제 + 시험직전 암기 기준. 객체지향/상속/인터페이스/제네릭/컬렉션/스트림/JDBC를 구분해서 암기.
+
+**1강 Java와 객체지향 프로그래밍**
+
+- Java 프로그램의 기본 구성단위는 **클래스**이며, 변수 자료형 검사가 엄격하다.
+- Java 소스(`A.java`)는 컴파일되어 **바이트코드**(`.class`)가 되고, 이 바이트코드가 **Java 플랫폼**(JVM)에서 실행된다.
+- **플랫폼 독립적**: 똑같은 바이트코드가 Java 플랫폼이 설치된 다양한 하드웨어/운영체제에서 수정 없이 실행된다.
+- 컴파일 시 소스 안의 클래스마다 `.class` 파일이 생성된다. 예) `public class A {} class B {}`를 컴파일하면 `A.class`와 `B.class`가 모두 생성된다.
+- Java 프로그래밍을 위해서는 **JDK**를 설치해야 한다.
+- Java 플랫폼 = **Java VM** + **Java API**로 구성된다.
+- `main()` 메서드 형식은 `public static void main(String[] args)`이다.
+- **클래스**는 동종 객체를 추상화시켜 표현한 틀이며 데이터(필드)와 메서드로 구성된다. **객체**는 특정 클래스의 **인스턴스**이다.
+- 화면 출력 기본형: `System.out.println("Hello, World!");`
+
+**2강 Java 기본 문법(1)**
+
+- 기본형 키워드 8가지: `byte` / `short` / `int` / `long` / `float` / `double` / `char` / `boolean`. (`boolean`은 클래스 이름이 아님 — `Integer`·`String`·`System`은 클래스)
+- 정수 리터럴 진법 표기: 10진수(`10`), 8진수(앞에 `0` — 예 `00001010`=8진수), 16진수(`0x0A`), 2진수(`0b0000_1010`). `0x0A`와 `0b0000_1010`는 10진수 `10`과 같지만 `00001010`(8진수)은 값이 다르다. 숫자 사이 `_` 구분자 허용.
+- 정수 리터럴은 기본적으로 `int`형으로 인식된다.
+- 변수 종류: **인스턴스 변수**(객체가 소유) / **클래스 변수**(`static`, 같은 클래스 객체들이 공유) / **지역 변수** / **파라미터**.
+- 클래스와 배열은 대표적 **참조형**이며, 참조형 변수에는 참조값(주소값)이 저장된다.
+- **묵시적 형변환**: 자료 손실이 없고 컴파일러가 자동 수행. **명시적 형변환**: 손실 가능, 직접 캐스팅.
+- **명령행 매개변수**: `main()`에 전달되는 인자로, 실행 시 클래스 이름 뒤에 나열한다.
+- 점프문(분기문): `break` / `continue` / `return`.
+- 향상된 for문: `for (int value : a) { ... }` 형태로 배열/컬렉션 순회.
+
+**3강 Java 기본 문법(2), 클래스와 상속(1)**
+
+- 배열은 원소의 **초기화 과정**이나 **생성 과정**을 거쳐야 사용할 수 있다.
+- 올바른 배열 선언 예: `int[][] c = new int[5][];`. (`int a[10] = new int[];`, `int b[] = new int(10);`, `int[5] d = {...};`는 모두 문법 오류 — 선언부 `[]`에 크기를 넣지 않음)
+- 배열 크기는 `배열이름.length`로 표현한다. (필드이므로 괄호 없음 — `String length()`와 구별)
+- 문자열 변수/리터럴에 `+` 연산을 적용하면 두 문자열이 **연결**된 문자열이 된다.
+- 두 정수 변수 `i`, `j`를 분리해 출력하려면 `System.out.println(i + " " + j);` (단순히 `i + j`는 합이 출력됨).
+- **Scanner** 클래스로 키보드/파일로부터 문자열·기본형 값을 편리하게 입력받는다.
+- 접근 제어자 4종: `public` / `protected` / (생략=default) / `private`.
+- **`protected`** 필드는 같은 클래스 / 같은 패키지 / **다른 패키지의 자식 클래스**에서 접근 가능. 다른 패키지의 무관한 클래스에서는 접근 불가.
+- 클래스 정의 시(내부 클래스가 아니면) 접근 제어자로 **생략**과 **`public`**만 지정 가능.
+- 접근 제어자가 생략된 클래스/필드는 **같은 패키지** 내에서만 사용 가능.
+- **생성자**는 이름을 클래스 이름과 같게 하고 반환형을 지정하지 않는다. 예) `Circle(...) { this.radius = radius; }`
+
+**4강 클래스와 상속(2)**
+
+- 모든 객체가 공유하는 데이터는 **`static`** 데이터 필드로 정의한다. `static` 메서드는 객체 없이 클래스 이름으로 호출 가능.
+- 데이터 필드 초깃값은 **선언문 / 초기화 블록 / 생성자**를 통해 지정한다.
+- **`final`** 정리:
+  - `final` 클래스는 자식 클래스를 정의할 수 없다.
+  - `final` 메서드는 자식 클래스에서 **재정의(오버라이딩) 불가**.
+  - `final` 변수는 한 번만 값을 정하는 **상수**로 사용된다.
+  - `final` 클래스라도 **객체 생성은 가능**하다(상속만 금지). → "final 클래스의 객체를 생성할 수 없다"는 틀린 설명.
+- 상수 선언은 **`static final`**: 예) `static final double PI = 3.14;` (Java에 `const` 키워드는 없음).
+- **오버로딩**: 한 클래스에서 이름이 같고 **매개변수 목록**이 달라 구별되는 여러 메서드.
+- **오버라이딩**: 부모로부터 상속받은 메서드의 몸체를 자식이 다시 정의. 접근 범위를 더 좁게 만들 수 없다.
+- 숨은 인자 **`this`**는 현재 객체를 가리킨다. `this()`는 같은 클래스의 다른 생성자를, `super()`는 부모 클래스 생성자를 호출한다.
+
+**5강 인터페이스와 다형성**
+
+- 몸체가 없는 메서드 = **추상 메서드**. 추상 클래스 또는 인터페이스에 포함될 수 있다.
+- **인터페이스**는 추상 메서드로만 구성된다. 단 `default` 인스턴스 메서드와 `static` 메서드는 몸체가 있어야 한다.
+- 묶는 기준: 의미적으로 유사 → **추상 클래스**, 기능적으로 유사 → **인터페이스**.
+- 상속 키워드: 클래스 상속은 **`extends`**, 인터페이스 구현은 **`implements`**. (클래스가 인터페이스를 구현 → `implements`, 인터페이스가 인터페이스를 상속 → `extends`)
+- **다형성**은 메서드 오버라이딩/오버로딩, 클래스 간 상속과 형변환, 인터페이스 구현과 형변환, 메서드 **동적 바인딩**으로 구현된다.
+- **열거 자료형(enum)**: 여러 상수값을 미리 정의하는 자료형, 각 상수값은 하나의 객체와 같다.
+- **익명 클래스**: 이름 없는 클래스로, 일회성으로 상속/구현을 통해 자식 객체를 생성하는 용도로만 사용. 예) `new CSuper() { ... }` → `CSuper`를 상속받는 익명 클래스를 정의하면서 동시에 그 객체를 생성.
+
+**6강 제네릭과 람다식**
+
+- **제네릭 타입**: 자료형을 매개변수로 가지는 클래스/인터페이스. 컴파일 시점에 명확한 자료형 검사를 수행해 실행 오류를 줄인다.
+- 타입 파라미터(`<T>`)는 필드의 자료형, 메서드 반환형, 메서드 인자의 자료형으로 사용될 수 있다.
+- 제네릭의 타입 인자에는 **참조형(클래스)만** 올 수 있다. `Data<int>`는 문법 오류 → 포장 클래스 `Data<Integer>`로 써야 한다. (`Data<String>`, raw type `Data` 등은 허용)
+- **제네릭 메서드**: 자료형을 매개변수로 가지는 메서드.
+- **람다식**: 매개변수를 갖는 코드 블록으로, 익명 클래스 객체 생성 부분을 수식화한 것. 함수형 인터페이스 구현 객체 생성에 효율적.
+  - 올바른 형태: `(int a, int b) -> { return (a + b); }` / `(int a, int b) -> a + b` / `(a, b) -> (a + b)`.
+  - 잘못된 형태: `(a, b) -> return (a + b)` — 화살표 뒤가 식이면 `return`·`;` 없이 식만, 문장 블록이면 `{ }`로 감싸야 한다.
+- 람다식의 결과 타입에 해당하는 인터페이스를 **타깃 타입**이라 한다.
+- 표준 함수형 인터페이스 `Supplier<T>`의 추상 메서드는 **`T get()`**.
+
+**7강 패키지와 예외처리**
+
+- **패키지**: 관련 있는 클래스/인터페이스의 묶음으로 **계층 구조**를 이룬다.
+- 소스 파일 맨 위에 패키지 지정: `package myprogram.game;` (클래스명은 붙이지 않음).
+- 다른 패키지의 클래스를 단순 이름으로 쓰려면 `import` 사용: `import java.util.Scanner;` 또는 `import java.util.*;`
+- 필요한 클래스/패키지는 환경 변수 **CLASSPATH** 경로상에서 찾을 수 있어야 한다.
+- **예외**: 실행 중 발생하는, 심각하지 않지만 정상 흐름을 벗어난 비정상 상황.
+- **checked Exception**은 발생 가능 시 반드시 예외 처리 구문을 작성해야 한다.
+- 예외 직접 처리는 **`try-catch`**, 예외 전파는 메서드 선언에 **`throws 예외유형`**(예 `throws IOException`). (던지는 것은 `throw`, 선언은 `throws`)
+- `finally`는 예외 발생 여부와 상관없이 실행된다.
+
+**8강 java.lang 패키지**
+
+- `java.lang` 패키지 클래스는 `import` 없이 사용 가능.
+- **`String`은 immutable 클래스** — 객체 생성 이후 내용 변경 불가. 문자열 반복 조작 시 매번 기존 문자열이 버려지고 새 문자열이 만들어져 비효율적.
+- 자주 변경되는 문자열은 **`StringBuffer`** 또는 **`StringBuilder`**를 사용하는 것이 효율적. (`StringBuffer`는 동시성 제어를 고려해 구현되어 `StringBuilder`보다 느림)
+- `toString()`, `equals()`는 **`Object`** 클래스에 정의되어 있고 일부 하위 클래스(예 `String`)에서 재정의됨. 모든 클래스는 묵시적으로 `Object`를 상속.
+- 기본형 값을 객체로 다루기 위해 기본형마다 상응하는 **포장(Wrapper) 클래스**가 존재한다.
+- **`System`** 클래스는 표준 입력/출력/오류 출력용으로 `in`, `out`, `err` 객체를 제공한다. (표준 입출력 스트림 static 필드는 `String`이 아니라 `System`이 제공)
+
+**9강 java.io 패키지와 스트림**
+
+- 스트림을 통해 데이터 생산자/소비자의 종류와 무관하게 **동일한 방법**으로 입출력을 수행한다.
+- **`File`** 클래스는 파일/디렉터리 조작 메서드를 제공하지만 **입출력 메서드는 제공하지 않는다.**
+- **`RandomAccessFile`**: 읽기/쓰기 지원, 파일 포인터가 가리키는 임의 위치에 읽기/쓰기 가능.
+- 스트림 구분: 입력/출력, 바이트 단위/캐릭터 단위, **기본 스트림 / 보조 스트림**.
+  - 기본 스트림 예: `FileReader`, `StringReader`, `ByteArrayInputStream`.
+  - 보조 스트림 예: `BufferedReader`/`BufferedWriter`, `BufferedInputStream`/`BufferedOutputStream` — 버퍼링으로 성능 향상.
+- 사용 순서: 기본 스트림 객체를 먼저 생성하고, 그 객체를 인자로 보조 스트림 객체를 생성한다.
+- **`BufferedReader`**는 `Reader`의 자식 클래스로 `read()`·`readLine()` 등 **문자 단위** 입력 메서드와 버퍼링을 제공한다. (바이트 단위 입력은 아님)
+- **`InputStreamReader`**: 바이트 단위 입력 스트림(`System.in`)을 캐릭터 단위 입력 스트림으로 변환 → 한글 입력 시 사용.
+
+**10강 java.nio 패키지의 활용**
+
+- `java.nio`와 서브 패키지는 `java.io`를 개선한 새로운 입출력 패키지이다.
+- **`Path`** 인터페이스(`java.nio.file`)는 `File` 클래스를 대체하며 더 풍부한 기능 제공 — 경로 생성/조작/비교/요소 조회. (단, **파일 내용의 읽기·쓰기 기능은 제공하지 않음**)
+- **`Files`** 클래스: 실제 파일/디렉터리 조작과 읽기·쓰기를 수행하는 **`static` 메서드** 제공.
+- 채널 입출력에서 **버퍼**는 기본형 데이터의 보관소이며 버퍼 단위로 입출력한다.
+- **`FileChannel`**: 입력·출력을 **모두** 제공, 기본적으로 버퍼링 사용, **멀티 스레드 환경에서 안전**. `FileChannel.open(path)`은 기본적으로 읽기용으로 연다. (`FileChannelReader`/`FileChannelWriter`라는 클래스는 없음)
+- **`WatchService`**: 디렉터리에 발생하는 이벤트를 감시하는 서비스. `take()`가 리턴하는 **`WatchKey`**는 등록된 디렉터리에 어떤 관심 이벤트가 등록되어 있고 실제 어떤 이벤트가 일어났는지의 상태 정보를 가진다.
+
+**11강 컬렉션**
+
+- **컬렉션**: 여러 원소를 저장·관리하는 객체의 통칭. **JCF**(Java Collections Framework)는 이를 효율적으로 다루는 API 프레임워크.
+- 인터페이스별 성질:
+
+| 인터페이스 | 순서 | 중복 | 비고 |
+|---|---|---|---|
+| `Set` | 의미 없음 | 불가 | `HashSet` |
+| `List` | 의미 있음 | 허용 | `ArrayList`, `LinkedList` |
+| `Queue` | 의미 있음 | 허용 | **FIFO** |
+| `Map` | - | 키 중복 불가 | `<키, 값>` 쌍 |
+
+- **`ArrayList`**: `List` 구현, 내부적으로 **배열** 사용, 순서 의미 있음, **자료 중복 허용**. (중복 불가는 틀린 설명)
+- **`Map`** 계열은 `<key, value>` 쌍 — `HashMap`, `Hashtable`, `Map`. (`HashSet`은 `Set` 계열로 Map이 아님)
+- **`LinkedList`**: `List`와 `Queue`를 모두 구현, 스택용 메서드도 제공.
+- `Queue` 자료 추가는 `boolean offer(E)`, 삭제는 `E poll()`.
+
+**12강 컬렉션과 스트림**
+
+- **스트림**: 컬렉션/배열로부터 만들어지는 원소의 시퀀스를 표현하는 인터페이스.
+- **내부 반복**: 컬렉션/배열 내부에서 각 원소를 반복 처리, 처리용 코드만 람다식으로 전달(반복용 코드 작성 안 함). **`forEach()`**는 람다식과 함께 원소를 외부로 꺼내지 않고 내부에서 탐색.
+- 배열을 스트림으로 만들기: **`Arrays.stream(numbers)`** (배열에는 `numbers.stream()`을 쓸 수 없음).
+- 중간 연산(새 스트림 리턴, 체인 가능):
+  - **`filter`**: 조건을 만족하는 원소만 걸러 냄(중복 제거 포함).
+  - **`map`**: 원소를 다른 원소로 변환(예 대문자 변환).
+- 최종(종료) 연산: 스트림 원소로 최종 결과를 만들어 리턴.
+  - **매칭(`match`)**: 특정 조건 만족 여부 확인.
+  - **수집(collect)**: 결과 원소들을 취합해 새 `List`/`Set`/`Map` 생성.
+- 중간연산은 변환·필터링 후 새 스트림을 리턴해 여러 번 체인 가능, 종료연산은 최종 결과를 만들어 리턴(스트림 소비).
+
+**13강 멀티스레드 프로그래밍**
+
+- **멀티 스레드 프로그래밍**: 하나의 프로세스에서 여러 스레드가 생성되어 동시 실행되게 하는 것.
+- 스레드 실행 코드는 `Thread`를 상속받은 클래스나 **`Runnable`** 인터페이스를 구현한 클래스의 **`public void run()`** 메서드에 정의한다.
+- 스레드 상태: Startable / Runnable / Running / Not Running 등을 거친다.
+- 상태 제어 메서드:
+  - `Thread` 클래스: `start()`, **`join()`**(this 스레드가 종료될 때까지 현재 스레드가 기다림), `interrupt()`, static `yield()`·`sleep()`.
+  - `Object` 클래스: `wait()`, `notify()`.
+- **동기화(synchronization)**: 데이터 무결성 유지를 위해 **한 번에 한 스레드만** 공유 객체에 접근하도록 하는 것.
+- **`synchronized`** 메서드는 동기화를 보장 — 한 스레드가 공유 객체의 메서드 실행 중이면 다른 스레드는 동일 객체에 접근할 수 없다.
+
+**14강 JDBC 프로그래밍**
+
+- **MariaDB**는 MySQL과 호환되는 오픈 소스 관계형 DBMS.
+- **JDBC**는 Java 프로그램이 관계형 데이터베이스와 연동하게 하는 표준 API. DBMS별 **JDBC 드라이버**(`.jar`)가 필요하며 **Classpath**에 추가해야 한다.
+- 주요 인터페이스/클래스: `DriverManager`, **`Connection`**(연결 설정 — `java.sql.Connection`), `Statement`, `PreparedStatement`, `ResultSet`. (`Runnable`은 JDBC와 무관)
+- SQL 실행: `Statement`의 `execute()` / `executeQuery()` / `executeUpdate()`.
+- `select` 구문은 `executeQuery()`로 실행하며, 결과가 테이블 형태의 **`ResultSet`** 객체로 리턴된다(행 단위로 읽음).
+- **`PreparedStatement`**: 같은 SQL을 여러 번 실행할 때 효율적, 매개변수가 있는 SQL을 저장하고 실행 전에 값을 지정. (`Statement`의 부모가 아니라 **자식** 인터페이스 — "부모"라는 설명은 틀림)
+- JDBC 순서: 드라이버/연결 → `Statement` → SQL 실행 → `ResultSet` 처리 → `close`.
+
+**15강 라이브러리와 모듈**
+
+- **라이브러리**: 자주 사용되는 클래스/인터페이스를 컴파일된 형태로 묶은 것 → `.class` 파일을 묶은 **`.jar`** 파일.
+- **모듈**: 라이브러리의 업그레이드 버전(Java 9 도입)으로 **패키지 단위로 접근성**을 설정할 수 있다.
+- 사용 시 추가 위치: 라이브러리(`.jar`)는 **Classpath**, 모듈은 **Modulepath**.
+- 모듈 정의 파일 **`module-info.java`**: `exports 패키지;`(공개) 또는 `requires 모듈;`(의존)로 모듈 간 의존관계 설정. 예) `java.sql` 패키지를 쓰면 `requires java.sql;`
+- JDK 표준 라이브러리는 모두 모듈화되었으며, **`java.base`**는 가장 기본 모듈로 **`requires` 선언 없이도 사용** 가능. (`jdk.base`·`jdk.lang`·`java.lang`은 표준 기본 모듈 이름이 아님)
 
 #### 핵심 암기표
 
