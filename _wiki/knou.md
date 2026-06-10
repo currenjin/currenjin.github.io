@@ -1382,7 +1382,7 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 **3강 HTML 요소: 미디어, 시멘틱 요소**
 
 - **미디어 `audio`/`video`**
-  - `audio`/`video` 속성: `src` / `autoplay` / `controls` / `loop` / `muted` / `preload`. `controls` 항상 권장, `preload="metadata"` 권장
+  - `audio`/`video` 속성: `src`(미디어 파일 경로, `source` 요소로 대체 가능) / `autoplay`(자동 재생, 브라우저 차단으로 `muted` 필요) / `controls`(재생 UI 표시, 항상 권장) / `loop`(반복 재생) / `muted`(음소거 시작) / `preload`(`none`/`metadata`/`auto` 사전 로딩 정도, `metadata` 권장)
   - **`autoplay`는 브라우저가 차단하므로 `muted`와 함께 써야 동작** (`<audio autoplay muted>`)
   - `source`: 단일 `src` 대신 여러 포맷 제공 → **브라우저 호환성 확보**. 위에서부터 재생 시도(용량 작고 호환 좋은 것 먼저), `type` 명시 권장
   - `video` 추가 속성: `width` / `height` / `poster`(로딩 중 빈 화면 방지) / `playsinline`(모바일 강제 전체화면 방지)
@@ -1401,11 +1401,15 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 
 - **`form` 기본**
   - 웹 폼 = 프론트엔드와 백엔드의 접점(UX·접근성·보안 고려)
-  - `form` 속성: `action` / `method`(`get`/`post`) / `enctype` / `autocomplete` / `novalidate`
+  - `form` 속성: `action`(전송 대상 URL) / `method`(`get`/`post`) / `enctype`(전송 데이터 인코딩 방식, 파일 업로드 시 `multipart/form-data`) / `autocomplete`(자동 완성 켜기·끄기) / `novalidate`(브라우저 기본 유효성 검사 끄기)
     - **`get`은 검색·필터·조회**(URL 공유 가능), **`post`는 데이터 변경·민감정보**(로그인·회원가입·글쓰기·결제)
 - **`input` 종류·속성**
-  - `input type` 종류: 텍스트(`text`/`password`/`email`/`tel`/`url`/`number`/`search`) / 선택(`checkbox`/`radio`/`file`/`range`/`color`) / 날짜(`date`/`month`/`week`/`time`/`datetime-local`) / 버튼(`submit`/`reset`/`button`/`hidden`)
-  - 주요 속성: `type`/`value`/`placeholder`/`id` / `name`/`required`/`checked`/`maxlength`·`minlength`/`min`·`max` / `readonly`/`autofocus`/`accept`
+  - `input type` 종류
+    - 텍스트·데이터: `text`(한 줄 텍스트) / `password`(가림 입력) / `email`(이메일 형식 자동 검증) / `tel`(전화번호, 형식 강제 없음) / `url`(URL 형식 자동 검증) / `number`(숫자 스피너) / `search`(검색어)
+    - 선택·체크: `checkbox`(다중 선택, 네모) / `radio`(같은 `name` 그룹에서 하나만, 동그라미) / `file`(파일 선택) / `range`(슬라이더) / `color`(색 선택기)
+    - 날짜·시간: `date`(날짜 피커) / `month`(연·월) / `week`(주차) / `time`(시각) / `datetime-local`(로컬 날짜·시간)
+    - 버튼·기능: `submit`(폼 제출) / `reset`(초기화) / `button`(일반 버튼) / `hidden`(화면에 안 보이는 전송값)
+  - 주요 속성: `type`(입력 타입 결정) / `value`(초기값, 버튼은 표시 글자) / `placeholder`(입력 시작 시 사라지는 힌트) / `id`(라벨 연결·식별) / `name`(서버 전송 키, 라디오 그룹 기준) / `required`(필수 입력) / `checked`(기본 선택) / `maxlength`·`minlength`(글자 수 상·하한) / `min`·`max`(값 상·하한) / `readonly`(수정 불가, 전송됨) / `autofocus`(로딩 시 자동 포커스) / `accept`(`file`의 허용 형식 필터)
   - **`placeholder`는 입력 시작 시 사라지는 힌트** → `label` 대체 금지. `value`는 초기값(버튼에서는 표시 글자), `alt`는 `type="image"` 버튼의 대체 텍스트
   - **`inputmode`는 모바일 가상 키보드 모양 결정** (인증번호 등은 `type="text"` + `inputmode="numeric"` 선호)
   - **`type="file"`**: `accept`(허용 형식 필터, 예 `image/*`·`.pdf`) / `multiple`(여러 파일 선택). 보안상 값은 가짜 경로(`C:\fakepath\`)로 표시
@@ -1416,7 +1420,7 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
   - **라디오 같은 그룹 조건 = 동일한 `name` 값** (배타적 선택)
   - **`datalist` 연동 = `input`의 `list` 속성과 `datalist`의 `id`를 같은 값으로**
 - **기타 폼 요소**
-  - `textarea`(긴 여러 줄 입력): `rows`/`cols`(크기) / `wrap` / `placeholder` / `maxlength` / `readonly` / `disabled`. 내용은 여는·닫는 태그 사이에 작성(`value` 속성 아님)
+  - `textarea`(긴 여러 줄 입력): `rows`/`cols`(보이는 줄·칸 크기) / `wrap`(줄바꿈 처리 방식) / `placeholder`(힌트) / `maxlength`(최대 글자 수) / `readonly`(수정 불가) / `disabled`(비활성·전송 제외). 내용은 여는·닫는 태그 사이에 작성(`value` 속성 아님)
   - `range`(슬라이더, `min`/`max`/`step`/`value`), `output`(실시간 계산값, `name`/`for`), `password`는 `autocomplete="current-password"`/`"new-password"`
 
 **5강 CSS: 개요, 선택자, 색상**
@@ -1445,23 +1449,31 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 **6강 CSS: 글꼴, 텍스트, 리스트, 테이블**
 
 - **글꼴**
-  - 폰트 속성: `font-family`(폴백 나열) / `font-size` / `font-style` / `font-variant` / `font-weight`(100~900, 400=normal·700=bold) / `font`(단축) / `@font-face`(`woff2` 권장, `font-display: swap` 필수)
+  - 폰트 속성: `font-family`(서체 폴백 나열) / `font-size`(글자 크기) / `font-style`(`normal`/`italic`/`oblique` — 이탤릭 등) / `font-variant`(`small-caps` 등 스몰캡스 변형) / `font-weight`(100~900, 400=normal·700=bold) / `font`(여러 폰트 속성 단축) / `@font-face`(웹 폰트 정의, `woff2` 권장, `font-display: swap` 필수)
   - **`font-family`는 우선순위 순으로 쉼표 나열**, 공백 포함 글꼴명은 따옴표(`"Noto Sans KR"`), 맨 끝에 **제네릭 글꼴**(`serif`/`sans-serif`/`monospace`/`cursive`)을 폴백으로 둠
   - **단축(shorthand) 속성**: `font`/`border`/`list-style`/`background`/`margin`/`padding`은 관련 속성을 한 줄로 일괄 지정 (예 `border: 1px solid black`, `list-style: square inside url()`)
   - **`rem` = 루트(html) 기준 상대 단위(보통 1rem=16px)** / **`em` = 부모 요소 기준** → `font-size`는 접근성 위해 `rem` 권장, `clamp()`로 반응형
   - 한글 본문 가독성: `font-size: 16px(1rem); line-height: 1.5~1.6` 조합
   - **`font` 단축에는 `line-height` 포함 가능** → `font-size` 뒤에 슬래시로 표기 (`font: 두께 크기/줄간격 서체`)
 - **텍스트**
-  - 텍스트 속성: `line-height`(단위 없는 숫자 1.5~1.6) / `letter-spacing`(한글은 -0.02em) / `text-align` / `text-decoration` / `text-transform` / `white-space` / `word-break`(한글 `keep-all`) / `overflow-wrap: break-word`(긴 URL)
+  - 텍스트 속성
+    - `line-height`(줄 간격, 단위 없는 숫자 1.5~1.6 권장)
+    - `letter-spacing`(자간, 한글은 -0.02em 권장)
+    - `text-align`(줄 전체 가로 정렬)
+    - `text-decoration`(밑줄·취소선 등 장식선)
+    - `text-transform`(대소문자 변환)
+    - `white-space`(공백·줄바꿈 처리 방식 — `nowrap`이면 줄바꿈 안 함)
+    - `word-break`(단어 끊김 규칙, 한글은 `keep-all`)
+    - `overflow-wrap: break-word`(긴 URL 등 박스 넘침 시 강제 줄바꿈)
   - **`text-transform`** = 대소문자 변환: `uppercase`(모두 대문자) / `lowercase`(모두 소문자) / `capitalize`(단어 첫 글자만 대문자) / `none`(원본 유지)
   - **`text-align`은 줄 전체 가로 정렬**(`left`/`right`/`center`/`justify`), **`text-align-last`는 마지막 줄(또는 한 줄짜리)만 정렬**
   - **`vertical-align`은 인라인·표 셀 요소 전용 세로 정렬**(`baseline`(기본)/`middle`/`top`/`bottom`/`sub`/`super`) — 블록 요소엔 적용 안 됨
   - **말줄임은 `text-overflow: ellipsis`** → 한 줄 말줄임 공식 = `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`
 - **리스트**
-  - 리스트 속성: `list-style-type` / `list-style-position` / `list-style-image` / `list-style`(단축). 커스텀 마커는 `::marker` 또는 `::before`
+  - 리스트 속성: `list-style-type`(마커 종류 — `disc`/`circle`/`decimal`/`none` 등) / `list-style-position`(마커 위치 — `outside`/`inside`) / `list-style-image`(마커를 이미지로) / `list-style`(위 세 속성 단축). 커스텀 마커는 `::marker` 또는 `::before`
   - 메뉴(GNB) 초기화: `ul { list-style: none; padding: 0; margin: 0; }`
 - **테이블**
-  - 테이블 속성: `border-collapse`(`collapse`=테두리 합침, 실무 필수) / `table-layout` / `border-spacing` / `caption-side` / `empty-cells`
+  - 테이블 속성: `border-collapse`(`collapse`=인접 테두리 합침(실무 필수)·`separate`=분리) / `table-layout`(`fixed`=지정 폭 강제·`auto`=내용 따라) / `border-spacing`(`separate`일 때 셀 간격) / `caption-side`(캡션 위·아래 위치) / `empty-cells`(빈 셀 테두리·배경 표시 여부)
   - **`table-layout: fixed`** = 내용 길이와 무관하게 지정 폭 강제 → 렌더링 속도·안정성↑ (`auto`는 내용에 따라 자동 조정). `colgroup`/`col`로 열 너비 세부 조절
   - 줄무늬: `:nth-child(even)`, 반응형: `overflow-x: auto`(가로 스크롤) 또는 미디어쿼리 카드 전환
 
@@ -1489,7 +1501,7 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 **8강 CSS: 배경, 그라데이션, 변형**
 
 - **배경**
-  - 배경 4대 속성: `background-color` / `background-image` / `background-repeat` / `background-position`
+  - 배경 4대 속성: `background-color`(배경색) / `background-image`(배경 이미지·그라데이션) / `background-repeat`(바둑판 반복 여부) / `background-position`(배경 위치 좌표)
   - `background-size`: **`contain`(잘림 없이 비율 유지하며 최대로, 여백 생길 수 있음)** / `cover`(빈틈없이 채움, 잘릴 수 있음) / `100% 100%`(찌그러짐)
   - `background-attachment`(`scroll`/`fixed`/`local`), **`background-clip`(`border-box`/`padding-box`/`content-box`/`text` — 칠해지는 범위 제한)**, `background-origin`(시작 기준점)
   - 다중 배경(레이어 겹침), `background` 단축
@@ -1534,7 +1546,7 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
   - 함수: 호이스팅 부작용 막으려 함수 표현식·화살표 함수(`() => {}`) 권장. 콜백 함수는 비동기·이벤트 처리 기반
   - 객체: 일회성은 리터럴 `{}`, 재사용 템플릿은 `class`. 접근은 점 표기(`.`), 변수 키는 대괄호(`[]`) 필수
 - **내장 객체**
-  - 내장 객체: `String`(`includes`/`replace`/`slice`/`trim`/`split` 체이닝) / `Array` / `Date`(`getTime`·`toLocaleString`·`toISOString`) / `Math` / `JSON`
+  - 내장 객체: `String`(문자열 처리 — `includes`(포함 여부)/`replace`(치환)/`slice`(잘라내기)/`trim`(양끝 공백 제거)/`split`(구분자로 배열화) 체이닝) / `Array`(배열) / `Date`(날짜·시간 — `getTime`(타임스탬프)·`toLocaleString`(현지 포맷)·`toISOString`(ISO 문자열)) / `Math`(수학) / `JSON`(직렬화·역직렬화)
   - **`Math`(인스턴스 없이 정적 호출)**: `Math.random()`(0 이상 1 미만 실수) / `Math.floor`(내림)·`Math.ceil`(올림)·`Math.round`(반올림)·`Math.trunc`(버림) / `Math.max(...)`·`Math.min(...)` / `Math.abs`(절댓값)·`Math.pow`·`Math.sqrt` / `Math.PI`. **`min`~`max` 정수 난수 = `Math.floor(Math.random() * (max - min + 1)) + min`**
 - **이벤트**
   - 이벤트: `addEventListener`로 등록. **`e.preventDefault()` = 기본 동작 취소**(폼 제출·링크 이동 막고 JS가 통제)
