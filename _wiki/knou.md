@@ -1350,19 +1350,23 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 - `hr`은 단순 수평선이 아니라 **주제 전환을 뜻하는 의미적 구분선** / 단순 시각선은 CSS `border-bottom`으로 처리
 - 제목 `h1`~`h6`: **`h1`은 페이지당 1개**, 순서 건너뛰지 말고 순차 사용, 글씨 키우는 디자인 용도 금지(크기는 CSS)
 - 물리(표현) ↔ 논리(의미) 대응: `b`↔`strong` / `i`↔`em` / `s`↔`del` / `u`↔`ins`. (`span`↔`div`는 인라인/블록 컨테이너 차이일 뿐 물리/논리 관계가 아님)
+- 인용 요소: **`blockquote`(블록 인용, `cite` 속성에 출처 URL 지정)** / `q`(짧은 인라인 인용, 브라우저가 따옴표 자동 삽입) / `cite`(작품·저작물 제목 표시). `cite` 속성값은 화면에 표시되지 않는 출처 메타데이터
 - **블록 요소**(`div` 등): 한 줄 전체(너비 100%) 차지 / 위아래 줄바꿈 / 폭·높이 조절 가능. **인라인 요소**(`span`·`a`·`strong`·`img`): 내용만큼만 차지
 
 **2강 HTML 요소: 리스트, 그림, 하이퍼링크, 테이블**
 - `ul`+`li`(순서 무의미) / `ol`+`li`(순서 자체가 의미) / `dl`+`dt`/`dd`: **`dt`=용어·키, `dd`=설명·값**
+- **`ol` 속성**: `type`(`1`/`A`/`a`/`I`/`i` — 마커 종류) / `start`(시작 번호) / `reversed`(역순 번호). `li`의 `value`로 특정 항목 번호 지정 가능
 - 내비게이션 기본 패턴은 `ul > li > a` 구조
 - 리스트 불릿 제거는 `list-style: none;`(메뉴 만들 때 기본 패턴), 추가로 `padding: 0; margin: 0;`로 초기화
-- `img`: `src`(필수) / **`alt`(접근성 필수, 장식용은 `alt=""`)** / `border` 금지(CSS로) / `usemap` 비권장 / `loading="lazy"`(지연 로딩)
+- `img`: `src`(필수) / **`alt`(접근성 필수, 장식용은 `alt=""`)** / `width`·`height`(레이아웃 밀림(CLS) 방지용으로 지정) / `border` 금지(CSS로) / `usemap` 비권장 / `loading="lazy"`(지연 로딩)
 - 반응형 이미지: `max-width: 100%; height: auto;` → 부모보다 커짐 방지 + 비율 찌그러짐 방지. `srcset`/`sizes`(브라우저가 자동 선택), `picture`(포맷·그림 분기)
 - `a`: `href`(필수) / `target` / `download`(동일 출처 파일만). **`target="_blank"`이면 보안 위해 `rel="noopener noreferrer"` 반드시 함께**
 - 앵커 이동: 링크는 `href="#위치이름"`, 목적지는 `id="위치이름"`. 블록 링크는 `a` 안에 블록 요소 가능하나 `a` 안에 또 다른 `a`/`button`은 금지
 - 이미지맵은 좌표 고정 → 반응형 문제로 지양. `iframe`은 외부 페이지 삽입(유튜브·지도·결제창), `title` 속성 권장
 - 테이블: `th`(제목 셀, 굵게·가운데 정렬 기본) / `td`(데이터 셀) / `caption`(표 전체 제목, 상단 중앙, 접근성 핵심)
 - `thead`/`tbody`/`tfoot`은 시각 장식이 아니라 **행을 의미적으로 그룹핑**(머리글·본문·바닥글)해 구조·스타일링·출력에 도움
+- 셀 병합: **`colspan`(가로로 N칸 합침) / `rowspan`(세로로 N칸 합침)** — `td`/`th`에 지정
+- 테이블 스타일: `tr`/`td` 등에 CSS 적용, **`visibility: collapse`는 표의 행·열을 공간까지 제거하며 숨김**(일반 요소의 `visibility: hidden`은 공간을 남김)
 
 **3강 HTML 요소: 미디어, 시멘틱 요소**
 - `audio`/`video` 속성: `src` / `autoplay` / `controls` / `loop` / `muted` / `preload`. `controls` 항상 권장, `preload="metadata"` 권장
@@ -1373,6 +1377,7 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 - `track`: 자막·캡션 제공. `src`(`.vtt`) / `kind`(`subtitles`=번역자막 / `captions`=청각장애인 / `descriptions`=시각장애인) / `srclang` / `label` / `default`
 - **시멘틱 요소의 핵심 목적 = 브라우저/검색엔진/개발자에게 역할·의미를 명확히 전달** (접근성·SEO·유지보수)
 - 문서 구조화 요소: `header`(머리말) / `footer`(꼬리말) / `nav`(내비, 보통 `ul`+`li`+`a`) / `aside`(부가 정보) / `section`(하나의 주제, 헤딩 하나) / `article`(독립 배포·공유 가능 콘텐츠) / `main`(핵심 콘텐츠, **문서당 1번**)
+- **`address`**: 가장 가까운 `article`/`body`의 **연락처·저자 정보**(이메일·주소 등)를 나타내는 시멘틱 요소, 보통 `footer` 안에 배치. 일반 우편 주소 표기용이 아님
 - `figure`+`figcaption`: **독립 콘텐츠와 캡션이 뗄 수 없는 관계임을 기계에 전달** (이미지·코드블록·도표·인용문 등). `figcaption`은 figure의 첫·마지막 자식
 - `details`+`summary`: 아코디언 UI, `open` 속성으로 기본 펼침
 - `time`: 날짜·시간에 의미 부여. **`datetime="YYYY-MM-DD"`가 기계가 읽는 값**
@@ -1390,7 +1395,10 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 - `fieldset`은 관련 입력을 그룹으로 묶음(회색 테두리), 제목은 `legend`(첫 자식). 체크박스·라디오에 실무 필수
 - **라디오 같은 그룹 조건 = 동일한 `name` 값** (배타적 선택)
 - **`datalist` 연동 = `input`의 `list` 속성과 `datalist`의 `id`를 같은 값으로**
-- `textarea`(긴 입력, `rows`/`cols`/`wrap`), `range`(슬라이더, `min`/`max`/`step`/`value`), `output`(실시간 계산값, `name`/`for`), `password`는 `autocomplete="current-password"`/`"new-password"`
+- **`type="file"`**: `accept`(허용 형식 필터, 예 `image/*`·`.pdf`) / `multiple`(여러 파일 선택). 보안상 값은 가짜 경로(`C:\fakepath\`)로 표시
+- **`pattern`**: 입력값을 정규식으로 검증(예 `pattern="[0-9]{3}-[0-9]{4}"`), 불일치 시 제출 차단. `title`에 형식 안내문을 넣어 오류 툴팁으로 노출
+- `textarea`(긴 여러 줄 입력): `rows`/`cols`(크기) / `wrap` / `placeholder` / `maxlength` / `readonly` / `disabled`. 내용은 여는·닫는 태그 사이에 작성(`value` 속성 아님)
+- `range`(슬라이더, `min`/`max`/`step`/`value`), `output`(실시간 계산값, `name`/`for`), `password`는 `autocomplete="current-password"`/`"new-password"`
 
 **5강 CSS: 개요, 선택자, 색상**
 - 기본 구문: `선택자 { 속성: 값; }`. 적용: 외부 파일(`.css`, 실무 표준) / 내부 `<style>` / 인라인
@@ -1404,6 +1412,7 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 - 최신 선택자: `:is()`, `:where()`(명시도 0), `:has()`(특정 자식 가진 부모 선택)
 - **결합자: 자손(공백) / 자식(`>`) / 인접 형제(`+`) / 일반 형제(`~`) / 그룹(`,`)**
   - "바로 밑 직계 자식"은 `ul > li`
+  - **`div` 하위(자손) 요소 전부 선택 = 자손 결합자(공백) `div *`** (`div`의 모든 후손), 직계 자식만은 `div > *`
 - 색상: 색상명(학습용) / 16진수 `#RRGGBB(AA)`(실무 기본) / `rgb()`·`rgba()` / `hsl()`·`hsla()`(인간 친화적, 테마용)
 - 키워드: **`currentColor`(현재 글자색을 따라감)** / `transparent`(완전 투명한 검은색)
 - CSS 변수: `:root`에 `--변수명` 선언, `var(--변수명)` 호출
@@ -1411,10 +1420,15 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 
 **6강 CSS: 글꼴, 텍스트, 리스트, 테이블**
 - 폰트 속성: `font-family`(폴백 나열) / `font-size` / `font-style` / `font-variant` / `font-weight`(100~900, 400=normal·700=bold) / `font`(단축) / `@font-face`(`woff2` 권장, `font-display: swap` 필수)
+- **`font-family`는 우선순위 순으로 쉼표 나열**, 공백 포함 글꼴명은 따옴표(`"Noto Sans KR"`), 맨 끝에 **제네릭 글꼴**(`serif`/`sans-serif`/`monospace`/`cursive`)을 폴백으로 둠
+- **단축(shorthand) 속성**: `font`/`border`/`list-style`/`background`/`margin`/`padding`은 관련 속성을 한 줄로 일괄 지정 (예 `border: 1px solid black`, `list-style: square inside url()`)
 - **`rem` = 루트(html) 기준 상대 단위(보통 1rem=16px)** / **`em` = 부모 요소 기준** → `font-size`는 접근성 위해 `rem` 권장, `clamp()`로 반응형
 - 한글 본문 가독성: `font-size: 16px(1rem); line-height: 1.5~1.6` 조합
 - **`font` 단축에는 `line-height` 포함 가능** → `font-size` 뒤에 슬래시로 표기 (`font: 두께 크기/줄간격 서체`)
 - 텍스트 속성: `line-height`(단위 없는 숫자 1.5~1.6) / `letter-spacing`(한글은 -0.02em) / `text-align` / `text-decoration` / `text-transform` / `white-space` / `word-break`(한글 `keep-all`) / `overflow-wrap: break-word`(긴 URL)
+- **`text-transform`** = 대소문자 변환: `uppercase`(모두 대문자) / `lowercase`(모두 소문자) / `capitalize`(단어 첫 글자만 대문자) / `none`(원본 유지)
+- **`text-align`은 줄 전체 가로 정렬**(`left`/`right`/`center`/`justify`), **`text-align-last`는 마지막 줄(또는 한 줄짜리)만 정렬**
+- **`vertical-align`은 인라인·표 셀 요소 전용 세로 정렬**(`baseline`(기본)/`middle`/`top`/`bottom`/`sub`/`super`) — 블록 요소엔 적용 안 됨
 - **말줄임은 `text-overflow: ellipsis`** → 한 줄 말줄임 공식 = `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`
 - 리스트 속성: `list-style-type` / `list-style-position` / `list-style-image` / `list-style`(단축). 커스텀 마커는 `::marker` 또는 `::before`
 - 메뉴(GNB) 초기화: `ul { list-style: none; padding: 0; margin: 0; }`
@@ -1432,7 +1446,8 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 - `position`: `static`(기본) / `relative`(자신 기준) / `absolute`(조상 기준, 공중에 뜸) / `fixed`(뷰포트 고정) / `sticky`(스크롤 고정), `z-index`(겹침 순서)
 - `display`: `block`/`inline`/`inline-block`/`none`. 현대 레이아웃: `flex`(1차원), `grid`(2차원)
   - grid 3열 = **`grid-template-columns: 1fr 1fr 1fr;`** (`fr`=남은 공간 비율)
-- 기타: `overflow` / `visibility` / `float`·`clear` / `resize`
+- 기타: `overflow` / `visibility`(`visible`/`hidden`(공간 유지)/`collapse`(표 행·열 공간 제거)) / `resize`
+- **`float`**(`left`/`right`/`none`): 요소를 좌·우로 띄워 텍스트가 감싸게 함 / **`clear`**(`left`/`right`/`both`/`none`): 앞선 float 영향 해제(아래로 내림). float 부모 높이 붕괴는 `overflow` 또는 클리어픽스로 해결
 - `border`(두께·스타일·색상 단축), 투명색(`transparent`)으로 삼각형
 - `border-radius`: `50%`(원/타원), **`9999px`(알약·캡슐 — 너비 가변에도 양끝 반원 유지)**, 슬래시로 타원 곡선
 - `outline`: **공간 차지 안 함**(레이아웃 영향 X) → focus 표시·디버깅
@@ -1473,15 +1488,17 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 - 함수: 호이스팅 부작용 막으려 함수 표현식·화살표 함수(`() => {}`) 권장. 콜백 함수는 비동기·이벤트 처리 기반
 - 객체: 일회성은 리터럴 `{}`, 재사용 템플릿은 `class`. 접근은 점 표기(`.`), 변수 키는 대괄호(`[]`) 필수
 - 내장 객체: `String`(`includes`/`replace`/`slice`/`trim`/`split` 체이닝) / `Array` / `Date`(`getTime`·`toLocaleString`·`toISOString`) / `Math` / `JSON`
+- **`Math`(인스턴스 없이 정적 호출)**: `Math.random()`(0 이상 1 미만 실수) / `Math.floor`(내림)·`Math.ceil`(올림)·`Math.round`(반올림)·`Math.trunc`(버림) / `Math.max(...)`·`Math.min(...)` / `Math.abs`(절댓값)·`Math.pow`·`Math.sqrt` / `Math.PI`. **`min`~`max` 정수 난수 = `Math.floor(Math.random() * (max - min + 1)) + min`**
 - 이벤트: `addEventListener`로 등록. **`e.preventDefault()` = 기본 동작 취소**(폼 제출·링크 이동 막고 JS가 통제)
 
 **11강 문서 객체 모델과 브라우저 객체 모델**
 - **DOM** = HTML을 객체 트리로 변환한 인터페이스. 브라우저는 DOM(구조)+CSSOM(스타일)을 합쳐 렌더 트리 구성
 - 요소 접근: `querySelector()`(CSS 선택자), **`querySelectorAll()`은 NodeList 반환 → `forEach` 바로 사용 가능**, `getElementById`
-- 내용 조작: **`innerHTML`(스크립트 실행 위험) 대신 `textContent`(순수 텍스트, 안전) 권장**. 속성은 점 표기 또는 `setAttribute()`
+- 내용 조작: **`innerHTML`(스크립트 실행 위험) 대신 `textContent`(순수 텍스트, 안전) 권장**
+- 속성 조작 2가지: **점 표기 프로퍼티**(`el.id`, `el.src`, `el.value`) 또는 **메서드** — **`getAttribute(name)` / `setAttribute(name, value)` / `removeAttribute(name)` / `hasAttribute(name)`**. (HTML 속성명과 DOM 프로퍼티명이 다른 경우 있음: `class`↔`className`, `for`↔`htmlFor`)
 - **`data-*` 속성은 JS에서 `element.dataset.속성명`(카멜케이스 변환)으로 읽음** (예: `data-product-code` → `dataset.productCode`)
 - 스타일 조작: `style` 직접 수정은 지양 → **`classList`의 `add()`/`remove()`/`toggle()`로 클래스 제어**(실무 표준). **`toggle()`은 있으면 제거·없으면 추가**
-  - 인라인 스타일 직접 수정 시 하이픈 CSS 속성은 카멜케이스: `style.backgroundColor`
+  - 인라인 스타일 직접 수정: `el.style.속성`에 값 대입(예 `el.style.color = "red"`), 하이픈 CSS 속성은 카멜케이스로(`background-color`→`style.backgroundColor`, `font-size`→`style.fontSize`). `style.color`는 인라인 스타일만 읽음 — 계산된 실제 값은 `getComputedStyle(el).color`
 - 삽입·삭제: `createElement()`+`append()`, `remove()`. **자식 전체 비우기는 `replaceChildren()`(인자 없이 호출)이 가장 빠르고 안전**
 - 성능: 대량 조작은 `DocumentFragment`(메모리 임시 바구니)에 모은 뒤 한 번만 부착
 - **BOM** = 브라우저 창 제어 API. 최상위 `window` 아래 `document`/`location`/`history`/`navigator`
