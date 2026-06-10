@@ -1341,216 +1341,287 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 > 강의록(1~15강) + 연습문제 기준. HTML 의미론 / CSS 선택자·박스모델 / JS DOM·BOM / Canvas·Web API를 속성·메서드 단위로 정리.
 
 **1강 웹 프로그래밍 개요 & HTML5 요소: 텍스트**
-- **웹** = 인터넷 위에서 동작하는 하이퍼텍스트 서비스로 "인터넷 ⊃ 웹". 작동 원리는 서버(응답)-클라이언트(요청) 구조이며 **클라이언트(브라우저)는 요청을 보내고 받은 HTML을 파싱·렌더링**해 화면에 표시. 흐름: URL 입력 → DNS 조회 → 요청 → 응답 → 렌더. 실무 표준은 `HTTPS`
-- 웹 페이지 3요소 = `HTML`(구조·내용) / `CSS`(시각적 표현·디자인) / `JavaScript`(동작·상호작용) → **관심사의 분리** 원칙
-- 요소 = `시작 태그 + 내용 + 종료 태그`. 전역 속성: `id`(정체성, 중복 불가) / `class`(스타일 적용) / `title`(툴팁) / `data-*`(숨김 데이터) / `role`·`aria-*`(접근성)
-- 작성 규칙: 대소문자 구분 안 함(소문자 권장) / 확장자 `.html`·`.htm` / 연속 공백은 하나로 처리 / 중첩 순서 준수
-- 기본 구조: `<!DOCTYPE html>`(HTML5 선언), `<html lang="ko">`, `<head>`(메타), `<body>`(화면)
-- `meta charset="UTF-8"`은 다국어 깨짐 방지 필수, `meta viewport`는 모바일 반응형 필수. **`meta keywords`는 현대 SEO에서 사실상 안 씀** — 대신 `og:title` 등 Open Graph가 SNS 공유 미리보기에 중요
-- `hr`은 단순 수평선이 아니라 **주제 전환을 뜻하는 의미적 구분선** / 단순 시각선은 CSS `border-bottom`으로 처리
-- 제목 `h1`~`h6`: **`h1`은 페이지당 1개**, 순서 건너뛰지 말고 순차 사용, 글씨 키우는 디자인 용도 금지(크기는 CSS)
-- 물리(표현) ↔ 논리(의미) 대응: `b`↔`strong` / `i`↔`em` / `s`↔`del` / `u`↔`ins`. (`span`↔`div`는 인라인/블록 컨테이너 차이일 뿐 물리/논리 관계가 아님)
-- 인용 요소: **`blockquote`(블록 인용, `cite` 속성에 출처 URL 지정)** / `q`(짧은 인라인 인용, 브라우저가 따옴표 자동 삽입) / `cite`(작품·저작물 제목 표시). `cite` 속성값은 화면에 표시되지 않는 출처 메타데이터
-- **블록 요소**(`div` 등): 한 줄 전체(너비 100%) 차지 / 위아래 줄바꿈 / 폭·높이 조절 가능. **인라인 요소**(`span`·`a`·`strong`·`img`): 내용만큼만 차지
+
+- **웹의 개념·작동 원리**
+  - **웹** = 인터넷 위에서 동작하는 하이퍼텍스트 서비스로 "인터넷 ⊃ 웹". 작동 원리는 서버(응답)-클라이언트(요청) 구조이며 **클라이언트(브라우저)는 요청을 보내고 받은 HTML을 파싱·렌더링**해 화면에 표시. 흐름: URL 입력 → DNS 조회 → 요청 → 응답 → 렌더. 실무 표준은 `HTTPS`
+  - 웹 페이지 3요소 = `HTML`(구조·내용) / `CSS`(시각적 표현·디자인) / `JavaScript`(동작·상호작용) → **관심사의 분리** 원칙
+- **요소·속성·작성 규칙**
+  - 요소 = `시작 태그 + 내용 + 종료 태그`. 전역 속성: `id`(정체성, 중복 불가) / `class`(스타일 적용) / `title`(툴팁) / `data-*`(숨김 데이터) / `role`·`aria-*`(접근성)
+  - 작성 규칙: 대소문자 구분 안 함(소문자 권장) / 확장자 `.html`·`.htm` / 연속 공백은 하나로 처리 / 중첩 순서 준수
+- **문서 기본 구조·메타**
+  - 기본 구조: `<!DOCTYPE html>`(HTML5 선언), `<html lang="ko">`, `<head>`(메타), `<body>`(화면)
+  - `meta charset="UTF-8"`은 다국어 깨짐 방지 필수, `meta viewport`는 모바일 반응형 필수. **`meta keywords`는 현대 SEO에서 사실상 안 씀** — 대신 `og:title` 등 Open Graph가 SNS 공유 미리보기에 중요
+- **텍스트 요소**
+  - `hr`은 단순 수평선이 아니라 **주제 전환을 뜻하는 의미적 구분선** / 단순 시각선은 CSS `border-bottom`으로 처리
+  - 제목 `h1`~`h6`: **`h1`은 페이지당 1개**, 순서 건너뛰지 말고 순차 사용, 글씨 키우는 디자인 용도 금지(크기는 CSS)
+  - 물리(표현) ↔ 논리(의미) 대응: `b`↔`strong` / `i`↔`em` / `s`↔`del` / `u`↔`ins`. (`span`↔`div`는 인라인/블록 컨테이너 차이일 뿐 물리/논리 관계가 아님)
+  - 인용 요소: **`blockquote`(블록 인용, `cite` 속성에 출처 URL 지정)** / `q`(짧은 인라인 인용, 브라우저가 따옴표 자동 삽입) / `cite`(작품·저작물 제목 표시). `cite` 속성값은 화면에 표시되지 않는 출처 메타데이터
+- **블록 vs 인라인**
+  - **블록 요소**(`div` 등): 한 줄 전체(너비 100%) 차지 / 위아래 줄바꿈 / 폭·높이 조절 가능. **인라인 요소**(`span`·`a`·`strong`·`img`): 내용만큼만 차지
 
 **2강 HTML 요소: 리스트, 그림, 하이퍼링크, 테이블**
-- `ul`+`li`(순서 무의미) / `ol`+`li`(순서 자체가 의미) / `dl`+`dt`/`dd`: **`dt`=용어·키, `dd`=설명·값**
-- **`ol` 속성**: `type`(`1`/`A`/`a`/`I`/`i` — 마커 종류) / `start`(시작 번호) / `reversed`(역순 번호). `li`의 `value`로 특정 항목 번호 지정 가능
-- 내비게이션 기본 패턴은 `ul > li > a` 구조
-- 리스트 불릿 제거는 `list-style: none;`(메뉴 만들 때 기본 패턴), 추가로 `padding: 0; margin: 0;`로 초기화
-- `img`: `src`(필수) / **`alt`(접근성 필수, 장식용은 `alt=""`)** / `width`·`height`(레이아웃 밀림(CLS) 방지용으로 지정) / `border` 금지(CSS로) / `usemap` 비권장 / `loading="lazy"`(지연 로딩)
-- 반응형 이미지: `max-width: 100%; height: auto;` → 부모보다 커짐 방지 + 비율 찌그러짐 방지. `srcset`/`sizes`(브라우저가 자동 선택), `picture`(포맷·그림 분기)
-- `a`: `href`(필수) / `target` / `download`(동일 출처 파일만). **`target="_blank"`이면 보안 위해 `rel="noopener noreferrer"` 반드시 함께**
-- 앵커 이동: 링크는 `href="#위치이름"`, 목적지는 `id="위치이름"`. 블록 링크는 `a` 안에 블록 요소 가능하나 `a` 안에 또 다른 `a`/`button`은 금지
-- 이미지맵은 좌표 고정 → 반응형 문제로 지양. `iframe`은 외부 페이지 삽입(유튜브·지도·결제창), `title` 속성 권장
-- 테이블: `th`(제목 셀, 굵게·가운데 정렬 기본) / `td`(데이터 셀) / `caption`(표 전체 제목, 상단 중앙, 접근성 핵심)
-- `thead`/`tbody`/`tfoot`은 시각 장식이 아니라 **행을 의미적으로 그룹핑**(머리글·본문·바닥글)해 구조·스타일링·출력에 도움
-- 셀 병합: **`colspan`(가로로 N칸 합침) / `rowspan`(세로로 N칸 합침)** — `td`/`th`에 지정
-- 테이블 스타일: `tr`/`td` 등에 CSS 적용, **`visibility: collapse`는 표의 행·열을 공간까지 제거하며 숨김**(일반 요소의 `visibility: hidden`은 공간을 남김)
+
+- **리스트**
+  - `ul`+`li`(순서 무의미) / `ol`+`li`(순서 자체가 의미) / `dl`+`dt`/`dd`: **`dt`=용어·키, `dd`=설명·값**
+  - **`ol` 속성**: `type`(`1`/`A`/`a`/`I`/`i` — 마커 종류) / `start`(시작 번호) / `reversed`(역순 번호). `li`의 `value`로 특정 항목 번호 지정 가능
+  - 내비게이션 기본 패턴은 `ul > li > a` 구조
+  - 리스트 불릿 제거는 `list-style: none;`(메뉴 만들 때 기본 패턴), 추가로 `padding: 0; margin: 0;`로 초기화
+- **이미지 `img`**
+  - `img`: `src`(필수) / **`alt`(접근성 필수, 장식용은 `alt=""`)** / `width`·`height`(레이아웃 밀림(CLS) 방지용으로 지정) / `border` 금지(CSS로) / `usemap` 비권장 / `loading="lazy"`(지연 로딩)
+  - 반응형 이미지: `max-width: 100%; height: auto;` → 부모보다 커짐 방지 + 비율 찌그러짐 방지. `srcset`/`sizes`(브라우저가 자동 선택), `picture`(포맷·그림 분기)
+- **하이퍼링크 `a`**
+  - `a`: `href`(필수) / `target` / `download`(동일 출처 파일만). **`target="_blank"`이면 보안 위해 `rel="noopener noreferrer"` 반드시 함께**
+  - 앵커 이동: 링크는 `href="#위치이름"`, 목적지는 `id="위치이름"`. 블록 링크는 `a` 안에 블록 요소 가능하나 `a` 안에 또 다른 `a`/`button`은 금지
+  - 이미지맵은 좌표 고정 → 반응형 문제로 지양. `iframe`은 외부 페이지 삽입(유튜브·지도·결제창), `title` 속성 권장
+- **테이블**
+  - 테이블: `th`(제목 셀, 굵게·가운데 정렬 기본) / `td`(데이터 셀) / `caption`(표 전체 제목, 상단 중앙, 접근성 핵심)
+  - `thead`/`tbody`/`tfoot`은 시각 장식이 아니라 **행을 의미적으로 그룹핑**(머리글·본문·바닥글)해 구조·스타일링·출력에 도움
+  - 셀 병합: **`colspan`(가로로 N칸 합침) / `rowspan`(세로로 N칸 합침)** — `td`/`th`에 지정
+  - 테이블 스타일: `tr`/`td` 등에 CSS 적용, **`visibility: collapse`는 표의 행·열을 공간까지 제거하며 숨김**(일반 요소의 `visibility: hidden`은 공간을 남김)
 
 **3강 HTML 요소: 미디어, 시멘틱 요소**
-- `audio`/`video` 속성: `src` / `autoplay` / `controls` / `loop` / `muted` / `preload`. `controls` 항상 권장, `preload="metadata"` 권장
-- **`autoplay`는 브라우저가 차단하므로 `muted`와 함께 써야 동작** (`<audio autoplay muted>`)
-- `source`: 단일 `src` 대신 여러 포맷 제공 → **브라우저 호환성 확보**. 위에서부터 재생 시도(용량 작고 호환 좋은 것 먼저), `type` 명시 권장
-- `video` 추가 속성: `width` / `height` / `poster`(로딩 중 빈 화면 방지) / `playsinline`(모바일 강제 전체화면 방지)
-- 재생 구간 지정: `src="파일명#t=시:분:초,시:분:초"` (동작 편차로 제한적 사용)
-- `track`: 자막·캡션 제공. `src`(`.vtt`) / `kind`(`subtitles`=번역자막 / `captions`=청각장애인 / `descriptions`=시각장애인) / `srclang` / `label` / `default`
-- **시멘틱 요소의 핵심 목적 = 브라우저/검색엔진/개발자에게 역할·의미를 명확히 전달** (접근성·SEO·유지보수)
-- 문서 구조화 요소: `header`(머리말) / `footer`(꼬리말) / `nav`(내비, 보통 `ul`+`li`+`a`) / `aside`(부가 정보) / `section`(하나의 주제, 헤딩 하나) / `article`(독립 배포·공유 가능 콘텐츠) / `main`(핵심 콘텐츠, **문서당 1번**)
-- **`address`**: 가장 가까운 `article`/`body`의 **연락처·저자 정보**(이메일·주소 등)를 나타내는 시멘틱 요소, 보통 `footer` 안에 배치. 일반 우편 주소 표기용이 아님
-- `figure`+`figcaption`: **독립 콘텐츠와 캡션이 뗄 수 없는 관계임을 기계에 전달** (이미지·코드블록·도표·인용문 등). `figcaption`은 figure의 첫·마지막 자식
-- `details`+`summary`: 아코디언 UI, `open` 속성으로 기본 펼침
-- `time`: 날짜·시간에 의미 부여. **`datetime="YYYY-MM-DD"`가 기계가 읽는 값**
-- `progress`: `value` 속성을 빼면 **파란 막대가 좌우로 움직이는 불확정(indeterminate) 상태 애니메이션** 표시
+
+- **미디어 `audio`/`video`**
+  - `audio`/`video` 속성: `src` / `autoplay` / `controls` / `loop` / `muted` / `preload`. `controls` 항상 권장, `preload="metadata"` 권장
+  - **`autoplay`는 브라우저가 차단하므로 `muted`와 함께 써야 동작** (`<audio autoplay muted>`)
+  - `source`: 단일 `src` 대신 여러 포맷 제공 → **브라우저 호환성 확보**. 위에서부터 재생 시도(용량 작고 호환 좋은 것 먼저), `type` 명시 권장
+  - `video` 추가 속성: `width` / `height` / `poster`(로딩 중 빈 화면 방지) / `playsinline`(모바일 강제 전체화면 방지)
+  - 재생 구간 지정: `src="파일명#t=시:분:초,시:분:초"` (동작 편차로 제한적 사용)
+  - `track`: 자막·캡션 제공. `src`(`.vtt`) / `kind`(`subtitles`=번역자막 / `captions`=청각장애인 / `descriptions`=시각장애인) / `srclang` / `label` / `default`
+- **시멘틱 요소**
+  - **시멘틱 요소의 핵심 목적 = 브라우저/검색엔진/개발자에게 역할·의미를 명확히 전달** (접근성·SEO·유지보수)
+  - 문서 구조화 요소: `header`(머리말) / `footer`(꼬리말) / `nav`(내비, 보통 `ul`+`li`+`a`) / `aside`(부가 정보) / `section`(하나의 주제, 헤딩 하나) / `article`(독립 배포·공유 가능 콘텐츠) / `main`(핵심 콘텐츠, **문서당 1번**)
+  - **`address`**: 가장 가까운 `article`/`body`의 **연락처·저자 정보**(이메일·주소 등)를 나타내는 시멘틱 요소, 보통 `footer` 안에 배치. 일반 우편 주소 표기용이 아님
+  - `figure`+`figcaption`: **독립 콘텐츠와 캡션이 뗄 수 없는 관계임을 기계에 전달** (이미지·코드블록·도표·인용문 등). `figcaption`은 figure의 첫·마지막 자식
+  - `details`+`summary`: 아코디언 UI, `open` 속성으로 기본 펼침
+  - `time`: 날짜·시간에 의미 부여. **`datetime="YYYY-MM-DD"`가 기계가 읽는 값**
+  - `progress`: `value` 속성을 빼면 **파란 막대가 좌우로 움직이는 불확정(indeterminate) 상태 애니메이션** 표시
 
 **4강 HTML 요소: 웹 폼**
-- 웹 폼 = 프론트엔드와 백엔드의 접점(UX·접근성·보안 고려)
-- `form` 속성: `action` / `method`(`get`/`post`) / `enctype` / `autocomplete` / `novalidate`
-  - **`get`은 검색·필터·조회**(URL 공유 가능), **`post`는 데이터 변경·민감정보**(로그인·회원가입·글쓰기·결제)
-- `input type` 종류: 텍스트(`text`/`password`/`email`/`tel`/`url`/`number`/`search`) / 선택(`checkbox`/`radio`/`file`/`range`/`color`) / 날짜(`date`/`month`/`week`/`time`/`datetime-local`) / 버튼(`submit`/`reset`/`button`/`hidden`)
-- 주요 속성: `type`/`value`/`placeholder`/`id` / `name`/`required`/`checked`/`maxlength`·`minlength`/`min`·`max` / `readonly`/`autofocus`/`accept`
-- **`placeholder`는 입력 시작 시 사라지는 힌트** → `label` 대체 금지. `value`는 초기값(버튼에서는 표시 글자), `alt`는 `type="image"` 버튼의 대체 텍스트
-- **`inputmode`는 모바일 가상 키보드 모양 결정** (인증번호 등은 `type="text"` + `inputmode="numeric"` 선호)
-- `label`(접근성 핵심): `for`+입력요소 `id` 연결(권장) 또는 `label` 안에 입력요소 포함
-- `fieldset`은 관련 입력을 그룹으로 묶음(회색 테두리), 제목은 `legend`(첫 자식). 체크박스·라디오에 실무 필수
-- **라디오 같은 그룹 조건 = 동일한 `name` 값** (배타적 선택)
-- **`datalist` 연동 = `input`의 `list` 속성과 `datalist`의 `id`를 같은 값으로**
-- **`type="file"`**: `accept`(허용 형식 필터, 예 `image/*`·`.pdf`) / `multiple`(여러 파일 선택). 보안상 값은 가짜 경로(`C:\fakepath\`)로 표시
-- **`pattern`**: 입력값을 정규식으로 검증(예 `pattern="[0-9]{3}-[0-9]{4}"`), 불일치 시 제출 차단. `title`에 형식 안내문을 넣어 오류 툴팁으로 노출
-- `textarea`(긴 여러 줄 입력): `rows`/`cols`(크기) / `wrap` / `placeholder` / `maxlength` / `readonly` / `disabled`. 내용은 여는·닫는 태그 사이에 작성(`value` 속성 아님)
-- `range`(슬라이더, `min`/`max`/`step`/`value`), `output`(실시간 계산값, `name`/`for`), `password`는 `autocomplete="current-password"`/`"new-password"`
+
+- **`form` 기본**
+  - 웹 폼 = 프론트엔드와 백엔드의 접점(UX·접근성·보안 고려)
+  - `form` 속성: `action` / `method`(`get`/`post`) / `enctype` / `autocomplete` / `novalidate`
+    - **`get`은 검색·필터·조회**(URL 공유 가능), **`post`는 데이터 변경·민감정보**(로그인·회원가입·글쓰기·결제)
+- **`input` 종류·속성**
+  - `input type` 종류: 텍스트(`text`/`password`/`email`/`tel`/`url`/`number`/`search`) / 선택(`checkbox`/`radio`/`file`/`range`/`color`) / 날짜(`date`/`month`/`week`/`time`/`datetime-local`) / 버튼(`submit`/`reset`/`button`/`hidden`)
+  - 주요 속성: `type`/`value`/`placeholder`/`id` / `name`/`required`/`checked`/`maxlength`·`minlength`/`min`·`max` / `readonly`/`autofocus`/`accept`
+  - **`placeholder`는 입력 시작 시 사라지는 힌트** → `label` 대체 금지. `value`는 초기값(버튼에서는 표시 글자), `alt`는 `type="image"` 버튼의 대체 텍스트
+  - **`inputmode`는 모바일 가상 키보드 모양 결정** (인증번호 등은 `type="text"` + `inputmode="numeric"` 선호)
+  - **`type="file"`**: `accept`(허용 형식 필터, 예 `image/*`·`.pdf`) / `multiple`(여러 파일 선택). 보안상 값은 가짜 경로(`C:\fakepath\`)로 표시
+  - **`pattern`**: 입력값을 정규식으로 검증(예 `pattern="[0-9]{3}-[0-9]{4}"`), 불일치 시 제출 차단. `title`에 형식 안내문을 넣어 오류 툴팁으로 노출
+- **접근성·그룹화**
+  - `label`(접근성 핵심): `for`+입력요소 `id` 연결(권장) 또는 `label` 안에 입력요소 포함
+  - `fieldset`은 관련 입력을 그룹으로 묶음(회색 테두리), 제목은 `legend`(첫 자식). 체크박스·라디오에 실무 필수
+  - **라디오 같은 그룹 조건 = 동일한 `name` 값** (배타적 선택)
+  - **`datalist` 연동 = `input`의 `list` 속성과 `datalist`의 `id`를 같은 값으로**
+- **기타 폼 요소**
+  - `textarea`(긴 여러 줄 입력): `rows`/`cols`(크기) / `wrap` / `placeholder` / `maxlength` / `readonly` / `disabled`. 내용은 여는·닫는 태그 사이에 작성(`value` 속성 아님)
+  - `range`(슬라이더, `min`/`max`/`step`/`value`), `output`(실시간 계산값, `name`/`for`), `password`는 `autocomplete="current-password"`/`"new-password"`
 
 **5강 CSS: 개요, 선택자, 색상**
-- 기본 구문: `선택자 { 속성: 값; }`. 적용: 외부 파일(`.css`, 실무 표준) / 내부 `<style>` / 인라인
-- **명시도 점수**: `!important`(무조건 승리, 지양) > 인라인 1000 > `id` 100 > `class`·가상클래스·속성선택자 10 > 타입·가상요소 1 > 전체(`*`) 0
-  - **인라인 지양 이유 = 유지보수·재사용 불가·관심사 분리 위배** (명시도가 낮아서가 아님 — 오히려 1000점으로 높아 덮어쓰기 어려움)
-  - `.text`(10) vs `p`(1) 충돌 시 **클래스가 적용**됨
-- 기본 선택자: 전체(`*`) / 요소(타입) / 클래스(`.`) / 아이디(`#`) / **속성(`[속성]`, `[속성="값"]`, `[속성*=]`, `[속성^=]`, `[속성$=]`)**
-  - `required`만 가진 input 선택은 `input[required]`(속성 선택자)
-- `id`는 유일성 강조 → 스타일보다 앵커·라벨 연결·JS 제어용
-- 가상 클래스(상태): `:hover`/`:focus`/`:checked`/`:nth-child` / 가상 요소(부분): `::before`/`::after`/`::placeholder`
-- 최신 선택자: `:is()`, `:where()`(명시도 0), `:has()`(특정 자식 가진 부모 선택)
-- **결합자: 자손(공백) / 자식(`>`) / 인접 형제(`+`) / 일반 형제(`~`) / 그룹(`,`)**
-  - "바로 밑 직계 자식"은 `ul > li`
-  - **`div` 하위(자손) 요소 전부 선택 = 자손 결합자(공백) `div *`** (`div`의 모든 후손), 직계 자식만은 `div > *`
-- 색상: 색상명(학습용) / 16진수 `#RRGGBB(AA)`(실무 기본) / `rgb()`·`rgba()` / `hsl()`·`hsla()`(인간 친화적, 테마용)
-- 키워드: **`currentColor`(현재 글자색을 따라감)** / `transparent`(완전 투명한 검은색)
-- CSS 변수: `:root`에 `--변수명` 선언, `var(--변수명)` 호출
-- `opacity`는 자식까지 투명 → 배경만 투명하게 할 땐 `rgba()`/`hsla()`
+
+- **CSS 기본·적용**
+  - 기본 구문: `선택자 { 속성: 값; }`. 적용: 외부 파일(`.css`, 실무 표준) / 내부 `<style>` / 인라인
+- **명시도**
+  - **명시도 점수**: `!important`(무조건 승리, 지양) > 인라인 1000 > `id` 100 > `class`·가상클래스·속성선택자 10 > 타입·가상요소 1 > 전체(`*`) 0
+    - **인라인 지양 이유 = 유지보수·재사용 불가·관심사 분리 위배** (명시도가 낮아서가 아님 — 오히려 1000점으로 높아 덮어쓰기 어려움)
+    - `.text`(10) vs `p`(1) 충돌 시 **클래스가 적용**됨
+- **선택자**
+  - 기본 선택자: 전체(`*`) / 요소(타입) / 클래스(`.`) / 아이디(`#`) / **속성(`[속성]`, `[속성="값"]`, `[속성*=]`, `[속성^=]`, `[속성$=]`)**
+    - `required`만 가진 input 선택은 `input[required]`(속성 선택자)
+  - `id`는 유일성 강조 → 스타일보다 앵커·라벨 연결·JS 제어용
+  - 가상 클래스(상태): `:hover`/`:focus`/`:checked`/`:nth-child` / 가상 요소(부분): `::before`/`::after`/`::placeholder`
+  - 최신 선택자: `:is()`, `:where()`(명시도 0), `:has()`(특정 자식 가진 부모 선택)
+  - **결합자: 자손(공백) / 자식(`>`) / 인접 형제(`+`) / 일반 형제(`~`) / 그룹(`,`)**
+    - "바로 밑 직계 자식"은 `ul > li`
+    - **`div` 하위(자손) 요소 전부 선택 = 자손 결합자(공백) `div *`** (`div`의 모든 후손), 직계 자식만은 `div > *`
+- **색상**
+  - 색상: 색상명(학습용) / 16진수 `#RRGGBB(AA)`(실무 기본) / `rgb()`·`rgba()` / `hsl()`·`hsla()`(인간 친화적, 테마용)
+  - 키워드: **`currentColor`(현재 글자색을 따라감)** / `transparent`(완전 투명한 검은색)
+  - CSS 변수: `:root`에 `--변수명` 선언, `var(--변수명)` 호출
+  - `opacity`는 자식까지 투명 → 배경만 투명하게 할 땐 `rgba()`/`hsla()`
 
 **6강 CSS: 글꼴, 텍스트, 리스트, 테이블**
-- 폰트 속성: `font-family`(폴백 나열) / `font-size` / `font-style` / `font-variant` / `font-weight`(100~900, 400=normal·700=bold) / `font`(단축) / `@font-face`(`woff2` 권장, `font-display: swap` 필수)
-- **`font-family`는 우선순위 순으로 쉼표 나열**, 공백 포함 글꼴명은 따옴표(`"Noto Sans KR"`), 맨 끝에 **제네릭 글꼴**(`serif`/`sans-serif`/`monospace`/`cursive`)을 폴백으로 둠
-- **단축(shorthand) 속성**: `font`/`border`/`list-style`/`background`/`margin`/`padding`은 관련 속성을 한 줄로 일괄 지정 (예 `border: 1px solid black`, `list-style: square inside url()`)
-- **`rem` = 루트(html) 기준 상대 단위(보통 1rem=16px)** / **`em` = 부모 요소 기준** → `font-size`는 접근성 위해 `rem` 권장, `clamp()`로 반응형
-- 한글 본문 가독성: `font-size: 16px(1rem); line-height: 1.5~1.6` 조합
-- **`font` 단축에는 `line-height` 포함 가능** → `font-size` 뒤에 슬래시로 표기 (`font: 두께 크기/줄간격 서체`)
-- 텍스트 속성: `line-height`(단위 없는 숫자 1.5~1.6) / `letter-spacing`(한글은 -0.02em) / `text-align` / `text-decoration` / `text-transform` / `white-space` / `word-break`(한글 `keep-all`) / `overflow-wrap: break-word`(긴 URL)
-- **`text-transform`** = 대소문자 변환: `uppercase`(모두 대문자) / `lowercase`(모두 소문자) / `capitalize`(단어 첫 글자만 대문자) / `none`(원본 유지)
-- **`text-align`은 줄 전체 가로 정렬**(`left`/`right`/`center`/`justify`), **`text-align-last`는 마지막 줄(또는 한 줄짜리)만 정렬**
-- **`vertical-align`은 인라인·표 셀 요소 전용 세로 정렬**(`baseline`(기본)/`middle`/`top`/`bottom`/`sub`/`super`) — 블록 요소엔 적용 안 됨
-- **말줄임은 `text-overflow: ellipsis`** → 한 줄 말줄임 공식 = `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`
-- 리스트 속성: `list-style-type` / `list-style-position` / `list-style-image` / `list-style`(단축). 커스텀 마커는 `::marker` 또는 `::before`
-- 메뉴(GNB) 초기화: `ul { list-style: none; padding: 0; margin: 0; }`
-- 테이블 속성: `border-collapse`(`collapse`=테두리 합침, 실무 필수) / `table-layout` / `border-spacing` / `caption-side` / `empty-cells`
-- **`table-layout: fixed`** = 내용 길이와 무관하게 지정 폭 강제 → 렌더링 속도·안정성↑ (`auto`는 내용에 따라 자동 조정). `colgroup`/`col`로 열 너비 세부 조절
-- 줄무늬: `:nth-child(even)`, 반응형: `overflow-x: auto`(가로 스크롤) 또는 미디어쿼리 카드 전환
+
+- **글꼴**
+  - 폰트 속성: `font-family`(폴백 나열) / `font-size` / `font-style` / `font-variant` / `font-weight`(100~900, 400=normal·700=bold) / `font`(단축) / `@font-face`(`woff2` 권장, `font-display: swap` 필수)
+  - **`font-family`는 우선순위 순으로 쉼표 나열**, 공백 포함 글꼴명은 따옴표(`"Noto Sans KR"`), 맨 끝에 **제네릭 글꼴**(`serif`/`sans-serif`/`monospace`/`cursive`)을 폴백으로 둠
+  - **단축(shorthand) 속성**: `font`/`border`/`list-style`/`background`/`margin`/`padding`은 관련 속성을 한 줄로 일괄 지정 (예 `border: 1px solid black`, `list-style: square inside url()`)
+  - **`rem` = 루트(html) 기준 상대 단위(보통 1rem=16px)** / **`em` = 부모 요소 기준** → `font-size`는 접근성 위해 `rem` 권장, `clamp()`로 반응형
+  - 한글 본문 가독성: `font-size: 16px(1rem); line-height: 1.5~1.6` 조합
+  - **`font` 단축에는 `line-height` 포함 가능** → `font-size` 뒤에 슬래시로 표기 (`font: 두께 크기/줄간격 서체`)
+- **텍스트**
+  - 텍스트 속성: `line-height`(단위 없는 숫자 1.5~1.6) / `letter-spacing`(한글은 -0.02em) / `text-align` / `text-decoration` / `text-transform` / `white-space` / `word-break`(한글 `keep-all`) / `overflow-wrap: break-word`(긴 URL)
+  - **`text-transform`** = 대소문자 변환: `uppercase`(모두 대문자) / `lowercase`(모두 소문자) / `capitalize`(단어 첫 글자만 대문자) / `none`(원본 유지)
+  - **`text-align`은 줄 전체 가로 정렬**(`left`/`right`/`center`/`justify`), **`text-align-last`는 마지막 줄(또는 한 줄짜리)만 정렬**
+  - **`vertical-align`은 인라인·표 셀 요소 전용 세로 정렬**(`baseline`(기본)/`middle`/`top`/`bottom`/`sub`/`super`) — 블록 요소엔 적용 안 됨
+  - **말줄임은 `text-overflow: ellipsis`** → 한 줄 말줄임 공식 = `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`
+- **리스트**
+  - 리스트 속성: `list-style-type` / `list-style-position` / `list-style-image` / `list-style`(단축). 커스텀 마커는 `::marker` 또는 `::before`
+  - 메뉴(GNB) 초기화: `ul { list-style: none; padding: 0; margin: 0; }`
+- **테이블**
+  - 테이블 속성: `border-collapse`(`collapse`=테두리 합침, 실무 필수) / `table-layout` / `border-spacing` / `caption-side` / `empty-cells`
+  - **`table-layout: fixed`** = 내용 길이와 무관하게 지정 폭 강제 → 렌더링 속도·안정성↑ (`auto`는 내용에 따라 자동 조정). `colgroup`/`col`로 열 너비 세부 조절
+  - 줄무늬: `:nth-child(even)`, 반응형: `overflow-x: auto`(가로 스크롤) 또는 미디어쿼리 카드 전환
 
 **7강 CSS: 박스 모델, 테두리**
-- 박스 4계층: **content → padding → border → margin**
-- **`box-sizing` 계산**: 기본값 `content-box`에서 실제 너비 = `width` + 좌우 `padding` + 좌우 `border` (예: 200+10+10+1+1 = **222px**). `border-box`면 지정 `width`가 곧 실제 너비(콘텐츠+패딩+테두리 포함). 실무는 `box-sizing: border-box` 초기화 필수
-- `margin`(투명한 바깥 여백, 요소 간 간격·중앙정렬, **상하 블록 병합 발생**) vs `padding`(안쪽 여백, 배경색 칠해짐, 병합 없음, 클릭 영역 확장)
-  - 왼쪽 바깥 여백으로 밀어내기 = **`margin-left`**
-  - 블록 가로 중앙 정렬 = **`margin: 0 auto;`** (인라인·width 없는 요소엔 동작 안 함)
-- 크기 보호: `max-width`(상한) / `min-height`(하한)
-- `position`: `static`(기본) / `relative`(자신 기준) / `absolute`(조상 기준, 공중에 뜸) / `fixed`(뷰포트 고정) / `sticky`(스크롤 고정), `z-index`(겹침 순서)
-- `display`: `block`/`inline`/`inline-block`/`none`. 현대 레이아웃: `flex`(1차원), `grid`(2차원)
-  - grid 3열 = **`grid-template-columns: 1fr 1fr 1fr;`** (`fr`=남은 공간 비율)
-- 기타: `overflow` / `visibility`(`visible`/`hidden`(공간 유지)/`collapse`(표 행·열 공간 제거)) / `resize`
-- **`float`**(`left`/`right`/`none`): 요소를 좌·우로 띄워 텍스트가 감싸게 함 / **`clear`**(`left`/`right`/`both`/`none`): 앞선 float 영향 해제(아래로 내림). float 부모 높이 붕괴는 `overflow` 또는 클리어픽스로 해결
-- `border`(두께·스타일·색상 단축), 투명색(`transparent`)으로 삼각형
-- `border-radius`: `50%`(원/타원), **`9999px`(알약·캡슐 — 너비 가변에도 양끝 반원 유지)**, 슬래시로 타원 곡선
-- `outline`: **공간 차지 안 함**(레이아웃 영향 X) → focus 표시·디버깅
-- `box-shadow`: 가로·세로 오프셋, blur, spread, 색상. **`inset` 키워드 = 안쪽 그림자(눌린 효과)** (`text-shadow`는 inset 미지원)
+
+- **박스 모델·크기**
+  - 박스 4계층: **content → padding → border → margin**
+  - **`box-sizing` 계산**: 기본값 `content-box`에서 실제 너비 = `width` + 좌우 `padding` + 좌우 `border` (예: 200+10+10+1+1 = **222px**). `border-box`면 지정 `width`가 곧 실제 너비(콘텐츠+패딩+테두리 포함). 실무는 `box-sizing: border-box` 초기화 필수
+  - `margin`(투명한 바깥 여백, 요소 간 간격·중앙정렬, **상하 블록 병합 발생**) vs `padding`(안쪽 여백, 배경색 칠해짐, 병합 없음, 클릭 영역 확장)
+    - 왼쪽 바깥 여백으로 밀어내기 = **`margin-left`**
+    - 블록 가로 중앙 정렬 = **`margin: 0 auto;`** (인라인·width 없는 요소엔 동작 안 함)
+  - 크기 보호: `max-width`(상한) / `min-height`(하한)
+- **배치 `position`·`display`**
+  - `position`: `static`(기본) / `relative`(자신 기준) / `absolute`(조상 기준, 공중에 뜸) / `fixed`(뷰포트 고정) / `sticky`(스크롤 고정), `z-index`(겹침 순서)
+  - `display`: `block`/`inline`/`inline-block`/`none`. 현대 레이아웃: `flex`(1차원), `grid`(2차원)
+    - grid 3열 = **`grid-template-columns: 1fr 1fr 1fr;`** (`fr`=남은 공간 비율)
+  - 기타: `overflow` / `visibility`(`visible`/`hidden`(공간 유지)/`collapse`(표 행·열 공간 제거)) / `resize`
+  - **`float`**(`left`/`right`/`none`): 요소를 좌·우로 띄워 텍스트가 감싸게 함 / **`clear`**(`left`/`right`/`both`/`none`): 앞선 float 영향 해제(아래로 내림). float 부모 높이 붕괴는 `overflow` 또는 클리어픽스로 해결
+- **테두리·그림자**
+  - `border`(두께·스타일·색상 단축), 투명색(`transparent`)으로 삼각형
+  - `border-radius`: `50%`(원/타원), **`9999px`(알약·캡슐 — 너비 가변에도 양끝 반원 유지)**, 슬래시로 타원 곡선
+  - `outline`: **공간 차지 안 함**(레이아웃 영향 X) → focus 표시·디버깅
+  - `box-shadow`: 가로·세로 오프셋, blur, spread, 색상. **`inset` 키워드 = 안쪽 그림자(눌린 효과)** (`text-shadow`는 inset 미지원)
 
 **8강 CSS: 배경, 그라데이션, 변형**
-- 배경 4대 속성: `background-color` / `background-image` / `background-repeat` / `background-position`
-- `background-size`: **`contain`(잘림 없이 비율 유지하며 최대로, 여백 생길 수 있음)** / `cover`(빈틈없이 채움, 잘릴 수 있음) / `100% 100%`(찌그러짐)
-- `background-attachment`(`scroll`/`fixed`/`local`), **`background-clip`(`border-box`/`padding-box`/`content-box`/`text` — 칠해지는 범위 제한)**, `background-origin`(시작 기준점)
-- 다중 배경(레이어 겹침), `background` 단축
-- `linear-gradient`: 각도·방향(`to bottom` 등). **0deg=위(12시), 시계방향 증가, `90deg`=오른쪽(to right), 기본값 180deg(to bottom)**. 중단점(%)으로 하드 스톱
-- `radial-gradient`(중심→바깥, `circle`/`ellipse`, 비네팅), **`conic-gradient`(중심 기준 시계방향 회전 — 컬러휠·파이차트·도넛차트)**
-- 반복: `repeating-linear/radial/conic-gradient()`(사선·물결·격자 패턴)
-- 2D 변형 함수: `translate`(이동) / `rotate`(회전) / `scale`(크기) / `skew`(비틀기) / `matrix()` — 레이아웃 흐름 안 깸
-  - **정중앙 배치: `top:50%; left:50%; transform: translate(-50%, -50%)`** (translate의 %는 자기 자신 크기 기준)
-- `transform-origin`(변형 기준축), `perspective`(부모에 px, 원근감)·`perspective-origin`
-- **`backface-visibility: hidden`** = 180도 뒤집힌 카드 뒷면 숨김(플립 카드)
+
+- **배경**
+  - 배경 4대 속성: `background-color` / `background-image` / `background-repeat` / `background-position`
+  - `background-size`: **`contain`(잘림 없이 비율 유지하며 최대로, 여백 생길 수 있음)** / `cover`(빈틈없이 채움, 잘릴 수 있음) / `100% 100%`(찌그러짐)
+  - `background-attachment`(`scroll`/`fixed`/`local`), **`background-clip`(`border-box`/`padding-box`/`content-box`/`text` — 칠해지는 범위 제한)**, `background-origin`(시작 기준점)
+  - 다중 배경(레이어 겹침), `background` 단축
+- **그라데이션**
+  - `linear-gradient`: 각도·방향(`to bottom` 등). **0deg=위(12시), 시계방향 증가, `90deg`=오른쪽(to right), 기본값 180deg(to bottom)**. 중단점(%)으로 하드 스톱
+  - `radial-gradient`(중심→바깥, `circle`/`ellipse`, 비네팅), **`conic-gradient`(중심 기준 시계방향 회전 — 컬러휠·파이차트·도넛차트)**
+  - 반복: `repeating-linear/radial/conic-gradient()`(사선·물결·격자 패턴)
+- **변형(transform)**
+  - 2D 변형 함수: `translate`(이동) / `rotate`(회전) / `scale`(크기) / `skew`(비틀기) / `matrix()` — 레이아웃 흐름 안 깸
+    - **정중앙 배치: `top:50%; left:50%; transform: translate(-50%, -50%)`** (translate의 %는 자기 자신 크기 기준)
+  - `transform-origin`(변형 기준축), `perspective`(부모에 px, 원근감)·`perspective-origin`
+  - **`backface-visibility: hidden`** = 180도 뒤집힌 카드 뒷면 숨김(플립 카드)
 
 **9강 CSS: 전환, 애니메이션, 다단**
-- 전환(transition): 상태 A→B를 일정 시간에 걸쳐 부드럽게. 주로 `:hover`/`:focus`에 반응
-- 구성: **`transition-property`(대상 속성 — `all` 지양, 구체 명시)** / `transition-duration`(0이면 즉시) / **`transition-timing-function`(가감속 곡선 — `ease`/`linear`/`ease-in`/`ease-out`/`steps`)** / `transition-delay`
-- 성능: `width`/`height`/`margin` 변화는 피하고 GPU 가속 `transform`·`opacity` 사용. transition 코드는 `:hover`가 아닌 원본 요소에 작성해야 양방향 전환
-- 애니메이션: `@keyframes`(0%~100% 시나리오) + `animation-*`
-  - `name` / `duration` / `iteration-count`(`infinite`) / **`direction: alternate`(요요·왕복, 짝수회 역방향)** / `fill-mode`(`forwards`=마지막 상태 유지) / `timing-function` / `delay` / **`play-state: paused`(일시정지·`running`)**
-- 최적화: `will-change`, CSS 변수+키프레임 모듈화
-- 다단(column): **`column-width`(최소 너비 제시 → 단 개수 자동 조절, 반응형)** / `column-count`(개수 고정) / `columns`(단축)
-- `column-gap`(단 간격) / `column-rule`(구분선) / `column-span: all`(다단 가로지름) / **`column-fill: balance`(기본값, 모든 단 높이 균등 재분배)**
+
+- **전환(transition)**
+  - 전환(transition): 상태 A→B를 일정 시간에 걸쳐 부드럽게. 주로 `:hover`/`:focus`에 반응
+  - 구성: **`transition-property`(대상 속성 — `all` 지양, 구체 명시)** / `transition-duration`(0이면 즉시) / **`transition-timing-function`(가감속 곡선 — `ease`/`linear`/`ease-in`/`ease-out`/`steps`)** / `transition-delay`
+  - 성능: `width`/`height`/`margin` 변화는 피하고 GPU 가속 `transform`·`opacity` 사용. transition 코드는 `:hover`가 아닌 원본 요소에 작성해야 양방향 전환
+- **애니메이션**
+  - 애니메이션: `@keyframes`(0%~100% 시나리오) + `animation-*`
+    - `name` / `duration` / `iteration-count`(`infinite`) / **`direction: alternate`(요요·왕복, 짝수회 역방향)** / `fill-mode`(`forwards`=마지막 상태 유지) / `timing-function` / `delay` / **`play-state: paused`(일시정지·`running`)**
+  - 최적화: `will-change`, CSS 변수+키프레임 모듈화
+- **다단(column)**
+  - 다단(column): **`column-width`(최소 너비 제시 → 단 개수 자동 조절, 반응형)** / `column-count`(개수 고정) / `columns`(단축)
+  - `column-gap`(단 간격) / `column-rule`(구분선) / `column-span: all`(다단 가로지름) / **`column-fill: balance`(기본값, 모든 단 높이 균등 재분배)**
 
 **10강 자바스크립트 언어**
-- JS = 동적 기능 담당 범용 스크립트 언어, 자바(Java)와는 완전히 다름(동적 타입)
-- 적용: `<head>`에 외부 `.js`를 `<script defer>`로 연결(실무 표준 — 파싱과 병렬 다운로드, 실행은 파싱 후), `type="module"`
-- 변수: **`const`(재할당 불가) 기본, 재할당 필요할 때만 `let`, `var` 금지**. 원시 타입(값 복사) vs 참조 타입(주소 복사)
-- 연산자: **엄격 일치 `===`**(타입+값, 권장) — `10 == "10"`은 `true`(강제 형변환), `10 === "10"`은 `false`. 선택적 체이닝 `?.` / 널 병합 `??`
-  - **단축 평가**: `"" || "환영합니다"` → falsy(`""`/0/null/undefined)면 오른쪽 반환 → `"환영합니다"` (기본값 패턴)
-- 배열 순회·메서드: `for...of`(순서 있는 데이터) / `for...in`(객체 키, 배열엔 비권장) / `forEach`(단순 실행)
-  - **`map`(1:1 가공 새 배열, 원본 보존)** / `filter`(조건 추출) / `reduce`(누적 단일값) / `includes`(존재 확인)
-  - **`push`/`pop`은 배열 뒤를 다루며 원본 변경**, `unshift`/`shift`는 앞을 다룸. 원본 변형 메서드(`splice`/`sort`) 대신 전개 연산자(`...`)로 복제
-- 함수: 호이스팅 부작용 막으려 함수 표현식·화살표 함수(`() => {}`) 권장. 콜백 함수는 비동기·이벤트 처리 기반
-- 객체: 일회성은 리터럴 `{}`, 재사용 템플릿은 `class`. 접근은 점 표기(`.`), 변수 키는 대괄호(`[]`) 필수
-- 내장 객체: `String`(`includes`/`replace`/`slice`/`trim`/`split` 체이닝) / `Array` / `Date`(`getTime`·`toLocaleString`·`toISOString`) / `Math` / `JSON`
-- **`Math`(인스턴스 없이 정적 호출)**: `Math.random()`(0 이상 1 미만 실수) / `Math.floor`(내림)·`Math.ceil`(올림)·`Math.round`(반올림)·`Math.trunc`(버림) / `Math.max(...)`·`Math.min(...)` / `Math.abs`(절댓값)·`Math.pow`·`Math.sqrt` / `Math.PI`. **`min`~`max` 정수 난수 = `Math.floor(Math.random() * (max - min + 1)) + min`**
-- 이벤트: `addEventListener`로 등록. **`e.preventDefault()` = 기본 동작 취소**(폼 제출·링크 이동 막고 JS가 통제)
+
+- **언어 개요·적용**
+  - JS = 동적 기능 담당 범용 스크립트 언어, 자바(Java)와는 완전히 다름(동적 타입)
+  - 적용: `<head>`에 외부 `.js`를 `<script defer>`로 연결(실무 표준 — 파싱과 병렬 다운로드, 실행은 파싱 후), `type="module"`
+- **변수·연산자**
+  - 변수: **`const`(재할당 불가) 기본, 재할당 필요할 때만 `let`, `var` 금지**. 원시 타입(값 복사) vs 참조 타입(주소 복사)
+  - 연산자: **엄격 일치 `===`**(타입+값, 권장) — `10 == "10"`은 `true`(강제 형변환), `10 === "10"`은 `false`. 선택적 체이닝 `?.` / 널 병합 `??`
+    - **단축 평가**: `"" || "환영합니다"` → falsy(`""`/0/null/undefined)면 오른쪽 반환 → `"환영합니다"` (기본값 패턴)
+- **배열 순회·메서드**
+  - 배열 순회·메서드: `for...of`(순서 있는 데이터) / `for...in`(객체 키, 배열엔 비권장) / `forEach`(단순 실행)
+    - **`map`(1:1 가공 새 배열, 원본 보존)** / `filter`(조건 추출) / `reduce`(누적 단일값) / `includes`(존재 확인)
+    - **`push`/`pop`은 배열 뒤를 다루며 원본 변경**, `unshift`/`shift`는 앞을 다룸. 원본 변형 메서드(`splice`/`sort`) 대신 전개 연산자(`...`)로 복제
+- **함수·객체**
+  - 함수: 호이스팅 부작용 막으려 함수 표현식·화살표 함수(`() => {}`) 권장. 콜백 함수는 비동기·이벤트 처리 기반
+  - 객체: 일회성은 리터럴 `{}`, 재사용 템플릿은 `class`. 접근은 점 표기(`.`), 변수 키는 대괄호(`[]`) 필수
+- **내장 객체**
+  - 내장 객체: `String`(`includes`/`replace`/`slice`/`trim`/`split` 체이닝) / `Array` / `Date`(`getTime`·`toLocaleString`·`toISOString`) / `Math` / `JSON`
+  - **`Math`(인스턴스 없이 정적 호출)**: `Math.random()`(0 이상 1 미만 실수) / `Math.floor`(내림)·`Math.ceil`(올림)·`Math.round`(반올림)·`Math.trunc`(버림) / `Math.max(...)`·`Math.min(...)` / `Math.abs`(절댓값)·`Math.pow`·`Math.sqrt` / `Math.PI`. **`min`~`max` 정수 난수 = `Math.floor(Math.random() * (max - min + 1)) + min`**
+- **이벤트**
+  - 이벤트: `addEventListener`로 등록. **`e.preventDefault()` = 기본 동작 취소**(폼 제출·링크 이동 막고 JS가 통제)
 
 **11강 문서 객체 모델과 브라우저 객체 모델**
-- **DOM** = HTML을 객체 트리로 변환한 인터페이스. 브라우저는 DOM(구조)+CSSOM(스타일)을 합쳐 렌더 트리 구성
-- 요소 접근: `querySelector()`(CSS 선택자), **`querySelectorAll()`은 NodeList 반환 → `forEach` 바로 사용 가능**, `getElementById`
-- 내용 조작: **`innerHTML`(스크립트 실행 위험) 대신 `textContent`(순수 텍스트, 안전) 권장**
-- 속성 조작 2가지: **점 표기 프로퍼티**(`el.id`, `el.src`, `el.value`) 또는 **메서드** — **`getAttribute(name)` / `setAttribute(name, value)` / `removeAttribute(name)` / `hasAttribute(name)`**. (HTML 속성명과 DOM 프로퍼티명이 다른 경우 있음: `class`↔`className`, `for`↔`htmlFor`)
-- **`data-*` 속성은 JS에서 `element.dataset.속성명`(카멜케이스 변환)으로 읽음** (예: `data-product-code` → `dataset.productCode`)
-- 스타일 조작: `style` 직접 수정은 지양 → **`classList`의 `add()`/`remove()`/`toggle()`로 클래스 제어**(실무 표준). **`toggle()`은 있으면 제거·없으면 추가**
-  - 인라인 스타일 직접 수정: `el.style.속성`에 값 대입(예 `el.style.color = "red"`), 하이픈 CSS 속성은 카멜케이스로(`background-color`→`style.backgroundColor`, `font-size`→`style.fontSize`). `style.color`는 인라인 스타일만 읽음 — 계산된 실제 값은 `getComputedStyle(el).color`
-- 삽입·삭제: `createElement()`+`append()`, `remove()`. **자식 전체 비우기는 `replaceChildren()`(인자 없이 호출)이 가장 빠르고 안전**
-- 성능: 대량 조작은 `DocumentFragment`(메모리 임시 바구니)에 모은 뒤 한 번만 부착
-- **BOM** = 브라우저 창 제어 API. 최상위 `window` 아래 `document`/`location`/`history`/`navigator`
-  - **`location`**: `location.href`에 URL 대입 시 이동(뒤로 가기 가능), `replace`(덮어쓰기, 뒤로 가기 불가), 쿼리는 `URLSearchParams`
-  - `history`: `back()`/`forward()`/`go()` / `navigator`: 브라우저·기기 정보, `clipboard.writeText()`·`readText()`(공유·복사)
-- 타이머: `setTimeout()`(한 번) / `setInterval()`(반복 — 카운트다운·스톱워치). **메모리 누수 방지 위해 `clearTimeout()`/`clearInterval()` 필수**
-- 이벤트 위임(event delegation): 부모 하나에만 리스너 등록 → 동적 자식 이벤트까지 처리(이벤트 버블링 활용)
+
+- **DOM 개념·요소 접근**
+  - **DOM** = HTML을 객체 트리로 변환한 인터페이스. 브라우저는 DOM(구조)+CSSOM(스타일)을 합쳐 렌더 트리 구성
+  - 요소 접근: `querySelector()`(CSS 선택자), **`querySelectorAll()`은 NodeList 반환 → `forEach` 바로 사용 가능**, `getElementById`
+- **내용·속성 조작**
+  - 내용 조작: **`innerHTML`(스크립트 실행 위험) 대신 `textContent`(순수 텍스트, 안전) 권장**
+  - 속성 조작 2가지: **점 표기 프로퍼티**(`el.id`, `el.src`, `el.value`) 또는 **메서드** — **`getAttribute(name)` / `setAttribute(name, value)` / `removeAttribute(name)` / `hasAttribute(name)`**. (HTML 속성명과 DOM 프로퍼티명이 다른 경우 있음: `class`↔`className`, `for`↔`htmlFor`)
+  - **`data-*` 속성은 JS에서 `element.dataset.속성명`(카멜케이스 변환)으로 읽음** (예: `data-product-code` → `dataset.productCode`)
+- **스타일 조작**
+  - 스타일 조작: `style` 직접 수정은 지양 → **`classList`의 `add()`/`remove()`/`toggle()`로 클래스 제어**(실무 표준). **`toggle()`은 있으면 제거·없으면 추가**
+    - 인라인 스타일 직접 수정: `el.style.속성`에 값 대입(예 `el.style.color = "red"`), 하이픈 CSS 속성은 카멜케이스로(`background-color`→`style.backgroundColor`, `font-size`→`style.fontSize`). `style.color`는 인라인 스타일만 읽음 — 계산된 실제 값은 `getComputedStyle(el).color`
+- **삽입·삭제·성능**
+  - 삽입·삭제: `createElement()`+`append()`, `remove()`. **자식 전체 비우기는 `replaceChildren()`(인자 없이 호출)이 가장 빠르고 안전**
+  - 성능: 대량 조작은 `DocumentFragment`(메모리 임시 바구니)에 모은 뒤 한 번만 부착
+- **BOM**
+  - **BOM** = 브라우저 창 제어 API. 최상위 `window` 아래 `document`/`location`/`history`/`navigator`
+    - **`location`**: `location.href`에 URL 대입 시 이동(뒤로 가기 가능), `replace`(덮어쓰기, 뒤로 가기 불가), 쿼리는 `URLSearchParams`
+    - `history`: `back()`/`forward()`/`go()` / `navigator`: 브라우저·기기 정보, `clipboard.writeText()`·`readText()`(공유·복사)
+- **타이머·이벤트 위임**
+  - 타이머: `setTimeout()`(한 번) / `setInterval()`(반복 — 카운트다운·스톱워치). **메모리 누수 방지 위해 `clearTimeout()`/`clearInterval()` 필수**
+  - 이벤트 위임(event delegation): 부모 하나에만 리스너 등록 → 동적 자식 이벤트까지 처리(이벤트 버블링 활용)
 
 **12강 캔버스 (1)**
-- `<canvas>` = JS 고속 픽셀 드로잉 컨테이너. 좌표계는 **좌측 상단 (0,0)**, 오른쪽·아래로 갈수록 x·y 증가. `getContext('2d')`로 컨텍스트 획득
-- 해상도 분리: `canvas.width`/`height`(내부 픽셀 수)와 `style.width`/`height`(표시 크기)가 다르면 흐려짐. **DPR 보정 = `window.devicePixelRatio`만큼 버퍼를 키우고 `ctx.scale()`로 압축**
-- 즉시 실행 사각형: `fillRect(x,y,w,h)`(면) / `strokeRect()`(테두리) / **`clearRect()`(투명하게 지움 — 애니메이션 프레임 초기화 필수)**
-- **상태 머신 `save()`/`restore()`**: 붓 상태(색상·두께·변환)를 스택에 백업·복구. **그려진 픽셀(그림)은 저장 안 됨** — Undo 아님
-- 패스 기반: **`beginPath()`(이전 경로 단절·리셋, 새 시작 선언 — 생략 시 이전 경로 누적)** → `moveTo(x,y)` → `lineTo(x,y)` → `closePath()`(시작·끝 연결) → `fill()`/`stroke()`로 화면 표시
-- **칠+테두리 순서: `fill()` 먼저, `stroke()` 나중** (선은 경로 중앙에서 양옆으로 퍼지므로 채우기를 먼저 해야 테두리 두께가 안 깎임)
-- **`arc(x, y, 반지름, 시작각, 종료각, 방향)`**: 각도는 라디안. **0라디안 = 3시 방향, 기본 시계 방향(counterclockwise=false)**. 부채꼴은 `moveTo`(중심)→`arc`→`closePath`, 파이 차트는 각도 누적
-- `Path2D`(경로 저장·재사용)
-- 색상: `fillStyle`/`strokeStyle`, **`globalAlpha`(0.0~1.0, 전체 일괄 투명도)**
-- 선 스타일: **`lineCap`(끝 모양 — `round`=둥근 끝)** / `lineJoin` / `lineWidth`. **`setLineDash([10,5])`**(점선) + **`lineDashOffset`**(패턴 시작 위치 이동 → 흐르는 점선 애니메이션)
+
+- **캔버스 기본·좌표계**
+  - `<canvas>` = JS 고속 픽셀 드로잉 컨테이너. 좌표계는 **좌측 상단 (0,0)**, 오른쪽·아래로 갈수록 x·y 증가. `getContext('2d')`로 컨텍스트 획득
+  - 해상도 분리: `canvas.width`/`height`(내부 픽셀 수)와 `style.width`/`height`(표시 크기)가 다르면 흐려짐. **DPR 보정 = `window.devicePixelRatio`만큼 버퍼를 키우고 `ctx.scale()`로 압축**
+- **사각형·상태 머신**
+  - 즉시 실행 사각형: `fillRect(x,y,w,h)`(면) / `strokeRect()`(테두리) / **`clearRect()`(투명하게 지움 — 애니메이션 프레임 초기화 필수)**
+  - **상태 머신 `save()`/`restore()`**: 붓 상태(색상·두께·변환)를 스택에 백업·복구. **그려진 픽셀(그림)은 저장 안 됨** — Undo 아님
+- **패스·도형**
+  - 패스 기반: **`beginPath()`(이전 경로 단절·리셋, 새 시작 선언 — 생략 시 이전 경로 누적)** → `moveTo(x,y)` → `lineTo(x,y)` → `closePath()`(시작·끝 연결) → `fill()`/`stroke()`로 화면 표시
+  - **칠+테두리 순서: `fill()` 먼저, `stroke()` 나중** (선은 경로 중앙에서 양옆으로 퍼지므로 채우기를 먼저 해야 테두리 두께가 안 깎임)
+  - **`arc(x, y, 반지름, 시작각, 종료각, 방향)`**: 각도는 라디안. **0라디안 = 3시 방향, 기본 시계 방향(counterclockwise=false)**. 부채꼴은 `moveTo`(중심)→`arc`→`closePath`, 파이 차트는 각도 누적
+  - `Path2D`(경로 저장·재사용)
+- **색상·선 스타일**
+  - 색상: `fillStyle`/`strokeStyle`, **`globalAlpha`(0.0~1.0, 전체 일괄 투명도)**
+  - 선 스타일: **`lineCap`(끝 모양 — `round`=둥근 끝)** / `lineJoin` / `lineWidth`. **`setLineDash([10,5])`**(점선) + **`lineDashOffset`**(패턴 시작 위치 이동 → 흐르는 점선 애니메이션)
 
 **13강 캔버스 (2)**
-- 그라디언트: `createLinearGradient(x0,y0,x1,y1)` / `createRadialGradient()` / `createConicGradient()` + `addColorStop(offset, 색)`
-  - `createLinearGradient(0,0,200,0)`은 y 고정·x만 변화 → **왼쪽→오른쪽 수평** 방향. 오프셋 동일하게 주면 하드 스톱(파이차트 등)
-- **`createPattern(이미지, 'repeat')`** = 외부 이미지·오프스크린 캔버스를 도장처럼 반복(질감·도트)
-- 그림자: `shadowColor` / **`shadowBlur`(흐림·가우시안 블러 반경)** / `shadowOffsetX` / `shadowOffsetY`. 오프셋 0+밝은색 = 네온
-- 합성: `globalCompositeOperation`(`source-in`=마스킹, `destination-out`=스포트라이트 지우개, `multiply`=색상 필터)
-- 텍스트: `fillText(text,x,y)`(내부 칠) / `strokeText()`(외곽선). `font` / **`textAlign`(수평 정렬, `center`)** / `textBaseline`(수직 기준). `measureText()`로 너비 측정(중앙 정렬·줄바꿈 직접 구현)
-- **`drawImage()`**(반드시 `onload` 후): 인자 **3개** `drawImage(img,dx,dy)`(원본 그대로) / **5개** `(img,dx,dy,dw,dh)`(크기 조절) / **9개** `(img,sx,sy,sw,sh,dx,dy,dw,dh)`(잘라서 늘리기)
-- 도형 변환 = 좌표계 자체를 이동(누적되므로 `save()`/`restore()` 필수)
-  - `translate`(원점 이동) / `rotate`(원점 기준 라디안 회전 — 제자리 회전은 translate로 중심 옮긴 뒤) / **`scale`(비율, `-1` 대입 시 좌우·상하 대칭 거울 모드)**
-  - **`scale(2,2)` 적용 시 선 두께(`lineWidth`)도 2배로 굵어짐** (그리드 자체가 확대되므로)
+
+- **그라디언트·패턴**
+  - 그라디언트: `createLinearGradient(x0,y0,x1,y1)` / `createRadialGradient()` / `createConicGradient()` + `addColorStop(offset, 색)`
+    - `createLinearGradient(0,0,200,0)`은 y 고정·x만 변화 → **왼쪽→오른쪽 수평** 방향. 오프셋 동일하게 주면 하드 스톱(파이차트 등)
+  - **`createPattern(이미지, 'repeat')`** = 외부 이미지·오프스크린 캔버스를 도장처럼 반복(질감·도트)
+- **그림자·합성**
+  - 그림자: `shadowColor` / **`shadowBlur`(흐림·가우시안 블러 반경)** / `shadowOffsetX` / `shadowOffsetY`. 오프셋 0+밝은색 = 네온
+  - 합성: `globalCompositeOperation`(`source-in`=마스킹, `destination-out`=스포트라이트 지우개, `multiply`=색상 필터)
+- **텍스트·이미지**
+  - 텍스트: `fillText(text,x,y)`(내부 칠) / `strokeText()`(외곽선). `font` / **`textAlign`(수평 정렬, `center`)** / `textBaseline`(수직 기준). `measureText()`로 너비 측정(중앙 정렬·줄바꿈 직접 구현)
+  - **`drawImage()`**(반드시 `onload` 후): 인자 **3개** `drawImage(img,dx,dy)`(원본 그대로) / **5개** `(img,dx,dy,dw,dh)`(크기 조절) / **9개** `(img,sx,sy,sw,sh,dx,dy,dw,dh)`(잘라서 늘리기)
+- **도형 변환**
+  - 도형 변환 = 좌표계 자체를 이동(누적되므로 `save()`/`restore()` 필수)
+    - `translate`(원점 이동) / `rotate`(원점 기준 라디안 회전 — 제자리 회전은 translate로 중심 옮긴 뒤) / **`scale`(비율, `-1` 대입 시 좌우·상하 대칭 거울 모드)**
+    - **`scale(2,2)` 적용 시 선 두께(`lineWidth`)도 2배로 굵어짐** (그리드 자체가 확대되므로)
 
 **14강 HTML API (1)**
-- `<video>`·`<audio>`는 `HTMLMediaElement` 인터페이스 공유 → 제어 동일. **`autoplay`는 `muted` 함께 써야 동작**
-- 속성: `currentTime`(재생 위치) / `duration`(전체 길이) / `volume` / `playbackRate`(배속) / **`paused`(일시정지 여부 true/false)**
-- 메서드: `play()` / `pause()`. **`stop()` 없음** → 정지는 `pause()` 후 **`currentTime = 0`**
-- 이벤트: `timeupdate`(재생 중 지속 발생 — 진행률 바) / `loadedmetadata`(길이 등 로딩 완료) / `waiting`·`playing`(버퍼링 스피너) / `volumechange`(음량 UI 동기화)
-- 드래그앤드롭 3요소: **출발지(`draggable="true"`)** / 목적지(드롭존) / **`dataTransfer`(데이터 운반 임시 바구니)**
-- 출발지: `dragstart` → `e.dataTransfer.setData('text/plain', id)`로 저장
-- 목적지(가장 중요): **`dragover`·`drop`에서 `e.preventDefault()` 필수** (기본은 드롭 거부·새 탭 열기 → 차단해야 정상 드롭)
-- 데이터 추출: drop에서 `getData()`. **`e.dataTransfer.files`(FileList) = 바탕화면에서 끌어온 파일** (텍스트가 아니므로 `getData('file')` 아님). `dragenter`/`dragleave`로 시각적 하이라이트
+
+- **미디어 제어 API**
+  - `<video>`·`<audio>`는 `HTMLMediaElement` 인터페이스 공유 → 제어 동일. **`autoplay`는 `muted` 함께 써야 동작**
+  - 속성: `currentTime`(재생 위치) / `duration`(전체 길이) / `volume` / `playbackRate`(배속) / **`paused`(일시정지 여부 true/false)**
+  - 메서드: `play()` / `pause()`. **`stop()` 없음** → 정지는 `pause()` 후 **`currentTime = 0`**
+  - 이벤트: `timeupdate`(재생 중 지속 발생 — 진행률 바) / `loadedmetadata`(길이 등 로딩 완료) / `waiting`·`playing`(버퍼링 스피너) / `volumechange`(음량 UI 동기화)
+- **드래그앤드롭**
+  - 드래그앤드롭 3요소: **출발지(`draggable="true"`)** / 목적지(드롭존) / **`dataTransfer`(데이터 운반 임시 바구니)**
+  - 출발지: `dragstart` → `e.dataTransfer.setData('text/plain', id)`로 저장
+  - 목적지(가장 중요): **`dragover`·`drop`에서 `e.preventDefault()` 필수** (기본은 드롭 거부·새 탭 열기 → 차단해야 정상 드롭)
+  - 데이터 추출: drop에서 `getData()`. **`e.dataTransfer.files`(FileList) = 바탕화면에서 끌어온 파일** (텍스트가 아니므로 `getData('file')` 아님). `dragenter`/`dragleave`로 시각적 하이라이트
 
 **15강 HTML API (2)**
-- 웹 스토리지: 클라이언트에 **키-값**으로 저장. 쿠키 단점(매번 서버 전송, 4KB) 극복 → 서버 전송 없이 도메인당 약 5MB
-- **`localStorage`**(브라우저 닫아도 영구, 탭 간 공유 — 다크모드·자동로그인) vs **`sessionStorage`**(탭 종료 시 소멸, 탭마다 격리 — 일회성 폼 백업)
-- 메서드: `setItem(key,value)` / **`getItem(key)`**(읽기 표준) / `removeItem(key)` / `clear()`(전체) / `key()` / `length`
-- **`storage` 이벤트는 변경한 현재 탭이 아니라 같은 영역을 쓰는 다른 탭/창에서만 발생** (탭 간 통신용)
-- **직렬화 필수: 스토리지는 문자열만 저장** → 객체·배열은 `JSON.stringify()`로 넣고 `JSON.parse()`로 꺼냄 (`setItem('user', JSON.stringify(user))`)
-- 위치 정보(Geolocation): GPS·Wi-Fi로 위도·경도 파악. **반드시 HTTPS(또는 localhost) + 사용자 동의** 필요
-- `navigator.geolocation.getCurrentPosition(성공, 실패, 옵션)`(한 번) / **`watchPosition()`(이동 시마다 실시간 추적 — 종료 시 `clearWatch()` 필수)**
-- 성공 콜백 `position`에서 **`position.coords.latitude`(위도)·`position.coords.longitude`(경도)**, 시각은 `position.timestamp`. 옵션 **`enableHighAccuracy: true`**(배터리 소모↑, GPS 강제·정밀)
-- Leaflet.js 연동 4단계: ①빈 컨테이너(`<div id="map">`) 준비 ②`L.map().setView([위도,경도], 줌)`(이미 있으면 `setView`만) ③`L.tileLayer()`(OpenStreetMap 타일) ④`L.marker([위도,경도]).addTo()` + `bindPopup().openPopup()`
+
+- **웹 스토리지**
+  - 웹 스토리지: 클라이언트에 **키-값**으로 저장. 쿠키 단점(매번 서버 전송, 4KB) 극복 → 서버 전송 없이 도메인당 약 5MB
+  - **`localStorage`**(브라우저 닫아도 영구, 탭 간 공유 — 다크모드·자동로그인) vs **`sessionStorage`**(탭 종료 시 소멸, 탭마다 격리 — 일회성 폼 백업)
+  - 메서드: `setItem(key,value)` / **`getItem(key)`**(읽기 표준) / `removeItem(key)` / `clear()`(전체) / `key()` / `length`
+  - **`storage` 이벤트는 변경한 현재 탭이 아니라 같은 영역을 쓰는 다른 탭/창에서만 발생** (탭 간 통신용)
+  - **직렬화 필수: 스토리지는 문자열만 저장** → 객체·배열은 `JSON.stringify()`로 넣고 `JSON.parse()`로 꺼냄 (`setItem('user', JSON.stringify(user))`)
+- **위치 정보(Geolocation)**
+  - 위치 정보(Geolocation): GPS·Wi-Fi로 위도·경도 파악. **반드시 HTTPS(또는 localhost) + 사용자 동의** 필요
+  - `navigator.geolocation.getCurrentPosition(성공, 실패, 옵션)`(한 번) / **`watchPosition()`(이동 시마다 실시간 추적 — 종료 시 `clearWatch()` 필수)**
+  - 성공 콜백 `position`에서 **`position.coords.latitude`(위도)·`position.coords.longitude`(경도)**, 시각은 `position.timestamp`. 옵션 **`enableHighAccuracy: true`**(배터리 소모↑, GPS 강제·정밀)
+  - Leaflet.js 연동 4단계: ①빈 컨테이너(`<div id="map">`) 준비 ②`L.map().setView([위도,경도], 줌)`(이미 있으면 `setView`만) ③`L.tileLayer()`(OpenStreetMap 타일) ④`L.marker([위도,경도]).addTo()` + `bindPopup().openPopup()`
 
 #### 핵심 암기표
 
