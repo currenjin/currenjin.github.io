@@ -1,19 +1,19 @@
 [
   {
+    "title": "Claude Code",
+    "url": "/wiki/claude-code",
+    "updated": "2026-06-12",
+    "summary": "Claude Code의 내부 아키텍처, Dynamic Workflows, Mythos/Glasswing 보안 이니셔티브, 시스템 프롬프트 유출 논란 분석",
+    "tags": "ai-agent, ai, productivity, engineering",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "한국방송통신대학교(Korea National Open University)",
     "url": "/wiki/knou",
     "updated": "2026-06-08",
     "summary": "KNOU 컴퓨터과학과 학교·학과 안내와 주요 과목 강의별 정리, 핵심 암기표",
     "tags": "knou, computer-science, exam-prep",
-    "source": "Wiki",
-    "external": false
-  },
-  {
-    "title": "Claude Code",
-    "url": "/wiki/claude-code",
-    "updated": "2026-05-29",
-    "summary": "Claude Code의 내부 아키텍처, Dynamic Workflows, Mythos/Glasswing 보안 이니셔티브 분석",
-    "tags": "ai-agent, ai, productivity, engineering",
     "source": "Wiki",
     "external": false
   },
