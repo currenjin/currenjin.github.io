@@ -77,6 +77,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 - 범용 통계패키지: **SPSS**(GUI 환경, 쉬운 분석처리) / **SAS**(방대한 자료처리·다양한 분석절차) / **R**(객체지향·대화형 통계분석·그래프 강점, 무료) / 파이썬(데이터과학용 프로그래밍 언어)
 - 주의: 스프레드시트 형태 입력은 엑셀 등의 특징이며, 파이썬을 "스프레드시트형 입력 언어"로 설명하면 틀림
 - 주요 사이트: `www.spss.co.kr` / `www.sas.com` / **R 공식 = `www.r-project.org`** / `www.anaconda.com`(파이썬) / `kosis.kr`
+- **S-LINK**: 우리나라에서 개발된 통계소프트웨어, 스프레드시트 형태 데이터 입력·메뉴 방식 처리(기출의 “국내 개발 패키지” 포인트).
 
 **2강 데이터 입력과 점검**
 - **데이터(data)**: 관심 주제에 대해 수집된 **구조화된 정보**(수치·문자·그림 등 표현양식 무관) / 수집법 = 조사·실험·관찰 (데이터가 숫자로만 이루어진 것은 아님)
@@ -92,6 +93,9 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 | **비율척도** | 차이와 비(比) 모두 의미, **절대 0** 존재 | 키, 몸무게, 나이, 급여 |
 - 변수의 측정수준은 적합한 **통계분석 기법 선택에 영향을 미친다**(영향 없다 = 틀림)
 - 데이터 오류 점검법: 입력 범위 벗어난 케이스 확인 / 변수 간 논리적 연관성 확인 / 각 케이스를 설문지와 대조 (응답 누락이 있다고 해당 설문지를 무조건 분석에서 제외하지는 않음)
+- **질적 데이터** = 명목척도·순서척도 / **양적 데이터** = 구간척도·비율척도로 측정된 데이터.
+- **부호화(coding)**: 설문 응답·관측결과를 통계분석 가능하게 일정한 원칙에 따라 숫자로 부여하는 과정. 여러 사람이 참여하면 **부호화 지침서(code book)**로 일관성 유지.
+- 설문 문항: 응답보기가 주어진 질문 = **폐쇄형 질문**, 응답자가 자유롭게 쓰는 질문 = **개방형 질문**. 개방형 응답도 분류·부호화하면 분석 가능.
 
 **3강 통계정보의 검색 및 활용 (1)**
 - 국가통계정보·데이터제공 사이트를 인터넷으로 검색하는 강의
@@ -105,10 +109,21 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 | **KSDC**(한국사회과학데이터센터) | 정부·공공 등 사회과학 데이터 DB | `www.ksdc.re.kr` |
 | **DASL** | **카네기 멜론 통계학과** 운영, 다양한 데이터 제공 | `lib.stat.cmu.edu/DASL` |
 | **NIST** | 미 표준기술연구소, 통계분석용 유용 데이터 | `www.itl.nist.gov/div898/strd` |
+- **MDSS/마이크로데이터서비스** = `mdss.kostat.go.kr`: 국가 통계조사 자료를 마이크로데이터로 내려받아 직접 가공·분석.
+- **e-나라지표** = `www.index.go.kr`: 국가 주요지표·국정통계의 추이와 분석 제공 / **SGIS** = `sgis.kostat.go.kr`: 통계지리정보를 지도 기반으로 제공.
+- 웹 통계분석 기출: **StatPages** = 통계 소프트웨어·전자교재·분석방법 정보 / **StatCrunch** = WebStat에서 발전한 웹 통계분석 소프트웨어.
 
 **4강 통계정보의 검색 및 활용 (2)**
 - 기술통계량과 통계그래프 학습 + 웹 활용 분석
 - 핵심 순서: **자료 정렬 → 평균/중앙값 계산 → 편차 계산 → 분산·표준편차 계산 → 상대비교가 필요하면 변동계수 → 그래프 선택**
+- **상수 더하기/빼기**: 모든 자료값에 `c`를 더하면 평균은 `+c`만큼 변하지만, 표본분산·표준편차는 변하지 않는다.
+- **산포도 측도**: 범위, 사분위수범위(IQR), 분산, 표준편차, 변동계수. 평균·중앙값·최빈값은 중심위치 측도라 산포도 측도가 아니다.
+- **표준오차(SE)**: `표준편차 / √관측수` — 엑셀 기술통계 결과 해석 포인트.
+- **왜도/첨도**: 왜도 = 분포의 비대칭·치우침 정도, 첨도 = 평균 주위 집중·봉우리 뾰족함 정도.
+- 기출형 예(2012): `22, 5, 21, 16, 18, 20, 23, 24, 32, 490, 36, 45, 25` → 정렬 후 13개 중 7번째 = **23** / 극단값 `490`이 있어도 중앙값은 크게 흔들리지 않음.
+- **상자그림 특이값 경계**: 안울타리 = `Q1 - 1.5×IQR`, `Q3 + 1.5×IQR`; 이 바깥 자료는 특이값(outlier)으로 표시.
+- **레이더차트**: 여러 평가기준·여러 대상의 특성 비교에 유용.
+- **줄기-잎 그림**: 연속형 자료의 분포를 보면서 원자료 값도 보존. 관측치가 아주 많을 때 도수분포표를 먼저 만들고 그리는 그래프는 히스토그램 쪽.
 
 **4강 계산 루틴**
 - 예제 자료: `2, 4, 4, 6, 8`
@@ -135,7 +150,6 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 - **중앙값**: 자료를 정렬했을 때 가운데 값
   - `2, 4, 4, 6, 8`의 중앙값 = `4`
   - 이상치(예: `490`)에 영향을 거의 안 받아 평균보다 안정적
-  - 기출형 예: `22, 5, 21, 16, 18, 20, 23, 24, 32, 490, 36` → 정렬 후 11개 중 6번째 = **22**
 - **사분위수**: 정렬된 자료를 **4등분**하는 기준값
   - `Q1` = 제1사분위수 = 아래쪽 25% 지점, 즉 하위 절반의 중앙값
   - `Q2` = 제2사분위수 = 전체 중앙값 = median
@@ -182,6 +196,8 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
   - 카이제곱 통계량 `chi^2` — 행렬·합 표기에서 **`chi`** 사용
   - 행 구분(나란히 표기) = **`&`** / 분수 = **`over`** (예: `관측도수 over 기대도수`)
   - 경우 나눔(중괄호로 조건별 정의) = **`cases`** (예: `f(x) = cases{1, & 0 leq x leq 1 # 0, & 아닐 때}`), 줄 바꿈 = **`#`**
+- 특수문자 입력 단축키 기출: 한글 2007/2014 기준 **`Ctrl+F10`**.
+- 수식편집기 기출: `{bar X} sim N left (mu,~ sigma^2 over n right)` → `X̄ ~ N(μ, σ²/n)`, `{{bar X}-mu} over {sigma/sqrt{n}} sim N(0,~1)` → 표준화된 정규분포 식.
 
 **6강 엑셀을 이용한 데이터 처리 (1)**
 - 엑셀 = 행·열 데이터 분석용 대표 **스프레드시트**: 그래프 표현 / 통계분석 / 데이터베이스 관리도구 기능 보유 (인터넷 검색 기능은 핵심 기능 아님)
@@ -198,6 +214,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 - 합계 조건판정: `=IF(SUM(B2:C2)>=130, "합격", "불합격")` — 예) `71+65=136 ≥ 130` → **합격**
 - **절대참조** `=$B$2+$C$2`: 아래로 드래그·복사해도 참조 셀이 **고정**되어 값이 그대로(예: D3에도 `B2+C2=136`)
 - 통계 함수: `SUM` / `AVERAGE` / `MEDIAN`(중앙값) / `STDEV`(표준편차)
+- `SUM(B2:B4, C2)`처럼 콤마로 여러 범위/셀을 함께 더할 수 있다.
 
 **8강 엑셀을 이용한 그래프 그리기 (1)**
 - 그래프 = 데이터의 정보·의미를 **시각적으로 요약**해 분석결과 이해를 도움
@@ -223,6 +240,8 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 - **`SUM`** 기반 점수계산: 예) `=SUM(D2:F2)-5*G2`(합계에서 결석일수×5 차감)
 - **`SUMPRODUCT(배열1, 배열2)`**: 같은 행끼리 곱한 뒤 모두 합산 — 예) A={1,2,3}, B={3,2,1} → `1·3+2·2+3·1 = 10`
 - **채우기 기능**: 연속·규칙적 숫자를 쉽게 입력 / `DATE(year, month, day)` = 날짜 일련번호
+- 지수함수 계산: `V = 10e^(-0.5t)`는 엑셀에서 `=10*EXP(-0.5*A2)`처럼 입력한다.
+- 문자열 생년월일 처리 기출: `=DATE(LEFT(C2,2), MID(C2,3,2), MID(C2,5,2))`는 연·월·일을 잘라 날짜로 만드는 패턴.
 
 **11강 엑셀 활용 (2)**
 - 원리합계 계산, 함수 그래프, 목표값 찾기, 적분 근사
@@ -237,6 +256,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 - 함수 `f(x)` 개형 그리기 = 차트마법사에서 **분산형** 선택
 - 환율 변환처럼 고정 셀이 있을 때 혼합참조 사용 — 예) `C6 = B6*B$2`(환율 셀의 행만 고정해 아래로 채움)
 - **복리 원리합계**: `원리합계 = p × (1 + r)^n` (p=원금, r=연이율, n=기간) — 채우기용 셀식 예) `=$B$1*(1+B$2)^$A5`(원금 절대고정, 이율은 행 고정, 기간은 열 고정)
+- 함수 그래프나 시간-전압처럼 두 수치형 변수의 관계를 그릴 때는 꺾은선형보다 **분산형**이 기출 정답으로 자주 나온다.
 
 **12강 R을 활용한 자료분석 (1)**
 - R = 무료 통계시스템, 대화형 언어로 통계분석·그래프 함수 다수 내장 (관련 사이트 `www.r-project.org`, `www.rstudio.com`, `www.rcommander.com`)
@@ -245,6 +265,8 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 - **`read.table("경로", header=T)`**: 텍스트 파일 읽기(첫 줄이 변수명이면 `header=T`)
 - **`head(ex.data)`**: 데이터의 앞부분 미리보기
 - **`library(xlsx)`**: 설치한 패키지를 메모리에 올려 사용(가동) / 설치는 `install.packages()`
+- R에서 단순 숫자 벡터 파일을 읽을 때는 `scan("경로")`, 첫 줄 변수명이 있는 표 형태 데이터프레임은 `read.table("경로", header=T)`로 구분한다.
+- 그룹별 상자그림 공식: `boxplot(분석변수 ~ 그룹변수)` — 예) `boxplot(ex8.data$salary ~ ex8.data$sex)`; 순서를 반대로 쓰면 오답.
 
 **13강 R을 활용한 자료분석 (2)**
 - Function 문, 정규분포, 이산형·연속형 그래프 학습
@@ -253,6 +275,9 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
   - 예) `power.value(2, 1/2, 2)`에서 `$v3 = 2^5 = 32`(n3 기본값 5), `$v1 = 2^(1/2) = 1.414`
 - 함수 정의 시 괄호 짝이 안 맞으면(예: `(function(x){x*x}`) 오류 발생
 - **`boxplot(ex.data)`**: 상자그림 / **`stem(ex.data)`**: 줄기-잎 그림 / `hist()`: 히스토그램
+- 정규분포 함수: `pnorm(z)` = 표준정규분포 누적확률, `rnorm(n)` = 정규분포 난수 `n`개 생성.
+- 평균 0, 분산 1인 정규분포 난수 100개 히스토그램: **`hist(rnorm(100))`** (`pnorm(100)`은 누적확률값).
+- R 수열 연산 기출: `x=(-2:2)`이면 `x = -2,-1,0,1,2`, `sum(x^2)=10`.
 
 **14강 파이썬을 활용한 자료분석 (1)**
 - 파이썬 = 객체지향, 문법이 쉽고 확장성 좋아 데이터과학에서 R과 함께 널리 사용
@@ -1361,6 +1386,7 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
   - 인용 요소: **`blockquote`(블록 인용, `cite` 속성에 출처 URL 지정)** / `q`(짧은 인라인 인용, 브라우저가 따옴표 자동 삽입) / `cite`(작품·저작물 제목 표시). `cite` 속성값은 화면에 표시되지 않는 출처 메타데이터
 - **블록 vs 인라인**
   - **블록 요소**(`div` 등): 한 줄 전체(너비 100%) 차지 / 위아래 줄바꿈 / 폭·높이 조절 가능. **인라인 요소**(`span`·`a`·`strong`·`img`): 내용만큼만 차지
+- **HTML 엔티티 기출**: 공백 1개 강제 표시는 `&nbsp;`, 예약문자는 `<`=`&lt;`, `>`=`&gt;`, `"`=`&quot;`, `&`=`&amp;`. 간격 조절은 `&nbsp;` 반복보다 CSS `margin`/`padding` 사용.
 
 **2강 HTML 요소: 리스트, 그림, 하이퍼링크, 테이블**
 
@@ -1381,6 +1407,8 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
   - `thead`/`tbody`/`tfoot`은 시각 장식이 아니라 **행을 의미적으로 그룹핑**(머리글·본문·바닥글)해 구조·스타일링·출력에 도움
   - 셀 병합: **`colspan`(가로로 N칸 합침) / `rowspan`(세로로 N칸 합침)** — `td`/`th`에 지정
   - 테이블 스타일: `tr`/`td` 등에 CSS 적용, **`visibility: collapse`는 표의 행·열을 공간까지 제거하며 숨김**(일반 요소의 `visibility: hidden`은 공간을 남김)
+- **테이블 열 그룹**: `colgroup`/`col`은 표의 **열 단위 스타일·폭 지정**용, `<row>` 태그는 없음. `col span="2"`처럼 `span`으로 같은 스타일을 적용할 열 개수 지정.
+- **`ol`/`li` 속성 주의**: `ol` 속성은 `type`/`start`/`reversed`, 개별 항목 번호 지정은 `li value` — `value`는 `ol` 속성이 아님.
 
 **3강 HTML 요소: 미디어, 시멘틱 요소**
 
@@ -1399,6 +1427,8 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
   - `details`+`summary`: 아코디언 UI, `open` 속성으로 기본 펼침
   - `time`: 날짜·시간에 의미 부여. **`datetime="YYYY-MM-DD"`가 기계가 읽는 값**
   - `progress`: `value` 속성을 빼면 **파란 막대가 좌우로 움직이는 불확정(indeterminate) 상태 애니메이션** 표시
+- **불리언 속성 기출**: `audio`/`video`의 `controls`, `autoplay`, `loop`, `muted`는 속성값 없이 속성명만 써도 참으로 처리된다. `poster`, `src`, `preload`는 값 필요.
+- **기본 표시 기출**: `<address>`는 연락처·저자 정보 의미 요소이며 브라우저 기본 스타일로 보통 **기울임꼴** 표시됨.
 
 **4강 HTML 요소: 웹 폼**
 
@@ -1425,6 +1455,9 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 - **기타 폼 요소**
   - `textarea`(긴 여러 줄 입력): `rows`/`cols`(보이는 줄·칸 크기) / `wrap`(줄바꿈 처리 방식) / `placeholder`(힌트) / `maxlength`(최대 글자 수) / `readonly`(수정 불가) / `disabled`(비활성·전송 제외). 내용은 여는·닫는 태그 사이에 작성(`value` 속성 아님)
   - `range`(슬라이더, `min`/`max`/`step`/`value`), `output`(실시간 계산값, `name`/`for`), `password`는 `autocomplete="current-password"`/`"new-password"`
+- **`select`/`option` 기출**: 드롭다운 목록은 `<select>` + 하위 `<option>`으로 작성. `select` 주요 속성은 `name`, `id`, `required`, `multiple`, `size`; `rows`는 `textarea` 속성.
+- **`select` vs `datalist`**: `select`는 정해진 목록에서 강제 선택, `datalist`는 추천 목록을 보여주지만 사용자가 새 값도 직접 입력 가능.
+- 버튼 형태 input 타입은 `submit`/`reset`/`button`/`image`; `search`는 검색어 입력용 한 줄 텍스트 타입으로 버튼이 아님.
 
 **5강 CSS: 개요, 선택자, 색상**
 
@@ -1448,6 +1481,9 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
   - 키워드: **`currentColor`(현재 글자색을 따라감)** / `transparent`(완전 투명한 검은색)
   - CSS 변수: `:root`에 `--변수명` 선언, `var(--변수명)` 호출
   - `opacity`는 자식까지 투명 → 배경만 투명하게 할 땐 `rgba()`/`hsla()`
+- CSS 적용은 `<style>` 태그, 외부 CSS 연결용 `<link>` 태그, `style` 속성으로 가능. `link`는 태그이지 CSS 적용 “속성”이 아님.
+- `p#style`은 `id="style"`인 `p` 요소를 선택하는 아이디 선택자 결합 형태.
+- `:hover`는 포인팅 장치가 요소 위에 올라간 동안, `:focus`는 입력 요소가 포커스를 받은 동안 적용.
 
 **6강 CSS: 글꼴, 텍스트, 리스트, 테이블**
 
@@ -1479,6 +1515,8 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
   - 테이블 속성: `border-collapse`(`collapse`=인접 테두리 합침(실무 필수)·`separate`=분리) / `table-layout`(`fixed`=지정 폭 강제·`auto`=내용 따라) / `border-spacing`(`separate`일 때 셀 간격) / `caption-side`(캡션 위·아래 위치) / `empty-cells`(빈 셀 테두리·배경 표시 여부)
   - **`table-layout: fixed`** = 내용 길이와 무관하게 지정 폭 강제 → 렌더링 속도·안정성↑ (`auto`는 내용에 따라 자동 조정). `colgroup`/`col`로 열 너비 세부 조절
   - 줄무늬: `:nth-child(even)`, 반응형: `overflow-x: auto`(가로 스크롤) 또는 미디어쿼리 카드 전환
+- **`@font-face` 기출**: 사용자 정의 글꼴은 `@font-face { font-family: 'myFont'; src: url(myFont.otf); }`처럼 `font-family`로 글꼴 이름, `src`로 파일 위치를 지정.
+- 없는 CSS 속성 주의: 글자색은 `color`, 그림자는 `text-shadow`; `text-color`는 CSS 속성이 아님.
 
 **7강 CSS: 박스 모델, 테두리**
 
@@ -1500,6 +1538,9 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
   - `border-radius`: `50%`(원/타원), **`9999px`(알약·캡슐 — 너비 가변에도 양끝 반원 유지)**, 슬래시로 타원 곡선
   - `outline`: **공간 차지 안 함**(레이아웃 영향 X) → focus 표시·디버깅
   - `box-shadow`: 가로·세로 오프셋, blur, spread, 색상. **`inset` 키워드 = 안쪽 그림자(눌린 효과)** (`text-shadow`는 inset 미지원)
+- **`overflow` 기출**: 콘텐츠가 박스를 넘칠 때 처리 속성은 `overflow`, 값은 `visible`(기본)/`hidden`/`scroll`/`auto`.
+- `margin`/`padding`/`border-style`은 값 개수에 따라 상우하좌 방향 적용이 달라진다. `background` 단축은 방향 4면 규칙이 아님.
+- `border` 단축은 `border-width`/`border-style`/`border-color`; `border-radius`는 포함되지 않음.
 
 **8강 CSS: 배경, 그라데이션, 변형**
 
@@ -1554,6 +1595,8 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
   - **`Math`(인스턴스 없이 정적 호출)**: `Math.random()`(0 이상 1 미만 실수) / `Math.floor`(내림)·`Math.ceil`(올림)·`Math.round`(반올림)·`Math.trunc`(버림) / `Math.max(...)`·`Math.min(...)` / `Math.abs`(절댓값)·`Math.pow`·`Math.sqrt` / `Math.PI`. **`min`~`max` 정수 난수 = `Math.floor(Math.random() * (max - min + 1)) + min`**
 - **이벤트**
   - 이벤트: `addEventListener`로 등록. **`e.preventDefault()` = 기본 동작 취소**(폼 제출·링크 이동 막고 JS가 통제)
+- 대화상자: `alert()`는 메시지 알림, `confirm()`은 `true`/`false` 반환, `prompt(메시지, 기본값)`는 문자열 입력값 또는 취소 시 `null` 반환.
+- 이벤트명: `keydown`=키를 누르는 순간, `keyup`=키를 놓는 순간, `blur`=포커스 상실, `load`=로딩 완료, `unload`=문서가 사라질 때, `dblclick`=더블클릭.
 
 **11강 문서 객체 모델과 브라우저 객체 모델**
 
@@ -1577,6 +1620,8 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
 - **타이머·이벤트 위임**
   - 타이머: `setTimeout()`(한 번) / `setInterval()`(반복 — 카운트다운·스톱워치). **메모리 누수 방지 위해 `clearTimeout()`/`clearInterval()` 필수**
   - 이벤트 위임(event delegation): 부모 하나에만 리스너 등록 → 동적 자식 이벤트까지 처리(이벤트 버블링 활용)
+- 구식 DOM 접근: `getElementsByClassName('bgcolor')`는 해당 클래스 요소 컬렉션 반환, `length`로 개수 확인, 각 요소의 태그명은 `tagName`, 내용 HTML은 `innerHTML`.
+- jQuery 기출 대비: `$("#id")`는 id 선택, `$(".class")`는 class 선택, `$(this)`는 현재 요소. `.val()`=폼 입력값, `.text()`=텍스트, `.html()`=HTML 포함 내용, `.attr("src")`=속성값, `.css("color")`=스타일값.
 
 **12강 캔버스 (1)**
 
@@ -3018,6 +3063,8 @@ const lng = position._________.longitude;
 - **명령행 매개변수**: `main()`에 전달되는 인자로, 실행 시 클래스 이름 뒤에 나열한다.
 - 점프문(분기문): `break` / `continue` / `return`.
 - 향상된 for문: `for (int value : a) { ... }` 형태로 배열/컬렉션 순회.
+- 식별자는 대소문자를 구별하며, 키워드는 식별자로 사용할 수 없고 첫 글자에 숫자가 올 수 없다.
+- 중첩 `if`에서 `else`는 **가장 가까운 짝 없는 `if`**와 결합한다.
 
 **3강 Java 기본 문법(2), 클래스와 상속(1)**
 
@@ -3032,6 +3079,7 @@ const lng = position._________.longitude;
 - 클래스 정의 시(내부 클래스가 아니면) 접근 제어자로 **생략**과 **`public`**만 지정 가능.
 - 접근 제어자가 생략된 클래스/필드는 **같은 패키지** 내에서만 사용 가능.
 - **생성자**는 이름을 클래스 이름과 같게 하고 반환형을 지정하지 않는다. 예) `Circle(...) { this.radius = radius; }`
+- **기본 생성자**는 생성자를 하나도 정의하지 않았을 때만 컴파일러가 자동 제공한다. 생성자를 하나라도 직접 정의하면 인자 없는 생성자는 자동으로 생기지 않는다.
 
 **4강 클래스와 상속(2)**
 
@@ -3046,6 +3094,9 @@ const lng = position._________.longitude;
 - **오버로딩**: 한 클래스에서 이름이 같고 **매개변수 목록**이 달라 구별되는 여러 메서드.
 - **오버라이딩**: 부모로부터 상속받은 메서드의 몸체를 자식이 다시 정의. 접근 범위를 더 좁게 만들 수 없다.
 - 숨은 인자 **`this`**는 현재 객체를 가리킨다. `this()`는 같은 클래스의 다른 생성자를, `super()`는 부모 클래스 생성자를 호출한다.
+- `static` 메서드는 객체 없이 호출되므로, 내부에서 인스턴스 필드/메서드나 `this`를 객체 없이 직접 사용할 수 없다.
+- 필드 초기화 순서: **선언부 초기값 → 인스턴스 초기화 블록 → 생성자**. `static` 초기화 블록은 클래스 로딩 시 한 번 실행된다.
+- 부모의 `private` 멤버는 자식 객체 안에 존재하더라도 자식 클래스에서 직접 접근할 수 없으며, 접근 가능한 메서드를 통해 사용해야 한다.
 
 **5강 인터페이스와 다형성**
 
@@ -3056,6 +3107,9 @@ const lng = position._________.longitude;
 - **다형성**은 메서드 오버라이딩/오버로딩, 클래스 간 상속과 형변환, 인터페이스 구현과 형변환, 메서드 **동적 바인딩**으로 구현된다.
 - **열거 자료형(enum)**: 여러 상수값을 미리 정의하는 자료형, 각 상수값은 하나의 객체와 같다.
 - **익명 클래스**: 이름 없는 클래스로, 일회성으로 상속/구현을 통해 자식 객체를 생성하는 용도로만 사용. 예) `new CSuper() { ... }` → `CSuper`를 상속받는 익명 클래스를 정의하면서 동시에 그 객체를 생성.
+- 추상 클래스는 객체를 직접 생성할 수 없고, 추상 메서드가 하나라도 있으면 클래스도 `abstract`로 선언해야 한다. 단, 일반 필드/메서드/생성자도 함께 가질 수 있다.
+- 인터페이스의 필드는 묵시적으로 `public static final`, 추상 메서드는 묵시적으로 `public abstract`이다. 한 클래스는 여러 인터페이스를 구현할 수 있다.
+- 부모/인터페이스 타입 변수로 자식 객체를 참조하면 오버라이딩 메서드는 동적 바인딩되지만, 자식/익명 클래스에서 새로 추가한 멤버는 캐스팅 없이는 접근할 수 없다.
 
 **6강 제네릭과 람다식**
 
@@ -3079,6 +3133,8 @@ const lng = position._________.longitude;
 - **checked Exception**은 발생 가능 시 반드시 예외 처리 구문을 작성해야 한다.
 - 예외 직접 처리는 **`try-catch`**, 예외 전파는 메서드 선언에 **`throws 예외유형`**(예 `throws IOException`). (던지는 것은 `throw`, 선언은 `throws`)
 - `finally`는 예외 발생 여부와 상관없이 실행된다.
+- `try-with-resources`: `try (...)` 괄호 안에서 생성한 리소스는 블록 종료 시 자동으로 `close()`되어 `finally`의 수동 닫기를 대체한다.
+- 사용자 정의 예외는 보통 `Exception`을 상속해 만들며, 발생은 `throw new MyException();`, 전파 선언은 `throws MyException`으로 한다.
 
 **8강 java.lang 패키지**
 
@@ -3089,6 +3145,10 @@ const lng = position._________.longitude;
 - 문자열 내용 비교는 `==`가 아니라 **`equals()`**로 한다. (`==`는 참조값 비교)
 - 기본형 값을 객체로 다루기 위해 기본형마다 상응하는 **포장(Wrapper) 클래스**가 존재한다.
 - **`System`** 클래스는 표준 입력/출력/오류 출력용으로 `in`, `out`, `err` 객체를 제공한다. (표준 입출력 스트림 static 필드는 `String`이 아니라 `System`이 제공)
+- `Object.clone()`을 사용하려면 보통 클래스가 `Cloneable`을 구현하고 `super.clone()`을 호출한다. 반환형은 `Object`이므로 필요한 타입으로 캐스팅한다.
+- `getClass()`는 객체의 `Class` 객체를 반환하며, 이를 통해 클래스 이름, 슈퍼클래스, 필드, 메서드 정보를 조회할 수 있다.
+- `String.valueOf(char[])`는 문자 배열 내용을 문자열로 만들지만, `String.valueOf(int[])` 같은 일반 배열은 `[I@...` 형태의 객체 참조 문자열이 된다.
+- 박싱/언박싱은 기본형↔포장 객체 자동 변환이고, 문자열을 숫자로 바꿀 때는 `Integer.parseInt(...)` 같은 메서드를 사용한다.
 
 **9강 java.io 패키지와 스트림**
 
@@ -3101,6 +3161,9 @@ const lng = position._________.longitude;
 - 사용 순서: 기본 스트림 객체를 먼저 생성하고, 그 객체를 인자로 보조 스트림 객체를 생성한다.
 - **`BufferedReader`**는 `Reader`의 자식 클래스로 `read()`·`readLine()` 등 **문자 단위** 입력 메서드와 버퍼링을 제공한다. (바이트 단위 입력은 아님)
 - **`InputStreamReader`**: 바이트 단위 입력 스트림(`System.in`)을 캐릭터 단위 입력 스트림으로 변환 → 한글 입력 시 사용.
+- 바이트 스트림 예: `InputStream`/`OutputStream`, `FileInputStream`/`FileOutputStream`; 문자 스트림 예: `Reader`/`Writer`, `FileReader`/`FileWriter`.
+- `InputStream.read()`는 더 읽을 데이터가 없으면 `-1`을 반환하므로 파일 복사 루프 조건은 `while ((n = is.read()) != -1)` 형태이다.
+- `Console`은 `System.console()`로 얻으며 `readLine()`과 비밀번호 입력용 `readPassword()`를 제공한다.
 
 **10강 java.nio 패키지의 활용**
 
@@ -3110,6 +3173,8 @@ const lng = position._________.longitude;
 - 채널 입출력에서 **버퍼**는 기본형 데이터의 보관소이며 버퍼 단위로 입출력한다.
 - **`FileChannel`**: 입력·출력을 **모두** 제공, 기본적으로 버퍼링 사용, **멀티 스레드 환경에서 안전**. `FileChannel.open(path)`은 기본적으로 읽기용으로 연다. (`FileChannelReader`/`FileChannelWriter`라는 클래스는 없음)
 - **`WatchService`**: 디렉터리에 발생하는 이벤트를 감시하는 서비스. `take()`가 리턴하는 **`WatchKey`**는 등록된 디렉터리에 어떤 관심 이벤트가 등록되어 있고 실제 어떤 이벤트가 일어났는지의 상태 정보를 가진다.
+- `Path` 주요 메서드: `getFileName()`, `getParent()`, `getNameCount()`, `getName(i)`; 경로 객체는 `Paths.get(...)`으로 만든다.
+- `FileChannel` 읽기 패턴: `read(buffer)` 후 `buffer.flip()`으로 읽기 모드 전환, 처리 후 `buffer.clear()`로 버퍼를 비운다.
 
 **11강 컬렉션**
 
@@ -3127,6 +3192,9 @@ const lng = position._________.longitude;
 - **`Map`** 계열은 `<key, value>` 쌍 — `HashMap`, `Hashtable`, `Map`. (`HashSet`은 `Set` 계열로 Map이 아님)
 - **`LinkedList`**: `List`와 `Queue`를 모두 구현, 스택용 메서드도 제공.
 - `Queue` 자료 추가는 `boolean offer(E)`, 삭제는 `E poll()`.
+- `HashSet.add(중복원소)`는 `false`를 반환하고 크기가 증가하지 않는다. `contains(new String("one"))`도 문자열 `equals()` 기준으로 판단된다.
+- `Iterator<E>` 탐색 기본형: `Iterator<E> it = collection.iterator(); while (it.hasNext()) it.next();`.
+- `ArrayList` 메서드 함정: `set(index, value)`와 `remove(index)`는 기존/삭제 원소를 반환하고, `remove(Object)`는 삭제 성공 여부 `boolean`을 반환한다.
 
 **12강 컬렉션과 스트림**
 
@@ -3140,6 +3208,10 @@ const lng = position._________.longitude;
   - **매칭(`match`)**: 특정 조건 만족 여부 확인.
   - **수집(collect)**: 결과 원소들을 취합해 새 `List`/`Set`/`Map` 생성.
 - 중간연산은 변환·필터링 후 새 스트림을 리턴해 여러 번 체인 가능, 종료연산은 최종 결과를 만들어 리턴(스트림 소비).
+- 숫자 스트림: `IntStream.rangeClosed(1, 100)`은 끝값을 포함하며 `sum()`, `average().getAsDouble()`, `min().getAsInt()`, `max().getAsInt()` 같은 집계를 제공한다.
+- `parallelStream()`은 병렬 처리하므로 출력 순서가 항상 보장되지 않는다.
+- 중간연산 추가: `sorted()`는 `Comparable.compareTo()` 기준으로 정렬하고, `peek()`은 중간 루핑/디버깅용이며 최종연산이 있어야 실행된다.
+- 최종연산 매칭: `anyMatch`는 하나라도 만족, `allMatch`는 모두 만족, `noneMatch`는 아무것도 만족하지 않음을 검사한다.
 
 **13강 멀티스레드 프로그래밍**
 
@@ -3152,6 +3224,8 @@ const lng = position._________.longitude;
 - 헷갈림 주의: `interrupt()`는 인터럽트를 “검사”하는 메서드가 아니며, `sleep()`이 현재 스레드를 정해진 시간 동안 멈춘다. `notify()`는 대기 중인 스레드 하나를 깨운다.
 - **동기화(synchronization)**: 데이터 무결성 유지를 위해 **한 번에 한 스레드만** 공유 객체에 접근하도록 하는 것.
 - **`synchronized`** 메서드는 동기화를 보장 — 한 스레드가 공유 객체의 메서드 실행 중이면 다른 스레드는 동일 객체에 접근할 수 없다.
+- 새 스레드를 실행하려면 `start()`를 호출해야 한다. `run()`을 직접 호출하면 새 스레드가 아니라 현재 스레드에서 일반 메서드처럼 실행된다.
+- `join()` 다음 문장은 대상 스레드가 종료된 뒤 실행된다. `synchronized`는 메서드 전체에 붙이거나 `synchronized(this) { ... }` 블록으로 임계영역을 지정할 수 있다.
 
 **14강 JDBC 프로그래밍**
 
@@ -3162,6 +3236,9 @@ const lng = position._________.longitude;
 - `select` 구문은 `executeQuery()`로 실행하며, 결과가 테이블 형태의 **`ResultSet`** 객체로 리턴된다(행 단위로 읽음).
 - **`PreparedStatement`**: 같은 SQL을 여러 번 실행할 때 효율적, 매개변수가 있는 SQL을 저장하고 실행 전에 값을 지정. (`Statement`의 부모가 아니라 **자식** 인터페이스 — "부모"라는 설명은 틀림)
 - JDBC 순서: 드라이버/연결 → `Statement` → SQL 실행 → `ResultSet` 처리 → `close`.
+- `Statement.execute(sql)`은 결과가 `ResultSet`이면 `true`, 갱신 결과이면 `false`를 반환한다. 갱신 행 수는 `getUpdateCount()`로 얻는다.
+- `executeUpdate()`는 `insert`/`update`/`delete` 실행에 사용하며 영향받은 행 수 `int`를 반환한다.
+- `DatabaseMetaData`는 `conn.getMetaData()`로 얻고, `ResultSetMetaData`는 `rs.getMetaData()`로 얻어 DB/컬럼 정보를 조회한다.
 
 **15강 라이브러리와 모듈**
 
@@ -3749,6 +3826,8 @@ for (int value : a) { System.out.print(value + " "); }
 #### 강의별 핵심 정리
 
 > 강의록 PDF(1~15강) + 체크포인트 + 연습문제 기준.
+- 모듈 의존성에서 `requires transitive B;`는 A를 요구하는 다른 모듈도 B를 읽을 수 있게 하는 전이 의존성 선언이다.
+- `exports`는 외부 모듈에 공개할 패키지를 지정하고, `requires`는 현재 모듈이 필요로 하는 다른 모듈을 지정한다.
 
 **1강 컴퓨터의 이해**
 - 데이터: 관찰·측정으로 얻은 질적/양적 값 / 정보: 데이터를 처리(정렬·합산·군집화)해 문제해결에 쓰는 결과물
