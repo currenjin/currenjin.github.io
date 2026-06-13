@@ -199,7 +199,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
   - 행 구분(나란히 표기) = **`&`** / 분수 = **`over`** (예: `관측도수 over 기대도수`)
   - 경우 나눔(중괄호로 조건별 정의) = **`cases`** (예: `f(x) = cases{1, & 0 leq x leq 1 # 0, & 아닐 때}`), 줄 바꿈 = **`#`**
 - 특수문자 입력 단축키 기출: 한글 2007/2014 기준 **`Ctrl+F10`**.
-- 수식편집기 기출: `{bar X} sim N left (mu,~ sigma^2 over n right)` → `X̄ ~ N(μ, σ²/n)`, `{{bar X}-mu} over {sigma/sqrt{n}} sim N(0,~1)` → 표준화된 정규분포 식.
+- 수식편집기 기출: `{bar X} sim N left (mu,~ sigma^2 over n right)` → `X̄ ~ N(μ, σ²/n)`, `{ {bar X}-mu} over {sigma/sqrt{n}} sim N(0,~1)` → 표준화된 정규분포 식.
 
 **6강 엑셀을 이용한 데이터 처리 (1)**
 - 엑셀 = 행·열 데이터 분석용 대표 **스프레드시트**: 그래프 표현 / 통계분석 / 데이터베이스 관리도구 기능 보유 (인터넷 검색 기능은 핵심 기능 아님)
