@@ -3,7 +3,7 @@ layout  : wiki
 title   : 한국방송통신대학교(Korea National Open University)
 summary : KNOU 컴퓨터과학과 학교·학과 안내와 주요 과목 강의별 정리, 핵심 암기표
 date    : 2026-05-18 12:00:00 +0900
-updated : 2026-06-13 12:00:00 +0900
+updated : 2026-06-14 12:00:00 +0900
 tags    : [knou, computer-science, exam-prep]
 toc     : true
 public  : true
@@ -3114,6 +3114,7 @@ const lng = position._________.longitude;
 - **인터페이스**는 추상 메서드로만 구성된다. 단 `default` 인스턴스 메서드와 `static` 메서드는 몸체가 있어야 한다.
 - 묶는 기준: 의미적으로 유사 → **추상 클래스**, 기능적으로 유사 → **인터페이스**.
 - 상속 키워드: 클래스 상속은 **`extends`**, 인터페이스 구현은 **`implements`**. (클래스가 인터페이스를 구현 → `implements`, 인터페이스가 인터페이스를 상속 → `extends`)
+- 이벤트 처리 구분: **Listener는 인터페이스라 `implements`, Adapter는 클래스라 `extends`**. `ActionListener`처럼 메서드가 1개면 직접 구현하고, `WindowListener`처럼 메서드가 많고 일부만 쓰면 `WindowAdapter` 같은 어댑터를 상속한다.
 - **다형성**은 메서드 오버라이딩/오버로딩, 클래스 간 상속과 형변환, 인터페이스 구현과 형변환, 메서드 **동적 바인딩**으로 구현된다.
 - **열거 자료형(enum)**: 여러 상수값을 미리 정의하는 자료형, 각 상수값은 하나의 객체와 같다.
 - **익명 클래스**: 이름 없는 클래스로, 일회성으로 상속/구현을 통해 자식 객체를 생성하는 용도로만 사용. 예) `new CSuper() { ... }` → `CSuper`를 상속받는 익명 클래스를 정의하면서 동시에 그 객체를 생성.
