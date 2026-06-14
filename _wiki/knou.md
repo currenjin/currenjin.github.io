@@ -3,7 +3,7 @@ layout  : wiki
 title   : 한국방송통신대학교(Korea National Open University)
 summary : KNOU 컴퓨터과학과 학교·학과 안내와 주요 과목 강의별 정리, 핵심 암기표
 date    : 2026-05-18 12:00:00 +0900
-updated : 2026-06-14 12:00:00 +0900
+updated : 2026-06-14 16:20:00 +0900
 tags    : [knou, computer-science, exam-prep]
 toc     : true
 public  : true
@@ -187,6 +187,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 - **상자그림 특이값 경계**: 안울타리 = `Q1 - 1.5×IQR`, `Q3 + 1.5×IQR`; 이 바깥 자료는 특이값(outlier)으로 표시.
 - **레이더차트**: 여러 평가기준·여러 대상의 특성 비교에 유용.
 - **줄기-잎 그림**: 연속형 자료의 분포를 보면서 원자료 값도 보존. 관측치가 아주 많을 때 도수분포표를 먼저 만들고 그리는 그래프는 히스토그램 쪽.
+- 기출 복구 규칙: **특이치에 강한 것 = 중앙값·IQR, 특이치에 약한 것 = 평균·표준편차**. 표준편차는 평균 기준 제곱거리라 IQR보다 특이치 영향이 작다는 설명은 틀리다.
 
 **5강 문서작성**
 - 한글 2018 사용법(문서·표 작성, 수식편집기)
@@ -304,6 +305,7 @@ KNOU(Korea National Open University)는 원격 학사 시스템을 운영하는 
 - 기술통계량: **`nex8.describe()`** — count/mean/std/min/25%/50%/75%/max 출력
 - 막대그래프: `import matplotlib.pyplot as plt` 후 **`plt.bar(x, height)`** — 예) `plt.bar(edu_freq.index, edu_freq["count"])`
 - 빈도표: `pd.crosstab(index=nex8["edu"], columns="count")`
+- 코드형 주관식: `pd.read_excel()`≒`pd.read_excel`, `plt.bar()`≒`plt.bar`, `nex8.iloc[:, 1:]`는 모든 행과 두 번째 열부터 끝까지를 뜻한다.
 
 #### 핵심 암기표
 
@@ -1697,6 +1699,7 @@ nex8 = ( )("c:/data/dataintro/nex8-1.csv", header=0)
   - **File API**: 사용자가 선택/드롭한 로컬 파일 정보를 JS에서 읽음
   - **Web Worker**: 무거운 작업을 백그라운드 스레드에서 처리해 UI 멈춤 감소
   - **WebSocket**: 서버와 연결을 유지하며 양방향 실시간 통신
+- 연습문제 1트 기준 새 복구 포인트는 없다. 시험 직전에는 HTML=태그·속성명, CSS=속성명·값, JS/jQuery=메서드 이름을 끝까지 정확히 구분한다.
 
 #### 핵심 암기표
 
@@ -3080,6 +3083,7 @@ const lng = position._________.longitude;
 
 - 배열은 원소의 **초기화 과정**이나 **생성 과정**을 거쳐야 사용할 수 있다.
 - 올바른 배열 선언 예: `int[][] c = new int[5][];`. (`int a[10] = new int[];`, `int b[] = new int(10);`, `int[5] d = {...};`는 모두 문법 오류 — 선언부 `[]`에 크기를 넣지 않음)
+  - `int[5] d = {1,2,3,4,5};`는 C 스타일 감각이라 Java에서는 틀림. Java는 왼쪽 타입에 크기를 쓰지 않고, 크기는 `new int[5]`처럼 오른쪽에 쓴다.
 - 배열 크기는 `배열이름.length`로 표현한다. (필드이므로 괄호 없음 — `String length()`와 구별)
 - 문자열 변수/리터럴에 `+` 연산을 적용하면 두 문자열이 **연결**된 문자열이 된다.
 - 두 정수 변수 `i`, `j`를 분리해 출력하려면 `System.out.println(i + " " + j);` (단순히 `i + j`는 합이 출력됨).
@@ -3115,6 +3119,7 @@ const lng = position._________.longitude;
 - 묶는 기준: 의미적으로 유사 → **추상 클래스**, 기능적으로 유사 → **인터페이스**.
 - 상속 키워드: 클래스 상속은 **`extends`**, 인터페이스 구현은 **`implements`**. (클래스가 인터페이스를 구현 → `implements`, 인터페이스가 인터페이스를 상속 → `extends`)
 - 이벤트 처리 구분: **Listener는 인터페이스라 `implements`, Adapter는 클래스라 `extends`**. `WindowListener`로도 작성할 수 있지만 Listener의 메서드를 모두 구현해야 한다. `WindowAdapter`는 `WindowListener`를 미리 구현한 편의 클래스라 필요한 메서드만 오버라이딩할 때 쓴다. 시험에서는 메서드 개수보다 선택지의 타입 이름을 먼저 보고 `Listener → implements`, `Adapter → extends`로 판단한다.
+- 이벤트 처리 함정: 이벤트 소스에 리스너 객체를 등록하는 것은 맞지만, **하나의 이벤트 소스에 하나의 이벤트 처리만 등록할 수 있다는 설명은 틀림**. 같은 소스에 여러 리스너/처리를 등록할 수 있다.
 - **다형성**은 메서드 오버라이딩/오버로딩, 클래스 간 상속과 형변환, 인터페이스 구현과 형변환, 메서드 **동적 바인딩**으로 구현된다.
 - **열거 자료형(enum)**: 여러 상수값을 미리 정의하는 자료형, 각 상수값은 하나의 객체와 같다.
 - **익명 클래스**: 이름 없는 클래스로, 일회성으로 상속/구현을 통해 자식 객체를 생성하는 용도로만 사용. 예) `new CSuper() { ... }` → `CSuper`를 상속받는 익명 클래스를 정의하면서 동시에 그 객체를 생성.
