@@ -1,5 +1,14 @@
 [
   {
+    "title": "Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)",
+    "url": "/wiki/designing-data-intensive-applications",
+    "updated": "2026-06-25",
+    "summary": "데이터 중심 애플리케이션 설계 북클럽 정리와 장별 참고 자료",
+    "tags": "architecture, database, engineering, design",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "한국방송통신대학교(Korea National Open University)",
     "url": "/wiki/knou",
     "updated": "2026-06-14",
@@ -140,15 +149,6 @@
     "updated": "2026-03-03",
     "summary": "",
     "tags": "git, devops, engineering",
-    "source": "Wiki",
-    "external": false
-  },
-  {
-    "title": "Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)",
-    "url": "/wiki/designing-data-intensive-applications",
-    "updated": "2026-02-24",
-    "summary": "",
-    "tags": "architecture, database, engineering, design",
     "source": "Wiki",
     "external": false
   },
