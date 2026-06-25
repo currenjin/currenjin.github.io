@@ -3,7 +3,7 @@ layout  : wiki
 title   : Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)
 summary : 데이터 중심 애플리케이션 설계 장별 노트
 date    : 2025-09-10 13:00:00 +0900
-updated : 2026-06-25 13:05:35 +0900
+updated : 2026-06-25 15:30:01 +0900
 tags    : [architecture, database, engineering, design]
 toc     : true
 public  : true
@@ -19,6 +19,7 @@ latex   : true
 
 마틴 클레프만의 *Designing Data-Intensive Applications*를 장별 노트 형식으로 정리한다. 원서의 흐름을 따라 개념을 먼저 잡고, 각 장에서 설계자가 판단해야 하는 선택지를 함께 기록한다.
 
+- [San Diego Machine Learning Book Club 정리](https://github.com/SanDiegoMachineLearning/bookclub/blob/master/designing-data-intensive-apps.md)
 - [Alexandria playground](https://github.com/currenjin/alexandria-playground/tree/main/book-designing-data-intensive-applications)
 - [DDIA 참고 문헌 저장소](https://github.com/ept/ddia-references)
 - [DDIA 운영 플레이북](https://github.com/currenjin/alexandria-playground/blob/main/book-designing-data-intensive-applications/runbook.md)
