@@ -3,7 +3,7 @@ layout  : wiki
 title   : Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)
 summary : 데이터 중심 애플리케이션 설계 장별 노트
 date    : 2025-09-10 13:00:00 +0900
-updated : 2026-06-25 15:30:01 +0900
+updated : 2026-06-27 23:00:00 +0900
 tags    : [architecture, database, engineering, design]
 toc     : true
 public  : true
@@ -25,14 +25,14 @@ latex   : true
 - [DDIA 운영 플레이북](https://github.com/currenjin/alexandria-playground/blob/main/book-designing-data-intensive-applications/runbook.md)
 - [DDIA 플레이북 리허설 가이드](https://github.com/currenjin/alexandria-playground/blob/main/book-designing-data-intensive-applications/runbook-drill.md)
 
-## Chapter 1. 신뢰성, 확장성, 유지보수성 있는 애플리케이션
-
-### 책의 구성
+## 책의 구성
 
 * 책은 세 부분으로 구성된다.
   * 1부는 데이터 시스템의 기초를 다룬다.
   * 2부는 여러 장비로 확장할 때 생기는 분산 데이터 문제를 다룬다.
   * 3부는 배치 처리와 스트림 처리를 포함한 파생 데이터 통합을 다룬다.
+
+## Chapter 1. 신뢰성, 확장성, 유지보수성 있는 애플리케이션
 
 ### 데이터 시스템의 목표
 
