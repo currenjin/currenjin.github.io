@@ -3,7 +3,7 @@ layout  : wiki
 title   : Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)
 summary : 데이터 중심 애플리케이션 설계 장별 노트
 date    : 2025-09-10 13:00:00 +0900
-updated : 2026-06-30 13:21:22 +0900
+updated : 2026-06-30 13:38:47 +0900
 tags    : [architecture, database, engineering, design]
 toc     : true
 public  : true
@@ -31,8 +31,6 @@ latex   : true
 
 ## Chapter 1. 신뢰성, 확장성, 유지보수성 있는 애플리케이션
 
-- 원문 노트: [Google Doc](https://docs.google.com/document/d/1MMMAAqen9FdskelaiGOsElVAlmxN5B60uxbBG-Cw2tA/edit)
-- 밋업 영상: [YouTube](https://youtu.be/JqDAEH_2t6M)
 
 ### 도서 정리
 - 이 책은 세 부분으로 구성되어 있습니다.
@@ -92,8 +90,6 @@ latex   : true
 
 ## Chapter 2. 데이터 모델과 질의 언어
 
-- 원문 노트: [Google Doc](https://docs.google.com/document/d/1tpV0cvj0sS5tslPKQnbI48uAf2UKg3_1WI-vYJZlA5E/edit)
-- 밋업 영상: [YouTube](https://youtu.be/8Xd1Nf1APmc)
 
 ### 소개
 - 대부분의 애플리케이션은 하나의 데이터 모델을 다른 데이터 모델 위에 계층화하여 구축됩니다.
@@ -187,8 +183,6 @@ latex   : true
 
 ## Chapter 3. 저장소와 검색
 
-- 원문 노트: [Google Doc](https://docs.google.com/document/d/1r_k-1PJlSp04LusH6yHpsSQ2o-vZIW1Catv9PRAV2iQ/edit)
-- 밋업 영상: [YouTube](https://youtu.be/b1djvhyUJUk)
 
 ### 소개
 - 동기를 부여하는 예로 저자는 단순히 키-값 쌍을 로그에 추가하는 간단한 데이터베이스를 보여줍니다.
@@ -335,8 +329,6 @@ latex   : true
 
 ## Chapter 4. 부호화와 발전
 
-- 원문 노트: [Google Doc](https://docs.google.com/document/d/1MUh3SYMrSfK0i3t_Bj96SxPlOflkysJ5tUrnsj_F3Jo/edit)
-- 밋업 영상: [YouTube](https://youtu.be/YZAvkAEPgVw)
 
 - 데이터를 인코딩하는 방법에는 여러 가지가 있습니다(JSON, XML, Protos, Thrift, Avro). 이 장에서 다루는 주요 질문은 다음과 같습니다.
   - 각각 스키마 변경 및 이전 버전/앞 버전 호환성을 어떻게 처리합니까?
@@ -453,8 +445,6 @@ latex   : true
 
 ## Chapter 5. 복제
 
-- 원문 노트: [Google Doc](https://docs.google.com/document/d/1T8Y4DNrJXr9Cxemz2J9SqxCMA1M115G7o8_-ggMUz9U/edit)
-- 밋업 영상: [YouTube](https://youtu.be/wk9yig6xqPo)
 
 ### 2부
 - 1부에서는 데이터가 단일 머신에 저장될 때의 빌딩 블록에 대해 논의했습니다.
@@ -621,8 +611,6 @@ latex   : true
 
 ## Chapter 6. 파티셔닝
 
-- 원문 노트: [Google Doc](https://docs.google.com/document/d/1JUt1vZMUgTBB3egr59Lj3DFJ2QxWUJYWViYcGOVNwtU/edit)
-- 밋업 영상: [YouTube](https://youtu.be/cARZXd8x7Ew)
 
 ### 소개
 - 파티셔닝은 데이터의 각 조각이 하나의 파티션의 일부가 되도록 데이터를 분할하고 파티션이 여러 서버에 분산되는 것입니다.
@@ -721,8 +709,6 @@ latex   : true
 
 ## Chapter 7. 트랜잭션
 
-- 원문 노트: [Google Doc](https://docs.google.com/document/d/1NDisyUYoBhSpzTzsi7NQ5KYRg3BULgmc-J5QT2oNcS4/edit)
-- 밋업 영상: [YouTube](https://youtu.be/9vvKkkMGQ2Q)
 
 ### 소개
 - 이 장에서는 항상 잘못될 수 있는 일이 있다는 것을 다룹니다.
@@ -849,8 +835,6 @@ latex   : true
 
 ## Chapter 8. 분산 시스템의 골칫거리
 
-- 원문 노트: [Google Doc](https://docs.google.com/document/d/1CuQn6nEu2z5P1oe6KPZRLQO-3Lrz-S8CqTp5LHNYlOc/edit)
-- 밋업 영상: [YouTube](https://youtu.be/WJcKtG7zxe0)
 
 - 이 장에서는 사물의 비관적인 측면을 살펴봅니다.
 - 잘못될 수 있는 모든 일이 잘못될 것이라고 가정
@@ -977,8 +961,6 @@ latex   : true
 
 ## Chapter 9. 일관성과 합의
 
-- 원문 노트: [Google Doc](https://docs.google.com/document/d/1MVwTKULlNDjnMw5MvhU5D1Ms5BBs07163C3_NfYkLaU/edit)
-- 밋업 영상: [YouTube](https://youtu.be/0rRsOVCKnsQ)
 
 ### 소개
 - 우리는 빌딩 블록을 살펴봤고, 지난 장에서는 분산 시스템에서 잘못될 수 있는 모든 것에 대해 논의했습니다.
@@ -1125,8 +1107,6 @@ latex   : true
 
 ## Chapter 10. 일괄 처리
 
-- 원문 노트: [Google Doc](https://docs.google.com/document/d/10wPVoRnLInhWNbjXYV3yXPmWzgFHyX1bgLBCFkM8b_s/edit)
-- 밋업 영상: [YouTube](https://youtu.be/uR2fTP26xK8)
 
 - 책 전반에 걸쳐 우리는 요청, 질의, 응답 및 결과를 살펴보았습니다. 이들의 성공은 일반적으로 응답 시간으로 측정됩니다.
 - 일괄 작업에서는 응답 시간보다는 처리량에 크게 신경을 쓸 수 있습니다.
@@ -1232,8 +1212,6 @@ latex   : true
 
 ## Chapter 11. 스트림 처리
 
-- 원문 노트: [Google Doc](https://docs.google.com/document/d/1cj0uHh2hl49S1BozHlHHUJY-i8GqaX5QQ-tryb0sWms/edit)
-- 밋업 영상: [YouTube](https://youtu.be/bLCUSDwjnNM)
 
 ### 소개
 - 지난 장에서 유한한 크기의 입력이 필요한 일괄 처리에 대해 이야기했지만 실제로는 많은 데이터 소스가 무한하며 지속적으로 데이터를 생성합니다.
@@ -1358,8 +1336,6 @@ latex   : true
 
 ## Chapter 12. 데이터 시스템의 미래
 
-- 원문 노트: [Google Doc](https://docs.google.com/document/d/1ltpJUG8SSD1WQftjutPWd_hmbRS9IP1gnuo5JGVOasM/edit)
-- 밋업 영상: [YouTube](https://youtu.be/KyCk_MUITY4)
 
 - 데이터 시스템의 미래에 대한 저자의 예측
 - 안정적이고 확장 가능하며 유지 관리 가능한 시스템을 위해 여러 가지를 하나로 모으는 방법을 마무리하려고 합니다.
