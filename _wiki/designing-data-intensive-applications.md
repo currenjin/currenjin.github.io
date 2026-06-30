@@ -3,7 +3,7 @@ layout  : wiki
 title   : Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)
 summary : 데이터 중심 애플리케이션 설계 장별 노트
 date    : 2025-09-10 13:00:00 +0900
-updated : 2026-06-30 14:01:11 +0900
+updated : 2026-06-30 14:15:59 +0900
 tags    : [architecture, database, engineering, design]
 toc     : true
 public  : true
@@ -716,20 +716,20 @@ flowchart LR
 ```
 
 - 목표는 데이터를 파티션 전체에 균등하게 분산시키는 것입니다.
-- Partitioning by key range
+- 키 범위 기준 파티셔닝
   - 연속적인 범위의 키를 파티션에 할당
   - 데이터가 균등하게 분산되지 않으면 범위가 균등하게 배치되지 않습니다.
   - 경계는 수동으로 선택하거나 자동으로 선택할 수 있습니다.
-    - Automatic used with automated rebalancing
+    - 자동 분할은 자동 재균형화와 함께 사용됩니다.
   - 데이터를 정렬된 순서로 저장할 수 있어 범위 쿼리가 효율적입니다.
   - 범위 분할로 인해 쉽게 핫스팟이 발생할 수 있다는 점에 주의하세요.
-- Partitioning by hash of key
+- 키 해시값 기준 파티셔닝
   - 해시 함수는 편향된 데이터를 균일하게 분산시키지만 암호화가 강력할 필요는 없습니다.
   - 연속된 범위의 해시 값을 파티션에 할당
   - 이제 범위 쿼리가 어려워지고 일부 제품/쿼리에서는 지원되지 않습니다.
     - Cassandra는 복합 기본 키를 허용하며 첫 번째 열에서는 범위 쿼리를 수행할 수 없지만 두 번째 열(및 추가 열)에서는 수행할 수 있습니다.
 
-### Skewed Workloads and Relieving Hot Spots
+### 쏠린 작업부하와 핫스팟 완화
 - 해싱은 일반적으로 키 전체에 걸쳐 요청을 균등화하지만 핫스팟이 없음을 보장하지는 않습니다.
 - 동일한 키에 대한 요청 수가 너무 많아도 여전히 핫스팟이 남아 있습니다.
 - 대부분의 시스템은 이러한 유형의 상황을 자동으로 해결할 수 없습니다.
@@ -863,7 +863,7 @@ flowchart TD
 - 대부분의 시스템은 직렬성을 제공하지 않기 때문에 저자는 “무작정 도구에 의존하기보다는 존재하는 동시성 문제의 종류와 이를 방지하는 방법에 대한 올바른 이해가 필요하다”고 설명합니다.
 - 약한 격리 수준을 강도가 높은 순서대로 나열하고 이를 통해 예방할 수 있는 6가지 경쟁 조건을 나열합니다(해당 난이도 순서).
 - 참고: 트랜잭션이 성공적으로 완료되면 커밋되었다고 합니다.  커밋되지 않은 쓰기라는 용어는 아직 완료되지 않은 트랜잭션의 일부인 쓰기를 나타냅니다.  커밋되지 않은 쓰기는 결국 커밋되거나 롤백될 수 있습니다.
-- 참고: 이 토론에서는 다양한 종류의 잠금에 대해 설명합니다.  자물쇠에 익숙하지 않은 경우 Wikipedia에 간단한 설명이 있습니다: https://en.wikipedia.org/wiki/Record_locking.  더 자세한 내용은 다음과 같습니다: https://www.methodsandtools.com/archive/archive.php?id=83.
+- 참고: 이 토론에서는 다양한 종류의 잠금에 대해 설명합니다.  잠금에 익숙하지 않은 경우 [Wikipedia의 record locking 설명](https://en.wikipedia.org/wiki/Record_locking)을 참고할 수 있습니다. 더 자세한 내용은 [Methods & Tools의 lock 관련 글](https://www.methodsandtools.com/archive/archive.php?id=83)을 참고하세요.
 
 ### 커밋되지 않은 읽기
 - 각주에만 언급된 가장 약한 격리 수준은 시스템이 하나의 경쟁 조건(더티 쓰기)만 방지하는 것입니다.
@@ -881,7 +881,7 @@ flowchart TD
   - 더티 읽기가 발생한 후 이 트랜잭션이 롤백되면 더티 읽기를 통해 다른 트랜잭션이 실제로 기록되지 않은 값을 볼 수 있습니다.
 - 구현:
   - 더티 읽기는 읽기 전에 공유 읽기 잠금을 획득하고(쓰기가 위에서 언급한 배타적 잠금을 사용한다고 가정) 읽기 후 즉시 해제함으로써 방지할 수 있습니다.  느린 쓰기로 인해 다른 트랜잭션이 차단되면 성능이 저하될 수 있습니다.
-- Alternative is to record the value of each object before it is written, and return that old value to all other transactions until the writing transaction completes.
+- 다른 방법은 각 객체가 쓰이기 전의 값을 기록해 두고, 쓰기 트랜잭션이 완료될 때까지 다른 모든 트랜잭션에는 그 이전 값을 반환하는 것입니다.
 - 읽기 커밋은 구현하기 쉽고, 우수한 동시성을 제공하며, 트랜잭션이 없는 것보다 훨씬 낫기 때문에 매우 일반적입니다.
 - 그러나 많은 사람들은 커밋된 읽기가 여전히 수많은 경쟁 조건을 허용한다는 사실을 깨닫지 못합니다.
 
@@ -890,8 +890,8 @@ flowchart TD
 - 스냅샷 격리를 사용하면 트랜잭션이 단일 시점의 모든 데이터에 대한 일관된 스냅샷을 읽을 수 있습니다.
   - 일부 제품에서는 스냅샷 격리를 "반복 가능 읽기"라고 부릅니다.  혼란을 더하기 위해 다른 제품은 "반복 읽기"로 인해 다른 의미를 갖습니다.
 - 스냅샷 격리는 데이터베이스 백업, 일관성 확인 및 장기 실행 분석 쿼리에 중요합니다.
-- Read skew (nonrepeatable reads) -- A transaction sees different parts of the database at different points in time (due to write activity from other users).
-  - 이 책에서는 사용자가 두 계좌의 은행 잔고를 읽는 예를 제시하며, 여기서 계좌 간 이체가 별도로 발생합니다.  It’s okay if the user sees both before values or both after values, but read skew is when one account sees the before value and the other sees the after value.
+- 읽기 스큐(nonrepeatable read) - 한 트랜잭션이 데이터베이스의 서로 다른 부분을 서로 다른 시점의 상태로 보게 되는 현상입니다. 보통 다른 사용자의 쓰기 작업 때문에 발생합니다.
+  - 이 책에서는 사용자가 두 계좌의 은행 잔고를 읽는 예를 제시합니다. 계좌 간 이체가 별도로 일어날 때, 사용자가 두 계좌 모두 이체 전 값을 보거나 두 계좌 모두 이체 후 값을 보는 것은 괜찮습니다. 읽기 스큐는 한 계좌는 이체 전 값을 보고 다른 계좌는 이체 후 값을 보는 경우입니다.
 - 구현:
   - 더티 쓰기를 방지하기 위해 쓰기 잠금이 계속 사용됩니다.
   - 스냅샷 격리 동작은 일반적으로 MVCC(다중 버전 동시성 제어)로 구현됩니다.
