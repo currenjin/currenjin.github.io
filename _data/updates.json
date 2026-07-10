@@ -3,7 +3,7 @@
     "title": "UML 다이어그램(Unified Modeling Language Diagram)",
     "url": "/wiki/uml-diagram",
     "updated": "2026-07-10",
-    "summary": "UML 다이어그램을 그릴 때 참고하는 표기법, 선 규칙, Mermaid 예시 정리",
+    "summary": "UML 다이어그램을 그릴 때 참고하는 표기법, 선 모양, Mermaid 예시 정리",
     "tags": "design, architecture, engineering",
     "source": "Wiki",
     "external": false
