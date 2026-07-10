@@ -1,5 +1,14 @@
 [
   {
+    "title": "UML 다이어그램(Unified Modeling Language Diagram)",
+    "url": "/wiki/uml-diagram",
+    "updated": "2026-07-10",
+    "summary": "UML 다이어그램을 그릴 때 참고하는 표기법, 선택 기준, Mermaid 예시 정리",
+    "tags": "design, architecture, engineering",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Designing Data-Intensive Applications(데이터 중심 애플리케이션 설계)",
     "url": "/wiki/designing-data-intensive-applications",
     "updated": "2026-06-30",

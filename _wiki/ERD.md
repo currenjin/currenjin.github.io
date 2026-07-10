@@ -14,7 +14,7 @@ latex   : true
 {:toc}
 
 # ERD
-구조화된 데이터에 대한 일련의 표현이다.
+구조화된 데이터에 대한 일련의 표현이다. UML 다이어그램 전체 선택 기준은 [[uml-diagram]]을 참고한다.
 
 ## ER diagram notation
 ![Image](https://github.com/user-attachments/assets/bbbae9b6-0d13-4167-aab4-095642831459)

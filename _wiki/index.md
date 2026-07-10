@@ -60,6 +60,7 @@ regenerate: true
 * [[street-coder]]
 * [[implementation-patterns]]
 * [[ERD]]
+* [[uml-diagram]]
 * [[java-virtual-machine]]
 * [[garbage-collection]]
 * [[concurrent-linked-queue]]
