@@ -87,27 +87,18 @@ classDiagram
 
 ### 클래스 선 규칙
 
-선 모양은 아래 그림을 먼저 본다. 표의 Mermaid 입력값은 그림을 만들기 위한 문법이다.
+아래 그림의 **선 끝 모양**을 기준으로 읽는다. 표의 입력값은 Mermaid로 같은 선을 그릴 때 복사하는 값이다.
 
-```mermaid
-classDiagram
-    direction TB
-    Animal <|-- Cat : 일반화 / 상속
-    PaymentGateway <|.. CardPaymentGateway : 실체화 / 구현
-    Order --> PaymentGateway : 연관 / 알고 있음
-    OrderService ..> OrderRepository : 의존 / 잠깐 사용
-    Team o-- Member : 집합 / 약한 전체-부분
-    Order *-- OrderLine : 합성 / 강한 전체-부분
-```
+![UML class diagram line notation](/assets/images/wiki/uml-class-lines.svg)
 
-| 실제 선 모양 | 관계 | 의미 | Mermaid 입력 | 판단 기준 |
-|---|---|---|---|---|
-| 빈 삼각형 + 실선 | 일반화(Generalization) | 상속, `is-a` | `&lt;&#124;--` | `Cat`은 `Animal`이다 |
-| 빈 삼각형 + 점선 | 실체화(Realization) | 인터페이스 구현 | `&lt;&#124;..` | `CardGateway`가 `PaymentGateway`를 구현한다 |
-| 일반 화살표 + 실선 | 연관(Association) | 지속적으로 알고 있음 | `--&gt;` | 필드로 참조한다 |
-| 일반 화살표 + 점선 | 의존(Dependency) | 일시적으로 사용함 | `..&gt;` | 파라미터, 지역 변수, static call로만 쓴다 |
-| 빈 다이아몬드 + 실선 | 집합(Aggregation) | 약한 전체-부분 | `o--` | 전체가 없어도 부분은 독립적으로 산다 |
-| 채운 다이아몬드 + 실선 | 합성(Composition) | 강한 전체-부분 | `*--` | 전체가 사라지면 부분 lifecycle도 끝난다 |
+| 관계 | 의미 | Mermaid 입력 | 판단 기준 |
+|---|---|---|---|
+| 일반화(Generalization) | 상속, `is-a` | `&lt;&#124;--` | `Cat`은 `Animal`이다 |
+| 실체화(Realization) | 인터페이스 구현 | `&lt;&#124;..` | `CardGateway`가 `PaymentGateway`를 구현한다 |
+| 연관(Association) | 지속적으로 알고 있음 | `--&gt;` | 필드로 참조한다 |
+| 의존(Dependency) | 일시적으로 사용함 | `..&gt;` | 파라미터, 지역 변수, static call로만 쓴다 |
+| 집합(Aggregation) | 약한 전체-부분 | `o--` | 전체가 없어도 부분은 독립적으로 산다 |
+| 합성(Composition) | 강한 전체-부분 | `*--` | 전체가 사라지면 부분 lifecycle도 끝난다 |
 
 ### Multiplicity 규칙
 
@@ -129,9 +120,9 @@ classDiagram
 
 | 헷갈리는 지점 | 판단 |
 |---|---|
-| 상속 vs 구현 | class 상속은 빈 삼각형 실선, interface 구현은 빈 삼각형 점선 |
-| 연관 vs 의존 | 오래 들고 있으면 실선 화살표, 잠깐 쓰면 점선 화살표 |
-| 집합 vs 합성 | lifecycle을 함께하면 채운 다이아몬드, 독립 생존하면 빈 다이아몬드 |
+| 상속 vs 구현 | class 상속은 일반화, interface 구현은 실체화 |
+| 연관 vs 의존 | 오래 들고 있으면 연관, 잠깐 쓰면 의존 |
+| 집합 vs 합성 | lifecycle을 함께하면 합성, 독립 생존하면 집합 |
 | 필드가 많다 | 설계 의도와 관계없는 필드는 생략한다 |
 | 선이 많다 | 핵심 메시지와 관계없는 의존은 지운다 |
 
@@ -141,28 +132,17 @@ classDiagram
 
 ### 시퀀스 선 규칙
 
-선 모양은 아래 그림처럼 읽는다. 실선은 호출, 점선은 응답, 열린 화살표는 비동기 메시지로 본다.
+아래 그림의 **선 종류와 화살표 머리**를 기준으로 읽는다. 표의 입력값은 Mermaid로 같은 메시지를 그릴 때 복사하는 값이다.
 
-```mermaid
-sequenceDiagram
-    participant Caller
-    participant Callee
-    participant Queue
+![UML sequence diagram message notation](/assets/images/wiki/uml-sequence-lines.svg)
 
-    Caller->>Callee: 동기 호출
-    Callee-->>Caller: 응답
-    Caller-)Queue: 비동기 메시지
-    Caller->>+Callee: activation 시작
-    Callee-->>-Caller: activation 종료
-```
-
-| 실제 선 모양 | 의미 | Mermaid 입력 | 사용 예시 |
-|---|---|---|---|
-| 실선 화살표 | 동기 호출 | `-&gt;&gt;` | API call, method call |
-| 점선 화살표 | 응답 | `--&gt;&gt;` | return, response |
-| 열린 화살표 | 비동기 메시지 | `-)` | event publish, queue send |
-| 실선 화살표 + activation 시작 | 호출과 처리 구간 시작 | `-&gt;&gt;+` | 긴 처리 시작 강조 |
-| 점선 화살표 + activation 종료 | 응답과 처리 구간 종료 | `--&gt;&gt;-` | 긴 처리 종료 강조 |
+| 의미 | Mermaid 입력 | 사용 예시 |
+|---|---|---|
+| 동기 호출 | `-&gt;&gt;` | API call, method call |
+| 응답 | `--&gt;&gt;` | return, response |
+| 비동기 메시지 | `-)` | event publish, queue send |
+| 호출과 처리 구간 시작 | `-&gt;&gt;+` | 긴 처리 시작 강조 |
+| 응답과 처리 구간 종료 | `--&gt;&gt;-` | 긴 처리 종료 강조 |
 
 ```mermaid
 sequenceDiagram

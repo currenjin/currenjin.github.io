@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="430" viewBox="0 0 920 430" role="img" aria-label="UML class diagram line notation">
+  <defs>
+    <style>
+      .bg{fill:#ffffff}.title{font:700 18px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#111827}.label{font:600 15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#111827}.hint{font:13px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#6b7280}.node{fill:#f9fafb;stroke:#9ca3af;stroke-width:1.2}.line{stroke:#111827;stroke-width:2.4;fill:none}.dash{stroke-dasharray:7 6}.diamond-empty{fill:#ffffff;stroke:#111827;stroke-width:2.4}.diamond-fill{fill:#111827;stroke:#111827;stroke-width:2.4}.tri-empty{fill:#ffffff;stroke:#111827;stroke-width:2.4}.arrow{fill:none;stroke:#111827;stroke-width:2.4}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#111827" stroke-width="1.8"/>
+    </marker>
+    <marker id="tri" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="11" markerHeight="11" orient="auto">
+      <path d="M 11 6 L 1 1 L 1 11 Z" class="tri-empty"/>
+    </marker>
+    <marker id="dia-empty" viewBox="0 0 14 14" refX="2" refY="7" markerWidth="13" markerHeight="13" orient="auto">
+      <path d="M 1 7 L 7 1 L 13 7 L 7 13 Z" class="diamond-empty"/>
+    </marker>
+    <marker id="dia-fill" viewBox="0 0 14 14" refX="2" refY="7" markerWidth="13" markerHeight="13" orient="auto">
+      <path d="M 1 7 L 7 1 L 13 7 L 7 13 Z" class="diamond-fill"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="920" height="430"/>
+  <text x="32" y="36" class="title">Class Diagram Lines</text>
+
+  <g transform="translate(32,64)">
+    <text x="0" y="23" class="label">Generalization</text><text x="0" y="43" class="hint">상속</text>
+    <rect x="210" y="0" width="92" height="44" rx="6" class="node"/><text x="238" y="28" class="label">Cat</text>
+    <line x1="302" y1="22" x2="515" y2="22" class="line" marker-end="url(#tri)"/>
+    <rect x="526" y="0" width="112" height="44" rx="6" class="node"/><text x="553" y="28" class="label">Animal</text>
+  </g>
+  <g transform="translate(32,124)">
+    <text x="0" y="23" class="label">Realization</text><text x="0" y="43" class="hint">인터페이스 구현</text>
+    <rect x="210" y="0" width="150" height="44" rx="6" class="node"/><text x="231" y="28" class="label">CardGateway</text>
+    <line x1="360" y1="22" x2="515" y2="22" class="line dash" marker-end="url(#tri)"/>
+    <rect x="526" y="0" width="164" height="44" rx="6" class="node"/><text x="546" y="28" class="label">PaymentGateway</text>
+  </g>
+  <g transform="translate(32,184)">
+    <text x="0" y="23" class="label">Association</text><text x="0" y="43" class="hint">알고 있음</text>
+    <rect x="210" y="0" width="92" height="44" rx="6" class="node"/><text x="232" y="28" class="label">Order</text>
+    <line x1="302" y1="22" x2="515" y2="22" class="line" marker-end="url(#arrow)"/>
+    <rect x="526" y="0" width="164" height="44" rx="6" class="node"/><text x="546" y="28" class="label">PaymentGateway</text>
+  </g>
+  <g transform="translate(32,244)">
+    <text x="0" y="23" class="label">Dependency</text><text x="0" y="43" class="hint">잠깐 사용</text>
+    <rect x="210" y="0" width="128" height="44" rx="6" class="node"/><text x="230" y="28" class="label">OrderService</text>
+    <line x1="338" y1="22" x2="515" y2="22" class="line dash" marker-end="url(#arrow)"/>
+    <rect x="526" y="0" width="160" height="44" rx="6" class="node"/><text x="543" y="28" class="label">OrderRepository</text>
+  </g>
+  <g transform="translate(32,304)">
+    <text x="0" y="23" class="label">Aggregation</text><text x="0" y="43" class="hint">약한 전체-부분</text>
+    <rect x="210" y="0" width="92" height="44" rx="6" class="node"/><text x="232" y="28" class="label">Team</text>
+    <line x1="315" y1="22" x2="515" y2="22" class="line" marker-start="url(#dia-empty)"/>
+    <rect x="526" y="0" width="104" height="44" rx="6" class="node"/><text x="551" y="28" class="label">Member</text>
+  </g>
+  <g transform="translate(32,364)">
+    <text x="0" y="23" class="label">Composition</text><text x="0" y="43" class="hint">강한 전체-부분</text>
+    <rect x="210" y="0" width="92" height="44" rx="6" class="node"/><text x="232" y="28" class="label">Order</text>
+    <line x1="315" y1="22" x2="515" y2="22" class="line" marker-start="url(#dia-fill)"/>
+    <rect x="526" y="0" width="112" height="44" rx="6" class="node"/><text x="548" y="28" class="label">OrderLine</text>
+  </g>
+</svg>

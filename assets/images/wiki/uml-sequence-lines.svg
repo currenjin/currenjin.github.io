@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="330" viewBox="0 0 920 330" role="img" aria-label="UML sequence diagram line notation">
+  <defs>
+    <style>
+      .bg{fill:#fff}.title{font:700 18px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#111827}.label{font:600 15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#111827}.hint{font:13px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#6b7280}.box{fill:#f9fafb;stroke:#9ca3af;stroke-width:1.2}.line{stroke:#111827;stroke-width:2.4;fill:none}.dash{stroke-dasharray:7 6}.open{fill:none;stroke:#111827;stroke-width:2.2}.act{fill:#e5e7eb;stroke:#6b7280;stroke-width:1}.life{stroke:#9ca3af;stroke-width:1.2;stroke-dasharray:5 5}
+    </style>
+    <marker id="filledArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#111827"/></marker>
+    <marker id="openArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" class="open"/></marker>
+  </defs>
+  <rect class="bg" width="920" height="330"/>
+  <text x="32" y="36" class="title">Sequence Diagram Messages</text>
+  <rect x="260" y="58" width="90" height="38" rx="5" class="box"/><text x="282" y="82" class="label">Caller</text>
+  <rect x="590" y="58" width="90" height="38" rx="5" class="box"/><text x="612" y="82" class="label">Callee</text>
+  <line x1="305" y1="96" x2="305" y2="306" class="life"/><line x1="635" y1="96" x2="635" y2="306" class="life"/>
+  <rect x="628" y="200" width="14" height="52" class="act"/>
+
+  <text x="32" y="128" class="label">Sync call</text><text x="32" y="148" class="hint">동기 호출</text>
+  <line x1="305" y1="132" x2="635" y2="132" class="line" marker-end="url(#filledArrow)"/>
+
+  <text x="32" y="176" class="label">Return</text><text x="32" y="196" class="hint">응답</text>
+  <line x1="635" y1="180" x2="305" y2="180" class="line dash" marker-end="url(#openArrow)"/>
+
+  <text x="32" y="224" class="label">Async message</text><text x="32" y="244" class="hint">비동기</text>
+  <line x1="305" y1="228" x2="635" y2="228" class="line" marker-end="url(#openArrow)"/>
+
+  <text x="32" y="272" class="label">Activation</text><text x="32" y="292" class="hint">처리 구간</text>
+  <line x1="305" y1="276" x2="628" y2="276" class="line" marker-end="url(#filledArrow)"/>
+</svg>
