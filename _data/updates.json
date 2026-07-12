@@ -1,5 +1,14 @@
 [
   {
+    "title": "Distributed Transaction",
+    "url": "/wiki/distributed-transaction",
+    "updated": "2026-07-12",
+    "summary": "여러 시스템에 걸친 하나의 업무를 어긋나지 않게 — 2PC·Saga·Outbox·멱등 소비",
+    "tags": "architecture, pattern, engineering",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Kafka",
     "url": "/wiki/kafka",
     "updated": "2026-07-12",

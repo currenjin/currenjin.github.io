@@ -194,7 +194,7 @@ sequenceDiagram
 - `transactional.id`를 가진 프로듀서가 여러 파티션 쓰기 + 오프셋 커밋을 하나의 원자 단위로 묶는다.
 - 같은 transactional.id로 새 프로듀서가 뜨면 epoch가 올라가고 이전 인스턴스(좀비)의 쓰기는 거부된다(zombie fencing).
 - 소비자가 `isolation.level=read_committed`면 커밋된 트랜잭션의 메시지만 읽는다.
-- 주 용도는 "카프카에서 읽어 카프카로 쓰는" 스트림 처리(consume-transform-produce)다. 외부 DB까지 원자로 묶어주진 않는다. 그건 Outbox/Inbox 같은 애플리케이션 패턴의 몫이다.
+- 주 용도는 "카프카에서 읽어 카프카로 쓰는" 스트림 처리(consume-transform-produce)다. 외부 DB까지 원자로 묶어주진 않는다. 그건 Outbox/Inbox 같은 애플리케이션 패턴의 몫이다. ([[distributed-transaction]])
 
 ### 배달 보장 정리
 
@@ -233,6 +233,7 @@ sequenceDiagram
 
 ## 관련 문서
 
+- [[distributed-transaction]]
 - [[designing-data-intensive-applications]]
 
 ## 참고

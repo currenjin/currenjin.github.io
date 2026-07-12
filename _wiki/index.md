@@ -81,3 +81,4 @@ regenerate: true
 * [[three-color-pen-study]]
 * [[knou]]
 * [[kafka]]
+* [[distributed-transaction]]
