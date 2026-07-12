@@ -24,6 +24,7 @@ latex   : true
 - [DDIA 참고 문헌 저장소](https://github.com/ept/ddia-references)
 - [DDIA 운영 플레이북](https://github.com/currenjin/alexandria-playground/blob/main/book-designing-data-intensive-applications/runbook.md)
 - [DDIA 플레이북 리허설 가이드](https://github.com/currenjin/alexandria-playground/blob/main/book-designing-data-intensive-applications/runbook-drill.md)
+- 관련 문서: [[kafka]]
 
 ## 책의 구성
 

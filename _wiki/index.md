@@ -80,3 +80,4 @@ regenerate: true
 * [[grafana-loki-tempo]]
 * [[three-color-pen-study]]
 * [[knou]]
+* [[kafka]]
