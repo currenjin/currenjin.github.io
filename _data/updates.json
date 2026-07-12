@@ -3,7 +3,7 @@
     "title": "Kafka",
     "url": "/wiki/kafka",
     "updated": "2026-07-12",
-    "summary": "분산 이벤트 스트리밍 플랫폼 — 파티션·프로듀서·컨슈머 그룹·복제·저장·정확히 한 번·KRaft·운영",
+    "summary": "분산 이벤트 스트리밍 플랫폼",
     "tags": "kafka, architecture, engineering",
     "source": "Wiki",
     "external": false
