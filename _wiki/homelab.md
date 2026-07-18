@@ -3,7 +3,7 @@ layout  : wiki
 title   : Homelab
 summary : k3d + Terraform + ArgoCD 기반 개인 홈서버의 구성과 운영 모델
 date    : 2026-04-27 12:00:00 +0900
-updated : 2026-05-03 12:00:00 +0900
+updated : 2026-07-18 12:00:00 +0900
 tags    : [homelab, kubernetes, sre, gitops, devops]
 toc     : true
 public  : true
@@ -461,43 +461,76 @@ GitOps 트래픽은 control plane 트래픽으로 분류된다.
 
 ### 6.3 관측 트래픽
 
+아래 다이어그램은 Phase 7에서 구축할 목표 흐름이다. 현재 `monitoring` namespace에는 아직 workload가 없다.
+
 #### 메트릭 (Prometheus, pull 방식)
 
 ```mermaid
-flowchart TB
-  Pod["📦 앱 Pod<br/>(/metrics 엔드포인트)"]
-  Prom["📦 Prometheus Pod<br/>(monitoring ns)"]
-  Graf["📊 Grafana Pod"]
-  User["👨 사용자 (브라우저 대시보드)"]
+flowchart LR
+  API["kube-apiserver"]
+  Monitor["ServiceMonitor / PodMonitor CR"]
+  PromCR["Prometheus CR"]
+  Operator["Prometheus Operator"]
+  Runtime["StatefulSet controller / kubelet"]
+  Prom["Prometheus Pod<br/>+ config-reloader"]
+  Graf["Grafana"]
+  User["사용자"]
 
-  Prom == "주기적 pull (스크래핑)" ==> Pod
-  Prom --> Graf --> User
+  subgraph Targets["수집 대상"]
+    Kubelet["kubelet / cAdvisor"]
+    Node["node-exporter"]
+    KSM["kube-state-metrics"]
+    App["앱 /metrics"]
+  end
+
+  Monitor --> |CR 저장| API
+  PromCR --> |CR 저장| API
+  Operator -. "CR list/watch" .-> API
+  Operator --> |StatefulSet·config Secret create/update| API
+  Runtime -. "desired resource watch" .-> API
+  Runtime --> |Pod 실행| Prom
+  Prom -. "service discovery list/watch" .-> API
+  KSM -. "Kubernetes 객체 list/watch" .-> API
+  Prom == "주기적 scrape" ==> Kubelet
+  Prom == "주기적 scrape" ==> Node
+  Prom == "주기적 scrape" ==> KSM
+  Prom == "주기적 scrape" ==> App
+  User --> Graf -- "PromQL" --> Prom
 
   classDef blue fill:#dbeafe,stroke:#1e40af,color:#000
-  class Pod,Prom,Graf,User blue
+  class API,Monitor,PromCR,Operator,Runtime,Prom,Graf,User,Kubelet,Node,KSM,App blue
 ```
 
-Prometheus는 각 Pod의 `/metrics` 엔드포인트를 주기적으로 스크래핑한다.
-타겟 목록은 apiserver에 메타조회로 가져오지만, 실제 메트릭 데이터는 Pod에 직접 접근한다.
+Prometheus Operator는 apiserver를 통해 `Prometheus`, `ServiceMonitor`, `PodMonitor` CR을 watch한다. `Prometheus` CR을 기준으로 StatefulSet을 만들고, monitor CR을 기준으로 scrape 설정 Secret을 생성한다. StatefulSet controller와 kubelet이 Prometheus Pod를 실행하고, 함께 실행되는 config-reloader가 설정 변경을 반영한다. Prometheus는 apiserver에서 타겟 메타데이터를 찾지만, 메트릭 데이터는 각 exporter와 앱의 `/metrics` 엔드포인트에서 직접 가져온다. `kube-state-metrics`도 apiserver를 list/watch해 Kubernetes 객체 상태를 메트릭으로 변환한다. Grafana는 Prometheus에 PromQL을 실행할 뿐 메트릭을 별도로 저장하지 않는다.
 
-#### 로그 (Loki, agent push 방식)
+#### 로그 (Alloy → Loki, push 방식)
 
 ```mermaid
-flowchart TB
-  Pod["📦 앱 Pod<br/>(stdout/stderr)"]
-  Disk["노드 디스크<br/>(kubelet이 stdout 떨굼)"]
-  Agent["📦 수집 에이전트 DaemonSet<br/>(Promtail / Vector / Fluent-bit)"]
-  Loki["📦 Loki Pod<br/>(monitoring ns)"]
-  Graf["📊 Grafana Pod"]
-  User["👨 사용자"]
+flowchart LR
+  API["kube-apiserver"]
+  User["사용자"]
+  Graf["Grafana"]
 
-  Pod --> Disk --> Agent -- push --> Loki --> Graf --> User
+  subgraph Node["각 k3d 노드"]
+    Pod["Pod stdout / stderr"]
+    Files["/var/log/pods"]
+    Alloy["Grafana Alloy DaemonSet"]
+    Pod --> |CRI 로그| Files --> |tail| Alloy
+  end
+
+  Loki["Loki SingleBinary"]
+  PVC["local-path PVC"]
+
+  Alloy -. "Pod / namespace / label list/watch" .-> API
+  Alloy == "Loki push API" ==> Loki
+  Loki --- PVC
+  User --> Graf -- "LogQL" --> Loki
 
   classDef blue fill:#dbeafe,stroke:#1e40af,color:#000
-  class Pod,Disk,Agent,Loki,Graf,User blue
+  class API,User,Graf,Pod,Files,Alloy,Loki,PVC blue
 ```
 
-각 워커 노드의 DaemonSet이 stdout 로그를 모아 Loki로 push한다.
+배포 후 Alloy DaemonSet은 kubelet이 남긴 Pod 로그를 tail하고, apiserver에서 조회한 Kubernetes 메타데이터를 붙여 Loki에 전송한다. server 노드가 schedulable하고 DaemonSet 설정이 이를 제외하지 않는 현재 조건에서는 server 1개와 agent 2개, 총 3개 Pod가 실행되는 것이 목표다. Promtail은 2026년 3월 2일 EOL이므로 신규 구성에는 사용하지 않는다.
 
 ### 6.4 회선 비교
 
@@ -539,6 +572,73 @@ flowchart TB
   class Prom blue
 ```
 
+### 6.5 Phase 7 목표 배포 구조
+
+Phase 7은 모니터링 컴포넌트를 Terraform에 추가하지 않고 ArgoCD로 배포한다. Terraform은 `monitoring` namespace와 ArgoCD 본체까지 책임지고, ArgoCD는 그 위에 올라가는 관측성 add-on을 지속적으로 reconcile한다.
+
+```mermaid
+flowchart TB
+  Git["homelab repo<br/>gitops/apps"]
+  Terraform["Terraform"]
+
+  subgraph Cluster["k3d-homelab"]
+    Argo["ArgoCD<br/>root Application"]
+    Storage["local-path StorageClass<br/>PV ReclaimPolicy: Delete"]
+
+    subgraph NS["monitoring namespace"]
+      subgraph Metrics["kube-prometheus-stack"]
+        Operator["Prometheus Operator"]
+        Prom["Prometheus"]
+        Graf["Grafana"]
+        Alert["Alertmanager"]
+        Exporters["kube-state-metrics<br/>node-exporter"]
+      end
+
+      subgraph Logs["로그 파이프라인"]
+        Alloy["Alloy DaemonSet<br/>노드마다 1개"]
+        Loki["Loki SingleBinary<br/>replica 1"]
+      end
+
+      PromPVC["Prometheus PVC"]
+      LokiPVC["Loki PVC"]
+    end
+  end
+
+  Terraform --> |namespace 생성| NS
+  Terraform --> |ArgoCD Helm 설치| Argo
+  Git --> Argo
+  Argo --> |Application reconcile| Metrics
+  Argo --> |Application reconcile| Logs
+  Prom --- PromPVC
+  Loki --- LokiPVC
+  PromPVC -. "dynamic provisioning" .-> Storage
+  LokiPVC -. "dynamic provisioning" .-> Storage
+  Graf --> |PromQL query| Prom
+  Graf --> |LogQL query| Loki
+  Alloy --> Loki
+
+  classDef infra fill:#fef3c7,stroke:#92400e,color:#000
+  classDef gitops fill:#dcfce7,stroke:#166534,color:#000
+  classDef observe fill:#dbeafe,stroke:#1e40af,color:#000
+  classDef storage fill:#f3f4f6,stroke:#4b5563,color:#000
+  class Terraform,NS infra
+  class Git,Argo gitops
+  class Operator,Prom,Graf,Alert,Exporters,Alloy,Loki observe
+  class PromPVC,LokiPVC,Storage storage
+```
+
+2026-07-18 공식 Helm repository index 기준으로 고정할 버전은 다음과 같다.
+
+| 역할 | Chart | Chart 버전 | App 버전 | 배포 형태 |
+|---|---|---:|---:|---|
+| 메트릭·대시보드·알림 | `kube-prometheus-stack` | `87.17.0` | `v0.92.1` | Prometheus/Grafana/Operator/Alertmanager |
+| 로그 저장·조회 | `loki` | `7.1.0` | `3.6.8` | SingleBinary 1 replica |
+| 노드 로그 수집 | `alloy` | `1.10.1` | `v1.17.1` | DaemonSet 3 replicas |
+
+현재 `local-path` StorageClass로 동적 생성되는 PV의 reclaim policy는 `Delete`다. Prometheus와 Loki는 서로 다른 PVC/PV를 사용한다. 이 볼륨은 Pod 재시작에는 대응하지만 k3d 클러스터 삭제와 호스트 장애를 견디는 백업이 아니다. 메트릭·로그의 호스트 고정 경로와 백업은 Phase 8에서 `~/srv/data/<app>/` 원칙에 맞춰 추가한다.
+
+k3s는 scheduler와 controller-manager를 별도 Pod가 아닌 단일 서버 프로세스에 포함하며, 현재 단일 server 구성의 datastore는 SQLite다. 따라서 etcd monitor는 비활성화하고, 표준 배포처럼 독립된 in-cluster scrape endpoint가 노출되지 않는 scheduler/controller-manager monitor도 비활성화해 거짓 장애 신호를 막는다.
+
 ---
 
 ## 7. 리포지토리 구조
@@ -579,8 +679,8 @@ infra/terraform/**/*.tfstate.backup
 | 영역 | 관리 도구 | 예시 |
 |---|---|---|
 | 클러스터 자체 | bootstrap script | `k3d cluster create` |
-| 플랫폼 | Terraform | namespace, ingress-nginx, cert-manager, prometheus, ArgoCD 본체 |
-| 앱 | ArgoCD | uptime-kuma, vaultwarden, 사이드 프로젝트 |
+| bootstrap 플랫폼 | Terraform | namespace, ingress-nginx, ArgoCD 본체 |
+| 플랫폼 add-on·앱 | ArgoCD | monitoring stack, uptime-kuma, vaultwarden, 사이드 프로젝트 |
 | 앱 코드 | 별도 repo | `projects/project-a/` |
 
 ArgoCD까지 Terraform이 설치하는 이유는 자기 참조 문제 때문이다.
@@ -616,8 +716,11 @@ git clone github.com/currenjin/homelab
 # tfstate, ~/srv/data, sops key 옮기기
 cd homelab && ./infra/bootstrap/install.sh   # 빈 k3d 클러스터 생성
 cd infra/terraform/envs/local && terraform apply  # platform 다시 설치
+cd ../../../.. && ./infra/bootstrap/restore-secrets.sh  # ArgoCD repo credential 복원
 # ArgoCD가 root-app을 sync해 모든 앱 자동 복원
 ```
+
+Terraform이 root Application을 먼저 만들기 때문에 repository credential 복원 전에는 일시적으로 sync가 실패할 수 있다. Secret 복원 후 ArgoCD가 재시도하며, `root`와 하위 Application이 `Synced / Healthy`인지 확인한다.
 
 ### 8.3 디버깅 진입점
 
@@ -627,7 +730,7 @@ cd infra/terraform/envs/local && terraform apply  # platform 다시 설치
 | kubectl 명령 실패 | apiserver 상태 → etcd (k3s state.db) 정상성 |
 | git push했는데 배포 안 됨 | ArgoCD가 git 변경을 감지했는지 (polling/webhook) → root-app sync 상태 → application Pod |
 | 메트릭 빈 칸 | Prometheus의 ServiceMonitor/PodMonitor → /metrics 엔드포인트 응답 |
-| 로그 안 보임 | Promtail/Vector DaemonSet 상태 → Loki 연결 |
+| 로그 안 보임 | Alloy DaemonSet의 파일 tail 상태 → Loki push 상태 → Loki query 상태 |
 | 클러스터 전체 사망 | bootstrap → terraform apply → ArgoCD 자동 복구 |
 | 호스트 이전 | tfstate + data + git + sops 키 |
 
@@ -684,3 +787,6 @@ MacBook 클램쉘 모드일 때 추가:
 - [[kubernetes]]
 - [[grafana-loki-tempo]]
 - [[docker]]
+- [Promtail EOL and Alloy migration](https://grafana.com/docs/loki/latest/send-data/promtail/)
+- [Prometheus Community Helm charts](https://prometheus-community.github.io/helm-charts/)
+- [Grafana Helm charts](https://grafana.github.io/helm-charts/)
