@@ -3,7 +3,7 @@ layout  : wiki
 title   : Homelab
 summary : k3d + Terraform + ArgoCD 기반 개인 홈서버의 구성과 운영 모델
 date    : 2026-04-27 12:00:00 +0900
-updated : 2026-07-18 12:00:00 +0900
+updated : 2026-07-18 15:50:02 +0900
 tags    : [homelab, kubernetes, sre, gitops, devops]
 toc     : true
 public  : true
@@ -15,8 +15,8 @@ latex   : false
 
 # Homelab
 
-개인 홈서버를 SRE 운영 훈련, 사이드 프로젝트 배포 기반, 빠른 실험 플랫폼으로 구성한다.
-NAS / 미디어 서버 대체가 아니다.
+SRE 운영을 연습하고 사이드 프로젝트를 배포하기 위한 개인 홈서버다. 새 도구를 부담 없이 시험하는 환경으로도 쓴다.
+NAS나 미디어 서버를 대체하려는 구성은 아니다.
 
 관련 문서: [[kubernetes]]
 
@@ -52,7 +52,7 @@ flowchart TB
 
   subgraph Home["🏠 집 네트워크"]
     HomeRouter["공유기<br/>🔒 NAT<br/>포트포워딩 없음"]
-    Host["🖥 맥북 호스트<br/>(tailscaled)"]
+    Host["🖥 Mac mini 호스트<br/>(tailscaled)"]
     HomeRouter --- Host
   end
 
@@ -136,8 +136,7 @@ CLI 도구(brew, kubectl, terraform, git), Tailscale 데몬이 실행된다.
 컨테이너는 리눅스 커널의 기능(namespaces + cgroups + chroot)이며, 리눅스 커널 없이 존재할 수 없다.
 macOS는 Darwin 커널을 사용하므로 컨테이너를 직접 실행할 수 없다.
 
-OrbStack은 Apple Virtualization Framework로 리눅스 VM을 한 대 띄우고, 그 안에 containerd를 실행한다.
-즉 OrbStack은 "맥북 안에 리눅스 머신 한 대를 끼워넣는" 장치다.
+OrbStack은 Apple Virtualization Framework로 리눅스 VM을 한 대 띄우고 그 안에서 containerd를 실행한다. macOS 위에 컨테이너를 실행할 리눅스 환경을 마련하는 역할이다.
 
 ### 3.3 층3: k3d 클러스터
 
@@ -235,8 +234,7 @@ flowchart TB
 6. 각 워커의 kubelet이 자기 노드에 할당된 Pod을 watch로 받음 → 컨테이너 런타임에 생성 명령
 7. Pod 실행 후 status를 apiserver에 보고
 
-각 단계는 "apiserver를 watch → 변경 감지 → 자기 일 수행 → 결과를 apiserver에 기록" 패턴을 따른다.
-이것이 Kubernetes의 선언적 reconcile loop다.
+각 컴포넌트는 apiserver의 변경을 감지하고 맡은 작업을 수행한 뒤 결과를 다시 기록한다. 이 흐름이 Kubernetes의 선언적 reconcile loop다.
 
 ### 4.4 워커 컴포넌트
 
@@ -344,9 +342,9 @@ etcd 장애 시 즉각 영향:
 
 ```mermaid
 flowchart LR
-  T0["<b>t=0</b><br/>bootstrap.sh<br/>사람 1회<br/><br/>산출물:<br/>빈 k3d 클러스터<br/>+ kubeconfig"]
-  T1["<b>t=1</b><br/>terraform apply<br/>사람 가끔<br/><br/>산출물:<br/>namespace, ingress<br/>cert-manager<br/>monitoring stack<br/>ArgoCD 본체<br/>root-app"]
-  T2["<b>t=2</b><br/>ArgoCD 첫 sync<br/>자동 1회<br/><br/>산출물:<br/>모든 앱 배포<br/>(uptime-kuma<br/>vaultwarden ...)"]
+  T0["<b>t=0</b><br/>bootstrap.sh<br/>사람 1회<br/><br/>결과:<br/>빈 k3d 클러스터<br/>+ kubeconfig"]
+  T1["<b>t=1</b><br/>terraform apply<br/>사람 가끔<br/><br/>결과:<br/>namespace<br/>ingress-nginx<br/>ArgoCD 본체<br/>root-app"]
+  T2["<b>t=2</b><br/>ArgoCD 첫 sync<br/>자동 1회<br/><br/>결과:<br/>podinfo<br/>prometheus-stack"]
   Tinf["<b>t=∞</b><br/>ArgoCD 영구 watch<br/><br/>git 변경 → 자동 반영<br/>drift → 자동 원복"]
 
   T0 == "인계 ①<br/>빈 클러스터<br/>+ kubeconfig" ==> T1
@@ -363,11 +361,11 @@ flowchart LR
   class Tinf forever
 ```
 
-| 시점 | 도구 | 빈도 | 산출물 |
+| 시점 | 도구 | 빈도 | 결과 |
 |---|---|---|---|
 | t=0 | bootstrap.sh | 1회 (사람) | 빈 k3d 클러스터, kubeconfig |
-| t=1 | terraform apply | 가끔 (사람) | namespace, ingress-nginx, cert-manager, monitoring stack, ArgoCD 본체, root-app |
-| t=2 | ArgoCD 첫 sync | 1회 (자동) | root-app이 가리키는 모든 앱 배포 |
+| t=1 | terraform apply | 가끔 (사람) | namespace, ingress-nginx, ArgoCD 본체, root-app |
+| t=2 | ArgoCD 첫 sync | 1회 (자동) | `podinfo`, `prometheus-stack` 배포 |
 | t=∞ | ArgoCD watch | 영구 (자동) | git 변경 자동 반영, drift 자동 원복 |
 
 ### 5.2 권한 인계
@@ -377,37 +375,34 @@ flowchart LR
 
 ### 5.3 App-of-Apps 패턴
 
-ArgoCD는 자기 자신의 매니페스트도 git에서 관리한다.
+Terraform은 ArgoCD와 root Application까지만 설치한다. root Application은 `gitops/apps/` 아래의 Application을 읽어 실제 앱을 배포한다.
 
 ```
 homelab/gitops/
-├── platform/
-│   ├── argocd/              # ArgoCD 자기 자신의 매니페스트
-│   ├── ingress-nginx/
-│   └── monitoring/
-└── apps/
-    ├── uptime-kuma/
-    └── vaultwarden/
+├── apps/
+│   ├── podinfo.yaml
+│   └── kube-prometheus-stack.yaml
+└── projects/
 ```
 
-운영상 분담:
+운영 책임은 다음처럼 나눈다.
 
 - Terraform: ArgoCD 최초 설치 + root-app 등록까지
-- ArgoCD git: 그 이후 모든 변경 (앱, ArgoCD 자체 설정)
-- Terraform 재실행: 클러스터 재구축 시 (응급 복구 도구 역할)
+- ArgoCD: `gitops/apps/`에 선언된 앱 배포와 상태 복구
+- Terraform 재실행: 클러스터를 다시 만들거나 플랫폼 구성을 바꿀 때
 
 ---
 
 ## 6. 트래픽 종류
 
-같은 클러스터 안에서 세 종류의 트래픽이 별도 회선으로 흐른다.
+클러스터 안의 트래픽은 사용자, GitOps, 관측 경로로 나눠 볼 수 있다.
 
 ### 6.1 사용자 트래픽
 
 ```mermaid
 flowchart TB
   Browser["🌐 브라우저"]
-  Host["🖥 맥북 호스트<br/>(80/443)"]
+  Host["🖥 Mac mini 호스트<br/>(80/443)"]
   VM["💿 OrbStack VM<br/>노출 포트"]
   LB["🔵 k3d 로드밸런서<br/>(serverlb 컨테이너)"]
   Ing["📦 ingress-nginx Pod<br/>(워커, platform ns)<br/>host header / path 라우팅"]
@@ -424,8 +419,7 @@ flowchart TB
   class Pod pod
 ```
 
-apiserver를 거치지 않는다. 사용자 트래픽은 data plane이며 control plane과 회선이 분리된다.
-apiserver가 다운되어도 평시 사용자 트래픽은 흐른다.
+사용자 트래픽은 apiserver를 거치지 않고 data plane으로 흐른다. 따라서 apiserver가 내려가도 이미 실행 중인 앱의 평시 트래픽은 계속 처리된다.
 
 ### 6.2 GitOps 트래픽
 
@@ -461,7 +455,7 @@ GitOps 트래픽은 control plane 트래픽으로 분류된다.
 
 ### 6.3 관측 트래픽
 
-아래 다이어그램은 Phase 7에서 구축할 목표 흐름이다. 현재 `monitoring` namespace에는 아직 workload가 없다.
+Phase 7 중 메트릭 경로는 운영 중이며, 로그 경로는 다음 단계에서 배포한다. 현재 Prometheus, Grafana, Alertmanager와 exporter가 `monitoring` namespace에서 실행 중이다.
 
 #### 메트릭 (Prometheus, pull 방식)
 
@@ -530,11 +524,11 @@ flowchart LR
   class API,User,Graf,Pod,Files,Alloy,Loki,PVC blue
 ```
 
-배포 후 Alloy DaemonSet은 kubelet이 남긴 Pod 로그를 tail하고, apiserver에서 조회한 Kubernetes 메타데이터를 붙여 Loki에 전송한다. server 노드가 schedulable하고 DaemonSet 설정이 이를 제외하지 않는 현재 조건에서는 server 1개와 agent 2개, 총 3개 Pod가 실행되는 것이 목표다. Promtail은 2026년 3월 2일 EOL이므로 신규 구성에는 사용하지 않는다.
+이 로그 경로는 Phase 7-3에서 배포할 예정이다. Alloy DaemonSet은 kubelet이 남긴 Pod 로그를 지속해서 읽고 Kubernetes 메타데이터를 붙여 Loki로 보낸다. server 노드 1개와 agent 노드 2개에 Alloy Pod가 하나씩, 총 3개 실행되어야 한다. Promtail은 2026년 3월 2일 EOL이므로 새 구성에서는 사용하지 않는다.
 
-### 6.4 회선 비교
+### 6.4 경로 비교
 
-| 트래픽 | apiserver 경유 | 회선 |
+| 트래픽 | apiserver 경유 | 경로 |
 |---|---|---|
 | 사용자 (🔴) | ❌ | data plane (ingress → service → pod) |
 | GitOps (🟢) | ✅ 핵심 경로 | control plane (ArgoCD → apiserver → etcd) |
@@ -572,9 +566,9 @@ flowchart TB
   class Prom blue
 ```
 
-### 6.5 Phase 7 목표 배포 구조
+### 6.5 Phase 7 배포 구조와 현재 상태
 
-Phase 7은 모니터링 컴포넌트를 Terraform에 추가하지 않고 ArgoCD로 배포한다. Terraform은 `monitoring` namespace와 ArgoCD 본체까지 책임지고, ArgoCD는 그 위에 올라가는 관측성 add-on을 지속적으로 reconcile한다.
+모니터링 컴포넌트는 Terraform이 아니라 ArgoCD로 배포한다. Terraform은 `monitoring` namespace와 ArgoCD 본체를 만들고, ArgoCD는 그 위의 관측성 앱을 Git 선언과 맞게 유지한다.
 
 ```mermaid
 flowchart TB
@@ -627,7 +621,7 @@ flowchart TB
   class PromPVC,LokiPVC,Storage storage
 ```
 
-2026-07-18 공식 Helm repository index 기준으로 고정할 버전은 다음과 같다.
+2026-07-18 공식 Helm repository index를 기준으로 메트릭 스택의 버전을 고정하고, 로그 스택에 사용할 버전을 정했다.
 
 | 역할 | Chart | Chart 버전 | App 버전 | 배포 형태 |
 |---|---|---:|---:|---|
@@ -635,7 +629,9 @@ flowchart TB
 | 로그 저장·조회 | `loki` | `7.1.0` | `3.6.8` | SingleBinary 1 replica |
 | 노드 로그 수집 | `alloy` | `1.10.1` | `v1.17.1` | DaemonSet 3 replicas |
 
-현재 `local-path` StorageClass로 동적 생성되는 PV의 reclaim policy는 `Delete`다. Prometheus와 Loki는 서로 다른 PVC/PV를 사용한다. 이 볼륨은 Pod 재시작에는 대응하지만 k3d 클러스터 삭제와 호스트 장애를 견디는 백업이 아니다. 메트릭·로그의 호스트 고정 경로와 백업은 Phase 8에서 `~/srv/data/<app>/` 원칙에 맞춰 추가한다.
+현재 `kube-prometheus-stack`은 배포를 마쳤다. Prometheus의 21개 target이 모두 UP이고, `monitoring` namespace의 Pod 8개가 Ready 상태다. Prometheus는 5Gi PVC를 사용한다. Loki와 Alloy는 Phase 7-3에서 이어서 배포한다.
+
+현재 `local-path` StorageClass로 동적 생성되는 PV의 reclaim policy는 `Delete`다. Prometheus는 전용 PVC/PV를 사용하고, Loki도 배포할 때 별도 PVC/PV를 사용한다. 이 볼륨은 Pod 재시작에는 대응하지만 k3d 클러스터 삭제와 호스트 장애를 견디는 백업이 아니다. 메트릭·로그의 호스트 고정 경로와 백업은 Phase 8에서 `~/srv/data/<app>/` 원칙에 맞춰 추가한다.
 
 k3s는 scheduler와 controller-manager를 별도 Pod가 아닌 단일 서버 프로세스에 포함하며, 현재 단일 server 구성의 datastore는 SQLite다. 따라서 etcd monitor는 비활성화하고, 표준 배포처럼 독립된 in-cluster scrape endpoint가 노출되지 않는 scheduler/controller-manager monitor도 비활성화해 거짓 장애 신호를 막는다.
 
@@ -643,28 +639,28 @@ k3s는 scheduler와 controller-manager를 별도 Pod가 아닌 단일 서버 프
 
 ## 7. 리포지토리 구조
 
-플랫폼(Terraform)과 앱(ArgoCD watch 대상)을 한 repo 안에서 디렉토리로 분리한다.
+Terraform 영역과 ArgoCD가 감시하는 영역을 한 저장소 안에서 디렉토리로 나눈다.
 
 ```
 homelab/
 ├── infra/                    # Terraform 영역 (ArgoCD watch ❌)
 │   ├── bootstrap/
-│   │   └── install.sh
+│   │   ├── install.sh
+│   │   └── restore-secrets.sh
+│   ├── secrets/              # sops 암호문
 │   ├── terraform/
 │   │   ├── modules/
 │   │   └── envs/local/
-│   └── argocd/
-│       └── root-app.yaml     # gitops/apps/* 가리킴
 ├── gitops/                   # ArgoCD watch 영역
-│   ├── apps/
+│   ├── apps/                 # podinfo, prometheus-stack
 │   └── projects/
 └── docs/
+    ├── remote-access.md
+    ├── secrets.md
     └── decisions/
-
-projects/*/                   # 사이드 프로젝트 코드 (별도 repo)
 ```
 
-ArgoCD가 watch하는 path는 `gitops/apps`로 좁힌다. `infra/` 하위 변경(특히 tfstate)이 ArgoCD에 영향을 주지 않도록 한다.
+ArgoCD는 `gitops/apps`만 감시한다. `infra/`의 Terraform 상태나 bootstrap 스크립트 변경은 자동 배포 대상이 아니다.
 
 `infra/terraform/` 하위의 state 파일은 `.gitignore`로 보호한다.
 
@@ -680,11 +676,10 @@ infra/terraform/**/*.tfstate.backup
 |---|---|---|
 | 클러스터 자체 | bootstrap script | `k3d cluster create` |
 | bootstrap 플랫폼 | Terraform | namespace, ingress-nginx, ArgoCD 본체 |
-| 플랫폼 add-on·앱 | ArgoCD | monitoring stack, uptime-kuma, vaultwarden, 사이드 프로젝트 |
-| 앱 코드 | 별도 repo | `projects/project-a/` |
+| 플랫폼 add-on·앱 | ArgoCD | `podinfo`, `kube-prometheus-stack`, 이후 사이드 프로젝트 |
+| 앱 코드 | 별도 repo | 각 사이드 프로젝트 저장소 |
 
-ArgoCD까지 Terraform이 설치하는 이유는 자기 참조 문제 때문이다.
-Terraform이 ArgoCD 설치 + root-app 등록을 담당하면, 그 이후는 ArgoCD가 자체 관리한다.
+ArgoCD가 설치되기 전에는 GitOps Application을 처리할 주체가 없다. 그래서 Terraform이 ArgoCD와 root Application을 먼저 설치하고, 이후 앱 배포를 ArgoCD에 넘긴다.
 
 ---
 
@@ -694,19 +689,20 @@ Terraform이 ArgoCD 설치 + root-app 등록을 담당하면, 그 이후는 Argo
 
 | 우선순위 | 대상 | 위치 | 잃었을 때 영향 |
 |---|---|---|---|
-| 1 | terraform.tfstate | 로컬 파일 | Terraform이 자기가 만든 리소스를 인식 못함 → 중복 생성 / 충돌 |
-| 2 | etcd | k3s = SQLite (`state.db`) | 모든 desired state 증발 |
-| 3 | 영구 데이터 | `~/srv/data/<app>/` | stateful 앱 데이터 손실 |
+| 1 | age 개인키 | `~/srv/secrets/age/keys.txt` | Git에 저장한 Secret 암호문을 복호화할 수 없음 |
+| 2 | terraform.tfstate | 로컬 파일 | Terraform이 기존 리소스를 인식하지 못해 중복 생성이나 충돌이 발생할 수 있음 |
+| 3 | 클러스터 datastore | k3s SQLite (`state.db`) | 현재 클러스터의 desired state 소실 |
+| 4 | 영구 데이터 | `~/srv/data/<app>/` | stateful 앱 데이터 손실 |
 | 자동 | git repo | GitHub | (GitHub이 보존) |
 
 ### 8.2 호스트 이전 절차
 
-이전 가능성 원칙을 지킨 경우, 새 호스트로 옮겨야 할 항목:
+새 호스트에는 다음 네 항목을 옮긴다.
 
 1. homelab repo (GitHub clone)
 2. terraform.tfstate (로컬 파일, 직접 옮김)
 3. ~/srv/data/ (rsync)
-4. sops age 키
+4. ~/srv/secrets/age/keys.txt
 
 새 호스트에서 실행:
 
@@ -740,7 +736,7 @@ Terraform이 root Application을 먼저 만들기 때문에 repository credentia
 
 ### 9.1 이전 가능성 원칙
 
-호스트가 변경되어도 동일하게 부활 가능해야 한다. 이를 위한 규칙:
+호스트가 바뀌어도 같은 구성을 다시 만들 수 있어야 한다.
 
 - 호스트 IP/이름 하드코딩 금지 (localhost, magic DNS, ClusterIP 사용)
 - 데이터 경로 절대 고정 (`~/srv/data/<app>/`)
@@ -752,29 +748,20 @@ Terraform이 root Application을 먼저 만들기 때문에 repository credentia
 - Tailscale only, 포트포워딩 사용 안 함
 - 공개 앱이 필요해지면 Cloudflare Tunnel 추가
 
-### 9.3 macOS 호스트를 24시간 운영하기
-
-데스크톱(Mac mini 등) / MacBook 클램쉘 공통:
+### 9.3 Mac mini를 24시간 운영하기
 
 - `pmset -c sleep 0`, `pmset -c disksleep 0`
 - 시스템 설정 → 일반 → 공유 → 원격 로그인 (SSH)
-- 컴퓨터 이름 고정 (예: `homelab`)
-
-MacBook 클램쉘 모드일 때 추가:
-
-- 외부 모니터 / 키보드 / 전원 상시 연결
-- 시스템 설정 → 배터리 → "디스플레이 끄기 후 잠자기 방지"
+- macOS hostname은 `home-mac`, Tailscale hostname은 `homelab`으로 고정
 
 ---
 
 ## 10. 추후 학습 영역
 
-핵심 모델에서 다루지 않은 영역. 구현 중 필요 시 학습한다.
+현재 구성 밖의 영역은 실제 필요가 생길 때 추가한다.
 
 | 영역 | 키워드 | 학습 시점 |
 |---|---|---|
-| Storage | PV / PVC / hostPath / StorageClass | 첫 stateful 앱 배포 시 |
-| Secrets 운영 | sops + age, External Secrets | 첫 비밀 배포 시 |
 | CNI / NetworkPolicy | Flannel, Calico | 트래픽 격리 필요 시 |
 | Service Mesh | Istio, Linkerd | mTLS / 관측성 강화 시 |
 | Backup/Restore | Velero, Restic | 정기 백업 자동화 시 |
