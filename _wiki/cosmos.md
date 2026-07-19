@@ -3,7 +3,7 @@ layout  : wiki
 title   : COSMOS(homelab)
 summary : 프로젝트와 서비스가 태어나고 연결되는 개인 인프라
 date    : 2026-04-27 12:00:00 +0900
-updated : 2026-07-19 20:55:12 +0900
+updated : 2026-07-19 23:49:15 +0900
 tags    : [kubernetes, sre, gitops, devops]
 toc     : true
 public  : true
@@ -625,6 +625,8 @@ Grafana는 `http://cosmos.tail511b20.ts.net/grafana`에서 연다. `COSMOS Overv
 Alloy에는 Pod 조회 권한만 준다. Loki는 사용하지 않는 rules sidecar와 서비스 계정 토큰 마운트를 끈다. Grafana Pod는 `monitoring` 네임스페이스의 ConfigMap을 읽을 수 있지만 Secret은 읽을 수 없다.
 
 Loki는 로그를 7일 보관하고, 만료된 데이터는 compactor가 비동기로 지운다. StatefulSet을 축소하거나 삭제해도 PVC는 남는다. 다만 PVC를 직접 삭제하면 `local-path` PV의 `Delete` 정책에 따라 데이터도 지워진다. 이 저장소는 클러스터 삭제나 호스트 장애를 견디는 백업이 아니다.
+
+Prometheus·Loki·Grafana와 Alloy Pod를 교체해도 컨트롤러가 새 Pod를 만들고 기존 PVC를 다시 연결한다. 이 과정에서 재시작 전 메트릭과 로그가 유지되고 Alloy의 신규 로그 수집도 재개되는 것을 확인했다. ArgoCD가 관리하는 Deployment의 replica 수를 Git 선언과 다르게 바꾸면 self-heal이 선언된 값으로 되돌린다.
 
 공유기 포트포워딩은 열지 않고 Tailscale MagicDNS로 접속한다. MagicDNS는 접근할 이름을 제공할 뿐, ingress의 출발지 제한까지 보장하지는 않는다. k3d가 호스트의 80/443을 열기 때문에 엄격한 접근 제한에는 별도의 호스트 바인딩이나 방화벽 설정이 필요하다.
 
