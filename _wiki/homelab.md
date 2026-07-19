@@ -3,7 +3,7 @@ layout  : wiki
 title   : Homelab
 summary : k3d + Terraform + ArgoCD 기반 개인 홈서버의 구성과 운영 모델
 date    : 2026-04-27 12:00:00 +0900
-updated : 2026-07-18 19:34:32 +0900
+updated : 2026-07-19 18:00:02 +0900
 tags    : [homelab, kubernetes, sre, gitops, devops]
 toc     : true
 public  : true
@@ -31,7 +31,7 @@ NAS나 미디어 서버를 대체하려는 구성은 아니다.
 | IaC (플랫폼) | Terraform | 플랫폼 컴포넌트 코드화 |
 | GitOps (앱) | ArgoCD | App-of-Apps 패턴 |
 | 원격 접속 | Tailscale | NAT 관통 |
-| 관측성 | Prometheus + Grafana + Loki | 메트릭 / 시각화 / 로그 |
+| 관측성 | Prometheus + Grafana + Loki + Alloy | 메트릭 / 시각화 / 로그 수집·조회 |
 | 시크릿 | sops + age | git 저장소에 암호화 보관 |
 
 ---
@@ -511,7 +511,9 @@ flowchart LR
     Pod["Pod stdout / stderr"]
     Files["/var/log/pods"]
     Alloy["Grafana Alloy DaemonSet"]
+    Position["/var/lib/alloy<br/>읽은 위치"]
     Pod --> |CRI 로그| Files --> |tail| Alloy
+    Alloy --- Position
   end
 
   Loki["Loki SingleBinary"]
@@ -524,10 +526,10 @@ flowchart LR
   User --> Graf -- "LogQL" --> Gateway
 
   classDef blue fill:#dbeafe,stroke:#1e40af,color:#000
-  class API,User,Graf,Pod,Files,Alloy,Gateway,Loki,PVC blue
+  class API,User,Graf,Pod,Files,Alloy,Position,Gateway,Loki,PVC blue
 ```
 
-Alloy DaemonSet은 server 노드 1개와 agent 노드 2개에서 Pod 로그를 읽고 Kubernetes 메타데이터를 붙여 Loki로 보낸다. 각 Alloy 인스턴스는 `spec.nodeName` field selector로 자기 노드의 Pod만 찾는다. 실제 CRI stdout 로그를 발생시켜 `namespace`, `pod`, `container`, `node`, `job`, `cluster` 라벨과 함께 LogQL로 조회되는 것까지 확인했다. Promtail은 2026년 3월 2일 EOL이므로 사용하지 않는다.
+Alloy DaemonSet은 server 노드 1개와 agent 노드 2개에서 Pod 로그를 읽고 Kubernetes 메타데이터를 붙여 Loki로 보낸다. 각 Alloy 인스턴스는 `spec.nodeName` field selector로 자기 노드의 Pod만 찾는다. 읽은 위치는 노드의 `/var/lib/alloy`에 보존해 Alloy Pod가 다시 떠도 기존 로그의 중복 수집을 줄인다. 새로 발견한 파일은 처음부터 읽는다. 한 줄만 출력하고 종료된 Pod를 실제로 실행해 `namespace`, `pod`, `container`, `node`, `job`, `cluster` 라벨과 함께 LogQL에서 조회되는 것까지 검증했다. Promtail은 2026년 3월 2일 EOL이므로 사용하지 않는다.
 
 ### 6.4 경로 비교
 
@@ -633,11 +635,15 @@ flowchart TB
 | 로그 저장·조회 | `loki` | `7.1.0` | `3.6.8` | SingleBinary 1 replica |
 | 노드 로그 수집 | `alloy` | `1.10.1` | `v1.17.1` | DaemonSet 3 replicas |
 
-`kube-prometheus-stack`, Loki, Alloy는 모두 ArgoCD에서 Synced/Healthy 상태다. Prometheus 활성 타깃 25개가 모두 UP이며, 여기에는 Alloy 3개와 Loki 1개가 포함된다. Prometheus와 Loki는 각각 5Gi PVC를 사용한다. Grafana에는 Prometheus와 Loki 데이터 소스가 자동 구성돼 있다.
+`kube-prometheus-stack`, Loki, Alloy는 모두 ArgoCD에서 Synced/Healthy 상태다. Prometheus 활성 타깃은 25/25 UP이며, 여기에는 Alloy 3개와 Loki 1개가 포함된다. Prometheus와 Loki는 각각 5Gi PVC를 사용한다. Grafana에는 Prometheus와 Loki 데이터 소스가 자동 구성돼 있다.
 
-Alloy의 ClusterRole은 Pod get/list/watch만 허용한다. Loki rules sidecar는 끄고 서비스 계정 토큰도 자동 마운트하지 않아 로그 파이프라인에 필요하지 않은 Kubernetes API 권한을 남기지 않았다.
+운영 화면은 `http://homelab.tail511b20.ts.net/grafana`에 둔다. `Homelab Overview` 대시보드는 준비된 노드, 실행 중인 Pod, 발생 중인 알림, 최근 한 시간의 컨테이너 재시작, 네임스페이스별 CPU·메모리 사용량, 최근 Pod 로그를 한 화면에 보여 준다. Grafana는 `Asia/Seoul` 시간대를 사용하며 30초마다 새로 고친다. `/grafana/metrics`를 별도 ServiceMonitor 경로로 지정해 하위 경로 리디렉션 때문에 메트릭 수집이 끊기지 않도록 했다.
 
-현재 `local-path` StorageClass로 동적 생성되는 PV의 reclaim policy는 `Delete`다. Prometheus와 Loki는 각각 전용 PVC/PV를 사용한다. 이 볼륨은 Pod 재시작에는 대응하지만 k3d 클러스터 삭제와 호스트 장애를 견디는 백업이 아니다. 메트릭·로그의 호스트 고정 경로와 백업은 Phase 8에서 `~/srv/data/<app>/` 원칙에 맞춰 추가한다.
+권한은 컴포넌트별로 좁혔다. Alloy의 ClusterRole은 Pod get/list/watch만 허용한다. Loki rules sidecar는 끄고 서비스 계정 토큰도 자동 마운트하지 않는다. Grafana Pod의 서비스 계정은 `monitoring` 네임스페이스의 ConfigMap만 get/list/watch할 수 있으며 Secret 조회는 거부된다.
+
+Loki의 보존 기간은 7일이며, 만료된 데이터는 compactor가 비동기로 삭제한다. Loki StatefulSet의 PVC 수명주기는 축소와 StatefulSet 삭제 모두 `Retain`이므로 워크로드를 다시 배포해도 기존 로그 볼륨을 자동 삭제하지 않는다. 다만 PVC를 직접 삭제하면 `local-path` StorageClass가 동적 생성한 PV의 `Delete` 정책에 따라 저장 데이터도 사라질 수 있다. 이 볼륨은 Pod·워크로드 재시작에는 대응하지만 k3d 클러스터 삭제와 호스트 장애를 견디는 백업이 아니다. 메트릭·로그의 호스트 고정 경로와 백업은 Phase 8에서 `~/srv/data/<app>/` 원칙에 맞춰 추가한다.
+
+접속 경로는 공유기 포트포워딩 없이 Tailscale MagicDNS를 사용한다. 다만 k3d가 호스트의 80/443을 열고 ingress가 출발지 IP를 별도로 제한하지 않으므로, "Tailscale 이름으로 접근한다"와 "ingress가 tailnet에서 온 패킷만 허용한다"는 같은 의미가 아니다. 엄격한 네트워크 강제와 TLS는 호스트 바인딩·방화벽·클러스터 재구성 범위에서 별도로 다룬다.
 
 k3s는 scheduler와 controller-manager를 별도 Pod가 아닌 단일 서버 프로세스에 포함하며, 현재 단일 server 구성의 datastore는 SQLite다. 따라서 etcd monitor는 비활성화하고, 표준 배포처럼 독립된 in-cluster scrape endpoint가 노출되지 않는 scheduler/controller-manager monitor도 비활성화해 거짓 장애 신호를 막는다.
 
