@@ -1,9 +1,9 @@
 ---
 layout  : wiki
-title   : COSMOS
+title   : COSMOS(homelab)
 summary : 프로젝트와 서비스가 태어나고 연결되는 개인 인프라
 date    : 2026-04-27 12:00:00 +0900
-updated : 2026-07-19 19:08:48 +0900
+updated : 2026-07-19 20:55:12 +0900
 tags    : [kubernetes, sre, gitops, devops]
 toc     : true
 public  : true
@@ -13,7 +13,7 @@ latex   : false
 * TOC
 {:toc}
 
-# COSMOS
+# COSMOS(homelab)
 
 COSMOS는 프로젝트와 서비스가 태어나고 연결되는 개인 인프라다. Mac mini 위에서 SRE 운영을 연습하고 사이드 프로젝트를 배포하며, 새 도구를 부담 없이 시험한다.
 NAS나 미디어 서버를 대체하려는 구성은 아니다.
