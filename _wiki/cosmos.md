@@ -1,10 +1,10 @@
 ---
 layout  : wiki
-title   : Homelab
-summary : k3d + Terraform + ArgoCD 기반 개인 홈서버의 구성과 운영 모델
+title   : COSMOS
+summary : 프로젝트와 서비스가 태어나고 연결되는 개인 인프라
 date    : 2026-04-27 12:00:00 +0900
-updated : 2026-07-19 18:11:50 +0900
-tags    : [homelab, kubernetes, sre, gitops, devops]
+updated : 2026-07-19 19:08:48 +0900
+tags    : [kubernetes, sre, gitops, devops]
 toc     : true
 public  : true
 parent  : [[index]]
@@ -13,9 +13,9 @@ latex   : false
 * TOC
 {:toc}
 
-# Homelab
+# COSMOS
 
-SRE 운영을 연습하고 사이드 프로젝트를 배포하기 위한 개인 홈서버다. 새 도구를 부담 없이 시험하는 환경으로도 쓴다.
+COSMOS는 프로젝트와 서비스가 태어나고 연결되는 개인 인프라다. Mac mini 위에서 SRE 운영을 연습하고 사이드 프로젝트를 배포하며, 새 도구를 부담 없이 시험한다.
 NAS나 미디어 서버를 대체하려는 구성은 아니다.
 
 관련 문서: [[kubernetes]]
@@ -146,9 +146,9 @@ Pod는 그 안에서 다시 컨테이너로 실행된다.
 
 ```bash
 docker ps
-# k3d-homelab-server-0   ← 노드 (컨테이너)
-# k3d-homelab-agent-0    ← 노드 (컨테이너)
-# k3d-homelab-agent-1    ← 노드 (컨테이너)
+# k3d-cosmos-server-0   ← 노드 (컨테이너)
+# k3d-cosmos-agent-0    ← 노드 (컨테이너)
+# k3d-cosmos-agent-1    ← 노드 (컨테이너)
 
 kubectl get pods -A
 # 위 노드 컨테이너 안에서 실행되는 Pod들
@@ -367,7 +367,7 @@ flowchart LR
 Terraform은 ArgoCD와 root Application까지만 설치한다. root Application은 `gitops/apps/` 아래의 Application을 읽어 실제 앱을 배포한다.
 
 ```
-homelab/gitops/
+cosmos/gitops/
 ├── apps/
 │   ├── podinfo.yaml
 │   ├── kube-prometheus-stack.yaml
@@ -417,7 +417,7 @@ flowchart TB
 ```mermaid
 flowchart TB
   Daniel["👨 사용자 IDE"]
-  GH["☁ GitHub<br/>(homelab repo, gitops/ 하위)"]
+  GH["☁ GitHub<br/>(cosmos repo, gitops/ 하위)"]
   Argo["📦 ArgoCD Pod<br/>(워커, platform ns)<br/>desired (git) vs current (cluster) 비교"]
   API["apiserver"]
   ETCD[("etcd")]
@@ -560,10 +560,10 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-  Git["homelab repo<br/>gitops/apps"]
+  Git["cosmos repo<br/>gitops/apps"]
   Terraform["Terraform"]
 
-  subgraph Cluster["k3d-homelab"]
+  subgraph Cluster["k3d-cosmos"]
     Argo["ArgoCD<br/>root Application"]
     Storage["local-path StorageClass<br/>PV ReclaimPolicy: Delete"]
 
@@ -620,7 +620,7 @@ flowchart TB
 
 Prometheus와 Loki는 각각 5Gi PVC를 쓴다. Grafana의 Prometheus·Loki 데이터 소스는 배포할 때 자동으로 등록된다.
 
-Grafana는 `http://homelab.tail511b20.ts.net/grafana`에서 연다. `Homelab Overview`에는 노드와 Pod 상태, 리소스 사용량, 알림, 최근 로그가 모여 있다. 시간대는 `Asia/Seoul`, 새로 고침 주기는 30초다. 메트릭 수집 경로는 하위 경로에 맞춰 `/grafana/metrics`로 지정했다.
+Grafana는 `http://cosmos.tail511b20.ts.net/grafana`에서 연다. `COSMOS Overview`에는 노드와 Pod 상태, 리소스 사용량, 알림, 최근 로그가 모여 있다. 시간대는 `Asia/Seoul`, 새로 고침 주기는 30초다. 메트릭 수집 경로는 하위 경로에 맞춰 `/grafana/metrics`로 지정했다.
 
 Alloy에는 Pod 조회 권한만 준다. Loki는 사용하지 않는 rules sidecar와 서비스 계정 토큰 마운트를 끈다. Grafana Pod는 `monitoring` 네임스페이스의 ConfigMap을 읽을 수 있지만 Secret은 읽을 수 없다.
 
@@ -637,7 +637,7 @@ k3s는 scheduler와 controller-manager를 별도 Pod가 아닌 단일 서버 프
 Terraform 영역과 ArgoCD가 감시하는 영역을 한 저장소 안에서 디렉토리로 나눈다.
 
 ```
-homelab/
+cosmos/
 ├── infra/                    # Terraform 영역 (ArgoCD watch ❌)
 │   ├── bootstrap/
 │   │   ├── install.sh
@@ -683,7 +683,7 @@ infra/terraform/**/*.tfstate.backup
 
 새 호스트에는 다음 네 항목을 옮긴다.
 
-1. homelab repo (GitHub clone)
+1. cosmos repo (GitHub clone)
 2. terraform.tfstate (로컬 파일, 직접 옮김)
 3. ~/srv/data/ (rsync)
 4. ~/srv/secrets/age/keys.txt
@@ -692,9 +692,9 @@ infra/terraform/**/*.tfstate.backup
 
 ```bash
 brew install orbstack k3d kubectl helm terraform sops age tailscale
-git clone github.com/currenjin/homelab
+git clone github.com/currenjin/cosmos
 # tfstate, ~/srv/data, sops key 옮기기
-cd homelab && ./infra/bootstrap/install.sh   # 빈 k3d 클러스터 생성
+cd cosmos && ./infra/bootstrap/install.sh   # 빈 k3d 클러스터 생성
 cd infra/terraform/envs/local && terraform apply  # platform 다시 설치
 cd ../../../.. && ./infra/bootstrap/restore-secrets.sh  # ArgoCD repo credential 복원
 # ArgoCD가 root-app을 sync해 모든 앱 자동 복원
@@ -736,7 +736,7 @@ Terraform이 root Application을 먼저 만들기 때문에 repository credentia
 
 - `pmset -c sleep 0`, `pmset -c disksleep 0`
 - 시스템 설정 → 일반 → 공유 → 원격 로그인 (SSH)
-- macOS hostname은 `home-mac`, Tailscale hostname은 `homelab`으로 고정
+- macOS hostname은 `home-mac`, Tailscale hostname은 `cosmos`으로 고정
 
 ---
 

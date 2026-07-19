@@ -1,10 +1,10 @@
 [
   {
-    "title": "Homelab",
-    "url": "/wiki/homelab",
+    "title": "COSMOS",
+    "url": "/wiki/cosmos",
     "updated": "2026-07-19",
-    "summary": "k3d + Terraform + ArgoCD 기반 개인 홈서버의 구성과 운영 모델",
-    "tags": "homelab, kubernetes, sre, gitops, devops",
+    "summary": "프로젝트와 서비스가 태어나고 연결되는 개인 인프라",
+    "tags": "kubernetes, sre, gitops, devops",
     "source": "Wiki",
     "external": false
   },
