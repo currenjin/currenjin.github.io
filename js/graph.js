@@ -387,6 +387,8 @@
 
       G.d3Force("charge").strength(CFG.forceCharge);
       G.d3Force("link").distance(CFG.forceLinkDist).strength(CFG.forceLinkStrength);
+      const dragHandlers = GraphForce.createDragHandlers(G, node => node === focusedNode);
+      G.onNodeDrag(dragHandlers.onNodeDrag).onNodeDragEnd(dragHandlers.onNodeDragEnd);
 
       updateStats();
 
