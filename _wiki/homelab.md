@@ -3,7 +3,7 @@ layout  : wiki
 title   : Homelab
 summary : k3d + Terraform + ArgoCD 기반 개인 홈서버의 구성과 운영 모델
 date    : 2026-04-27 12:00:00 +0900
-updated : 2026-07-19 18:00:02 +0900
+updated : 2026-07-19 18:11:50 +0900
 tags    : [homelab, kubernetes, sre, gitops, devops]
 toc     : true
 public  : true
@@ -74,16 +74,16 @@ flowchart TB
 사설 IP(`192.168.x.x`)는 외부에서 직접 보이지 않는다. 외부에서 들어오는 패킷은 공유기가 라우팅 대상을 모르므로 폐기한다.
 별도 방화벽 설정 없이도 인바운드 트래픽은 기본적으로 차단된다.
 
-포트포워딩은 차단된 벽에 룰 하나를 추가해 구멍을 뚫는 행위다.
+포트포워딩을 설정하면 특정 외부 포트를 내부 장치로 전달하는 규칙이 생긴다.
 
 ### 2.2 Tailscale의 NAT 관통
 
-1. STUN 서버를 통해 양 디바이스가 자신의 외부 IP/포트를 확인한다.
-2. 양쪽이 동시에 서로에게 패킷을 전송하면 NAT가 outbound 응답으로 인식해 통과시킨다 (hole punching).
+1. STUN 서버를 통해 두 장치가 자신의 외부 IP와 포트를 확인한다.
+2. 두 장치가 동시에 패킷을 보내면 NAT가 기존 연결의 응답으로 인식해 통과시킨다 (hole punching).
 3. 이후 WireGuard 암호화 P2P 터널로 직접 통신한다.
 4. 관통이 실패하면 DERP 릴레이 서버가 트래픽을 중계한다.
 
-Tailscale Control Plane은 좌표 메타데이터만 처리한다. 실제 데이터 트래픽은 거치지 않는다.
+Tailscale Control Plane은 장치의 접속 정보만 처리한다. 실제 데이터는 두 장치 사이의 터널로 흐른다.
 
 ---
 
@@ -142,7 +142,7 @@ OrbStack은 Apple Virtualization Framework로 리눅스 VM을 한 대 띄우고 
 
 k3d는 k3s(경량 Kubernetes 배포판)를 도커 컨테이너로 실행하는 도구다.
 각 "노드"는 OrbStack VM 안의 도커 컨테이너이며, 그 컨테이너 안에서 k3s 바이너리가 실행된다.
-Pod은 그 안에서 또 다른 컨테이너로 실행되는 중첩 구조다.
+Pod는 그 안에서 다시 컨테이너로 실행된다.
 
 ```bash
 docker ps
@@ -182,8 +182,7 @@ flowchart TB
 | Control Plane | server | 클러스터 상태 관리, 변경 권한 |
 | Worker | agent | Pod 실제 실행 |
 
-Control Plane이 다운되어도 이미 실행 중인 Pod의 평시 트래픽은 영향을 받지 않는다.
-새 Pod 생성/삭제, 자동 복구, kubectl 명령 등 변경 권한만 마비된다.
+Control Plane이 멈추면 새 Pod 배치, 자동 복구, kubectl 같은 클러스터 변경 작업도 멈춘다. 이미 실행 중인 Pod의 트래픽은 워커가 계속 처리한다.
 
 운영 환경에서는 etcd의 raft 합의를 위해 Control Plane을 홀수(3, 5, 7…)로 둔다.
 
@@ -319,59 +318,49 @@ Service와의 차이:
 - Service: Pod 라우팅 (가상 IP, DNS, 변경되는 Pod IP를 추상화)
 - Namespace: Pod 그룹화 (조직, 권한, 격리)
 
-### 4.6 etcd 장애 영향
+### 4.6 datastore 장애 영향
 
 | 데이터 상태 | 결과 |
 |---|---|
 | 데이터 파일 무사 (k3s `state.db`) | 자동 재시작 → 정상 복귀 |
-| 데이터 파일 소실 | 모든 desired state 증발, 사실상 새 클러스터 |
+| 데이터 파일 소실 | 선언된 클러스터 상태가 사라져 새 클러스터처럼 됨 |
 | 백업 존재 | 백업 시점으로 복구 |
 
-etcd 장애 시 즉각 영향:
+datastore 장애 시 영향:
 
-- 이미 실행 중인 Pod: 워커에서 그대로 작동 (kubelet이 자체 운영)
+- 이미 실행 중인 Pod: 워커에서 계속 실행
 - kubectl 명령: 실패
-- scheduler / controller-manager: watch 실패로 마비
-- 신규 배포 / 자동 복구: 불가
+- scheduler / controller-manager: watch 중단
+- 신규 배포 / 자동 복구: 동작하지 않음
 
 ---
 
-## 5. 시간축과 책임 분리
+## 5. 배포 책임
 
-### 5.1 단계별 흐름
+### 5.1 구성 순서
 
 ```mermaid
 flowchart LR
-  T0["<b>t=0</b><br/>bootstrap.sh<br/>사람 1회<br/><br/>결과:<br/>빈 k3d 클러스터<br/>+ kubeconfig"]
-  T1["<b>t=1</b><br/>terraform apply<br/>사람 가끔<br/><br/>결과:<br/>namespace<br/>ingress-nginx<br/>ArgoCD 본체<br/>root-app"]
-  T2["<b>t=2</b><br/>ArgoCD 첫 sync<br/>자동 1회<br/><br/>결과:<br/>podinfo<br/>prometheus-stack<br/>loki<br/>alloy"]
-  Tinf["<b>t=∞</b><br/>ArgoCD 영구 watch<br/><br/>git 변경 → 자동 반영<br/>drift → 자동 원복"]
+  Bootstrap["bootstrap.sh<br/>k3d 클러스터 + kubeconfig"]
+  Terraform["terraform apply<br/>namespace + ingress-nginx<br/>ArgoCD + root Application"]
+  Argo["ArgoCD<br/>gitops/apps 배포"]
+  Reconcile["지속적인 reconcile<br/>git 반영 + drift 복구"]
 
-  T0 == "인계 ①<br/>빈 클러스터<br/>+ kubeconfig" ==> T1
-  T1 == "인계 ②<br/>root-app<br/>매니페스트" ==> T2
-  T2 --> Tinf
+  Bootstrap ==> Terraform ==> Argo --> Reconcile
 
-  classDef once fill:#fde68a,stroke:#92400e,color:#000
-  classDef occasional fill:#dbeafe,stroke:#1e40af,color:#000
-  classDef auto fill:#dcfce7,stroke:#166534,color:#000
-  classDef forever fill:#fce7f3,stroke:#9d174d,color:#000
-  class T0 once
-  class T1 occasional
-  class T2 auto
-  class Tinf forever
+  classDef bootstrap fill:#fde68a,stroke:#92400e,color:#000
+  classDef platform fill:#dbeafe,stroke:#1e40af,color:#000
+  classDef gitops fill:#dcfce7,stroke:#166534,color:#000
+  class Bootstrap bootstrap
+  class Terraform platform
+  class Argo,Reconcile gitops
 ```
 
-| 시점 | 도구 | 빈도 | 결과 |
-|---|---|---|---|
-| t=0 | bootstrap.sh | 1회 (사람) | 빈 k3d 클러스터, kubeconfig |
-| t=1 | terraform apply | 가끔 (사람) | namespace, ingress-nginx, ArgoCD 본체, root-app |
-| t=2 | ArgoCD 첫 sync | 1회 (자동) | `podinfo`, `prometheus-stack`, `loki`, `alloy` 배포 |
-| t=∞ | ArgoCD watch | 영구 (자동) | git 변경 자동 반영, drift 자동 원복 |
+### 5.2 책임 경계
 
-### 5.2 권한 인계
-
-- **인계 ① bootstrap → Terraform**: bootstrap이 빈 k3d 클러스터와 kubeconfig를 생성한다. Terraform은 클러스터 자체를 생성하지 않으며 이미 존재하는 클러스터의 kubeconfig를 사용한다.
-- **인계 ② Terraform → ArgoCD**: Terraform이 ArgoCD 본체와 root-app 매니페스트를 등록한다. root-app은 `gitops/apps/*` 경로의 모든 Application을 등록한다. 이후 Terraform은 추가 작업을 하지 않는다.
+- bootstrap은 k3d 클러스터와 kubeconfig를 만든다.
+- Terraform은 kubeconfig를 받아 namespace, ingress-nginx, ArgoCD와 root Application을 설치한다.
+- ArgoCD는 `gitops/apps/`의 Application을 배포하고 git과 다른 상태를 되돌린다.
 
 ### 5.3 App-of-Apps 패턴
 
@@ -387,7 +376,7 @@ homelab/gitops/
 └── projects/
 ```
 
-운영 책임은 다음처럼 나눈다.
+Terraform과 ArgoCD의 책임은 나뉘어 있다.
 
 - Terraform: ArgoCD 최초 설치 + root-app 등록까지
 - ArgoCD: `gitops/apps/`에 선언된 앱 배포와 상태 복구
@@ -421,7 +410,7 @@ flowchart TB
   class Pod pod
 ```
 
-사용자 트래픽은 apiserver를 거치지 않고 data plane으로 흐른다. 따라서 apiserver가 내려가도 이미 실행 중인 앱의 평시 트래픽은 계속 처리된다.
+사용자 트래픽은 apiserver를 거치지 않고 data plane으로 흐른다.
 
 ### 6.2 GitOps 트래픽
 
@@ -446,18 +435,14 @@ flowchart TB
   class Daniel,GH,Argo,API,ETCD,CM,Cluster green
 ```
 
-git 변경 감지 방식:
+ArgoCD는 git을 3분마다 확인한다. GitHub webhook도 함께 사용해 push 직후 동기화를 시작하며, polling은 webhook이 실패했을 때를 대비한 안전망으로 남긴다.
 
-- **기본**: ArgoCD가 git을 3분 주기로 polling
-- **최적화**: GitHub webhook 등록 → push 즉시 신호 → 즉시 sync
-- **운영**: 둘 다 활성화 (webhook은 빠른 반영, polling은 fallback)
-
-ArgoCD는 일반 Kubernetes client처럼 apiserver를 호출한다. etcd 직접 접근은 불가하다.
+ArgoCD는 일반 Kubernetes client처럼 apiserver를 호출하며 etcd에는 직접 접근하지 않는다.
 GitOps 트래픽은 control plane 트래픽으로 분류된다.
 
 ### 6.3 관측 트래픽
 
-Phase 7의 메트릭과 로그 경로가 모두 운영 중이다. Prometheus, Grafana, Alertmanager, exporter, Loki, Alloy가 `monitoring` namespace에서 실행된다.
+Prometheus, Grafana, Alertmanager, exporter, Loki, Alloy는 `monitoring` 네임스페이스에서 실행된다.
 
 #### 메트릭 (Prometheus, pull 방식)
 
@@ -497,7 +482,7 @@ flowchart LR
   class API,Monitor,PromCR,Operator,Runtime,Prom,Graf,User,Kubelet,Node,KSM,App blue
 ```
 
-Prometheus Operator는 apiserver를 통해 `Prometheus`, `ServiceMonitor`, `PodMonitor` CR을 watch한다. `Prometheus` CR을 기준으로 StatefulSet을 만들고, monitor CR을 기준으로 scrape 설정 Secret을 생성한다. StatefulSet controller와 kubelet이 Prometheus Pod를 실행하고, 함께 실행되는 config-reloader가 설정 변경을 반영한다. Prometheus는 apiserver에서 타겟 메타데이터를 찾지만, 메트릭 데이터는 각 exporter와 앱의 `/metrics` 엔드포인트에서 직접 가져온다. `kube-state-metrics`도 apiserver를 list/watch해 Kubernetes 객체 상태를 메트릭으로 변환한다. Grafana는 Prometheus에 PromQL을 실행할 뿐 메트릭을 별도로 저장하지 않는다.
+Prometheus Operator는 `Prometheus`, `ServiceMonitor`, `PodMonitor` 리소스를 보고 StatefulSet과 수집 설정을 만든다. Prometheus는 apiserver에서 수집 대상을 찾은 뒤 각 exporter와 앱의 `/metrics`를 직접 읽는다. Grafana는 PromQL로 Prometheus를 조회하며 메트릭을 따로 저장하지 않는다.
 
 #### 로그 (Alloy → Loki, push 방식)
 
@@ -529,15 +514,15 @@ flowchart LR
   class API,User,Graf,Pod,Files,Alloy,Position,Gateway,Loki,PVC blue
 ```
 
-Alloy DaemonSet은 server 노드 1개와 agent 노드 2개에서 Pod 로그를 읽고 Kubernetes 메타데이터를 붙여 Loki로 보낸다. 각 Alloy 인스턴스는 `spec.nodeName` field selector로 자기 노드의 Pod만 찾는다. 읽은 위치는 노드의 `/var/lib/alloy`에 보존해 Alloy Pod가 다시 떠도 기존 로그의 중복 수집을 줄인다. 새로 발견한 파일은 처음부터 읽는다. 한 줄만 출력하고 종료된 Pod를 실제로 실행해 `namespace`, `pod`, `container`, `node`, `job`, `cluster` 라벨과 함께 LogQL에서 조회되는 것까지 검증했다. Promtail은 2026년 3월 2일 EOL이므로 사용하지 않는다.
+Alloy는 각 노드의 Pod 로그를 읽어 Loki로 보낸다. `spec.nodeName`으로 자기 노드의 Pod만 찾고, 읽은 위치는 `/var/lib/alloy`에 보관한다. 로그에는 `namespace`, `pod`, `container`, `node`, `job`, `cluster` 라벨이 붙는다. Promtail은 지원이 끝났기 때문에 사용하지 않는다.
 
 ### 6.4 경로 비교
 
 | 트래픽 | apiserver 경유 | 경로 |
 |---|---|---|
-| 사용자 (🔴) | ❌ | data plane (ingress → service → pod) |
-| GitOps (🟢) | ✅ 핵심 경로 | control plane (ArgoCD → apiserver → etcd) |
-| 관측 (🔵) | 🟡 메타조회만 | data plane (대부분) + apiserver (타겟 목록) |
+| 사용자 | 아니오 | data plane (ingress → service → pod) |
+| GitOps | 예 | control plane (ArgoCD → apiserver → etcd) |
+| 관측 | 메타데이터 조회만 | data plane + apiserver (타겟 목록) |
 
 ```mermaid
 flowchart TB
@@ -571,9 +556,7 @@ flowchart TB
   class Prom blue
 ```
 
-### 6.5 Phase 7 배포 구조와 현재 상태
-
-모니터링 컴포넌트는 Terraform이 아니라 ArgoCD로 배포한다. Terraform은 `monitoring` namespace와 ArgoCD 본체를 만들고, ArgoCD는 그 위의 관측성 앱을 Git 선언과 맞게 유지한다.
+### 6.5 관측성 배포 구조
 
 ```mermaid
 flowchart TB
@@ -627,7 +610,7 @@ flowchart TB
   class PromPVC,LokiPVC,Storage storage
 ```
 
-2026-07-18 공식 Helm repository index를 기준으로 메트릭과 로그 스택 버전을 다음처럼 고정했다.
+관측성 스택의 Helm chart 버전은 다음과 같다.
 
 | 역할 | Chart | Chart 버전 | App 버전 | 배포 형태 |
 |---|---|---:|---:|---|
@@ -635,15 +618,15 @@ flowchart TB
 | 로그 저장·조회 | `loki` | `7.1.0` | `3.6.8` | SingleBinary 1 replica |
 | 노드 로그 수집 | `alloy` | `1.10.1` | `v1.17.1` | DaemonSet 3 replicas |
 
-`kube-prometheus-stack`, Loki, Alloy는 모두 ArgoCD에서 Synced/Healthy 상태다. Prometheus 활성 타깃은 25/25 UP이며, 여기에는 Alloy 3개와 Loki 1개가 포함된다. Prometheus와 Loki는 각각 5Gi PVC를 사용한다. Grafana에는 Prometheus와 Loki 데이터 소스가 자동 구성돼 있다.
+Prometheus와 Loki는 각각 5Gi PVC를 쓴다. Grafana의 Prometheus·Loki 데이터 소스는 배포할 때 자동으로 등록된다.
 
-운영 화면은 `http://homelab.tail511b20.ts.net/grafana`에 둔다. `Homelab Overview` 대시보드는 준비된 노드, 실행 중인 Pod, 발생 중인 알림, 최근 한 시간의 컨테이너 재시작, 네임스페이스별 CPU·메모리 사용량, 최근 Pod 로그를 한 화면에 보여 준다. Grafana는 `Asia/Seoul` 시간대를 사용하며 30초마다 새로 고친다. `/grafana/metrics`를 별도 ServiceMonitor 경로로 지정해 하위 경로 리디렉션 때문에 메트릭 수집이 끊기지 않도록 했다.
+Grafana는 `http://homelab.tail511b20.ts.net/grafana`에서 연다. `Homelab Overview`에는 노드와 Pod 상태, 리소스 사용량, 알림, 최근 로그가 모여 있다. 시간대는 `Asia/Seoul`, 새로 고침 주기는 30초다. 메트릭 수집 경로는 하위 경로에 맞춰 `/grafana/metrics`로 지정했다.
 
-권한은 컴포넌트별로 좁혔다. Alloy의 ClusterRole은 Pod get/list/watch만 허용한다. Loki rules sidecar는 끄고 서비스 계정 토큰도 자동 마운트하지 않는다. Grafana Pod의 서비스 계정은 `monitoring` 네임스페이스의 ConfigMap만 get/list/watch할 수 있으며 Secret 조회는 거부된다.
+Alloy에는 Pod 조회 권한만 준다. Loki는 사용하지 않는 rules sidecar와 서비스 계정 토큰 마운트를 끈다. Grafana Pod는 `monitoring` 네임스페이스의 ConfigMap을 읽을 수 있지만 Secret은 읽을 수 없다.
 
-Loki의 보존 기간은 7일이며, 만료된 데이터는 compactor가 비동기로 삭제한다. Loki StatefulSet의 PVC 수명주기는 축소와 StatefulSet 삭제 모두 `Retain`이므로 워크로드를 다시 배포해도 기존 로그 볼륨을 자동 삭제하지 않는다. 다만 PVC를 직접 삭제하면 `local-path` StorageClass가 동적 생성한 PV의 `Delete` 정책에 따라 저장 데이터도 사라질 수 있다. 이 볼륨은 Pod·워크로드 재시작에는 대응하지만 k3d 클러스터 삭제와 호스트 장애를 견디는 백업이 아니다. 메트릭·로그의 호스트 고정 경로와 백업은 Phase 8에서 `~/srv/data/<app>/` 원칙에 맞춰 추가한다.
+Loki는 로그를 7일 보관하고, 만료된 데이터는 compactor가 비동기로 지운다. StatefulSet을 축소하거나 삭제해도 PVC는 남는다. 다만 PVC를 직접 삭제하면 `local-path` PV의 `Delete` 정책에 따라 데이터도 지워진다. 이 저장소는 클러스터 삭제나 호스트 장애를 견디는 백업이 아니다.
 
-접속 경로는 공유기 포트포워딩 없이 Tailscale MagicDNS를 사용한다. 다만 k3d가 호스트의 80/443을 열고 ingress가 출발지 IP를 별도로 제한하지 않으므로, "Tailscale 이름으로 접근한다"와 "ingress가 tailnet에서 온 패킷만 허용한다"는 같은 의미가 아니다. 엄격한 네트워크 강제와 TLS는 호스트 바인딩·방화벽·클러스터 재구성 범위에서 별도로 다룬다.
+공유기 포트포워딩은 열지 않고 Tailscale MagicDNS로 접속한다. MagicDNS는 접근할 이름을 제공할 뿐, ingress의 출발지 제한까지 보장하지는 않는다. k3d가 호스트의 80/443을 열기 때문에 엄격한 접근 제한에는 별도의 호스트 바인딩이나 방화벽 설정이 필요하다.
 
 k3s는 scheduler와 controller-manager를 별도 Pod가 아닌 단일 서버 프로세스에 포함하며, 현재 단일 server 구성의 datastore는 SQLite다. 따라서 etcd monitor는 비활성화하고, 표준 배포처럼 독립된 in-cluster scrape endpoint가 노출되지 않는 scheduler/controller-manager monitor도 비활성화해 거짓 장애 신호를 막는다.
 
@@ -681,17 +664,6 @@ infra/terraform/**/.terraform/
 infra/terraform/**/*.tfstate
 infra/terraform/**/*.tfstate.backup
 ```
-
-### 7.1 책임 분리
-
-| 영역 | 관리 도구 | 예시 |
-|---|---|---|
-| 클러스터 자체 | bootstrap script | `k3d cluster create` |
-| bootstrap 플랫폼 | Terraform | namespace, ingress-nginx, ArgoCD 본체 |
-| 플랫폼 add-on·앱 | ArgoCD | `podinfo`, `kube-prometheus-stack`, 이후 사이드 프로젝트 |
-| 앱 코드 | 별도 repo | 각 사이드 프로젝트 저장소 |
-
-ArgoCD가 설치되기 전에는 GitOps Application을 처리할 주체가 없다. 그래서 Terraform이 ArgoCD와 root Application을 먼저 설치하고, 이후 앱 배포를 ArgoCD에 넘긴다.
 
 ---
 
@@ -735,7 +707,7 @@ Terraform이 root Application을 먼저 만들기 때문에 repository credentia
 | 증상 | 점검 위치 |
 |---|---|
 | 외부에서 앱 접속 안 됨 | Tailscale 연결 → ingress-nginx Pod 상태 → Service endpoints → 앱 Pod |
-| kubectl 명령 실패 | apiserver 상태 → etcd (k3s state.db) 정상성 |
+| kubectl 명령 실패 | apiserver 상태 → k3s datastore (`state.db`) 정상성 |
 | git push했는데 배포 안 됨 | ArgoCD가 git 변경을 감지했는지 (polling/webhook) → root-app sync 상태 → application Pod |
 | 메트릭 빈 칸 | Prometheus의 ServiceMonitor/PodMonitor → /metrics 엔드포인트 응답 |
 | 로그 안 보임 | Alloy DaemonSet의 파일 읽기 상태 → Loki 전송 상태 → LogQL 조회 상태 |
@@ -757,7 +729,7 @@ Terraform이 root Application을 먼저 만들기 때문에 repository credentia
 
 ### 9.2 외부 접속 정책
 
-- Tailscale only, 포트포워딩 사용 안 함
+- 공유기 포트포워딩은 사용하지 않고 Tailscale MagicDNS를 기본 접속 경로로 사용
 - 공개 앱이 필요해지면 Cloudflare Tunnel 추가
 
 ### 9.3 Mac mini를 24시간 운영하기
@@ -768,20 +740,7 @@ Terraform이 root Application을 먼저 만들기 때문에 repository credentia
 
 ---
 
-## 10. 추후 학습 영역
-
-현재 구성 밖의 영역은 실제 필요가 생길 때 추가한다.
-
-| 영역 | 키워드 | 학습 시점 |
-|---|---|---|
-| CNI / NetworkPolicy | Flannel, Calico | 트래픽 격리 필요 시 |
-| Service Mesh | Istio, Linkerd | mTLS / 관측성 강화 시 |
-| Backup/Restore | Velero, Restic | 정기 백업 자동화 시 |
-| 업그레이드 | k3s / ArgoCD / Terraform 버전업 | 6개월차 |
-
----
-
-## 11. 참고
+## 10. 참고
 
 - [[kubernetes]]
 - [[grafana-loki-tempo]]
