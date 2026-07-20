@@ -3,7 +3,7 @@ layout  : wiki
 title   : COSMOS(homelab)
 summary : 프로젝트와 서비스가 태어나고 연결되는 개인 인프라
 date    : 2026-04-27 12:00:00 +0900
-updated : 2026-07-19 23:49:15 +0900
+updated : 2026-07-20 13:28:52 +0900
 tags    : [kubernetes, sre, gitops, devops]
 toc     : true
 public  : true
@@ -587,6 +587,9 @@ flowchart TB
     end
   end
 
+  HostStorage["호스트 영속 저장소"]
+  ColdBackup["무결성을 검증한 콜드 백업"]
+
   Terraform --> |namespace 생성| NS
   Terraform --> |ArgoCD Helm 설치| Argo
   Git --> Argo
@@ -596,6 +599,8 @@ flowchart TB
   Loki --- LokiPVC
   PromPVC -. "dynamic provisioning" .-> Storage
   LokiPVC -. "dynamic provisioning" .-> Storage
+  Storage --- HostStorage
+  HostStorage -. "정기 백업" .-> ColdBackup
   Graf --> |PromQL query| Prom
   Graf --> |LogQL query| Gateway
   Alloy --> Gateway --> Loki
@@ -607,7 +612,7 @@ flowchart TB
   class Terraform,NS infra
   class Git,Argo gitops
   class Operator,Prom,Graf,Alert,Exporters,Alloy,Gateway,Loki observe
-  class PromPVC,LokiPVC,Storage storage
+  class PromPVC,LokiPVC,Storage,HostStorage,ColdBackup storage
 ```
 
 관측성 스택의 Helm chart 버전은 다음과 같다.
@@ -618,13 +623,15 @@ flowchart TB
 | 로그 저장·조회 | `loki` | `7.1.0` | `3.6.8` | SingleBinary 1 replica |
 | 노드 로그 수집 | `alloy` | `1.10.1` | `v1.17.1` | DaemonSet 3 replicas |
 
-Prometheus와 Loki는 각각 5Gi PVC를 쓴다. Grafana의 Prometheus·Loki 데이터 소스는 배포할 때 자동으로 등록된다.
+Prometheus와 Loki는 각각 5Gi PVC를 쓴다. local-path 볼륨의 실제 데이터는 k3d 노드 수명과 분리된 호스트 저장소에 놓고, 무결성을 검증한 콜드 백업으로 별도 보존한다. Grafana의 Prometheus·Loki 데이터 소스는 배포할 때 자동으로 등록된다.
 
 Grafana는 `http://cosmos.tail511b20.ts.net/grafana`에서 연다. `COSMOS Overview`에는 노드와 Pod 상태, 리소스 사용량, 알림, 최근 로그가 모여 있다. 시간대는 `Asia/Seoul`, 새로 고침 주기는 30초다. 메트릭 수집 경로는 하위 경로에 맞춰 `/grafana/metrics`로 지정했다.
 
 Alloy에는 Pod 조회 권한만 준다. Loki는 사용하지 않는 rules sidecar와 서비스 계정 토큰 마운트를 끈다. Grafana Pod는 `monitoring` 네임스페이스의 ConfigMap을 읽을 수 있지만 Secret은 읽을 수 없다.
 
-Loki는 로그를 7일 보관하고, 만료된 데이터는 compactor가 비동기로 지운다. StatefulSet을 축소하거나 삭제해도 PVC는 남는다. 다만 PVC를 직접 삭제하면 `local-path` PV의 `Delete` 정책에 따라 데이터도 지워진다. 이 저장소는 클러스터 삭제나 호스트 장애를 견디는 백업이 아니다.
+Loki는 로그를 7일 보관하고, 만료된 데이터는 compactor가 비동기로 지운다. StatefulSet을 축소하거나 삭제해도 PVC는 남는다. PVC를 직접 삭제하면 `local-path` PV의 `Delete` 정책에 따라 데이터도 지워질 수 있으므로, PVC와 호스트 저장소는 백업을 대신하지 않는다.
+
+자동 복구는 파일이 존재하는지만 확인하지 않는다. 클러스터를 다시 시작한 뒤 모든 노드와 관측성 Pod의 readiness, 새로고침한 GitOps 동기화 상태까지 통과해야 완료된다. 이어지는 운영 검증에서 백업 시점 이전의 메트릭과 로그가 실제로 조회되는지 확인한다.
 
 Prometheus·Loki·Grafana와 Alloy Pod를 교체해도 컨트롤러가 새 Pod를 만들고 기존 PVC를 다시 연결한다. 이 과정에서 재시작 전 메트릭과 로그가 유지되고 Alloy의 신규 로그 수집도 재개되는 것을 확인했다. ArgoCD가 관리하는 Deployment의 replica 수를 Git 선언과 다르게 바꾸면 self-heal이 선언된 값으로 되돌린다.
 
@@ -675,10 +682,10 @@ infra/terraform/**/*.tfstate.backup
 
 | 우선순위 | 대상 | 위치 | 잃었을 때 영향 |
 |---|---|---|---|
-| 1 | age 개인키 | `~/srv/secrets/age/keys.txt` | Git에 저장한 Secret 암호문을 복호화할 수 없음 |
+| 1 | age 개인키 | 호스트 외부의 별도 보관소 | Git에 저장한 Secret 암호문을 복호화할 수 없음 |
 | 2 | terraform.tfstate | 로컬 파일 | Terraform이 기존 리소스를 인식하지 못해 중복 생성이나 충돌이 발생할 수 있음 |
-| 3 | 클러스터 datastore | k3s SQLite (`state.db`) | 현재 클러스터의 desired state 소실 |
-| 4 | 영구 데이터 | `~/srv/data/<app>/` | stateful 앱 데이터 손실 |
+| 3 | 클러스터 선언 | Terraform + GitOps 저장소 | 플랫폼과 앱의 desired state를 재구성할 수 없음 |
+| 4 | 영구 데이터 | 호스트 영속 저장소 | stateful 앱 데이터 손실 |
 | 자동 | git repo | GitHub | (GitHub이 보존) |
 
 ### 8.2 호스트 이전 절차
@@ -688,7 +695,7 @@ infra/terraform/**/*.tfstate.backup
 1. cosmos repo (GitHub clone)
 2. terraform.tfstate (로컬 파일, 직접 옮김)
 3. ~/srv/data/ (rsync)
-4. ~/srv/secrets/age/keys.txt
+4. 호스트 외부에 보관한 age 개인키
 
 새 호스트에서 실행:
 
@@ -725,7 +732,7 @@ Terraform이 root Application을 먼저 만들기 때문에 repository credentia
 호스트가 바뀌어도 같은 구성을 다시 만들 수 있어야 한다.
 
 - 호스트 IP/이름 하드코딩 금지 (localhost, magic DNS, ClusterIP 사용)
-- 데이터 경로 절대 고정 (`~/srv/data/<app>/`)
+- Kubernetes PVC 데이터는 호스트 영속 저장소에 둔다.
 - 시크릿은 sops + age로 git에 암호화 저장
 - Terraform / ArgoCD / 매니페스트 모두 git에 보관
 
