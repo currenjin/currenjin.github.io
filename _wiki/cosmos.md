@@ -3,7 +3,7 @@ layout  : wiki
 title   : COSMOS(homelab)
 summary : 프로젝트와 서비스가 태어나고 연결되는 개인 인프라
 date    : 2026-04-27 12:00:00 +0900
-updated : 2026-07-21 13:14:52 +0900
+updated : 2026-07-21 13:23:21 +0900
 tags    : [kubernetes, sre, gitops, devops]
 toc     : true
 public  : true
@@ -64,6 +64,25 @@ COSMOS에 올라와 운영을 시작한 앱 프로젝트 하나를 **항성계**
 | Loki | 사건과 흔적을 남기는 로그 기록소 |
 | Alloy | 각 노드에서 메트릭과 로그를 모으는 관측 장비 |
 | Alertmanager | 이상 징후를 알리는 경보 장치 |
+
+---
+
+## 프로젝트
+
+COSMOS에 배포된 항성계를 이곳에 기록한다.
+
+### Cosmic Filament
+
+> 생각은 하나의 빛이고, 색인은 생각들이 이어지는 접점이다. 그 사이의 연결이 필라멘트를 이룬다.
+
+Cosmic Filament는 색인된 생각과 그 사이의 연결을 그래프로 보여 주는 비공개 생각 지도다. 앱이 관계를 새로 추측하지는 않는다. 두 생각이 이어져 있다면 같은 색인을 공유하기 때문이다.
+
+| 천체 | 이름 | 역할 |
+|---|---|---|
+| 별 | Cosmic Filament | 생각과 색인의 관계를 탐색하는 웹 앱 |
+| 행성 | Thought DB | 생각 원문과 색인을 보관하는 원본 데이터 저장소 |
+
+소스 코드는 [GitHub](https://github.com/currenjin/cosmic-filament)에 공개되어 있다. 저장소에는 가상 데이터만 들어가며, 실제 생각과 색인은 COSMOS 안에서만 읽는다.
 
 ---
 
