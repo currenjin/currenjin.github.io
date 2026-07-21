@@ -3,7 +3,7 @@ layout  : wiki
 title   : COSMOS(homelab)
 summary : 프로젝트와 서비스가 태어나고 연결되는 개인 인프라
 date    : 2026-04-27 12:00:00 +0900
-updated : 2026-07-21 12:53 +0900
+updated : 2026-07-21 12:53:00 +0900
 tags    : [kubernetes, sre, gitops, devops]
 toc     : true
 public  : true
