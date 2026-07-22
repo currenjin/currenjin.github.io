@@ -3,7 +3,7 @@ layout  : wiki
 title   : COSMOS(homelab)
 summary : 프로젝트와 서비스가 태어나고 연결되는 개인 인프라
 date    : 2026-04-27 12:00:00 +0900
-updated : 2026-07-22 15:33:19 +0900
+updated : 2026-07-22 15:45:46 +0900
 tags    : [kubernetes, sre, gitops, devops]
 toc     : true
 public  : true
@@ -77,7 +77,7 @@ COSMOS에 배포된 항성계를 이곳에 기록한다.
 
 Cosmic Filament는 색인된 생각과 그 사이의 연결을 그래프로 보여 주는 비공개 생각 지도다. 앱이 관계를 새로 추측하지는 않는다. 두 생각이 이어져 있다면 같은 색인을 공유하기 때문이다.
 
-![생각과 색인의 연결을 펼친 Cosmic Filament 화면](https://raw.githubusercontent.com/currenjin/cosmic-filament/main/docs/images/cosmic-filament-cosmos.png)
+![생각과 색인의 연결을 펼친 Cosmic Filament 화면](https://raw.githubusercontent.com/currenjin/cosmic-filament/main/docs/images/cosmic-filament.png)
 
 *회색 점은 생각을, 보라색 점은 색인을 나타낸다. 같은 색인을 공유하는 생각만 선으로 이어진다.*
 
