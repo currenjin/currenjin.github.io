@@ -1,5 +1,14 @@
 [
   {
+    "title": "Building Evolutionary Architectures(진화적 아키텍처)",
+    "url": "/wiki/building-evolutionary-architectures",
+    "updated": "2026-08-31",
+    "summary": "진화적 아키텍처 장별 노트. 피트니스 함수, 점진적 변화, 동조성, 거버넌스 자동화",
+    "tags": "architecture, design, engineering, devops",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "그날도 별은 보이지 않았다.",
     "url": "https://medium.com/@jung23e/%EA%B7%B8%EB%82%A0%EB%8F%84-%EB%B3%84%EC%9D%80-%EB%B3%B4%EC%9D%B4%EC%A7%80-%EC%95%8A%EC%95%98%EB%8B%A4-5bb58aae4128?source=rss-a0ae377eb2b1------2",
     "updated": "2026-08-28",
@@ -8,15 +17,6 @@
     "tags": "",
     "source": "Medium",
     "external": true
-  },
-  {
-    "title": "Building Evolutionary Architectures(진화적 아키텍처)",
-    "url": "/wiki/building-evolutionary-architectures",
-    "updated": "2026-08-27",
-    "summary": "진화적 아키텍처 장별 노트. 피트니스 함수, 점진적 변화, 동조성, 거버넌스 자동화",
-    "tags": "architecture, design, engineering, devops",
-    "source": "Wiki",
-    "external": false
   },
   {
     "title": "COSMOS(homelab)",
