@@ -3,7 +3,7 @@ layout  : wiki
 title   : Building Evolutionary Architectures(진화적 아키텍처)
 summary : 진화적 아키텍처 장별 노트. 피트니스 함수, 점진적 변화, 동조성, 거버넌스 자동화
 date    : 2026-08-27 17:00:00 +0900
-updated : 2026-08-31 21:40:00 +0900
+updated : 2026-08-31 19:06:05 +0900
 tags    : [architecture, design, engineering, devops]
 toc     : true
 public  : true
