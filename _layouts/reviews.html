@@ -1,0 +1,185 @@
+---
+layout: default
+---
+
+<div class="reviews-page">
+  <div class="reviews-header">
+    <h1 class="reviews-title">리뷰</h1>
+    <p class="reviews-subtitle">경험한 것들의 기록</p>
+    <div class="reviews-stats">
+      {% assign finished = site.reviews | where: "status", "finished" %}
+      {% assign reading = site.reviews | where: "status", "reading" %}
+      <span>전체 <strong>{{ site.reviews | size }}</strong></span>
+      <span>완료 <strong>{{ finished | size }}</strong></span>
+      <span>진행 중 <strong>{{ reading | size }}</strong></span>
+    </div>
+  </div>
+
+  <div class="reviews-filters">
+    <div class="reviews-filter-row">
+      <span class="filter-label">상태</span>
+      <button class="filter-btn active" data-filter-status="all">전체</button>
+      <button class="filter-btn" data-filter-status="finished">완료</button>
+      <button class="filter-btn" data-filter-status="reading">진행 중</button>
+      <button class="filter-btn" data-filter-status="want">예정</button>
+    </div>
+    <div class="reviews-filter-row">
+      <span class="filter-label">유형</span>
+      <button class="filter-btn active" data-filter-media-type="all">전체</button>
+      {% assign all_media_types = "" | split: "" %}
+      {% for review in site.reviews %}
+        {% unless all_media_types contains review.type or review.type == nil %}
+          {% assign all_media_types = all_media_types | push: review.type %}
+        {% endunless %}
+      {% endfor %}
+      {% assign all_media_types = all_media_types | sort %}
+      {% for t in all_media_types %}
+      <button class="filter-btn" data-filter-media-type="{{ t }}">{{ site.data.review_types[t] | default: t }}</button>
+      {% endfor %}
+    </div>
+    <div class="reviews-filter-row">
+      <span class="filter-label">분야</span>
+      <button class="filter-btn active" data-filter-genre="all">전체</button>
+      {% assign all_genres = "" | split: "" %}
+      {% for review in site.reviews %}
+        {% assign genres = review.genre | split: ", " %}
+        {% for g in genres %}
+          {% unless all_genres contains g or g == "" %}
+            {% assign all_genres = all_genres | push: g %}
+          {% endunless %}
+        {% endfor %}
+      {% endfor %}
+      {% assign all_genres = all_genres | sort %}
+      {% for g in all_genres %}
+      <button class="filter-btn" data-filter-genre="{{ g | strip }}">{{ g | strip }}</button>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="reviews-grid">
+    {% assign rated_reviews = site.reviews | where_exp: "r", "r.rating" | sort: "rating" | reverse %}
+    {% assign unrated_reviews = site.reviews | where_exp: "r", "r.rating == nil" %}
+    {% assign sorted_reviews = rated_reviews | concat: unrated_reviews %}
+    {% for review in sorted_reviews %}
+    <div class="review-item" data-status="{{ review.status }}" data-media-type="{{ review.type }}" data-genre="{{ review.genre }}">
+      {% if review.content != "" and review.content != nil %}
+      <a href="{{ review.url }}" class="review-card-link">
+      {% else %}
+      <div class="review-card-link">
+      {% endif %}
+        <div class="review-card" data-media-type="{{ review.type }}">
+          {% if review.cover_url and review.cover_url contains "product" %}
+          <div class="review-card-cover">
+            <img src="{{ review.cover_url }}" alt="{{ review.title }}" loading="lazy">
+          </div>
+          {% else %}
+          <div class="review-card-cover--empty"></div>
+          {% endif %}
+          <div class="review-card-body">
+            <p class="review-card-type">{{ site.data.review_types[review.type] | default: review.type }}</p>
+            <h3 class="review-card-title">{{ review.title }}</h3>
+            {% if review.author %}<p class="review-card-author">{{ review.author | split: "," | first | strip }}</p>{% endif %}
+            {% if review.genre %}<p class="review-card-genre">{{ review.genre | split: "," | first | strip }}</p>{% endif %}
+            <div class="review-card-footer">
+              <span class="review-card-status review-card-status--{{ review.status }}">
+                {% if review.status == 'finished' %}완료
+                {% elsif review.status == 'reading' %}진행 중
+                {% else %}예정{% endif %}
+              </span>
+              <span class="review-card-right">
+                {% if review.rating %}
+                <span class="review-card-rating">★ {{ review.rating }}</span>
+                {% endif %}
+                {% if review.content != "" and review.content != nil %}<span class="review-card-notes">노트 →</span>{% endif %}
+              </span>
+            </div>
+          </div>
+        </div>
+      {% if review.content != "" and review.content != nil %}
+      </a>
+      {% else %}
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+(function () {
+  const typeColors = {
+    book:       '#4a7fb5',
+    music:      '#9b6abf',
+    movie:      '#c95a5a',
+    game:       '#5aaa55',
+    animation:  '#d4a82a',
+    exhibition: '#3aacb8',
+    other:      '#7a8a9a',
+    default:    '#7a8a9a',
+  };
+
+  document.querySelectorAll('.review-card').forEach(el => {
+    const raw = el.dataset.mediaType || '';
+    const color = typeColors[raw] || typeColors['default'];
+    const accent = el.querySelector('.review-card-accent');
+    if (accent) accent.style.background = color;
+    const typeEl = el.querySelector('.review-card-type');
+    if (typeEl) typeEl.style.color = color;
+  });
+
+  let activeStatus = 'all';
+  let activeMediaType = 'all';
+  let selectedGenres = new Set();
+
+  function applyFilters() {
+    document.querySelectorAll('.review-item').forEach(c => {
+      const matchStatus = activeStatus === 'all' || c.dataset.status === activeStatus;
+      const matchMediaType = activeMediaType === 'all' || c.dataset.mediaType === activeMediaType;
+      const genres = (c.dataset.genre || '').split(',').map(g => g.trim());
+      const matchGenre = selectedGenres.size === 0 || genres.some(g => selectedGenres.has(g));
+      c.style.display = (matchStatus && matchMediaType && matchGenre) ? '' : 'none';
+    });
+  }
+
+  document.querySelectorAll('[data-filter-status]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-filter-status]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeStatus = btn.dataset.filterStatus;
+      applyFilters();
+    });
+  });
+
+  document.querySelectorAll('[data-filter-media-type]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-filter-media-type]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeMediaType = btn.dataset.filterMediaType;
+      applyFilters();
+    });
+  });
+
+  const allGenreBtn = document.querySelector('[data-filter-genre="all"]');
+  document.querySelectorAll('[data-filter-genre]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const genre = btn.dataset.filterGenre.trim();
+      if (genre === 'all') {
+        selectedGenres.clear();
+        document.querySelectorAll('[data-filter-genre]').forEach(b => b.classList.remove('active'));
+        allGenreBtn.classList.add('active');
+      } else {
+        if (selectedGenres.has(genre)) {
+          selectedGenres.delete(genre);
+          btn.classList.remove('active');
+        } else {
+          selectedGenres.add(genre);
+          btn.classList.add('active');
+          allGenreBtn.classList.remove('active');
+        }
+        if (selectedGenres.size === 0) allGenreBtn.classList.add('active');
+      }
+      applyFilters();
+    });
+  });
+})();
+</script>

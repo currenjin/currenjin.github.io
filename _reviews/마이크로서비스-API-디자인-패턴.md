@@ -1,0 +1,11 @@
+---
+layout   : review
+title    : "마이크로서비스 API 디자인 패턴"
+author   : "Olaf Zimmermann, Mirko Stocker, Daniel Lubke, Uwe Zdun, Cesare Pautasso"
+type     : book
+genre    : "소프트웨어"
+tags     : ['api', 'architecture']
+status   : want
+cover_url: "https://image.aladin.co.kr/product/35094/77/cover500/k382934502_1.jpg"
+rating  :
+---

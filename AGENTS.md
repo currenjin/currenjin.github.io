@@ -1,7 +1,7 @@
 # AGENTS.md
 
-개인 Jekyll 블로그. 핵심 산출물은 **공개 위키(`_wiki/`)**, 독서 로그(`_books/`),
-태그 기반 지식 그래프. 이 문서는 위키·책·전역 UI를 추가/수정하는 에이전트가
+개인 Jekyll 블로그. 핵심 산출물은 **공개 위키(`_wiki/`)**, 작품 리뷰(`_reviews/`),
+태그 기반 지식 그래프. 이 문서는 위키·리뷰·전역 UI를 추가/수정하는 에이전트가
 일관된 규칙으로 작업하기 위한 in-repo 스키마다.
 
 ## 위키 (`_wiki/*.md`)
@@ -69,25 +69,28 @@ container · ai · sre · javascript · ai-agent · jvm · jpa · sql · refacto
 5. `_data/updates.json` 최상단에 항목 추가
    (`title / url / updated / summary / tags / source: "Wiki" / external: false`)
 
-## 책 (`_books/*.md`)
+## 리뷰 (`_reviews/*.md`)
 
 ```yaml
 ---
-layout   : book
+layout   : review
 title    : "..."
-author   : "..."                                # 번역서는 원저자 한글 표기 우선
-type     : "소프트웨어"                          # 또는 "인문" 등
+author   : "..."                                # 책은 원저자 한글 표기 우선
+type     : book | music | movie | game | animation | exhibition | other
+genre    : "소프트웨어"                         # 작품 유형 안의 분야·장르
 status   : reading | want | finished
-cover_url: "https://image.aladin.co.kr/product/.../cover500/...jpg"
-rating   : 4                                    # finished 일 때만 (5점 척도)
+cover_url: "https://..."                        # 작품 표지·포스터·대표 이미지
+rating   : 4                                     # 완료한 작품일 때만 (5점 척도)
 tags     : [database, architecture]             # 선택
 ---
 ```
 
-- `cover_url`은 알라딘의 `cover500` 패턴을 사용. **무료특별판이 아니라 정식
-  종이책 ItemId의 표지**를 쓴다 (무료판은 별도 ItemId/표지를 가진다).
+- `type`은 작품 매체 유형이다. 현재 이관된 기존 독서 로그는 모두 `book`으로 둔다.
+- `genre`는 기존 독서 로그의 `소프트웨어`·`인문` 같은 분야 값을 보존하며, 리뷰 화면에서 별도 필터로 쓴다.
+- 책의 `cover_url`은 알라딘 `cover500` 패턴을 사용한다. 다른 유형은 작품을 식별할 수 있는 대표 이미지를 쓴다.
 - 파일명은 한국어 제목을 그대로 사용하되 공백은 `-` 로 치환
   (예: `시스템-성능-엔지니어링.md`).
+- 공개 진입점은 `/reviews/`다. `/books/`는 기존 링크를 위한 호환 리디렉션으로만 유지한다.
 
 ## 그래프 도크 / 전역 UI
 
@@ -108,7 +111,7 @@ tags     : [database, architecture]             # 선택
 - 출력은 `_site/`. Python 정적 서버로 확인:
   `cd _site && python3 -m http.server 4000 --bind 127.0.0.1`.
 - `graph-data.json` / `search-index.json` 은 Jekyll 빌드 시 자동 생성된다
-  (위키·책 컬렉션을 순회) — 수동으로 손대지 않는다.
+  (위키·리뷰 컬렉션을 순회) — 수동으로 손대지 않는다.
 
 ## 작업 위생
 

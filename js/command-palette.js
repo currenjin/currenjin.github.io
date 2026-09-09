@@ -7,7 +7,7 @@
     const QUICK_ACTIONS = [
         { title: 'Go to Wiki index', kind: 'action', url: '/wiki/index/', hint: 'index' },
         { title: 'Go to Graph', kind: 'action', url: '/graph/', hint: 'graph' },
-        { title: 'Go to Books', kind: 'action', url: '/books/', hint: 'books' },
+        { title: 'Go to Reviews', kind: 'action', url: '/reviews/', hint: 'reviews' },
         { title: 'Go to Recent updates', kind: 'action', url: '/recent/', hint: 'recent' },
         { title: 'Go to Tags', kind: 'action', url: '/tag/', hint: 'tags' },
     ];

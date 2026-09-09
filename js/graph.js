@@ -25,21 +25,21 @@
 
   const COLOR = {
     wiki:     "#91d478",
-    book:     "#60a5fa",
+    review:   "#60a5fa",
     wikiFade: "rgba(145,212,120,0.1)",
-    bookFade: "rgba(96,165,250,0.1)",
+    reviewFade: "rgba(96,165,250,0.1)",
     edge: {
       "wiki-wiki": "rgba(145,212,120,0.38)",
-      "wiki-book": "rgba(147,197,253,0.42)",
-      "book-book": "rgba(96,165,250,0.28)",
+      "wiki-review": "rgba(147,197,253,0.42)",
+      "review-review": "rgba(96,165,250,0.28)",
     },
     edgeFade: "rgba(100,116,139,0.04)",
     labelHot:  "#ffffff",
     labelWiki: "#d1fac0",
-    labelBook: "#bfdbfe",
+    labelReview: "#bfdbfe",
     tagHot:    "rgba(203,213,225,0.85)",
     tagWiki:   "rgba(145,212,120,0.5)",
-    tagBook:   "rgba(96,165,250,0.5)",
+    tagReview: "rgba(96,165,250,0.5)",
     focusRing: "rgba(145,212,120,0.55)",
     hoverRing: "rgba(255,255,255,0.22)",
   };
@@ -51,7 +51,7 @@
   let isLocal = false; // 데이터 로드 후 결정
 
   // ── 상태 ────────────────────────────────────────────
-  const filters = { "wiki-wiki": true, "wiki-book": false, "book-book": true };
+  const filters = { "wiki-wiki": true, "wiki-review": false, "review-review": true };
   let minWeight  = CFG.edgeWeightDefault;
   let showLabels = false;
   let showTags   = false;
@@ -86,7 +86,7 @@
   // ── 엣지 빌드 ────────────────────────────────────────
   function buildLinks(nodes) {
     const wikis = nodes.filter(n => n.type === "wiki");
-    const books = nodes.filter(n => n.type === "book");
+    const reviews = nodes.filter(n => n.type === "review");
     const links = [];
 
     const pushIfShared = (a, b, kind) => {
@@ -99,12 +99,12 @@
         pushIfShared(wikis[i], wikis[j], "wiki-wiki");
 
     for (const w of wikis)
-      for (const b of books)
-        pushIfShared(w, b, "wiki-book");
+      for (const r of reviews)
+        pushIfShared(w, r, "wiki-review");
 
-    for (let i = 0; i < books.length; i++)
-      for (let j = i + 1; j < books.length; j++)
-        pushIfShared(books[i], books[j], "book-book");
+    for (let i = 0; i < reviews.length; i++)
+      for (let j = i + 1; j < reviews.length; j++)
+        pushIfShared(reviews[i], reviews[j], "review-review");
 
     return links;
   }
@@ -138,9 +138,9 @@
 
   // ── 노드 렌더링 ──────────────────────────────────────
   function nodeFillColor(node, { dim, isHot }) {
-    if (dim)   return node.type === "wiki" ? COLOR.wikiFade : COLOR.bookFade;
+    if (dim)   return node.type === "wiki" ? COLOR.wikiFade : COLOR.reviewFade;
     if (isHot) return COLOR.labelHot;
-    return node.type === "wiki" ? COLOR.wiki : COLOR.book;
+    return node.type === "wiki" ? COLOR.wiki : COLOR.review;
   }
 
   function drawNode(node, ctx, gs) {
@@ -174,7 +174,7 @@
     ctx.font = `600 ${fs}px ${CFG.fontStack}`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillStyle = isHot ? COLOR.labelHot : (node.type === "wiki" ? COLOR.labelWiki : COLOR.labelBook);
+    ctx.fillStyle = isHot ? COLOR.labelHot : (node.type === "wiki" ? COLOR.labelWiki : COLOR.labelReview);
     const label = node.title.length > CFG.labelMaxLen
       ? node.title.slice(0, CFG.labelMaxLen - 1) + "…"
       : node.title;
@@ -183,19 +183,19 @@
     if (!((showTags || isHot) && node._tags.length)) return;
     const tfs = Math.max(6, 9 / gs);
     ctx.font = `${tfs}px ${CFG.fontStack}`;
-    ctx.fillStyle = isHot ? COLOR.tagHot : (node.type === "wiki" ? COLOR.tagWiki : COLOR.tagBook);
+    ctx.fillStyle = isHot ? COLOR.tagHot : (node.type === "wiki" ? COLOR.tagWiki : COLOR.tagReview);
     ctx.fillText(node._tags.map(t => "#" + t).join(" "), node.x, node.y + r + fs * 0.9 + tfs * 1.4);
   }
 
   // ── 패널/통계 ────────────────────────────────────────
   function updateStats() {
     const active = activeLinks();
-    const counts = { "wiki-wiki": 0, "wiki-book": 0, "book-book": 0 };
+    const counts = { "wiki-wiki": 0, "wiki-review": 0, "review-review": 0 };
     active.forEach(l => { counts[l.kind]++; });
     document.getElementById("stats").innerHTML =
       `Wiki↔Wiki: ${counts["wiki-wiki"]}<br>` +
-      `Wiki↔Book: ${counts["wiki-book"]}<br>` +
-      `Book↔Book: ${counts["book-book"]}`;
+      `Wiki↔Review: ${counts["wiki-review"]}<br>` +
+      `Review↔Review: ${counts["review-review"]}`;
   }
 
   function buildTagPanel(nodes) {
@@ -276,8 +276,8 @@
   }
 
   function nodeTooltip(node) {
-    const typeLabel = node.type === "wiki" ? "Wiki" : "Book";
-    const author = node.type === "book" && node.author ? `<div class="tt-meta">${node.author}</div>` : "";
+    const typeLabel = node.type === "wiki" ? "Wiki" : "Review";
+    const author = node.type === "review" && node.author ? `<div class="tt-meta">${node.author}</div>` : "";
     const tags = node._tags.length ? `<div class="tt-meta"># ${node._tags.join(" · ")}</div>` : "";
     return `
       <div class="tt-type col-${node.type}">${typeLabel}</div>
@@ -287,8 +287,8 @@
 
   function showNodeInfo(node) {
     const panel = document.getElementById("node-info");
-    const typeColor = node.type === "wiki" ? COLOR.wiki : COLOR.book;
-    document.getElementById("ni-type").textContent  = node.type === "wiki" ? "Wiki" : "Book";
+    const typeColor = node.type === "wiki" ? COLOR.wiki : COLOR.review;
+    document.getElementById("ni-type").textContent  = node.type === "wiki" ? "Wiki" : "Review";
     document.getElementById("ni-type").style.color  = typeColor;
     document.getElementById("ni-title").textContent = node.title;
     document.getElementById("ni-tags").textContent  = node._tags.length ? "# " + node._tags.join(" · ") : "";

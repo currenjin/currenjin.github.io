@@ -1,0 +1,31 @@
+---
+layout: document
+---
+
+<div class="post">
+    <header class="post-header">
+        <p class="review-back-link"><a href="/reviews/">← 리뷰로</a></p>
+        <h1 class="page-title">{{ page.title }}</h1>
+        {% if page.author %}<p class="title-summary">{{ page.author }}</p>{% endif %}
+        <div class="review-detail-tags">
+            <span class="review-tag review-tag--type">{{ site.data.review_types[page.type] | default: page.type }}</span>
+            {% if page.genre %}
+            <span class="review-tag review-tag--genre">{{ page.genre }}</span>
+            {% endif %}
+            <span class="review-tag review-tag--status review-tag--{{ page.status }}">
+                {% if page.status == 'finished' %}완료
+                {% elsif page.status == 'reading' %}진행 중
+                {% else %}예정{% endif %}
+            </span>
+            {% if page.end_date %}
+            <span class="review-tag review-tag--date">{{ page.end_date }}</span>
+            {% endif %}
+        </div>
+        <div class="history-button">
+            <p><a href="https://github.com/currenjin/currenjin.github.io/edit/main/_reviews/{{ page.slug }}.md">편집하기</a></p>
+        </div>
+    </header>
+    <article class="post-content">
+        {{ content }}
+    </article>
+</div>

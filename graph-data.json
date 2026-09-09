@@ -6,6 +6,6 @@ permalink: /graph-data.json
 {% assign first = true %}
 {% for wiki in site.wiki %}{% unless wiki.public == false %}{% unless first %},{% endunless %}{% assign first = false %}
 {"id":{{ wiki.path | remove: "_wiki/" | remove: ".md" | jsonify }},"title":{{ wiki.title | jsonify }},"type":"wiki","tags":{{ wiki.tags | jsonify }},"url":{{ wiki.url | jsonify }},"updated":{{ wiki.updated | date: "%Y-%m-%d" | jsonify }}}{% endunless %}{% endfor %}
-{% for book in site.books %}{% unless first %},{% endunless %}{% assign first = false %}
-{"id":{{ book.path | remove: "_books/" | remove: ".md" | jsonify }},"title":{{ book.title | jsonify }},"type":"book","tags":{% if book.tags %}{{ book.tags | jsonify }}{% else %}[]{% endif %},"bookType":{{ book.type | default: "" | jsonify }},"url":{{ book.url | jsonify }},"author":{{ book.author | default: "" | jsonify }},"status":{{ book.status | default: "" | jsonify }}}{% endfor %}
+{% for review in site.reviews %}{% unless first %},{% endunless %}{% assign first = false %}
+{"id":{{ review.path | remove: "_reviews/" | remove: ".md" | jsonify }},"title":{{ review.title | jsonify }},"type":"review","tags":{% if review.tags %}{{ review.tags | jsonify }}{% else %}[]{% endif %},"mediaType":{{ review.type | default: "" | jsonify }},"genre":{{ review.genre | default: "" | jsonify }},"url":{{ review.url | jsonify }},"author":{{ review.author | default: "" | jsonify }},"status":{{ review.status | default: "" | jsonify }}}{% endfor %}
 ]
