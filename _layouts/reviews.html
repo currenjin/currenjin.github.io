@@ -68,7 +68,7 @@ layout: default
       <div class="review-card-link">
       {% endif %}
         <div class="review-card" data-media-type="{{ review.type }}">
-          {% if review.cover_url and review.cover_url contains "product" %}
+          {% if review.cover_url %}
           <div class="review-card-cover">
             <img src="{{ review.cover_url }}" alt="{{ review.title }}" loading="lazy">
           </div>
