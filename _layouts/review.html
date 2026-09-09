@@ -17,6 +17,9 @@ layout: document
                 {% elsif page.status == 'reading' %}진행 중
                 {% else %}예정{% endif %}
             </span>
+            {% if page.rating %}
+            <span class="review-tag review-tag--rating">★ {{ page.rating }}</span>
+            {% endif %}
             {% if page.end_date %}
             <span class="review-tag review-tag--date">{{ page.end_date }}</span>
             {% endif %}
