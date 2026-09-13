@@ -1,7 +1,7 @@
 ## Variant: DLOG Editorial Home
 
 ### Design stance
-DLOG의 화면을 복제하지 않고, **대표 콘텐츠 3편을 먼저 고르고 최신 기록으로 이어지는 편집 원칙**을 Wiki와 Reviews 합본 홈에 적용한다.
+DLOG의 화면을 복제하지 않고, **대표 콘텐츠를 먼저 고르고 최근 기록으로 이어지는 편집 원칙**을 공개 아카이브 홈에 적용한다. Wiki와 Reviews는 현재 전면에 놓인 두 아카이브이며, 사이트 전체를 영구적으로 제한하는 경계가 아니다.
 
 ### Key choices
 - Layout: 하나의 마스트헤드 아래 Wiki와 Reviews를 차례로 읽는 합본 출판 홈
