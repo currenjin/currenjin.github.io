@@ -29,20 +29,16 @@
     apply();
   });
 
-  document.querySelectorAll('details[data-preview-toggle]').forEach(details=>{
-    const summary=details.querySelector('summary');
-    const button=details.querySelector('[data-cover-toggle]');
-    const sync=()=>{
-      button.setAttribute('aria-expanded',String(details.open));
-      button.textContent=details.open?'표지 닫기 −':'표지 보기 +';
-    };
-    summary.addEventListener('click',event=>{
-      if(event.target.closest('a'))return;
-      event.preventDefault();
-      if(event.target.closest('[data-cover-toggle]'))details.open=!details.open;
+  document.querySelectorAll('[data-preview-toggle]').forEach(entry=>{
+    const button=entry.querySelector('[data-cover-toggle]');
+    const cover=entry.querySelector('.media-body');
+    if(!button||!cover)return;
+    button.addEventListener('click',()=>{
+      const expanded=button.getAttribute('aria-expanded')!=='true';
+      button.setAttribute('aria-expanded',String(expanded));
+      button.textContent=expanded?'표지 닫기 −':'표지 보기 +';
+      cover.hidden=!expanded;
     });
-    details.addEventListener('toggle',sync);
-    sync();
   });
 
   document.querySelectorAll('[data-disclosure-control]').forEach(button=>button.addEventListener('click',()=>{
