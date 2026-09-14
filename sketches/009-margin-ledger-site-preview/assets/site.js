@@ -29,6 +29,22 @@
     apply();
   });
 
+  document.querySelectorAll('details[data-preview-toggle]').forEach(details=>{
+    const summary=details.querySelector('summary');
+    const button=details.querySelector('[data-cover-toggle]');
+    const sync=()=>{
+      button.setAttribute('aria-expanded',String(details.open));
+      button.textContent=details.open?'표지 닫기 −':'표지 보기 +';
+    };
+    summary.addEventListener('click',event=>{
+      if(event.target.closest('a'))return;
+      event.preventDefault();
+      if(event.target.closest('[data-cover-toggle]'))details.open=!details.open;
+    });
+    details.addEventListener('toggle',sync);
+    sync();
+  });
+
   document.querySelectorAll('[data-disclosure-control]').forEach(button=>button.addEventListener('click',()=>{
     const details=[...document.querySelectorAll('details[data-review-cover]')];
     const shouldOpen=details.some(item=>!item.open);
