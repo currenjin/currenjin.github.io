@@ -1,3 +1,7 @@
 .idea
 .jekyll-cache
 _site
+.tasty/
+profiles/
+sketches/
+design-prototypes/

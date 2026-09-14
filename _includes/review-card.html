@@ -1,0 +1,14 @@
+{% assign r = include.review %}
+<article class="entry home-review review-card" data-filter-item data-kind="{{ r.status | default: 'want' }}">
+  <a class="entry-link" href="{{ r.url | prepend: site.baseurl }}">
+    <div class="entry-summary">
+      <time class="date"{% if r.end_date %} datetime="{{ r.end_date | date: '%Y-%m-%d' }}"{% endif %}>{% if r.end_date %}{{ r.end_date | date: '%y-%m-%d' }}{% else %}—{% endif %}</time>
+      <span class="kind">{{ r.type | default: 'other' }}</span>
+      <span class="review-line"><span class="entry-title">{{ r.title }}<small>{% if r.author %}{{ r.author | split: ',' | first | strip }}{% endif %}{% if r.genre %} · {{ r.genre }}{% endif %}{% if r.rating %} · {{ r.rating }}/5.0{% endif %}</small></span></span>
+    </div>
+    <div class="media-body">
+      {% if r.cover_url %}<img loading="lazy" src="{{ r.cover_url }}" alt="{{ r.title | escape }} 표지">{% else %}<div class="cover-placeholder" aria-label="표지 없음">no cover</div>{% endif %}
+      <div class="media-copy">{% if r.rating %}<p class="rating">{{ r.rating }}/5.0</p>{% endif %}<p>{{ site.data.review_types[r.type] | default: r.type }}{% if r.status %} · {{ r.status }}{% endif %}</p></div>
+    </div>
+  </a>
+</article>

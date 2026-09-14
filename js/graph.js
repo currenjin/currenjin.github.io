@@ -1,16 +1,21 @@
 (function () {
-  // ── 설정 (매직 넘버 모음) ───────────────────────────
+  "use strict";
+
+  const root = document.querySelector(".knowledge-graph");
+  const canvas = document.getElementById("graph-canvas");
+  const status = document.getElementById("graph-status");
+  if (!root || !canvas) return;
+
   const CFG = {
-    nodeRadiusBase: 2.4,
+    nodeRadiusBase: 2.35,
     edgeWeightDefault: 2,
     edgeWidthCap: 2,
     edgeHoverWidthCap: 3.5,
-    labelMaxLen: 20,
-    fontStack: "Pretendard, 'Segoe UI', sans-serif",
+    labelMaxLen: 22,
     forceCharge: -500,
     forceLinkDist: 140,
     forceLinkStrength: 0.25,
-    minZoom: 0.05,
+    minZoom: 0.08,
     maxZoom: 12,
     velocityDecay: 0.4,
     alphaMin: 0.001,
@@ -21,399 +26,468 @@
     focusSettleMs: 800,
     zoomFitPadding: 60,
     focusFullZoom: 2,
+    fontStack: 'Georgia, "Times New Roman", "Apple SD Gothic Neo", serif',
+    sansStack: 'Arial, "Apple SD Gothic Neo", sans-serif',
   };
 
   const COLOR = {
-    wiki:     "#91d478",
-    review:   "#60a5fa",
-    wikiFade: "rgba(145,212,120,0.1)",
-    reviewFade: "rgba(96,165,250,0.1)",
+    paper: "#ecece7",
+    ink: "#151515",
+    muted: "#696965",
+    accent: "#52656b",
+    wiki: "#52656b",
+    review: "#151515",
+    wikiFade: "rgba(82,101,107,.12)",
+    reviewFade: "rgba(21,21,21,.09)",
     edge: {
-      "wiki-wiki": "rgba(145,212,120,0.38)",
-      "wiki-review": "rgba(147,197,253,0.42)",
-      "review-review": "rgba(96,165,250,0.28)",
+      "wiki-wiki": "rgba(82,101,107,.42)",
+      "wiki-review": "rgba(82,101,107,.28)",
+      "review-review": "rgba(21,21,21,.20)",
     },
-    edgeFade: "rgba(100,116,139,0.04)",
-    labelHot:  "#ffffff",
-    labelWiki: "#d1fac0",
-    labelReview: "#bfdbfe",
-    tagHot:    "rgba(203,213,225,0.85)",
-    tagWiki:   "rgba(145,212,120,0.5)",
-    tagReview: "rgba(96,165,250,0.5)",
-    focusRing: "rgba(145,212,120,0.55)",
-    hoverRing: "rgba(255,255,255,0.22)",
+    edgeFade: "rgba(105,105,101,.05)",
   };
 
-  // ── URL 파라미터 ─────────────────────────────────────
-  const params = new URLSearchParams(location.search);
+  const params = new URLSearchParams(window.location.search);
   const isEmbed = params.get("embed") === "1";
   const focusUrl = params.get("focus");
-  let isLocal = false; // 데이터 로드 후 결정
-
-  // ── 상태 ────────────────────────────────────────────
   const filters = { "wiki-wiki": true, "wiki-review": false, "review-review": true };
-  let minWeight  = CFG.edgeWeightDefault;
+
+  let isLocal = false;
+  let minWeight = CFG.edgeWeightDefault;
   let showLabels = false;
-  let showTags   = false;
+  let showTags = false;
   let hoveredNode = null;
-  let neighborSet = new Set();
+  let selectedNode = null;
   let focusedNode = null;
-  let focusedNeighborSet = new Set();
-  let activeTagFilter = null;
-  let tagMatchSet = new Set();
+  let neighborSet = new Set();
+  let activeTag = null;
+  let tagMatches = new Set();
+  let nodes = [];
   let allLinks = [];
-  let G;
+  let graph;
 
-  // ── 헬퍼 ────────────────────────────────────────────
-  // d3 시뮬레이션이 source/target을 객체로 바꿔둘 수도 있어 안전하게 id 추출
-  const linkEnds = l => [l.source?.id ?? l.source, l.target?.id ?? l.target];
+  const tooltip = document.getElementById("tooltip");
+  const info = document.getElementById("node-info");
+  const tagList = document.getElementById("tag-list");
+  const linkEnds = link => [link.source?.id ?? link.source, link.target?.id ?? link.target];
 
-  const linkTouches = (l, id) => {
-    const [s, t] = linkEnds(l);
-    return s === id || t === id;
-  };
-
-  function normalizeTags(raw) {
-    if (!raw) return [];
-    if (Array.isArray(raw)) return raw.map(t => String(t).trim()).filter(Boolean);
-    return String(raw).split(/[\s,]+/).map(t => t.trim()).filter(Boolean);
+  function normalizeTags(value) {
+    if (Array.isArray(value)) return value.map(tag => String(tag).trim()).filter(Boolean);
+    return String(value || "").split(/[\s,]+/).map(tag => tag.trim()).filter(Boolean);
   }
 
   function sharedTags(a, b) {
-    return a._tags.filter(t => b._tags.includes(t));
+    return a._tags.filter(tag => b._tags.includes(tag));
   }
 
-  // ── 엣지 빌드 ────────────────────────────────────────
-  function buildLinks(nodes) {
-    const wikis = nodes.filter(n => n.type === "wiki");
-    const reviews = nodes.filter(n => n.type === "review");
+  function buildLinks(graphNodes) {
+    const wikis = graphNodes.filter(node => node.type === "wiki");
+    const reviews = graphNodes.filter(node => node.type === "review");
     const links = [];
-
-    const pushIfShared = (a, b, kind) => {
-      const s = sharedTags(a, b);
-      if (s.length) links.push({ source: a.id, target: b.id, kind, weight: s.length, shared: s });
+    const add = (a, b, kind) => {
+      const shared = sharedTags(a, b);
+      if (shared.length) links.push({ source: a.id, target: b.id, kind, weight: shared.length, shared });
     };
 
-    for (let i = 0; i < wikis.length; i++)
-      for (let j = i + 1; j < wikis.length; j++)
-        pushIfShared(wikis[i], wikis[j], "wiki-wiki");
-
-    for (const w of wikis)
-      for (const r of reviews)
-        pushIfShared(w, r, "wiki-review");
-
-    for (let i = 0; i < reviews.length; i++)
-      for (let j = i + 1; j < reviews.length; j++)
-        pushIfShared(reviews[i], reviews[j], "review-review");
-
+    for (let i = 0; i < wikis.length; i += 1) {
+      for (let j = i + 1; j < wikis.length; j += 1) add(wikis[i], wikis[j], "wiki-wiki");
+    }
+    for (const wiki of wikis) {
+      for (const review of reviews) add(wiki, review, "wiki-review");
+    }
+    for (let i = 0; i < reviews.length; i += 1) {
+      for (let j = i + 1; j < reviews.length; j += 1) add(reviews[i], reviews[j], "review-review");
+    }
     return links;
   }
 
   function activeLinks() {
-    return allLinks.filter(l => filters[l.kind] && l.weight >= minWeight);
+    return allLinks.filter(link => filters[link.kind] && link.weight >= minWeight);
   }
 
-  // ── 이웃 계산 ────────────────────────────────────────
-  function computeNeighborsFrom(links, node) {
-    const set = new Set();
-    if (!node) return set;
-    links.forEach(l => {
-      const [s, t] = linkEnds(l);
-      if (s === node.id) set.add(t);
-      if (t === node.id) set.add(s);
-    });
-    return set;
-  }
-  const computeNeighbors        = node => { neighborSet        = computeNeighborsFrom(G.graphData().links, node); };
-  const computeFocusedNeighbors = ()   => { focusedNeighborSet = computeNeighborsFrom(activeLinks(),       focusedNode); };
-
-  function applyTagFilter(tag) {
-    activeTagFilter = tag;
-    tagMatchSet = new Set();
-    if (!tag) return;
-    G.graphData().nodes.forEach(n => {
-      if (n._tags.includes(tag)) tagMatchSet.add(n.id);
-    });
+  function neighborsOf(node, links) {
+    const result = new Set();
+    if (!node) return result;
+    for (const link of links || graph.graphData().links) {
+      const [source, target] = linkEnds(link);
+      if (source === node.id) result.add(target);
+      if (target === node.id) result.add(source);
+    }
+    return result;
   }
 
-  // ── 노드 렌더링 ──────────────────────────────────────
-  function nodeFillColor(node, { dim, isHot }) {
-    if (dim)   return node.type === "wiki" ? COLOR.wikiFade : COLOR.reviewFade;
-    if (isHot) return COLOR.labelHot;
+  function currentAnchor() {
+    return hoveredNode || selectedNode || focusedNode;
+  }
+
+  function refreshGraph() {
+    if (graph) graph.nodeCanvasObject(drawNode);
+  }
+
+  function nodeColor(node, dim, hot) {
+    if (dim) return node.type === "wiki" ? COLOR.wikiFade : COLOR.reviewFade;
+    if (hot) return COLOR.paper;
     return node.type === "wiki" ? COLOR.wiki : COLOR.review;
   }
 
-  function drawNode(node, ctx, gs) {
-    const r = (node._val || 1) * CFG.nodeRadiusBase;
-    const isH = hoveredNode?.id === node.id;
-    const isF = focusedNode?.id === node.id;
-    const isHot = isH || isF;
-    const isN  = !isHot && hoveredNode && neighborSet.has(node.id);
-    const isFN = !isHot && !isN && focusedNode && focusedNeighborSet.has(node.id);
-    const tagMiss = activeTagFilter && !tagMatchSet.has(node.id);
-    const anyHot = hoveredNode || focusedNode;
-    const dim = tagMiss || (!tagMiss && anyHot && !isHot && !isN && !isFN);
+  function drawNode(node, context, scale) {
+    const radius = (node._val || 1) * CFG.nodeRadiusBase;
+    const anchor = currentAnchor();
+    const hot = anchor?.id === node.id;
+    const neighbor = !hot && anchor && neighborSet.has(node.id);
+    const tagMiss = activeTag && !tagMatches.has(node.id);
+    const dim = tagMiss || (anchor && !hot && !neighbor);
 
-    ctx.beginPath();
-    ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
-    ctx.fillStyle = nodeFillColor(node, { dim, isHot });
-    ctx.fill();
+    context.beginPath();
+    context.arc(node.x, node.y, radius, 0, Math.PI * 2);
+    context.fillStyle = nodeColor(node, dim, hot);
+    context.fill();
 
-    if (isHot) {
-      const focusOnly = isF && !isH;
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, r + (focusOnly ? 5 : 3), 0, Math.PI * 2);
-      ctx.strokeStyle = focusOnly ? COLOR.focusRing : COLOR.hoverRing;
-      ctx.lineWidth = focusOnly ? 2 : 1.5;
-      ctx.stroke();
+    if (hot) {
+      context.beginPath();
+      context.arc(node.x, node.y, radius + 4, 0, Math.PI * 2);
+      context.strokeStyle = node.type === "wiki" ? COLOR.accent : COLOR.ink;
+      context.lineWidth = 1.4;
+      context.stroke();
     }
 
-    if (!((showLabels || isHot || isN || isFN || gs > 2.0) && !dim)) return;
-
-    const fs = Math.max(7.5, 11 / gs);
-    ctx.font = `600 ${fs}px ${CFG.fontStack}`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = isHot ? COLOR.labelHot : (node.type === "wiki" ? COLOR.labelWiki : COLOR.labelReview);
+    if (!((showLabels || hot || neighbor || scale > 2) && !dim)) return;
+    const fontSize = Math.max(7.5, 11 / scale);
+    context.font = `${hot ? "600" : "400"} ${fontSize}px ${CFG.fontStack}`;
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillStyle = COLOR.ink;
     const label = node.title.length > CFG.labelMaxLen
-      ? node.title.slice(0, CFG.labelMaxLen - 1) + "…"
+      ? `${node.title.slice(0, CFG.labelMaxLen - 1)}…`
       : node.title;
-    ctx.fillText(label, node.x, node.y + r + fs * 0.9);
+    context.fillText(label, node.x, node.y + radius + fontSize);
 
-    if (!((showTags || isHot) && node._tags.length)) return;
-    const tfs = Math.max(6, 9 / gs);
-    ctx.font = `${tfs}px ${CFG.fontStack}`;
-    ctx.fillStyle = isHot ? COLOR.tagHot : (node.type === "wiki" ? COLOR.tagWiki : COLOR.tagReview);
-    ctx.fillText(node._tags.map(t => "#" + t).join(" "), node.x, node.y + r + fs * 0.9 + tfs * 1.4);
+    if (!((showTags || hot) && node._tags.length)) return;
+    const tagSize = Math.max(6, 9 / scale);
+    context.font = `${tagSize}px ${CFG.sansStack}`;
+    context.fillStyle = COLOR.muted;
+    context.fillText(
+      node._tags.map(tag => `#${tag}`).join(" "),
+      node.x,
+      node.y + radius + fontSize + tagSize * 1.45
+    );
   }
 
-  // ── 패널/통계 ────────────────────────────────────────
-  function updateStats() {
-    const active = activeLinks();
-    const counts = { "wiki-wiki": 0, "wiki-review": 0, "review-review": 0 };
-    active.forEach(l => { counts[l.kind]++; });
-    document.getElementById("stats").innerHTML =
-      `Wiki↔Wiki: ${counts["wiki-wiki"]}<br>` +
-      `Wiki↔Review: ${counts["wiki-review"]}<br>` +
-      `Review↔Review: ${counts["review-review"]}`;
+  function edgeState(link) {
+    const [source, target] = linkEnds(link);
+    if (activeTag && !tagMatches.has(source) && !tagMatches.has(target)) return "hidden";
+    const anchor = currentAnchor();
+    if (!anchor) return "all";
+    return source === anchor.id || target === anchor.id ? "hot" : "dim";
   }
 
-  function buildTagPanel(nodes) {
-    const freq = {};
-    nodes.forEach(n => n._tags.forEach(t => { freq[t] = (freq[t] || 0) + 1; }));
-    const list = document.getElementById("tag-list");
-    list.innerHTML = "";
-    Object.entries(freq).sort((a, b) => b[1] - a[1]).forEach(([tag, count]) => {
-      const chip = document.createElement("span");
-      chip.className = "tag-chip";
-      const cnt = document.createElement("span");
-      cnt.style.opacity = "0.45";
-      cnt.textContent = count;
-      chip.appendChild(document.createTextNode("#" + tag + " "));
-      chip.appendChild(cnt);
-      chip.addEventListener("click", () => {
-        const isActive = activeTagFilter === tag;
-        document.querySelectorAll(".tag-chip").forEach(c => c.classList.remove("on"));
-        applyTagFilter(isActive ? null : tag);
-        if (!isActive) chip.classList.add("on");
-      });
-      list.appendChild(chip);
-    });
+  function hideTooltip() {
+    tooltip.hidden = true;
+    tooltip.replaceChildren();
   }
 
-  // ── 토글 (DRY) ───────────────────────────────────────
-  function rebuildAfterFilter() {
-    const { nodes } = G.graphData();
-    G.graphData({ nodes, links: activeLinks() });
-    hoveredNode = null;
-    neighborSet = new Set();
-    computeFocusedNeighbors();
-    G.d3ReheatSimulation();
-    updateStats();
+  function appendTooltip(kindText, kindClass, titleText, metaText) {
+    tooltip.replaceChildren();
+    const kind = document.createElement("span");
+    kind.className = `tooltip-kind${kindClass ? ` ${kindClass}` : ""}`;
+    kind.textContent = kindText;
+    const title = document.createElement("strong");
+    title.textContent = titleText;
+    tooltip.append(kind, title);
+    if (metaText) {
+      const meta = document.createElement("small");
+      meta.textContent = metaText;
+      tooltip.append(meta);
+    }
+    tooltip.hidden = false;
   }
 
-  window.toggleKind = function (kind, btn) {
-    filters[kind] = !filters[kind];
-    btn.classList.toggle("on", filters[kind]);
-    rebuildAfterFilter();
-  };
-
-  window.toggleMinWeight = function (btn) {
-    minWeight = minWeight === CFG.edgeWeightDefault ? 1 : CFG.edgeWeightDefault;
-    btn.classList.toggle("on", minWeight === CFG.edgeWeightDefault);
-    rebuildAfterFilter();
-  };
-
-  function makeVisualToggle(getRef, setRef) {
-    return function (btn) {
-      setRef(!getRef());
-      btn.classList.toggle("on", getRef());
-      G.refresh();
-    };
-  }
-  window.toggleLabels = makeVisualToggle(() => showLabels, v => { showLabels = v; });
-  window.toggleTags   = makeVisualToggle(() => showTags,   v => { showTags   = v; });
-
-  // ── 툴팁 ─────────────────────────────────────────────
-  const tooltip = document.getElementById("tooltip");
-  document.addEventListener("mousemove", e => {
-    tooltip.style.left = (e.clientX + 14) + "px";
-    tooltip.style.top  = (e.clientY - 10) + "px";
-  });
-
-  function showTooltip(html) { tooltip.innerHTML = html; tooltip.style.display = "block"; }
-  function hideTooltip()     { tooltip.style.display = "none"; }
-
-  function linkTooltip(link) {
-    const [s, t] = linkEnds(link);
-    const ns = G.graphData().nodes;
-    const sNode = ns.find(n => n.id === s);
-    const tNode = ns.find(n => n.id === t);
-    return `
-      <div class="tt-type" style="color:#94a3b8">공유 태그 ${link.shared.length}개</div>
-      <div class="tt-title" style="font-size:11px;line-height:1.5">${sNode?.title} ↔ ${tNode?.title}</div>
-      <div class="tt-meta"># ${link.shared.join(" · ")}</div>`;
+  function showNodeTooltip(node) {
+    const meta = [
+      node._tags.length ? `# ${node._tags.join(" · ")}` : "",
+      node.author || node.updated || "",
+    ].filter(Boolean).join(" · ");
+    appendTooltip(node.type, node.type, node.title, meta);
   }
 
-  function nodeTooltip(node) {
-    const typeLabel = node.type === "wiki" ? "Wiki" : "Review";
-    const author = node.type === "review" && node.author ? `<div class="tt-meta">${node.author}</div>` : "";
-    const tags = node._tags.length ? `<div class="tt-meta"># ${node._tags.join(" · ")}</div>` : "";
-    return `
-      <div class="tt-type col-${node.type}">${typeLabel}</div>
-      <div class="tt-title">${node.title}</div>
-      ${tags}${author}`;
+  function showLinkTooltip(link) {
+    const [sourceId, targetId] = linkEnds(link);
+    const source = nodes.find(node => node.id === sourceId);
+    const target = nodes.find(node => node.id === targetId);
+    appendTooltip(
+      `공유 태그 ${link.shared.length}개`,
+      "",
+      `${source?.title || ""} ↔ ${target?.title || ""}`,
+      `# ${link.shared.join(" · ")}`
+    );
   }
 
   function showNodeInfo(node) {
-    const panel = document.getElementById("node-info");
-    const typeColor = node.type === "wiki" ? COLOR.wiki : COLOR.review;
-    document.getElementById("ni-type").textContent  = node.type === "wiki" ? "Wiki" : "Review";
-    document.getElementById("ni-type").style.color  = typeColor;
+    selectedNode = node;
+    focusedNode = null;
+    neighborSet = neighborsOf(node);
+    document.getElementById("ni-type").textContent = node.type;
     document.getElementById("ni-title").textContent = node.title;
-    document.getElementById("ni-tags").textContent  = node._tags.length ? "# " + node._tags.join(" · ") : "";
-    document.getElementById("ni-meta").textContent  = node.author || node.updated || "";
-    document.getElementById("ni-link").href         = node.url;
-    panel.style.display = "block";
+    document.getElementById("ni-tags").textContent = node._tags.length ? `# ${node._tags.join(" · ")}` : "";
+    document.getElementById("ni-meta").textContent = [node.author, node.genre, node.updated].filter(Boolean).join(" · ");
+    document.getElementById("ni-link").href = node.url;
+    info.hidden = false;
+    refreshGraph();
   }
 
-  // ── 초기화 ───────────────────────────────────────────
-  fetch("/graph-data.json")
-    .then(r => r.json())
-    .then(raw => {
-      let nodes = raw
-        .filter(n => n.id && n.title)
-        .map(n => ({ ...n, _tags: normalizeTags(n.tags), _val: 1 }));
+  function clearNodeInfo() {
+    info.hidden = true;
+    selectedNode = null;
+    if (focusedNode) neighborSet = neighborsOf(focusedNode);
+    else neighborSet = new Set();
+    refreshGraph();
+  }
 
-      // 임베드 + focus 일치 노드 → 로컬(1-hop) 모드
-      if (isEmbed && focusUrl) {
-        const center = nodes.find(n => n.url === focusUrl);
-        if (center) {
-          isLocal = true;
-          const keep = new Set([center.id]);
-          nodes.forEach(other => {
-            if (other.id !== center.id && other._tags.some(t => center._tags.includes(t))) {
-              keep.add(other.id);
-            }
+  function updateStats() {
+    const links = activeLinks();
+    const counts = { "wiki-wiki": 0, "wiki-review": 0, "review-review": 0 };
+    links.forEach(link => { counts[link.kind] += 1; });
+    const stats = document.getElementById("stats");
+    stats.textContent = `${nodes.length} nodes · ${links.length} links`;
+    stats.title = `wiki↔wiki ${counts["wiki-wiki"]} · wiki↔review ${counts["wiki-review"]} · review↔review ${counts["review-review"]}`;
+  }
+
+  function rebuildGraph() {
+    graph.graphData({ nodes, links: activeLinks() });
+    hoveredNode = null;
+    neighborSet = neighborsOf(selectedNode || focusedNode);
+    hideTooltip();
+    graph.d3ReheatSimulation();
+    updateStats();
+  }
+
+  function buildTagPanel() {
+    const frequencies = {};
+    nodes.forEach(node => node._tags.forEach(tag => { frequencies[tag] = (frequencies[tag] || 0) + 1; }));
+    tagList.replaceChildren();
+    Object.entries(frequencies)
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .forEach(([tag, count]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "tag-chip";
+        button.textContent = `#${tag} ${count}`;
+        button.setAttribute("aria-pressed", "false");
+        button.addEventListener("click", () => {
+          const turningOff = activeTag === tag;
+          activeTag = turningOff ? null : tag;
+          tagMatches = new Set(
+            activeTag ? nodes.filter(node => node._tags.includes(activeTag)).map(node => node.id) : []
+          );
+          tagList.querySelectorAll(".tag-chip").forEach(chip => {
+            const active = !turningOff && chip === button;
+            chip.classList.toggle("on", active);
+            chip.setAttribute("aria-pressed", String(active));
           });
-          nodes = nodes.filter(n => keep.has(n.id));
-        }
-      }
-
-      allLinks = buildLinks(nodes);
-
-      // 노드 크기 = 1 + sqrt(연결도) * 0.7
-      const degree = {};
-      allLinks.forEach(l => {
-        degree[l.source] = (degree[l.source] || 0) + 1;
-        degree[l.target] = (degree[l.target] || 0) + 1;
+          refreshGraph();
+        });
+        tagList.append(button);
       });
-      nodes.forEach(n => { n._val = 1 + Math.sqrt(degree[n.id] || 0) * 0.7; });
+  }
 
-      buildTagPanel(nodes);
+  function bindControls() {
+    document.querySelectorAll("[data-link-kind]").forEach(button => {
+      button.addEventListener("click", () => {
+        const kind = button.dataset.linkKind;
+        filters[kind] = !filters[kind];
+        button.classList.toggle("on", filters[kind]);
+        button.setAttribute("aria-pressed", String(filters[kind]));
+        rebuildGraph();
+      });
+    });
 
-      const edgeAnchorVisible = link => {
-        const [s, t] = linkEnds(link);
-        if (activeTagFilter && !tagMatchSet.has(s) && !tagMatchSet.has(t)) return null; // 태그 미스
-        const anchor = hoveredNode || focusedNode;
-        if (!anchor) return "all";
-        return linkTouches(link, anchor.id) ? "anchored" : "other";
-      };
+    document.getElementById("btn-weight").addEventListener("click", event => {
+      minWeight = minWeight === CFG.edgeWeightDefault ? 1 : CFG.edgeWeightDefault;
+      const strict = minWeight === CFG.edgeWeightDefault;
+      event.currentTarget.classList.toggle("on", strict);
+      event.currentTarget.setAttribute("aria-pressed", String(strict));
+      event.currentTarget.textContent = strict ? "공유 태그 2개 이상" : "공유 태그 1개 이상";
+      rebuildGraph();
+    });
 
-      G = ForceGraph()(document.getElementById("graph-canvas"))
-        .backgroundColor("#0f1117")
-        .graphData({ nodes, links: activeLinks() })
-        .nodeId("id")
-        .nodeLabel(() => "")
-        .nodeVal(n => n._val)
-        .nodeCanvasObject(drawNode)
-        .nodePointerAreaPaint((node, color, ctx) => {
-          ctx.beginPath();
-          ctx.arc(node.x, node.y, (node._val || 1) * CFG.nodeRadiusBase + 6, 0, Math.PI * 2);
-          ctx.fillStyle = color;
-          ctx.fill();
-        })
-        .linkColor(link => {
-          const state = edgeAnchorVisible(link);
-          if (state === null || state === "other") return COLOR.edgeFade;
-          return COLOR.edge[link.kind] || COLOR.edgeFade;
-        })
-        .linkWidth(link => {
-          const state = edgeAnchorVisible(link);
-          if (state === null || state === "other") return 0.25;
-          if (state === "all") return Math.min(link.weight * 0.55, CFG.edgeWidthCap);
-          return Math.min(link.weight + 1, CFG.edgeHoverWidthCap);
-        })
-        .onLinkHover(link => {
-          if (link && !hoveredNode) showTooltip(linkTooltip(link));
-          else if (!hoveredNode)    hideTooltip();
-        })
-        .onNodeHover(node => {
-          hoveredNode = node || null;
-          computeNeighbors(node);
-          if (node) showTooltip(nodeTooltip(node));
-          else      hideTooltip();
-        })
-        .onNodeClick(showNodeInfo)
-        .enableZoomInteraction(true)
-        .enablePanInteraction(true)
-        .minZoom(CFG.minZoom)
-        .maxZoom(CFG.maxZoom)
-        .d3AlphaDecay(isLocal ? CFG.alphaDecayLocal : CFG.alphaDecayFull)
-        .d3VelocityDecay(CFG.velocityDecay)
-        .d3AlphaMin(CFG.alphaMin)
-        // 시뮬레이션을 유한 틱으로 → 안정화 후 idle 상태로 들어가 모바일 발열/렉 해소
-        .cooldownTicks(isLocal ? CFG.coolLocal : CFG.coolFull);
+    document.getElementById("btn-labels").addEventListener("click", event => {
+      showLabels = !showLabels;
+      event.currentTarget.classList.toggle("on", showLabels);
+      event.currentTarget.setAttribute("aria-pressed", String(showLabels));
+      refreshGraph();
+    });
 
-      G.d3Force("charge").strength(CFG.forceCharge);
-      G.d3Force("link").distance(CFG.forceLinkDist).strength(CFG.forceLinkStrength);
-      const dragHandlers = GraphForce.createDragHandlers(G, node => node === focusedNode);
-      G.onNodeDrag(dragHandlers.onNodeDrag).onNodeDragEnd(dragHandlers.onNodeDragEnd);
+    document.getElementById("btn-tags").addEventListener("click", event => {
+      showTags = !showTags;
+      event.currentTarget.classList.toggle("on", showTags);
+      event.currentTarget.setAttribute("aria-pressed", String(showTags));
+      refreshGraph();
+    });
 
-      updateStats();
+    const toggle = document.getElementById("panel-toggle");
+    const setPanel = open => {
+      document.documentElement.classList.toggle("graph-panel-collapsed", !open);
+      toggle.setAttribute("aria-expanded", String(open));
+    };
+    toggle.addEventListener("click", () => setPanel(document.documentElement.classList.contains("graph-panel-collapsed")));
+    document.getElementById("panel-collapse").addEventListener("click", () => setPanel(false));
+    setPanel(!document.documentElement.classList.contains("graph-panel-collapsed"));
 
-      if (!focusUrl) return;
-      const target = nodes.find(n => n.url === focusUrl);
-      if (!target) return;
+    document.getElementById("ni-close").addEventListener("click", clearNodeInfo);
+    document.querySelectorAll("[data-zoom]").forEach(button => {
+      button.addEventListener("click", () => {
+        const action = button.dataset.zoom;
+        if (action === "in") graph.zoom(graph.zoom() * 1.5, 250);
+        else if (action === "out") graph.zoom(graph.zoom() / 1.5, 250);
+        else graph.zoomToFit(450, 55);
+      });
+    });
 
-      // focus 노드를 원점에 고정 → 시뮬레이션이 그 주변으로 안정화
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        hideTooltip();
+        clearNodeInfo();
+      }
+    });
+  }
+
+  function initialize(raw) {
+    nodes = raw
+      .filter(node => node.id && node.title)
+      .map(node => ({ ...node, _tags: normalizeTags(node.tags), _val: 1 }));
+
+    if (isEmbed && focusUrl) {
+      const center = nodes.find(node => node.url === focusUrl);
+      if (center) {
+        isLocal = true;
+        const keep = new Set([center.id]);
+        nodes.forEach(other => {
+          if (other.id !== center.id && other._tags.some(tag => center._tags.includes(tag))) keep.add(other.id);
+        });
+        nodes = nodes.filter(node => keep.has(node.id));
+      }
+    }
+
+    allLinks = buildLinks(nodes);
+    const degree = {};
+    allLinks.forEach(link => {
+      const [source, target] = linkEnds(link);
+      degree[source] = (degree[source] || 0) + 1;
+      degree[target] = (degree[target] || 0) + 1;
+    });
+    nodes.forEach(node => { node._val = 1 + Math.sqrt(degree[node.id] || 0) * 0.7; });
+
+    buildTagPanel();
+    graph = ForceGraph()(canvas)
+      .width(canvas.clientWidth)
+      .height(canvas.clientHeight)
+      .backgroundColor(COLOR.paper)
+      .graphData({ nodes, links: activeLinks() })
+      .nodeId("id")
+      .nodeLabel(() => "")
+      .nodeVal(node => node._val)
+      .nodeCanvasObject(drawNode)
+      .nodePointerAreaPaint((node, color, context) => {
+        context.beginPath();
+        context.arc(node.x, node.y, (node._val || 1) * CFG.nodeRadiusBase + 7, 0, Math.PI * 2);
+        context.fillStyle = color;
+        context.fill();
+      })
+      .linkColor(link => {
+        const state = edgeState(link);
+        return state === "hidden" || state === "dim" ? COLOR.edgeFade : COLOR.edge[link.kind];
+      })
+      .linkWidth(link => {
+        const state = edgeState(link);
+        if (state === "hidden" || state === "dim") return 0.2;
+        return Math.min(
+          link.weight * (state === "hot" ? 1 : 0.5),
+          state === "hot" ? CFG.edgeHoverWidthCap : CFG.edgeWidthCap
+        );
+      })
+      .onLinkHover(link => {
+        if (link && !hoveredNode) showLinkTooltip(link);
+        else if (!hoveredNode) hideTooltip();
+      })
+      .onNodeHover(node => {
+        hoveredNode = node || null;
+        neighborSet = neighborsOf(hoveredNode || selectedNode || focusedNode);
+        if (node) showNodeTooltip(node);
+        else hideTooltip();
+        refreshGraph();
+      })
+      .onNodeClick(showNodeInfo)
+      .enableZoomInteraction(true)
+      .enablePanInteraction(true)
+      .minZoom(CFG.minZoom)
+      .maxZoom(CFG.maxZoom)
+      .d3AlphaDecay(isLocal ? CFG.alphaDecayLocal : CFG.alphaDecayFull)
+      .d3VelocityDecay(CFG.velocityDecay)
+      .d3AlphaMin(CFG.alphaMin)
+      .cooldownTicks(isLocal ? CFG.coolLocal : CFG.coolFull);
+
+    graph.d3Force("charge").strength(CFG.forceCharge);
+    graph.d3Force("link").distance(CFG.forceLinkDist).strength(CFG.forceLinkStrength);
+    const dragHandlers = GraphForce.createDragHandlers(graph, node => node === selectedNode || node === focusedNode);
+    graph.onNodeDrag(dragHandlers.onNodeDrag).onNodeDragEnd(dragHandlers.onNodeDragEnd);
+
+    bindControls();
+    updateStats();
+    status.hidden = true;
+
+    root.addEventListener("mousemove", event => {
+      if (tooltip.hidden) return;
+      const bounds = root.getBoundingClientRect();
+      const width = Math.min(240, bounds.width - 24);
+      tooltip.style.left = `${Math.max(10, Math.min(event.clientX - bounds.left + 14, bounds.width - width - 10))}px`;
+      tooltip.style.top = `${Math.max(10, Math.min(event.clientY - bounds.top - 12, bounds.height - tooltip.offsetHeight - 10))}px`;
+    });
+
+    const resize = () => {
+      if (canvas.clientWidth && canvas.clientHeight) graph.width(canvas.clientWidth).height(canvas.clientHeight);
+    };
+    if ("ResizeObserver" in window) new ResizeObserver(resize).observe(canvas);
+    else window.addEventListener("resize", resize);
+
+    const target = focusUrl ? nodes.find(node => node.url === focusUrl) : null;
+    if (target) {
       target.fx = 0;
       target.fy = 0;
       focusedNode = target;
-      computeFocusedNeighbors();
-      G.d3ReheatSimulation();
-      setTimeout(() => {
+      neighborSet = neighborsOf(target, activeLinks());
+      graph.d3ReheatSimulation();
+      window.setTimeout(() => {
         if (isLocal) {
-          // 활성 필터에서 실제 엣지로 focus와 연결된 노드만 fit 대상에 포함
-          const visible = computeNeighborsFrom(G.graphData().links, target);
+          const visible = neighborsOf(target, graph.graphData().links);
           visible.add(target.id);
-          G.zoomToFit(CFG.focusSettleMs, CFG.zoomFitPadding, n => visible.has(n.id));
+          graph.zoomToFit(CFG.focusSettleMs, CFG.zoomFitPadding, node => visible.has(node.id));
         } else {
-          G.centerAt(0, 0, CFG.focusSettleMs);
-          G.zoom(CFG.focusFullZoom, CFG.focusSettleMs);
+          graph.centerAt(0, 0, CFG.focusSettleMs);
+          graph.zoom(CFG.focusFullZoom, CFG.focusSettleMs);
         }
-        G.refresh();
+        refreshGraph();
       }, CFG.focusSettleMs);
+    } else {
+      window.setTimeout(() => graph.zoomToFit(600, CFG.zoomFitPadding), 650);
+    }
+  }
+
+  if (typeof window.ForceGraph !== "function" || !window.GraphForce) {
+    status.textContent = "그래프 엔진을 불러오지 못했습니다.";
+    return;
+  }
+
+  fetch(canvas.dataset.source || "/graph-data.json")
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
     })
-    .catch(err => console.error("graph-data.json load failed:", err));
+    .then(raw => {
+      if (!Array.isArray(raw)) throw new Error("Invalid graph data");
+      initialize(raw);
+    })
+    .catch(error => {
+      status.textContent = "그래프 데이터를 불러오지 못했습니다.";
+      console.error("graph-data.json load failed:", error);
+    });
 })();

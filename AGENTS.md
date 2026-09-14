@@ -76,7 +76,7 @@ container · ai · sre · javascript · ai-agent · jvm · jpa · sql · refacto
 layout   : review
 title    : "..."
 author   : "..."                                # 책은 원저자 한글 표기 우선
-type     : book | music | movie | game | animation | exhibition | other
+type     : book | music | movie | tv | animation | webtoon | game | exhibition | other
 genre    : "소프트웨어"                         # 작품 유형 안의 분야·장르
 status   : reading | want | finished
 cover_url: "https://..."                        # 작품 표지·포스터·대표 이미지

@@ -1,11 +1,10 @@
-<header class="header">
-    <a class="site-title" href="{{ site.baseurl }}/">{{ site.title }}</a>
-    <nav class="site-nav">
-        <a class="site-nav-link" href="/reviews/">🗂️ reviews</a>
-        <a class="site-nav-link" href="https://medium.com/@jung23e" target="_blank" rel="noopener noreferrer">blog</a>
-{% if site.github_username %}
-        <a class="site-nav-link" href="https://github.com/{{ site.github_username }}" target="_blank" rel="noopener noreferrer">github</a>
-{% endif %}
-        <a class="site-nav-link" href="https://docs.google.com/document/d/1dokB9vn3sFZtjfOz0RAF-0QL1evdOdDEgXo9GQ5Amsk/edit?tab=t.0" target="_blank" rel="noopener noreferrer">ABOUT</a>
-    </nav>
+<a class="skip" href="#main">본문으로 이동</a>
+<header class="site-head">
+  <a class="wordmark" href="{{ '/' | prepend: site.baseurl }}">currenjin</a>
+  <nav class="site-nav" aria-label="아카이브 탐색">
+    <a href="{{ '/wiki/index/' | prepend: site.baseurl }}"{% if page.collection == 'wiki' or page.layout == 'wikiindex' %} aria-current="page"{% endif %}>wiki</a>
+    <a href="{{ '/reviews/' | prepend: site.baseurl }}"{% if page.collection == 'reviews' or page.layout == 'reviews' %} aria-current="page"{% endif %}>review</a>
+    <a href="{{ '/graph/' | prepend: site.baseurl }}">graph</a>
+    <button class="search-trigger" type="button" data-search-open aria-label="전체 기록 검색 열기">search <kbd>⌘K</kbd></button>
+  </nav>
 </header>

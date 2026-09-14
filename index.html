@@ -2,63 +2,23 @@
 layout: home
 adsense: false
 regenerate: true
+title: ""
 ---
-
-<div class="blog-face">
-    <div>
-        <h3 class="identity-title">기술적 기록</h3>
-    </div>
-    <div>
-        <p class="identity-lead">엔지니어링 세계의 광활함을 사유하고 기록하는 위키</p>
-    </div>
-    <div class="identity-keywords">
-        <span>사유</span><span>깊이</span><span>자기성찰</span><span>밀도</span><span>탐색</span>
-    </div>
-</div>
-<div>
-    <H3 class="indent">최근 업데이트</H3>
-    <ul class="post-list">
-{% assign updates = site.data.updates %}
-{% if updates == nil %}
-{% assign updates = "" | split: "" %}
-{% endif %}
-{% for doc in updates limit: 32 %}
-        <li>
-            <a class="post-link{% if doc.source == 'Medium' %} post-link--external{% endif %}"
-               href="{% if doc.source == 'Medium' %}{{ doc.url }}{% else %}{{ doc.url | prepend: site.baseurl }}{% endif %}"
-               {% if doc.source == 'Medium' %}target="_blank" rel="noopener noreferrer"{% endif %}>
-                <div class="post-meta">{{ doc.updated | date: "%Y.%m.%d" }}</div>
-                <div class="post-title">
-                    {{ doc.title }}
-                    {% if doc.source == 'Medium' %}
-                    <span class="post-title-external" aria-hidden="true">↗</span>
-                    {% endif %}
-                </div>
-                {% if doc.summary and doc.summary != "" %}
-                <div class="post-excerpt">{{ doc.summary }}</div>
-                {% endif %}
-                {% if doc.source == 'Medium' or (doc.tags and doc.tags != "") %}
-                <div class="post-badge-groups">
-                    {% if doc.source == 'Medium' %}
-                    <div class="post-badge-box post-badge-box--platform">
-                        <span class="post-badge-key">platform</span>
-                        <span class="post-badge-value">medium</span>
-                    </div>
-                    {% endif %}
-                    {% if doc.source != 'Medium' and doc.tags and doc.tags != "" %}
-                    <div class="post-badge-box post-badge-box--tags">
-                        <span class="post-badge-key">tags</span>
-                        <span class="post-badge-value">{{ doc.tags }}</span>
-                    </div>
-                    {% endif %}
-                </div>
-                {% endif %}
-            </a>
-        </li>
-{% endfor %}
-    </ul>
-    <h4>
-        <a href="/recent/">전체 문서 리스트 보기 ({{ site.wiki | size | minus: 1 }} 항목)</a>
-    </h4>
-</div>
-{% include createLink.html %}
+<main id="main" class="home">
+  <header class="page-intro"><p class="eyebrow">public archives</p><h1>배우고, 보고, 기록하다</h1><p class="summary">배운 것과 보고 들은 것을 오래 남기기 위한 공개 기록.</p></header>
+  {% assign public_wiki = site.wiki | where_exp: 'w', 'w.public != false' %}
+  {% assign wiki_count = public_wiki.size | minus: 1 %}{% assign total_records = wiki_count | plus: site.reviews.size | plus: site.data.medium.size %}
+  <section class="ledger-head" aria-label="기록 필터"><span>date</span><span>type</span><div class="ledger-actions"><div class="filters" data-filter-group><button class="filter" data-filter="all" aria-pressed="true">all</button><button class="filter" data-filter="wiki" aria-pressed="false">wiki</button><button class="filter" data-filter="review" aria-pressed="false">review</button><button class="filter" data-filter="post" aria-pressed="false">post</button></div><span class="result-count" data-result-count>{{ total_records }} / {{ total_records }}</span></div></section>
+  <div class="home-ledger" data-sort-ledger>
+  {% for wiki in public_wiki %}{% unless wiki.title == 'wiki' %}
+    <article class="entry" data-filter-item data-kind="wiki" data-date="{{ wiki.updated | date: '%Y-%m-%d' }}"><a class="entry-link" href="{{ wiki.url | prepend: site.baseurl }}"><time class="date">{{ wiki.updated | date: '%y-%m-%d' }}</time><span class="kind">wiki</span><span class="entry-title">{{ wiki.title }}{% if wiki.summary %}<small>{{ wiki.summary }}</small>{% endif %}</span></a></article>
+  {% endunless %}{% endfor %}
+  {% for review in site.reviews %}
+    <details class="entry home-review" data-filter-item data-kind="review" data-date="{% if review.end_date %}{{ review.end_date | date: '%Y-%m-%d' }}{% endif %}" data-preview-toggle><summary><time class="date">{% if review.end_date %}{{ review.end_date | date: '%y-%m-%d' }}{% else %}—{% endif %}</time><span class="kind">review</span><span class="review-line"><a class="entry-title" href="{{ review.url | prepend: site.baseurl }}">{{ review.title }}<small>{% if review.author %}{{ review.author | split: ',' | first | strip }}{% endif %}{% if review.genre %} · {{ review.genre }}{% endif %}{% if review.rating %} · {{ review.rating }}/5.0{% endif %}</small></a><button class="cover-toggle" type="button" data-cover-toggle aria-expanded="false">표지 보기 +</button></span></summary><div class="media-body" hidden>{% if review.cover_url %}<img loading="lazy" src="{{ review.cover_url }}" alt="{{ review.title | escape }} 표지">{% else %}<div class="article-cover-placeholder">no cover</div>{% endif %}<div class="media-copy">{% if review.rating %}<p class="rating">{{ review.rating }}/5.0</p>{% endif %}<p><a href="{{ review.url | prepend: site.baseurl }}">기록 열기 →</a></p></div></div></details>
+  {% endfor %}
+  {% for post in site.data.medium %}
+    <article class="entry" data-filter-item data-kind="post" data-date="{{ post.updated }}"><a class="entry-link" href="{{ post.url }}" target="_blank" rel="noopener noreferrer"><time class="date">{{ post.updated | date: '%y-%m-%d' }}</time><span class="kind">post</span><span class="entry-title">{{ post.title }} <span class="entry-external">↗</span>{% if post.summary and post.summary != '' %}<small>{{ post.summary }}</small>{% endif %}</span></a></article>
+  {% endfor %}
+  </div>
+  <p class="empty" data-empty>표시할 기록이 없습니다.</p>
+</main>

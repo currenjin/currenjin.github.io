@@ -1,13 +1,13 @@
 ---
 layout: default
 ---
-<div class="post-main hide">
-    <header class="post-header">
-        <h1 class="page-title">{{ page.title }}</h1>
-    </header>
-    <article class="post-content wiki-list">
-        {{ content }}
-    </article>
-</div>
-<script defer src="/js/wikiindex.js"></script>
-{% include createLink.html %}
+<main id="main">
+  <header class="page-intro"><p class="eyebrow">wiki / {{ site.wiki | size | minus: 1 }} records</p><h1>배우고 기록하다</h1></header>
+  <section class="tools"><label class="search-field"><span>기록 안에서 찾기</span><input type="search" data-catalog-search placeholder="제목, 요약, 태그" autocomplete="off"></label><span class="result-count" data-catalog-count aria-live="polite"></span></section>
+  <div class="catalog" data-catalog>
+  {% assign sorted_wiki = site.wiki | sort: 'updated' | reverse %}
+  {% for wiki in sorted_wiki %}{% unless wiki.public == false or wiki.title == 'wiki' %}
+    <article class="catalog-row" data-catalog-item data-search="{{ wiki.title | escape }} {{ wiki.summary | escape }} {{ wiki.tags | join: ' ' }}"><time class="date">{{ wiki.updated | date: '%y-%m-%d' }}</time><a class="catalog-title" href="{{ wiki.url | prepend: site.baseurl }}">{{ wiki.title }}{% if wiki.summary %}<small>{{ wiki.summary }}</small>{% endif %}</a><div class="tags">{% for tag in wiki.tags %}<span>#{{ tag }}</span>{% endfor %}</div></article>
+  {% endunless %}{% endfor %}
+  </div><p class="empty" data-catalog-empty>일치하는 기록이 없습니다.</p>
+</main>

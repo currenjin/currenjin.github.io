@@ -57,3 +57,10 @@ edit: "https://github.com/currenjin/currenjin.github.io/edit/main/_wiki"
 issue: "https://github.com/currenjin/currenjin.github.io/issues/new"
 
 timezone: "Asia/Seoul"
+
+# Local design and preference artifacts must never be published by Jekyll.
+exclude:
+  - .tasty
+  - profiles
+  - sketches
+  - design-prototypes

@@ -3,30 +3,9 @@ layout: null
 permalink: /search-index.json
 ---
 [
-{% assign all_entries = "" | split: "" %}
-{% for wiki in site.wiki %}
-  {% unless wiki.public == false %}
-  {% capture wiki_entry %}{
-    "type": "wiki",
-    "title": {{ wiki.title | jsonify }},
-    "url": {{ wiki.url | jsonify }},
-    "tags": {{ wiki.tags | jsonify }},
-    "summary": {{ wiki.summary | default: "" | jsonify }},
-    "updated": {{ wiki.updated | date: "%Y-%m-%d" | jsonify }}
-  }{% endcapture %}
-  {% assign all_entries = all_entries | push: wiki_entry %}
-  {% endunless %}
-{% endfor %}
-{% for review in site.reviews %}
-  {% capture review_entry %}{
-    "type": "review",
-    "title": {{ review.title | jsonify }},
-    "url": {{ review.url | jsonify }},
-    "tags": {{ review.genre | default: "" | jsonify }},
-    "summary": {{ review.author | default: "" | jsonify }},
-    "updated": {{ review.end_date | default: "" | jsonify }}
-  }{% endcapture %}
-  {% assign all_entries = all_entries | push: review_entry %}
-{% endfor %}
-{{ all_entries | join: "," }}
+{% assign entries = "" | split: "" %}
+{% for wiki in site.wiki %}{% unless wiki.public == false or wiki.title == 'wiki' %}{% capture e %}{"type":"wiki","title":{{ wiki.title | jsonify }},"url":{{ wiki.url | jsonify }},"tags":{{ wiki.tags | jsonify }},"summary":{{ wiki.summary | default: "" | jsonify }},"updated":{{ wiki.updated | date: "%Y-%m-%d" | jsonify }}}{% endcapture %}{% assign entries = entries | push: e %}{% endunless %}{% endfor %}
+{% for review in site.reviews %}{% capture e %}{"type":"review","title":{{ review.title | jsonify }},"url":{{ review.url | jsonify }},"tags":{{ review.tags | default: review.genre | jsonify }},"summary":{{ review.author | default: "" | jsonify }},"updated":{{ review.end_date | default: "" | jsonify }}}{% endcapture %}{% assign entries = entries | push: e %}{% endfor %}
+{% for post in site.data.medium %}{% capture e %}{"type":"post","title":{{ post.title | jsonify }},"url":{{ post.url | jsonify }},"tags":{{ post.tags | default: "" | jsonify }},"summary":{{ post.summary | default: "" | jsonify }},"updated":{{ post.updated | jsonify }}}{% endcapture %}{% assign entries = entries | push: e %}{% endfor %}
+{{ entries | join: ',' }}
 ]

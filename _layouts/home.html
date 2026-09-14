@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-    {% include head.html %}
-    <body>
-        {% include site-header.html %}
-        <div class="home-content">
-            {% include searchbox.html %}
-            {{ content }}
-            {% include footer.html %}
-        </div>
-        <script defer src="/js/hero-cosmos-tilt.js"></script>
-        {% include global-ui.html %}
-    </body>
-</html>
+---
+layout: default
+---
+{{ content }}
