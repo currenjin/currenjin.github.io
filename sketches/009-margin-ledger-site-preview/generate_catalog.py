@@ -13,7 +13,7 @@ import yaml
 
 PREVIEW = Path(__file__).resolve().parent
 ROOT = PREVIEW.parents[1]
-ASSET_VERSION = 17
+ASSET_VERSION = 18
 LOCAL_WIKI = {p.stem for p in (PREVIEW / "wiki").glob("*.html") if p.name != "index.html"}
 LOCAL_REVIEWS = {p.stem for p in (PREVIEW / "reviews").glob("*.html") if p.name != "index.html"}
 TYPE_LABELS = {
@@ -79,6 +79,15 @@ def rating(value) -> str:
         return "unrated"
 
 
+def rating_value(value) -> float | None:
+    if value in (None, ""):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def esc(value) -> str:
     return html.escape(as_text(value), quote=True)
 
@@ -121,16 +130,21 @@ def load_reviews() -> list[dict]:
             "status": as_text(data.get("status")),
             "cover": as_text(data.get("cover_url")),
             "rating": rating(data.get("rating")),
+            "rating_value": rating_value(data.get("rating")),
             "date": iso_date(data.get("end_date") or data.get("start_date")),
             "local": slug in LOCAL_REVIEWS,
         })
-    return sorted(items, key=lambda item: (item["date"], item["title"].casefold()), reverse=True)
+    return sorted(items, key=lambda item: (
+        item["rating_value"] is None,
+        -(item["rating_value"] or 0),
+        item["title"].casefold(),
+    ))
 
 
 def load_medium() -> list[dict]:
     data = json.loads((ROOT / "_data" / "medium.json").read_text(encoding="utf-8"))
     return [{
-        "kind": "other",
+        "kind": "post",
         "title": as_text(item.get("title")),
         "summary": as_text(item.get("summary")),
         "date": iso_date(item.get("updated") or item.get("published_at")),
@@ -198,7 +212,7 @@ def home_wiki(item: dict) -> str:
 
 
 def home_medium(item: dict) -> str:
-    return (f'<article class="entry" data-filter-item data-kind="other" '
+    return (f'<article class="entry" data-filter-item data-kind="post" '
             f'data-search="{attrs_search(item["title"], item["summary"], item["source"])}">'
             f'<time class="date" datetime="{item["date"]}">{display_date(item["date"])}</time>'
             f'<span class="kind">{esc(item["source"])}</span>'
@@ -213,7 +227,7 @@ def build_home(wiki: list[dict], reviews: list[dict], medium: list[dict]) -> str
     return "\n".join([
         doc_head("public archives"), nav(""), '<main id="main" class="home">',
         '<section class="intro" aria-labelledby="intro-title"><p id="intro-title">고쳐 쓰고, 보고 듣고, 바깥에 남긴 공개 기록.</p><p class="note">현재 공개된 각 아카이브의 전체 데이터를 한 장부에서 봅니다.</p></section>',
-        '<div class="ledger-head"><span>date</span><span>archive</span><div class="filters" data-filter-group aria-label="기록 필터"><button class="filter" data-filter="all" aria-pressed="true">all</button><button class="filter" data-filter="wiki" aria-pressed="false">wiki</button><button class="filter" data-filter="review" aria-pressed="false">reviews</button><button class="filter" data-filter="other" aria-pressed="false">elsewhere</button></div></div>',
+        '<div class="ledger-head"><span>date</span><span>archive</span><div class="filters" data-filter-group aria-label="기록 필터"><button class="filter" data-filter="all" aria-pressed="true">all</button><button class="filter" data-filter="wiki" aria-pressed="false">wiki</button><button class="filter" data-filter="review" aria-pressed="false">reviews</button><button class="filter" data-filter="post" aria-pressed="false">post</button></div></div>',
         f'<p class="result-count ledger-count" data-result-count aria-live="polite"></p><section class="ledger" aria-label="공개 기록 전체 {len(all_items)}개">',
         *rows, '<p class="empty" data-empty>일치하는 기록이 없습니다.</p></section></main></body></html>'
     ])
@@ -260,7 +274,7 @@ def build_reviews(reviews: list[dict]) -> str:
     buttons = ''.join(f'<button class="filter" data-filter="{kind}" aria-pressed="false">{TYPE_LABELS[kind]}</button>' for kind in kinds)
     return "\n".join([
         doc_head("reviews", "../"), nav("../", "reviews"), '<main id="main">',
-        f'<header class="page-intro"><p class="eyebrow">reviews / {len(reviews)} records</p><h1>보고 들은 것들</h1><p class="summary">책, 음악, 영화와 그 밖의 경험에 남긴 전체 기록. 표지는 기본으로 열어 두고 날짜 없는 기록도 빠뜨리지 않습니다.</p></header>',
+        f'<header class="page-intro"><p class="eyebrow">reviews / {len(reviews)} records</p><h1>보고 들은 것들</h1><p class="summary">책, 음악, 영화와 그 밖의 경험에 남긴 전체 기록. 평점이 높은 순서로 놓고, 표지는 기본으로 열어 둡니다.</p></header>',
         f'<section aria-label="리뷰 찾기"><div class="tools"><div class="search-field"><label for="review-search">리뷰 검색 · ⌘K</label><input id="review-search" type="search" data-search placeholder="제목, 저자, 장르" autocomplete="off"></div><span class="result-count" data-result-count aria-live="polite"></span><button class="text-button" type="button" data-disclosure-control aria-pressed="true">표지 모두 접기</button></div><div class="filters" data-filter-group aria-label="매체 필터"><button class="filter" data-filter="all" aria-pressed="true">all</button>{buttons}</div></section>',
         '<section class="ledger" aria-label="리뷰 목록" style="margin-top:46px">', *rows,
         '<p class="empty" data-empty>일치하는 리뷰가 없습니다.</p></section></main></body></html>'
@@ -285,7 +299,7 @@ def main() -> None:
     (PREVIEW / "wiki" / "index.html").write_text(build_wiki(wiki), encoding="utf-8")
     (PREVIEW / "reviews" / "index.html").write_text(build_reviews(reviews), encoding="utf-8")
     strip_auxiliary_ui()
-    print(f"home={len(wiki) + len(reviews) + len(medium)} wiki={len(wiki)} reviews={len(reviews)} elsewhere={len(medium)}")
+    print(f"home={len(wiki) + len(reviews) + len(medium)} wiki={len(wiki)} reviews={len(reviews)} posts={len(medium)}")
 
 
 if __name__ == "__main__":

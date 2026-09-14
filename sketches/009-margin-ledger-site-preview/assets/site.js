@@ -41,13 +41,17 @@
     });
   });
 
-  document.querySelectorAll('[data-disclosure-control]').forEach(button=>button.addEventListener('click',()=>{
+  document.querySelectorAll('[data-disclosure-control]').forEach(button=>{
     const details=[...document.querySelectorAll('details[data-review-cover]')];
-    const shouldOpen=details.some(item=>!item.open);
-    details.forEach(item=>item.open=shouldOpen);
-    button.textContent=shouldOpen?'표지 모두 접기':'표지 모두 펼치기';
-    button.setAttribute('aria-pressed',String(shouldOpen));
-  }));
+    const setOpen=open=>{
+      details.forEach(item=>item.open=open);
+      button.textContent=open?'표지 모두 접기':'표지 모두 펼치기';
+      button.setAttribute('aria-pressed',String(open));
+    };
+    setOpen(true);
+    window.addEventListener('pageshow',()=>setOpen(true));
+    button.addEventListener('click',()=>setOpen(details.some(item=>!item.open)));
+  });
 
   const graphSearch=document.querySelector('[data-graph-search]');
   if(graphSearch){

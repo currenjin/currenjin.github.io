@@ -27,7 +27,7 @@
 
 ## Interaction notes
 
-- 홈: `all / wiki / reviews / elsewhere` 필터, 모든 내부 제목의 상세 직행, 별도 표지 토글.
+- 홈: `all / wiki / reviews / post` 필터, 모든 내부 제목의 상세 직행, 별도 표지 토글.
 - Wiki: 제목·요약·태그 실시간 검색 및 태그 필터 조합.
 - Reviews: 제목·저자·장르 실시간 검색, 매체 필터, 각 표지 disclosure와 표지 전체 접기/펼치기.
 - Graph: 검색어와 맞지 않는 노드를 흐리게 하고 결과 목록을 동시에 거른다.
