@@ -8,9 +8,9 @@
 | --- | --- | --- |
 | `index.html` | 홈, 날짜순 wiki/review/Medium 혼합 스트림 | 필터, 제목의 상세 이동, 별도 버튼으로 여는 리뷰 표지 |
 | `wiki/index.html` | 최근 수정순 Wiki 카탈로그 | 텍스트 검색, 태그 필터, Distributed Transaction 상세 |
-| `wiki/distributed-transaction.html` | 대표 Wiki 상세 | sticky 목차, 본문 앵커, 관련 문서와 Graph |
+| `wiki/*.html` | 홈에서 직접 여는 Wiki 상세 | sticky 목차, 본문 앵커, 관련 문서 |
 | `reviews/index.html` | 날짜순 Reviews 장부 | 텍스트 검색, 매체 필터, 표지 일괄 접기/펼치기 |
-| `reviews/cosmos.html` | 대표 Review 상세 | 실제 표지·메타데이터·본문, 목차 |
+| `reviews/*.html` | 홈에서 직접 여는 Review 상세 | 실제 표지·메타데이터·저장된 본문 |
 | `graph/index.html` | Graph/search 발견 화면 | 실제 위키링크 관계, 그래프 노드와 검색 결과에서 내부 이동 |
 | `assets/style.css` | 모든 화면의 공용 시각·반응형 규칙 | 008 토큰과 장부 그리드 확장 |
 | `assets/site.js` | 모든 화면의 공용 상호작용 | 검색, 필터, disclosure, graph 강조, `Cmd/Ctrl+K` |
@@ -27,7 +27,7 @@
 
 ## Interaction notes
 
-- 홈: `all / wiki / reviews / elsewhere` 필터, 제목의 상세 이동, 별도 표지 토글.
+- 홈: `all / wiki / reviews / elsewhere` 필터, 모든 내부 제목의 상세 직행, 별도 표지 토글.
 - Wiki: 제목·요약·태그 실시간 검색 및 태그 필터 조합.
 - Reviews: 제목·저자·장르 실시간 검색, 매체 필터, 각 표지 disclosure와 표지 전체 접기/펼치기.
 - Graph: 검색어와 맞지 않는 노드를 흐리게 하고 결과 목록을 동시에 거른다.
