@@ -28,7 +28,7 @@ main { padding:0 26px 90px; }
 .page-intro h1,.article-head h1 { margin:0; font-weight:400; font-size:clamp(31px,4.3vw,58px); line-height:1.04; letter-spacing:-.045em; text-wrap:balance; }
 .page-intro .summary,.article-head .summary { max-width:560px; margin:22px 0 0; color:#3d3d3a; font-size:15px; line-height:1.65; }
 .ledger-head { display:grid; grid-template-columns:82px 72px minmax(0,796px); width:min(100%,950px); margin-bottom:24px; color:var(--muted); font:11px/1.2 var(--sans); text-transform:lowercase; }
-.home .ledger-head { margin-top:clamp(23px,4.25vh,48px); }
+.home .ledger-head { margin-top:clamp(19px,3.25vh,36px); }
 .ledger-actions { display:flex; align-items:center; gap:28px; min-width:0; }
 .ledger-actions .result-count { margin-left:auto; }
 .filters { display:flex; flex-wrap:wrap; gap:15px; }
@@ -112,11 +112,30 @@ details[open] summary .entry-title::after { content:" −"; }
 .rail-controls button { appearance:none; width:34px; height:30px; border:1px solid var(--line); background:transparent; color:var(--ink); font:15px/1 var(--sans); }
 .rail-controls button:disabled { opacity:.25; }
 .review-rail { display:flex; gap:30px; width:100%; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:x proximity; padding:4px 26px 18px 0; outline-offset:5px; scrollbar-color:var(--line) transparent; scrollbar-width:thin; }
-.review-card { flex:0 0 420px; scroll-snap-align:start; margin:0; }
+.review-card { display:block; flex:0 0 420px; scroll-snap-align:start; margin:0; }
+.home-review { display:block; }
 .review-card .entry-summary { grid-template-columns:68px 60px minmax(0,1fr); }
 .review-card .media-body { grid-template-columns:150px minmax(0,1fr); gap:18px; margin:20px 0 0 128px; }
 .review-card .media-body img,.review-card .cover-placeholder { width:150px; height:210px; object-fit:cover; object-position:center; background:#deded8; }
 .review-card .cover-placeholder { display:grid; place-items:center; border:1px solid var(--line); color:var(--faint); font:10px/1 var(--sans); }
+.wiki-article .article-head,
+.wiki-article .article-layout { width:min(100%,1120px); margin-right:auto; margin-left:auto; }
+.wiki-article .prose { font-size:20px; line-height:1.8; }
+.prose pre,
+.prose .highlight { max-width:100%; overflow-x:auto; background:#1c2630; color:#fafafa; }
+.prose .highlight { margin:28px 0; }
+.prose .highlight pre { margin:0; }
+.prose pre code { padding:0; background:transparent; color:inherit; overflow-wrap:normal; word-break:normal; white-space:pre; }
+.prose .highlight .c,.prose .highlight .cp,.prose .highlight .cs { color:#9a9a8a; }
+.prose .highlight .c1 { color:#acca8b; }
+.prose .highlight .k,.prose .highlight .kc,.prose .highlight .kp,.prose .highlight .kr,.prose .highlight .kt { color:#66d9ef; }
+.prose .highlight .kd { color:#00d0a5; }
+.prose .highlight .kn,.prose .highlight .nt,.prose .highlight .ow { color:#f92672; }
+.prose .highlight .s,.prose .highlight .s1,.prose .highlight .s2,.prose .highlight .sb,.prose .highlight .sc,.prose .highlight .sd,.prose .highlight .se,.prose .highlight .sh,.prose .highlight .si,.prose .highlight .sr,.prose .highlight .ss { color:#e6db74; }
+.prose .highlight .m,.prose .highlight .mf,.prose .highlight .mh,.prose .highlight .mo { color:#ae81ff; }
+.prose .highlight .mi { color:#f8ff30; }
+.prose .highlight .na,.prose .highlight .nc,.prose .highlight .nd,.prose .highlight .ne,.prose .highlight .nx { color:#a6e22e; }
+.prose .highlight .nf,.prose .highlight .nv { color:#bed6ff; }
 body.search-open { overflow:hidden; }
 .search-overlay { position:fixed; inset:0; z-index:100; padding:clamp(16px,6vh,72px) 18px; background:rgba(21,21,21,.36); backdrop-filter:blur(4px); }
 .search-dialog { display:flex; flex-direction:column; width:min(100%,760px); max-height:min(760px,88vh); margin:0 auto; overflow:hidden; border:1px solid var(--ink); background:var(--paper); box-shadow:0 22px 80px rgba(0,0,0,.2); }
@@ -135,7 +154,11 @@ body.search-open { overflow:hidden; }
 .global-search-copy strong { display:block; font-weight:400; font-size:18px; line-height:1.24; letter-spacing:-.02em; }
 .global-search-copy small { display:block; margin-top:5px; color:var(--muted); font:11px/1.45 var(--sans); }
 .search-empty { color:var(--muted); font:13px/1.5 var(--sans); }
-.code-copy-button { position:absolute; top:8px; right:8px; padding:5px 7px; border:1px solid var(--line); background:var(--paper); color:var(--muted); font:10px/1 var(--sans); }
+.code-copy-btn { position:absolute; top:8px; right:8px; padding:5px 7px; border:1px solid rgba(255,255,255,.22); border-radius:2px; background:rgba(28,38,48,.86); color:rgba(255,255,255,.72); font:10px/1 var(--sans); opacity:0; }
+.prose pre:hover .code-copy-btn,.code-copy-btn:focus-visible,.code-copy-btn.is-copied { opacity:1; }
+.code-copy-success { display:none; color:#b9d99f; }
+.code-copy-btn.is-copied .code-copy-default { display:none; }
+.code-copy-btn.is-copied .code-copy-success { display:inline; }
 .heading-anchor { margin-left:8px; color:var(--faint); font-family:var(--sans); font-size:.6em; }
 /* Compatibility pages outside the main archive routes. */
 .post,.post-main,.page-content,.home-content { width:min(100%,var(--reading)); margin:0; padding:0 26px 90px; }
@@ -174,10 +197,13 @@ footer { padding:30px 26px; color:var(--muted); font:11px/1.5 var(--sans); }
   .catalog-row .tags { grid-column:2; }
   .article-page { padding-bottom:70px; }
   .article-head { margin:23px 0 78px; }
+  .wiki-article .article-head { margin:23px auto 78px; }
+  .wiki-article .prose { font-size:18px; line-height:1.78; }
   .prose { font-size:18px; line-height:1.78; letter-spacing:-.008em; }
   .prose h2 { margin-top:64px; font-size:28px; }
   .prose h3 { font-size:23px; }
   .prose code { font-size:14px; }
+  .code-copy-btn { opacity:1; }
   .prose table { display:block; max-width:100%; overflow-x:auto; font-size:14px; -webkit-overflow-scrolling:touch; }
   .review-hero { grid-template-columns:105px minmax(0,1fr); gap:24px; align-items:end; margin:22px 0 82px; }
   .review-hero h1 { font-size:33px; }

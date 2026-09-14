@@ -47,6 +47,12 @@
 
                 setTimeout(() => insertParent(data.parent, recursiveCount + 1, parentList), 0);
                 return;
+            })
+            .catch(function() {
+                var parentListElement = document.getElementById('parent-list');
+                if (parentListElement) {
+                    parentListElement.innerHTML = makeHTML(parentList);
+                }
             });
     }
 })();
