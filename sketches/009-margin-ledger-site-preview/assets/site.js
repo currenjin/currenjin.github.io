@@ -1,6 +1,14 @@
 (()=>{
   const normalize=value=>(value||'').toLocaleLowerCase('ko').normalize('NFKC').trim();
   const updateEmpty=(scope,visible)=>{const empty=scope.querySelector('[data-empty]');if(empty)empty.dataset.visible=String(visible===0)};
+  const setPreviewOpen=(entry,expanded)=>{
+    const button=entry.querySelector('[data-cover-toggle]');
+    const cover=entry.querySelector('.media-body');
+    if(!button||!cover)return;
+    button.setAttribute('aria-expanded',String(expanded));
+    button.textContent=expanded?'표지 닫기 −':'표지 보기 +';
+    cover.hidden=!expanded;
+  };
 
   document.querySelectorAll('[data-filter-group]').forEach(group=>{
     const scope=group.closest('main')||document;
@@ -23,6 +31,9 @@
     group.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
       active=button.dataset.filter;
       group.querySelectorAll('[data-filter]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+      if(scope.classList.contains('home')){
+        items.filter(item=>item.dataset.kind==='review').forEach(item=>setPreviewOpen(item,active==='review'));
+      }
       apply();
     }));
     search?.addEventListener('input',apply);
@@ -35,23 +46,17 @@
     if(!button||!cover)return;
     button.addEventListener('click',()=>{
       const expanded=button.getAttribute('aria-expanded')!=='true';
-      button.setAttribute('aria-expanded',String(expanded));
-      button.textContent=expanded?'표지 닫기 −':'표지 보기 +';
-      cover.hidden=!expanded;
+      setPreviewOpen(entry,expanded);
     });
   });
 
-  document.querySelectorAll('[data-disclosure-control]').forEach(button=>{
+  document.querySelectorAll('[data-disclosure-control]').forEach(button=>button.addEventListener('click',()=>{
     const details=[...document.querySelectorAll('details[data-review-cover]')];
-    const setOpen=open=>{
-      details.forEach(item=>item.open=open);
-      button.textContent=open?'표지 모두 접기':'표지 모두 펼치기';
-      button.setAttribute('aria-pressed',String(open));
-    };
-    setOpen(true);
-    window.addEventListener('pageshow',()=>setOpen(true));
-    button.addEventListener('click',()=>setOpen(details.some(item=>!item.open)));
-  });
+    const shouldOpen=details.some(item=>!item.open);
+    details.forEach(item=>item.open=shouldOpen);
+    button.textContent=shouldOpen?'표지 모두 접기':'표지 모두 펼치기';
+    button.setAttribute('aria-pressed',String(shouldOpen));
+  }));
 
   const graphSearch=document.querySelector('[data-graph-search]');
   if(graphSearch){
