@@ -120,7 +120,14 @@ details[open] summary .entry-title::after { content:" −"; }
 .review-card .cover-placeholder { display:grid; place-items:center; border:1px solid var(--line); color:var(--faint); font:10px/1 var(--sans); }
 .wiki-article .article-head { width:min(100%,720px); margin-right:auto; margin-left:auto; }
 .wiki-article .article-layout { width:min(100%,720px); margin-right:auto; margin-left:auto; }
-.wiki-article .prose { color:#252523; font-size:18px; line-height:1.85; letter-spacing:-.004em; word-break:keep-all; overflow-wrap:break-word; }
+.wiki-article .prose { color:#252523; font-size:18px; line-height:1.68; letter-spacing:-.004em; word-break:keep-all; overflow-wrap:break-word; }
+.wiki-article .prose p { margin-bottom:22px; }
+.wiki-article .prose h2 { margin:88px 0 24px; padding-top:24px; border-top:1px solid var(--line); font-size:30px; line-height:1.25; }
+.wiki-article .prose h3 { margin:50px 0 16px; font-size:23px; line-height:1.35; }
+.wiki-article .prose h4 { margin:38px 0 13px; color:#303b3e; font-family:var(--sans); font-size:16px; font-weight:600; line-height:1.45; letter-spacing:-.01em; }
+.wiki-article .prose h5,.wiki-article .prose h6 { margin:30px 0 11px; color:var(--muted); font-family:var(--sans); font-size:14px; font-weight:600; line-height:1.45; letter-spacing:0; }
+.wiki-article .prose #markdown-toc + h1,.wiki-article .prose #markdown-toc + h2 { margin-top:0; }
+.wiki-toc-toggle { display:none; }
 .wiki-article #markdown-toc { max-height:300px; margin:0 0 72px; padding:18px 20px 18px 36px; overflow-y:auto; border-top:1px solid var(--line); border-bottom:1px solid var(--line); color:var(--muted); font:12px/1.65 var(--sans); }
 .wiki-article #markdown-toc::before { content:"목차"; display:block; margin:0 0 10px -18px; color:var(--ink); font:11px/1.2 var(--sans); }
 .wiki-article #markdown-toc ul { margin:5px 0 0; padding-left:16px; }
@@ -204,7 +211,14 @@ footer { padding:30px 26px; color:var(--muted); font:11px/1.5 var(--sans); }
   .article-page { padding-bottom:70px; }
   .article-head { margin:23px 0 78px; }
   .wiki-article .article-head { margin:23px auto 78px; }
-  .wiki-article .prose { font-size:18px; line-height:1.78; }
+  .wiki-article .prose { font-size:18px; line-height:1.68; }
+  .wiki-article .prose h2 { margin-top:72px; padding-top:20px; font-size:28px; }
+  .wiki-article .prose h3 { margin-top:44px; font-size:22px; }
+  .wiki-article .prose h4 { margin-top:34px; font-size:16px; }
+  .wiki-toc-toggle { appearance:none; display:flex; align-items:center; justify-content:space-between; width:100%; margin:0 0 58px; padding:14px 0; border:0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); border-radius:0; background:transparent; color:var(--ink); font:12px/1.4 var(--sans); text-align:left; }
+  .wiki-toc-toggle::after { content:"+"; color:var(--muted); font-size:16px; }
+  .wiki-toc-toggle[aria-expanded="true"] { margin-bottom:0; border-bottom-color:transparent; }
+  .wiki-toc-toggle[aria-expanded="true"]::after { content:"−"; }
   .wiki-article #markdown-toc { margin-bottom:58px; }
   .prose { font-size:18px; line-height:1.78; letter-spacing:-.008em; }
   .prose h2 { margin-top:64px; font-size:28px; }

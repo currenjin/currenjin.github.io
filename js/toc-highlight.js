@@ -2,11 +2,41 @@
     const TOC_ID = '#markdown-toc';
     const ACTIVE_CLASS = 'active-toc';
     const tocRoot = document.querySelector(TOC_ID);
-    const postContent = document.querySelector(".post-content");
+    const postContent = document.querySelector(".wiki-article .prose, .post-content");
 
     if (!tocRoot || !postContent) {
         return;
     }
+
+    const mobileQuery = window.matchMedia('(max-width: 760px)');
+    const tocToggle = document.createElement('button');
+    tocToggle.type = 'button';
+    tocToggle.className = 'wiki-toc-toggle';
+    tocToggle.setAttribute('aria-controls', 'markdown-toc');
+    tocToggle.setAttribute('aria-expanded', 'false');
+    tocToggle.textContent = '목차 보기';
+    tocRoot.before(tocToggle);
+
+    const setTocOpen = (isOpen) => {
+        tocRoot.hidden = !isOpen;
+        tocToggle.setAttribute('aria-expanded', String(isOpen));
+        tocToggle.textContent = isOpen ? '목차 닫기' : '목차 보기';
+    };
+
+    const syncTocForViewport = () => {
+        if (mobileQuery.matches) {
+            setTocOpen(false);
+            return;
+        }
+        tocRoot.hidden = false;
+        tocToggle.setAttribute('aria-expanded', 'true');
+    };
+
+    tocToggle.addEventListener('click', () => {
+        setTocOpen(tocToggle.getAttribute('aria-expanded') !== 'true');
+    });
+    mobileQuery.addEventListener('change', syncTocForViewport);
+    syncTocForViewport();
 
     /**
      * toc 엘리먼트 맵 캐시.
