@@ -76,6 +76,7 @@ details[open] summary .entry-title::after { content:" −"; }
 .ai-note { position:absolute; z-index:40; top:calc(100% + 8px); left:0; width:270px; margin:0; padding:10px 12px; border:1px solid var(--line); background:var(--paper); box-shadow:0 10px 28px rgba(21,21,21,.08); color:var(--muted); font:11px/1.55 var(--sans); letter-spacing:0; text-align:left; text-transform:none; }
 .ai-disclosure--catalog { margin-top:2px; }
 .ai-disclosure--catalog .ai-note { right:0; left:auto; }
+.ai-mark { display:inline-block; margin-left:6px; padding:1px 4px; border:1px solid currentColor; color:var(--muted); font:10px/1.2 var(--sans); letter-spacing:.08em; vertical-align:.18em; }
 .tags { display:flex; flex-wrap:wrap; gap:5px 10px; color:var(--accent); font:11px/1.45 var(--sans); }
 .empty { display:none; color:var(--muted); font:13px/1.5 var(--sans); }
 .empty[data-visible="true"] { display:block; }
