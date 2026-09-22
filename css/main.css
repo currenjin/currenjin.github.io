@@ -110,7 +110,6 @@ details[open] summary .entry-title::after { content:" −"; }
 .review-hero .tags { margin-top:19px; }
 .review-archive-intro { max-width:650px; margin:clamp(19px,3.25vh,36px) 0 50px; }
 .review-archive-intro h1 { margin:0; font-weight:400; font-size:clamp(31px,4.3vw,58px); line-height:1.04; letter-spacing:-.045em; text-wrap:balance; }
-.review-archive-intro .summary { max-width:540px; margin:20px 0 0; color:#3d3d3a; font-size:15px; line-height:1.65; }
 .review-type-controls { width:min(100%,var(--measure)); margin-bottom:30px; border-bottom:1px solid var(--ink); }
 .review-type-controls .filters { gap:16px; }
 .review-archive-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:38px 28px; width:min(100%,var(--measure)); }
