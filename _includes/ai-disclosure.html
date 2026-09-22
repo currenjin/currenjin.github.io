@@ -1,0 +1,13 @@
+{% assign ai_level = include.ai.level | default: 'generated' %}
+{% assign ai_reviewed = include.ai.reviewed | default: false %}
+<details class="ai-disclosure{% if include.context %} ai-disclosure--{{ include.context }}{% endif %}">
+  <summary aria-label="AI 사용 정보 보기">AI</summary>
+  <p class="ai-note">
+    {% if ai_level == 'assisted' %}
+      작성자의 원자료를 바탕으로 생성형 AI가 구조와 문장을 편집했습니다.
+    {% else %}
+      이 문서의 본문 대부분은 생성형 AI가 작성했습니다. 작성자가 내용을 검토하고 수정했습니다.
+    {% endif %}
+    {% unless ai_reviewed %} 아직 작성자의 충분한 사실 검증을 거치지 않았습니다.{% endunless %}
+  </p>
+</details>

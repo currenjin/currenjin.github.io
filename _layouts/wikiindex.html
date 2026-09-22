@@ -6,7 +6,7 @@ layout: default
   <div class="catalog" data-catalog>
   {% assign sorted_wiki = site.wiki | sort: 'updated' | reverse %}
   {% for wiki in sorted_wiki %}{% unless wiki.public == false or wiki.title == 'wiki' %}
-    <article class="catalog-row" data-catalog-item data-search="{{ wiki.title | escape }} {{ wiki.summary | escape }} {{ wiki.tags | join: ' ' }}"><time class="date">{{ wiki.updated | date: '%y-%m-%d' }}</time><a class="catalog-title" href="{{ wiki.url | prepend: site.baseurl }}">{{ wiki.title }}{% if wiki.summary %}<small>{{ wiki.summary }}</small>{% endif %}</a><div class="tags">{% for tag in wiki.tags %}<span>#{{ tag }}</span>{% endfor %}</div></article>
+    <article class="catalog-row" data-catalog-item data-search="{{ wiki.title | escape }} {{ wiki.summary | escape }} {{ wiki.tags | join: ' ' }}"><time class="date">{{ wiki.updated | date: '%y-%m-%d' }}</time><div class="catalog-title-cell"><a class="catalog-title" href="{{ wiki.url | prepend: site.baseurl }}">{{ wiki.title }}{% if wiki.summary %}<small>{{ wiki.summary }}</small>{% endif %}</a>{% if wiki.ai %}{% include ai-disclosure.html ai=wiki.ai context='catalog' %}{% endif %}</div><div class="tags">{% for tag in wiki.tags %}<span>#{{ tag }}</span>{% endfor %}</div></article>
   {% endunless %}{% endfor %}
   </div>
 </main>

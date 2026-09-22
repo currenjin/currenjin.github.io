@@ -9,6 +9,9 @@ toc     : true
 public  : true
 parent  : [[index]]
 latex   : false
+ai:
+  level: generated
+  reviewed: true
 ---
 * TOC
 {:toc}

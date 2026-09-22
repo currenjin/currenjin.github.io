@@ -21,6 +21,14 @@
 | `toc`     | ✓ | `true`면 목차 렌더 |
 | `latex`   | ✓ | `true`면 MathJax 로드 |
 
+AI가 본문 대부분을 작성한 문서는 다음 선택 필드로 출처를 남긴다. 화면에는 Wiki 목록과 상세에 `AI`만 표시하고, 설명은 표식을 눌렀을 때만 연다. Home에는 표시하지 않는다.
+
+```yaml
+ai:
+  level: generated   # generated | assisted
+  reviewed: true
+```
+
 ### `[[backlink]]` 문법 — `_includes/createLink.html` 기준
 
 ```
