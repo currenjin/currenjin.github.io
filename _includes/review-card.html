@@ -7,8 +7,12 @@
 {% else %}
   {% assign filter_kind = media_kind %}
 {% endif %}
+{% assign review_status = r.status | default: 'other' %}
+{% unless review_status == 'finished' or review_status == 'reading' or review_status == 'want' %}
+  {% assign review_status = 'other' %}
+{% endunless %}
 {% assign review_body = r.content | strip %}
-<article class="review-archive-card{% if review_body != empty %} has-writing{% endif %}" data-filter-item data-kind="{{ filter_kind }}" data-rating="{{ r.rating | default: 0 }}" data-writing="{% if review_body != empty %}true{% else %}false{% endif %}">
+<article class="review-archive-card{% if review_body != empty %} has-writing{% endif %}" data-filter-item data-kind="{{ filter_kind }}" data-status="{{ review_status }}" data-rating="{{ r.rating | default: 0 }}" data-writing="{% if review_body != empty %}true{% else %}false{% endif %}">
   <a class="review-archive-link" href="{{ r.url | prepend: site.baseurl }}">
     {% if r.cover_url %}
       <img class="review-archive-cover" loading="lazy" src="{{ r.cover_url }}" alt="{{ r.title | escape }} 표지">

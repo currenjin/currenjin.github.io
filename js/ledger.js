@@ -10,6 +10,11 @@
   if(ledger){[...ledger.children].sort((a,b)=>{const ad=Date.parse(a.dataset.date||'')||0,bd=Date.parse(b.dataset.date||'')||0;return bd-ad}).forEach(el=>ledger.appendChild(el));}
   const reviewGrid=document.querySelector('.review-archive-grid');
   if(reviewGrid){[...reviewGrid.children].sort((a,b)=>Number(b.dataset.rating||0)-Number(a.dataset.rating||0)+0||Number(b.dataset.writing==='true')-Number(a.dataset.writing==='true')).forEach(el=>reviewGrid.appendChild(el));}
+  document.querySelectorAll('[data-review-filters]').forEach(controls=>{
+    const scope=controls.closest('main')||document,items=[...scope.querySelectorAll('[data-filter-item]')],active={kind:'all',status:'all'};
+    const apply=()=>{let visible=0;items.forEach(item=>{const showKind=active.kind==='all'||item.dataset.kind===active.kind,showStatus=active.status==='all'||item.dataset.status===active.status,show=showKind&&showStatus;item.hidden=!show;if(show)visible++;});const empty=scope.querySelector('[data-empty]');if(empty)empty.dataset.visible=String(visible===0);};
+    controls.querySelectorAll('[data-review-filter-group]').forEach(group=>{const key=group.dataset.reviewFilterGroup;group.querySelectorAll('[data-review-filter]').forEach(button=>button.addEventListener('click',()=>{const selected=button.dataset.reviewFilter;if(key==='status'&&active.status===selected){active.status='all';button.setAttribute('aria-pressed','false');}else{active[key]=selected;group.querySelectorAll('[data-review-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));}apply();}));});apply();
+  });
   document.querySelectorAll('[data-filter-group]').forEach(group=>{
     const scope=group.closest('main')||document, items=[...scope.querySelectorAll('[data-filter-item]')], count=scope.querySelector('[data-result-count]');
     let active='all';

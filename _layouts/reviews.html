@@ -7,14 +7,23 @@ layout: default
     <h1>보고 듣고 느끼다</h1>
   </header>
 
-  <section class="review-type-controls" aria-label="매체 필터">
-    <div class="filters" data-filter-group>
-      <button class="filter" data-filter="all" aria-pressed="true">전체</button>
-      <button class="filter" data-filter="book" aria-pressed="false">책</button>
-      <button class="filter" data-filter="music" aria-pressed="false">음악</button>
-      <button class="filter" data-filter="video" aria-pressed="false">영상</button>
-      <button class="filter" data-filter="webtoon" aria-pressed="false">웹툰</button>
-      <button class="filter" data-filter="other" aria-pressed="false">기타</button>
+  <section class="review-type-controls" aria-label="리뷰 필터" data-review-filters>
+    <div class="review-filter-groups">
+      <div class="filters" aria-label="매체" data-review-filter-group="kind">
+        <button class="filter" data-review-filter="all" aria-pressed="true">전체</button>
+        <button class="filter" data-review-filter="book" aria-pressed="false">책</button>
+        <button class="filter" data-review-filter="music" aria-pressed="false">음악</button>
+        <button class="filter" data-review-filter="video" aria-pressed="false">영상</button>
+        <button class="filter" data-review-filter="webtoon" aria-pressed="false">웹툰</button>
+        <button class="filter" data-review-filter="other" aria-pressed="false">기타</button>
+      </div>
+      <span class="review-filter-divider" aria-hidden="true">|</span>
+      <div class="filters" aria-label="상태" data-review-filter-group="status">
+        <button class="filter" data-review-filter="finished" aria-pressed="false">완료</button>
+        <button class="filter" data-review-filter="reading" aria-pressed="false">진행중</button>
+        <button class="filter" data-review-filter="want" aria-pressed="false">예정</button>
+        <button class="filter" data-review-filter="other" aria-pressed="false">기타</button>
+      </div>
     </div>
   </section>
 
