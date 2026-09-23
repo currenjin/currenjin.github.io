@@ -37,6 +37,7 @@ main { padding:0 26px 90px; }
 .result-count { color:var(--muted); font:11px/1.4 var(--sans); white-space:nowrap; }
 .home-ledger { width:min(100%,var(--measure)); }
 .entry { display:grid; grid-template-columns:82px 72px minmax(0,760px); align-items:baseline; margin:0 0 34px; }
+.home-review { display:block; }
 .entry-link { display:contents; }
 .entry-link:hover,.entry-link:focus-visible { text-decoration:none; }
 .entry-link:hover .entry-title,.entry-link:focus-visible .entry-title { text-decoration:underline; text-underline-offset:4px; }
