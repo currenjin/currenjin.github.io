@@ -19,12 +19,13 @@ layout: default
       </div>
       <span class="review-filter-divider" aria-hidden="true">|</span>
       <div class="filters" aria-label="상태" data-review-filter-group="status">
+        <button class="filter" data-review-filter="all" aria-pressed="true">전체</button>
         <button class="filter" data-review-filter="finished" aria-pressed="false">완료</button>
         <button class="filter" data-review-filter="reading" aria-pressed="false">진행중</button>
         <button class="filter" data-review-filter="want" aria-pressed="false">예정</button>
-        <button class="filter" data-review-filter="other" aria-pressed="false">기타</button>
       </div>
     </div>
+    <output class="review-filter-count" data-review-count aria-live="polite" aria-label="표시 중인 리뷰 수">{{ site.reviews | size }}/{{ site.reviews | size }}</output>
   </section>
 
   <div class="review-archive-grid">

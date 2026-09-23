@@ -110,10 +110,11 @@ details[open] summary .entry-title::after { content:" −"; }
 .review-hero .tags { margin-top:19px; }
 .review-archive-intro { max-width:650px; margin:clamp(19px,3.25vh,36px) 0 50px; }
 .review-archive-intro h1 { margin:0; font-weight:400; font-size:clamp(31px,4.3vw,58px); line-height:1.04; letter-spacing:-.045em; text-wrap:balance; }
-.review-type-controls { width:min(100%,var(--measure)); margin-bottom:30px; border-bottom:1px solid var(--ink); }
-.review-filter-groups { display:flex; align-items:center; gap:16px; }
+.review-type-controls { display:flex; align-items:center; justify-content:space-between; gap:16px; width:min(100%,var(--measure)); margin-bottom:30px; border-bottom:1px solid var(--ink); }
+.review-filter-groups { display:flex; align-items:center; gap:16px; min-width:0; }
 .review-type-controls .filters { gap:16px; }
 .review-filter-divider { color:var(--faint); font:11px/1 var(--sans); }
+.review-filter-count { flex:0 0 auto; margin-left:auto; color:var(--faint); font:9px/1.4 var(--sans); letter-spacing:.03em; }
 .review-archive-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:38px 28px; width:min(100%,var(--measure)); }
 .review-archive-card { min-width:0; }
 .review-archive-link { display:grid; grid-template-columns:96px minmax(0,1fr); gap:16px; align-items:start; min-width:0; }
