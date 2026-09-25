@@ -7,7 +7,7 @@
   {% if meta_image contains 'http://' or meta_image contains 'https://' %}{% assign meta_image_url = meta_image %}{% else %}{% assign meta_image_url = meta_image | prepend: site.baseurl | prepend: site.url %}{% endif %}
   <title>{{ page.seo_title | default: meta_title }}</title>
   <meta name="description" content="{{ meta_description | escape }}">
-  <link rel="stylesheet" href="{{ '/css/main.css?v=20260923-2' | prepend: site.baseurl }}">
+  <link rel="stylesheet" href="{{ '/css/main.css?v=20260925-1' | prepend: site.baseurl }}">
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | prepend: site.baseurl }}">
   <meta property="og:type" content="website"><meta property="og:title" content="{{ page.og_title | default: meta_title | escape }}"><meta property="og:description" content="{{ page.og_description | default: meta_description | escape }}"><meta property="og:image" content="{{ meta_image_url }}"><meta property="og:url" content="{{ site.url }}{{ page.url }}">
