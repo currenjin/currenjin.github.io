@@ -1,23 +1,30 @@
 <style>
+  /* 도크 chrome 토큰(--gd-*)은 css/main.css 의 시맨틱 토큰에서 파생된다.
+     따라서 라이트/다크 전환이 별도 분기 없이 그대로 따라온다. */
   :root {
     --graph-dock-width: 480px;
     /* 색 토큰 */
-    --gd-bg: #0f1117;
-    --gd-text: #cbd5e1;
-    --gd-text-strong: #f1f5f9;
-    --gd-text-dim: #64748b;
-    --gd-border: #1e293b;
-    --gd-border-hover: #334155;
-    --gd-surface-fab: rgba(15,17,23,0.88);
-    --gd-surface-dock: rgba(15,17,23,0.94);
-    --gd-overlay: rgba(255,255,255,0.05);
-    --gd-wiki: #91d478;
-    --gd-wiki-bd: rgba(145,212,120,0.32);
-    --gd-wiki-bd-hover: rgba(145,212,120,0.6);
-    --gd-wiki-glow: 0 0 8px rgba(145,212,120,0.7);
-    --gd-wiki-handle-bg: rgba(145,212,120,0.10);
-    --gd-wiki-handle-active: rgba(145,212,120,0.7);
-    --gd-handle-rest: rgba(148,163,184,0.18);
+    --gd-bg: var(--surface);
+    --gd-text: var(--muted);
+    --gd-text-strong: var(--ink);
+    --gd-text-dim: var(--faint);
+    --gd-border: var(--line);
+    --gd-border-hover: var(--line-strong);
+    --gd-surface-fab: var(--surface);
+    --gd-surface-dock: var(--surface);
+    --gd-overlay: color-mix(in srgb, var(--ink) 8%, transparent);
+    --gd-wiki: var(--accent);
+    --gd-wiki-bd: var(--line-strong);
+    --gd-wiki-bd-hover: var(--accent);
+    --gd-wiki-glow: none;
+    --gd-wiki-handle-bg: color-mix(in srgb, var(--accent) 12%, transparent);
+    --gd-wiki-handle-active: var(--accent);
+    --gd-handle-rest: var(--line-strong);
+    --gd-shadow-fab: var(--shadow-sm);
+    --gd-shadow-dock: var(--shadow-lg);
+    --gd-kbd-bg: color-mix(in srgb, var(--ink) 6%, transparent);
+    --gd-kbd-bd: var(--line);
+    --gd-kbd-bd-hover: var(--line-strong);
     /* 타이포 / 모션 */
     --gd-font: 600 12px/1 Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --gd-ease: cubic-bezier(.2,.8,.2,1);
@@ -34,7 +41,7 @@
     border: 1px solid var(--gd-wiki-bd);
     font: var(--gd-font); letter-spacing: .02em; cursor: pointer;
     backdrop-filter: blur(8px);
-    box-shadow: 0 6px 18px rgba(0,0,0,.28), 0 0 22px rgba(145,212,120,.08);
+    box-shadow: var(--gd-shadow-fab);
     transition: color .15s, border-color .15s, transform .15s, opacity .2s;
   }
   #wiki-graph-fab:hover {
@@ -47,14 +54,14 @@
   }
   #wiki-graph-fab .kbd {
     margin-left: 6px; padding: 2px 6px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.14);
+    background: var(--gd-kbd-bg);
+    border: 1px solid var(--gd-kbd-bd);
     border-radius: 4px;
     color: var(--gd-text);
     font: 600 10.5px/1 'Source Code Pro', 'SF Mono', Menlo, monospace;
     letter-spacing: .02em;
   }
-  #wiki-graph-fab:hover .kbd { color: var(--gd-text-strong); border-color: rgba(255,255,255,0.22); }
+  #wiki-graph-fab:hover .kbd { color: var(--gd-text-strong); border-color: var(--gd-kbd-bd-hover); }
   #wiki-graph-fab.is-hidden { opacity: 0; pointer-events: none; transform: scale(.9); }
 
   /* ── 도크 스테이지 & 패널 ────────────────────────
@@ -70,7 +77,7 @@
     display: flex; flex-direction: column;
     background: var(--gd-bg);
     border-left: 1px solid var(--gd-border);
-    box-shadow: -10px 0 30px rgba(0,0,0,.35);
+    box-shadow: var(--gd-shadow-dock);
     transform: translateX(100%); pointer-events: none;
     transition: transform var(--gd-anim) var(--gd-ease);
   }

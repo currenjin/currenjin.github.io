@@ -1,19 +1,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f2ebdf">
+  {% include theme-boot.html %}
   {% assign meta_title = site.title %}{% if page.title and page.title != "" %}{% assign meta_title = page.title | append: " — " | append: site.title %}{% endif %}
   {% assign meta_description = page.summary | default: site.description %}
   {% assign meta_image = page.og_image | default: page.cover_url | default: site.og_image | default: "/resource/currenjin.png" %}
   {% if meta_image contains 'http://' or meta_image contains 'https://' %}{% assign meta_image_url = meta_image %}{% else %}{% assign meta_image_url = meta_image | prepend: site.baseurl | prepend: site.url %}{% endif %}
   <title>{{ page.seo_title | default: meta_title }}</title>
   <meta name="description" content="{{ meta_description | escape }}">
-  <link rel="stylesheet" href="{{ '/css/main.css?v=20260925-1' | prepend: site.baseurl }}">
+  <link rel="stylesheet" href="{{ '/css/main.css?v=20260925-2' | prepend: site.baseurl }}">
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | prepend: site.baseurl }}">
   <meta property="og:type" content="website"><meta property="og:title" content="{{ page.og_title | default: meta_title | escape }}"><meta property="og:description" content="{{ page.og_description | default: meta_description | escape }}"><meta property="og:image" content="{{ meta_image_url }}"><meta property="og:url" content="{{ site.url }}{{ page.url }}">
   <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{{ page.og_title | default: meta_title | escape }}"><meta name="twitter:description" content="{{ page.og_description | default: meta_description | escape }}"><meta name="twitter:image" content="{{ meta_image_url }}">
   <link rel="icon" type="image/svg+xml" href="{{ '/resource/icon/favicon.svg' | prepend: site.baseurl }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ '/resource/icon/apple-icon-180x180.png' | prepend: site.baseurl }}">
+  <script defer src="{{ '/js/theme.js' | prepend: site.baseurl }}"></script>
   <script defer src="{{ '/js/ledger.js?v=20260922-4' | prepend: site.baseurl }}"></script>
   <script defer src="{{ '/js/code-copy.js' | prepend: site.baseurl }}"></script>
   <script defer src="{{ '/js/heading-anchor.js' | prepend: site.baseurl }}"></script>

@@ -8,7 +8,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo no test found"
+    "test": "node --test test/*.test.cjs"
   },
   "repository": {
     "type": "git",

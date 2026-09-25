@@ -6,5 +6,6 @@
     <a href="{{ '/reviews/' | prepend: site.baseurl }}"{% if page.collection == 'reviews' or page.layout == 'reviews' %} aria-current="page"{% endif %}>review</a>
     <a href="{{ '/graph/' | prepend: site.baseurl }}">graph</a>
     <button class="search-trigger" type="button" data-search-open aria-label="전체 기록 검색 열기">search <kbd>⌘K</kbd></button>
+    {% include theme-toggle.html %}
   </nav>
 </header>

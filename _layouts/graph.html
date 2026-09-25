@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f2ebdf">
+{% include theme-boot.html %}
 <title>{{ page.seo_title | default: page.title }}</title>
 <meta name="description" content="{{ page.summary | escape }}">
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
@@ -18,22 +21,60 @@
   })();
 </script>
 <style>
+  /* /graph/ 는 main.css 를 쓰지 않으므로 같은 팔레트를 --g-* 로 다시 선언한다.
+     값은 css/main.css 의 Parchment / Deep Ink 토큰과 1:1로 맞춘다.
+     캔버스(js/graph.js)는 여기 선언된 토큰을 읽어 그린다 — 하드코딩 금지. */
   :root {
-    --g-paper: #ecece7;
-    --g-ink: #151515;
-    --g-muted: #696965;
-    --g-faint: #96958e;
-    --g-wiki: #52656b;
-    --g-line: #cfcec6;
-    --g-panel: rgba(236, 236, 231, 0.95);
+    color-scheme: light;
+    --g-paper: #f2ebdf;
+    --g-surface: #f9f4ea;
+    --g-ink: #23190f;
+    --g-muted: #6b5741;
+    --g-faint: #8b7454;
+    --g-wiki: #8a4b2a;
+    --g-review: #23190f;
+    --g-line: #dccfb7;
+    --g-focus: #7a3e1f;
+    --g-panel: rgba(249, 244, 234, 0.95);
+    --g-float: rgba(249, 244, 234, 0.97);
+    --g-shadow: 0 8px 30px rgba(60, 42, 24, 0.12);
+    /* 캔버스 전용 — 희미하게 처리된 노드/엣지 */
+    --g-wiki-fade: rgba(138, 75, 42, 0.14);
+    --g-review-fade: rgba(35, 25, 15, 0.10);
+    --g-edge-ww: rgba(138, 75, 42, 0.42);
+    --g-edge-wr: rgba(138, 75, 42, 0.28);
+    --g-edge-rr: rgba(35, 25, 15, 0.20);
+    --g-edge-fade: rgba(107, 87, 65, 0.06);
     --g-serif: Georgia, "Times New Roman", "Apple SD Gothic Neo", serif;
     --g-sans: Arial, "Apple SD Gothic Neo", sans-serif;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --g-paper: #14171c;
+    --g-surface: #1b1f27;
+    --g-ink: #e4e0d8;
+    --g-muted: #a09a8e;
+    --g-faint: #857f74;
+    --g-wiki: #c9a583;
+    --g-review: #e4e0d8;
+    --g-line: #2b3037;
+    --g-focus: #d7b694;
+    --g-panel: rgba(27, 31, 39, 0.95);
+    --g-float: rgba(27, 31, 39, 0.97);
+    --g-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    --g-wiki-fade: rgba(201, 165, 131, 0.16);
+    --g-review-fade: rgba(228, 224, 216, 0.12);
+    --g-edge-ww: rgba(201, 165, 131, 0.42);
+    --g-edge-wr: rgba(201, 165, 131, 0.28);
+    --g-edge-rr: rgba(228, 224, 216, 0.20);
+    --g-edge-fade: rgba(160, 154, 142, 0.07);
   }
 
   *, *::before, *::after { box-sizing: border-box; }
   html, body { margin: 0; min-width: 0; min-height: 100%; background: var(--g-paper); color: var(--g-ink); }
   body { overflow-x: hidden; font-family: var(--g-serif); -webkit-font-smoothing: antialiased; }
   button, a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--g-focus); outline-offset: 3px; }
   button { font: inherit; cursor: pointer; }
   a { text-decoration: none; }
   a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
@@ -49,6 +90,16 @@
   .graph-nav { display: flex; align-items: center; gap: 17px; font: 12px/1.2 var(--g-sans); }
   .graph-nav a { display: inline-flex; align-items: center; min-height: 44px; }
   .graph-nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
+  .theme-toggle {
+    appearance: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px;
+    padding: 0; border: 0; background: transparent; color: var(--g-muted); font: 11px/1.2 var(--g-sans);
+  }
+  .theme-toggle:hover, .theme-toggle:focus-visible { color: var(--g-ink); }
+  .theme-toggle:hover .theme-toggle-text, .theme-toggle:focus-visible .theme-toggle-text {
+    text-decoration: underline; text-underline-offset: 4px;
+  }
+  .theme-toggle[aria-pressed="true"] { color: var(--g-ink); }
+  .theme-toggle-mark { font-size: 9px; line-height: 1; }
 
   .graph-page { padding: 0 26px 38px; }
   .graph-intro { margin: clamp(19px, 3.25vh, 36px) 0 40px; max-width: 650px; }
@@ -63,10 +114,10 @@
     overflow: hidden; border-top: 1px solid var(--g-line); border-bottom: 1px solid var(--g-line);
   }
   #graph-canvas, #graph-canvas > div, #graph-canvas canvas { display: block; width: 100%; height: 100%; }
-  #graph-canvas:focus-visible { outline: 1px solid var(--g-wiki); outline-offset: -3px; }
+  #graph-canvas:focus-visible { outline: 2px solid var(--g-focus); outline-offset: -4px; }
   .graph-chip {
     display: grid; place-items: center; border: 1px solid var(--g-line);
-    background: rgba(236, 236, 231, .92); color: var(--g-ink); font: 11px/1 var(--g-sans);
+    background: var(--g-panel); color: var(--g-ink); font: 11px/1 var(--g-sans);
   }
 
   #graph-panel {
@@ -87,7 +138,7 @@
   .graph-legend span { display: flex; align-items: center; gap: 6px; color: var(--g-muted); }
   .legend-node { width: 8px; height: 8px; border-radius: 50%; }
   .legend-node.wiki { background: var(--g-wiki); }
-  .legend-node.review { background: var(--g-ink); }
+  .legend-node.review { background: var(--g-review); }
   .graph-panel-section { padding: 11px 0; border-top: 1px solid var(--g-line); }
   .graph-panel-section > button {
     display: block; width: 100%; min-height: 30px; padding: 4px 0; border: 0;
@@ -96,9 +147,6 @@
   .graph-panel-section > button::before { content: "○"; display: inline-block; width: 18px; color: var(--g-faint); }
   .graph-panel-section > button.on { color: var(--g-ink); }
   .graph-panel-section > button.on::before { content: "●"; color: var(--g-wiki); }
-  .graph-panel-section > button:focus-visible, .graph-panel-head button:focus-visible, #ni-close:focus-visible {
-    outline: 1px solid var(--g-wiki); outline-offset: 2px;
-  }
   #stats { padding: 2px 0 12px; color: var(--g-muted); font: 10px/1.4 var(--g-sans); }
   #tag-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; max-height: 150px; overflow: auto; }
   .tag-chip { padding: 3px 5px; border: 1px solid var(--g-line); background: transparent; color: var(--g-muted); font: 9px/1.2 var(--g-sans); }
@@ -112,8 +160,8 @@
 
   #tooltip {
     position: absolute; z-index: 9; width: min(240px, calc(100% - 24px)); padding: 10px 12px;
-    background: rgba(236, 236, 231, .97); border: 1px solid var(--g-line);
-    pointer-events: none; box-shadow: 0 8px 30px rgba(21, 21, 21, .08); font-family: var(--g-sans);
+    background: var(--g-float); border: 1px solid var(--g-line);
+    pointer-events: none; box-shadow: var(--g-shadow); font-family: var(--g-sans);
   }
   #tooltip span, #tooltip strong, #tooltip small { display: block; }
   .tooltip-kind { margin-bottom: 4px; color: var(--g-muted); font: 9px/1.2 var(--g-sans); text-transform: uppercase; }
@@ -123,7 +171,7 @@
 
   #node-info {
     position: absolute; z-index: 8; left: 16px; bottom: 16px; width: min(270px, calc(100% - 32px));
-    padding: 15px 16px; background: rgba(236, 236, 231, .97); border: 1px solid var(--g-line);
+    padding: 15px 16px; background: var(--g-float); border: 1px solid var(--g-line);
     backdrop-filter: blur(9px);
   }
   #ni-close { position: absolute; top: 10px; right: 11px; }
@@ -152,6 +200,7 @@
   @media (max-width: 720px) {
     .graph-site-head { padding: 18px 17px; }
     .graph-nav { gap: 13px; font-size: 11px; }
+    .theme-toggle { gap: 4px; font-size: 10px; }
     .graph-page { padding: 0 17px 28px; }
     .graph-intro { margin: 22px 0 30px; }
     .graph-intro h1 { font-size: 38px; }
@@ -177,6 +226,7 @@
       <a href="{{ '/wiki/index/' | prepend: site.baseurl }}">wiki</a>
       <a href="{{ '/reviews/' | prepend: site.baseurl }}">review</a>
       <a href="{{ '/graph/' | prepend: site.baseurl }}" aria-current="page">graph</a>
+      {% include theme-toggle.html %}
     </nav>
   </header>
 
@@ -237,6 +287,7 @@
   </main>
 
   <script src="https://unpkg.com/force-graph@1.43.5/dist/force-graph.min.js"></script>
+  <script src="{{ '/js/theme.js' | prepend: site.baseurl }}"></script>
   <script src="{{ '/js/graph-force.js' | prepend: site.baseurl }}"></script>
   <script src="{{ '/js/graph.js' | prepend: site.baseurl }}"></script>
 </body>

@@ -1,0 +1,10 @@
+{%- comment -%}
+  라이트/다크 토글. 마크업은 여기 한 곳에만 둔다.
+  기본 레이아웃은 site-header.html, /graph/ 는 graph 레이아웃이 같은 파일을 include 한다.
+  상태는 js/theme.js 가 aria-pressed 와 표식(○/●)으로 동기화한다.
+  접근 가능한 이름은 항상 "dark" — 상태는 aria-pressed 가 전달한다.
+{%- endcomment -%}
+<button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" title="다크 모드 켜기">
+  <span class="theme-toggle-mark" data-theme-toggle-mark aria-hidden="true">○</span>
+  <span class="theme-toggle-text">dark</span>
+</button>

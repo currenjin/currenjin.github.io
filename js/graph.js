@@ -30,22 +30,57 @@
     sansStack: 'Arial, "Apple SD Gothic Neo", sans-serif',
   };
 
+  // 캔버스 색은 _layouts/graph.html 의 --g-* 토큰에서 읽는다. 테마가 바뀌면
+  // 같은 객체를 제자리에서 갱신하므로 아래 draw 콜백들은 그대로 두면 된다.
+  // 폴백 값은 라이트(Parchment / Umber) 팔레트.
   const COLOR = {
-    paper: "#ecece7",
-    ink: "#151515",
-    muted: "#696965",
-    accent: "#52656b",
-    wiki: "#52656b",
-    review: "#151515",
-    wikiFade: "rgba(82,101,107,.12)",
-    reviewFade: "rgba(21,21,21,.09)",
+    paper: "#f2ebdf",
+    ink: "#23190f",
+    muted: "#6b5741",
+    accent: "#8a4b2a",
+    wiki: "#8a4b2a",
+    review: "#23190f",
+    wikiFade: "rgba(138,75,42,.14)",
+    reviewFade: "rgba(35,25,15,.10)",
     edge: {
-      "wiki-wiki": "rgba(82,101,107,.42)",
-      "wiki-review": "rgba(82,101,107,.28)",
-      "review-review": "rgba(21,21,21,.20)",
+      "wiki-wiki": "rgba(138,75,42,.42)",
+      "wiki-review": "rgba(138,75,42,.28)",
+      "review-review": "rgba(35,25,15,.20)",
     },
-    edgeFade: "rgba(105,105,101,.05)",
+    edgeFade: "rgba(107,87,65,.06)",
   };
+
+  const COLOR_TOKENS = {
+    paper: "--g-paper",
+    ink: "--g-ink",
+    muted: "--g-muted",
+    accent: "--g-wiki",
+    wiki: "--g-wiki",
+    review: "--g-review",
+    wikiFade: "--g-wiki-fade",
+    reviewFade: "--g-review-fade",
+    edgeFade: "--g-edge-fade",
+  };
+  const EDGE_TOKENS = {
+    "wiki-wiki": "--g-edge-ww",
+    "wiki-review": "--g-edge-wr",
+    "review-review": "--g-edge-rr",
+  };
+
+  function readPalette() {
+    const styles = getComputedStyle(document.documentElement);
+    const token = name => styles.getPropertyValue(name).trim();
+    for (const key of Object.keys(COLOR_TOKENS)) {
+      const value = token(COLOR_TOKENS[key]);
+      if (value) COLOR[key] = value;
+    }
+    for (const kind of Object.keys(EDGE_TOKENS)) {
+      const value = token(EDGE_TOKENS[kind]);
+      if (value) COLOR.edge[kind] = value;
+    }
+  }
+
+  readPalette();
 
   const params = new URLSearchParams(window.location.search);
   const isEmbed = params.get("embed") === "1";
@@ -65,6 +100,14 @@
   let nodes = [];
   let allLinks = [];
   let graph;
+
+  // 테마 토글 → 캔버스도 따라간다. DOM 쪽은 CSS 토큰이 알아서 처리한다.
+  document.addEventListener("themechange", () => {
+    readPalette();
+    if (!graph) return;
+    graph.backgroundColor(COLOR.paper);
+    refreshGraph();
+  });
 
   const tooltip = document.getElementById("tooltip");
   const info = document.getElementById("node-info");

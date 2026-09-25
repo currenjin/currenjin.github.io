@@ -1,0 +1,6 @@
+{%- comment -%}
+  FOUC 방지: 스타일시트보다 먼저, 동기로 실행해 첫 페인트 전에 테마를 확정한다.
+  js/theme.js 와 같은 규칙(저장된 선택 우선, 없으면 prefers-color-scheme)을 쓴다.
+  로직이 바뀌면 두 곳을 함께 고칠 것 — test/theme.test.cjs 가 동치를 검사한다.
+{%- endcomment -%}
+<script>(function(){try{var s=localStorage.getItem('theme');var t=(s==='light'||s==='dark')?s:(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');var r=document.documentElement;r.setAttribute('data-theme',t);r.style.colorScheme=t;}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
