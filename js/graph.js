@@ -100,6 +100,7 @@
   let nodes = [];
   let allLinks = [];
   let graph;
+  let returnFocus = null;
 
   // 테마 토글 → 캔버스도 따라간다. DOM 쪽은 CSS 토큰이 알아서 처리한다.
   document.addEventListener("themechange", () => {
@@ -112,6 +113,13 @@
   const tooltip = document.getElementById("tooltip");
   const info = document.getElementById("node-info");
   const tagList = document.getElementById("tag-list");
+  const index = document.getElementById("graph-index");
+  const indexSearch = document.getElementById("graph-index-search");
+  const indexList = document.getElementById("graph-index-list");
+  const indexCount = document.getElementById("graph-index-count");
+  const niLinks = document.getElementById("ni-links");
+  const hint = document.getElementById("graph-hint");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const linkEnds = link => [link.source?.id ?? link.source, link.target?.id ?? link.target];
 
   function normalizeTags(value) {
@@ -274,13 +282,77 @@
     document.getElementById("ni-tags").textContent = node._tags.length ? `# ${node._tags.join(" · ")}` : "";
     document.getElementById("ni-meta").textContent = [node.author, node.genre, node.updated].filter(Boolean).join(" · ");
     document.getElementById("ni-link").href = node.url;
+    renderConnections(node);
     info.hidden = false;
+    document.documentElement.classList.add("graph-info-open");
+    syncIndexSelection();
     refreshGraph();
   }
 
+  // 선택한 기록과 현재 표시 중인 연결을 버튼으로 노출 — 캔버스를 조작하지 않고도 그래프를 따라 이동한다.
+  function renderConnections(node) {
+    const list = document.getElementById("ni-links-list");
+    const byId = new Map(nodes.map(item => [item.id, item]));
+    const connected = graph.graphData().links
+      .map(link => {
+        const [source, target] = linkEnds(link);
+        if (source !== node.id && target !== node.id) return null;
+        return { node: byId.get(source === node.id ? target : source), weight: link.weight };
+      })
+      .filter(entry => entry && entry.node)
+      .sort((a, b) => b.weight - a.weight || a.node.title.localeCompare(b.node.title, "ko"));
+    const shown = connected.slice(0, 6);
+    document.getElementById("ni-links-label").textContent = connected.length > shown.length
+      ? `연결된 기록 ${connected.length}개 중 ${shown.length}개`
+      : `연결된 기록 ${connected.length}개`;
+    list.replaceChildren(...shown.map(({ node: other, weight }) => {
+      const item = document.createElement("li");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = other.title;
+      const meta = document.createElement("small");
+      meta.textContent = ` ${other.type} · 공유 태그 ${weight}`;
+      button.append(meta);
+      button.addEventListener("click", () => selectNode(other));
+      item.append(button);
+      return item;
+    }));
+    niLinks.hidden = connected.length === 0;
+  }
+
+  // 키보드·목록에서 선택: 정보 패널을 열고 노드로 시점을 옮긴 뒤 제목으로 포커스를 보낸다.
+  function selectNode(node, invoker) {
+    if (invoker) returnFocus = invoker;
+    // embed 에서는 목록이 그래프 위 오버레이라 선택하면 닫아 정보 패널을 드러낸다.
+    if (isEmbed && index && index.contains(invoker)) index.open = false;
+    showNodeInfo(node);
+    if (Number.isFinite(node.x) && Number.isFinite(node.y)) {
+      const duration = reduceMotion ? 0 : 500;
+      graph.centerAt(node.x, node.y, duration);
+      graph.zoom(Math.max(graph.zoom(), 2.5), duration);
+    }
+    document.getElementById("ni-title").focus();
+  }
+
+  // 목록은 필터·연결 조건이 바뀔 때마다 다시 그려지므로, 원래 버튼이 사라졌으면 같은 노드 ID의 현재 항목으로 돌아간다.
+  function restoreFocusFromInfo() {
+    let target = returnFocus;
+    const nodeId = target?.dataset?.nodeId;
+    if (target && !target.isConnected && nodeId && indexList) {
+      target = [...indexList.querySelectorAll(".graph-index-item")].find(item => item.dataset.nodeId === nodeId) || null;
+    }
+    const usable = target && target.isConnected && !target.closest("[hidden]") && target.getClientRects().length > 0;
+    returnFocus = null;
+    (usable ? target : canvas).focus();
+  }
+
   function clearNodeInfo() {
+    const hadFocus = info.contains(document.activeElement);
     info.hidden = true;
+    document.documentElement.classList.remove("graph-info-open");
     selectedNode = null;
+    syncIndexSelection();
+    if (hadFocus) restoreFocusFromInfo();
     if (focusedNode) neighborSet = neighborsOf(focusedNode);
     else neighborSet = new Set();
     refreshGraph();
@@ -302,6 +374,128 @@
     hideTooltip();
     graph.d3ReheatSimulation();
     updateStats();
+    if (selectedNode) renderConnections(selectedNode);
+    renderIndex();
+  }
+
+  function degreeMap() {
+    const degree = {};
+    graph.graphData().links.forEach(link => {
+      const [source, target] = linkEnds(link);
+      degree[source] = (degree[source] || 0) + 1;
+      degree[target] = (degree[target] || 0) + 1;
+    });
+    return degree;
+  }
+
+  function normalizeQuery(value) {
+    return String(value || "").toLocaleLowerCase("ko").normalize("NFKC").trim();
+  }
+
+  // 그래프와 같은 노드·연결 데이터를 쓰는 의미 목록. 활성 태그 필터와 검색어를 함께 따른다.
+  function renderIndex() {
+    if (!index) return;
+    const query = normalizeQuery(indexSearch.value);
+    const degree = degreeMap();
+    const matches = nodes
+      .filter(node => !activeTag || node._tags.includes(activeTag))
+      .filter(node => !query || normalizeQuery(`${node.title} ${node._tags.join(" ")} ${node.author || ""}`).includes(query))
+      .sort((a, b) => (a.type === b.type ? 0 : a.type === "wiki" ? -1 : 1) || a.title.localeCompare(b.title, "ko"));
+    indexList.replaceChildren(...matches.map(node => {
+      const item = document.createElement("li");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "graph-index-item";
+      button.dataset.nodeId = node.id;
+      button.setAttribute("aria-pressed", String(selectedNode?.id === node.id));
+      const kind = document.createElement("span");
+      kind.className = `kind ${node.type}`;
+      kind.textContent = node.type;
+      const copy = document.createElement("span");
+      const title = document.createElement("strong");
+      title.textContent = node.title;
+      const meta = document.createElement("small");
+      meta.textContent = [
+        node._tags.length ? `#${node._tags.join(" #")}` : "",
+        `연결 ${degree[node.id] || 0}`,
+      ].filter(Boolean).join(" · ");
+      copy.append(title, meta);
+      button.append(kind, copy);
+      button.addEventListener("click", () => selectNode(node, button));
+      item.append(button);
+      return item;
+    }));
+    const scope = activeTag ? ` · #${activeTag} 필터` : "";
+    indexCount.textContent = `${matches.length} / ${nodes.length}${scope}`;
+    if (!matches.length) {
+      const empty = document.createElement("li");
+      empty.textContent = "일치하는 기록이 없습니다.";
+      indexList.append(empty);
+    }
+  }
+
+  function syncIndexSelection() {
+    if (!indexList) return;
+    indexList.querySelectorAll(".graph-index-item").forEach(button => {
+      button.setAttribute("aria-pressed", String(selectedNode?.id === button.dataset.nodeId));
+    });
+  }
+
+  function openIndex() {
+    index.open = true;
+    indexSearch.focus();
+  }
+
+  function closeEmbedIndex() {
+    index.open = false;
+    canvas.focus();
+  }
+
+  function bindIndex() {
+    if (!index) return;
+    document.getElementById("graph-index-total").textContent = `${nodes.length}`;
+    index.hidden = false;
+    indexSearch.addEventListener("input", renderIndex);
+    // 검색창 ↓ 과 목록 ↑↓ 로 항목 사이를 이동한다(Tab 도 그대로 동작).
+    index.addEventListener("keydown", event => {
+      if (isEmbed && index.open && event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        closeEmbedIndex();
+        return;
+      }
+      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+      const items = [...indexList.querySelectorAll(".graph-index-item")];
+      const at = items.indexOf(document.activeElement);
+      if (document.activeElement === indexSearch && event.key === "ArrowDown" && items.length) {
+        event.preventDefault();
+        items[0].focus();
+      } else if (at !== -1) {
+        event.preventDefault();
+        if (event.key === "ArrowDown") items[Math.min(at + 1, items.length - 1)].focus();
+        else if (at === 0) indexSearch.focus();
+        else items[at - 1].focus();
+      }
+    });
+    document.querySelectorAll("[data-graph-index-open]").forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        openIndex();
+      });
+    });
+    // embed 오버레이를 요약 줄로 닫으면 사라진 요약 대신 캔버스로 포커스를 돌린다.
+    index.addEventListener("toggle", () => {
+      if (isEmbed && !index.open && index.contains(document.activeElement)) canvas.focus();
+    });
+    canvas.addEventListener("keydown", event => {
+      if (event.target !== canvas || event.key !== "Enter") return;
+      event.preventDefault();
+      openIndex();
+    });
+    const pointerHint = hint ? hint.textContent : "";
+    canvas.addEventListener("focus", () => { if (hint) hint.textContent = "Enter — 기록 목록에서 찾기"; });
+    canvas.addEventListener("blur", () => { if (hint) hint.textContent = pointerHint; });
+    renderIndex();
   }
 
   function buildTagPanel() {
@@ -327,6 +521,7 @@
             chip.classList.toggle("on", active);
             chip.setAttribute("aria-pressed", String(active));
           });
+          renderIndex();
           refreshGraph();
         });
         tagList.append(button);
@@ -475,6 +670,7 @@
     graph.onNodeDrag(dragHandlers.onNodeDrag).onNodeDragEnd(dragHandlers.onNodeDragEnd);
 
     bindControls();
+    bindIndex();
     updateStats();
     status.hidden = true;
 

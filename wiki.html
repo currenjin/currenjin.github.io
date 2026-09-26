@@ -1,0 +1,23 @@
+---
+layout: null
+permalink: /wiki/
+---
+{%- comment -%}
+  위키 목록의 정식 주소는 /wiki/index/ (_wiki/index.md 가 컬렉션 문서라 경로가 고정된다).
+  GitHub Pages 에는 서버 리디렉션이 없으므로 /wiki/ 는 정적 리디렉션 페이지로만 둔다.
+{%- endcomment -%}
+{%- assign target = '/wiki/index/' | prepend: site.baseurl -%}
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>wiki — {{ site.title }}</title>
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="{{ target | prepend: site.url }}">
+  <meta http-equiv="refresh" content="0; url={{ target }}">
+  <script>window.location.replace('{{ target }}' + window.location.search + window.location.hash);</script>
+</head>
+<body>
+  <p><a href="{{ target }}">위키 목록으로 이동합니다.</a></p>
+</body>
+</html>

@@ -101,17 +101,23 @@ tags     : [database, architecture]             # 선택
   (예: `시스템-성능-엔지니어링.md`).
 - 공개 진입점은 `/reviews/`다. `/books/`는 기존 링크를 위한 호환 리디렉션으로만 유지한다.
 
-## 그래프 도크 / 전역 UI
+## 전역 UI / 그래프
 
-- 전역 도크: `_includes/global-ui.html` → `_includes/graph-dock.html`.
-  default / home / searchList 레이아웃에서 자동 노출. `/graph/` 페이지에서는
-  중복 방지를 위해 미노출.
-- 단축키: `Cmd/Ctrl + G`로 도크 토글, `Cmd/Ctrl + K`는 명령 팔레트.
+- 전역 검색: `js/ledger.js`가 `role="dialog"` 검색 모달을 만들고, `_includes/site-header.html`의
+  `search` 버튼과 `Cmd/Ctrl + K`로 연다. 포커스 순환은 `js/focus-trap.js`가 맡는다.
+  `main.css`와 `head.html`을 쓰는 default / home / searchList 계열 레이아웃에만 있다.
+- `/graph/`(`_layouts/graph.html`)는 자체 `<head>`를 쓰므로 전역 검색이 없다. 대신 그래프
+  아래 `기록 목록으로 찾기` 목록(`#graph-index`)이 같은 그래프 데이터로 노드를 검색·선택하는
+  키보드 대안이다. 선택 패널(`#node-info`)에는 연결된 기록 버튼이 있다.
+- 과거의 전역 그래프 도크와 `Cmd/Ctrl + G` 단축키는 현재 노출되지 않는다.
+  `_includes/global-ui.html`은 도크를 포함하지 않으며, `_includes/graph-dock.html`·
+  `js/command-palette.js`는 어떤 레이아웃에서도 로드되지 않는 미사용 파일이다.
 - 새 전역 UI(토스트, 단축키 헬프 등)는 **`_includes/global-ui.html`에만 추가**한다.
   세 레이아웃에 따로따로 넣지 않는다.
-- 그래프 코어 토큰은 `_layouts/graph.html` `:root`의 `--g-*`, 도크 chrome 토큰은
-  `_includes/graph-dock.html` `:root`의 `--gd-*`. 색·간격은 토큰을 사용한다.
-- 모바일 브레이크포인트는 `720px` (도크 폭 `100vw` 전환 기준).
+- 그래프 코어 토큰은 `_layouts/graph.html` `:root`의 `--g-*`이며 `css/main.css` 팔레트와
+  1:1로 맞춘다. 색·간격은 토큰을 사용한다.
+- 브레이크포인트: 공용 헤더·페이지 여백은 `760px`(와 `420px`)로, `/graph/` 헤더도 같은 값을
+  따른다. 그래프 내부 오버레이(설정 패널 기본 접힘, 선택 패널·확대 버튼 배치)는 `720px` 기준이다.
 
 ## 빌드 / 검증
 
