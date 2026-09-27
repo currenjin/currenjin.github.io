@@ -39,7 +39,7 @@
   {
     "title": "Kafka",
     "url": "/wiki/kafka",
-    "updated": "2026-07-12",
+    "updated": "2026-09-30",
     "summary": "분산 이벤트 스트리밍 플랫폼",
     "tags": "kafka, architecture, engineering",
     "source": "Wiki",

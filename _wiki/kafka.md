@@ -3,7 +3,7 @@ layout  : wiki
 title   : Kafka
 summary : 분산 이벤트 스트리밍 플랫폼
 date    : 2026-07-12 15:00:00 +0900
-updated : 2026-07-12 18:00:00 +0900
+updated : 2026-09-30 11:20:06 +0900
 tags    : [kafka, architecture, engineering]
 toc     : true
 public  : true
@@ -92,7 +92,9 @@ flowchart LR
 | 1 | 리더 기록까지 | 리더 죽으면 유실 가능 |
 | all | ISR 전부 기록까지 | 유실 방어. `min.insync.replicas`와 세트 |
 
-- **acks=all은 `min.insync.replicas`와 세트로 봐야 한다.** 복제 3에 min.insync=2면 "리더+팔로워 1까지 기록돼야 성공". ISR이 min 밑으로 떨어지면 쓰기가 거부된다(가용성을 내주고 유실을 막는 선택).
+- **`acks=all`은 현재 ISR 전체의 기록 확인을 기다린다.** `min.insync.replicas`는 확인을 기다릴 복제본 수를 지정하는 값이 아니라, 쓰기를 허용할 최소 ISR 수다.
+  - 복제 계수 3, `min.insync.replicas=2`일 때 ISR이 3개면 3개 모두의 확인을 기다린다. ISR이 2개로 줄면 그 2개의 확인을 기다리고, 1개로 줄면 쓰기가 거부된다.
+  - 복제 계수가 3이어도 `min.insync.replicas=1`이면 ISR이 리더 하나만 남은 상태에서 쓰기가 성공할 수 있다. `acks=all`만으로 항상 여러 복제본에 기록되는 것은 아니다.
 
 ### 재시도가 만드는 문제 둘
 
@@ -240,6 +242,9 @@ sequenceDiagram
 - [[designing-data-intensive-applications]]
 
 ## 참고
+
+- [Apache Kafka 4.0 Producer Configs — acks](https://kafka.apache.org/40/generated/producer_config.html#producerconfigs_acks)
+- [Apache Kafka 4.0 Topic Configs — min.insync.replicas](https://kafka.apache.org/40/generated/topic_config.html#topicconfigs_min.insync.replicas)
 
 - 카프카 핵심 가이드 (개정증보판, 제이펍) — ch3 프로듀서 / ch4 컨슈머 / ch6 복제·컨트롤러 / ch7 저장 / ch8 정확히 한 번
 - 실전 카프카 개발부터 운영까지 (책만)
