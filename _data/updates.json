@@ -1,5 +1,14 @@
 [
   {
+    "title": "Kafka",
+    "url": "/wiki/kafka",
+    "updated": "2026-09-30",
+    "summary": "분산 이벤트 스트리밍 플랫폼",
+    "tags": "kafka, architecture, engineering",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Building Evolutionary Architectures(진화적 아키텍처)",
     "url": "/wiki/building-evolutionary-architectures",
     "updated": "2026-08-31",
@@ -33,15 +42,6 @@
     "updated": "2026-07-12",
     "summary": "시스템 경계를 넘는 업무의 정합성을 지키는 법 — 2PC·Saga·Outbox·멱등 소비",
     "tags": "architecture, pattern, engineering",
-    "source": "Wiki",
-    "external": false
-  },
-  {
-    "title": "Kafka",
-    "url": "/wiki/kafka",
-    "updated": "2026-09-30",
-    "summary": "분산 이벤트 스트리밍 플랫폼",
-    "tags": "kafka, architecture, engineering",
     "source": "Wiki",
     "external": false
   },
