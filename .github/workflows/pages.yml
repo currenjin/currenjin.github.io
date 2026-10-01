@@ -27,7 +27,7 @@ jobs:
       - name: Verify approved content and navigation
         run: python3 tests/verify_archive.py _site
       - name: Verify publication boundary
-        run: bundle exec ruby tests/archive_test.rb
+        run: ruby tests/archive_test.rb
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
