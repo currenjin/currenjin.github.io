@@ -97,6 +97,19 @@
 }
 * { box-sizing:border-box; }
 /* Clip horizontal overflow without creating a scroll container for the sticky header. */
+/* Authored Post structure: scoped so Wiki/Review reading styles stay intact. */
+.book-toc-panel { padding:0 0 22px 154px; }
+.post-chapters { margin:0; padding-left:1.4em; }
+.post-chapters li { padding:6px 0; overflow-wrap:anywhere; }
+.post-chapters a { text-decoration:underline; text-underline-offset:3px; }
+.post-chapters small,.post-standalone small { margin-left:12px; color:var(--muted); font:11px/1.6 var(--sans); }
+.post-planned { color:var(--muted); }
+.post-collection + .post-collection,.post-standalone { margin-top:36px; }
+.post-reading-toc { margin:0 0 32px; padding:20px 0; border-block:1px solid var(--line); }
+.post-reading-toc h2 { margin:0 0 12px; font-size:18px; }
+.post-chapter-nav { display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px; margin-top:40px; padding-top:20px; border-top:1px solid var(--line); font:13px/1.7 var(--sans); }
+.post-chapter-nav a { text-decoration:underline; text-underline-offset:3px; overflow-wrap:anywhere; }
+@media(max-width:760px) { .book-toc-panel { padding-left:0; } .post-chapter-nav { flex-direction:column; } }
 html { scroll-behavior:smooth; scroll-padding-top:96px; overflow-x:clip; }
 body { margin:0; min-width:0; overflow-x:clip; background:var(--paper); color:var(--ink); font-family:var(--serif); -webkit-font-smoothing:antialiased; }
 a { color:inherit; text-decoration:none; }

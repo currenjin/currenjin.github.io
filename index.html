@@ -6,7 +6,7 @@ title: ""
 ---
 <main id="main" class="home">
   {% assign public_wiki = site.wiki | where_exp: 'w', 'w.public != false' %}
-  {% assign wiki_count = public_wiki.size | minus: 1 %}{% assign total_records = wiki_count | plus: site.reviews.size | plus: site.data.medium.size %}
+  {% assign wiki_count = public_wiki.size | minus: 1 %}{% assign total_records = wiki_count | plus: site.reviews.size | plus: site.archive_articles.size | plus: site.archive_books.size %}
   <section class="ledger-head" aria-label="기록 필터"><span>date</span><span>type</span><div class="ledger-actions"><div class="filters" data-filter-group><button class="filter" data-filter="all" aria-pressed="true">all</button><button class="filter" data-filter="wiki" aria-pressed="false">wiki</button><button class="filter" data-filter="review" aria-pressed="false">review</button><button class="filter" data-filter="post" aria-pressed="false">post</button></div><span class="result-count" data-result-count>{{ total_records }} / {{ total_records }}</span></div></section>
   <div class="home-ledger" data-sort-ledger>
   {% for wiki in public_wiki %}{% unless wiki.title == 'wiki' %}
@@ -15,8 +15,14 @@ title: ""
   {% for review in site.reviews %}
     <article class="entry home-review" data-filter-item data-kind="review" data-date="{% if review.end_date %}{{ review.end_date | date: '%Y-%m-%d' }}{% endif %}" data-preview-toggle><div class="entry-summary"><time class="date">{% if review.end_date %}{{ review.end_date | date: '%y-%m-%d' }}{% else %}—{% endif %}</time><span class="kind">review</span><span class="review-line"><a class="entry-title" href="{{ review.url | prepend: site.baseurl }}">{{ review.title }}<small>{% if review.author %}{{ review.author | split: ',' | first | strip }}{% endif %}{% if review.genre %} · {{ review.genre }}{% endif %}{% if review.rating %} · {{ review.rating }}/5.0{% endif %}</small></a><button class="cover-toggle" type="button" data-cover-toggle aria-expanded="false">표지 보기 +</button></span></div><div class="media-body" hidden>{% if review.cover_url %}<img loading="lazy" src="{{ review.cover_url }}" alt="{{ review.title | escape }} 표지">{% else %}<div class="article-cover-placeholder">no cover</div>{% endif %}<div class="media-copy">{% if review.rating %}<p class="rating">{{ review.rating }}/5.0</p>{% endif %}</div></div></article>
   {% endfor %}
-  {% for post in site.data.medium %}
-    <article class="entry" data-filter-item data-kind="post" data-date="{{ post.updated }}"><a class="entry-link" href="{{ post.url }}" target="_blank" rel="noopener noreferrer"><time class="date">{{ post.updated | date: '%y-%m-%d' }}</time><span class="kind">post</span><span class="entry-title">{{ post.title }} <span class="entry-external">↗</span>{% if post.summary and post.summary != '' %}<small>{{ post.summary }}</small>{% endif %}</span></a></article>
+  {% for book in site.archive_books %}
+    <article class="entry home-post-book" data-filter-item data-kind="post" data-date="{{ book.updated | date: '%Y-%m-%d' }}">
+      <div class="entry-summary"><time class="date">{{ book.updated | date: '%y-%m-%d' }}</time><span class="kind">post</span><span class="review-line"><a class="entry-title" href="{{ book.url | relative_url }}">{{ book.title | escape }}<small>{{ book.intro | escape }}</small></a><button class="cover-toggle" type="button" data-book-toc-toggle aria-expanded="true" aria-controls="book-toc-{{ book.id }}">목차 닫기 −</button></span></div>
+      <div class="book-toc-panel" id="book-toc-{{ book.id }}">{% include book-toc.html book=book %}</div>
+    </article>
+  {% endfor %}
+  {% for post in site.archive_articles %}
+    <article class="entry" data-filter-item data-kind="post" data-date="{{ post.date | date: '%Y-%m-%d' }}"><a class="entry-link" href="{{ post.url | relative_url }}"><time class="date">{{ post.date | date: '%y-%m-%d' }}</time><span class="kind">post</span><span class="entry-title">{{ post.title | escape }}{% if post.summary and post.summary != '' %}<small>{{ post.summary | escape }}</small>{% endif %}</span></a></article>
   {% endfor %}
   </div>
   <p class="empty" data-empty>표시할 기록이 없습니다.</p>

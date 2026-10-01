@@ -35,6 +35,25 @@ collections:
     reviews:
         output: true
         permalink: /reviews/:path/
+    articles:
+        output: true
+        permalink: /posts/:path/
+    chapters:
+        output: true
+        permalink: /posts/chapters/:path/
+
+# Canonical publication is enforced by _plugins/archive.rb before rendering.
+defaults:
+  - scope:
+      path: ""
+      type: articles
+    values:
+      layout: post
+  - scope:
+      path: ""
+      type: chapters
+    values:
+      layout: post
 
 # Comment Service
 disqus:
@@ -64,3 +83,14 @@ exclude:
   - profiles
   - sketches
   - design-prototypes
+  - .ouroboros
+  - docs
+  - tests
+  - test
+  - scripts
+  - tool
+  - AGENTS.md
+  - package.json
+  - package-lock.json
+  - node_modules
+  - vendor

@@ -6,6 +6,16 @@
     if(!b||!body)return; entry.open=expanded; body.hidden=!expanded;
     b.setAttribute('aria-expanded',String(expanded)); b.textContent=expanded?'표지 닫기 −':'표지 보기 +';
   };
+  const setBookToc=(entry,expanded)=>{
+    const button=entry.querySelector('[data-book-toc-toggle]'), panel=entry.querySelector('.book-toc-panel');
+    if(!button||!panel)return;
+    panel.hidden=!expanded; button.setAttribute('aria-expanded',String(expanded));
+    button.textContent=expanded?'목차 닫기 −':'목차 보기 +';
+  };
+  document.querySelectorAll('.home-post-book').forEach(entry=>{
+    const button=entry.querySelector('[data-book-toc-toggle]');
+    if(button)button.addEventListener('click',()=>setBookToc(entry,button.getAttribute('aria-expanded')!=='true'));
+  });
   const ledger=document.querySelector('[data-sort-ledger]');
   if(ledger){[...ledger.children].sort((a,b)=>{const ad=Date.parse(a.dataset.date||'')||0,bd=Date.parse(b.dataset.date||'')||0;return bd-ad}).forEach(el=>ledger.appendChild(el));}
   const reviewGrid=document.querySelector('.review-archive-grid');
@@ -19,7 +29,10 @@
     const scope=group.closest('main')||document, items=[...scope.querySelectorAll('[data-filter-item]')], count=scope.querySelector('[data-result-count]');
     let active='all';
     const apply=()=>{let visible=0;items.forEach(item=>{const show=active==='all'||(item.dataset.kind||'').split(/\s+/).includes(active);item.hidden=!show;if(show)visible++;});
-      if(scope.classList.contains('home'))items.filter(i=>i.dataset.kind==='review').forEach(i=>setPreview(i,active==='review'));
+      if(scope.classList.contains('home')){
+        items.filter(i=>i.dataset.kind==='review').forEach(i=>setPreview(i,active==='review'));
+        items.filter(i=>i.classList.contains('home-post-book')).forEach(i=>setBookToc(i,active==='post'));
+      }
       if(count)count.textContent=`${visible} / ${items.length}`;const empty=scope.querySelector('[data-empty]');if(empty)empty.dataset.visible=String(visible===0);
     };
     group.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{active=button.dataset.filter;group.querySelectorAll('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));apply();}));apply();
