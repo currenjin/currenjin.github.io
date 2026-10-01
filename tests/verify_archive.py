@@ -37,6 +37,21 @@ for i, entry in enumerate(manifest):
 for folder in ['tests','docs','.ouroboros','scripts','tool','vendor','_articles','_chapters']:
     assert not (SITE / folder).exists(), folder
 header = re.search(r'<nav class="site-nav".*?</nav>', home, re.S).group()
-positions = [header.index(s) for s in ['data-search-open','/wiki/index/','/reviews/','/posts/','theme-toggle']]
+positions = [header.index(s) for s in ['data-search-open','/wiki/index/','/posts/','/reviews/','theme-toggle']]
 assert positions == sorted(positions)
-print(json.dumps({'result':'PASS','approved_articles':5,'public_books':0,'source_body_fidelity':True,'header_order':['search','wiki','review','post','theme'],'excluded_authoring_artifacts':True}, ensure_ascii=False, indent=2))
+wiki_index = (SITE / 'wiki/index/index.html').read_text()
+review_index = (SITE / 'reviews/index.html').read_text()
+assert '<p class="eyebrow">review</p>' in review_index
+assert '<p class="eyebrow">wiki</p>' in wiki_index
+assert '<h1>사유하고 남기다</h1>' in post_index
+for html in [wiki_index, post_index]:
+    count = re.search(r'<output class="archive-index-count"[^>]*>(\d+)/(\d+)</output>', html)
+    assert count and count[1] == count[2]
+    if html == wiki_index:
+        assert int(count[1]) == html.count('data-catalog-item')
+    else:
+        assert int(count[1]) == len(posts)
+    assert 'data-review-filters' not in html
+filters = re.findall(r'data-filter="([^"]+)"', home)
+assert filters[:4] == ['all', 'wiki', 'post', 'review']
+print(json.dumps({'result':'PASS','approved_articles':5,'public_books':0,'source_body_fidelity':True,'header_order':['search','wiki','post','review','theme'],'excluded_authoring_artifacts':True}, ensure_ascii=False, indent=2))

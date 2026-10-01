@@ -4,7 +4,9 @@ title: Post
 permalink: /posts/
 ---
 <main id="main" class="post-index">
-  <header class="page-intro"><p class="eyebrow">post</p><h1>Post</h1></header>
+  <header class="archive-index-intro"><p class="eyebrow">post</p><h1>사유하고 남기다</h1></header>
+  {% assign post_count = site.archive_documents | size %}
+  <div class="archive-index-controls"><output class="archive-index-count" aria-label="표시 중인 글 수">{{ post_count }}/{{ post_count }}</output></div>
   {% for book in site.archive_books %}
   <section class="post-collection" aria-labelledby="{{ book.id }}">
     <h2 id="{{ book.id }}">{{ book.title | escape }}</h2>
