@@ -328,13 +328,13 @@ test('clicking the toggle flips the theme, its state, and persists the choice', 
   const dom = fakeDom({ prefersDark: false })
   theme.mount(dom.doc, dom.win)
   assert.equal(dom.button.getAttribute('aria-pressed'), 'false')
-  assert.equal(dom.mark.textContent, '○')
+  assert.match(dom.mark.innerHTML, /data-icon="moon"/)
 
   dom.click()
   assert.equal(dom.root.getAttribute('data-theme'), 'dark')
   assert.equal(dom.root.style.colorScheme, 'dark')
   assert.equal(dom.button.getAttribute('aria-pressed'), 'true')
-  assert.equal(dom.mark.textContent, '●')
+  assert.match(dom.mark.innerHTML, /data-icon="sun"/)
   assert.equal(dom.meta.attrs.content, DARK['--paper'])
   assert.equal(dom.store.value, 'dark')
 
@@ -386,4 +386,26 @@ test('toggling still works when localStorage is unavailable', () => {
   theme.mount(dom.doc, dom.win)
   dom.click()
   assert.equal(dom.root.getAttribute('data-theme'), 'dark')
+})
+
+test('icon-only toggle announces the destination mode', () => {
+  const dom = fakeDom()
+  theme.mount(dom.doc, dom.win)
+  assert.equal(dom.button.getAttribute('aria-label'), '다크 모드로 전환')
+  dom.click()
+  assert.equal(dom.button.getAttribute('aria-label'), '라이트 모드로 전환')
+  assert.equal(dom.button.getAttribute('title'), '라이트 모드로 전환')
+  const include = read('_includes/theme-toggle.html')
+  assert.doesNotMatch(include, /class="theme-toggle-text"/)
+  assert.match(include, /<svg/)
+})
+
+test('approved readability tokens preserve the page ground', () => {
+  assert.equal(DARK['--paper'], '#14171c')
+  assert.equal(DARK['--prose-ink'], '#d8d4cb')
+  assert.equal(DARK['--home-muted'], '#b0a99d')
+  assert.equal(DARK['--wiki-link'], '#d7b694')
+  assert.ok(contrast(DARK['--wiki-link'], DARK['--paper']) >= 4.5)
+  assert.match(MAIN_CSS, /\.wiki-article \.prose code[^}]*font-size:15px/)
+  assert.match(MAIN_CSS, /\.home \.date[^}]*font-size:12px/)
 })

@@ -91,7 +91,7 @@
   .graph-nav a { display: inline-flex; align-items: center; min-height: 44px; }
   .graph-nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
   .theme-toggle {
-    appearance: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px;
+    appearance: none; display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px;
     padding: 0; border: 0; background: transparent; color: var(--g-muted); font: 11px/1.2 var(--g-sans);
   }
   .theme-toggle:hover, .theme-toggle:focus-visible { color: var(--g-ink); }
@@ -99,7 +99,8 @@
     text-decoration: underline; text-underline-offset: 4px;
   }
   .theme-toggle[aria-pressed="true"] { color: var(--g-ink); }
-  .theme-toggle-mark { font-size: 9px; line-height: 1; }
+  .theme-toggle-mark { display: inline-flex; line-height: 1; }
+  .theme-toggle-mark svg { display: block; width: 20px; height: 20px; }
 
   .graph-page { padding: 0 26px 38px; }
   .graph-intro { margin: clamp(19px, 3.25vh, 36px) 0 40px; max-width: 650px; }
@@ -378,7 +379,7 @@
   </main>
 
   <script src="https://unpkg.com/force-graph@1.43.5/dist/force-graph.min.js"></script>
-  <script src="{{ '/js/theme.js' | prepend: site.baseurl }}"></script>
+  <script src="{{ '/js/theme.js?v=20261001-1' | prepend: site.baseurl }}"></script>
   <script src="{{ '/js/graph-force.js' | prepend: site.baseurl }}"></script>
   <script src="{{ '/js/graph.js' | prepend: site.baseurl }}"></script>
 </body>
