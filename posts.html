@@ -3,19 +3,24 @@ layout: default
 title: Post
 permalink: /posts/
 ---
-<main id="main" class="article-page wiki-article post-index">
-  <header class="article-head"><div class="article-title-row"><h1>Post</h1></div></header>
-  <div class="article-layout article-layout--single"><article class="prose">
-    {% for book in site.archive_books %}
-    <section class="post-collection" aria-labelledby="{{ book.id }}">
-      <h2 id="{{ book.id }}">{{ book.title | escape }}</h2>
-      <p class="post-intro">{{ book.intro | escape }}</p>
-      {% include book-toc.html book=book %}
-    </section>
-    {% endfor %}
-    <section class="post-standalone" aria-labelledby="standalone">
-      <h2 id="standalone">독립 글</h2>
-      <ul>{% for post in site.archive_articles %}<li><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a><small>{{ post.date | date: '%Y.%m.%d' }}</small></li>{% endfor %}</ul>
-    </section>
-  </article></div>
+<main id="main" class="post-index">
+  <header class="page-intro"><p class="eyebrow">post</p><h1>Post</h1></header>
+  {% for book in site.archive_books %}
+  <section class="post-collection" aria-labelledby="{{ book.id }}">
+    <h2 id="{{ book.id }}">{{ book.title | escape }}</h2>
+    <p class="post-intro">{{ book.intro | escape }}</p>
+    {% include book-toc.html book=book %}
+  </section>
+  {% endfor %}
+  <section aria-label="독립 글">
+    {% if site.archive_books.size > 0 %}<h2>독립 글</h2>{% endif %}
+    <div class="catalog">
+      {% for post in site.archive_articles %}
+      <article class="catalog-row">
+        <time class="date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: '%y-%m-%d' }}</time>
+        <div class="catalog-title-cell"><div class="catalog-title-row"><a class="catalog-title" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></div></div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
 </main>
