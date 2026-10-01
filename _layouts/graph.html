@@ -72,7 +72,8 @@
 
   *, *::before, *::after { box-sizing: border-box; }
   html, body { margin: 0; min-width: 0; min-height: 100%; background: var(--g-paper); color: var(--g-ink); }
-  body { overflow-x: hidden; font-family: var(--g-serif); -webkit-font-smoothing: antialiased; }
+  html { scroll-padding-top: 96px; }
+  body { overflow-x: clip; font-family: var(--g-serif); -webkit-font-smoothing: antialiased; }
   button, a { color: inherit; }
   :focus-visible { outline: 2px solid var(--g-focus); outline-offset: 3px; }
   button { font: inherit; cursor: pointer; }
@@ -83,9 +84,11 @@
   .graph-skip { position: absolute; left: -9999px; }
   .graph-skip:focus { left: 18px; top: 10px; z-index: 30; padding: 8px; background: var(--g-paper); }
   .graph-site-head {
+    position: sticky; top: 0; z-index: 50; background: var(--g-paper);
     display: flex; align-items: flex-start; justify-content: space-between;
     padding: 22px 26px;
   }
+  .graph-site-head::after { content: ""; position: absolute; inset: auto 0 0; border-bottom: 1px solid var(--g-line); pointer-events: none; }
   .graph-wordmark { font-size: 21px; line-height: 1; letter-spacing: -.035em; }
   .graph-nav { display: flex; align-items: center; gap: 17px; font: 12px/1.2 var(--g-sans); }
   .graph-nav a { display: inline-flex; align-items: center; min-height: 44px; }

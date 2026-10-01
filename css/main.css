@@ -96,8 +96,9 @@
   --code-inline-bg:rgba(228,224,216,.07);
 }
 * { box-sizing:border-box; }
-html { scroll-behavior:smooth; overflow-x:hidden; }
-body { margin:0; min-width:0; overflow-x:hidden; background:var(--paper); color:var(--ink); font-family:var(--serif); -webkit-font-smoothing:antialiased; }
+/* Clip horizontal overflow without creating a scroll container for the sticky header. */
+html { scroll-behavior:smooth; scroll-padding-top:96px; overflow-x:clip; }
+body { margin:0; min-width:0; overflow-x:clip; background:var(--paper); color:var(--ink); font-family:var(--serif); -webkit-font-smoothing:antialiased; }
 a { color:inherit; text-decoration:none; }
 a:hover,a:focus-visible { text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:4px; }
 button,input { color:inherit; font:inherit; }
@@ -106,7 +107,9 @@ button { cursor:pointer; }
 [hidden] { display:none!important; }
 .skip { position:absolute; left:-9999px; }
 .skip:focus { left:18px; top:10px; z-index:120; padding:8px; background:var(--paper); }
-.site-head { display:flex; align-items:flex-start; justify-content:space-between; padding:22px 26px; }
+.site-head { position:sticky; top:0; z-index:50; background:var(--paper); display:flex; align-items:flex-start; justify-content:space-between; padding:22px 26px; }
+/* Draw the rule inside the existing header box; keep its height and padding unchanged. */
+.site-head::after { content:""; position:absolute; inset:auto 0 0; border-bottom:1px solid var(--line); pointer-events:none; }
 .wordmark { font-size:21px; line-height:1; letter-spacing:-.035em; }
 .site-nav { display:flex; align-items:center; gap:17px; font:12px/1.2 var(--sans); }
 .site-nav a { display:inline-flex; align-items:center; min-height:44px; }
