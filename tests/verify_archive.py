@@ -16,6 +16,9 @@ post_index = (SITE / 'posts/index.html').read_text()
 # Authored books can be added later; only the unapproved demonstration is forbidden.
 assert '코드를 만들고 확인하는 일' not in home + post_index
 assert 'Lifecycle fixture' not in home + post_index
+# Book wrappers must not inherit the inner date/type/title grid.
+css = (SITE / 'css/main.css').read_text()
+assert re.search(r'\.home-post-book\s*\{[^}]*display\s*:\s*block\s*;', css), 'Home Post wrapper collapses its nested row'
 for i, entry in enumerate(manifest):
     source = (ROOT / entry['path']).read_text()
     body = re.split(r'^---\s*$', source, maxsplit=2, flags=re.M)[2].strip() + '\n'
