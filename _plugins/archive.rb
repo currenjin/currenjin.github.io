@@ -68,6 +68,10 @@ module CanonicalArchive
     site.config['archive_articles'] = articles.sort_by { |doc| Time.parse(doc.data.fetch('date').to_s) }.reverse
     site.config['archive_books'] = books.sort_by { |book| book['updated'] }.reverse
     site.config['archive_documents'] = articles + chapters
+    site.config['archive_catalog'] = (
+      books.map { |book| { 'kind' => 'series', 'date' => book['updated'], 'book' => book } } +
+      articles.map { |doc| { 'kind' => 'article', 'date' => Time.parse(doc.data.fetch('date').to_s), 'document' => doc } }
+    ).sort_by { |entry| entry['date'] }.reverse
   end
 
   class Generator < Jekyll::Generator

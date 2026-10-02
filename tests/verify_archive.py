@@ -5,6 +5,28 @@ import json
 import re
 import sys
 from pathlib import Path
+from html.parser import HTMLParser
+
+class CatalogCounter(HTMLParser):
+    """Count only direct catalog entries, not expanded child chapters."""
+    def __init__(self):
+        super().__init__()
+        self.stack = []
+        self.entries = 0
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'article' and self.stack and self.stack[-1][1]:
+            self.entries += 1
+        if tag not in {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'}:
+            self.stack.append((tag, 'mixed-archive' in (attrs.get('class') or '').split()))
+
+    def handle_endtag(self, tag):
+        for i in range(len(self.stack) - 1, -1, -1):
+            if self.stack[i][0] == tag:
+                del self.stack[i:]
+                break
+
 ROOT = Path(__file__).resolve().parents[1]
 SITE = Path(sys.argv[1])
 manifest = json.loads((ROOT / 'tests/fixtures/approved-imports.json').read_text())
@@ -53,7 +75,11 @@ for html in [wiki_index, post_index]:
     if html == wiki_index:
         assert int(count[1]) == html.count('data-catalog-item')
     else:
-        assert int(count[1]) == len([p for p in posts if not p['url'].startswith('/posts/#')])
+        catalog = CatalogCounter()
+        catalog.feed(html)
+        assert catalog.entries > 0
+        assert int(count[1]) == catalog.entries
+        assert '<h2>독립 글</h2>' not in html
     assert 'data-review-filters' not in html
 filters = re.findall(r'data-filter="([^"]+)"', home)
 assert filters[:4] == ['all', 'wiki', 'post', 'review']

@@ -64,6 +64,17 @@ class ArchiveTest < Minitest::Test
     CanonicalArchive.prepare(s)
     assert_empty s.config['archive_books']
   end
+  def test_mixed_catalog_uses_series_update_and_article_initial_date
+    planned = book([{'id'=>'outline','state'=>'planned','title'=>'Outline'}],
+                   'state'=>'planned','date'=>'2026-09-01','updated'=>'2026-09-15')
+    s = site([], [planned])
+    s.collections['articles'].docs = [doc('title'=>'Old','date'=>'2026-09-01','updated'=>'2026-09-29'),
+                                      doc('title'=>'New','date'=>'2026-09-20','updated'=>'2026-09-20')]
+    CanonicalArchive.prepare(s)
+    assert_equal ['article','series','article'], s.config['archive_catalog'].map { |entry| entry['kind'] }
+    assert_equal ['2026-09-20','2026-09-15','2026-09-01'], s.config['archive_catalog'].map { |entry| entry['date'].strftime('%Y-%m-%d') }
+    assert_equal 'New', s.config['archive_catalog'].first['document'].data['title']
+  end
   def test_duplicate_ids_fail_closed
     b = book([{'id'=>'one','state'=>'planned','title'=>'One'}, {'id'=>'one','state'=>'planned','title'=>'Again'}])
     assert_raises(RuntimeError) { CanonicalArchive.prepare(site([], [b])) }

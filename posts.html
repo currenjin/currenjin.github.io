@@ -5,24 +5,23 @@ permalink: /posts/
 ---
 <main id="main" class="post-index">
   <header class="archive-index-intro"><p class="eyebrow">post</p><h1>사유하고 남기다</h1></header>
-  {% assign post_count = site.archive_documents | size %}
+  {% assign post_count = site.archive_catalog | size %}
   <div class="archive-index-controls"><output class="archive-index-count" aria-label="표시 중인 글 수">{{ post_count }}/{{ post_count }}</output></div>
-  {% for book in site.archive_books %}
-  <section class="post-collection" aria-labelledby="{{ book.id }}">
-    <h2 id="{{ book.id }}">{{ book.title | escape }}</h2>
-    <p class="post-intro">{{ book.intro | escape }}</p>
-    {% include book-toc.html book=book variant="catalog" %}
-  </section>
-  {% endfor %}
-  <section aria-label="독립 글">
-    {% if site.archive_books.size > 0 %}<h2>독립 글</h2>{% endif %}
-    <div class="catalog">
-      {% for post in site.archive_articles %}
-      <article class="catalog-row">
-        <time class="date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: '%y-%m-%d' }}</time>
-        <div class="catalog-title-cell"><div class="catalog-title-row"><a class="catalog-title" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></div></div>
-      </article>
-      {% endfor %}
-    </div>
-  </section>
+  <div class="catalog mixed-archive">
+    {% for entry in site.archive_catalog %}
+    <article class="catalog-row"{% if entry.kind == 'series' %} id="{{ entry.book.id }}"{% endif %}>
+      <time class="date" datetime="{{ entry.date | date: '%Y-%m-%d' }}">{{ entry.date | date: '%y-%m-%d' }}</time>
+      <div class="catalog-title-cell">
+      {% if entry.kind == 'series' %}{% assign book = entry.book %}
+        <details class="archive-topic">
+          <summary class="catalog-title-row"><span class="catalog-title">{{ book.title | escape }}</span><span class="series-badge" aria-label="연재 시리즈">SERIES</span><span class="archive-list-toggle"><span class="when-closed">목록 보기 +</span><span class="when-open">목록 닫기 −</span></span></summary>
+          <div class="mixed-children">{% include book-toc.html book=book variant="catalog" %}</div>
+        </details>
+      {% else %}{% assign post = entry.document %}
+        <div class="catalog-title-row"><a class="catalog-title" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></div>
+      {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
 </main>
