@@ -65,6 +65,8 @@ header = re.search(r'<nav class="site-nav".*?</nav>', home, re.S).group()
 positions = [header.index(s) for s in ['data-search-open','/wiki/index/','/posts/','/reviews/','theme-toggle']]
 assert positions == sorted(positions)
 wiki_index = (SITE / 'wiki/index/index.html').read_text()
+# Archive children must be separate pages, never a document's heading anchors.
+assert not re.search(r'href="/wiki/[^"#]*#[^"]*"', wiki_index), 'Wiki catalog leaked document TOC links'
 review_index = (SITE / 'reviews/index.html').read_text()
 assert '<p class="eyebrow">review</p>' in review_index
 assert '<p class="eyebrow">wiki</p>' in wiki_index

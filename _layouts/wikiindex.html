@@ -1,31 +1,14 @@
 ---
 layout: default
 ---
-<main id="main" class="wiki-index">
+<main id="main">
   {% assign wiki_count = 0 %}{% for wiki in site.wiki %}{% unless wiki.public == false or wiki.title == 'wiki' %}{% assign wiki_count = wiki_count | plus: 1 %}{% endunless %}{% endfor %}
   <header class="archive-index-intro"><p class="eyebrow">wiki</p><h1>배우고 기록하다</h1></header>
   <div class="archive-index-controls"><output class="archive-index-count" aria-label="표시 중인 위키 수">{{ wiki_count }}/{{ wiki_count }}</output></div>
-  <div class="catalog mixed-archive" data-catalog>
+  <div class="catalog" data-catalog>
   {% assign sorted_wiki = site.wiki | sort: 'updated' | reverse %}
   {% for wiki in sorted_wiki %}{% unless wiki.public == false or wiki.title == 'wiki' %}
-    {% assign sections = wiki.content | archive_sections %}
-    <article class="catalog-row" data-catalog-item data-search="{{ wiki.title | escape }} {{ wiki.summary | escape }} {{ wiki.tags | join: ' ' }}">
-      <time class="date" datetime="{{ wiki.updated | date: '%Y-%m-%d' }}">{{ wiki.updated | date: '%y-%m-%d' }}</time>
-      <div class="catalog-title-cell">
-      {% if sections.size > 0 %}
-        <details class="archive-topic">
-          <summary class="catalog-title-row"><a class="catalog-title" href="{{ wiki.url | relative_url }}">{{ wiki.title | escape }}</a>{% if wiki.ai %}{% include ai-disclosure.html ai=wiki.ai context='catalog' %}{% endif %}<span class="archive-list-toggle"><span class="when-closed">목록 보기 +</span><span class="when-open">목록 닫기 −</span></span></summary>
-          <div class="mixed-children catalog">
-          {% for section in sections %}
-            <article class="catalog-row"><span class="date" aria-label="{{ forloop.index }}절">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span><div class="catalog-title-cell"><div class="catalog-title-row"><a class="catalog-title" href="{{ wiki.url | relative_url }}#{{ section.id | escape }}">{{ section.title | escape }}</a></div></div></article>
-          {% endfor %}
-          </div>
-        </details>
-      {% else %}
-        <div class="catalog-title-row"><a class="catalog-title" href="{{ wiki.url | relative_url }}">{{ wiki.title | escape }}</a>{% if wiki.ai %}{% include ai-disclosure.html ai=wiki.ai context='catalog' %}{% endif %}</div>
-      {% endif %}
-      </div>
-    </article>
+    <article class="catalog-row" data-catalog-item data-search="{{ wiki.title | escape }} {{ wiki.summary | escape }} {{ wiki.tags | join: ' ' }}"><time class="date" datetime="{{ wiki.updated | date: '%Y-%m-%d' }}">{{ wiki.updated | date: '%y-%m-%d' }}</time><div class="catalog-title-cell"><div class="catalog-title-row"><a class="catalog-title" href="{{ wiki.url | prepend: site.baseurl }}">{{ wiki.title | escape }}</a>{% if wiki.ai %}{% include ai-disclosure.html ai=wiki.ai context='catalog' %}{% endif %}</div></div></article>
   {% endunless %}{% endfor %}
   </div>
 </main>
