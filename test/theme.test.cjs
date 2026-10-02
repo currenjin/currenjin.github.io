@@ -52,21 +52,21 @@ function contrast (a, b) {
 const LIGHT = tokenBlock(MAIN_CSS, ':root')
 const DARK = tokenBlock(MAIN_CSS, ':root[data-theme="dark"]')
 
-/* ── 1. resolution: stored choice wins, system is the fallback ─ */
+/* ── 1. resolution: stored choice wins, light is the fallback ─ */
 
 test('an explicit stored choice overrides the system preference', () => {
   assert.equal(theme.resolveTheme('dark', false), 'dark')
   assert.equal(theme.resolveTheme('light', true), 'light')
 })
 
-test('with no stored choice the system preference decides', () => {
-  assert.equal(theme.resolveTheme(null, true), 'dark')
+test('with no stored choice light is the default regardless of system', () => {
+  assert.equal(theme.resolveTheme(null, true), 'light')
   assert.equal(theme.resolveTheme(null, false), 'light')
 })
 
-test('junk in storage falls back to the system preference rather than sticking', () => {
+test('junk in storage falls back to light', () => {
   for (const junk of ['', 'DARK', 'sepia', '0', undefined]) {
-    assert.equal(theme.resolveTheme(junk, true), 'dark')
+    assert.equal(theme.resolveTheme(junk, true), 'light')
     assert.equal(theme.resolveTheme(junk, false), 'light')
   }
 })
@@ -313,15 +313,15 @@ function fakeDom ({ stored = null, prefersDark = false } = {}) {
 }
 
 test('mount paints the resolved theme and labels the control', () => {
-  const dom = fakeDom({ prefersDark: true })
+  const dom = fakeDom({ stored: 'dark', prefersDark: true })
   theme.mount(dom.doc, dom.win)
 
   assert.equal(dom.root.getAttribute('data-theme'), 'dark')
   assert.equal(dom.root.style.colorScheme, 'dark')
   assert.equal(dom.button.getAttribute('aria-pressed'), 'true')
   assert.equal(dom.meta.attrs.content, DARK['--paper'])
-  // Following the system is not an explicit choice, so nothing is persisted.
-  assert.equal(dom.store.value, null)
+  // The explicit choice remains stored.
+  assert.equal(dom.store.value, 'dark')
 })
 
 test('clicking the toggle flips the theme, its state, and persists the choice', () => {
@@ -351,18 +351,18 @@ test('a click on the mark inside the button still toggles', () => {
   assert.equal(dom.root.getAttribute('data-theme'), 'dark')
 })
 
-test('the system preference is followed until the user chooses, then ignored', () => {
+test('system changes do not override the light default or explicit choice', () => {
   const dom = fakeDom({ prefersDark: false })
   theme.mount(dom.doc, dom.win)
 
   dom.systemChange(true)
-  assert.equal(dom.root.getAttribute('data-theme'), 'dark', 'no stored choice yet — follow the system')
+  assert.equal(dom.root.getAttribute('data-theme'), 'light', 'no stored choice — retain the light default')
 
-  dom.click() // user picks light explicitly
-  assert.equal(dom.store.value, 'light')
+  dom.click() // user picks dark explicitly
+  assert.equal(dom.store.value, 'dark')
 
   dom.systemChange(true)
-  assert.equal(dom.root.getAttribute('data-theme'), 'light', 'an explicit choice must survive a system change')
+  assert.equal(dom.root.getAttribute('data-theme'), 'dark', 'an explicit choice must survive a system change')
 })
 
 test('a stored choice beats the system preference at mount', () => {

@@ -2,7 +2,7 @@
  *
  * 규칙
  *   1. localStorage 에 명시적 선택이 있으면 그것이 최우선이다.
- *   2. 없으면 prefers-color-scheme 를 따르고, 시스템이 바뀌면 같이 따라간다.
+ *   2. 없으면 시스템 설정과 무관하게 라이트 모드로 시작한다.
  *   3. 사용자가 토글하면 그 선택이 저장되고 시스템 설정을 덮어쓴다.
  *
  * 순수 함수(resolveTheme/nextTheme)는 node:test 에서 직접 불러 검증한다.
@@ -19,7 +19,6 @@
   "use strict";
 
   const STORAGE_KEY = "theme";
-  const DARK_QUERY = "(prefers-color-scheme: dark)";
   const EVENT = "themechange";
   // Static, trusted SVG: show the mode the button will switch to.
   const MARK = { light: '<svg data-icon="moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20.5 13a8.5 8.5 0 0 1-9.5-9.5A8.5 8.5 0 1 0 20.5 13Z"/></svg>', dark: '<svg data-icon="sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>' };
@@ -31,10 +30,10 @@
     return value === "light" || value === "dark";
   }
 
-  /** 저장된 선택이 있으면 그것, 없으면 시스템 설정. theme-boot.html 과 동일한 규칙. */
-  function resolveTheme(stored, prefersDark) {
+  /** 저장된 선택이 있으면 그것, 없으면 라이트. theme-boot.html 과 동일한 규칙. */
+  function resolveTheme(stored) {
     if (isTheme(stored)) return stored;
-    return prefersDark ? "dark" : "light";
+    return "light";
   }
 
   function nextTheme(current) {
@@ -93,9 +92,7 @@
     const storage = (function () {
       try { return win.localStorage; } catch (e) { return null; }
     })();
-    const media = win.matchMedia ? win.matchMedia(DARK_QUERY) : null;
-
-    applyTheme(doc, resolveTheme(readStored(storage), media ? media.matches : false));
+    applyTheme(doc, resolveTheme(readStored(storage)));
 
     doc.addEventListener("click", function (event) {
       const button = event.target.closest && event.target.closest("[data-theme-toggle]");
@@ -105,13 +102,6 @@
       applyTheme(doc, theme);
     });
 
-    // 명시적 선택이 없는 동안에만 시스템 설정을 따라간다.
-    if (media && media.addEventListener) {
-      media.addEventListener("change", function (event) {
-        if (readStored(storage)) return;
-        applyTheme(doc, event.matches ? "dark" : "light");
-      });
-    }
   }
 
   return {
