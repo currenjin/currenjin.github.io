@@ -1,5 +1,16 @@
+{% if include.variant == 'catalog' %}
+<div class="catalog">
+{% for chapter in include.book.chapters %}
+  <article class="catalog-row">
+    <span class="date" aria-label="{{ forloop.index }}장">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+    <div class="catalog-title-cell"><div class="catalog-title-row">{% if chapter.planned %}<span class="catalog-title">{{ chapter.title | escape }}</span>{% else %}<a class="catalog-title" href="{{ chapter.url | relative_url }}">{{ chapter.title | escape }}</a>{% endif %}{% if chapter.planned %}<small class="catalog-summary">집필 예정</small>{% endif %}</div></div>
+  </article>
+{% endfor %}
+</div>
+{% else %}
 <ol class="post-chapters">
 {% for chapter in include.book.chapters %}
   <li{% if chapter.planned %} class="post-planned"{% endif %}>{% if chapter.planned %}<span>{{ chapter.title | escape }}</span><small>집필 예정</small>{% else %}<a href="{{ chapter.url | relative_url }}">{{ chapter.title | escape }}</a>{% endif %}</li>
 {% endfor %}
 </ol>
+{% endif %}

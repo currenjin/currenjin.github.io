@@ -11,7 +11,7 @@ permalink: /posts/
   <section class="post-collection" aria-labelledby="{{ book.id }}">
     <h2 id="{{ book.id }}">{{ book.title | escape }}</h2>
     <p class="post-intro">{{ book.intro | escape }}</p>
-    {% include book-toc.html book=book %}
+    {% include book-toc.html book=book variant="catalog" %}
   </section>
   {% endfor %}
   <section aria-label="독립 글">
