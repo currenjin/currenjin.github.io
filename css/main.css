@@ -106,6 +106,7 @@
 .post-planned { color:var(--muted); }
 .post-collection + .post-collection,.post-standalone { margin-top:36px; }
 .post-index .catalog-title-row .catalog-summary { display:inline; margin:0 0 0 12px; }
+.post-index .post-planned .catalog-title-row { color:var(--muted); }
 .post-reading-toc { margin:0 0 32px; padding:20px 0; border-block:1px solid var(--line); }
 .post-reading-toc h2 { margin:0 0 12px; font-size:18px; }
 .post-chapter-nav { display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px; margin-top:40px; padding-top:20px; border-top:1px solid var(--line); font:13px/1.7 var(--sans); }

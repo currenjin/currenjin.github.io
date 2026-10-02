@@ -17,7 +17,7 @@ title: ""
   {% endfor %}
   {% for book in site.archive_books %}
     <article class="entry home-post-book" data-filter-item data-kind="post" data-date="{{ book.updated | date: '%Y-%m-%d' }}">
-      <div class="entry-summary"><time class="date">{{ book.updated | date: '%y-%m-%d' }}</time><span class="kind">post</span><span class="review-line"><a class="entry-title" href="{{ book.url | relative_url }}">{{ book.title | escape }}<small>{{ book.intro | escape }}</small></a><button class="cover-toggle" type="button" data-book-toc-toggle aria-expanded="true" aria-controls="book-toc-{{ book.id }}">목차 닫기 −</button></span></div>
+      <div class="entry-summary"><time class="date">{{ book.updated | date: '%y-%m-%d' }}</time><span class="kind">post</span><span class="review-line"><a class="entry-title" href="{{ book.url | relative_url }}">{{ book.title | escape }}<small>{{ book.intro | escape }}</small></a><button class="cover-toggle" type="button" data-book-toc-toggle aria-expanded="true" aria-controls="book-toc-{{ book.id }}">목록 닫기 −</button></span></div>
       <div class="book-toc-panel" id="book-toc-{{ book.id }}">{% include book-toc.html book=book %}</div>
     </article>
   {% endfor %}

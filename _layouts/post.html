@@ -11,12 +11,12 @@ layout: default
     {% if page.source_url %}<p class="article-meta">원문: <a href="{{ page.source_url | escape }}" rel="noopener noreferrer">{{ page.source_name | default: '출처' | escape }}</a> · {{ page.source_date | date: '%Y.%m.%d' }}</p>{% endif %}
   </header>
   {% if page.archive_book %}{% assign current_book = site.archive_books | where: 'id', page.book | first %}
-  <nav class="post-reading-toc" aria-label="책 전체 목차"><h2>{{ current_book.title | escape }} 목차</h2>{% include book-toc.html book=current_book %}</nav>
+  <nav class="post-reading-toc" aria-label="책 전체 목록"><h2>{{ current_book.title | escape }} 목록</h2>{% include book-toc.html book=current_book %}</nav>
   {% endif %}
   <div class="article-layout article-layout--single"><article class="prose">{{ content }}</article></div>
   <nav class="post-chapter-nav" aria-label="{% if page.archive_book %}장 탐색{% else %}글 탐색{% endif %}">
     {% if page.previous_chapter %}<a href="{{ page.previous_chapter.url | relative_url }}">이전 장 · {{ page.previous_chapter.title | escape }}</a>{% endif %}
-    <a href="{{ page.archive_book.url | default: '/posts/' | relative_url }}">{% if page.archive_book %}목차{% else %}Post 목록{% endif %}</a>
+    <a href="{{ page.archive_book.url | default: '/posts/' | relative_url }}">{% if page.archive_book %}목록{% else %}Post 목록{% endif %}</a>
     {% if page.next_chapter %}<a href="{{ page.next_chapter.url | relative_url }}">다음 장 · {{ page.next_chapter.title | escape }}</a>{% endif %}
   </nav>
 </main>

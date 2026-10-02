@@ -10,7 +10,7 @@
     const button=entry.querySelector('[data-book-toc-toggle]'), panel=entry.querySelector('.book-toc-panel');
     if(!button||!panel)return;
     panel.hidden=!expanded; button.setAttribute('aria-expanded',String(expanded));
-    button.textContent=expanded?'목차 닫기 −':'목차 보기 +';
+    button.textContent=expanded?'목록 닫기 −':'목록 보기 +';
   };
   document.querySelectorAll('.home-post-book').forEach(entry=>{
     const button=entry.querySelector('[data-book-toc-toggle]');
