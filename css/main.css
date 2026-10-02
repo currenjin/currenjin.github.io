@@ -65,35 +65,35 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --paper:#14171c;
-  --surface:#1b1f27;
-  --img-placeholder:#252a31;
+  --paper:#1c1917;
+  --surface:#282321;
+  --img-placeholder:#342d28;
 
-  --ink:#e4e0d8;
-  --prose-ink:#d8d4cb;
-  --soft:#c2bcb1;
-  --muted:#a09a8e;
-  --faint:#857f74;
-  --home-muted:#b0a99d;
-  --wiki-link:#d7b694;
-  --heading-sub:#e4e0d8;
+  --ink:#f0e9df;
+  --prose-ink:#e2d9ce;
+  --soft:#cfc3b5;
+  --muted:#b5a899;
+  --faint:#a89886;
+  --home-muted:#b5a899;
+  --wiki-link:#e8b991;
+  --heading-sub:#f0e9df;
 
-  --accent:#c9a583;
-  --line:#2b3037;
-  --line-strong:#464d57;
-  --rule-strong:#6b727c;
-  --focus:#d7b694;
+  --accent:#e8b991;
+  --line:#38312b;
+  --line-strong:#5b4e43;
+  --rule-strong:#8b7968;
+  --focus:#e8b991;
 
   --scrim:rgba(4,6,9,.64);
   --shadow-sm:0 10px 28px rgba(0,0,0,.45);
   --shadow-lg:0 22px 80px rgba(0,0,0,.6);
 
-  --code-bg:#0e1115;
-  --code-ink:#e4e0d8;
-  --code-line:rgba(228,224,216,.16);
-  --code-chrome-bg:rgba(14,17,21,.9);
-  --code-chrome-ink:rgba(228,224,216,.74);
-  --code-inline-bg:rgba(228,224,216,.07);
+  --code-bg:#14110f;
+  --code-ink:#f0e9df;
+  --code-line:rgba(240,233,223,.16);
+  --code-chrome-bg:rgba(20,17,15,.9);
+  --code-chrome-ink:rgba(240,233,223,.74);
+  --code-inline-bg:rgba(240,233,223,.07);
 }
 * { box-sizing:border-box; }
 /* Clip horizontal overflow without creating a scroll container for the sticky header. */

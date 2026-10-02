@@ -400,11 +400,13 @@ test('icon-only toggle announces the destination mode', () => {
   assert.match(include, /<svg/)
 })
 
-test('approved readability tokens preserve the page ground', () => {
-  assert.equal(DARK['--paper'], '#14171c')
-  assert.equal(DARK['--prose-ink'], '#d8d4cb')
-  assert.equal(DARK['--home-muted'], '#b0a99d')
-  assert.equal(DARK['--wiki-link'], '#d7b694')
+test('approved warm charcoal palette B preserves readability', () => {
+  assert.equal(DARK['--paper'], '#1c1917')
+  assert.equal(DARK['--surface'], '#282321')
+  assert.equal(DARK['--ink'], '#f0e9df')
+  assert.equal(DARK['--prose-ink'], '#e2d9ce')
+  assert.equal(DARK['--home-muted'], '#b5a899')
+  assert.equal(DARK['--wiki-link'], '#e8b991')
   assert.ok(contrast(DARK['--wiki-link'], DARK['--paper']) >= 4.5)
   assert.match(MAIN_CSS, /\.wiki-article \.prose code[^}]*font-size:15px/)
   assert.match(MAIN_CSS, /\.home \.date[^}]*font-size:12px/)
