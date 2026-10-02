@@ -1,0 +1,19 @@
+{% assign meta_title = site.title %}{% if page.title and page.title != "" %}{% assign meta_title = page.title | append: " — " | append: site.title %}{% endif %}
+{% assign meta_title = page.seo_title | default: meta_title %}
+{% assign meta_description = page.meta_description | default: page.seo_description | default: page.summary | default: site.description %}
+{% assign meta_image = page.og_image | default: page.cover_url | default: site.og_image | default: "/resource/currenjin.png" %}
+{% assign meta_image_url = meta_image | absolute_url %}
+{% assign canonical_path = page.canonical_url | default: page.url | replace: 'index.html', '' %}
+{% assign meta_canonical = canonical_path | absolute_url | uri_escape | seo_uri_escape %}
+<title>{{ meta_title | escape }}</title>
+<meta name="description" content="{{ meta_description | escape }}">
+<link rel="canonical" href="{{ meta_canonical | escape }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ meta_title | escape }}">
+<meta property="og:description" content="{{ meta_description | escape }}">
+<meta property="og:image" content="{{ meta_image_url | escape }}">
+<meta property="og:url" content="{{ meta_canonical | escape }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ meta_title | escape }}">
+<meta name="twitter:description" content="{{ meta_description | escape }}">
+<meta name="twitter:image" content="{{ meta_image_url | escape }}">

@@ -6,9 +6,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f2ebdf">
 {% include theme-boot.html %}
-<title>{{ page.seo_title | default: page.title }}</title>
-<meta name="description" content="{{ page.summary | escape }}">
-<link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+{% include seo-meta.html %}
 <link rel="icon" type="image/svg+xml" href="{{ '/resource/icon/favicon.svg' | prepend: site.baseurl }}">
 <script>
   (function () {
