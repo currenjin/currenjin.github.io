@@ -191,7 +191,7 @@ details[open] summary .entry-title::after { content:" −"; }
 .catalog-title-cell { min-width:0; }
 .catalog-title-row { position:relative; min-width:0; font-size:19px; line-height:1.25; letter-spacing:-.02em; }
 .catalog-title { font:inherit; letter-spacing:inherit; }
-.archive-topic > summary { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; cursor:pointer; list-style:none; }
+.archive-topic > summary { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; min-height:0; margin-bottom:0; cursor:pointer; list-style:none; }
 .archive-topic > summary::-webkit-details-marker { display:none; }
 .archive-topic > summary:focus-visible { outline:1px solid var(--accent); outline-offset:6px; }
 .series-badge { display:inline-flex; align-items:center; flex:none; padding:3px 6px 2px; border:1px solid var(--faint); border-radius:2px; background:var(--code-inline-bg); color:var(--muted); font:9px/1.15 var(--sans); letter-spacing:.12em; transform:rotate(-3deg); }
