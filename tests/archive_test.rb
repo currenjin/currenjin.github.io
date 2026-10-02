@@ -46,6 +46,24 @@ class ArchiveTest < Minitest::Test
       assert_empty s.collections['chapters'].docs
     end
   end
+  def test_explicit_planned_book_lists_only_approved_titles
+    entries = [{'id'=>'plan','state'=>'planned','title'=>'Planned'}]
+    extra = {'state'=>'planned','date'=>'2026-09-01','updated'=>'2026-09-02'}
+    s = site([], [book(entries, extra)])
+    CanonicalArchive.prepare(s)
+    assert_equal ['Planned'], s.config['archive_books'].first.fetch('chapters').map { |c| c['title'] }
+    assert_nil s.config['archive_books'].first['chapters'].first['url']
+    assert_empty s.collections['chapters'].docs
+    assert_equal 1, s.config['archive_documents'].size
+    [{'public'=>false}, {'public'=>'true'}, {'date'=>'2030-01-01'}, {'updated'=>'2030-01-01'}, {'date'=>nil}, {'updated'=>'2026-01-01'}].each do |invalid|
+      s = site([], [book(entries, extra.merge(invalid))])
+      CanonicalArchive.prepare(s)
+      assert_empty s.config['archive_books'], invalid.inspect
+    end
+    s = site([], [book([], extra)])
+    CanonicalArchive.prepare(s)
+    assert_empty s.config['archive_books']
+  end
   def test_duplicate_ids_fail_closed
     b = book([{'id'=>'one','state'=>'planned','title'=>'One'}, {'id'=>'one','state'=>'planned','title'=>'Again'}])
     assert_raises(RuntimeError) { CanonicalArchive.prepare(site([], [b])) }

@@ -50,8 +50,8 @@ for html in [wiki_index, post_index]:
     if html == wiki_index:
         assert int(count[1]) == html.count('data-catalog-item')
     else:
-        assert int(count[1]) == len(posts)
+        assert int(count[1]) == len([p for p in posts if not p['url'].startswith('/posts/#')])
     assert 'data-review-filters' not in html
 filters = re.findall(r'data-filter="([^"]+)"', home)
 assert filters[:4] == ['all', 'wiki', 'post', 'review']
-print(json.dumps({'result':'PASS','approved_articles':5,'public_books':0,'source_body_fidelity':True,'header_order':['search','wiki','post','review','theme'],'excluded_authoring_artifacts':True}, ensure_ascii=False, indent=2))
+print(json.dumps({'result':'PASS','approved_articles':5,'public_books':len([p for p in posts if p['url'].startswith('/posts/#')]),'source_body_fidelity':True,'header_order':['search','wiki','post','review','theme'],'excluded_authoring_artifacts':True}, ensure_ascii=False, indent=2))

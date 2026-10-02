@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'time'
+require 'ostruct'
 
 # A single publication boundary for canonical articles and authored chapters.
 # Requires a normal (not --safe) Jekyll build; see docs/post-authoring.md.
@@ -48,9 +49,14 @@ module CanonicalArchive
         book['chapters'] << { 'title' => doc.data.fetch('title'), 'url' => doc.url, 'document' => doc }
       end
       published = book['chapters'].map { |entry| entry['document'] }.compact
-      # No placeholder book is published before its first approved chapter.
-      next if published.empty?
-      book['updated'] = published.map { |doc| Time.parse(doc.data.fetch('updated', doc.data['date']).to_s) }.max
+      # Planned-only outlines require explicit approval and valid publication dates.
+      if published.empty?
+        next unless metadata['state'] == 'planned' && !book['chapters'].empty?
+        next unless public_document?(OpenStruct.new(data: metadata), site.time)
+        book['updated'] = Time.parse(metadata.fetch('updated', metadata['date']).to_s)
+      else
+        book['updated'] = published.map { |doc| Time.parse(doc.data.fetch('updated', doc.data['date']).to_s) }.max
+      end
       published.each_with_index do |doc, index|
         doc.data['archive_book'] = { 'title' => book.fetch('title'), 'url' => book['url'] }
         doc.data['previous_chapter'] = published[index - 1] if index.positive?

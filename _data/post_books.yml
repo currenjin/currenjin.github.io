@@ -1,2 +1,18 @@
 # Authored books only. Examples live in excluded docs/tests, never here.
-[]
+- id: what-am-i
+  title: "'나'는 무엇인가."
+  intro: ""
+  public: true
+  state: planned
+  date: 2026-10-02 13:07:22 +0900
+  updated: 2026-10-02 13:07:22 +0900
+  chapters:
+    - id: existence
+      title: "'나'라는 존재에 대한 정의"
+      state: planned
+    - id: developer
+      title: "개발자로서의 '나'"
+      state: planned
+    - id: becoming
+      title: "내가 바라는 '나'"
+      state: planned
