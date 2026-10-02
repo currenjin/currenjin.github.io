@@ -9,12 +9,14 @@
   const setBookToc=(entry,expanded)=>{
     const button=entry.querySelector('[data-book-toc-toggle]'), panel=entry.querySelector('.book-toc-panel');
     if(!button||!panel)return;
-    panel.hidden=!expanded; button.setAttribute('aria-expanded',String(expanded));
+    panel.hidden=!expanded;
+    entry.querySelectorAll('[data-book-toc-toggle], [data-book-title-toggle]').forEach(control=>control.setAttribute('aria-expanded',String(expanded)));
     button.textContent=expanded?'목록 닫기 −':'목록 보기 +';
   };
   document.querySelectorAll('.home-post-book').forEach(entry=>{
-    const button=entry.querySelector('[data-book-toc-toggle]');
-    if(button)button.addEventListener('click',()=>setBookToc(entry,button.getAttribute('aria-expanded')!=='true'));
+    entry.querySelectorAll('[data-book-toc-toggle], [data-book-title-toggle]').forEach(button=>{
+      button.addEventListener('click',()=>setBookToc(entry,button.getAttribute('aria-expanded')!=='true'));
+    });
   });
   const ledger=document.querySelector('[data-sort-ledger]');
   if(ledger){[...ledger.children].sort((a,b)=>{const ad=Date.parse(a.dataset.date||'')||0,bd=Date.parse(b.dataset.date||'')||0;return bd-ad}).forEach(el=>ledger.appendChild(el));}

@@ -180,6 +180,8 @@ summary .entry-title::after { content:" +"; color:var(--muted); font:12px var(--
 details[open] summary .entry-title::after { content:" −"; }
 .review-line { grid-column:3; display:flex; align-items:flex-start; gap:16px; min-width:0; }
 .review-line .entry-title { grid-column:auto; min-width:0; }
+.home-post-book button.entry-title { appearance:none; margin:0; padding:0; border:0; background:none; text-align:left; }
+.home-post-book button.entry-title:hover,.home-post-book button.entry-title:focus-visible { text-decoration:underline; text-underline-offset:4px; }
 .cover-toggle { appearance:none; flex:0 0 auto; align-self:start; min-height:32px; margin:0; padding:0; border:0; background:transparent; color:var(--accent); font:11px/1.4 var(--sans); white-space:nowrap; }
 .cover-toggle:hover,.cover-toggle:focus-visible { text-decoration:underline; text-underline-offset:4px; }
 .media-body { display:grid; grid-template-columns:140px minmax(0,360px); gap:22px; align-items:start; margin:22px 0 50px 154px; }
