@@ -160,6 +160,11 @@ main { padding:0 26px 90px; }
 .entry { display:grid; grid-template-columns:82px 72px minmax(0,760px); align-items:baseline; margin:0 0 34px; }
 .home-review { display:block; }
 .home-post-book { display:block; }
+.home-post-book .entry-summary { min-height:0; margin-bottom:0; }
+.home-post-book .review-line { align-items:baseline; flex-wrap:wrap; gap:8px 12px; }
+.home-post-book .cover-toggle { min-height:0; align-self:baseline; }
+.home-post-book .series-badge { vertical-align:baseline; margin-left:6px; }
+.home-post-book .book-toc-panel:not([hidden]) { padding-top:22px; }
 .entry-link { display:contents; }
 .entry-link:hover,.entry-link:focus-visible { text-decoration:none; }
 .entry-link:hover .entry-title,.entry-link:focus-visible .entry-title { text-decoration:underline; text-underline-offset:4px; }
