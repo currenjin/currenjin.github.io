@@ -35,23 +35,14 @@ collections:
     reviews:
         output: true
         permalink: /reviews/:path/
-    articles:
+    post:
         output: true
         permalink: /posts/:path/
-    chapters:
-        output: true
-        permalink: /posts/chapters/:path/
 
 # Canonical publication is enforced by _plugins/archive.rb before rendering.
 defaults:
   - scope:
-      path: ""
-      type: articles
-    values:
-      layout: post
-  - scope:
-      path: ""
-      type: chapters
+      path: "_post"
     values:
       layout: post
 
@@ -88,9 +79,7 @@ exclude:
   - .ouroboros
   - docs
   - tests
-  - test
   - scripts
-  - tool
   - AGENTS.md
   - package.json
   - package-lock.json

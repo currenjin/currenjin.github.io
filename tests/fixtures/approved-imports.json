@@ -1,6 +1,6 @@
 [
   {
-    "path": "_articles/stars-unseen.md",
+    "path": "_post/stars-unseen.md",
     "source_url": "https://medium.com/@jung23e/%EA%B7%B8%EB%82%A0%EB%8F%84-%EB%B3%84%EC%9D%80-%EB%B3%B4%EC%9D%B4%EC%A7%80-%EC%95%8A%EC%95%98%EB%8B%A4-5bb58aae4128?source=rss-a0ae377eb2b1------2",
     "date": "2026-08-28",
     "title": "그날도 별은 보이지 않았다.",
@@ -12,7 +12,7 @@
     "markdown_sha256": "d014d00d11c3d14a86213da1f36a0a62c069d06803a8b1581f81cd5a6c2c97b9"
   },
   {
-    "path": "_articles/positivism-vibe-coding.md",
+    "path": "_post/positivism-vibe-coding.md",
     "source_url": "https://medium.com/@jung23e/%EC%8B%A4%EC%A6%9D%EC%A3%BC%EC%9D%98%EC%A0%81-%EA%B4%80%EC%A0%90%EC%9C%BC%EB%A1%9C-%EB%B0%94%EB%9D%BC%EB%B3%B8-%EB%B0%94%EC%9D%B4%EB%B8%8C-%EC%BD%94%EB%94%A9-a95d7e922737?source=rss-a0ae377eb2b1------2",
     "date": "2026-01-21",
     "title": "실증주의적 관점으로 바라본 바이브 코딩",
@@ -24,7 +24,7 @@
     "markdown_sha256": "a1ba85ecf3a139baa32bdf01fbe83c9ee1e0f020063567a273f85be5238be461"
   },
   {
-    "path": "_articles/junit-consolelauncher-4772.md",
+    "path": "_post/junit-consolelauncher-4772.md",
     "source_url": "https://medium.com/@jung23e/junit-consolelauncher-%EC%9E%98%EB%AA%BB%EB%90%9C-classpath-root-%EA%B0%90%EC%A7%80-%EB%B0%8F-%EB%A1%9C%EA%B9%85-%EA%B0%9C%EC%84%A0-4772-1b07dce63fa9?source=rss-a0ae377eb2b1------2",
     "date": "2025-08-18",
     "title": "JUnit ConsoleLauncher — 잘못된 classpath root 감지 및 로깅 개선 (#4772)",
@@ -36,7 +36,7 @@
     "markdown_sha256": "0f13691e88d5dd23815c9568ca4b2943818e772ef0f32cd2f42c97285287314d"
   },
   {
-    "path": "_articles/what-i-feared.md",
+    "path": "_post/what-i-feared.md",
     "source_url": "https://medium.com/@jung23e/%EB%82%98%EB%8A%94-%EB%AC%B4%EC%97%87%EC%9D%84-%EB%91%90%EB%A0%A4%EC%9B%8C%ED%96%88%EB%8A%94%EA%B0%80-d8bc49f87da3?source=rss-a0ae377eb2b1------2",
     "date": "2025-08-12",
     "title": "나는 무엇을 두려워했는가",
@@ -48,7 +48,7 @@
     "markdown_sha256": "ac340e943a6e2ff49b7da815f84f6fb6656e08cd34656819e3bd00f9accd244c"
   },
   {
-    "path": "_articles/challenges-connect.md",
+    "path": "_post/challenges-connect.md",
     "source_url": "https://medium.com/@jung23e/%EB%8F%84%EC%A0%84%EC%9D%80-%EC%97%B0%EA%B2%B0%EB%90%9C%EB%8B%A4-5%EB%85%84%EC%B0%A8-%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%ED%8E%B8-f26edb188a9f?source=rss-a0ae377eb2b1------2",
     "date": "2025-08-02",
     "title": "도전은 연결된다. — 5년차 소프트웨어 엔지니어편",

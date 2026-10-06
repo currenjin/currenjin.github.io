@@ -1,4 +1,4 @@
-// Build and serve _site first. NODE_PATH=<temporary Playwright modules> node test/toc-highlight.browser.cjs
+// Build and serve _site first. NODE_PATH=<temporary Playwright modules> node tests/browser/toc-highlight.browser.cjs
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');

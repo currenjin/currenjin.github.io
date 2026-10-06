@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
-const generator = path.resolve(__dirname, '../generateData.js');
+const generator = path.resolve(__dirname, '../../generateData.js');
 
 function inScratch(run) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'archive-generator-'));
@@ -18,6 +18,23 @@ test('importing the generator does not scan or write the current directory', () 
     assert.equal(result.status, 0, result.stderr);
     assert.equal(result.stdout, '');
     assert.deepEqual(fs.readdirSync(dir), []);
+  });
+});
+
+test('canonical implementation and compatibility CLI produce identical files and stdout', () => {
+  inScratch(dir => {
+    fs.mkdirSync(path.join(dir, '_wiki'));
+    fs.writeFileSync(path.join(dir, '_wiki/index.md'), '---\ntitle: Index\ntags: [test]\npublic: true\nupdated: 2026-01-01\n---\nBody\n');
+    const run = entry => {
+      const result = spawnSync(process.execPath, [entry], { cwd: dir, encoding: 'utf8' });
+      assert.equal(result.status, 0, result.stderr);
+      const files = fs.readdirSync(path.join(dir, 'data'), { recursive: true })
+        .filter(name => fs.statSync(path.join(dir, 'data', name)).isFile())
+        .sort().map(name => [name, fs.readFileSync(path.join(dir, 'data', name), 'utf8')]);
+      fs.rmSync(path.join(dir, 'data'), { recursive: true });
+      return { stdout: result.stdout, files };
+    };
+    assert.deepEqual(run(path.resolve(__dirname, '../../scripts/generation/generate-data.js')), run(generator));
   });
 });
 

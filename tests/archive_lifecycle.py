@@ -10,7 +10,7 @@ def chapter(title, public=True, extra=''):
 with tempfile.TemporaryDirectory(prefix='archive-lifecycle-') as tmp:
     root = Path(tmp) / 'source'
     shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns('.git', '.ouroboros', '_site', 'vendor', 'node_modules', '__pycache__'))
-    chapters = root / '_chapters/lifecycle'
+    chapters = root / '_post/books/lifecycle'
     chapters.mkdir(parents=True)
     for title in ['first', 'last', 'secret', 'future', 'draft', 'unpublished', 'orphan']:
         text = chapter(title, title != 'secret', 'draft: true\n' if title == 'draft' else 'published: false\n' if title == 'unpublished' else '')
@@ -34,7 +34,7 @@ with tempfile.TemporaryDirectory(prefix='archive-lifecycle-') as tmp:
         assert all(title not in x['url'] for x in index)
     first = (site / 'posts/chapters/lifecycle/first/index.html').read_text()
     last = (site / 'posts/chapters/lifecycle/last/index.html').read_text()
-    assert '책 전체 목차' in first and '집필 예정' in first
+    assert '<nav class="post-reading-toc" aria-label="책 전체 목록">' in first and '집필 예정' in first
     assert '다음 장 · last' in first and '이전 장 · first' in last
     assert 'book-toc-lifecycle' in (site / 'index.html').read_text()
     assert 'Lifecycle fixture' in (site / 'posts/index.html').read_text()

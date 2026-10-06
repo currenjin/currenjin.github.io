@@ -6,6 +6,7 @@ A full rendered-site build is a separate required integration check.
 """
 import json
 from pathlib import Path
+import re
 import subprocess
 import unittest
 
@@ -194,10 +195,19 @@ puts JSON.generate(counts)
         print('실제 리뷰 description 근거 집계:', counts)
 
     def test_content_and_design_are_not_changed(self):
+        # Source moves are allowed; authored bytes and runtime assets are not.
         result = subprocess.run(['git', 'diff', '--exit-code', 'HEAD', '--',
-            '_wiki', '_reviews', '_articles', '_chapters', '_data', 'css', '_sass', 'js',
-            '_plugins/archive.rb'], cwd=ROOT, capture_output=True, text=True)
+            '_wiki', '_reviews', '_data', '_sass', 'js'],
+            cwd=ROOT, capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        for old, new in [('_articles/', '_post/'), ('_chapters/', '_post/books/')]:
+            paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', 'HEAD', old], cwd=ROOT, text=True).splitlines()
+            for path in paths:
+                authored = subprocess.check_output(['git', 'show', f'HEAD:{path}'], cwd=ROOT)
+                self.assertEqual(authored, (ROOT / path.replace(old, new, 1)).read_bytes(), path)
+        baseline = subprocess.check_output(['git', 'show', 'HEAD:css/main.css'], cwd=ROOT, text=True)
+        strip_comments = lambda text: re.sub(r'/\*[\s\S]*?\*/', '', text)
+        self.assertEqual(strip_comments(baseline), strip_comments((ROOT / 'css/main.css').read_text()))
 
 
 if __name__ == '__main__':

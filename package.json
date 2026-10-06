@@ -8,7 +8,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "node --test test/*.test.cjs"
+    "test": "node --test tests/js/*.test.cjs",
+    "generate:wiki": "node scripts/generation/generate-data.js"
   },
   "repository": {
     "type": "git",

@@ -35,7 +35,8 @@ def stamp(value):
     if not re.fullmatch(r'\d{4}-\d{2}-\d{2}(?:[T ]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z| ?[+-]\d{2}:?\d{2}))?', value):
         return None
     try:
-        return dt.datetime.fromisoformat(value.replace('Z', '+00:00')).isoformat() if len(value) > 10 else dt.date.fromisoformat(value).isoformat()
+        value = re.sub(r' ?([+-]\d{2}):?(\d{2})$', r'\1:\2', value.replace('Z', '+00:00'))
+        return dt.datetime.fromisoformat(value).isoformat() if len(value) > 10 else dt.date.fromisoformat(value).isoformat()
     except ValueError:
         return None
 
@@ -58,18 +59,22 @@ def inventory():
     now = dt.datetime.now(dt.timezone.utc)
     expected, excluded, counts = {}, set(), {}
     books = yaml.safe_load((ROOT / '_data/post_books.yml').read_text()) or []
-    for collection, prefix in [('wiki', '/wiki/'), ('reviews', '/reviews/'), ('articles', '/posts/'), ('chapters', '/posts/chapters/')]:
+    for collection, prefix in [('wiki', '/wiki/'), ('reviews', '/reviews/'), ('post', '/posts/')]:
         count = 0
         for path in (ROOT / ('_' + collection)).rglob('*.md'):
             data = source(path)
             relative = path.relative_to(ROOT / ('_' + collection)).with_suffix('').as_posix()
-            url = data.get('permalink', prefix + relative + '/')
+            is_chapter = collection == 'post' and (relative.startswith('books/') or 'book' in data or 'chapter_id' in data)
+            route = 'chapters/' + relative[len('books/'):] if collection == 'post' and relative.startswith('books/') else relative
+            url = data.get('permalink', prefix + route + '/')
             allowed = public(data, now)
-            if collection in ['articles', 'chapters']:
-                allowed = allowed and data.get('public') is True and stamp(data.get('date')) is not None
+            if collection == 'post':
                 date, updated = stamp(data.get('date')), stamp(data.get('updated', data.get('date')))
-                allowed = allowed and updated is not None and updated >= date
-            if collection == 'chapters':
+                allowed = allowed and data.get('public') is True and date is not None and updated is not None
+                if allowed and date is not None and updated is not None:
+                    allowed = updated >= date
+            if is_chapter:
+                allowed = allowed and relative == f"books/{data.get('book')}/{data.get('chapter_id')}"
                 allowed = allowed and any(book.get('public') is True and book.get('id') == data.get('book') and any(entry.get('id') == data.get('chapter_id') and entry.get('state') == 'published' for entry in book.get('chapters', [])) for book in books)
             if not allowed:
                 excluded.add(url)

@@ -2,7 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const read = file => fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
+const read = file => fs.readFileSync(path.join(__dirname, '../..', file), 'utf8');
 test('shared disclosure styles are restricted to authored prose', () => {
   const css=read('css/disclosure.css').replace(/\/\*[\s\S]*?\*\//g,'');
   for(const rule of css.matchAll(/([^{}]+)\{/g)) assert.ok(rule[1].trim().startsWith('.prose details'),rule[1]);

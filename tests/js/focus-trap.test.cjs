@@ -1,6 +1,6 @@
 const test = require('node:test')
 const assert = require('node:assert/strict')
-const { wrapTarget, handleTab } = require('../js/focus-trap.js')
+const { wrapTarget, handleTab } = require('../../js/focus-trap.js')
 
 const a = { id: 'a' }
 const b = { id: 'b' }
@@ -47,7 +47,7 @@ test('non-Tab keys are left alone', () => {
 test('the search dialog loads the trap before ledger.js and wires it to the dialog', () => {
   const fs = require('node:fs')
   const path = require('node:path')
-  const root = path.join(__dirname, '..')
+  const root = path.join(__dirname, '../..')
   const head = fs.readFileSync(path.join(root, '_includes/head.html'), 'utf8')
   const ledger = fs.readFileSync(path.join(root, 'js/ledger.js'), 'utf8')
   assert.ok(head.indexOf('/js/focus-trap.js') !== -1, 'head.html must load focus-trap.js')

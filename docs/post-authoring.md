@@ -1,10 +1,14 @@
 # Post 저작·출판 안내
 
-Post는 저자가 쓴 책과 독립 글을 위한 공간이다. 작품 감상은 Review, 지식 레퍼런스는 Wiki에 그대로 둔다. 공개 독립 글과 승인된 책 목차는 `_articles/`와 `_data/post_books.yml`에서 관리한다. 아래 예시는 문서에만 있으며 공개 책을 생성하지 않는다.
+Post는 저자가 쓴 책과 독립 글을 위한 공간이다. 작품 감상은 Review, 지식 레퍼런스는 Wiki에 그대로 둔다. 공개 독립 글과 승인된 책 목차는 `_post/`와 `_data/post_books.yml`에서 관리한다. 아래 예시는 문서에만 있으며 공개 책을 생성하지 않는다.
+
+Post 소스는 `post` 단일 collection이다. `_post/books/`는 장 전용 예약 경로로,
+`book`·`chapter_id`가 빠진 파일도 독립 글로 공개되지 않는다. 소스 경로와 공개 URL을 분리하여
+플러그인이 렌더 전에 경로를 지정한다. 원문에 이관용 `permalink`를 일괄 추가하지 않는다.
 
 ## 독립 글
 
-`_articles/<slug>.md`에 다음 프론트매터와 Markdown 본문을 작성한다.
+`_post/<slug>.md`에 다음 프론트매터와 Markdown 본문을 작성한다.
 
 ```yaml
 ---
@@ -22,7 +26,7 @@ public: false
 
 1. `_data/post_books.yml`에 책을 추가한다. `id`는 영문 소문자·숫자·하이픈만 사용하고 중복 없이 고정한다. `title`과 `intro`를 작성한다.
 2. `chapters`의 순서가 공개 목차 및 이전/다음 장 순서다. 장의 `id` 역시 책 안에서 중복되면 안 된다.
-3. `_chapters/<book-id>/<chapter-id>.md`에 본문을 작성한다. 프론트매터는 독립 글과 같고 `book`과 `chapter_id`를 추가한다.
+3. `_post/books/<book-id>/<chapter-id>.md`에 본문을 작성한다. 프론트매터는 독립 글과 같고 `book`과 `chapter_id`를 추가한다.
 
 ```yaml
 # _data/post_books.yml (실제 데이터에는 승인 후 추가)
@@ -39,7 +43,7 @@ public: false
 ```
 
 ```yaml
-# _chapters/my-authored-book/opening.md
+# _post/books/my-authored-book/opening.md
 ---
 layout: post
 title: 첫 번째 질문
@@ -55,7 +59,7 @@ public: false
 
 Home의 all에서는 목차가 접히고 post 필터에서는 펼쳐진다. 목차 버튼으로 별도 열고 닫을 수 있다. `/posts/`에서는 목차가 항상 보인다. 장 상세에는 전체 책 목차와 공개 장만을 잇는 이전/다음 링크가 있으며 전역 검색에서도 찾을 수 있다.
 
-독립 글 `_articles/<slug>.md`의 주소는 `/posts/<slug>/`, 장 `_chapters/<book-id>/<chapter-id>.md`는 `/posts/chapters/<book-id>/<chapter-id>/`, 책 목차는 `/posts/#<book-id>`다. 공개한 뒤에는 파일명과 책·장 id를 바꾸지 않는다. 예정 장에 본문을 공개할 때는 해당 Markdown을 작성하고 날짜·`public: true`를 확인한 뒤, 책 메타데이터의 같은 id 항목을 `state: published`로 바꾼다. 예정 항목의 `title`은 삭제해도 되며 공개 장 제목은 Markdown의 `title`을 사용한다.
+독립 글 `_post/<slug>.md`의 주소는 `/posts/<slug>/`, 장 `_post/books/<book-id>/<chapter-id>.md`는 `/posts/chapters/<book-id>/<chapter-id>/`, 책 목차는 `/posts/#<book-id>`다. 공개한 뒤에는 파일명과 책·장 id를 바꾸지 않는다. 예정 장에 본문을 공개할 때는 해당 Markdown을 작성하고 날짜·`public: true`를 확인한 뒤, 책 메타데이터의 같은 id 항목을 `state: published`로 바꾼다. 예정 항목의 `title`은 삭제해도 되며 공개 장 제목은 Markdown의 `title`을 사용한다.
 
 ## 빌드·배포 주의
 
@@ -68,4 +72,4 @@ python3 tests/verify_archive.py /path/to/generated/site
 python3 tests/archive_lifecycle.py
 ```
 
-`docs/`, `tests/`, `scripts/`, `tool/`, `.ouroboros/`, `vendor/`는 공개 출력에서 제외된다. 자동 Medium 수집 데이터는 더 이상 Post의 공개 원본이 아니며, 새 외부 글은 별도 승인 후 이관한다. 원문 이관 시 RSS의 본문 HTML과 전체 텍스트를 대조하고 문단·강조·코드 구조를 보존한다. 기존 정본은 자동 수집으로 덮어쓰지 않는다.
+`docs/`, `tests/`, `scripts/`, `.ouroboros/`, `vendor/`는 공개 출력에서 제외된다. 자동 Medium 수집 데이터는 더 이상 Post의 공개 원본이 아니며, 새 외부 글은 별도 승인 후 이관한다. 원문 이관 시 RSS의 본문 HTML과 전체 텍스트를 대조하고 문단·강조·코드 구조를 보존한다. 기존 정본은 자동 수집으로 덮어쓰지 않는다.
