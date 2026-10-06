@@ -17,10 +17,36 @@
     tocToggle.textContent = '목차 보기';
     tocRoot.before(tocToggle);
 
+    let activeTocLink = null;
+
+    // Scroll only the article TOC, never its document/ancestors. Immediate
+    // movement also respects reduced-motion preferences without animation.
+    const revealTocLink = (link) => {
+        if (!link || tocRoot.hidden || !tocRoot.getClientRects().length ||
+            tocRoot.scrollHeight <= tocRoot.clientHeight) {
+            return;
+        }
+        const bounds = tocRoot.getBoundingClientRect();
+        const label = window.getComputedStyle(tocRoot, '::before');
+        const labelHeight = label.position === 'sticky'
+            ? (parseFloat(label.height) || parseFloat(label.lineHeight) || 0) +
+                (parseFloat(label.paddingTop) || 0) + (parseFloat(label.paddingBottom) || 0)
+            : 0;
+        const top = bounds.top + tocRoot.clientTop + labelHeight;
+        const bottom = bounds.top + tocRoot.clientTop + tocRoot.clientHeight;
+        const entry = link.getBoundingClientRect();
+        if (entry.top < top) {
+            tocRoot.scrollTop += entry.top - top;
+        } else if (entry.bottom > bottom) {
+            tocRoot.scrollTop += Math.min(entry.bottom - bottom, entry.top - top);
+        }
+    };
+
     const setTocOpen = (isOpen) => {
         tocRoot.hidden = !isOpen;
         tocToggle.setAttribute('aria-expanded', String(isOpen));
         tocToggle.textContent = isOpen ? '목차 닫기' : '목차 보기';
+        if (isOpen) revealTocLink(activeTocLink);
     };
 
     const syncTocForViewport = () => {
@@ -95,14 +121,23 @@
     }
 
     let activeHeadingId = null;
-    document.addEventListener('scroll', function() {
+    const updateActiveHeading = () => {
         const currentHeading = findCurrentHeading(headings);
 
         if (currentHeading.id == activeHeadingId) {
             return;
         }
         deActivate();
-        activate(tocMap[currentHeading.id]);
+        activeTocLink = tocMap[currentHeading.id];
+        activate(activeTocLink);
+        revealTocLink(activeTocLink);
         activeHeadingId = currentHeading.id;
+    };
+    document.addEventListener('scroll', updateActiveHeading);
+    tocRoot.addEventListener('focusin', (event) => {
+        const link = event.target.closest('a');
+        if (link && tocRoot.contains(link)) revealTocLink(link);
     });
+    window.addEventListener('resize', () => revealTocLink(activeTocLink));
+    updateActiveHeading();
 })();
