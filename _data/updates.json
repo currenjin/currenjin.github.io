@@ -2,8 +2,8 @@
   {
     "title": "Kafka",
     "url": "/wiki/kafka",
-    "updated": "2026-09-30",
-    "summary": "분산 이벤트 스트리밍 플랫폼",
+    "updated": "2026-10-06",
+    "summary": "로그·복제·커밋·트랜잭션에서 Kafka Connect·CDC·Outbox까지 배우는 웹 교과서",
     "tags": "kafka, architecture, engineering",
     "source": "Wiki",
     "external": false

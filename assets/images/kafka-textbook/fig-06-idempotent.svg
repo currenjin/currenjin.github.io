@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Kafka 4.3 교과서 도식. 이 책을 위해 새로 그림(공식 문서 그림 복제 아님).
+     설계 원칙·SVG 문법 참고: diagram-design (MIT License, (c) 2025 Cathryn Lavery),
+     https://github.com/cathrynlavery/diagram-design — 전문: https://github.com/cathrynlavery/diagram-design/blob/main/LICENSE.
+     생성: diagrams/make_diagrams.py -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300" role="img" aria-labelledby="fig-06-idempotent-title fig-06-idempotent-desc">
+<title id="fig-06-idempotent-title">멱등 프로듀서: 같은 시퀀스 번호의 재전송은 한 번만 기록된다</title>
+<desc id="fig-06-idempotent-desc">첫 전송이 기록된 뒤 응답이 유실되고, 프로듀서가 같은 프로듀서 ID와 시퀀스 번호로 재전송하자 리더가 중복을 알아보고 다시 쓰지 않은 채 성공을 돌려주는 과정.</desc>
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#555b6b"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b5482a"/></marker>
+  <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2d5a9e"/></marker>
+  <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#555b6b" stroke-width="1.2"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#fbfaf6"/>
+<line x1="64" y1="54" x2="64" y2="288" stroke="rgba(38,38,43,0.28)" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="236" y1="54" x2="236" y2="288" stroke="rgba(38,38,43,0.28)" stroke-width="1" stroke-dasharray="3,3"/>
+<path d="M 64,88 L 233,88" fill="none" stroke="#555b6b" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path d="M 236,124 L 150,124" fill="none" stroke="#555b6b" stroke-width="1.3" stroke-dasharray="5,4"/>
+<path d="M 64,170 L 233,170" fill="none" stroke="#555b6b" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path d="M 236,268 L 67,268" fill="none" stroke="#b5482a" stroke-width="1.3" stroke-dasharray="5,4" marker-end="url(#arrow-accent)"/>
+<rect x="107.94" y="68.97" width="84.12" height="14.5" rx="2" fill="#fbfaf6"/>
+<text x="150" y="80" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">pid=42 seq=7</text>
+<rect x="165.4" y="103.68" width="61.2" height="16" rx="2" fill="#fbfaf6"/>
+<text x="196" y="116" fill="#b5482a" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">응답 유실</text>
+<rect x="82.2" y="149.68" width="135.6" height="16" rx="2" fill="#fbfaf6"/>
+<text x="150" y="162" fill="#26262b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">재전송 pid=42 seq=7</text>
+<rect x="135" y="247.68" width="30" height="16" rx="2" fill="#fbfaf6"/>
+<text x="150" y="260" fill="#b5482a" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">성공</text>
+<rect x="10" y="10" width="108" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="10" y="10" width="108" height="44" rx="6" fill="#ffffff" stroke="#26262b" stroke-width="1"/>
+<rect x="182" y="10" width="108" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="182" y="10" width="108" height="44" rx="6" fill="#ffffff" stroke="#26262b" stroke-width="1"/>
+<rect x="144" y="118" width="6" height="12" rx="1" fill="#b5482a" stroke="#b5482a" stroke-width="1"/>
+<rect x="96" y="192" width="124" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="96" y="192" width="124" height="44" rx="6" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<text x="64" y="28.2875" fill="#26262b" font-size="12.5" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">프로듀서</text>
+<text x="64" y="48.2125" fill="#555b6b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">idempotent</text>
+<text x="236" y="35.375" fill="#26262b" font-size="12.5" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">리더 브로커</text>
+<text x="158" y="209.44" fill="#26262b" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">이미 기록한 seq</text>
+<text x="158" y="225.04" fill="#26262b" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">다시 쓰지 않음</text>
+</svg>

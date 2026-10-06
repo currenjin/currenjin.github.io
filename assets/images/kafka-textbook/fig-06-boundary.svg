@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Kafka 4.3 교과서 도식. 이 책을 위해 새로 그림(공식 문서 그림 복제 아님).
+     설계 원칙·SVG 문법 참고: diagram-design (MIT License, (c) 2025 Cathryn Lavery),
+     https://github.com/cathrynlavery/diagram-design — 전문: https://github.com/cathrynlavery/diagram-design/blob/main/LICENSE.
+     생성: diagrams/make_diagrams.py -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 408" width="300" height="408" role="img" aria-labelledby="fig-06-boundary-title fig-06-boundary-desc">
+<title id="fig-06-boundary-title">Kafka 트랜잭션의 원자성 경계와 외부 DB</title>
+<desc id="fig-06-boundary-desc">변환기가 출력 토픽 쓰기와 입력 오프셋 기록을 한 트랜잭션으로 묶는 반면, 외부 결제 DB 쓰기는 경계 밖에 있어 abort되어도 남으며, read_committed 소비자와 read_uncommitted 소비자가 서로 다른 건수를 보는 모습.</desc>
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#555b6b"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b5482a"/></marker>
+  <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2d5a9e"/></marker>
+  <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#555b6b" stroke-width="1.2"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#fbfaf6"/>
+<rect x="8" y="190" width="188" height="114" rx="8" fill="rgba(181,72,42,0.035)" stroke="rgba(181,72,42,0.55)" stroke-width="1" stroke-dasharray="4,4"/>
+<path d="M 150,56 L 150,88" fill="none" stroke="#555b6b" stroke-width="1.2" marker-end="url(#arrow)"/>
+<path d="M 128,132 L 128,143 Q 128,150 121,150 L 65,150 Q 58,150 58,157 L 58,206" fill="none" stroke="#555b6b" stroke-width="1.2" marker-end="url(#arrow)"/>
+<path d="M 150,132 L 150,206" fill="none" stroke="#555b6b" stroke-width="1.2" marker-end="url(#arrow)"/>
+<path d="M 210,110 L 243,110 Q 250,110 250,117 L 250,198" fill="none" stroke="#2d5a9e" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+<path d="M 44,250 L 44,330" fill="none" stroke="#555b6b" stroke-width="1.2" marker-end="url(#arrow)"/>
+<path d="M 72,250 L 72,307 Q 72,314 79,314 L 215,314 Q 222,314 222,321 L 222,330" fill="none" stroke="#555b6b" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+<rect x="195.4" y="151.68" width="51.6" height="16" rx="2" fill="#fbfaf6"/>
+<text x="244" y="164" fill="#2d5a9e" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="end">DB 쓰기</text>
+<rect x="90" y="12" width="120" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="90" y="12" width="120" height="44" rx="6" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="90" y="88" width="120" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="90" y="88" width="120" height="44" rx="6" fill="#ffffff" stroke="#26262b" stroke-width="1"/>
+<rect x="16" y="206" width="84" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="16" y="206" width="84" height="44" rx="6" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="108" y="206" width="84" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="108" y="206" width="84" height="44" rx="6" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="208" y="198" width="84" height="52" rx="6" fill="#fbfaf6"/>
+<rect x="208" y="198" width="84" height="52" rx="6" fill="rgba(181,72,42,0.08)" stroke="#b5482a" stroke-width="1.6"/>
+<rect x="8" y="330" width="124" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="8" y="330" width="124" height="44" rx="6" fill="#ffffff" stroke="#26262b" stroke-width="1"/>
+<rect x="160" y="330" width="132" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="160" y="330" width="132" height="44" rx="6" fill="#ffffff" stroke="#26262b" stroke-width="1"/>
+<text x="150" y="30.2875" fill="#26262b" font-size="12.5" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">입력 토픽</text>
+<text x="150" y="50.2125" fill="#555b6b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">orders</text>
+<text x="150" y="106.153" fill="#26262b" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">결제 요청 변환기</text>
+<text x="150" y="125.427" fill="#555b6b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">transactional.id</text>
+<text x="58" y="231.24" fill="#26262b" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">출력 토픽</text>
+<text x="150" y="231.24" fill="#26262b" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">오프셋 기록</text>
+<text x="96" y="274" fill="#b5482a" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">한 트랜잭션:</text>
+<text x="96" y="290" fill="#b5482a" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">함께 확정·무효</text>
+<text x="250" y="220.287" fill="#b5482a" font-size="12.5" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">결제 DB</text>
+<text x="250" y="240.213" fill="#555b6b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">INSERT</text>
+<text x="250" y="270" fill="#b5482a" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">abort돼도 남음</text>
+<text x="70" y="348.153" fill="#26262b" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">결제 서비스</text>
+<text x="70" y="367.428" fill="#555b6b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">read_committed</text>
+<text x="226" y="348.153" fill="#26262b" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">감사 수집기</text>
+<text x="226" y="367.428" fill="#555b6b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">read_uncommitted</text>
+<text x="70" y="394" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">커밋된 1건만</text>
+<text x="226" y="394" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">abort분 포함 2건</text>
+</svg>

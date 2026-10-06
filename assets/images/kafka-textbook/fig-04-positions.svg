@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Kafka 4.3 교과서 도식. 이 책을 위해 새로 그림(공식 문서 그림 복제 아님).
+     설계 원칙·SVG 문법 참고: diagram-design (MIT License, (c) 2025 Cathryn Lavery),
+     https://github.com/cathrynlavery/diagram-design — 전문: https://github.com/cathrynlavery/diagram-design/blob/main/LICENSE.
+     생성: diagrams/make_diagrams.py -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 270" width="300" height="270" role="img" aria-labelledby="fig-04-positions-title fig-04-positions-desc">
+<title id="fig-04-positions-title">커밋된 오프셋, 위치, 로그 끝: 세 경계와 두 가지 지연</title>
+<desc id="fig-04-positions-desc">한 파티션에서 커밋된 오프셋 44, 컨슈머의 위치 49, 로그 끝 52를 표시하고, 44부터 48까지가 처리했지만 커밋하지 않은 구간이며 도구의 지연은 커밋 기준, 클라이언트 지표는 위치 기준임을 보여 준다.</desc>
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#555b6b"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b5482a"/></marker>
+  <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2d5a9e"/></marker>
+  <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#555b6b" stroke-width="1.2"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#fbfaf6"/>
+<line x1="107" y1="52" x2="215" y2="52" stroke="#b5482a" stroke-width="1.2"/>
+<line x1="107" y1="48" x2="107" y2="56" stroke="#b5482a" stroke-width="1.2"/>
+<line x1="215" y1="48" x2="215" y2="56" stroke="#b5482a" stroke-width="1.2"/>
+<line x1="106" y1="100" x2="106" y2="110" stroke="#26262b" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="216" y1="100" x2="216" y2="142" stroke="#26262b" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="282" y1="100" x2="282" y2="110" stroke="#26262b" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="106" y1="196" x2="282" y2="196" stroke="#26262b" stroke-width="1"/>
+<line x1="106" y1="192" x2="106" y2="200" stroke="#26262b" stroke-width="1"/>
+<line x1="282" y1="192" x2="282" y2="200" stroke="#26262b" stroke-width="1"/>
+<line x1="216" y1="238" x2="282" y2="238" stroke="#26262b" stroke-width="1"/>
+<line x1="216" y1="234" x2="216" y2="242" stroke="#26262b" stroke-width="1"/>
+<line x1="282" y1="234" x2="282" y2="242" stroke="#26262b" stroke-width="1"/>
+<rect x="18" y="70" width="22" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="18" y="70" width="22" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="40" y="70" width="22" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="40" y="70" width="22" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="62" y="70" width="22" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="62" y="70" width="22" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="84" y="70" width="22" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="84" y="70" width="22" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="106" y="70" width="22" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="106" y="70" width="22" height="28" rx="2" fill="rgba(181,72,42,0.08)" stroke="#b5482a" stroke-width="1.3"/>
+<rect x="128" y="70" width="22" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="128" y="70" width="22" height="28" rx="2" fill="rgba(181,72,42,0.08)" stroke="#b5482a" stroke-width="1.3"/>
+<rect x="150" y="70" width="22" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="150" y="70" width="22" height="28" rx="2" fill="rgba(181,72,42,0.08)" stroke="#b5482a" stroke-width="1.3"/>
+<rect x="172" y="70" width="22" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="172" y="70" width="22" height="28" rx="2" fill="rgba(181,72,42,0.08)" stroke="#b5482a" stroke-width="1.3"/>
+<rect x="194" y="70" width="22" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="194" y="70" width="22" height="28" rx="2" fill="rgba(181,72,42,0.08)" stroke="#b5482a" stroke-width="1.3"/>
+<rect x="216" y="70" width="22" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="216" y="70" width="22" height="28" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="238" y="70" width="22" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="238" y="70" width="22" height="28" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="260" y="70" width="22" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="260" y="70" width="22" height="28" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<text x="29" y="88" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">40</text>
+<text x="51" y="88" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">41</text>
+<text x="73" y="88" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">42</text>
+<text x="95" y="88" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">43</text>
+<text x="117" y="88" fill="#b5482a" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">44</text>
+<text x="139" y="88" fill="#b5482a" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">45</text>
+<text x="161" y="88" fill="#b5482a" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">46</text>
+<text x="183" y="88" fill="#b5482a" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">47</text>
+<text x="205" y="88" fill="#b5482a" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">48</text>
+<text x="227" y="88" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">49</text>
+<text x="249" y="88" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">50</text>
+<text x="271" y="88" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">51</text>
+<text x="161" y="42" fill="#b5482a" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">죽으면 다시 처리</text>
+<text x="18" y="24" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">처리·커밋 끝</text>
+<text x="282" y="24" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="end">아직 안 읽음</text>
+<text x="102" y="124" fill="#26262b" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">커밋 44</text>
+<text x="102" y="140" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">재시작 지점</text>
+<text x="212" y="156" fill="#26262b" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">위치 49</text>
+<text x="212" y="172" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">메모리에만</text>
+<text x="282" y="124" fill="#26262b" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="end">끝 52</text>
+<text x="106" y="216" fill="#26262b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">도구의 LAG = 52 − 44 = 8</text>
+<text x="282" y="258" fill="#26262b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="end">records-lag = 52 − 49 = 3</text>
+</svg>

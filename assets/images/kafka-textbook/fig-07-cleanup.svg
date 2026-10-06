@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Kafka 4.3 교과서 도식. 이 책을 위해 새로 그림(공식 문서 그림 복제 아님).
+     설계 원칙·SVG 문법 참고: diagram-design (MIT License, (c) 2025 Cathryn Lavery),
+     https://github.com/cathrynlavery/diagram-design — 전문: https://github.com/cathrynlavery/diagram-design/blob/main/LICENSE.
+     생성: diagrams/make_diagrams.py -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 292" width="300" height="292" role="img" aria-labelledby="fig-07-cleanup-title fig-07-cleanup-desc">
+<title id="fig-07-cleanup-title">delete와 compact: 무엇을 기준으로 남기는가</title>
+<desc id="fig-07-cleanup-desc">같은 입력 로그를 delete 정책은 기한 지난 앞 세그먼트를 통째로 버려 정리하고, compact 정책은 키마다 마지막 값만 남기되 오프셋을 유지하며 삭제 표시는 일정 시간만 남는 모습을 비교한다.</desc>
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#555b6b"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b5482a"/></marker>
+  <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2d5a9e"/></marker>
+  <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#555b6b" stroke-width="1.2"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#fbfaf6"/>
+<rect x="12" y="30" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="12" y="30" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="38" y="30" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="38" y="30" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="64" y="30" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="64" y="30" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="90" y="30" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="90" y="30" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="122" y="30" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="122" y="30" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="148" y="30" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="148" y="30" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="174" y="30" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="174" y="30" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="200" y="30" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="200" y="30" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="226" y="30" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="226" y="30" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="258" y="30" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="258" y="30" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="12" y="108" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="12" y="108" width="26" height="36" rx="2" fill="rgba(38,38,43,0.02)" stroke="rgba(38,38,43,0.28)" stroke-width="0.9" stroke-dasharray="3,2"/>
+<rect x="38" y="108" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="38" y="108" width="26" height="36" rx="2" fill="rgba(38,38,43,0.02)" stroke="rgba(38,38,43,0.28)" stroke-width="0.9" stroke-dasharray="3,2"/>
+<rect x="64" y="108" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="64" y="108" width="26" height="36" rx="2" fill="rgba(38,38,43,0.02)" stroke="rgba(38,38,43,0.28)" stroke-width="0.9" stroke-dasharray="3,2"/>
+<rect x="90" y="108" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="90" y="108" width="26" height="36" rx="2" fill="rgba(38,38,43,0.02)" stroke="rgba(38,38,43,0.28)" stroke-width="0.9" stroke-dasharray="3,2"/>
+<rect x="122" y="108" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="122" y="108" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="148" y="108" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="148" y="108" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="174" y="108" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="174" y="108" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="200" y="108" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="200" y="108" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="226" y="108" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="226" y="108" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="258" y="108" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="258" y="108" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="12" y="186" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="12" y="186" width="26" height="36" rx="2" fill="rgba(38,38,43,0.02)" stroke="rgba(38,38,43,0.28)" stroke-width="0.9" stroke-dasharray="3,2"/>
+<rect x="38" y="186" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="38" y="186" width="26" height="36" rx="2" fill="rgba(38,38,43,0.02)" stroke="rgba(38,38,43,0.28)" stroke-width="0.9" stroke-dasharray="3,2"/>
+<rect x="64" y="186" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="64" y="186" width="26" height="36" rx="2" fill="rgba(38,38,43,0.02)" stroke="rgba(38,38,43,0.28)" stroke-width="0.9" stroke-dasharray="3,2"/>
+<rect x="90" y="186" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="90" y="186" width="26" height="36" rx="2" fill="rgba(38,38,43,0.02)" stroke="rgba(38,38,43,0.28)" stroke-width="0.9" stroke-dasharray="3,2"/>
+<rect x="122" y="186" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="122" y="186" width="26" height="36" rx="2" fill="rgba(38,38,43,0.02)" stroke="rgba(38,38,43,0.28)" stroke-width="0.9" stroke-dasharray="3,2"/>
+<rect x="148" y="186" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="148" y="186" width="26" height="36" rx="2" fill="rgba(38,38,43,0.02)" stroke="rgba(38,38,43,0.28)" stroke-width="0.9" stroke-dasharray="3,2"/>
+<rect x="174" y="186" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="174" y="186" width="26" height="36" rx="2" fill="rgba(181,72,42,0.08)" stroke="#b5482a" stroke-width="1.5"/>
+<rect x="200" y="186" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="200" y="186" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="226" y="186" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="226" y="186" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="258" y="186" width="26" height="36" rx="2" fill="#fbfaf6"/>
+<rect x="258" y="186" width="26" height="36" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<text x="12" y="22" fill="#26262b" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">입력 로그 (오프셋 / 키·값)</text>
+<text x="25" y="42" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">0</text>
+<text x="25" y="58" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A1</text>
+<text x="51" y="42" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">1</text>
+<text x="51" y="58" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B1</text>
+<text x="77" y="42" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">2</text>
+<text x="77" y="58" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A2</text>
+<text x="103" y="42" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">3</text>
+<text x="103" y="58" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">C1</text>
+<text x="135" y="42" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">4</text>
+<text x="135" y="58" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B2</text>
+<text x="161" y="42" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">5</text>
+<text x="161" y="58" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A3</text>
+<text x="187" y="42" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">6</text>
+<text x="187" y="58" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">C∅</text>
+<text x="213" y="42" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">7</text>
+<text x="213" y="58" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B3</text>
+<text x="239" y="42" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">8</text>
+<text x="239" y="58" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A4</text>
+<text x="271" y="42" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">9</text>
+<text x="271" y="58" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">D1</text>
+<text x="12" y="100" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="start">cleanup.policy=delete</text>
+<text x="288" y="100" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="end">앞 세그먼트째 삭제</text>
+<text x="25" y="120" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">0</text>
+<text x="25" y="136" fill="#7b8090" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A1</text>
+<text x="51" y="120" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">1</text>
+<text x="51" y="136" fill="#7b8090" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B1</text>
+<text x="77" y="120" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">2</text>
+<text x="77" y="136" fill="#7b8090" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A2</text>
+<text x="103" y="120" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">3</text>
+<text x="103" y="136" fill="#7b8090" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">C1</text>
+<text x="135" y="120" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">4</text>
+<text x="135" y="136" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B2</text>
+<text x="161" y="120" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">5</text>
+<text x="161" y="136" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A3</text>
+<text x="187" y="120" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">6</text>
+<text x="187" y="136" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">C∅</text>
+<text x="213" y="120" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">7</text>
+<text x="213" y="136" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B3</text>
+<text x="239" y="120" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">8</text>
+<text x="239" y="136" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A4</text>
+<text x="271" y="120" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">9</text>
+<text x="271" y="136" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">D1</text>
+<text x="12" y="178" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="start">cleanup.policy=compact</text>
+<text x="288" y="178" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="end">키마다 마지막 값</text>
+<text x="25" y="198" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">0</text>
+<text x="25" y="214" fill="#7b8090" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A1</text>
+<text x="51" y="198" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">1</text>
+<text x="51" y="214" fill="#7b8090" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B1</text>
+<text x="77" y="198" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">2</text>
+<text x="77" y="214" fill="#7b8090" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A2</text>
+<text x="103" y="198" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">3</text>
+<text x="103" y="214" fill="#7b8090" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">C1</text>
+<text x="135" y="198" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">4</text>
+<text x="135" y="214" fill="#7b8090" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B2</text>
+<text x="161" y="198" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">5</text>
+<text x="161" y="214" fill="#7b8090" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A3</text>
+<text x="187" y="198" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">6</text>
+<text x="187" y="214" fill="#b5482a" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">C∅</text>
+<text x="213" y="198" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">7</text>
+<text x="213" y="214" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B3</text>
+<text x="239" y="198" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">8</text>
+<text x="239" y="214" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A4</text>
+<text x="271" y="198" fill="#7b8090" font-size="9.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">9</text>
+<text x="271" y="214" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">D1</text>
+<text x="12" y="246" fill="#b5482a" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">C∅ = 삭제 표시(값이 null)</text>
+<text x="12" y="262" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">delete.retention.ms가 지나면 제거됨</text>
+<text x="12" y="280" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">빈 오프셋 0~5에서 읽으면 6부터 받음</text>
+</svg>

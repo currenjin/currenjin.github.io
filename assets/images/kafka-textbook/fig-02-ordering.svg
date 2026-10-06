@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Kafka 4.3 교과서 도식. 이 책을 위해 새로 그림(공식 문서 그림 복제 아님).
+     설계 원칙·SVG 문법 참고: diagram-design (MIT License, (c) 2025 Cathryn Lavery),
+     https://github.com/cathrynlavery/diagram-design — 전문: https://github.com/cathrynlavery/diagram-design/blob/main/LICENSE.
+     생성: diagrams/make_diagrams.py -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 318" width="300" height="318" role="img" aria-labelledby="fig-02-ordering-title fig-02-ordering-desc">
+<title id="fig-02-ordering-title">파티션 안의 순서만 보장되고, 파티션 사이의 끼어들기는 정해져 있지 않다</title>
+<desc id="fig-02-ordering-desc">P0의 A1, A2와 P1의 B1을 한 소비자가 받을 수 있는 순서 네 가지 중, A2가 A1보다 먼저 오는 순서만 일어나지 않는다는 것을 보여 준다.</desc>
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#555b6b"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b5482a"/></marker>
+  <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2d5a9e"/></marker>
+  <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#555b6b" stroke-width="1.2"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#fbfaf6"/>
+<line x1="56" y1="124" x2="266" y2="124" stroke="#7b8090" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="8" y1="158" x2="292" y2="158" stroke="rgba(38,38,43,0.14)" stroke-width="0.8"/>
+<rect x="56" y="38" width="40" height="26" rx="2" fill="#fbfaf6"/>
+<rect x="56" y="38" width="40" height="26" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="176" y="38" width="40" height="26" rx="2" fill="#fbfaf6"/>
+<rect x="176" y="38" width="40" height="26" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="116" y="78" width="40" height="26" rx="2" fill="#fbfaf6"/>
+<rect x="116" y="78" width="40" height="26" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="56" y="192" width="38" height="24" rx="2" fill="#fbfaf6"/>
+<rect x="56" y="192" width="38" height="24" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="100" y="192" width="38" height="24" rx="2" fill="#fbfaf6"/>
+<rect x="100" y="192" width="38" height="24" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="144" y="192" width="38" height="24" rx="2" fill="#fbfaf6"/>
+<rect x="144" y="192" width="38" height="24" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="56" y="222" width="38" height="24" rx="2" fill="#fbfaf6"/>
+<rect x="56" y="222" width="38" height="24" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="100" y="222" width="38" height="24" rx="2" fill="#fbfaf6"/>
+<rect x="100" y="222" width="38" height="24" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="144" y="222" width="38" height="24" rx="2" fill="#fbfaf6"/>
+<rect x="144" y="222" width="38" height="24" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="56" y="252" width="38" height="24" rx="2" fill="#fbfaf6"/>
+<rect x="56" y="252" width="38" height="24" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="100" y="252" width="38" height="24" rx="2" fill="#fbfaf6"/>
+<rect x="100" y="252" width="38" height="24" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="144" y="252" width="38" height="24" rx="2" fill="#fbfaf6"/>
+<rect x="144" y="252" width="38" height="24" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="56" y="282" width="38" height="24" rx="2" fill="#fbfaf6"/>
+<rect x="56" y="282" width="38" height="24" rx="2" fill="rgba(181,72,42,0.08)" stroke="#b5482a" stroke-width="1.4"/>
+<rect x="100" y="282" width="38" height="24" rx="2" fill="#fbfaf6"/>
+<rect x="100" y="282" width="38" height="24" rx="2" fill="rgba(181,72,42,0.08)" stroke="#b5482a" stroke-width="1.4"/>
+<rect x="144" y="282" width="38" height="24" rx="2" fill="#fbfaf6"/>
+<rect x="144" y="282" width="38" height="24" rx="2" fill="#ffffff" stroke="#555b6b" stroke-width="0.9"/>
+<text x="14" y="22" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">A = 주문 7번(P0), B = 주문 9번(P1)</text>
+<text x="14" y="55" fill="#26262b" font-size="11" font-weight="500" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="start">P0</text>
+<text x="14" y="95" fill="#26262b" font-size="11" font-weight="500" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="start">P1</text>
+<text x="76" y="54.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A1</text>
+<text x="196" y="54.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A2</text>
+<text x="136" y="94.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B1</text>
+<text x="56" y="142" fill="#7b8090" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">기록된 시각 순서</text>
+<text x="14" y="180" fill="#26262b" font-size="12.5" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">한 소비자가 받을 수 있는 순서</text>
+<text x="75" y="208" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A1</text>
+<text x="119" y="208" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B1</text>
+<text x="163" y="208" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A2</text>
+<text x="196" y="209" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">가능</text>
+<text x="75" y="238" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B1</text>
+<text x="119" y="238" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A1</text>
+<text x="163" y="238" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A2</text>
+<text x="196" y="239" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">가능</text>
+<text x="75" y="268" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A1</text>
+<text x="119" y="268" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A2</text>
+<text x="163" y="268" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B1</text>
+<text x="196" y="269" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">가능</text>
+<text x="75" y="298" fill="#b5482a" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A2</text>
+<text x="119" y="298" fill="#b5482a" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">A1</text>
+<text x="163" y="298" fill="#26262b" font-size="11" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">B1</text>
+<text x="196" y="299" fill="#b5482a" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">일어나지 않음</text>
+</svg>
