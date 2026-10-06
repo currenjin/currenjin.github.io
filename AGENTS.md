@@ -88,7 +88,7 @@ type     : book | music | movie | tv | animation | webtoon | game | exhibition |
 genre    : "소프트웨어"                         # 작품 유형 안의 분야·장르
 status   : reading | want | finished
 cover_url: "https://..."                        # 작품 표지·포스터·대표 이미지
-rating   : 4                                     # 완료한 작품일 때만 (5점 척도)
+rating   : 4.0                                   # 완료한 작품일 때만 (5점 척도, 소수점 한 자리)
 tags     : [database, architecture]             # 선택
 ---
 ```

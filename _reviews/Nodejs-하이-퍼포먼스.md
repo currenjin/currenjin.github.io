@@ -7,5 +7,5 @@ genre    : "소프트웨어"
 tags     : ['javascript', 'programming']
 status   : finished
 cover_url: "https://image.aladin.co.kr/product/9832/4/cover500/8960779482_1.jpg"
-rating  : 2
+rating  : 2.0
 ---
