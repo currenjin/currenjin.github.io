@@ -2,68 +2,72 @@
 
 const YAML = require('yamljs');
 const fs = require('fs');
-const list = [];
-const tagMap = {};
-const pageMap = {};
+// Requiring this module must not regenerate data in the caller's directory.
+function generateData() {
+    const list = [];
+    const tagMap = {};
+    const pageMap = {};
 
-getFiles('./_wiki', 'wiki', list);
+    getFiles('./_wiki', 'wiki', list);
 
-const dataList = list.map(file => collectData(file))
-    .filter((row) => row != null)
-    .filter((row) => row.public !== false && row.public !== 'false')
-    .sort(lexicalOrderingBy('fileName'))
+    const dataList = list.map(file => collectData(file))
+        .filter((row) => row != null)
+        .filter((row) => row.public !== false && row.public !== 'false')
+        .sort(lexicalOrderingBy('fileName'))
 
-
-dataList.forEach(function collectTagMap(data) {
-    const tags = data.tags;
-    if (!tags) {
-        return;
-    }
-
-    tags.forEach(tag => {
-        if (!tagMap[tag]) {
-            tagMap[tag] = [];
+    dataList.forEach(function collectTagMap(data) {
+        const tags = data.tags;
+        if (!tags) {
+            return;
         }
-        tagMap[tag].push({
-            fileName: data.fileName,
-            // updated: data.updated || data.date,
+
+        tags.forEach(tag => {
+            if (!tagMap[tag]) {
+                tagMap[tag] = [];
+            }
+            tagMap[tag].push({
+                fileName: data.fileName,
+                // updated: data.updated || data.date,
+            });
         });
     });
-});
 
-for (const tag in tagMap) {
-    tagMap[tag].sort(lexicalOrderingBy('fileName'));
-}
+    for (const tag in tagMap) {
+        tagMap[tag].sort(lexicalOrderingBy('fileName'));
+    }
 
-dataList.sort(lexicalOrderingBy('fileName'))
-    .forEach((page) => {
-        pageMap[page.fileName] =
-            {
-                type: page.type,
-                title: page.title,
-                summary: page.summary,
-                parent: page.parent,
-                url: page.url,
-                updated: page.updated || page.date,
-                tags: page.tags || [],
-                children: [],
-            };
+    dataList.sort(lexicalOrderingBy('fileName'))
+        .forEach((page) => {
+            pageMap[page.fileName] =
+                {
+                    type: page.type,
+                    title: page.title,
+                    summary: page.summary,
+                    parent: page.parent,
+                    url: page.url,
+                    updated: page.updated || page.date,
+                    tags: page.tags || [],
+                    children: [],
+                };
+        });
+
+    dataList.forEach(page => {
+        if (page.parent && page.parent != 'index') {
+
+            const parent = pageMap[page.parent];
+
+            if (parent && parent.children) {
+                parent.children.push(page.fileName);
+            }
+        }
     });
 
-dataList.forEach(page => {
-    if (page.parent && page.parent != 'index') {
+    saveTagFiles(tagMap, pageMap);
+    saveTagCount(tagMap);
+    saveMetaDataFiles(pageMap);
+}
 
-        const parent = pageMap[page.parent];
-
-        if (parent && parent.children) {
-            parent.children.push(page.fileName);
-        }
-    }
-});
-
-saveTagFiles(tagMap, pageMap);
-saveTagCount(tagMap);
-saveMetaDataFiles(pageMap);
+if (require.main === module) generateData();
 
 function lexicalOrderingBy(property) {
     return (a, b) => a[property].toLowerCase()

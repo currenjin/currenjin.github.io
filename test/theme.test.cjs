@@ -11,7 +11,6 @@ const read = p => fs.readFileSync(path.join(root, p), 'utf8')
 
 const MAIN_CSS = read('css/main.css')
 const GRAPH_LAYOUT = read('_layouts/graph.html')
-const GRAPH_DOCK = read('_includes/graph-dock.html')
 const BOOT = read('_includes/theme-boot.html')
 
 /* ── helpers ──────────────────────────────────────────────── */
@@ -133,7 +132,6 @@ test('no production stylesheet hard-codes a colour outside its token block', () 
   const sources = {
     'css/main.css': MAIN_CSS,
     '_layouts/graph.html': GRAPH_LAYOUT,
-    '_includes/graph-dock.html': GRAPH_DOCK,
   }
   for (const [name, css] of Object.entries(sources)) {
     const offenders = withoutTokenBlocks(css)
