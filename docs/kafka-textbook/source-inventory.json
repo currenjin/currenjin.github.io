@@ -1,0 +1,625 @@
+[
+  {
+    "url": "https://kafka.apache.org/43/",
+    "http_status_at_collection": 200,
+    "title": "AK 4.3.X | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/apis/",
+    "http_status_at_collection": 200,
+    "title": "API | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/",
+    "http_status_at_collection": 200,
+    "title": "Configuration | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/admin-configs/",
+    "http_status_at_collection": 200,
+    "title": "Admin Configs | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/broker-configs/",
+    "http_status_at_collection": 200,
+    "title": "Broker Configs | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/configuration-providers/",
+    "http_status_at_collection": 200,
+    "title": "Configuration Providers | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/consumer-configs/",
+    "http_status_at_collection": 200,
+    "title": "Consumer and Share Consumer Configs | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/group-configs/",
+    "http_status_at_collection": 200,
+    "title": "Group Configs | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/kafka-connect-configs/",
+    "http_status_at_collection": 200,
+    "title": "Kafka Connect Configs | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/kafka-streams-configs/",
+    "http_status_at_collection": 200,
+    "title": "Kafka Streams Configs | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/mirrormaker-configs/",
+    "http_status_at_collection": 200,
+    "title": "MirrorMaker Configs | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/producer-configs/",
+    "http_status_at_collection": 200,
+    "title": "Producer Configs | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/system-properties/",
+    "http_status_at_collection": 200,
+    "title": "System Properties | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/tiered-storage-configs/",
+    "http_status_at_collection": 200,
+    "title": "Tiered Storage Configs | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/configuration/topic-configs/",
+    "http_status_at_collection": 200,
+    "title": "Topic Configs | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/design/",
+    "http_status_at_collection": 200,
+    "title": "Design | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/design/design/",
+    "http_status_at_collection": 200,
+    "title": "Design | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/design/protocol/",
+    "http_status_at_collection": 200,
+    "title": "Protocol | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/getting-started/",
+    "http_status_at_collection": 200,
+    "title": "Getting Started | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/getting-started/compatibility/",
+    "http_status_at_collection": 200,
+    "title": "Compatibility | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/getting-started/docker/",
+    "http_status_at_collection": 200,
+    "title": "Docker | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/getting-started/ecosystem/",
+    "http_status_at_collection": 200,
+    "title": "Ecosystem | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/getting-started/introduction/",
+    "http_status_at_collection": 200,
+    "title": "Introduction | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/getting-started/quickstart/",
+    "http_status_at_collection": 200,
+    "title": "Quick Start | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/getting-started/upgrade/",
+    "http_status_at_collection": 200,
+    "title": "Upgrading | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/getting-started/uses/",
+    "http_status_at_collection": 200,
+    "title": "Use Cases | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/getting-started/zk2kraft/",
+    "http_status_at_collection": 200,
+    "title": "KRaft vs ZooKeeper | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/implementation/",
+    "http_status_at_collection": 200,
+    "title": "Implementation | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/implementation/distribution/",
+    "http_status_at_collection": 200,
+    "title": "Distribution | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/implementation/log/",
+    "http_status_at_collection": 200,
+    "title": "Log | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/implementation/message-format/",
+    "http_status_at_collection": 200,
+    "title": "Message Format | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/implementation/messages/",
+    "http_status_at_collection": 200,
+    "title": "Messages | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/implementation/network-layer/",
+    "http_status_at_collection": 200,
+    "title": "Network Layer | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/kafka-connect/",
+    "http_status_at_collection": 200,
+    "title": "Kafka Connect | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/kafka-connect/administration/",
+    "http_status_at_collection": 200,
+    "title": "Administration | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/kafka-connect/connector-development-guide/",
+    "http_status_at_collection": 200,
+    "title": "Connector Development Guide | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/kafka-connect/overview/",
+    "http_status_at_collection": 200,
+    "title": "Overview | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/kafka-connect/user-guide/",
+    "http_status_at_collection": 200,
+    "title": "User Guide | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/",
+    "http_status_at_collection": 200,
+    "title": "Operations | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/basic-kafka-operations/",
+    "http_status_at_collection": 200,
+    "title": "Basic Kafka Operations | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/consumer-rebalance-protocol/",
+    "http_status_at_collection": 200,
+    "title": "Consumer Rebalance Protocol | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/datacenters/",
+    "http_status_at_collection": 200,
+    "title": "Datacenters | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/eligible-leader-replicas/",
+    "http_status_at_collection": 200,
+    "title": "Eligible Leader Replicas | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/geo-replication-cross-cluster-data-mirroring/",
+    "http_status_at_collection": 200,
+    "title": "Geo-Replication (Cross-Cluster Data Mirroring) | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/hardware-and-os/",
+    "http_status_at_collection": 200,
+    "title": "Hardware and OS | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/java-version/",
+    "http_status_at_collection": 200,
+    "title": "Java Version | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/kraft/",
+    "http_status_at_collection": 200,
+    "title": "KRaft | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/monitoring/",
+    "http_status_at_collection": 200,
+    "title": "Monitoring | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/multi-tenancy/",
+    "http_status_at_collection": 200,
+    "title": "Multi-Tenancy | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/tiered-storage/",
+    "http_status_at_collection": 200,
+    "title": "Tiered Storage | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/operations/transaction-protocol/",
+    "http_status_at_collection": 200,
+    "title": "Transaction Protocol | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/security/",
+    "http_status_at_collection": 200,
+    "title": "Security | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/security/authentication-using-sasl/",
+    "http_status_at_collection": 200,
+    "title": "Authentication using SASL | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/security/authorization-and-acls/",
+    "http_status_at_collection": 200,
+    "title": "Authorization and ACLs | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/security/encryption-and-authentication-using-ssl/",
+    "http_status_at_collection": 200,
+    "title": "Encryption and Authentication using SSL | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/security/incorporating-security-features-in-a-running-cluster/",
+    "http_status_at_collection": 200,
+    "title": "Incorporating Security Features in a Running Cluster | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/security/listener-configuration/",
+    "http_status_at_collection": 200,
+    "title": "Listener Configuration | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/security/security-overview/",
+    "http_status_at_collection": 200,
+    "title": "Security Overview | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/",
+    "http_status_at_collection": 200,
+    "title": "Kafka Streams | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/architecture/",
+    "http_status_at_collection": 200,
+    "title": "Architecture | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/core-concepts/",
+    "http_status_at_collection": 200,
+    "title": "Core Concepts | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/",
+    "http_status_at_collection": 200,
+    "title": "Streams Developer Guide | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/app-reset-tool/",
+    "http_status_at_collection": 200,
+    "title": "Application Reset Tool | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/config-streams/",
+    "http_status_at_collection": 200,
+    "title": "Configuring a Streams Application | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/datatypes/",
+    "http_status_at_collection": 200,
+    "title": "Data Types and Serialization | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/dsl-api/",
+    "http_status_at_collection": 200,
+    "title": "Streams DSL | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/dsl-topology-naming/",
+    "http_status_at_collection": 200,
+    "title": "Naming Operators in a Streams DSL application | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/interactive-queries/",
+    "http_status_at_collection": 200,
+    "title": "Interactive Queries | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/kafka-streams-group-sh/",
+    "http_status_at_collection": 200,
+    "title": "Kafka Streams Groups Tool | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/manage-topics/",
+    "http_status_at_collection": 200,
+    "title": "Managing Streams Application Topics | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/memory-mgmt/",
+    "http_status_at_collection": 200,
+    "title": "Memory Management | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/processor-api/",
+    "http_status_at_collection": 200,
+    "title": "Processor API | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/running-app/",
+    "http_status_at_collection": 200,
+    "title": "Running Streams Applications | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/scala-migration/",
+    "http_status_at_collection": 200,
+    "title": "Migrating from Streams Scala to Java API | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/security/",
+    "http_status_at_collection": 200,
+    "title": "Streams Security | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/streams-rebalance-protocol/",
+    "http_status_at_collection": 200,
+    "title": "Streams Rebalance Protocol | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/testing/",
+    "http_status_at_collection": 200,
+    "title": "Testing a Streams Application | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/developer-guide/write-streams-app/",
+    "http_status_at_collection": 200,
+    "title": "Writing a Streams Application | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/introduction/",
+    "http_status_at_collection": 200,
+    "title": "Introduction | Apache Kafka",
+    "referenced_in_final_wiki": true,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/quickstart/",
+    "http_status_at_collection": 200,
+    "title": "Quick Start | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/tutorial/",
+    "http_status_at_collection": 200,
+    "title": "Write a streams app | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://kafka.apache.org/43/streams/upgrade-guide/",
+    "http_status_at_collection": 200,
+    "title": "Upgrade Guide | Apache Kafka",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://docs.confluent.io/kafka-connectors/jdbc/current/source-connector/overview.html",
+    "http_status_at_collection": 200,
+    "title": "JDBC Source Connector for Confluent Platform | Confluent Documentation",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://docs.confluent.io/kafka-connectors/jdbc/current/source-connector/source_config_options.html",
+    "http_status_at_collection": 200,
+    "title": "Configuration Reference for JDBC Source Connector for Confluent Platform | Confluent Documentation",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://docs.confluent.io/kafka-connectors/jdbc/current/sink-connector/overview.html",
+    "http_status_at_collection": 200,
+    "title": "JDBC Sink Connector for Confluent Platform | Confluent Documentation",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://docs.confluent.io/kafka-connectors/jdbc/current/sink-connector/sink_config_options.html",
+    "http_status_at_collection": 200,
+    "title": "Configuration Reference for JDBC Sink Connector for Confluent Platform | Confluent Documentation",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://debezium.io/documentation/reference/3.3/connectors/postgresql.html",
+    "http_status_at_collection": "failed",
+    "title": null,
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://debezium.io/documentation/reference/3.3/transformations/outbox-event-router.html",
+    "http_status_at_collection": "failed",
+    "title": null,
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  },
+  {
+    "url": "https://docs.confluent.io/platform/current/schema-registry/connect.html",
+    "http_status_at_collection": 200,
+    "title": "Integrate schemas from Kafka Connect in Confluent Platform | Confluent Documentation",
+    "referenced_in_final_wiki": false,
+    "review_scope": "Collected; reference use does not imply full-page reading"
+  }
+]

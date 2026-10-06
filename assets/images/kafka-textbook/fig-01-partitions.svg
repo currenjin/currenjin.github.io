@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Kafka 4.3 교과서 도식. 이 책을 위해 새로 그림(공식 문서 그림 복제 아님).
+     설계 원칙·SVG 문법 참고: diagram-design (MIT License, (c) 2025 Cathryn Lavery),
+     https://github.com/cathrynlavery/diagram-design — 전문: https://github.com/cathrynlavery/diagram-design/blob/main/LICENSE.
+     생성: diagrams/make_diagrams.py -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300" role="img" aria-labelledby="fig-01-partitions-title fig-01-partitions-desc">
+<title id="fig-01-partitions-title">키가 파티션을 정하고, 새 이벤트는 파티션 끝에 붙는다</title>
+<desc id="fig-01-partitions-desc">주문 서비스가 키 해시로 고른 파티션 P1의 끝(오프셋 5)에 새 이벤트를 추가하고, 파티션마다 오프셋이 따로 매겨지는 모습.</desc>
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#555b6b"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b5482a"/></marker>
+  <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2d5a9e"/></marker>
+  <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#555b6b" stroke-width="1.2"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#fbfaf6"/>
+<path d="M 220,34 L 275,34 Q 282,34 282,41 L 282,167 Q 282,174 275,174 L 202,174" fill="none" stroke="#b5482a" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+<rect x="226.4" y="13.68" width="49.2" height="16" rx="2" fill="#fbfaf6"/>
+<text x="251" y="26" fill="#b5482a" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">키 해시</text>
+<rect x="80" y="12" width="140" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="80" y="12" width="140" height="44" rx="6" fill="#ffffff" stroke="#26262b" stroke-width="1"/>
+<rect x="44" y="108" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="44" y="108" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="70" y="108" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="70" y="108" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="96" y="108" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="96" y="108" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="122" y="108" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="122" y="108" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="148" y="108" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="148" y="108" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="174" y="108" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="174" y="108" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="200" y="108" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="200" y="108" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="44" y="160" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="44" y="160" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="70" y="160" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="70" y="160" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="96" y="160" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="96" y="160" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="122" y="160" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="122" y="160" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="148" y="160" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="148" y="160" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="174" y="160" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="174" y="160" width="26" height="28" rx="2" fill="rgba(181,72,42,0.08)" stroke="#b5482a" stroke-width="1.6"/>
+<rect x="44" y="236" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="44" y="236" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="70" y="236" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="70" y="236" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="96" y="236" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="96" y="236" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<rect x="122" y="236" width="26" height="28" rx="2" fill="#fbfaf6"/>
+<rect x="122" y="236" width="26" height="28" rx="2" fill="rgba(38,38,43,0.05)" stroke="#555b6b" stroke-width="0.9"/>
+<text x="150" y="30.2875" fill="#26262b" font-size="12.5" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">주문 서비스</text>
+<text x="150" y="50.2125" fill="#555b6b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">producer</text>
+<text x="44" y="96" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">파티션마다 오프셋은 0부터 따로 증가</text>
+<text x="14" y="126" fill="#26262b" font-size="11" font-weight="500" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="start">P0</text>
+<text x="57" y="125.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">0</text>
+<text x="83" y="125.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">1</text>
+<text x="109" y="125.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">2</text>
+<text x="135" y="125.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">3</text>
+<text x="161" y="125.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">4</text>
+<text x="187" y="125.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">5</text>
+<text x="213" y="125.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">6</text>
+<text x="14" y="178" fill="#26262b" font-size="11" font-weight="500" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="start">P1</text>
+<text x="57" y="177.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">0</text>
+<text x="83" y="177.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">1</text>
+<text x="109" y="177.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">2</text>
+<text x="135" y="177.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">3</text>
+<text x="161" y="177.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">4</text>
+<text x="187" y="177.78" fill="#b5482a" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">5</text>
+<text x="14" y="254" fill="#26262b" font-size="11" font-weight="500" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="start">P2</text>
+<text x="57" y="253.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">0</text>
+<text x="83" y="253.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">1</text>
+<text x="109" y="253.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">2</text>
+<text x="135" y="253.78" fill="#26262b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">3</text>
+<text x="200" y="208" fill="#b5482a" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="end">새 이벤트 = P1의 오프셋 5</text>
+<text x="14" y="284" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">같은 키 → 같은 파티션 (파티션 수 불변 시)</text>
+</svg>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Kafka 4.3 교과서 도식. 이 책을 위해 새로 그림(공식 문서 그림 복제 아님).
+     설계 원칙·SVG 문법 참고: diagram-design (MIT License, (c) 2025 Cathryn Lavery),
+     https://github.com/cathrynlavery/diagram-design — 전문: https://github.com/cathrynlavery/diagram-design/blob/main/LICENSE.
+     생성: diagrams/make_diagrams.py -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 316" width="300" height="316" role="img" aria-labelledby="fig-03-acks1-title fig-03-acks1-desc">
+<title id="fig-03-acks1-title">acks=1: 성공 응답을 받은 레코드가 사라지는 순서</title>
+<desc id="fig-03-acks1-desc">프로듀서가 acks=1로 받은 성공 응답 직후 리더가 멈추고, 그 레코드가 없는 팔로워가 새 리더가 되며, 옛 리더는 돌아와 새 리더의 로그에 맞춰지는 과정을 시간순으로 보여 준다.</desc>
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#555b6b"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b5482a"/></marker>
+  <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2d5a9e"/></marker>
+  <marker id="arrow-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polyline points="0 0, 8 3, 0 6" fill="none" stroke="#555b6b" stroke-width="1.2"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#fbfaf6"/>
+<line x1="40" y1="54" x2="40" y2="282" stroke="rgba(38,38,43,0.28)" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="115" y1="54" x2="115" y2="282" stroke="rgba(38,38,43,0.28)" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="190" y1="54" x2="190" y2="282" stroke="rgba(38,38,43,0.28)" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="262" y1="54" x2="262" y2="282" stroke="rgba(38,38,43,0.28)" stroke-width="1" stroke-dasharray="3,3"/>
+<path d="M 40,90 L 112,90" fill="none" stroke="#555b6b" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path d="M 115,120 L 43,120" fill="none" stroke="#b5482a" stroke-width="1.3" stroke-dasharray="5,4" marker-end="url(#arrow-accent)"/>
+<path d="M 262,186 L 193,186" fill="none" stroke="#555b6b" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path d="M 40,222 L 187,222" fill="none" stroke="#555b6b" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path d="M 115,272 L 187,272" fill="none" stroke="#555b6b" stroke-width="1.3" marker-end="url(#arrow)"/>
+<rect x="55.3" y="69.68" width="44.4" height="16" rx="2" fill="#fbfaf6"/>
+<text x="77.5" y="82" fill="#26262b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">m 쓰기</text>
+<rect x="62.5" y="99.68" width="30" height="16" rx="2" fill="#fbfaf6"/>
+<text x="77.5" y="112" fill="#b5482a" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">성공</text>
+<rect x="201.4" y="165.68" width="49.2" height="16" rx="2" fill="#fbfaf6"/>
+<text x="226" y="178" fill="#26262b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">새 리더</text>
+<rect x="121.4" y="201.68" width="61.2" height="16" rx="2" fill="#fbfaf6"/>
+<text x="152" y="214" fill="#26262b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">다음 쓰기</text>
+<rect x="131.5" y="251.68" width="42" height="16" rx="2" fill="#fbfaf6"/>
+<text x="152.5" y="264" fill="#26262b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">재합류</text>
+<rect x="6" y="10" width="68" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="6" y="10" width="68" height="44" rx="6" fill="#ffffff" stroke="#26262b" stroke-width="1"/>
+<rect x="81" y="10" width="68" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="81" y="10" width="68" height="44" rx="6" fill="#ffffff" stroke="#26262b" stroke-width="1"/>
+<rect x="156" y="10" width="68" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="156" y="10" width="68" height="44" rx="6" fill="#ffffff" stroke="#26262b" stroke-width="1"/>
+<rect x="228" y="10" width="68" height="44" rx="6" fill="#fbfaf6"/>
+<rect x="228" y="10" width="68" height="44" rx="6" fill="#ffffff" stroke="#26262b" stroke-width="1"/>
+<rect x="101" y="142" width="28" height="6" rx="1" fill="#b5482a" stroke="#b5482a" stroke-width="1"/>
+<rect x="101" y="244" width="28" height="6" rx="1" fill="#26262b" stroke="#26262b" stroke-width="1"/>
+<text x="40" y="28.2875" fill="#26262b" font-size="12.5" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">프로듀서</text>
+<text x="40" y="48.2125" fill="#555b6b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">acks=1</text>
+<text x="115" y="28.2875" fill="#26262b" font-size="12.5" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">브로커1</text>
+<text x="115" y="48.2125" fill="#555b6b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">leader</text>
+<text x="190" y="28.2875" fill="#26262b" font-size="12.5" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">브로커2</text>
+<text x="190" y="48.2125" fill="#555b6b" font-size="10.5" font-weight="400" font-family="'Geist Mono', 'Noto Sans KR', monospace" text-anchor="middle">follower</text>
+<text x="262" y="35.375" fill="#26262b" font-size="12.5" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">컨트롤러</text>
+<text x="133" y="150" fill="#b5482a" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="start">멈춤</text>
+<text x="97" y="252" fill="#555b6b" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="end">재시작</text>
+<text x="115" y="304" fill="#b5482a" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" text-anchor="middle">브로커1은 m 없는 로그로 맞춰짐</text>
+</svg>
