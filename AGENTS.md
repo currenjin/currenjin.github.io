@@ -33,6 +33,8 @@
 - Home의 전체 목록에서는 책 목차가 접히고 Post 필터에서는 펼쳐진다. `/posts/`의 목차는 항상 보인다.
 - 출판 경계는 `_plugins/archive.rb`가 강제한다. `--safe` 또는 기본 제한 플러그인 빌드로 우회하지 않는다.
 - 자동 수집 데이터로 승인된 정본을 덮어쓰지 않는다.
+- Post 이미지는 저장소의 `resource/`, `resources/` 등에 새로 저장하지 않고 GitHub Issue에 실제 첨부 업로드한 `https://github.com/user-attachments/assets/...` URL을 사용한다. raw GitHub URL이나 업로드하지 않은 링크로 대체하지 않는다.
+- 기존 Post 이미지 이관은 원본 바이트를 보존하고 첨부 URL의 HTTP 응답·SHA-256 일치·브라우저 렌더링을 확인한 뒤 참조만 바꾼다. 저장소 전체의 참조를 점검하여 다른 콘텐츠·공용 자산에서 쓰지 않는 원본만 삭제한다. 업로드 인증이 막히면 기존 참조와 파일을 유지하고 차단 사유를 보고한다. Wiki·Review·공용 자산은 이 Post 규칙의 이관 범위가 아니다.
 
 ## 위키 (`_wiki/*.md`)
 
