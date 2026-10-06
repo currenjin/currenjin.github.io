@@ -74,7 +74,7 @@ for old_chapter, item, chapter, label_item in refs + notes:
         errors.append(f"Stale source label: source-{old_chapter}.{item} displays {chapter}.{label_item}")
 if {(a, b) for a, b, _, _ in refs} - {(a, b) for a, b, _, _ in notes}:
     errors.append("Citation without a numbered source-index entry")
-for forbidden in [".claude", "docs/wiki-authoring.md"]:
+for forbidden in [".claude", ".agents", "docs/wiki-authoring.md"]:
     if (site / forbidden).exists():
         errors.append("Published authoring artifact: " + forbidden)
 if p.details < 15:
