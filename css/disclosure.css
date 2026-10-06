@@ -1,34 +1,5 @@
-/* Shared disclosure affordances, independent of layout and default open state.
-   Graph uses its own palette; fallback tokens keep the same interaction contract. */
-:is(details > summary, [data-book-title-toggle], [data-book-toc-toggle], [data-cover-toggle], .wiki-toc-toggle, #panel-toggle, #panel-collapse) {
-  cursor:pointer;
-}
-:is(details > summary, [data-book-title-toggle], [data-book-toc-toggle], [data-cover-toggle], .wiki-toc-toggle, #panel-toggle, #panel-collapse):hover {
-  background:var(--code-inline-bg, var(--g-surface));
-}
-:is(details > summary, [data-book-title-toggle], [data-book-toc-toggle], [data-cover-toggle], .wiki-toc-toggle, #panel-toggle, #panel-collapse):focus-visible {
-  outline:2px solid var(--focus, var(--g-focus));
-  outline-offset:3px;
-  background:var(--code-inline-bg, var(--g-surface));
-}
-details > summary { list-style:none; }
-details > summary::-webkit-details-marker { display:none; }
-:where(details > summary, [data-book-title-toggle], [data-book-toc-toggle], [data-cover-toggle], #panel-toggle, #panel-collapse)::before,
-.wiki-toc-toggle::after {
-  content:"▸";
-  display:inline-block;
-  flex:0 0 auto;
-  margin-inline-end:.55em;
-  color:var(--muted, var(--g-muted));
-  font:14px/1 var(--sans, var(--g-sans));
-}
-details[open] > summary::before,
-:is([data-book-title-toggle], [data-book-toc-toggle], [data-cover-toggle], #panel-toggle)[aria-expanded="true"]::before,
-#panel-collapse::before,
-.wiki-toc-toggle[aria-expanded="true"]::after { content:"▾"; }
-.wiki-toc-toggle::after { margin-inline-end:0; }
-/* A prose summary is a full-width header, not an archive's date/kind grid.
-   Inline flow preserves authored emphasis, links and arbitrary summary markup. */
+/* Shared authored-content disclosures only. Site navigation and metadata
+   controls intentionally retain their existing styles and behavior. */
 .prose details { margin:24px 0; border-block:1px solid var(--line); }
 .prose details > summary {
   display:block;
@@ -38,13 +9,25 @@ details[open] > summary::before,
   color:var(--ink);
   font:15px/1.5 var(--sans);
   overflow-wrap:anywhere;
+  list-style:none;
+  cursor:pointer;
 }
+.prose details > summary::-webkit-details-marker { display:none; }
+.prose details > summary::before {
+  content:"▸";
+  display:inline-block;
+  margin-inline-end:.55em;
+  color:var(--muted);
+  font:14px/1 var(--sans);
+}
+.prose details[open] > summary::before { content:"▾"; }
 .prose details > summary::after { content:" 보기"; }
 .prose details[open] > summary::after { content:" 접기"; }
+.prose details > summary:hover { background:var(--code-inline-bg); }
+.prose details > summary:focus-visible {
+  outline:2px solid var(--focus);
+  outline-offset:-2px;
+  background:var(--code-inline-bg);
+}
 .prose details > :not(summary) { margin-inline:24px 10px; }
 .prose details > summary + * { margin-top:12px; }
-/* The series title fills the available header; the secondary control stays separate. */
-.home-post-book [data-book-title-toggle] { flex:1 1 auto; }
-/* Compact AI markers and wrapped catalog headers keep their existing geometry. */
-.ai-disclosure > summary::before { font-size:10px; margin-inline-end:4px; }
-.graph-index > summary { border-top:1px solid var(--g-line); }

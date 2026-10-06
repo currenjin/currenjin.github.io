@@ -3,30 +3,20 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const read = file => fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
-
-test('every layout loads one shared disclosure stylesheet, including standalone graph', () => {
-  for (const file of ['_includes/head.html', '_layouts/graph.html']) {
-    assert.match(read(file), /css\/disclosure\.css/);
-  }
+test('shared disclosure styles are restricted to authored prose', () => {
+  const css=read('css/disclosure.css').replace(/\/\*[\s\S]*?\*\//g,'');
+  for(const rule of css.matchAll(/([^{}]+)\{/g)) assert.ok(rule[1].trim().startsWith('.prose details'),rule[1]);
+  assert.match(css,/content:"▸"/); assert.match(css,/content:"▾"/);
+  assert.match(css,/cursor:pointer/); assert.match(css,/:focus-visible/);
+  assert.doesNotMatch(css,/data-book|data-cover|wiki-toc|graph|ai-disclosure/);
 });
-
-test('disclosure affordances cover native and custom controls without theme or search buttons', () => {
-  const css = read('css/disclosure.css');
-  for (const selector of ['details > summary', '[data-book-title-toggle]', '[data-book-toc-toggle]', '[data-cover-toggle]', '.wiki-toc-toggle', '#panel-toggle', '#panel-collapse']) {
-    assert.ok(css.includes(selector), selector);
-  }
-  assert.match(css, /content:\s*"▸"/);
-  assert.match(css, /content:\s*"▾"/);
-  assert.match(css, /cursor:\s*pointer/);
-  assert.match(css, /:focus-visible/);
-  assert.match(css, /:hover/);
-  assert.doesNotMatch(css, /theme-toggle|search-trigger|kafka|answer-disclosure/);
+test('graph and navigation retain their original disclosure markers',()=>{
+  assert.doesNotMatch(read('_layouts/graph.html'),/css\/disclosure\.css/);
+  assert.match(read('_layouts/graph.html'),/summary::after \{ content: "\+"/);
+  assert.match(read('css/main.css'),/\.wiki-toc-toggle::after \{ content:"\+"/);
 });
-
-test('prose disclosures retain authored summaries and native no-JS state', () => {
-  const kafka = read('_wiki/kafka.md');
-  assert.doesNotMatch(kafka, /answer-disclosure|answer-show|answer-hide/);
-  assert.match(kafka, /<summary>해설<\/summary>/);
-  assert.match(kafka, /<summary>주장별 Kafka 4\.3 원문<\/summary>/);
-  assert.match(read('css/disclosure.css'), /\.prose details > summary/);
+test('content summaries stay authored and native, without Kafka-specific patches',()=>{
+  assert.match(read('_includes/head.html'),/css\/disclosure\.css/);
+  assert.match(read('_wiki/kafka.md'),/<summary>해설<\/summary>/);
+  assert.doesNotMatch(read('_wiki/kafka.md'),/answer-disclosure|answer-show/);
 });
