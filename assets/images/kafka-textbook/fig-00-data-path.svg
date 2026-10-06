@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" role="img" aria-labelledby="data-title data-desc">
-<title id="data-title">그림 0-1. Kafka 전체 구조와 데이터 경로</title>
+<title id="data-title">그림 1-1. Kafka 전체 구조와 데이터 경로</title>
 <desc id="data-desc">Producer에서 partition leader로 배치를 보내고 follower가 fetch해 복제한다. Consumer는 leader에 fetch하고 응답을 역직렬화한다. KRaft controller는 metadata를 관리하며 group coordinator는 멤버십과 offset을 관리한다. 실선은 데이터 이동, 점선은 제어 경로다.</desc>
 <defs><marker id="a" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><path d="M0 0L8 3L0 6" fill="#555b6b"/></marker></defs>
 <rect width="760" height="520" fill="#fbfaf6"/>
 <g font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" fill="#26262b" font-size="16">
-<text x="24" y="30" font-weight="600">그림 0-1 · 데이터 경로와 관리 역할</text>
+<text x="24" y="30" font-weight="600">그림 1-1 · 데이터 경로와 관리 역할</text>
 <g fill="#fff" stroke="#26262b"><rect x="24" y="65" width="210" height="110" rx="6"/><rect x="278" y="65" width="220" height="110" rx="6"/><rect x="548" y="65" width="188" height="110" rx="6"/><rect x="278" y="238" width="220" height="84" rx="6"/></g>
 <text x="40" y="92" font-weight="600">Producer</text><text x="40" y="120">객체 → 직렬화</text><text x="40" y="149">partition별 배치·전송</text>
 <text x="294" y="92" font-weight="600">Broker · partition leader</text><text x="294" y="120">검사 → 활성 로그 추가</text><text x="294" y="149">page cache / segment</text>

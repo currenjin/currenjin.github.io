@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 510" role="img" aria-labelledby="memory-title memory-desc">
-<title id="memory-title">그림 0-2. JVM과 커널·디스크·네트워크의 경계</title>
+<title id="memory-title">그림 1-2. JVM과 커널·디스크·네트워크의 경계</title>
 <desc id="memory-desc">JVM은 요청과 상태를 관리하고 로그 파일의 큰 캐시는 OS page cache에 둔다. Dirty page를 writeback으로 디스크에 반영하고 cache miss는 디스크에서 읽는다. 변환 없는 비 TLS 파일 전송은 조건부 sendfile 경로를 사용하며 TLS는 사용자 공간 처리를 거친다. 모든 복사가 사라진다는 뜻이 아니다.</desc>
 <defs><marker id="a" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><path d="M0 0L8 3L0 6" fill="#555b6b"/></marker></defs>
 <rect width="760" height="510" fill="#fbfaf6"/>
 <g font-family="'Noto Sans KR','Apple SD Gothic Neo',sans-serif" fill="#26262b" font-size="16">
-<text x="24" y="30" font-weight="600">그림 0-2 · 메모리와 I/O의 서로 다른 층</text>
+<text x="24" y="30" font-weight="600">그림 1-2 · 메모리와 I/O의 서로 다른 층</text>
 <rect x="24" y="60" width="710" height="120" rx="6" fill="#fff" stroke="#26262b"/>
 <text x="40" y="88" font-weight="600">사용자 공간 · JVM</text><text x="40" y="118">요청·배치 버퍼·metadata·coordinator 상태 · 객체는 GC 관리 대상</text>
 <text x="40" y="150" fill="#b5482a">TLS: 파일 데이터를 사용자 공간에서 처리·암호화 → socket</text>
