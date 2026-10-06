@@ -1,6 +1,6 @@
 # AGENTS.md
 
-개인 공개 아카이브. Jekyll로 **Post(`_articles/`, `_chapters/`)**, **Wiki(`_wiki/`)**,
+개인 공개 아카이브. Jekyll로 **Post(`_post/`, `_post/books/`)**, **Wiki(`_wiki/`)**,
 **Review(`_reviews/`)**, 태그 기반 지식 그래프를 출판한다.
 이 문서는 도구와 무관한 공통 작업 규칙의 정본이다. 에이전트 지침은 `AGENTS.md`만 유지하며 별도 `CLAUDE.md`는 만들지 않는다.
 
@@ -21,10 +21,10 @@
 - 사용자가 승인한 해당 장르의 문체 예시를 참고한다. 승인 대기 예시나 AI 생성 글을 사용자 고유 문체의 근거로 삼지 않는다.
 - 내용 검토와 문체 검토를 구분한다. 윤문하면서 사실, 조건, 기술 용어, 출처, 코드, 그림, 목차와 링크를 훼손하지 않는다.
 
-## Post (`_articles/`, `_chapters/`)
+## Post (`_post/`, `_post/books/`)
 
-- 독립 글은 `_articles/<slug>.md` → `/posts/<slug>/`.
-- 책 목차는 `_data/post_books.yml`, 장 본문은 `_chapters/<book-id>/<chapter-id>.md`에서 관리한다.
+- 독립 글은 `_post/<slug>.md` → `/posts/<slug>/`.
+- 책 목차는 `_data/post_books.yml`, 장 본문은 `_post/books/<book-id>/<chapter-id>.md`에서 관리한다.
 - 스키마, 예정 목차, 출처 보존, 출판 절차는 `docs/post-authoring.md`를 먼저 읽는다.
 - 새 초안은 `public: false`. 공개 승인을 받은 문서만 YAML 불리언 `public: true`로 전환한다.
 - `date`·`updated`가 유효하고 미래가 아니며 `updated >= date`여야 한다. `draft: true`와 `published: false`는 공개를 막는다.
@@ -155,6 +155,7 @@ tags     : [database, architecture]             # 선택
 
 ## 빌드 / 검증
 
+- 내부 도구는 `scripts/`(generation/maintenance/hooks), 검증은 `tests/`(js/browser/fixtures)에 모은다. 전체 경계와 호환 예외는 `docs/repository-layout.md`를 따른다.
 - 배포는 `.github/workflows/pages.yml`의 일반 Jekyll 빌드·검증·Pages 배포를 사용한다.
 - 삭제·비공개 전환 검증은 깨끗한 destination에서 빌드한다. 예전 공개 파일이 남아 있으면 실패다.
 

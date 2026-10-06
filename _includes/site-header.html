@@ -4,7 +4,7 @@
   <nav class="site-nav" aria-label="아카이브 탐색">
     <button class="search-trigger" type="button" data-search-open aria-label="전체 기록 검색 열기">search <kbd>⌘K</kbd></button>
     <a href="{{ '/wiki/index/' | prepend: site.baseurl }}"{% if page.collection == 'wiki' or page.layout == 'wikiindex' %} aria-current="page"{% endif %}>wiki</a>
-    <a href="{{ '/posts/' | prepend: site.baseurl }}"{% if page.collection == 'articles' or page.collection == 'chapters' or page.url == '/posts/' %} aria-current="page"{% endif %}>post</a>
+    <a href="{{ '/posts/' | prepend: site.baseurl }}"{% if page.collection == 'post' or page.url == '/posts/' %} aria-current="page"{% endif %}>post</a>
     <a href="{{ '/reviews/' | prepend: site.baseurl }}"{% if page.collection == 'reviews' or page.layout == 'reviews' %} aria-current="page"{% endif %}>review</a>
     {% include theme-toggle.html %}
   </nav>

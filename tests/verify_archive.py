@@ -59,7 +59,7 @@ for i, entry in enumerate(manifest):
     assert '{{' not in html and '{%' not in html
     assert 'data-search-open' in html and 'Post 목록' in html
     assert url in home and url in post_index
-for folder in ['tests','docs','.ouroboros','scripts','tool','vendor','_articles','_chapters']:
+for folder in ['tests','docs','.ouroboros','scripts','vendor','_post']:
     assert not (SITE / folder).exists(), folder
 header = re.search(r'<nav class="site-nav".*?</nav>', home, re.S).group()
 positions = [header.index(s) for s in ['data-search-open','/wiki/index/','/posts/','/reviews/','theme-toggle']]

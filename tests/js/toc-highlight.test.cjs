@@ -2,7 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const source = fs.readFileSync(require('node:path').join(__dirname, '../js/toc-highlight.js'), 'utf8');
+const source = fs.readFileSync(require('node:path').join(__dirname, '../../js/toc-highlight.js'), 'utf8');
 
 function fixture({ mobile = false, sticky = true, overflow = true, initial = 0 } = {}) {
   const events = {}, tocEvents = {}, windowEvents = {};

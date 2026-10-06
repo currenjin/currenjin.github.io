@@ -3,7 +3,7 @@
    Light  — Parchment / Umber  (approved palette)
    Dark   — Deep Ink, tuned down for prolonged reading
    Every colour below this block is expressed as a token. Raw hex
-   outside :root / [data-theme] is a bug; test/theme.test.cjs guards it.
+   outside :root / [data-theme] is a bug; tests/js/theme.test.cjs guards it.
    ============================================================ */
 :root {
   color-scheme: light;

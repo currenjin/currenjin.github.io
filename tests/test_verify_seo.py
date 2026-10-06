@@ -12,6 +12,11 @@ import verify_seo as seo
 
 
 class VerifierTests(unittest.TestCase):
+    def test_stamp_normalizes_offsets_for_python38_fixture_runtime(self):
+        for value in ['2020-01-01 00:00:00 +0900', '2020-01-01T00:00:00+0900',
+                      '2020-01-01 00:00:00 +09:00']:
+            self.assertEqual(seo.stamp(value), '2020-01-01T00:00:00+09:00')
+
     def verify_fixture(self, public_path='/reviews/한글/', search_path=None,
                        excluded=(), extra_search=(), branding='Original branding'):
         with tempfile.TemporaryDirectory(prefix='seo-verifier-') as tmp:
@@ -44,6 +49,42 @@ class VerifierTests(unittest.TestCase):
                 [{'url': search_path or public_path}] + [{'url': path} for path in extra_search]))
             with patch.object(seo, 'ROOT', root), patch.object(seo, 'inventory', return_value=(expected, set(excluded), {})), contextlib.redirect_stdout(io.StringIO()):
                 seo.verify(site)
+
+    def test_post_inventory_preserves_routes_and_book_publication_boundary(self):
+        with tempfile.TemporaryDirectory(prefix='seo-post-inventory-') as tmp:
+            root = Path(tmp)
+            (root / '_data').mkdir()
+            (root / '_data/post_books.yml').write_text('''
+- id: registered
+  public: true
+  chapters:
+    - {id: good, state: published}
+    - {id: planned, state: planned}
+- id: private
+  public: false
+  chapters:
+    - {id: good, state: published}
+''')
+            records = {
+                'article': {}, 'custom': {'permalink': '/kept/'},
+                'books/registered/good': {'book': 'registered', 'chapter_id': 'good'},
+                'books/registered/planned': {'book': 'registered', 'chapter_id': 'planned'},
+                'books/private/good': {'book': 'private', 'chapter_id': 'good'},
+                'books/orphan': {},
+                'metadata-orphan': {'book': 'unknown', 'chapter_id': 'good'},
+                'secret': {'public': False}, 'invalid': {'updated': '2019-01-01'},
+            }
+            for slug, override in records.items():
+                path = root / '_post' / (slug + '.md')
+                path.parent.mkdir(parents=True, exist_ok=True)
+                data = {'title': slug, 'public': True, 'date': '2020-01-01', 'updated': '2020-01-02', **override}
+                path.write_text('---\n' + seo.yaml.safe_dump(data) + '---\nBody\n')
+            with patch.object(seo, 'ROOT', root):
+                expected, excluded, counts = seo.inventory()
+            self.assertEqual(set(expected), {'/posts/article/', '/kept/', '/posts/chapters/registered/good/'})
+            self.assertEqual(counts['post'], 3)
+            self.assertEqual(excluded, {'/posts/chapters/registered/planned/', '/posts/chapters/private/good/',
+                                       '/posts/chapters/orphan/', '/posts/metadata-orphan/', '/posts/secret/', '/posts/invalid/'})
 
     def test_encoded_search_matches_raw_source(self):
         self.verify_fixture(search_path='/reviews/%ED%95%9C%EA%B8%80/')

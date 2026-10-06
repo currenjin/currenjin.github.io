@@ -1,4 +1,4 @@
-// Run after the Docker build and static server: NODE_PATH=<playwright modules> node test/sticky-header.browser.cjs
+// Run after the Docker build and static server: NODE_PATH=<playwright modules> node tests/browser/sticky-header.browser.cjs
 // BASE_URL may point at Pages; CHROME_PATH overrides the local Chrome executable.
 const assert = require('node:assert/strict');
 const { chromium } = require('playwright');

@@ -20,6 +20,14 @@ jobs:
           ruby-version: '3.1'
           bundler-cache: true
       - uses: actions/configure-pages@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Verify tools and JavaScript contracts
+        run: |
+          npm ci
+          npm test
+          python3 tests/test_repository_layout.py
       - name: Build canonical archive
         env:
           JEKYLL_ENV: production
@@ -28,6 +36,8 @@ jobs:
         run: python3 tests/verify_archive.py _site
       - name: Verify publication boundary
         run: ruby tests/archive_test.rb
+      - name: Verify SEO
+        run: python3 tests/verify_seo.py _site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

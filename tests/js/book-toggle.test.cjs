@@ -3,8 +3,14 @@ const assert = require('node:assert/strict')
 const fs = require('node:fs')
 const vm = require('node:vm')
 const path = require('node:path')
-const root = path.join(__dirname, '..')
+const root = path.join(__dirname, '../..')
 const read = p => fs.readFileSync(path.join(root, p), 'utf8')
+
+test('Post navigation uses the unified collection label', () => {
+  const header = read('_includes/site-header.html');
+  assert.match(header, /page\.collection == 'post'/);
+  assert.doesNotMatch(header, /page\.collection == '(articles|chapters)'/);
+});
 
 test('home series title is an accessible disclosure, not a navigation link', () => {
   const home = read('index.html')

@@ -1,6 +1,6 @@
 const test = require('node:test')
 const assert = require('node:assert/strict')
-const { createDragHandlers } = require('../js/graph-force.js')
+const { createDragHandlers } = require('../../js/graph-force.js')
 
 test('drag reheats force simulation and release returns an ordinary node to the web', () => {
   let reheats = 0

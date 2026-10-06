@@ -1,5 +1,5 @@
 bundle update && bundle install
-./generateData.js
+node scripts/generation/generate-data.js
 
 if [[ $1 = "docker" ]]; then
     docker-compose up

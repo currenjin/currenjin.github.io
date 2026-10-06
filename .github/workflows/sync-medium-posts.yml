@@ -9,7 +9,7 @@ on:
       - main
     paths:
       - "_wiki/**"
-      - "scripts/sync-medium-posts.js"
+      - "scripts/generation/sync-medium-posts.js"
       - "_config.yml"
       - ".github/workflows/sync-medium-posts.yml"
 
@@ -29,7 +29,7 @@ jobs:
           node-version: 20
 
       - name: Fetch Medium posts
-        run: node scripts/sync-medium-posts.js
+        run: node scripts/generation/sync-medium-posts.js
 
       - name: Commit and push if changed
         run: |

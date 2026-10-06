@@ -2,7 +2,7 @@
 // `npm test` 에는 포함되지 않는다(브라우저와 빌드 산출물이 필요).
 //
 //   cd _site && python3 -m http.server 4000 --bind 127.0.0.1 &
-//   PLAYWRIGHT_CORE=/path/to/node_modules/playwright-core node test/browser/a11y.check.cjs http://127.0.0.1:4000
+//   PLAYWRIGHT_CORE=/path/to/node_modules/playwright-core node tests/browser/a11y.check.cjs http://127.0.0.1:4000
 const assert = require('node:assert/strict')
 const { chromium } = require(process.env.PLAYWRIGHT_CORE || 'playwright-core')
 

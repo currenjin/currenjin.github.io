@@ -4,9 +4,9 @@ const fs = require('node:fs')
 const path = require('node:path')
 const vm = require('node:vm')
 
-const theme = require('../js/theme.js')
+const theme = require('../../js/theme.js')
 
-const root = path.join(__dirname, '..')
+const root = path.join(__dirname, '../..')
 const read = p => fs.readFileSync(path.join(root, p), 'utf8')
 
 const MAIN_CSS = read('css/main.css')
