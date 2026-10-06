@@ -2,7 +2,7 @@
 
 개인 공개 아카이브. Jekyll로 **Post(`_articles/`, `_chapters/`)**, **Wiki(`_wiki/`)**,
 **Review(`_reviews/`)**, 태그 기반 지식 그래프를 출판한다.
-이 문서는 도구와 무관한 공통 작업 규칙의 정본이다. Claude Code는 `CLAUDE.md`에서 이 문서를 참조한다.
+이 문서는 도구와 무관한 공통 작업 규칙의 정본이다. 에이전트 지침은 `AGENTS.md`만 유지하며 별도 `CLAUDE.md`는 만들지 않는다.
 
 ## 기본 원칙
 
