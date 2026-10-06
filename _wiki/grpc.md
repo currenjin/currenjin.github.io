@@ -3,7 +3,7 @@ layout  : wiki
 title   : gRPC
 summary : RPC·Protobuf 계약에서 스트리밍·deadline·재시도·보안·운영까지 배우는 웹 교과서
 date    : 2026-10-06 16:30:00 +0900
-updated : 2026-10-06 16:30:00 +0900
+updated : 2026-10-06 19:00:00 +0900
 tags    : [network, architecture, engineering]
 toc     : true
 public  : true
@@ -23,7 +23,11 @@ gRPC 공식 문서를 학습 순서로 재구성한 비공식 웹 교과서다. 
 
 본문의 한결마켓·주문·재고 사례는 설명을 위해 만든 가상 사례다. 원리와 정상 흐름을 설명한 뒤 조건을 바꾸어 실패 결과를 살펴본다. 확인 질문의 해설은 펼쳐 볼 수 있다. 5장의 Python 예제 외에 설계용 코드와 설정은 해당 절에 범위를 표시한다.
 
-공식 가이드는 특정 gRPC 릴리스에 고정된 문서가 아니다. 이 문서는 2026-10-06 조회한 원문을 기준으로 한다. Protobuf 설명은 `proto3`, 실행 예제는 Python 3.11·`grpcio==1.84.0`·`grpcio-tools==1.84.0`·`protobuf==7.36.2` 기준이다. Java·Go·C++·Python의 deadline 전파, interceptor, health checking, 관측 API가 모두 같다고 가정하지 않는다. 다른 버전과 언어에서는 각 장의 공식 링크를 다시 확인한다.
+공식 가이드는 특정 gRPC 릴리스에 고정된 문서가 아니다. 이 문서의 설명은 2026-10-06 다시 조회한 원문과 대조했다. Protobuf 설명은 `proto3` 기준이다.
+
+실행 예제는 Python 3.11·`grpcio==1.84.0`·`grpcio-tools==1.84.0`·`protobuf==7.36.2`로 재현한다. 이 버전은 예제의 재현 조건이며, 문서 조회일과는 별개로 고정한 값이다.
+
+Java·Go·C++·Python의 deadline 전파, interceptor, health checking, 관측 API가 모두 같다고 가정하지 않는다. 다른 버전과 언어에서는 각 장의 공식 링크를 다시 확인한다.
 
 | 순서 | 배우는 문제 |
 |---|---|
@@ -52,7 +56,7 @@ gRPC에서는 서비스의 메서드와 요청·응답 타입을 먼저 정의�
 
 ### 메서드 모양은 같아도 실패 모델은 다르다
 
-생성된 stub의 `GetStock`을 호출하면 로컬 코드가 네트워크 요청을 만든다. 재고 서버는 요청을 해석하고 업무 코드를 실행한 뒤 결과를 돌려준다. 타입에 맞지 않는 인자를 넘기는 실수를 줄여도 통신 실패까지 사라지는 것은 아니다.
+Stub은 계약에서 생성된 클라이언트 객체로, 원격 메서드를 로컬 메서드처럼 호출하게 해 준다. 생성된 stub의 `GetStock`을 호출하면 로컬 코드가 네트워크 요청을 만든다. 재고 서버는 요청을 해석하고 업무 코드를 실행한 뒤 결과를 돌려준다. 타입에 맞지 않는 인자를 넘기는 실수를 줄여도 통신 실패까지 사라지는 것은 아니다.
 
 네트워크 요청은 도착하지 않을 수 있다. 도착했지만 서버가 처리하지 못할 수도 있고, 처리한 뒤 응답만 유실될 수도 있다. 호출자가 같은 오류를 보더라도 서버에서 일어난 일은 다를 수 있다. 이 때문에 '응답을 못 받았다'와 '실행되지 않았다'를 구분해야 한다. 재고를 조회하는 호출과 재고를 차감하는 호출은 같은 방식으로 재시도할 수 없다.
 
@@ -105,9 +109,11 @@ message StockReply {
 }
 ```
 
-`product_id`, `quantity`는 생성 코드에서 쓰는 이름이다. 이진 wire 형식에서 필드를 식별하는 것은 `1`, `2`, `3`이라는 field number다. 한 메시지 안에서 번호는 중복될 수 없다. 기존 필드의 번호를 바꾸면 이름이 같아도 다른 wire 필드가 된다.
+`product_id`, `quantity`는 생성 코드에서 쓰는 이름이다. Wire 형식(wire format)은 메시지가 네트워크나 저장소에 실제로 기록되는 바이트 인코딩이다. 이진 wire 형식에서 필드를 식별하는 것은 `1`, `2`, `3`이라는 field number다. 한 메시지 안에서 번호는 중복될 수 없다. 기존 필드의 번호를 바꾸면 이름이 같아도 다른 wire 필드가 된다.
 
-필드를 삭제할 때는 번호와 이름을 예약한다. 예를 들어 3번을 지웠다면 다음처럼 작성한다.
+Field number는 1부터 536,870,911까지 쓸 수 있다. 19,000~19,999는 Protobuf 구현이 예약한 범위라 사용할 수 없다. 메시지 타입을 사용하기 시작한 뒤에는 번호를 바꾸지 않는다.
+
+필드를 삭제할 때는 번호와 이름을 예약한다. 번호 예약은 이진 데이터의 재해석을 막고, 이름 예약은 JSON·TextFormat 표현이 계속 파싱되도록 한다. 예를 들어 3번을 지웠다면 다음처럼 작성한다.
 
 ```proto
 message StockReply {
@@ -122,17 +128,21 @@ message StockReply {
 
 ### Presence는 '없음'과 '기본값'을 나누는 규칙이다
 
-`proto3`의 일반적인 singular scalar 필드는 implicit presence를 사용한다. 위 `quantity`를 읽으면 보내지 않은 경우에도 숫자의 기본값인 `0`이 나온다. 생성 API의 값만 보고 '필드가 생략됐다'와 '재고 0을 보냈다'를 구분할 수 없다. 문자열은 빈 문자열, boolean은 `false`가 기본값이다.
+`proto3`의 일반적인 singular scalar 필드는 implicit presence를 사용한다. 위 `quantity`를 읽으면 보내지 않은 경우에도 숫자의 기본값인 `0`이 나온다. 생성 API의 값만 보고 '필드가 생략됐다'와 '재고 0을 보냈다'를 구분할 수 없다. 문자열은 빈 문자열, bytes는 빈 바이트, boolean은 `false`, enum은 첫 번째로 정의한 값(번호 0)이 기본값이다.
 
-`optional` scalar는 explicit presence를 가진다. `optional int32 quantity = 2;`로 설계하면, Python의 `HasField("quantity")` 같은 API로 설정 여부를 확인할 수 있다. 설정된 0과 미설정 상태가 다르다. Message 타입과 `oneof`도 presence를 다루지만, repeated 필드와 map은 같은 방식의 '설정 여부'를 제공하지 않는다. 언어별 생성 API는 공식 문서를 확인한다.
+`optional` scalar는 explicit presence를 가진다. `optional int32 quantity = 2;`로 설계하면, Python의 `HasField("quantity")` 같은 API로 설정 여부를 확인할 수 있다. 설정된 0과 미설정 상태가 다르다.
 
-재고 변경 요청에서 `quantity = 0`을 '변경하지 않음'으로 해석하면 재고를 실제로 0으로 바꾸기 어렵다. 이 경우 explicit presence나 FieldMask 같은 별도의 변경 계약을 검토한다. 조회한 Proto3 공식 가이드는 proto2·Editions와의 호환성을 위해 scalar의 `optional`을 권한다. Presence를 선택하는 것과 없음 상태의 업무 의미를 정하는 것은 별개다. 예를 들어 optional 필드가 없을 때 '변경하지 않음'인지 '잘못된 요청'인지는 서비스가 계약해야 한다.
+필드 종류마다 presence 규칙이 다르다. 단일 message 필드와 `oneof`는 설정 여부를 추적한다. Repeated 필드와 map은 같은 방식의 '설정 여부'를 제공하지 않는다. 언어별 생성 API는 공식 문서를 확인한다.
+
+재고 변경 요청에서 `quantity = 0`을 '변경하지 않음'으로 해석하면 재고를 실제로 0으로 바꾸기 어렵다. 이 경우 explicit presence나 FieldMask 같은 별도의 변경 계약을 검토한다. FieldMask는 변경하거나 읽을 필드 경로의 목록을 담는 Protobuf 표준 메시지다.
+
+조회한 Proto3 공식 가이드는 Editions·proto2와의 최대 호환성을 위해 implicit 필드보다 `optional`을 권장한다. Editions는 proto2·proto3 문법 선택을 대신하는 Protobuf의 새 버전 체계다. Presence를 선택하는 것과 없음 상태의 업무 의미를 정하는 것은 별개다. 예를 들어 optional 필드가 없을 때 '변경하지 않음'인지 '잘못된 요청'인지는 서비스가 계약해야 한다.
 
 ### Unknown field 보존에는 통과 경로의 조건이 있다
 
-신버전 서버가 새 필드를 추가하면 구버전 클라이언트는 모르는 필드를 가진 메시지를 받을 수 있다. Proto3는 unknown field를 이진 파싱·재직렬화 과정에서 보존한다. 다만 JSON으로 바꾸거나 알려진 필드만 하나씩 새 메시지에 복사하면 unknown field가 사라질 수 있다.
+신버전 서버가 새 필드를 추가하면 구버전 클라이언트는 모르는 필드를 가진 메시지를 받을 수 있다. Proto3는 unknown field를 이진 파싱·재직렬화 과정에서 보존한다. 다만 JSON으로 바꾸거나 알려진 필드만 하나씩 새 메시지에 복사하면 unknown field가 사라질 수 있다. 공식 가이드는 보존이 필요하면 `CopyFrom()`·`MergeFrom()` 같은 메시지 단위 API를 사용하라고 안내한다.
 
-구버전 중계 서비스를 거친 뒤에도 새 필드가 남아 있는지는 실제 처리 경로를 확인해야 한다. 중계 서비스가 이진 메시지를 파싱·재직렬화하는지, JSON DTO로 변환하는지에 따라 결과가 다르다. Protobuf 이진 호환 규칙을 ProtoJSON과 생성 코드의 source compatibility에 그대로 적용하지 않는다.
+구버전 중계 서비스를 거친 뒤에도 새 필드가 남아 있는지는 실제 처리 경로를 확인해야 한다. 중계 서비스가 이진 메시지를 파싱·재직렬화하는지, JSON DTO로 변환하는지에 따라 결과가 다르다. ProtoJSON은 Protobuf 메시지를 JSON으로 표현하는 표준 매핑이고, source compatibility는 생성 코드를 쓰는 프로그램이 다시 빌드되는지를 뜻한다. Protobuf 이진 호환 규칙을 이 두 경우에 그대로 적용하지 않는다.
 
 ### 호환성을 세 층으로 나누어 확인한다
 
@@ -144,7 +154,9 @@ message StockReply {
 
 새 필드 추가는 보통 binary wire-safe한 변화지만, 서버가 새 필드를 모든 요청의 필수 업무 조건으로 삼으면 구버전 클라이언트가 실패한다. 구버전은 필드를 보낼 수 없기 때문이다. 먼저 서버가 필드가 없는 요청도 처리하도록 바꾼다. 이어서 클라이언트를 갱신하고, 실제 호출 현황을 확인한 뒤 구경로를 종료하는 식으로 배포 순서를 정해야 한다. Protobuf 문법이 이 순서를 대신 정해 주지는 않는다.
 
-`int32`를 같은 번호의 `string`으로 바꾸는 식의 변경은 안전하다고 가정하지 않는다. 공식 문서는 wire-safe·wire-compatible·wire-unsafe 변경을 구분한다. 일부 숫자 타입 변경이 wire-compatible해도 값 범위에 따라 잘리거나 데이터가 손실될 수 있다. 변경 가능한 타입 목록을 외우기보다 저장된 메시지와 실제 값 범위를 함께 검사한다.
+`int32`를 같은 번호의 `string`으로 바꾸는 식의 변경은 안전하다고 가정하지 않는다. Proto3 가이드의 'Updating A Message Type' 절은 binary wire-safe·wire-compatible(조건부 안전)·wire-unsafe 변경을 구분한다. 기존 필드의 번호를 바꾸거나 기존 필드를 이미 있는 `oneof` 안으로 옮기는 변경은 안전하지 않은 쪽에 속한다.
+
+일부 숫자 타입 변경이 wire-compatible해도 값 범위에 따라 잘리거나 데이터가 손실될 수 있다. 예를 들어 64비트 값을 `int32`로 읽으면 32비트로 잘린다. 변경 가능한 타입 목록을 외우기보다 저장된 메시지와 실제 값 범위를 함께 검사한다.
 
 ### 확인 질문: 이름을 그대로 두고 단위를 바꾸면
 
@@ -166,9 +178,11 @@ message StockReply {
 
 ### Channel을 RPC 하나나 TCP 연결 하나로 보지 않는다
 
-Channel은 대상 주소와 통신 정책을 가진 클라이언트 객체다. gRPC는 channel을 바탕으로 이름 해석·연결·부하 분산 같은 통신 작업을 수행한다. Channel을 생성했다고 원격 서버가 즉시 업무 요청을 받을 수 있는 것은 아니다. Channel에는 `IDLE`, `CONNECTING`, `READY`, `TRANSIENT_FAILURE` 같은 연결 상태가 있다.
+Channel은 대상 주소와 통신 정책을 가진 클라이언트 객체다. gRPC는 channel을 바탕으로 이름 해석·연결·부하 분산 같은 통신 작업을 수행한다. Channel을 생성했다고 원격 서버가 즉시 업무 요청을 받을 수 있는 것은 아니다. Channel에는 `IDLE`, `CONNECTING`, `READY`, `TRANSIENT_FAILURE`, `SHUTDOWN` 같은 연결 상태가 있다. `SHUTDOWN`은 channel이 종료를 시작한 상태이며 새 RPC는 즉시 실패한다.
 
-한 channel은 구현과 정책에 따라 0개 이상의 HTTP/2 연결을 사용할 수 있다. 한 연결에는 여러 HTTP/2 stream이 공존할 수 있다. 새 RPC마다 새 channel을 만들면 DNS·연결·TLS 등의 비용을 반복할 수 있으므로, 보통 stub과 channel을 재사용한다. 이 권고가 'channel 하나면 어떤 부하도 처리한다'는 보장은 아니다. [13장](#chapter-13)에서 동시 stream 한도를 살펴본다.
+한 channel은 구현과 정책에 따라 0개 이상의 HTTP/2 연결을 사용할 수 있다. HTTP/2 stream은 한 연결 안에서 요청·응답 프레임을 주고받는 독립된 논리 흐름이며, 한 연결에는 여러 stream이 공존할 수 있다.
+
+새 RPC마다 새 channel을 만들면 DNS·연결·TLS 등의 비용을 반복할 수 있으므로, 보통 stub과 channel을 재사용한다. 이 권고가 'channel 하나면 어떤 부하도 처리한다'는 보장은 아니다. 연결의 active RPC가 동시 stream 한도에 이르면 추가 RPC는 클라이언트에서 대기한다. [13장](#chapter-13)에서 이 한도를 살펴본다.
 
 여기서 HTTP/2 stream과 애플리케이션의 streaming RPC는 구분한다. Unary RPC도 HTTP/2 stream을 사용한다. Streaming RPC는 같은 RPC 안에 여러 Protobuf 메시지를 보내는 호출 형태다. 'HTTP/2를 사용하니 응답이 여러 개다'는 설명은 맞지 않는다.
 
@@ -205,7 +219,7 @@ READY는 통신에 사용할 연결 상태이지 모든 업무 의존성이 정�
 
 </details>
 
-공식 원문: [Core concepts](https://grpc.io/docs/what-is-grpc/core-concepts/), [Metadata](https://grpc.io/docs/guides/metadata/), [Performance best practices](https://grpc.io/docs/guides/performance/).
+공식 원문: [Core concepts](https://grpc.io/docs/what-is-grpc/core-concepts/), [Metadata](https://grpc.io/docs/guides/metadata/), [Performance best practices](https://grpc.io/docs/guides/performance/), [Connectivity semantics and API](https://github.com/grpc/grpc/blob/master/doc/connectivity-semantics-and-api.md).
 
 <a id="chapter-4"></a>
 ## 4장. 한 번의 호출에서 몇 개의 메시지를 주고받는가 | Streaming
@@ -247,11 +261,11 @@ service Inventory {
 
 ### Flow control은 수신 용량을 맞추는 통신 제어다
 
-송신자가 수신자보다 빠르면 보내는 속도를 제한해야 한다. gRPC는 underlying transport의 flow control을 사용해 보내는 속도를 조절한다. Write가 대기할 수 있으며, write API가 반환됐다고 메시지가 이미 네트워크로 나갔다는 뜻도 아니다. 프레임워크의 버퍼에 전달된 상태일 수 있다.
+송신자가 수신자보다 빠르면 보내는 속도를 제한해야 한다. gRPC는 하위 전송 계층(underlying transport)인 HTTP/2의 flow control을 사용해 보내는 속도를 조절한다. Write가 대기할 수 있으며, write API가 반환됐다고 메시지가 이미 네트워크로 나갔다는 뜻도 아니다. 프레임워크의 버퍼에 전달된 상태일 수 있다.
 
-수신 측에서 메시지를 읽어 전송 용량이 열리는 것과, 그 내용을 DB에 반영한 것은 다르다. 'write가 성공했으니 재고 수정이 끝났다'는 판단은 불가능하다. 업무 완료 확인이 필요하면 응답 메시지에 반영 결과나 처리 위치를 명시하고 그 의미를 계약한다.
+수신 측에서 메시지를 읽어 전송 용량이 열리는 것과, 그 내용을 DB에 반영한 것은 다르다. 'write가 성공했으니 재고 수정이 끝났다'는 판단은 불가능하다. 업무 완료 확인이 필요하면 응답 메시지에 반영 결과나 처리 위치를 명시하고 그 의미를 계약한다. 공식 flow control 가이드는 이 제어가 streaming RPC에 적용되며 unary RPC와는 관련이 없다고 설명한다.
 
-클라이언트와 서버가 모두 메시지를 많이 쓰면서 읽지 않으면 버퍼·flow-control 용량이 소진되어 양쪽 모두 더 진행하지 못할 수 있다. 양쪽이 먼저 상대 메시지를 기다리는 프로토콜도 멈출 수 있다. 읽기와 쓰기가 각각 진행될 수 있도록 관리하고, 애플리케이션 큐에도 용량 제한을 둔다. 수신한 모든 메시지를 무한 큐로 옮기면 통신 flow control만으로 프로세스 메모리를 지키기 어렵다.
+공식 가이드가 교착(deadlock) 가능성을 지적하는 조건은, 클라이언트와 서버가 모두 동기 읽기나 수동 flow control을 사용하면서 읽지 않고 많이 쓰는 경우다. 버퍼·flow-control 용량이 소진되어 양쪽 모두 더 진행하지 못할 수 있다. 양쪽이 먼저 상대 메시지를 기다리도록 설계한 애플리케이션 프로토콜도 같은 방식으로 멈출 수 있다. 읽기와 쓰기가 각각 진행될 수 있도록 관리하고, 애플리케이션 큐에도 용량 제한을 둔다. 수신한 모든 메시지를 무한 큐로 옮기면 통신 flow control만으로 프로세스 메모리를 지키기 어렵다.
 
 ### 끊어진 stream은 자동 replay 로그가 아니다
 
@@ -315,7 +329,7 @@ python -m grpc_tools.protoc -I. \
   --python_out=. --grpc_python_out=. inventory.proto
 ```
 
-`inventory_pb2.py`는 메시지 클래스, `inventory_pb2_grpc.py`는 stub·servicer·서버 등록 함수를 제공한다. 생성 파일을 직접 고치는 대신 `.proto`를 바꾸고 다시 생성한다.
+`inventory_pb2.py`는 메시지 클래스, `inventory_pb2_grpc.py`는 stub·servicer·서버 등록 함수를 제공한다. Servicer는 서버가 구현할 메서드를 정의한 생성 기본 클래스다. 생성 파일을 직접 고치는 대신 `.proto`를 바꾸고 다시 생성한다.
 
 ### 서버: handler를 구현하고 등록한다
 
@@ -384,7 +398,9 @@ if __name__ == "__main__":
         server.stop(1).wait()
 ```
 
-`context.abort`는 실패 status와 설명으로 RPC를 중단한다. 서버는 `None`을 정상 응답처럼 반환해 직렬화 오류를 일으키는 대신 업무 오류를 명시한다. Stream에서는 generator가 메시지를 차례로 생성한다. 이 실습의 세 응답은 실제 재고 변경을 나타내지 않는다. 고정 수량과 증가하는 sequence를 담는다.
+`context.abort`는 실패 status와 설명으로 RPC를 중단한다. 이 함수는 예외를 발생시키므로 뒤의 코드는 실행되지 않으며, `StatusCode.OK`로는 호출할 수 없다. 서버는 `None`을 정상 응답처럼 반환해 직렬화 오류를 일으키는 대신 업무 오류를 명시한다.
+
+Stream에서는 generator가 메시지를 차례로 생성한다. Generator는 `yield`로 값을 하나씩 내보내고 다음 요청 때 이어서 실행되는 Python 함수다. 이 실습의 세 응답은 실제 재고 변경을 나타내지 않는다. 고정 수량과 증가하는 sequence를 담는다.
 
 ### 클라이언트: 성공·실패·취소를 구분한다
 
@@ -455,7 +471,7 @@ Deadline이 없다면 응답을 사실상 무한히 기다릴 수 있다. 결함
 
 </details>
 
-공식 원문: [Python quick start](https://grpc.io/docs/languages/python/quickstart/), [Python basics](https://grpc.io/docs/languages/python/basics/), [Deadlines](https://grpc.io/docs/guides/deadlines/), [Cancellation](https://grpc.io/docs/guides/cancellation/).
+공식 원문: [Python quick start](https://grpc.io/docs/languages/python/quickstart/), [Python basics](https://grpc.io/docs/languages/python/basics/), [gRPC Python API](https://grpc.github.io/grpc/python/grpc.html), [Deadlines](https://grpc.io/docs/guides/deadlines/), [Cancellation](https://grpc.io/docs/guides/cancellation/).
 
 
 <a id="chapter-6"></a>
@@ -494,7 +510,7 @@ reply = downstream.GetStock(request, timeout=budget)
 
 ### 서버는 대기 종료와 실제 작업 중단을 연결해야 한다
 
-Deadline이 지나면 gRPC는 서버 측 RPC를 취소한다. 하지만 handler가 별도 스레드·하위 API·DB 쿼리를 시작했다면 애플리케이션이 그것을 중단하거나 정리해야 한다. gRPC의 취소 신호가 이미 커밋된 변경을 rollback하지는 않는다.
+Deadline이 지나면 gRPC는 서버 측 RPC를 취소한다. 같은 호출을 클라이언트는 `DEADLINE_EXCEEDED`로, 서버는 `CANCELLED`로 관찰한다. 하지만 handler가 별도 스레드·하위 API·DB 쿼리를 시작했다면 애플리케이션이 그것을 중단하거나 정리해야 한다. gRPC의 취소 신호가 이미 커밋된 변경을 rollback하지는 않는다.
 
 쓰기 전에 남은 시간을 확인하면 불필요한 작업을 줄일 수 있다. 하지만 확인 직후 deadline이 지날 수 있으므로, 이 확인만으로 커밋 성공 여부를 원자적으로 판정할 수는 없다. DB 쿼리 timeout과 RPC deadline은 각각 설정하고, 커밋 뒤에 응답 전송이 실패하는 경우도 고려해 설계한다.
 
@@ -526,7 +542,7 @@ Deadline이 지나면 gRPC는 서버 측 RPC를 취소한다. 하지만 handler�
 
 ### 하위 호출에도 원래 요청의 수명이 전달되어야 한다
 
-주문 서버가 결제 서버를 기다리는 동안 최초 호출이 취소되었다. 하위 결제 호출이 계속 진행하면 취소된 요청에서 시작한 작업이 남는다. 일부 언어는 outgoing RPC 취소를 자동으로 연결하지만, 다른 구현에서는 개발자가 call 객체나 context를 통해 전파해야 한다. 공식 가이드의 언어별 예제를 확인한다.
+주문 서버가 결제 서버를 기다리는 동안 최초 호출이 취소되었다. 하위 결제 호출이 계속 진행하면 취소된 요청에서 시작한 작업이 남는다. 일부 언어는 outgoing RPC 취소를 자동으로 연결하지만, 다른 구현에서는 개발자가 call 객체나 context를 통해 전파해야 한다. 조회한 공식 가이드의 언어 지원 표는 Java·Go·C++를 자동 취소로 표시하며, Python에는 그 표시가 없다. 공식 가이드의 언어별 예제를 확인한다.
 
 취소 신호를 전파해 멈출 수 있는 작업과 이미 확정된 업무도 구분한다. 아직 실행되지 않은 조회를 취소하는 것과 완료한 결제를 되돌리는 것은 다르다. 결제 취소는 새로운 업무 작업이며, RPC 취소 신호와 동일하지 않다. 취소 여부만 보고 보상 작업을 수행하면 정상 결제를 중복 취소할 수도 있다.
 
@@ -545,7 +561,7 @@ Deadline이 지나면 gRPC는 서버 측 RPC를 취소한다. 하지만 handler�
 
 ### 취소 이유를 비즈니스 메시지처럼 쓰지 않는다
 
-클라이언트가 자신의 cancel 로그에 이유를 붙일 수 있는 API가 있어도, 그것이 서버에 동일한 업무 사유로 전달된다고 가정하지 않는다. 고객이 주문을 취소했다는 사실은 `CancelOrder` 같은 인증·인가된 업무 요청으로 표현해야 한다. 통신 취소와 업무 취소의 감사 기록도 분리한다.
+공식 가이드에 따르면 cancel API가 받는 이유 문자열은 클라이언트 측 예외나 로그에 남는다. gRPC 클라이언트는 취소 이유에 대한 추가 정보를 서버에 보내지 않는다. 고객이 주문을 취소했다는 사실은 `CancelOrder` 같은 인증·인가된 업무 요청으로 표현해야 한다. 통신 취소와 업무 취소의 감사 기록도 분리한다.
 
 ### 확인 질문: 작업 정리는 누가 맡는가
 
@@ -582,8 +598,10 @@ Handler가 외부 구독을 등록한 뒤 별도 worker가 메시지를 생성�
 | `DEADLINE_EXCEEDED` | 대기 시간이 끝남. 서버 변경이 성공했을 가능성도 있다 |
 | `CANCELLED` | 호출이 취소됨. 변경의 rollback을 뜻하지 않는다 |
 | `UNIMPLEMENTED` | 메서드 또는 기능을 구현·지원하지 않음 |
-| `INTERNAL`, `UNKNOWN` | 내부 오류나 충분히 분류되지 않은 오류. 근거 없이 재시도 정책에 묶지 않는다 |
-| `OUT_OF_RANGE`, `DATA_LOSS` | 유효 범위 밖의 작업, 복구할 수 없는 손실·손상 등. 상세 원인을 확인한다 |
+| `INTERNAL` | 하부 시스템이 기대하는 불변식이 깨진 심각한 오류. 근거 없이 재시도 정책에 묶지 않는다 |
+| `UNKNOWN` | 오류 정보가 부족한 오류. 서버 handler의 예외도 이 상태가 될 수 있다 |
+| `OUT_OF_RANGE` | 유효 범위 밖의 작업. 파일 끝을 넘어 읽기처럼 시스템 상태가 바뀌면 해결될 수 있다 |
+| `DATA_LOSS` | 복구할 수 없는 데이터 손실·손상. 상세 원인을 확인한다 |
 
 공식 문서는 `UNAVAILABLE`·`ABORTED`·`FAILED_PRECONDITION`을 구분한다. 실패한 호출만 다시 시도해도 회복할 수 있는 경우가 있고, 그 호출을 포함한 전체 절차를 다시 수행해야 하는 경우가 있다. 시스템 상태를 명시적으로 고쳐야 하는 경우도 있다.
 
@@ -597,7 +615,9 @@ Handler가 외부 구독을 등록한 뒤 별도 worker가 메시지를 생성�
 
 ### Metadata의 규칙과 신뢰 경계
 
-Metadata key는 ASCII이고 대소문자를 구분하지 않으며, `grpc-` 접두사는 내부 용도로 예약되어 있다. 바이너리 값에는 `-bin` suffix를 사용한다. API가 binary metadata를 처리하는 방식은 언어별로 확인한다. 큰 업무 payload를 metadata에 넣지 않는다. 서버가 request header 크기를 제한할 수 있고, 공식 문서는 8KiB 제한을 제안값으로 언급한다. 모든 서버의 고정 한도라는 뜻은 아니다.
+Metadata key는 ASCII이고 대소문자를 구분하지 않으며, `grpc-` 접두사는 내부 용도로 예약되어 있다. 바이너리 값에는 `-bin` suffix를 사용한다. API가 binary metadata를 처리하는 방식은 언어별로 확인한다.
+
+큰 업무 payload를 metadata에 넣지 않는다. 서버가 request header 크기를 제한할 수 있고, 공식 문서는 8KiB 제한을 제안값으로 언급한다. 모든 서버의 고정 한도라는 뜻은 아니다.
 
 `authorization`, trace context, 요청 ID를 전달할 수 있다. 클라이언트가 `tenant-id`를 보냈다는 이유만으로 해당 테넌트의 데이터 접근을 허용하면 안 된다. 인증한 주체와 허용된 테넌트·대상 자원을 검증한다. Metadata도 입력값이며 로그에 그대로 남기면 토큰과 개인정보가 노출될 수 있다.
 
@@ -614,20 +634,42 @@ Initial metadata는 메시지 앞에, trailing metadata는 서버가 RPC를 닫�
 
 </details>
 
-공식 원문: [Status codes](https://grpc.io/docs/guides/status-codes/), [Metadata](https://grpc.io/docs/guides/metadata/).
+공식 원문: [Status codes](https://grpc.io/docs/guides/status-codes/), [Metadata](https://grpc.io/docs/guides/metadata/), [Core concepts — Metadata](https://grpc.io/docs/what-is-grpc/core-concepts/).
 
 <a id="chapter-9"></a>
 ## 9장. 같은 호출을 다시 해도 되는가 | Retry·멱등성
 
-재시도는 실패한 호출의 이력을 새로운 attempt에서 재생하는 동작이다. 호출자는 한 번 호출했다고 생각해도 서버에는 여러 attempt가 도착할 수 있다. '재시도가 지원된다'와 '재시도해도 업무가 한 번만 반영된다'는 별개의 조건이다.
+재시도는 실패한 호출의 이력을 새로운 attempt에서 재생하는 동작이다. Attempt는 하나의 논리 호출 안에서 서버로 실제 전송을 시도한 한 번을 뜻한다. 호출자는 한 번 호출했다고 생각해도 서버에는 여러 attempt가 도착할 수 있다.
+
+'재시도가 지원된다'와 '재시도해도 업무가 한 번만 반영된다'는 별개의 조건이다. 멱등성(idempotency)은 같은 요청을 여러 번 처리해도 한 번 처리한 것과 같은 업무 효과가 남는 성질이다. 공식 status 문서도 멱등하지 않은 작업의 재시도가 항상 안전하지는 않다고 경고한다.
 
 ### Transparent retry와 설정된 retry policy
 
-gRPC는 retry policy가 없어도 일부 낮은 수준의 실패를 transparent retry로 처리할 수 있다. 공식 가이드는 RPC가 client를 벗어나지 않은 경우와, server library에는 도달했지만 server application logic이 보지 않은 경우를 구분한다. 후자는 한 번의 transparent retry가 가능하다. '기본적으로 모든 UNAVAILABLE을 무조건 재시도한다'는 뜻은 아니다.
+gRPC는 retry policy가 없어도 일부 낮은 수준의 실패를 transparent retry로 처리할 수 있다. 공식 가이드는 두 경우를 구분한다.
 
-더 넓은 재시도에는 서비스·메서드별 retry policy를 설정한다. 허용 status, 최대 attempt 수, initial·max backoff, multiplier를 지정한다. Backoff에는 jitter가 적용되어 많은 클라이언트가 같은 시각에 재요청하는 현상을 줄인다. Throttling과 server pushback도 원문에서 확인할 수 있다. 언어·runtime의 지원 범위를 점검한다.
+- RPC가 client를 벗어나지 않은 경우: deadline 안에서 횟수 제한 없이 transparent retry할 수 있다.
+- Server library에는 도달했지만 server application logic이 보지 않은 경우: 한 번만 transparent retry한다.
 
-다음은 `GetStock` 조회에만 적용하는 service config 예시다. 운영 권장값이 아니라 설정 구조를 설명한다. Python에서는 JSON을 channel option으로 넘길 수 있으며 [11장](#chapter-11)의 방식과 연결된다.
+Transparent retry는 설정한 `maxAttempts` 횟수에 포함되지 않는다(gRFC A6). '기본적으로 모든 UNAVAILABLE을 무조건 재시도한다'는 뜻은 아니다.
+
+공식 가이드에 따르면 retry 기능은 기본으로 켜져 있지만 기본 retry policy는 없다. Channel을 만들 때 retry를 끄면 transparent retry와 설정한 policy가 모두 비활성화된다.
+
+더 넓은 재시도에는 서비스·메서드별 retry policy를 설정한다. 허용 status, 최대 attempt 수, initial·max backoff, multiplier를 지정한다. Backoff는 다음 attempt 전에 기다리는 시간이며, 실패가 반복될수록 multiplier만큼 늘어나되 max backoff를 넘지 않는다.
+
+Backoff에는 ±20% jitter가 적용된다. Jitter는 대기 시간에 무작위 편차를 섞어 많은 클라이언트가 같은 시각에 재요청하는 현상을 줄인다.
+
+공식 가이드는 retry throttling과 server pushback도 지원한다고 설명한다. Throttling은 클라이언트 측 제한이다. 실패한 RPC마다 token을 1 줄이고 성공한 RPC마다 `tokenRatio`만큼 늘리며, token이 `maxTokens`의 절반 아래로 떨어지면 회복될 때까지 재시도를 멈춘다. Pushback은 서버가 응답 metadata(`grpc-retry-pushback-ms`)로 재시도 지연이나 재시도 금지를 알리는 방식이다. 언어·runtime의 지원 범위를 점검한다.
+
+Retry policy를 설정한 메서드의 정상적인 재시도 흐름은 다음과 같다.
+
+1. 첫 attempt가 `retryableStatusCodes`에 포함된 status로 실패한다.
+2. RPC가 아직 committed 상태가 아니고 deadline이 남아 있으면 backoff만큼 기다린다.
+3. 같은 요청 메시지로 새 attempt를 보낸다.
+4. 성공하거나, 재시도할 수 없는 status를 받거나, `maxAttempts`·deadline·throttling 한도에 이르거나, 서버 pushback이 재시도를 막으면 멈춘다.
+
+Retry와 hedging은 같은 메서드에 둘 중 하나만 설정할 수 있다. Hedging은 응답을 기다리지 않고 지연을 두어 여러 attempt를 미리 보내는 정책이며, 이 교과서는 설정 실습을 다루지 않는다.
+
+다음은 `GetStock` 조회에만 적용하는 service config 예시다. 운영 권장값이 아니라 설정 구조를 설명한다. Python에서는 JSON을 channel option으로 넘길 수 있으며 [11장](#chapter-11)의 방식과 연결된다. 공식 Python retry 예제는 `grpc.service_config`와 함께 `grpc.enable_retries` 옵션을 설정한다.
 
 ```json
 {
@@ -644,19 +686,24 @@ gRPC는 retry policy가 없어도 일부 낮은 수준의 실패를 transparent 
 }
 ```
 
-`maxAttempts`는 최초 attempt를 포함한다. Deadline 안에서 attempt와 backoff가 진행되므로 최대 횟수를 설정해도 항상 그 횟수만큼 실행하지 않는다. 서버가 느린 상황에서 deadline을 늘리고 횟수도 늘리면, 같은 논리 호출이 더 많은 서버 자원을 쓸 수 있다.
+`maxAttempts`는 최초 attempt를 포함한다. gRFC A6에 따르면 클라이언트는 기본적으로 5보다 큰 값을 5로 취급하며, 이 상한은 channel argument로 바꿀 수 있다. Deadline은 모든 attempt에 걸쳐 적용되므로 최대 횟수를 설정해도 항상 그 횟수만큼 실행하지 않는다. 서버가 느린 상황에서 deadline을 늘리고 횟수도 늘리면, 같은 논리 호출이 더 많은 서버 자원을 쓸 수 있다.
 
 ### Retry의 commit은 DB commit이 아니다
 
-응답 header를 받으면 RPC는 retry 관점에서 committed 상태가 되어 추가 built-in retry를 하지 않는다. 이때의 commit은 서버 DB의 commit과 다른 용어다. 재시도 이력을 저장할 버퍼 제한을 넘는 경우도 retry 동작을 제한할 수 있으므로 구현과 설정을 확인한다.
+RPC가 retry 관점에서 committed 상태가 되면 추가 built-in retry를 하지 않는다. 이때의 commit은 서버 DB의 commit과 다른 용어다. gRFC A6는 committed가 되는 두 조건을 정한다.
+
+- 클라이언트가 응답 header를 받았다.
+- 재시도를 위해 보관하는 송신 메시지가 client library의 버퍼를 넘었다.
+
+버퍼에는 RPC별 한도와 전체 한도가 있다. 버퍼에 들어가지 않는 RPC는 원래 요청은 보내지만 재시도 대상이 되지 않는다. 구현과 설정을 확인한다.
 
 따라서 오래 유지한 stream이 중간에 끊겼을 때 retry policy만으로 전체 메시지를 자동 복구한다고 가정하지 않는다. 호출자가 이미 메시지를 처리했다면 재연결·resume·deduplication을 별도로 설계해야 한다. Built-in retry가 하지 않는 재시도를 애플리케이션이 수행할 수도 있으므로 각 계층의 재시도 동작을 함께 검사한다.
 
 ### Wait-for-ready는 서버 준비 대기다
 
-Channel이 `TRANSIENT_FAILURE`인 시점에 새 RPC를 만들면, 기본 동작은 준비되지 않은 연결 때문에 실패할 수 있다. `wait_for_ready=True`는 연결이 준비될 때까지 호출을 대기시킨다. `IDLE`·`CONNECTING` 상태에서의 정상적인 연결 대기까지 '기본이면 즉시 실패'라고 설명하면 틀린다.
+Channel이 서버 연결에 실패한 `TRANSIENT_FAILURE` 시점에 새 RPC를 만들면, wait-for-ready를 켜지 않은 기본 동작은 즉시 실패를 반환한다. `wait_for_ready=True`는 연결이 준비될 때까지 호출을 대기열에 둔다. `IDLE`·`CONNECTING` 상태에서의 정상적인 연결 대기까지 '기본이면 즉시 실패'라고 설명하면 틀린다.
 
-Wait-for-ready에도 deadline은 적용된다. 서버가 복구하지 않으면 대기하다 시간이 끝나며 다른 종류의 실패도 여전히 발생할 수 있다. 이미 서버가 처리한 업무를 되돌리거나 deduplicate하는 기능이 아니다. 배치처럼 잠깐 연결 복구를 기다려도 되는 작업과, 사용자가 빠른 오류를 원하는 화면 요청을 구분한다.
+Wait-for-ready에도 deadline은 적용된다. 서버가 복구하지 않으면 대기하다 시간이 끝난다. 공식 가이드의 흐름도는 영구적인 실패(permanent failure)이면 기다리지 않고 실패한다고 표시한다. 서버 준비 외의 이유로 실패하는 경우도 여전히 있다. 이미 서버가 처리한 업무를 되돌리거나 deduplicate하는 기능이 아니다. 배치처럼 잠깐 연결 복구를 기다려도 되는 작업과, 사용자가 빠른 오류를 원하는 화면 요청을 구분한다.
 
 ```python
 # 5장의 stub에서 사용하는 호출 옵션 예시
@@ -695,7 +742,7 @@ transaction commit
 
 </details>
 
-공식 원문: [Retry](https://grpc.io/docs/guides/retry/), [Wait-for-ready](https://grpc.io/docs/guides/wait-for-ready/), [Service config](https://grpc.io/docs/guides/service-config/). DB 멱등 처리 흐름은 이 교과서의 설계 예시이며 gRPC의 자동 보장이 아니다.
+공식 원문: [Retry](https://grpc.io/docs/guides/retry/), [gRFC A6: Client Retries](https://github.com/grpc/proposal/blob/master/A6-client-retries.md), [Wait-for-ready](https://grpc.io/docs/guides/wait-for-ready/), [Service config](https://grpc.io/docs/guides/service-config/), [Status codes](https://grpc.io/docs/guides/status-codes/). DB 멱등 처리 흐름은 이 교과서의 설계 예시이며 gRPC의 자동 보장이 아니다.
 
 <a id="chapter-10"></a>
 ## 10장. 누구의 호출이며 무엇을 허용하는가 | 보안·Interceptor
@@ -720,11 +767,11 @@ credentials = grpc.ssl_channel_credentials(root_certificates=roots)
 channel = grpc.secure_channel("inventory.example.com:443", credentials)
 ```
 
-검증 오류가 났다고 host name 검증을 무력화하는 옵션으로 덮지 않는다. 인증서 대상 이름·유효기간·신뢰 체인·서버 설정을 확인한다. Google OAuth token도 임의의 사설 서비스에 보내지 않는다. 공식 가이드는 잘못된 대상에 보낸 token이 탈취·악용될 수 있음을 경고한다.
+검증 오류가 났다고 host name 검증을 무력화하는 옵션으로 덮지 않는다. 인증서 대상 이름·유효기간·신뢰 체인·서버 설정을 확인한다. 공식 가이드는 Google 자격 증명을 Google 서비스 연결에만 쓰라고 한다. Google이 발급한 OAuth2 token을 Google이 아닌 서비스에 보내면, token이 탈취되어 Google 서비스에서 그 클라이언트를 사칭하는 데 쓰일 수 있다.
 
 ### Interceptor는 호출 단위의 공통 로직이다
 
-Interceptor는 middleware·filter와 비슷하게 많은 RPC에 적용할 공통 처리를 제공한다. Metadata, 로깅, 지표, server-side 인증·인가, fault injection 등에 사용할 수 있다. Client interceptor와 server interceptor의 API는 다르며 언어마다 구현 방식도 다르다.
+Interceptor는 middleware·filter와 비슷하게 많은 RPC에 적용할 공통 처리를 제공한다. Metadata, 로깅, 지표, server-side 인증·인가, fault injection(시험을 위해 지연이나 오류를 의도적으로 주입함) 등에 사용할 수 있다. Client interceptor와 server interceptor의 API는 다르며 언어마다 구현 방식도 다르다.
 
 Interceptor는 per-call 확장점이다. TCP port 설정·TLS 연결 구성 자체를 담당하지 않는다. Client-side 인증 정보를 붙이는 데는 call credentials API가 더 적합할 수 있다. 공통 로직을 한 곳에 두더라도 메서드와 자원의 업무 권한을 실제로 검사해야 한다.
 
@@ -759,7 +806,11 @@ mTLS는 연결 주체의 인증을 다루며 요청한 테넌트·자원에 대�
 
 Name resolver는 `dns:///inventory.example.com:443` 같은 target 이름을 주소 목록으로 해석하고 service config를 제공할 수 있다. Load-balancing policy는 그 주소의 subchannel을 관리하고 새 RPC에 사용할 연결을 고르는 picker를 제공한다. Subchannel은 특정 서버와의 물리 연결을 나타내는 단위다.
 
-Channel target이 하나의 VIP만 가리키면 클라이언트가 실제 서버 세 대를 직접 알고 있는 것과 다르다. 어떤 LB 정책을 지정해도 resolver가 알려 주지 않은 backend 주소를 임의로 찾아내는 것은 아니다. DNS·xDS·proxy가 각각 어떤 endpoint를 제공하는지 확인한다.
+VIP(virtual IP)는 여러 서버 앞의 부하 분산 장치가 대표로 받는 가상 주소다. Channel target이 하나의 VIP만 가리키면 클라이언트가 실제 서버 세 대를 직접 알고 있는 것과 다르다. 어떤 LB 정책을 지정해도 resolver가 알려 주지 않은 backend 주소를 임의로 찾아내는 것은 아니다.
+
+xDS는 control plane이 endpoint·라우팅·LB 설정을 클라이언트나 proxy에 내려 주는 API 묶음이다. DNS·xDS·proxy가 각각 어떤 endpoint를 제공하는지 확인한다.
+
+주소 목록이 언제 갱신되는지도 resolver마다 다르다. 공식 가이드에 따르면 표준 DNS에서는 클라이언트가 연결을 시작할 때 주소를 조회하고 그 연결의 수명 동안 해당 주소를 유지한다. 반면 custom resolver는 변경을 감시(watch)하는 방식으로 만들 수 있다. 서버를 늘려도 기존 연결이 새 주소를 자동으로 알게 되는 것은 아니다.
 
 기본 `pick_first`는 resolver의 주소들을 시도하고 연결할 수 있는 첫 대상을 사용한다. 이름과 달리 모든 호출을 round-robin 분배하지 않는다. `round_robin`은 알려진 주소들에 연결하고 연결된 backend를 돌아가며 새 RPC를 보낸다. 지원하는 정책과 resolver API는 언어마다 다르다.
 
@@ -769,7 +820,7 @@ Channel target이 하나의 VIP만 가리키면 클라이언트가 실제 서버
 
 Service config는 특정 target에 대한 client-side 설정이다. Load balancing, call timeout, wait-for-ready, retry·hedging, health checking 등을 제어할 수 있다. 모든 channel의 글로벌 설정이나 서버의 업무 구현을 바꾸는 파일은 아니다.
 
-Resolver가 제공하거나 애플리케이션에서 기본 JSON을 지정할 수 있다. 예를 들어 Go의 DNS resolver는 TXT record를 통한 config를 지원하지만 이를 모든 언어의 DNS 기본 동작으로 일반화하지 않는다. xDS control plane을 사용하면 받은 설정을 client의 service config로 변환하는 경로도 있다. 본문은 xDS 배포 실습을 다루지 않는다.
+Resolver가 제공하거나 애플리케이션에서 기본 JSON을 지정할 수 있다. 코드에서 지정한 config는 resolver가 config를 제공하지 않을 때 쓰는 기본값이다. Resolver가 config를 주면 코드의 값은 사용되지 않는다. 예를 들어 Go의 DNS resolver는 TXT record를 통한 config를 지원하지만 이를 모든 언어의 DNS 기본 동작으로 일반화하지 않는다. xDS control plane을 사용하면 받은 설정을 client의 service config로 변환하는 경로도 있다. 본문은 xDS 배포 실습을 다루지 않는다.
 
 Python의 설정 구조 예시는 다음과 같다. 실제 DNS가 여러 backend를 제공한다는 조건에서 새 RPC 분산을 관찰할 수 있다. 이 hostname은 설명용이며 그대로 실행하는 주소가 아니다.
 
@@ -790,7 +841,7 @@ channel = grpc.insecure_channel(
 
 ### L4와 L7의 분산 단위가 다르다
 
-설계상 추론으로, TCP 연결 단위로 분산하는 L4 LB 뒤에 재사용되는 HTTP/2 연결 하나가 오래 남으면 그 연결의 많은 RPC가 같은 backend에 갈 수 있다. 서버 인스턴스를 늘려도 기존 연결이 유지되면 트래픽이 즉시 균등해지지 않을 수 있다.
+L4 LB는 TCP 연결 단위로 backend를 고르고, L7 LB는 HTTP 요청이나 gRPC 호출의 내용을 보고 고른다. gRPC 안의 부하 분산은 연결 단위가 아니라 호출 단위로 일어난다. 설계상 추론으로, TCP 연결 단위로 분산하는 L4 LB 뒤에 재사용되는 HTTP/2 연결 하나가 오래 남으면 그 연결의 많은 RPC가 같은 backend에 갈 수 있다. 서버 인스턴스를 늘려도 기존 연결이 유지되면 트래픽이 즉시 균등해지지 않을 수 있다.
 
 Client-side LB는 클라이언트가 여러 backend를 보고 RPC 단위로 선택하도록 한다. gRPC를 이해하는 L7 proxy도 새로운 HTTP/2 stream을 backend에 분산할 수 있다. 어느 계층에서 분산할지, proxy가 HTTP/2·gRPC trailer·timeout을 제대로 처리하는지 확인한다. 'Kubernetes Service가 있으니 RPC가 균등하다'는 전제로 시작하지 않는다.
 
@@ -807,7 +858,7 @@ Client-side LB는 클라이언트가 여러 backend를 보고 RPC 단위로 선�
 
 </details>
 
-공식 원문: [Custom name resolution](https://grpc.io/docs/guides/custom-name-resolution/), [Custom load balancing](https://grpc.io/docs/guides/custom-load-balancing/), [Service config](https://grpc.io/docs/guides/service-config/), [Performance best practices](https://grpc.io/docs/guides/performance/).
+공식 원문: [Custom name resolution](https://grpc.io/docs/guides/custom-name-resolution/), [Custom load balancing](https://grpc.io/docs/guides/custom-load-balancing/), [Service config](https://grpc.io/docs/guides/service-config/), [Performance best practices](https://grpc.io/docs/guides/performance/), [Load balancing in gRPC](https://github.com/grpc/grpc/blob/master/doc/load-balancing.md).
 
 <a id="chapter-12"></a>
 ## 12장. 연결이 살아 있고 업무를 받을 수 있는가 | Health·Keepalive·종료
@@ -822,7 +873,9 @@ gRPC의 표준 `health/v1` 서비스는 unary `Check`와 streaming `Watch`를 �
 
 어떤 조건에서 `NOT_SERVING`으로 바꿀지도 설계한다. 선택적 의존성의 일시 실패마다 전체 서버를 요청을 받지 못하는 상태로 전환하면 정상 처리 가능한 메서드까지 차단할 수 있다. 반대로 DB를 사용할 수 없는데 계속 `SERVING`이면 client가 호출이 실패할 서버를 계속 선택할 수 있다. 메서드별 의존성과 전체 서비스의 준비 기준을 맞춘다.
 
-Client-side health checking을 활성화하면 client는 연결 뒤 `Watch`를 사용해 상태를 확인하고 healthy 서비스에 호출을 보낸다. `UNIMPLEMENTED`로 Watch가 실패하면 이 health checking 기능을 끄는 동작이 있으며, `pick_first`처럼 일부 LB policy는 health checking을 비활성화할 수 있다. 설정을 넣었다고 모든 언어·정책에서 반드시 같은 gate가 작동한다고 주장하지 않는다.
+Client-side health checking을 활성화하면 client는 연결 뒤 `Watch`를 사용해 상태를 확인하고 healthy 서비스에 호출을 보낸다. 해당 서비스가 healthy 상태를 보내기 전에는 그 연결로 요청을 보내지 않는다.
+
+Watch 호출이 실패하면 exponential backoff로 다시 시도한다. `UNIMPLEMENTED`로 Watch가 실패하면 이 health checking 기능을 끄는 동작이 있으며, `pick_first`처럼 일부 LB policy는 health checking을 비활성화할 수 있다. 설정을 넣었다고 모든 언어·정책에서 반드시 같은 gate가 작동한다고 주장하지 않는다.
 
 ### Keepalive는 HTTP/2 PING으로 연결을 확인한다
 
@@ -830,7 +883,9 @@ Keepalive는 HTTP/2 PING을 사용해 연결의 생존을 확인하고 idle 경�
 
 장기 stream에서 keepalive 실패로 연결이 닫히면 진행 중 RPC도 실패할 수 있다. 아직 보내지 않은 데이터는 손실될 수 있으므로 애플리케이션이 resume·재처리 정책을 정해야 한다. PING interval을 줄이면 연결 실패를 빨리 알 수 있지만, 무조건 줄일 경우 client 수에 따른 부하·서버의 허용 정책이 문제가 될 수 있다.
 
-서버 운영자와 허용 interval·활성 호출이 없을 때 PING 허용 여부를 맞춘다. 서버가 허용하지 않는 빈번한 PING은 `GOAWAY`와 `too_many_pings`로 이어질 수 있다. 공식 가이드는 호출 없는 keepalive를 피하고 client interval을 1분보다 훨씬 짧게 설정하는 것을 경계한다. 이 문서는 모든 배포에 하나의 고정 interval을 권하지 않는다.
+서버 운영자와 허용 interval·활성 호출이 없을 때 PING 허용 여부를 맞춘다. 공식 가이드는 서비스가 keepalive를 지원하지 않으면 처음 몇 번의 PING은 무시되다가, 서버가 debug data `too_many_pings`를 담은 `GOAWAY`를 보낼 수 있다고 설명한다. `GOAWAY`는 연결을 닫겠다고 알리는 HTTP/2 frame이다. 서버의 허용 기준(`PERMIT_KEEPALIVE_TIME`, 표의 기본값 5분)보다 잦은 PING도 확인 대상이다.
+
+공식 가이드는 서버에 과도한 부하(DDoS)를 주지 않도록 호출 없는 keepalive를 피하고 client interval을 1분보다 훨씬 짧게 설정하지 말라고 권한다. 이 문서는 모든 배포에 하나의 고정 interval을 권하지 않는다.
 
 | 확인 수단 | 알 수 있는 것 | 이것만으로 알 수 없는 것 |
 |---|---|---|
@@ -843,9 +898,9 @@ Keepalive는 HTTP/2 PING을 사용해 연결의 생존을 확인하고 idle 경�
 
 배포 때 서버를 즉시 종료하면 진행 중 RPC와 stream이 끊긴다. Graceful shutdown은 새 호출을 더 받지 않도록 전환하고 진행 중 호출이 끝날 시간을 준다. 무한 stream이 있으면 종료를 끝없이 기다릴 수 있으므로, 정해진 유예 뒤 forceful shutdown하는 경로도 필요하다.
 
-Health status 갱신·LB drain·gRPC server shutdown·프로세스 종료 시간을 함께 조정한다. Client가 상태 변화를 알아차리기까지 시간이 걸리므로 전환 중 새 요청이나 재시도가 도착할 수 있다. 종료 유예가 있다는 이유로 실패가 완전히 사라지지는 않는다.
+Drain은 새 트래픽을 다른 서버로 돌리고 기존 작업이 끝나기를 기다리는 단계다. 공식 health 가이드는 서버 종료를 health library에 알려 연결된 client에 통지하도록 안내한다. Health status 갱신·LB drain·gRPC server shutdown·프로세스 종료 시간을 함께 조정한다. Client가 상태 변화를 알아차리기까지 시간이 걸리므로 전환 중 새 요청이나 재시도가 도착할 수 있다. 종료 유예가 있다는 이유로 실패가 완전히 사라지지는 않는다.
 
-Python 실습의 `server.stop(1).wait()`는 새 RPC를 막고 기존 호출에 최대 1초의 grace를 주는 사용 예다. 다른 언어의 graceful 함수는 별도 forceful timer를 구성해야 할 수 있다. 장기 stream에는 종료 신호·재접속·resume 계약을 둔다. Kubernetes 등의 종료 유예도 이 시간과 충돌하지 않아야 한다.
+Python 실습의 `server.stop(1).wait()`는 새 RPC를 막고 기존 호출에 최대 1초의 grace를 주는 사용 예다. Python API는 grace 안에 끝나지 않은 RPC를 중단(abort)하므로 강제 종료가 이 호출에 포함된다. 다른 언어의 graceful 함수는 별도 forceful timer를 구성해야 할 수 있다. 장기 stream에는 종료 신호·재접속·resume 계약을 둔다. Kubernetes 등의 종료 유예도 이 시간과 충돌하지 않아야 한다.
 
 ### 확인 질문: PING은 되는데 조회가 실패한다면
 
@@ -854,11 +909,11 @@ Keepalive PING은 정상이다. DB는 사용할 수 없고 health status는 여�
 <details markdown="1">
 <summary>해설</summary>
 
-PING은 연결의 생존만 확인하므로 DB 장애를 해결하거나 올바른 health status를 만들지 않는다. 애플리케이션의 readiness 기준과 갱신 경로를 고쳐야 한다. 무한 stream은 스스로 끝나지 않을 수 있어 종료 프로토콜·유예 제한·강제 종료·client 복구를 함께 설계한다.
+PING은 연결의 생존만 확인하므로 DB 장애를 해결하거나 올바른 health status를 만들지 않는다. 애플리케이션의 readiness(요청을 받아 처리할 준비가 된 상태) 기준과 갱신 경로를 고쳐야 한다. 무한 stream은 스스로 끝나지 않을 수 있어 종료 프로토콜·유예 제한·강제 종료·client 복구를 함께 설계한다.
 
 </details>
 
-공식 원문: [Health checking](https://grpc.io/docs/guides/health-checking/), [Keepalive](https://grpc.io/docs/guides/keepalive/), [Graceful shutdown](https://grpc.io/docs/guides/server-graceful-stop/).
+공식 원문: [Health checking](https://grpc.io/docs/guides/health-checking/), [Keepalive](https://grpc.io/docs/guides/keepalive/), [Graceful shutdown](https://grpc.io/docs/guides/server-graceful-stop/), [gRPC Python API — Server.stop](https://grpc.github.io/grpc/python/grpc.html).
 
 <a id="chapter-13"></a>
 ## 13장. 느린 호출은 어디에서 기다리는가 | 성능·동시성·Backpressure
@@ -871,27 +926,27 @@ gRPC는 생성 코드·이진 메시지·HTTP/2 연결 재사용을 제공하지
 
 한 HTTP/2 연결의 active RPC가 동시 stream 한도에 도달하면 추가 RPC는 client에서 기다릴 수 있다. 서버 CPU가 낮더라도 client latency가 늘어날 수 있다. 장기 stream이 연결 용량을 오래 차지하면 짧은 unary 호출도 영향을 받을 수 있다.
 
-고부하 영역의 별도 channel이나 channel pool은 이 대기의 완화책이 될 수 있다. 하지만 runtime이 연결을 재사용해 여러 channel이 실제로 독립 연결을 만들지 않을 수도 있다. 공식 가이드는 channel argument를 다르게 하는 조건도 설명한다. 측정 없이 pool 크기부터 늘리면 연결·메모리 비용만 증가할 수 있다.
+고부하 영역의 별도 channel이나 channel pool은 이 대기의 완화책이 될 수 있다. 하지만 runtime이 연결을 재사용해 여러 channel이 실제로 독립 연결을 만들지 않을 수도 있다. 공식 가이드는 재사용을 막으려면 channel argument를 다르게 해야 한다고 설명하며, 여러 channel을 만드는 방법을 언젠가 필요 없어질 임시 해결책으로 본다. 측정 없이 pool 크기부터 늘리면 연결·메모리 비용만 증가할 수 있다.
 
 ### Streaming은 workload의 선택이지 자동 최적화가 아니다
 
 장기 논리 흐름을 하나의 stream으로 유지하면 반복적인 RPC 시작 비용을 줄일 수 있다. 반면 시작한 stream은 다른 backend로 이동하지 못하고, 실패 시 복구와 관측이 복잡해질 수 있다. 많은 작은 RPC를 합치는 이익과 장기 점유·편중의 비용을 비교한다.
 
-특히 Python의 동기 gRPC stack은 streaming의 송수신에 추가 스레드를 사용한다. 공식 가이드는 다른 언어와 달리 이 경로에서 streaming이 unary보다 느릴 수 있음을 설명하고 `asyncio` 사용을 검토하도록 한다. 모든 언어의 streaming 성능을 하나의 규칙으로 묶지 않는다. async로 바꿔도 blocking DB 호출을 event loop에 그대로 두면 다른 작업을 막을 수 있다.
+특히 공식 가이드는 gRPC Python의 streaming RPC가 메시지 수신(경우에 따라 송신)을 위한 추가 스레드를 만들기 때문에, 다른 언어와 달리 unary RPC보다 훨씬 느리다고 설명한다. 같은 가이드는 `asyncio`가 성능을 개선할 수 있다고 한다. 모든 언어의 streaming 성능을 하나의 규칙으로 묶지 않는다. async로 바꿔도 blocking DB 호출을 event loop에 그대로 두면 다른 작업을 막을 수 있다.
 
 압축은 payload 특성에 따라 CPU 사용량을 늘리는 대신 bandwidth 사용량을 줄이는 선택이다. 작은 메시지·이미 압축된 데이터·CPU 병목에서는 이익이 적을 수 있다. Compression on/off만 비교하지 말고 payload 크기와 처리량·latency·CPU를 같은 조건에서 관찰한다. 이것은 측정 설계이며 공식 문서에 없는 성능 수치를 만들어 넣지 않는다.
 
 ### Transport의 제어와 애플리케이션 큐의 제어를 연결한다
 
-Flow control에서는 receiver가 sender에게 보낼 수 있는 용량을 알리고, sender는 용량이 없으면 대기한다. Handler가 메시지를 읽는 즉시 무제한 작업 큐로 옮기면 전송은 계속 진행될 수 있지만 실제 처리는 밀리고 메모리가 늘어난다. 애플리케이션 큐 길이·최대 동시 작업·메시지 크기도 제한해야 한다.
+Backpressure는 처리하는 쪽이 느릴 때 그 압력을 보내는 쪽으로 되돌려 생산 속도를 늦추는 방식이다. Flow control에서는 receiver가 sender에게 보낼 수 있는 용량을 알리고, sender는 용량이 없으면 대기한다. Handler가 메시지를 읽는 즉시 무제한 작업 큐로 옮기면 전송은 계속 진행될 수 있지만 실제 처리는 밀리고 메모리가 늘어난다. 애플리케이션 큐 길이·최대 동시 작업·메시지 크기도 제한해야 한다.
 
-5장의 server executor는 worker 4개인 학습용 구성이다. 생산 환경의 동시 요청 admission 정책 전체를 구성한 것은 아니다. Worker를 늘리기 전에 DB pool·하위 서비스·메모리의 처리 한도를 맞춘다. 대기 중인 요청이 deadline 뒤에 실행되지 않도록 취소 확인도 필요하다.
+5장의 server executor는 worker 4개인 학습용 구성이다. 생산 환경의 동시 요청 admission 정책 전체를 구성한 것은 아니다. Admission은 새 요청을 지금 받아 처리할지, 대기시키거나 거절할지 정하는 입구 제어다. Worker를 늘리기 전에 DB pool·하위 서비스·메모리의 처리 한도를 맞춘다. 대기 중인 요청이 deadline 뒤에 실행되지 않도록 취소 확인도 필요하다.
 
 Bidi에서 읽기와 쓰기를 무조건 한 작업의 순서로 묶으면 교착 상태가 생길 수 있다. 양쪽이 대량으로 먼저 쓰고 읽지 않으면 상대가 받아야 열리는 용량을 서로 기다리게 된다. 독립적인 reader·writer 또는 명확한 request/response 진행 규칙과 bounded queue를 설계한다.
 
 ### 같은 부하 조건으로 비교한다
 
-성능 시험에서는 connection warm-up, payload, 동시 호출 수, 서버 인스턴스, 오류·deadline 비율을 기록한다. 평균만 보지 말고 p95·p99와 client 대기·server 처리 시간을 비교한다. 성공한 빠른 요청만 집계하면 timeout으로 탈락한 느린 호출을 숨길 수 있다.
+성능 시험에서는 connection warm-up, payload, 동시 호출 수, 서버 인스턴스, 오류·deadline 비율을 기록한다. 평균만 보지 말고 p95·p99(요청의 95%·99%가 그 시간 안에 끝나는 백분위 지연)와 client 대기·server 처리 시간을 비교한다. 성공한 빠른 요청만 집계하면 timeout으로 탈락한 느린 호출을 숨길 수 있다.
 
 | 관찰 | 먼저 나눠 볼 위치 |
 |---|---|
@@ -901,7 +956,7 @@ Bidi에서 읽기와 쓰기를 무조건 한 작업의 순서로 묶으면 교�
 | Stream 수 증가와 memory 증가 | 메시지 버퍼·애플리케이션 큐·정리되지 않은 구독 |
 | 오류와 retry가 함께 증가 | backend 장애·retry amplification·deadline budget |
 
-이 표는 진단 출발점이지 지표 하나로 원인을 확정하는 규칙이 아니다. Trace·지연 구간·실제 부하 변화로 가설을 검증한다.
+Retry amplification은 여러 계층이나 많은 클라이언트의 재시도가 겹쳐 장애 중인 backend에 요청이 몇 배로 늘어나는 현상이다. 이 표는 진단 출발점이지 지표 하나로 원인을 확정하는 규칙이 아니다. Trace·지연 구간·실제 부하 변화로 가설을 검증한다.
 
 ### 확인 질문: 스레드만 늘리면 되는가
 
@@ -927,7 +982,9 @@ Client connection의 동시 stream 한도나 picker 대기 때문에 느리다�
 
 Call 한 개가 attempt 여러 개로 이어지면 최종 성공률은 높아 보여도 backend 부하는 늘 수 있다. 논리 호출 수와 attempt 수를 비교하고, retry delay·최종 status·server 처리량을 함께 본다. 논리 호출을 세는지 attempt를 세는지에 따라 오류율의 분모도 달라지므로 각 지표의 측정 범위를 확인한다.
 
-실험적 retry·LB·xDS 지표는 기본 비활성화일 수 있다. Plugin, optional attribute, 언어별 설치 API와 버전을 확인한다. 같은 이름의 표준 지표 목록이 있다고 모든 runtime에서 설정 없이 전부 나오는 것은 아니다. Metric label에 주문 ID·사용자 ID를 무제한 넣으면 cardinality가 증가하므로 개별 호출 연결은 trace·구조화 로그에서 다룬다.
+공식 가이드에 따르면 일부 지표는 기본으로 꺼져 있고, 실험적(experimental) 지표는 항상 기본 비활성화다. `grpc.client.call.retries` 같은 retry 지표도 실험적 지표에 속한다. Optional attribute도 명시적으로 켜야 한다. Plugin, 언어별 설치 API와 버전을 확인한다. 같은 이름의 표준 지표 목록이 있다고 모든 runtime에서 설정 없이 전부 나오는 것은 아니다.
+
+Cardinality는 한 지표가 가지는 label 값 조합의 수다. Metric label에 주문 ID·사용자 ID를 무제한 넣으면 cardinality가 늘어 저장·조회 비용이 커지므로 개별 호출 연결은 trace·구조화 로그에서 다룬다.
 
 ### 통신 결과와 업무 결과를 같은 ID로 연결한다
 
@@ -984,9 +1041,11 @@ Retry가 오류를 숨기는 동안 부하·지연을 키웠을 수 있다. Atte
 
 ### 브라우저에서는 native gRPC와 같은 API를 가정하지 않는다
 
-브라우저의 일반 fetch API를 native gRPC의 stub처럼 사용할 수 있는 것은 아니다. 공식 `grpc-web` 구현은 gRPC-Web client와 이를 backend gRPC로 연결하는 proxy 또는 지원 서버를 사용한다. 보통 Envoy proxy가 예시에 쓰인다. 변환 경로의 CORS·TLS·metadata·trailer 처리도 확인한다.
+브라우저의 일반 fetch API를 native gRPC의 stub처럼 사용할 수 있는 것은 아니다. 공식 `grpc-web` 구현은 gRPC-Web client와 이를 backend gRPC로 연결하는 proxy 또는 지원 서버를 사용한다. README는 기본 proxy를 Envoy로 소개하고, 그 밖의 proxy와 gRPC-Web을 직접 지원하는 서버 프레임워크도 생태계 목록에 둔다.
 
-2026-10-06 조회한 공식 `grpc/grpc-web` README에서 지원 모드는 unary와 server-side streaming이며, server streaming은 `grpcwebtext` 모드에서 지원한다. Client streaming과 bidirectional streaming은 지원하지 않는다고 명시되어 있다. 이는 해당 공식 구현의 현재 범위이며 모든 브라우저 관련 RPC 라이브러리의 영구적인 한계로 확대하지 않는다.
+변환 경로의 CORS·TLS·metadata·trailer 처리도 확인한다. CORS(cross-origin resource sharing)는 브라우저가 다른 origin의 API 호출을 허용할지 서버 응답 header로 판단하는 규칙이다.
+
+2026-10-06 조회한 공식 `grpc/grpc-web` README에서 지원 모드는 unary와 server-side streaming이며, server streaming은 `grpcwebtext` 모드에서 지원한다. `grpcweb` 모드는 unary만 지원한다. Client streaming과 bidirectional streaming은 지원하지 않는다고 명시되어 있다. 이는 해당 공식 구현의 현재 범위이며 모든 브라우저 관련 RPC 라이브러리의 영구적인 한계로 확대하지 않는다.
 
 브라우저에서 bidi가 필요하면 WebSocket 등 별도 후보를 검토하거나 다른 구현의 실제 지원·운영 경로를 확인한다. 'native 서버가 bidi를 지원하니 gRPC-Web도 된다'는 추론으로 설계하지 않는다.
 
@@ -1046,6 +1105,7 @@ Retry가 오류를 숨기는 동안 부하·지연을 키웠을 수 있다. Atte
 | Status·metadata·trailers | 결과 코드·호출 부가 정보·서버 종료 metadata — [8장](#chapter-8) |
 | Call·attempt | Application의 논리 호출과 개별 실행 시도 — [9장](#chapter-9), [14장](#chapter-14) |
 | Transparent retry | 서버 업무 코드가 처리하지 않은 일부 실패의 투명 재시도 — [9장](#chapter-9) |
+| Backoff·jitter | 재시도 전 대기 시간과 그 시간에 섞는 무작위 편차 — [9장](#chapter-9) |
 | Wait-for-ready | 준비되지 않은 연결에서 deadline까지 기다리는 옵션 — [9장](#chapter-9) |
 | 멱등성 | 같은 업무의 반복에서 정의한 효과를 중복시키지 않는 계약 — [9장](#chapter-9) |
 | Credentials·interceptor | 통신/호출 인증 정보와 호출별 공통 확장점 — [10장](#chapter-10) |
