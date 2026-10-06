@@ -20,4 +20,5 @@ layout: default
     {% if page.next_chapter %}<a href="{{ page.next_chapter.url | relative_url }}">다음 장 · {{ page.next_chapter.title | escape }}</a>{% endif %}
   </nav>
 </main>
+<script defer src="{{ '/js/toc-highlight.js?v=2' | relative_url }}"></script>
 {% endif %}
