@@ -39,6 +39,9 @@
 
 ## 위키 (`_wiki/*.md`)
 
+학습용 교과서 작성·보강 기준은 `docs/wiki-authoring.md`를 따른다.
+Claude Code 프로젝트 커맨드는 `.claude/commands/wiki.md` (`/wiki <대상> [요청]`)다.
+
 ### 프론트매터
 
 | 키        | 필수 | 설명 |
