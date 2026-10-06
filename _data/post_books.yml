@@ -1,4 +1,13 @@
 # Authored books only. Examples live in excluded docs/tests, never here.
+- id: consider-the-clean-coder
+  title: "Consider — The Clean Coder"
+  intro: ""
+  public: true
+  chapters:
+    - id: reading-ahead
+      state: published
+    - id: test-driven-development
+      state: published
 - id: what-am-i
   title: "'나'는 무엇인가."
   intro: ""
