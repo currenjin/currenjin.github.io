@@ -63,6 +63,20 @@ for target in ["foundation-planes", "foundation-pipeline", "foundation-log",
 for name in ["fig-00-data-path.svg", "fig-00-memory-io.svg"]:
     if not any(src.endswith(name) for src in p.images):
         errors.append("Missing foundation figure: " + name)
+# Stable source IDs retain their original chapter prefix; visible numbers
+# must follow the current 1–16 chapter numbering in both prose and index.
+refs = re.findall(r'<a href="#source-(\d+)\.(\d+)">\[(\d+)\.(\d+)\]</a>', html)
+notes = re.findall(r'<a id="source-(\d+)\.(\d+)"></a>\s*</p>\s*<ul>\s*<li>\s*<strong>(\d+)\.(\d+)</strong>', html)
+if not refs or not notes:
+    errors.append("Missing numbered source references or source index")
+for old_chapter, item, chapter, label_item in refs + notes:
+    if int(chapter) != int(old_chapter) + 1 or item != label_item:
+        errors.append(f"Stale source label: source-{old_chapter}.{item} displays {chapter}.{label_item}")
+if {(a, b) for a, b, _, _ in refs} - {(a, b) for a, b, _, _ in notes}:
+    errors.append("Citation without a numbered source-index entry")
+for forbidden in [".claude", "docs/wiki-authoring.md"]:
+    if (site / forbidden).exists():
+        errors.append("Published authoring artifact: " + forbidden)
 if p.details < 15:
     errors.append("Expected expandable explanations")
 print(json.dumps({"result": "FAIL" if errors else "PASS", "chapter_count": len(chapters),

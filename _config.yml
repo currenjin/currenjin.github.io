@@ -79,6 +79,7 @@ timezone: "Asia/Seoul"
 
 # Local design and preference artifacts must never be published by Jekyll.
 exclude:
+  - .claude
   - .tasty
   - profiles
   - sketches
