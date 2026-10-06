@@ -204,8 +204,6 @@
     color: var(--g-muted); font: 11px/1.3 var(--g-sans);
   }
   .graph-index > summary::-webkit-details-marker { display: none; }
-  .graph-index > summary::after { content: "+"; margin-left: auto; font-size: 15px; }
-  .graph-index[open] > summary::after { content: "−"; }
   .graph-index > summary:hover { color: var(--g-ink); }
   .graph-index-body { padding: 6px 0 24px; }
   .graph-index-field span { display: block; margin-bottom: 9px; color: var(--g-muted); font: 11px/1.4 var(--g-sans); }
@@ -292,6 +290,7 @@
     *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
   }
 </style>
+<link rel="stylesheet" href="{{ '/css/disclosure.css?v=20261006-1' | prepend: site.baseurl }}">
 </head>
 <body>
   <a class="graph-skip" href="#graph-canvas">그래프로 이동</a>
