@@ -3,7 +3,7 @@ layout  : wiki
 title   : Kafka
 summary : 로그·복제·커밋·트랜잭션에서 Kafka Connect·CDC·Outbox까지 배우는 웹 교과서
 date    : 2026-07-12 15:00:00 +0900
-updated : 2026-10-06 15:23:05 +0900
+updated : 2026-10-06 17:41:42 +0900
 tags    : [kafka, architecture, engineering]
 toc     : true
 public  : true
@@ -27,6 +27,7 @@ ai:
 
 | 순서 | 배우는 문제 |
 |---|---|
+| [0장](#chapter-0) | 데이터 경로·배치·로그 파일·메모리와 I/O에서 설계 이유를 이해한다 |
 | [1장](#chapter-1) | Topic·Partition·Key·Offset으로 로그를 이해한다 |
 | [2장](#chapter-2) | 순서·그룹·처리·commit을 구분한다 |
 | [3장](#chapter-3) | 복제·ISR·acks와 성공 응답의 의미를 연결한다 |
@@ -43,12 +44,88 @@ ai:
 | [14장](#cdc) | JDBC polling·CDC·snapshot·delete의 차이를 설명한다 |
 | [15장](#outbox) | Outbox의 DB 원자성과 재전달 경계를 구분한다 |
 
+<a id="chapter-0"></a>
+## 0장. 전체 구조와 데이터 경로
+
+한결마켓의 주문 이벤트가 producer의 Java 객체에서 consumer의 업무 코드까지 이동한다고 하자. 이 사이에는 직렬화, 전송 대기, broker의 로그 추가, 복제, 읽기 요청과 역직렬화가 있다. 각 단계가 끝나는 시점은 다르다. `send()`가 반환되었다고 broker가 기록한 것은 아니며, broker가 기록했다고 디스크에 동기화되거나 정산이 끝난 것도 아니다. 앞으로 살펴볼 보장과 실패는 이 경로의 어느 경계까지 확인했는지에 따라 달라진다.
+
+이 장은 물리적인 경로를 먼저 설명한다. 1~2장에서는 그 경로 위에 topic·partition·offset과 순서를 놓고, 3~6장에서는 복제와 처리의 성공 조건을 구분한다. 7장 이후의 보존·설정·운영·외부 연동도 같은 구조에서 이유를 찾는다. 그림은 역할과 데이터 이동을 설명하는 개념도이며 모든 구현 클래스나 요청을 나타내지는 않는다.
+
+<a id="foundation-planes"></a>
+### 0.1 데이터가 흐르는 곳과 경로를 관리하는 곳
+
+Producer와 consumer는 broker에 연결한다. Producer는 metadata 응답에서 대상 partition의 leader를 찾아 그 broker로 직접 쓰기를 보낸다. Consumer도 metadata와 할당 정보를 이용해 담당 partition의 데이터를 fetch한다. 보통의 leader 읽기 경로를 기준으로 설명하되, Kafka에는 조건에 따라 follower에서 읽는 구성도 있다. Bootstrap 주소는 클러스터를 처음 발견할 입구이지 모든 레코드가 지나는 중계 서버가 아니다.<sup><a href="#source-0.1">[0.1]</a></sup>
+
+이 레코드의 쓰기·복제·읽기 경로를 **data plane**이라고 부른다. 반면 topic과 partition의 배치, leader, broker의 생존 상태 같은 metadata를 관리하는 경로를 **control plane**이라고 구분할 수 있다. 여기서 두 용어는 구조를 설명하기 위한 분류다. KRaft controller들은 metadata quorum을 이루고 활성 controller가 클러스터 변경을 관리한다. 주문 payload를 controller로 보내서 다시 broker로 전달하는 구조가 아니다. Controller와 broker를 같은 프로세스로 실행할 수 있어도 두 역할의 책임은 다르다.<sup><a href="#source-0.2">[0.2]</a></sup>
+
+![그림 0-1. Producer의 직렬화·배치에서 partition leader, follower 복제, consumer fetch·역직렬화로 이어지는 데이터 경로. KRaft는 metadata를 관리하며 그룹 코디네이터는 그룹과 offset을 관리한다. 둘 다 주문 payload의 중계점이 아니다.](/assets/images/kafka-textbook/fig-00-data-path.svg "그림 0-1")
+
+Group coordinator도 controller와 구분해야 한다. Coordinator는 broker의 역할로, consumer group의 멤버십과 복구 위치를 관리한다. Consumer는 `FindCoordinator`로 이 broker를 찾고 offset commit을 보낸다. 저장된 위치는 `__consumer_offsets`라는 복제된 내부 topic에 남는다. 그러므로 controller의 metadata quorum에 복구 위치를 직접 저장하는 것도, coordinator를 거쳐 모든 주문을 읽는 것도 아니다. 클러스터 지도, 그룹의 담당자, 실제 읽을 로그를 구분하면 4장의 rebalance와 11장의 controller 장애를 같은 사건으로 오해하지 않게 된다.<sup><a href="#source-0.3">[0.3]</a></sup>
+
+<a id="foundation-pipeline"></a>
+### 0.2 객체 하나를 보내도 저장과 전송의 단위는 배치다
+
+Producer의 serializer는 애플리케이션의 key·value 객체를 바이트로 바꾼다. Producer는 전송 전 레코드를 partition별 버퍼에 모으며 background I/O thread가 요청을 만들어 보낸다. 같은 partition의 여러 레코드가 하나의 record batch를 이룰 수 있고, batch에는 레코드가 하나만 있을 수도 있다. 하나의 broker 요청에는 그 broker가 담당하는 여러 partition의 배치를 함께 실을 수 있다. **설계상 해석:** 업무 코드의 `send()` 호출 횟수와 네트워크 요청 수가 같지 않은 것은 이 모으는 단계 때문이다.<sup><a href="#source-0.4">[0.4]</a></sup>
+
+`batch.size`는 partition별 배치 크기에, `linger.ms`는 더 모으기 위한 대기에 영향을 준다. 배치를 키우면 요청·전송·쓰기의 고정 비용을 여러 레코드가 나누지만, 유입이 적으면 채우기를 기다리는 시간이 생긴다. Compression도 레코드 하나씩보다 배치에 적용할 때 반복되는 필드와 값의 패턴을 함께 이용할 수 있다. Producer에서 압축한 배치는 broker에 저장되고 consumer까지 압축된 채 이동할 수 있으며 consumer가 풀어 읽는다. 다만 topic이 다른 compression codec을 강제하면 broker의 재압축 비용이 생길 수 있다. “Kafka는 바이트를 저장한다”는 말은 broker가 어떤 검사나 변환도 하지 않는다는 뜻이 아니다.<sup><a href="#source-0.5">[0.5]</a></sup>
+
+Broker에서는 네트워크 연결을 받는 acceptor와 연결 I/O를 담당하는 processor가 요청을 받아들인다. 요청 처리 단계에서 produce 데이터의 형식과 조건을 검사하고 해당 partition의 활성 로그에 추가한다. 성공 응답을 언제 보낼지는 이 추가 작업과 복제 진척, `acks` 조건에 달려 있다. Consumer와 follower는 fetch 요청으로 필요한 로그 범위를 가져온다. Consumer fetch는 업무를 처리하라는 서버의 호출이 아니라 client가 자신의 위치에서 데이터를 요청하는 동작이다. 부족한 데이터가 더 모이기를 기다리는 fetch와 복제 확인을 기다리는 produce는 지연 원인도 다르다.<sup><a href="#source-0.6">[0.6]</a></sup><sup><a href="#source-0.1">[0.1]</a></sup>
+
+<a id="foundation-log"></a>
+### 0.3 긴 로그를 작은 파일과 성긴 색인으로 읽는다
+
+Partition 로그는 segment들로 나뉜다. 일반적인 새 쓰기는 마지막 활성 segment의 끝에 붙고, 크기나 시간 조건에 따라 새 segment로 넘어간다. Consumer가 offset을 요청하면 broker는 그 offset을 포함할 segment를 찾고 파일 안의 위치를 찾아 읽는다. Offset은 논리적인 레코드 위치이며 파일 안의 바이트 주소와 같은 값이 아니다. Kafka 4.3의 Log 설명에는 오래된 메시지 형식의 설명도 남아 있으므로 현재 배치의 이진 형식은 Message Format과 함께 읽어야 한다.<sup><a href="#source-0.7">[0.7]</a></sup>
+
+Offset index는 모든 레코드의 주소를 기록하는 촘촘한 색인이 아니다. 일정 바이트 간격으로 위치를 추가하는 **sparse index**다. 인접한 색인 위치에서 필요한 offset까지 로그를 훑으면 되므로 색인 크기를 줄이는 대신 그 사이를 읽는 비용이 남는다. 시간 색인도 timestamp에서 읽을 위치를 찾는 데 쓰인다. `index.interval.bytes`를 작게 하면 일반적으로 색인 항목은 늘고 탐색 뒤 스캔 구간은 짧아지는 방향이며, 크게 하면 반대다. 정확한 읽기 비용은 레코드·배치 크기와 캐시 상태에도 달려 있다.<sup><a href="#source-0.8">[0.8]</a></sup>
+
+**설계상 해석:** 이 구조는 모든 key의 현재 값을 임의 조회하는 DB의 색인과 목적이 다르다. Kafka가 자주 하는 작업은 partition 끝에 추가하고, offset에서 시작해 연속된 구간을 읽는 것이다. Key는 partition 선택과 compaction의 기준이지만 일반 consumer에게 `key=주문7`만 찾아 반환하는 조회 색인을 제공하지 않는다. 개별 주문 조회가 필요하면 consumer가 별도 DB나 상태 저장소를 만든다. Segment를 나누는 이유도 읽기뿐 아니라 오래된 파일을 통째로 삭제하고 완료된 파일을 정리할 수 있게 하기 위해서다.
+
+<a id="foundation-memory"></a>
+### 0.4 JVM heap, OS page cache, 디스크는 서로 다른 층이다
+
+파일에 썼다는 말부터 나눠 보자. Kafka는 로그를 파일 시스템에 추가하지만 매 레코드마다 `fsync`로 저장장치까지 강제 동기화하지는 않는다. 일반적인 buffered I/O에서 새 데이터는 OS의 page cache에 들어간다. 메모리에 바뀐 내용이 있고 디스크에는 아직 반영되지 않은 페이지를 **dirty page**라고 부르며, OS의 background writeback이 이를 디스크로 내려쓴다. 쓰기 유입을 디스크가 지속적으로 따라가지 못하면 dirty 데이터가 쌓이고 결국 쓰는 프로세스도 대기할 수 있다. 따라서 page cache는 디스크 성능 부족을 없애는 장치가 아니라 메모리에서 쓰기를 모으고 읽기를 재사용하는 층이다.<sup><a href="#source-0.9">[0.9]</a></sup>
+
+JVM 안에 레코드를 Java 객체로 대량 캐시하면 객체 헤더·참조 등 표현 비용이 생기고, 살아 있는 객체가 많아져 GC가 관리할 부담도 커질 수 있다. 같은 파일 내용이 OS page cache에도 있으면 애플리케이션 캐시와 OS 캐시가 중복으로 메모리를 차지할 수 있다. 객체 표현의 overhead와 두 층의 duplicate cache는 서로 다른 문제다. 공식 Design의 배수 예시는 이 선택을 설명하는 사례이지 모든 객체가 정확히 두 배라는 계산 법칙이 아니다.<sup><a href="#source-0.10">[0.10]</a></sup>
+
+Kafka의 선택은 로그 데이터의 큰 캐시를 JVM 객체 모음으로 따로 유지하기보다 파일과 OS page cache를 활용하는 것이다. 그렇다고 Kafka가 GC를 사용하지 않거나 heap에 아무것도 없다는 뜻은 아니다. 요청 처리, metadata, coordinator의 offset cache 같은 상태는 여전히 메모리를 쓴다. OS는 여러 reader가 같은 파일 페이지를 재사용하도록 관리하고 사용 가능한 메모리를 캐시에 활용한다. Broker 프로세스만 재시작하고 OS가 살아 있다면 이 캐시가 남을 수 있지만, 머신을 재부팅해도 캐시가 보존된다는 보장은 없다. Heap을 늘리는 일이 언제나 읽기 성능 향상이 되지 않는 이유도, 같은 머신에서 page cache가 쓸 여유 메모리가 줄 수 있기 때문이다.<sup><a href="#source-0.10">[0.10]</a></sup><sup><a href="#source-0.3">[0.3]</a></sup>
+
+![그림 0-2. JVM은 요청과 상태를 관리하며 로그 파일의 큰 캐시는 커널 page cache를 활용한다. Dirty page는 writeback으로 디스크에 내려간다. 캐시된 파일의 조건부 sendfile 경로와 TLS의 사용자 공간 경로를 구분한다.](/assets/images/kafka-textbook/fig-00-memory-io.svg "그림 0-2")
+
+<a id="foundation-io"></a>
+### 0.5 순차 접근과 zero-copy가 줄이는 비용에는 조건이 있다
+
+연속된 파일 구간을 읽고 쓰면 작은 임의 접근을 매번 수행하는 것보다 요청당 고정 비용을 나누기 쉽고, read-ahead도 앞으로 필요한 데이터를 캐시에 올릴 수 있다. HDD에서는 탐색과 회전 비용을 줄이는 효과가 특히 크다. SSD에도 배치·연속 전송으로 요청 비용을 줄이는 이유는 남지만 HDD와 같은 비율의 개선을 약속할 수는 없다. 여러 partition의 쓰기, 오래된 로그 재처리, compaction의 재읽기·재쓰기가 섞이면 저장장치에서 보는 접근은 한 파일의 순차 쓰기만으로 설명되지 않는다. 공식 문서의 과거 HDD 처리량 예시는 설계 배경이며 HDD가 필수라거나 SSD의 효과가 없다는 근거가 아니다.<sup><a href="#source-0.10">[0.10]</a></sup>
+
+파일을 네트워크로 보내는 일반 경로는 커널의 파일 페이지를 사용자 공간 버퍼로 읽고, 다시 socket 쪽으로 보내는 복사를 포함한다. Kafka는 지원되는 파일 전송 경로에서 Java의 `transferTo`와 OS의 `sendfile` 계열 기능으로 이 사용자 공간 왕복 복사를 줄인다. 여기서 **zero-copy**는 저장장치부터 NIC까지 어떤 이동도 없다는 뜻이 아니라 애플리케이션 버퍼를 경유하는 불필요한 복사를 피한다는 뜻이다. 실제 하위 전송 동작은 OS와 네트워크 장치에 달려 있다.<sup><a href="#source-0.6">[0.6]</a></sup><sup><a href="#source-0.11">[0.11]</a></sup>
+
+파일의 배치를 변환 없이 내보낼 수 있을 때 이 경로의 이점이 살아난다. 형식 변환 등이 필요하면 그대로 파일 구간을 전달한다는 전제가 달라진다. 특히 Kafka 4.3 Design은 TLS/SSL 처리가 사용자 공간에서 일어나며 Kafka가 in-kernel `SSL_sendfile`을 지원하지 않아 SSL 연결에서는 `sendfile`을 사용하지 않는다고 명시한다. Compression은 payload를 줄이는 방식이고 TLS는 연결을 암호화하는 방식이므로 하나를 켰다고 다른 비용까지 없어지지 않는다. 캐시에 없는 과거 segment는 디스크에서 읽어야 한다. 따라잡은 consumer가 캐시된 최신 로그를 읽는 상황과 대규모 재처리를 같은 성능 계약으로 잡으면 안 된다.<sup><a href="#source-0.11">[0.11]</a></sup>
+
+<a id="foundation-guarantees"></a>
+### 0.6 물리 경로를 알면 보장의 조건이 보인다
+
+Page cache의 레코드가 follower에게 복제될 수 있으며, follower 역시 자신의 로그에 기록한다. `acks=all`은 필요한 복제 확인을 기다리는 계약이지 모든 replica의 저장장치에 매번 `fsync`가 완료됐다는 계약이 아니다. Broker 하나가 멈춰도 살아 있는 동기화 replica에서 복구할 수 있다는 전제와, 같은 전원·장애 영역을 공유하는 replica들을 한꺼번에 잃는 상황은 다르다. 3장과 8장의 복제·ISR 설정을 읽을 때 “몇 군데에 확인되었는가”와 “각 머신에서 어디까지 영속화됐는가”를 따로 질문해야 한다.<sup><a href="#source-3.2">[3.2]</a></sup><sup><a href="#source-3.5">[3.5]</a></sup>
+
+로그를 읽어도 파일은 없어지지 않으므로 다른 group이 독립적으로 읽고 다시 처리할 수 있다. 대신 보존과 정리 비용을 시스템이 부담한다. Retention은 오래된 segment를 버려 저장 공간과 재처리 범위를 맞바꾼다. Compaction은 key별 최신 상태를 남기기 위해 segment를 읽고 다시 쓰며, 이력의 일부와 클리너 I/O를 비용으로 치른다. 둘은 배치의 바이트를 압축하는 compression과 다르다. 7장의 tombstone 기한과 10장의 재처리 예산은 이 물리적인 정리 과정 위에 있는 계약이다.<sup><a href="#source-0.7">[0.7]</a></sup><sup><a href="#source-7.3">[7.3]</a></sup>
+
+### 확인 질문: 디스크 읽기는 없는데 왜 정산은 늦는가
+
+가상 운영 지표에서 broker의 디스크 읽기가 거의 없고 producer의 `send()`도 빠르게 반환되는데 정산 반영은 늦다. 이것만으로 Kafka 기록과 정산 DB 쓰기가 끝났다고 판단할 수 있는가? TLS를 켠 뒤 CPU 사용량이 늘었다면 “page cache를 못 쓰게 됐다”는 설명은 맞는가?
+
+<details markdown="1">
+<summary>해설</summary>
+
+`send()` 반환은 전송 버퍼에 들어간 시점일 수 있다. 실제 성공 callback, 복제 경계, consumer의 fetch·처리·commit과 DB 완료를 각각 확인해야 한다. 디스크 읽기가 적다는 것은 캐시에서 데이터를 공급하는 상황과 양립하며 업무 완료 증거가 아니다. TLS는 page cache 자체를 없애지 않는다. Kafka 4.3에서는 파일을 사용자 공간으로 우회하지 않고 내보내는 `sendfile` 경로를 사용할 수 없고 암호화 작업도 필요하므로 CPU·복사 비용을 함께 조사한다. 이처럼 관측된 비용과 보장이 확인된 경계를 분리하는 방식으로 다음 장들을 읽는다.
+
+</details>
+
 <a id="chapter-1"></a>
 ## 1장. 이벤트를 어디에 기록하고 어떻게 다시 읽는가 | Topic·Partition·Key·Offset
 
 가상의 장보기 서비스 한결마켓에서 주문이 결제되었다. 주문 서비스는 그 사실을 알림 서비스와 정산 배치에 전달해야 한다. 주문 서비스가 두 소비자를 직접 호출하면 둘이 요청을 받을 수 있는지에 따라 주문 처리도 영향을 받는다. Kafka를 사이에 두면 주문 서비스는 먼저 사실을 기록하고, 두 소비자는 자신이 준비된 때 그 기록을 읽는다. Kafka는 메시지를 잠시 맡아 주는 상자보다 여러 독자가 독립적으로 읽는 로그에 가깝다.
 
 ### Event·Producer·Consumer: 누가 무엇을 기록하는가
+
+[0.2절](#foundation-pipeline)의 경로에서 producer가 넘기는 것은 직렬화한 바이트이며 broker가 덧붙이는 곳은 선택된 partition의 로그다. 그래서 topic 이름만 정하는 것으로는 순서나 분산이 정해지지 않는다. Key를 어떤 바이트로 표현하고 어느 partition으로 보내는지까지 정해야 하나의 주문이 어떤 로그의 순서를 따를지 설명할 수 있다.
 
 이벤트(event)는 이미 일어난 사실이다. 레코드(record), 메시지(message)라는 말도 쓴다. 주문 번호를 key, 상태 변경 내용을 value로 두고 timestamp와 선택적인 header를 함께 보낼 수 있다. 이벤트를 보내는 애플리케이션은 producer, 받아 처리하는 애플리케이션은 consumer다. Kafka 서버를 broker라고 한다.<sup><a href="#source-1.1">[1.1]</a></sup>
 
@@ -110,6 +187,8 @@ Consumer는 읽을 위치를 갖고, 나중에 복구할 위치를 별도로 저
 1장에서 설명한 파티션이 Kafka가 약속하는 순서의 단위다. 토픽 전체에는 같은 약속이 적용되지 않는다. 이 순서가 업무 처리까지 유지되려면 프로듀서와 컨슈머도 순서를 깨뜨리지 않아야 한다.
 
 ### 파티션 안에서는 쓴 순서가 곧 읽는 순서다
+
+[0.3절](#foundation-log)의 활성 segment에 배치가 차례로 추가되고 fetch가 그 offset 구간을 읽기 때문에, 보장의 기준은 애플리케이션의 벽시계가 아니라 로그에 확정된 위치다. 배치가 여러 partition에 나뉘면 각 로그가 독립적으로 전진한다. **설계상 추론:** 네트워크 요청 하나로 묶여 전송됐다는 사실도 토픽 전체의 단일 순서를 만들지는 않는다.
 
 공식 문서는 어떤 토픽 파티션을 읽는 컨슈머든 그 파티션의 이벤트를 쓰인 순서와 정확히 같은 순서로 읽는다고 설명한다.<sup><a href="#source-2.1">[2.1]</a></sup> 설계 문서는 토픽을 “완전히 순서가 정해진 파티션들의 집합”이라고 표현한다.<sup><a href="#source-2.2">[2.2]</a></sup> 컨슈머 설정 문서도 트랜잭션 설정과 관계없이 메시지는 항상 오프셋 순서로 반환된다고 적는다.<sup><a href="#source-2.3">[2.3]</a></sup>
 
@@ -218,6 +297,8 @@ Kafka가 약속하는 것은 한 파티션 안에서 “오프셋 순서 = 기�
 브로커의 디스크에 남은 데이터, 복제본 사이에서 “커밋”된 데이터, 프로듀서가 성공 응답을 받은 데이터는 구분해야 한다.
 
 ### 한 브로커 안: 페이지 캐시와 복구
+
+[0.4절](#foundation-memory)의 dirty page는 빠른 응답과 아직 디스크에 없는 데이터를 동시에 설명한다. 복제는 다른 머신에 로그를 남기는 방법이고 fsync는 한 머신의 저장장치에 강제로 내려쓰는 방법이다. 이 둘을 같은 완료 조건으로 취급하면 전원 차단의 실패 범위를 잘못 잡는다. 여기서는 먼저 한 머신에서 잃을 수 있는 꼬리를 확인한 뒤, 그 꼬리를 가진 다른 replica가 있는지를 살펴본다.
 
 Kafka 브로커는 받은 데이터를 곧바로 파일 시스템의 로그에 쓰지만, 그때마다 디스크로 강제로 내려쓰지(fsync) 않는다. 설계 문서의 표현으로는 데이터가 “커널의 페이지 캐시로 옮겨질 뿐”이다.<sup><a href="#source-3.1">[3.1]</a></sup> 디스크로 내려쓰는 시점은 운영 체제의 백그라운드 플러시에 맡긴다.
 
@@ -377,6 +458,8 @@ KafkaConsumer Javadoc은 사용자가 알아야 할 위치가 사실 두 가지�
 
 ### 커밋은 어디에 저장되는가
 
+Consumer가 업무 레코드를 fetch하는 broker와 commit을 받는 coordinator는 같을 필요가 없다. [0.1절](#foundation-planes)의 서로 다른 경로이므로 읽기는 가능해도 복구 위치 저장이 실패할 수 있다. 이때 로컬 position은 앞서가고 저장된 offset은 남는다. Coordinator 장애가 발생한 시점과 새 담당자가 돌아갈 위치를 구분해야 재시작 뒤 중복 범위를 예측할 수 있다.
+
 컨슈머 그룹마다 오프셋을 관리하는 브로커가 하나 정해지는데, 이를 **그룹 코디네이터**(group coordinator)라고 한다. 그룹은 이름을 기준으로 코디네이터에 배정되고, 컨슈머는 아무 브로커에게나 `FindCoordinator` 요청을 보내 자기 코디네이터를 찾는다. 코디네이터가 옮겨 가면 다시 찾아야 한다.<sup><a href="#source-4.2">[4.2]</a></sup>
 
 코디네이터는 커밋 요청을 받으면 그것을 `__consumer_offsets`라는 특별한 컴팩션된 내부 토픽에 덧붙인다. 성공 응답은 이 오프셋 토픽의 모든 복제본이 커밋을 받은 뒤에 보낸다. 제한 시간 안에 복제되지 않으면 커밋은 실패하고, 컨슈머는 잠시 뒤 다시 시도할 수 있다.<sup><a href="#source-4.2">[4.2]</a></sup> 이 제한 시간이 브로커 설정 `offsets.commit.timeout.ms`(기본 5초)다.<sup><a href="#source-4.4">[4.4]</a></sup> 오프셋 토픽의 기본 복제 계수는 3이다.<sup><a href="#source-4.4">[4.4]</a></sup> 커밋 역시 3장에서 본 복제 규칙을 따르는 쓰기라는 뜻이다.
@@ -488,6 +571,8 @@ KafkaConsumer Javadoc은 사용자가 알아야 할 위치가 사실 두 가지�
 4장에서 설명했듯이 새 담당 컨슈머는 마지막으로 커밋된 오프셋부터 읽는다. “처리한 범위”와 “커밋한 범위”가 어긋난 동안 장애가 나면 중복이나 누락이 생긴다. 이 시간 구간을 실패 창(failure window)이라고 한다.
 
 ### 두 번의 쓰기, 두 개의 저장소
+
+빠른 배치 전송이나 [0.5절](#foundation-io)의 복사 절감은 두 저장소 사이의 원자성을 만들지 않는다. 데이터 경로를 빠르게 해도 정산 DB의 commit과 offset topic의 commit은 각자 성공할 수 있다. **설계상 해석:** 성능 최적화와 전달 보장의 문제를 분리해야, 배치를 줄여 실패 창을 좁힌 것과 그 창 자체를 없앤 것을 혼동하지 않는다.
 
 레코드 하나를 처리하는 컨슈머는 사실 서로 다른 두 곳에 쓴다. 처리 결과는 데이터베이스(또는 다른 토픽, 외부 API)에 쓰고, 위치는 Kafka의 `__consumer_offsets`에 커밋한다. 두 쓰기를 하나로 묶어 주는 장치가 없는 한, 둘 사이에는 반드시 순서가 있고 그 사이에 프로세스가 죽을 수 있다.
 
@@ -606,6 +691,8 @@ abort와 재처리가 끝난 뒤, 결제 서비스(read_committed), 감사 로�
 5장은 “처리 결과를 쓰는 일”과 “커밋하는 일”이 두 번의 쓰기라서 실패 창이 생긴다고 했다. Kafka의 멱등성과 트랜잭션은 이 창을 줄이거나 없애는 도구다. 다만 그 효과는 Kafka가 관리하는 저장소 안에서만 온전하다.
 
 ### 멱등 프로듀서: 재시도가 중복을 만들지 않는 원리
+
+[0.2절](#foundation-pipeline)에서 본 record batch는 단순히 여러 값을 묶는 운반 상자가 아니다. Producer 식별자와 sequence 같은 프로토콜 정보도 배치에 실리므로 broker는 업무 payload의 의미를 몰라도 같은 전송의 재시도를 구분할 수 있다. 반대로 서로 다른 전송에 담긴 같은 주문이라는 업무 의미는 이 식별자만으로 알 수 없다. 멱등 전송과 이벤트 ID 기반 업무 중복 제거의 경계가 여기서 갈린다.
 
 5장에서 프로듀서가 네트워크 오류를 받으면 기록 여부를 알 수 없어 다시 보내야 하고, 그러면 중복이 생길 수 있다고 했다. 0.11.0.0부터 Kafka 프로듀서는 재전송이 로그에 중복 항목을 만들지 않도록 하는 멱등 전달을 지원한다. 브로커가 프로듀서마다 ID를 부여하고, 프로듀서가 메시지마다 함께 보내는 시퀀스 번호로 중복을 걸러 낸다.<sup><a href="#source-6.1">[6.1]</a></sup> 메시지 형식에도 이 흔적이 있다. 레코드 배치 헤더에는 `producerId`, `producerEpoch`, `baseSequence` 필드가 있다.<sup><a href="#source-6.5">[6.5]</a></sup>
 
@@ -743,6 +830,8 @@ Kafka Streams 문서는 입력 토픽 오프셋 커밋, 상태 저장소 갱신,
 시간·크기 보존과 세그먼트 단위 삭제 외에 로그 컴팩션(log compaction)이라는 수명 모델도 있다. compaction은 흔히 “압축”으로 옮기지만, 데이터 크기를 줄이는 compression(프로듀서의 `compression.type`)과는 전혀 다른 개념이다. 이 책에서는 헷갈리지 않도록 **컴팩션**이라고 쓴다.
 
 ### 세그먼트와 보존: 언제 사라지는가
+
+[0.3절](#foundation-log)의 파일 분할은 관리 비용과 삭제 시점을 함께 정한다. 파일째 버리는 retention은 간단한 대신 같은 segment에 묶인 오래된 레코드가 함께 수명을 갖는다. Compaction은 그 파일을 다시 읽고 필요한 레코드만 써야 하므로 최신 상태를 남기는 대신 추가 I/O가 든다. **설계상 해석:** 공간 사용량만 줄일 목표로 정리 정책을 바꾸면 재처리의 의미와 실시간 I/O 예산도 함께 바뀐다.
 
 파티션 디렉터리 안의 로그는 하나의 거대한 파일이 아니라 여러 세그먼트(segment) 파일로 나뉜다. 각 파일 이름은 그 파일의 첫 오프셋이다. 첫 파일은 `00000000000000000000.log`이고, 마지막 파일이 설정된 크기에 이르면 새 파일로 넘어간다.<sup><a href="#source-1.5">[1.5]</a></sup> 토픽 설정으로 보면 세그먼트는 `segment.bytes`(기본 1GiB)에 이르거나 `segment.ms`(기본 7일)가 지나면 새로 만들어진다. `segment.ms`는 파일이 다 차지 않아도 강제로 넘겨서, 오래된 데이터를 보존 정책이 지우거나 컴팩션할 수 있게 하려는 설정이다.<sup><a href="#source-1.8">[1.8]</a></sup>
 
@@ -901,6 +990,8 @@ Kafka Streams 문서는 입력 토픽 오프셋 커밋, 상태 저장소 갱신,
 3장은 `acks`, ISR, `min.insync.replicas`를 하나씩 설명했다. 설정 문서는 항목별로 정리되어 있지만, 장애 때의 동작은 이 설정들의 조합에 따라 달라진다.
 
 ### 설정은 쓰기 경로 위에 놓여 있다
+
+[0장](#chapter-0)의 각 대기 지점에 서로 다른 설정이 붙는다. `linger.ms`는 전송 전 모으는 시간을, `acks`는 기록·복제 뒤 성공을 듣는 조건을 다룬다. 둘 다 지연에 영향을 주지만 하나를 줄인다고 다른 대기가 사라지지는 않는다. 버퍼를 키우는 것도 장애 동안 더 많은 데이터를 기다리게 하는 선택일 수 있으며, 복제나 디스크의 지속 처리 능력을 늘리는 선택과는 다르다.
 
 레코드 하나가 프로듀서에서 컨슈머까지 가는 경로를 따라 각 설정이 어디서 작동하는지 살펴보자.
 
@@ -1086,6 +1177,8 @@ ELR이 켜진 4.1 이후 새 클러스터에서는 `min.insync.replicas`를 다�
 
 ### 요청 지연을 쪼개 보기
 
+[0.2절](#foundation-pipeline)의 요청 경로와 [0.4절](#foundation-memory)의 writeback을 함께 보면 디스크 지연이 늘어난 방식도 나눌 수 있다. 캐시가 쓰기를 받아주는 동안과 dirty 데이터가 쌓여 쓰기가 막히는 동안은 다르다. **조사 가설:** 로컬 처리 시간이 커졌다면 저장장치와 OS의 writeback, CPU·GC와 요청 처리 부하를 함께 확인한다. 같은 시간 지표가 커졌다는 사실만으로 디스크나 GC 하나를 원인으로 확정하지 않는다.
+
 브로커가 요청을 느리게 처리하는 것 같다면, 요청 지연을 구간별로 나눠 볼 수 있다. 운영 문서는 요청 종류별(`Produce`, `FetchConsumer`, `FetchFollower`) 전체 시간 `TotalTimeMs`가 대기열 시간, 로컬 처리 시간, 원격 대기 시간, 응답 대기열 시간, 응답 전송 시간으로 나뉜다고 설명한다.<sup><a href="#source-9.6">[9.6]</a></sup>
 
 - `RequestQueueTimeMs`: 요청이 요청 대기열에서 기다린 시간. 크면 브로커의 처리 스레드가 부족하다.
@@ -1241,6 +1334,8 @@ ELR이 켜진 4.1 이후 새 클러스터에서는 `min.insync.replicas`를 다�
 
 ### 재처리의 실제 비용
 
+[0.5절](#foundation-io)의 캐시 기반 최신 읽기와 과거 segment 읽기는 같은 비용이 아니다. 보존을 길게 잡으면 복구할 자료는 늘지만, 그 전부가 메모리에 남는 것은 아니다. **설계상 추론:** 재처리 설계에는 필요한 기간뿐 아니라 캐시에 없는 범위를 읽을 저장장치 대역폭, 실시간 reader와의 경쟁, 복구 목표 시간도 포함해야 한다. SSD를 선택해도 정산 API나 consumer 업무 코드가 병목이면 복구가 그만큼 빨라지는 것은 아니다.
+
 설계 문서가 Kafka의 장점으로 드는 것 가운데 하나가 되감아 다시 읽는 능력이다. 소비자 코드에 버그가 있었다면 고친 뒤 그 메시지들을 다시 소비할 수 있다.<sup><a href="#source-10.4">[10.4]</a></sup> 운영 도구도 이를 지원한다. `--reset-offsets --to-datetime`으로 특정 시각부터 다시 읽게 할 수 있다(9장).<sup><a href="#source-10.6">[10.6]</a></sup> 하지만 “다시 읽을 수 있다”와 “다시 읽어도 된다”는 다르다. 재처리의 비용은 네 가지로 나눠 볼 수 있다.
 
 **첫째, 범위.** 다시 읽을 수 있는 범위는 실제 남아 있는 로그다. 시간·크기 보존, 세그먼트 경계, 타임스탬프와 compaction이 이를 정한다. 버그 발견이 늦으면 필요한 앞부분이 삭제되어 있을 수 있다. 설정된 보존 기간만 보고 날짜별 재처리를 보장하지 말고 log start offset과 남아 있는 레코드를 확인한다.
@@ -1318,6 +1413,8 @@ ELR이 켜진 4.1 이후 새 클러스터에서는 `min.insync.replicas`를 다�
 <a id="chapter-11"></a>
 ## 11장. 데이터와 메타데이터는 어떻게 다르게 복제되는가 | KRaft
 
+[0.1절](#foundation-planes)의 control plane은 data plane의 배치를 전달하는 통로가 아니라 어느 broker가 어떤 역할을 맡는지 정하는 층이다. 그래서 데이터 복제본을 늘리는 것과 controller quorum을 늘리는 것은 서로 다른 장애 여유를 만든다. Consumer group의 coordinator 역시 broker 역할이며 그 offset topic의 복구는 metadata quorum의 과반 합의와 같은 절차가 아니다. 각 로그가 저장하는 내용과 성공 조건부터 나누어 살펴본다.
+
 컨트롤러는 브로커의 세션을 관리하고(3장), ISR 변경을 클러스터 메타데이터에 기록하고(3장), 리더를 선출하며(3장), ELR을 기록한다(3장, 8장). KRaft는 이 메타데이터를 관리하는 방식이다.
 
 Kafka 4.3은 KRaft 모드만 지원하며 ZooKeeper 모드는 제거되었다. ZooKeeper 모드 클러스터는 KRaft로 먼저 이전해야 4.3으로 올릴 수 있다.<sup><a href="#source-A.1">[A.1]</a></sup>
@@ -1345,6 +1442,8 @@ ZooKeeper 모드의 비밀번호 암호화 관련 설정은 사라졌고, KRaft 
 
 <a id="chapter-12"></a>
 ## 12장. 누가 접근하고 어디에서 비용이 발생하는가 | 보안·성능
+
+보안을 켜면 [0.5절](#foundation-io)의 바이트 이동 경로도 달라진다. Page cache에서 읽을 수 있는 데이터라도 TLS로 암호화해 전송하는 CPU 작업과 사용자 공간 경로의 비용은 남는다. 따라서 암호화 전후의 성능 비교에는 같은 배치 크기·압축·유입량·읽기 범위를 맞춘 조건이 필요하다. 보안 비용을 줄이려고 인증이나 암호화를 끄는 것과 배치·CPU 예산을 조정하는 것은 같은 최적화가 아니다.
 
 Kafka는 클라이언트·다른 브로커·도구가 브로커에 연결할 때 SSL 또는 SASL로 인증할 수 있다. SASL 메커니즘으로는 GSSAPI(Kerberos), PLAIN, SCRAM-SHA-256/512, OAUTHBEARER가 있다. 연결은 SSL로 암호화할 수 있으며, 문서는 SSL을 켜면 CPU와 JVM 구현에 따라 성능 저하가 있다고 적는다. 인가는 플러그인 방식이다. 보안은 선택 사항이라 보안 없는 클러스터도, 인증·비인증과 암호화·비암호화 클라이언트가 섞인 클러스터도 지원된다.<sup><a href="#source-B.1">[B.1]</a></sup>
 
@@ -1378,6 +1477,8 @@ Kafka는 클라이언트·다른 브로커·도구가 브로커에 연결할 때
 “커넥터가 있으니 요구사항을 충족한다”는 판단은 위험하다. JDBC 조회 커넥터가 설치되어도 조회 사이에 생겼다 지워진 행은 못 볼 수 있다. 이벤트마다 세 외부 API를 호출해야 하는 업무를 SMT에 밀어 넣으면 단순 연동 프레임워크를 업무 오케스트레이터로 사용하는 셈이다. 요구하는 결과, 필요한 이력, 장애 복구 단위부터 정한 뒤 도구를 고른다.
 
 ### Source·Sink, Connector·Task·Worker는 각각 무엇인가
+
+[0.2절](#foundation-pipeline)의 producer·consumer 경로는 Connect에서도 사라지지 않는다. Worker가 변환과 Kafka client 실행을 맡고 task가 외부 시스템을 읽거나 쓰므로, task 수를 늘려도 외부 데이터의 분할이나 Kafka partition 배치가 병렬성을 허용하지 않으면 같은 비율로 처리량이 늘지 않는다. 변환 단계에서 key를 바꾸면 바이트 표현뿐 아니라 이후 partition 선택과 compaction의 기준도 바뀔 수 있다.
 
 **Source connector**는 외부 시스템에서 읽어 Kafka로 보낸다. **Sink connector**는 Kafka에서 읽어 외부 시스템에 쓴다. 이름의 기준은 Kafka다. 데이터베이스는 방향에 따라 source가 될 수도, sink가 될 수도 있다.
 
@@ -1489,6 +1590,8 @@ Checkpoint는 테이블에 대한 마지막 조회 위치다. Kafka로 레코드
 
 ### CDC는 행 조회가 아니라 변경 로그를 읽는다
 
+CDC에서는 원본 DB의 변경 로그와 [0.3절](#foundation-log)의 Kafka partition 로그가 직렬로 연결된다. 한쪽의 읽기 위치가 다른 쪽의 offset과 같은 번호일 이유는 없으며, 두 로그는 보존 조건도 따로 가진다. **설계상 추론:** Kafka의 보존 기간을 늘려도 아직 Kafka에 전달되지 않은 WAL을 되살릴 수 없다. 어디까지 전달됐는지와 원본에서 어디부터 다시 읽을 수 있는지를 각각 확인해야 복구 가능성을 판단할 수 있다.
+
 CDC(Change Data Capture)는 변경을 포착하는 접근이다. 여기서 다루는 Debezium PostgreSQL 3.3.0.Final은 PostgreSQL logical decoding을 이용해 insert·update·delete를 Kafka 변경 이벤트로 보낸다. 커넥터마다 source 위치 형식과 DB 준비 조건은 다르다. PostgreSQL의 LSN, replication slot, publication, replica identity를 MySQL binlog 설정과 같은 것으로 설명하면 안 된다.
 
 Replication slot은 소비가 밀린 동안 필요한 WAL을 유지하는 데 영향을 준다. Kafka나 connector가 오래 멈추면 DB의 WAL 공간이 커질 수 있다. 반대로 슬롯 제거나 보존 한계로 필요한 WAL이 사라지면 저장된 source offset에서 복구할 수 없다. “Kafka에 lag가 쌓인다”는 모델뿐 아니라 원본 DB에도 보존 부담이 생긴다는 점을 관측해야 한다. DB failover 뒤 slot과 source 위치를 어떻게 유지할지도 PostgreSQL 버전과 운영 구조에 의존한다.
@@ -1526,6 +1629,8 @@ Delete 이벤트는 소비자가 외부 상태를 지우도록 알려 주고, to
 주문 생성 DB transaction이 성공한 다음 producer가 Kafka에 이벤트를 보내는 구조를 생각해 보자. 두 작업 사이에서 프로세스가 죽으면 주문은 있는데 이벤트가 없다. 반대로 Kafka에 먼저 보낸 다음 DB를 커밋하면 DB가 롤백되어도 주문 이벤트가 남을 수 있다. Kafka transaction만으로 이 두 저장소의 원자성을 얻지는 못한다.
 
 ### 업무 행과 Outbox 행을 같은 DB Transaction에 넣는다
+
+[0.6절](#foundation-guarantees)의 확인 경계를 원본 DB까지 확장하면 outbox가 필요한 이유가 보인다. Kafka가 복제한 것은 받은 배치이지 아직 producer에게 넘기지 못한 업무 사실이 아니다. 원본 DB에 발행할 사실을 함께 남기면 Kafka가 일시적으로 받지 못해도 relay가 다시 시도할 근거가 남는다. **설계상 해석:** 이 구조는 Kafka의 복제를 대체하는 것이 아니라 복제 경로에 진입하기 전의 누락 창을 원본 저장소에서 닫는 것이다.
 
 Transactional outbox는 주문 행과 발행할 이벤트 행을 **같은 DB 트랜잭션**에 기록한다. 둘 다 커밋되거나 둘 다 롤백된다. 이 경계에서 얻는 것은 “주문은 커밋됐는데 보낼 이벤트 기록 자체가 없다”는 빈틈의 제거다. 아직 Kafka 전달 성공이나 소비자의 업무 효과 완료를 보장한 것은 아니다.
 
@@ -1620,6 +1725,12 @@ Downstream이 포인트 적립을 한다면 이벤트 ID unique 제약과 적립
 
 | 용어 | 한 줄 뜻 | 자세히 |
 |---|---|---|
+| Data plane·Control plane | 레코드 쓰기·복제·읽기 경로와 metadata 관리 역할의 구분 | [0.1절](#foundation-planes) |
+| Record batch·Serialization | 레코드를 바이트로 만들고 partition별로 묶는 전송·저장 단위 | [0.2절](#foundation-pipeline) |
+| Sparse index | 모든 레코드 대신 일정 간격의 위치를 기록하는 색인 | [0.3절](#foundation-log) |
+| Page cache·Dirty page·Writeback | OS의 파일 캐시, 디스크 미반영 페이지와 내려쓰기 | [0.4절](#foundation-memory) |
+| JVM heap·GC·Duplicate cache | 객체 관리 비용과 OS 캐시의 중복 점유를 구분 | [0.4절](#foundation-memory) |
+| Sendfile·Zero-copy | 조건에 맞는 파일 전송에서 사용자 공간 왕복 복사를 줄이는 경로 | [0.5절](#foundation-io) |
 | 이벤트(event), 레코드 | “무언가 일어났다”는 사실 하나. 키·값·타임스탬프·헤더 | [1장](#chapter-1) |
 | 토픽(topic) | 이벤트를 저장하는 이름 붙은 흐름 | [1장](#chapter-1) |
 | 파티션(partition) | 토픽을 나눈 추가 전용 로그. 순서의 단위 | [1장](#chapter-1), [2장](#chapter-2) |
@@ -1661,6 +1772,7 @@ Downstream이 포인트 적립을 한다면 이벤트 ID unique 제약과 적립
 
 | 장 | 먼저 열 페이지 | 필요할 때 찾아볼 페이지 |
 |---|---|---|
+| 0장 | [Design § Persistence·Efficiency](https://kafka.apache.org/43/design/design/), [Network Layer](https://kafka.apache.org/43/implementation/network-layer/) | [Log](https://kafka.apache.org/43/implementation/log/), [Message Format](https://kafka.apache.org/43/implementation/message-format/), [KRaft](https://kafka.apache.org/43/operations/kraft/), [Hardware and OS](https://kafka.apache.org/43/operations/hardware-and-os/) |
 | 1장 | [Introduction](https://kafka.apache.org/43/getting-started/introduction/), [Log](https://kafka.apache.org/43/implementation/log/) | [Topic Configs](https://kafka.apache.org/43/configuration/topic-configs/) |
 | 2장 | [Design § The Consumer](https://kafka.apache.org/43/design/design/#the-consumer) | [Producer Configs](https://kafka.apache.org/43/configuration/producer-configs/) |
 | 3장 | [Design § Replication](https://kafka.apache.org/43/design/design/#replication) | [ELR](https://kafka.apache.org/43/operations/eligible-leader-replicas/), [Hardware and OS](https://kafka.apache.org/43/operations/hardware-and-os/) |
@@ -1686,6 +1798,39 @@ Downstream이 포인트 적립을 한다면 이벤트 ID unique 제약과 적립
 
 <details markdown="1">
 <summary>주장별 Kafka 4.3 원문</summary>
+
+<a id="source-0.1"></a>
+- **0.1** Leader 직접 전송, metadata 발견, consumer pull, follower fetch와 조건부 follower 읽기 (Design § The Producer, § The Consumer, § Replication) <https://kafka.apache.org/43/design/design/>
+
+<a id="source-0.2"></a>
+- **0.2** Broker·controller 역할, combined 모드, metadata quorum과 과반 (KRaft § Process Roles, § Controllers) <https://kafka.apache.org/43/operations/kraft/>
+
+<a id="source-0.3"></a>
+- **0.3** FindCoordinator, offset topic에 저장, coordinator의 메모리 캐시 (Distribution § Consumer Offset Tracking) <https://kafka.apache.org/43/implementation/distribution/#consumer-offset-tracking>
+
+<a id="source-0.4"></a>
+- **0.4** Serializer, partition별 버퍼, background I/O와 배치; batch에 하나 이상의 record (KafkaProducer Javadoc; Message Format) <https://kafka.apache.org/43/javadoc/org/apache/kafka/clients/producer/KafkaProducer.html> · <https://kafka.apache.org/43/implementation/message-format/>
+
+<a id="source-0.5"></a>
+- **0.5** 배치의 고정 비용 분담과 end-to-end compression; topic codec 유지·재지정 (Design § Efficiency, § End-to-end Batch Compression; Topic Configs § compression.type) <https://kafka.apache.org/43/design/design/#efficiency> · <https://kafka.apache.org/43/configuration/topic-configs/#topicconfigs_compression.type>
+
+<a id="source-0.6"></a>
+- **0.6** Acceptor·processor의 NIO 연결 처리와 TransferableRecords·transferTo (Network Layer) <https://kafka.apache.org/43/implementation/network-layer/>
+
+<a id="source-0.7"></a>
+- **0.7** Segment 추가·탐색·삭제; 현재 record batch 형식은 Message Format과 대조 (Log; Message Format) <https://kafka.apache.org/43/implementation/log/> · <https://kafka.apache.org/43/implementation/message-format/>
+
+<a id="source-0.8"></a>
+- **0.8** 성긴 offset index와 timestamp index, 색인 간격·크기·탐색 비용 (Topic Configs § index.interval.bytes) <https://kafka.apache.org/43/configuration/topic-configs/#topicconfigs_index.interval.bytes>
+
+<a id="source-0.9"></a>
+- **0.9** Page cache의 dirty 데이터와 OS background writeback, 내려쓰기가 유입을 못 따라갈 때 쓰기 대기 (Hardware and OS § Understanding Linux OS Flush Behavior) <https://kafka.apache.org/43/operations/hardware-and-os/#understanding-linux-os-flush-behavior>
+
+<a id="source-0.10"></a>
+- **0.10** 순차 I/O 설계 배경, 객체 overhead·GC와 OS cache 중복, pagecache 중심 선택과 프로세스 재시작 (Design § Persistence) <https://kafka.apache.org/43/design/design/#dont-fear-the-filesystem>
+
+<a id="source-0.11"></a>
+- **0.11** 공통 이진 형식과 파일 전송의 복사 절감, 최신 로그의 캐시 재사용, SSL에서는 sendfile 미사용 (Design § Efficiency) <https://kafka.apache.org/43/design/design/#efficiency>
 
 <a id="source-1.1"></a>
 - **1.1** 이벤트의 구성(키·값·타임스탬프·헤더), 프로듀서와 컨슈머의 분리, 토픽의 다중 생산·구독, 소비 뒤에도 지워지지 않고 토픽별 설정으로 보존, 파티션 분산과 같은 키의 같은 파티션 배치 (Introduction § Main Concepts and Terminology) <https://kafka.apache.org/43/getting-started/introduction/#main-concepts-and-terminology>
