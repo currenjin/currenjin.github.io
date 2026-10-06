@@ -90,7 +90,6 @@ exclude:
   - scripts
   - tool
   - AGENTS.md
-  - CLAUDE.md
   - package.json
   - package-lock.json
   - node_modules
