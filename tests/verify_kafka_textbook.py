@@ -34,7 +34,7 @@ errors = []
 toc = "markdown-toc" in p.ids
 if not toc:
     errors.append("Missing rendered table of contents")
-for n in range(0, 16):
+for n in range(1, 17):
     if f'id="markdown-toc-' not in html or not re.search(r'id="markdown-toc-[^\"]*"[^>]*>\s*' + str(n) + r'장\.', html):
         errors.append(f"Missing TOC entry for chapter {n}")
 for target in p.links:
@@ -54,8 +54,8 @@ for target in ["chapter-" + str(n) for n in range(0,13)] + ["connect", "cdc", "o
         errors.append("Missing chapter: " + target)
 source = Path("_wiki/kafka.md").read_text()
 chapters = re.findall(r"^## (\d+)장\.", source, re.M)
-if chapters != [str(n) for n in range(16)]:
-    errors.append("Expected foundation chapter 0 followed by unchanged chapters 1–15")
+if chapters != [str(n) for n in range(1, 17)]:
+    errors.append("Expected sequential chapter headings 1–16 (stable fragment IDs unchanged)")
 for target in ["foundation-planes", "foundation-pipeline", "foundation-log",
                "foundation-memory", "foundation-io", "foundation-guarantees"]:
     if target not in p.ids:
