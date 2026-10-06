@@ -9,7 +9,7 @@ source_url: "https://simpleisit.tistory.com/193"
 source_date: "2022-05-05T00:09:51+09:00"
 ---
 
-<div><figure><img height="202" loading="lazy" src="/resource/posts/tistory/193/1.png" width="709"/></figure>
+<div><figure><img height="202" loading="lazy" src="https://github.com/user-attachments/assets/1945eb11-1604-4b54-a25b-d03f44c92cf1" width="709"/></figure>
 <p> <br/>약 3개월 동안(220127 ~ 220503) 매일 하루도 빠지지 않고 반복했다.<br/>우리 회사 코드 내의 테스트 코드를 해석해 내 생각을 반영한 글을 작성했고, 작성된 글을 우리 테크 유닛 전체에게 메일로 발송했었다.</p>
 <blockquote> 테크 유닛은 일하는 직장에 내가 속한 부서다.
 </blockquote>
@@ -64,5 +64,5 @@ source_date: "2022-05-05T00:09:51+09:00"
 <br/>
 <br/>감사합니다.
 </blockquote>
-<p> <br/><b>그리고 아래는 동료들의 답변(멋진 동료들이다)</b></p><figure><img height="142" loading="lazy" src="/resource/posts/tistory/193/2.png" width="724"/></figure>
+<p> <br/><b>그리고 아래는 동료들의 답변(멋진 동료들이다)</b></p><figure><img height="142" loading="lazy" src="https://github.com/user-attachments/assets/ccfe8991-74e4-4f89-999e-4e891853da64" width="724"/></figure>
 <p> </p></div>

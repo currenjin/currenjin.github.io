@@ -17,7 +17,7 @@ source_date: "2021-11-17T01:36:31+09:00"
 <li>변경된 정책이 궁금하시면 <a href="https://trevari.co.kr/policy?id=e7f87418-6bee-4661-8883-81cb3a016695">해당 링크</a>에서 볼 수 있습니다!</li>
 </ul>
 <h3>기존 시스템(작성 중)</h3>
-<figure><img height="143" loading="lazy" src="/resource/posts/tistory/188/1.png" width="518"/></figure>
+<figure><img height="143" loading="lazy" src="https://github.com/user-attachments/assets/edfbf518-9cda-4287-93cc-d0a7e46b28f5" width="518"/></figure>
 
 <p>기존 시스템에 대한 Architecture 입니다. 몇 년 동안 이어져 온 구조이지만 항상 문제라고 생각했던 부분이죠.</p>
 <p><strong>무엇이 문제인가?</strong></p>
@@ -29,8 +29,8 @@ source_date: "2021-11-17T01:36:31+09:00"
 <p><strong>응집도와 결합도란?(진행 예정)</strong></p>
 <p><strong>그래서?</strong><br/>우리는 기존 방식에서 벗어난 아키텍쳐를 구성하기로 했어요.</p>
 <h3>변경된 시스템(작성 중)</h3>
-<figure><img height="168" loading="lazy" src="/resource/posts/tistory/188/2.png" width="562"/></figure>
-<figure><img height="236" loading="lazy" src="/resource/posts/tistory/188/3.png" width="517"/></figure>
+<figure><img height="168" loading="lazy" src="https://github.com/user-attachments/assets/4c358660-6dcb-4a69-86d8-1a4d94043820" width="562"/></figure>
+<figure><img height="236" loading="lazy" src="https://github.com/user-attachments/assets/9b0d1e70-25fb-4f74-a054-58101b3bf99b" width="517"/></figure>
 
 <h2>진행하면서 어떤 점이 어려웠나요?</h2>
 <p>거의 다 어려웠지만, 테스트를 기반으로 하는 개발이 제일 어려웠습니다.</p>
