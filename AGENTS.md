@@ -135,8 +135,9 @@ tags     : [database, architecture]             # 선택
   아래 `기록 목록으로 찾기` 목록(`#graph-index`)이 같은 그래프 데이터로 노드를 검색·선택하는
   키보드 대안이다. 선택 패널(`#node-info`)에는 연결된 기록 버튼이 있다.
 - 과거의 전역 그래프 도크와 `Cmd/Ctrl + G` 단축키는 현재 노출되지 않는다.
-  `_includes/global-ui.html`은 도크를 포함하지 않으며, `_includes/graph-dock.html`·
-  `js/command-palette.js`는 어떤 레이아웃에서도 로드되지 않는 미사용 파일이다.
+  `_includes/global-ui.html`은 도크를 포함하지 않으며 미사용 도크 include는 제거했다.
+  `js/command-palette.js`는 로드하지 않지만 기존 공개 URL 호환성을 위해 유지한다.
+  저장소 구성과 정리 예외는 `docs/repository-layout.md`를 참고한다.
 - 새 전역 UI(토스트, 단축키 헬프 등)는 **`_includes/global-ui.html`에만 추가**한다.
   세 레이아웃에 따로따로 넣지 않는다.
 - 그래프 코어 토큰은 `_layouts/graph.html` `:root`의 `--g-*`이며 `css/main.css` 팔레트와
