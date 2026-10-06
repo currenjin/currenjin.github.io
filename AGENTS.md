@@ -40,7 +40,9 @@
 ## 위키 (`_wiki/*.md`)
 
 학습용 교과서 작성·보강 기준은 `docs/wiki-authoring.md`를 따른다.
-Claude Code 프로젝트 커맨드는 `.claude/commands/wiki.md` (`/wiki <대상> [요청]`)다.
+공용 스킬은 `.agents/skills/wiki/SKILL.md`다. 위키 작성·보강·검토 요청이나
+`/wiki <대상> [요청]`이라는 요청을 받으면 이 스킬을 읽는다.
+자동 스킬 탐색·슬래시 메뉴 지원은 도구마다 다르므로, 미지원 도구에서는 파일을 직접 읽어 실행한다.
 
 ### 프론트매터
 
