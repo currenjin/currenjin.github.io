@@ -28,8 +28,15 @@ class Page(HTMLParser):
 site = Path(sys.argv[1] if len(sys.argv) > 1 else "_site")
 page = site / "wiki/kafka/index.html"
 p = Page()
-p.feed(page.read_text())
+html = page.read_text()
+p.feed(html)
 errors = []
+toc = "markdown-toc" in p.ids
+if not toc:
+    errors.append("Missing rendered table of contents")
+for n in range(1, 16):
+    if f'id="markdown-toc-' not in html or not re.search(r'id="markdown-toc-[^\"]*"[^>]*>\s*' + str(n) + r'장\.', html):
+        errors.append(f"Missing TOC entry for chapter {n}")
 for target in p.links:
     if target and target not in p.ids:
         errors.append("Missing fragment: " + target)
