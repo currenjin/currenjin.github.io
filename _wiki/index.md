@@ -81,5 +81,6 @@ regenerate: true
 * [[three-color-pen-study]]
 * [[knou]]
 * [[kafka]]
+* [[grpc]]
 * [[distributed-transaction]]
 * [[building-evolutionary-architectures]]
