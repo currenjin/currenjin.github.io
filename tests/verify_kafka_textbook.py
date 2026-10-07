@@ -6,7 +6,6 @@ from pathlib import Path
 import json
 import re
 import sys
-import xml.etree.ElementTree as ET
 from urllib.parse import unquote
 
 class Page(HTMLParser):
@@ -20,7 +19,7 @@ class Page(HTMLParser):
             self.ids.append(a["id"])
         if tag == "a" and a.get("href", "").startswith("#"):
             self.links.append(unquote(a["href"][1:]))
-        if tag == "img" and "kafka-textbook" in a.get("src", ""):
+        if tag == "img":
             self.images.append(a["src"])
         if tag == "details":
             self.details += 1
@@ -43,12 +42,15 @@ for target in p.links:
 for key, count in Counter(p.ids).items():
     if count > 1:
         errors.append("Duplicate id: " + key)
+manifest = json.loads(Path("docs/kafka-diagram-attachments.json").read_text())["figures"]
+expected_images = {item["url"] for item in manifest.values()}
+if len(p.images) != 20 or set(p.images) != expected_images:
+    errors.append("Expected all 20 actual Issue attachment images, without duplicates or local asset URLs")
 for src in p.images:
-    file = site / src.lstrip("/")
-    if not file.is_file():
-        errors.append("Missing image: " + src)
-    elif file.suffix == ".svg":
-        ET.parse(file)
+    if not src.startswith("https://github.com/user-attachments/assets/"):
+        errors.append("Image is not an Issue attachment: " + src)
+if (site / "assets/images/kafka-textbook").exists():
+    errors.append("Unexpected repository-hosted Kafka image assets")
 for target in ["chapter-" + str(n) for n in range(0,13)] + ["connect", "cdc", "outbox"]:
     if target not in p.ids:
         errors.append("Missing chapter: " + target)
@@ -61,7 +63,7 @@ for target in ["foundation-planes", "foundation-pipeline", "foundation-log",
     if target not in p.ids:
         errors.append("Missing foundation section: " + target)
 for name in ["fig-00-data-path.svg", "fig-00-memory-io.svg"]:
-    if not any(src.endswith(name) for src in p.images):
+    if manifest[name]["url"] not in p.images:
         errors.append("Missing foundation figure: " + name)
 # Stable source IDs retain their original chapter prefix; visible numbers
 # must follow the current 1–16 chapter numbering in both prose and index.
@@ -74,7 +76,7 @@ for old_chapter, item, chapter, label_item in refs + notes:
         errors.append(f"Stale source label: source-{old_chapter}.{item} displays {chapter}.{label_item}")
 if {(a, b) for a, b, _, _ in refs} - {(a, b) for a, b, _, _ in notes}:
     errors.append("Citation without a numbered source-index entry")
-for forbidden in [".claude", ".agents", "docs/wiki-authoring.md"]:
+for forbidden in [".claude", ".agents", "docs/wiki-authoring.md", "docs/kafka-diagram-attachments.json"]:
     if (site / forbidden).exists():
         errors.append("Published authoring artifact: " + forbidden)
 if p.details < 15:

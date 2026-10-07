@@ -9,9 +9,11 @@ chapters 14–16. Only the Python standard library is required.
 from html import escape
 from pathlib import Path
 import xml.etree.ElementTree as ET
+import argparse
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "assets/images/kafka-textbook"
+OUT = Path(tempfile.gettempdir()) / "kafka-integration-diagrams"
 BG, INK, LINE, WHITE = "#fbfaf6", "#26262b", "#555b6b", "#ffffff"
 FONT = "'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, sans-serif"
 
@@ -148,6 +150,13 @@ def outbox():
 
 
 def main():
+    global OUT
+    parser = argparse.ArgumentParser(description="Generate temporary SVGs for Issue attachment, never repository image assets.")
+    parser.add_argument("--output", type=Path, default=OUT, help="Temporary output directory outside the repository")
+    args = parser.parse_args()
+    OUT = args.output.resolve()
+    if OUT == ROOT or ROOT in OUT.parents:
+        parser.error("output must be outside the repository; publish via actual Issue attachments")
     runtime()
     record_path()
     snapshot()
