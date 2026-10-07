@@ -28,12 +28,15 @@ jobs:
           npm ci
           npm test
           python3 tests/test_repository_layout.py
+          python3 tests/test_kafka_integration_diagrams.py
       - name: Build canonical archive
         env:
           JEKYLL_ENV: production
         run: bundle exec jekyll build
       - name: Verify approved content and navigation
         run: python3 tests/verify_archive.py _site
+      - name: Verify Kafka textbook and Issue attachment references
+        run: python3 tests/verify_kafka_textbook.py _site
       - name: Verify publication boundary
         run: ruby tests/archive_test.rb
       - name: Verify SEO

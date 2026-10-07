@@ -1,0 +1,106 @@
+{
+  "issue_url": "https://github.com/currenjin/currenjin.github.io/issues/30#issuecomment-6030659465",
+  "format": "original SVG bytes",
+  "figures": {
+    "fig-14-connect-runtime.svg": {
+      "url": "https://github.com/user-attachments/assets/17d0d065-b5a0-43dd-978f-b7d3f2c6db98",
+      "sha256": "88f7f15a3c5e1f6a7f8a45849f6ee7c71dac38f1fd11a7e32448c7f49d91c803",
+      "bytes": 8204
+    },
+    "fig-00-data-path.svg": {
+      "url": "https://github.com/user-attachments/assets/34677e35-9f06-46ff-ada6-da7f6c03672a",
+      "sha256": "b6cddb01381c6b2c2e2386e1901e13d2a1759894de535a326c351d08d964907a",
+      "bytes": 3273
+    },
+    "fig-00-memory-io.svg": {
+      "url": "https://github.com/user-attachments/assets/5faee7d4-d3de-48d6-af78-5acb2ad90e23",
+      "sha256": "29b482991aa12522aebed8e8d1b1c4bc2c3e14d1bb2952130a100036915363aa",
+      "bytes": 3033
+    },
+    "fig-01-partitions.svg": {
+      "url": "https://github.com/user-attachments/assets/b8cdecab-3aba-4413-bf03-6d9401919254",
+      "sha256": "8bbb4632dad6591c77ad5d1a5d764808800ec974503388e33af6ed6dd174bb66",
+      "bytes": 9584
+    },
+    "fig-01-retention.svg": {
+      "url": "https://github.com/user-attachments/assets/96a7577c-ebe7-4a47-874e-606ff91882c1",
+      "sha256": "e1b2bc128e411d66e39e0308cf9ba4776fb82ac9d4c1cb9f87adc5c2094f7246",
+      "bytes": 8366
+    },
+    "fig-02-ordering.svg": {
+      "url": "https://github.com/user-attachments/assets/4ba22605-b5cf-4c4b-bfd0-fd179c576980",
+      "sha256": "b7f37ef24c671b2ee874afcfcad7018e203e3152e7e1fb9e50782e0bdb6f505b",
+      "bytes": 8527
+    },
+    "fig-03-acks1.svg": {
+      "url": "https://github.com/user-attachments/assets/d6121a5c-b768-433e-81d9-6257466cf77f",
+      "sha256": "00e8a35ea5794088fa68268ab215b4e963bbebc955db95933269e99fe223d0a9",
+      "bytes": 6816
+    },
+    "fig-03-isr.svg": {
+      "url": "https://github.com/user-attachments/assets/f2e6f786-cef0-48e4-a381-b9e3f10178e0",
+      "sha256": "857f0c4784f24dc4bbae1a6cb409645cad4fec604573ff277de2778bb001e3a7",
+      "bytes": 13138
+    },
+    "fig-04-positions.svg": {
+      "url": "https://github.com/user-attachments/assets/d8aefb6c-37c7-433a-92cd-aa529f2348ea",
+      "sha256": "e500dc09ca5fee3fcaf92100c1e7eef74fb975fdce0dca798841559939ac0c20",
+      "bytes": 8774
+    },
+    "fig-04-rebalance.svg": {
+      "url": "https://github.com/user-attachments/assets/8fc178ab-d9df-4d60-ba93-5b3159c93d2d",
+      "sha256": "34a0ea45d032544e6120bc5e71f9343539bce97347f21ed69e351b0a814e89c1",
+      "bytes": 3936
+    },
+    "fig-05-window.svg": {
+      "url": "https://github.com/user-attachments/assets/19325546-4d74-4ac1-ac42-1bc0cdf08eb0",
+      "sha256": "0068892b976b8b0cf8c9d19e3467db1f571365d6a6b6ee704569708aef06f81d",
+      "bytes": 6338
+    },
+    "fig-06-boundary.svg": {
+      "url": "https://github.com/user-attachments/assets/43db469d-f049-4425-aaf6-3e12db5eebae",
+      "sha256": "c80b095810fd6d32fe5f8a0eeec596e0fe294d0cfb0f330ee1344c5bbf6464a2",
+      "bytes": 7482
+    },
+    "fig-06-idempotent.svg": {
+      "url": "https://github.com/user-attachments/assets/9bc8bc27-bb02-41fc-a844-a48946234218",
+      "sha256": "64be909dfc349880bbd09b18cfcfc6b2558f0e057d81e2ed0d73d5498fd6052b",
+      "bytes": 5042
+    },
+    "fig-07-cleanup.svg": {
+      "url": "https://github.com/user-attachments/assets/ae857933-9438-4863-bd01-390fdab43d81",
+      "sha256": "cd518f7f90e26cb757a719efc4a64698b58b7e25e5eb4f30acb58fad6c77465a",
+      "bytes": 18484
+    },
+    "fig-08-knobs.svg": {
+      "url": "https://github.com/user-attachments/assets/cff7184e-a710-41da-a0a1-f222d7ded9c4",
+      "sha256": "fbaa2addd79c223810c74bec47f86e9d4f9ad394620f5589ba8674660f337de8",
+      "bytes": 6027
+    },
+    "fig-09-diagnosis.svg": {
+      "url": "https://github.com/user-attachments/assets/dfc3b988-2a2c-4895-9efc-eeeb235e6919",
+      "sha256": "94faf6f7f96ad64bb3164905dcdbad28bd52d42a47b1bb82aa7714caeec6e379",
+      "bytes": 8895
+    },
+    "fig-10-replay.svg": {
+      "url": "https://github.com/user-attachments/assets/d14ceb83-a84e-4f41-90d7-3840038edd67",
+      "sha256": "bf3185eef06de836d670db46b55f19b08bddb4ff1df6ccee911d6dfa5dca4789",
+      "bytes": 5385
+    },
+    "fig-14-connect-record-path.svg": {
+      "url": "https://github.com/user-attachments/assets/05590002-2d26-41db-b4f7-53fa46286840",
+      "sha256": "ede5b3094bbe3380a7c0983d71b4bb451a210b6374c23c5772680b8fd0710aed",
+      "bytes": 12981
+    },
+    "fig-15-snapshot-streaming.svg": {
+      "url": "https://github.com/user-attachments/assets/d8b467e7-e1c8-4b9e-866f-4d023eacfde1",
+      "sha256": "d5e99261da03f4fed617ac06592834a2d2d0d493aeebf37556247c19015c8e86",
+      "bytes": 10017
+    },
+    "fig-16-outbox-boundaries.svg": {
+      "url": "https://github.com/user-attachments/assets/575508c1-e2df-4748-b5aa-eb7df2836602",
+      "sha256": "3cfcb50d61639a5efaae45baac98cf9fdf234451a6e05fca748b2498948756ce",
+      "bytes": 9353
+    }
+  }
+}

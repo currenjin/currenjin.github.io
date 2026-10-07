@@ -3,6 +3,11 @@
 from pathlib import Path
 import re
 import unittest
+import json
+import hashlib
+import subprocess
+import sys
+import tempfile
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,19 +32,40 @@ def contrast(a, b):
 
 
 class IntegrationDiagrams(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.temp = tempfile.TemporaryDirectory(prefix='kafka-issue-diagrams-')
+        cls.generated = Path(cls.temp.name)
+        cls.manifest = json.loads((ROOT / 'docs/kafka-diagram-attachments.json').read_text())['figures']
+        subprocess.run([sys.executable, str(ROOT / 'scripts/generation/kafka_integration_diagrams.py'), '--output', cls.temp.name], check=True, capture_output=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.temp.cleanup()
+
+    def test_kafka_images_use_issue_attachments(self):
+        source = (ROOT / '_wiki/kafka.md').read_text()
+        images = re.findall(r'!\[[^\]]*\]\(([^\s)]+)', source)
+        self.assertEqual(len(images), 20)
+        self.assertTrue(all(url.startswith('https://github.com/user-attachments/assets/') for url in images))
+        self.assertEqual(set(images), {item['url'] for item in self.manifest.values()})
+        self.assertEqual(len(set(images)), 20)
+        self.assertFalse((ROOT / 'assets/images/kafka-textbook').exists())
+
     def test_each_figure_is_embedded_once_near_its_chapter(self):
         source = (ROOT / '_wiki/kafka.md').read_text()
         for name in FIGURES:
             with self.subTest(figure=name):
-                self.assertEqual(source.count('/assets/images/kafka-textbook/' + name), 1)
-                position = source.index('/assets/images/kafka-textbook/' + name)
+                url = self.manifest[name]['url']
+                self.assertEqual(source.count(url), 1)
+                position = source.index(url)
                 chapter = re.findall(r'^## (\d+)장\.', source[:position], re.M)[-1]
                 self.assertEqual(chapter, name.split('-')[1])
 
     def test_svg_accessibility_rendering_and_publication_safety(self):
         for name in FIGURES:
             with self.subTest(figure=name):
-                svg = ET.parse(ROOT / 'assets/images/kafka-textbook' / name).getroot()
+                svg = ET.parse(self.generated / name).getroot()
                 self.assertEqual(svg.get('role'), 'img')
                 elements = list(svg.iter())
                 ids = [e.get('id') for e in elements if e.get('id')]
@@ -61,6 +87,19 @@ class IntegrationDiagrams(unittest.TestCase):
                 background = svg.find(NS + 'rect')
                 assert background is not None
                 self.assertEqual(background.get('fill'), '#fbfaf6')
+
+    def test_generated_svg_matches_attached_original_bytes(self):
+        for name in FIGURES:
+            with self.subTest(figure=name):
+                data = (self.generated / name).read_bytes()
+                self.assertEqual(hashlib.sha256(data).hexdigest(), self.manifest[name]['sha256'])
+                self.assertEqual(len(data), self.manifest[name]['bytes'])
+
+    def test_generator_refuses_repository_output(self):
+        result = subprocess.run([sys.executable, str(ROOT / 'scripts/generation/kafka_integration_diagrams.py'), '--output', str(ROOT / 'assets/images/kafka-textbook')], capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('output must be outside the repository', result.stderr)
+        self.assertFalse((ROOT / 'assets/images/kafka-textbook').exists())
 
     def test_current_opaque_palette_contrast(self):
         # Both node fill and artboard are opaque; no alpha compositing is needed.

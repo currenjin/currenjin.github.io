@@ -14,6 +14,13 @@
 - 콘텐츠 유지보수의 실행·게시 요청은 검증 후 커밋·푸시까지 수행한다. 디자인 실험은 최종 승인 전 커밋·푸시하지 않는다.
 - 개인 경로·인증정보·비공개 초안·로컬 실험물을 공개 산출물에 넣지 않는다.
 
+## 콘텐츠 이미지
+
+- Post·Wiki·Review의 본문 이미지와 도식은 저장소의 `resource/`, `resources/` 등에 새로 저장하지 않고 GitHub Issue에 실제 첨부 업로드한 `https://github.com/user-attachments/assets/...` URL을 사용한다. raw GitHub URL이나 업로드하지 않은 링크로 대체하지 않는다.
+- 첨부 업로드는 설치된 `gh issue create/comment --help`에서 `--attach` 지원 여부를 먼저 확인한다. 미지원 버전에서는 검증된 OAuth 경로를 사용할 수 있다: `gh api repos/<owner>/<repo> --jq .id`로 저장소 ID를 구하고, `gh auth token`을 메모리에서 읽어 `POST https://uploads.github.com/user-attachments/assets?name=<filename>&content_type=image%2Fpng&repository_id=<id>`에 원본 바이트를 보낸다(메모리의 OAuth 토큰을 Authorization 헤더의 Bearer 값으로 설정하고, `Content-Type: image/png`, `Accept: application/json`을 사용한다). 쓰기 권한이 있는 계정의 PNG 업로드에서 HTTP 201과 canonical URL 반환을 확인했다. 토큰을 로그·명령 인수에 노출하지 않고, 반환 URL을 해당 Issue 본문·댓글에 연결한다. 브라우저 로그인이 필수라고 가정하지 않는다.
+- 기존 본문 이미지 이관은 원본 바이트를 보존하고 인증·쿠키 없는 첨부 URL의 HTTP 200·SHA-256 일치·브라우저 렌더링을 확인한 뒤 참조만 바꾼다. 연결 직후 404는 일시적 전파 지연일 수 있으므로 제한된 횟수로 재검증하며, 만료되는 `private-user-images`/CDN 서명 URL은 저장하지 않는다. 저장소 전체의 참조를 점검하여 다른 콘텐츠·공용 자산에서 쓰지 않는 원본만 삭제한다. 업로드 인증이 막히면 기존 참조와 파일을 유지하고 차단 사유를 보고한다. Review 표지의 검증된 외부 `cover_url`과 공용 UI 자산은 별도 기준을 유지한다. 요청하지 않은 다른 문서의 일괄 이관은 하지 않는다.
+- SVG도 원본 그대로 Issue에 첨부할 수 있다. 업로드 시 `content_type=image%2Fsvg%2Bxml`과 `Content-Type: image/svg+xml`을 사용하고 HTTP 201, Issue 연결 후 비인증 HTTP 200·SHA-256 일치·브라우저 렌더링을 확인한다. 생성 중간 파일은 저장소 밖 임시 디렉터리에 두며 본문은 실제 첨부 URL만 사용한다.
+
 ## 글쓰기
 
 - 본문 작성·수정 전 `docs/writing-convention.md`를 읽는다. 글쓰기 세부 기준은 그 문서에서만 관리한다.
@@ -33,9 +40,6 @@
 - Home의 전체 목록에서는 책 목차가 접히고 Post 필터에서는 펼쳐진다. `/posts/`의 목차는 항상 보인다.
 - 출판 경계는 `_plugins/archive.rb`가 강제한다. `--safe` 또는 기본 제한 플러그인 빌드로 우회하지 않는다.
 - 자동 수집 데이터로 승인된 정본을 덮어쓰지 않는다.
-- Post 이미지는 저장소의 `resource/`, `resources/` 등에 새로 저장하지 않고 GitHub Issue에 실제 첨부 업로드한 `https://github.com/user-attachments/assets/...` URL을 사용한다. raw GitHub URL이나 업로드하지 않은 링크로 대체하지 않는다.
-- 첨부 업로드는 설치된 `gh issue create/comment --help`에서 `--attach` 지원 여부를 먼저 확인한다. 미지원 버전에서는 검증된 OAuth 경로를 사용할 수 있다: `gh api repos/<owner>/<repo> --jq .id`로 저장소 ID를 구하고, `gh auth token`을 메모리에서 읽어 `POST https://uploads.github.com/user-attachments/assets?name=<filename>&content_type=image%2Fpng&repository_id=<id>`에 원본 바이트를 보낸다(메모리의 OAuth 토큰을 Authorization 헤더의 Bearer 값으로 설정하고, `Content-Type: image/png`, `Accept: application/json`을 사용한다). 쓰기 권한이 있는 계정의 PNG 업로드에서 HTTP 201과 canonical URL 반환을 확인했다. 토큰을 로그·명령 인수에 노출하지 않고, 반환 URL을 해당 Issue 본문·댓글에 연결한다. 브라우저 로그인이 필수라고 가정하지 않는다.
-- 기존 Post 이미지 이관은 원본 바이트를 보존하고 인증·쿠키 없는 첨부 URL의 HTTP 200·SHA-256 일치·브라우저 렌더링을 확인한 뒤 참조만 바꾼다. 연결 직후 404는 일시적 전파 지연일 수 있으므로 제한된 횟수로 재검증하며, 만료되는 `private-user-images`/CDN 서명 URL은 저장하지 않는다. 저장소 전체의 참조를 점검하여 다른 콘텐츠·공용 자산에서 쓰지 않는 원본만 삭제한다. 업로드 인증이 막히면 기존 참조와 파일을 유지하고 차단 사유를 보고한다. Wiki·Review·공용 자산은 이 Post 규칙의 이관 범위가 아니다.
 
 ## 위키 (`_wiki/*.md`)
 
