@@ -1882,15 +1882,7 @@ Connect worker는 브로커·컨트롤러와 **별도로 시작하는 JVM 프로
 
 실행 위치는 서버일 수도 컨테이너일 수도 있다. 같은 물리 서버에 브로커와 worker를 배치해도 두 프로세스의 역할은 합쳐지지 않는다. DB 읽기와 converter 변환의 CPU·메모리 부담, 검색 API 연결 수, 플러그인 장애의 영향 범위는 worker 쪽에서 발생한다. Worker를 별도로 배치하면 이런 연동 부하를 브로커 자원과 분리할 수 있지만 별도 배포·감시·용량 관리가 필요하다.
 
-```text
-외부 PostgreSQL                 Kafka 클러스터               외부 검색 엔진
-       ↑                            ↑ ↓                           ↑
-       └── DB 연결 ── [Connect worker 프로세스] ── 검색 API 연결 ──┘
-                       Source / Sink task
-                       Converter / SMT
-                       Kafka producer / consumer
-                       REST 관리 서버
-```
+![외부 DB에서 source worker를 거쳐 Kafka에 쓰고, 별도 sink worker가 Kafka에서 읽어 검색 엔진에 반영한다. Worker는 커넥터 플러그인을 실행하지만 브로커는 실행하지 않는다.](/assets/images/kafka-textbook/fig-14-connect-runtime.svg "그림 14-2. Connect 실행 경계")
 
 이 그림은 실행 구조다. 데이터가 꼭 한 worker의 source에서 같은 worker의 sink로 직접 넘어간다는 뜻은 아니다. Source worker는 Kafka에 쓰고, sink worker는 Kafka에서 읽는다. 서로 다른 worker나 서로 다른 Connect 클러스터여도 같은 토픽을 매개로 연결할 수 있다. 브로커는 레코드를 저장·복제·전달할 뿐 PostgreSQL 드라이버나 검색 엔진 플러그인을 실행하지 않는다.
 
@@ -1927,10 +1919,7 @@ Distributed 모드에서는 어느 worker에 task가 재할당될지 바뀔 수 
 
 **Converter**는 Connect의 키·값 모델을 Kafka에 저장할 바이트로 직렬화하거나, 읽은 바이트를 Connect 모델로 역직렬화한다. 키와 값의 converter를 따로 고른다. **SMT**는 한 Connect 레코드의 필드나 키·토픽 등을 바꾸는 작은 변환이다. Converter가 표현 포맷을 바꾸는 층이라면 SMT는 직렬화 전 또는 역직렬화 후의 레코드 내용에 작용한다.
 
-```text
-Source: 외부 읽기 → SourceRecord → SMT → key/value converter → producer → Kafka
-Sink:   Kafka → consumer → key/value converter → SMT → SinkRecord를 task에 전달 → 외부 쓰기
-```
+![Source는 task가 만든 Connect 레코드에 SMT를 적용하고 converter로 직렬화해 발행한다. Sink는 읽은 바이트를 converter로 역직렬화한 뒤 SMT를 적용하고 task에 전달한다. 각 방향의 단계는 worker JVM 안에서 실행되며 SMT는 구성한 경우 적용한다.](/assets/images/kafka-textbook/fig-14-connect-record-path.svg "그림 14-3. Connect 레코드 경로")
 
 SourceRecord·SinkRecord는 앞서 정의한 내부 레코드의 방향별 이름이다. 그림의 단계는 논리적 데이터 경로이며, 모두 별도 서버라는 뜻은 아니다. Converter·SMT·Kafka 클라이언트는 worker에서 실행된다. 아래에서는 SMT 없는 source와, 변경 이벤트를 검색 문서로 바꾸는 sink 쪽 변환을 가정한다. 구체적인 sink 구현이 이 입력 형식과 변환을 지원하는지는 따로 확인해야 한다.
 
@@ -2225,11 +2214,7 @@ Snapshot 중 실패하면 재시작 시 snapshot을 다시 수행하거나 저�
 
 가상의 주문 `104`가 snapshot의 일관된 기준 상태에서는 `CREATED`이고, snapshot을 읽는 동안 다른 트랜잭션이 `PAID`로 수정해 커밋되었다고 하자. 커넥터는 초기 행을 읽은 `op=r`(read) 이벤트를 만들고, 이어지는 streaming에서 `op=u`(update) 이벤트를 내보낼 수 있다. 전자는 기준 상태, 후자는 그 뒤의 변경이다. 같은 키를 두 번 받았다는 사실만으로 중복 장애라고 판정하지 않는다.
 
-```text
-기준 WAL 위치 확보 ── 일관된 snapshot에서 CREATED 읽기 ── snapshot 완료
-        │                         DB의 PAID 변경 커밋
-        └───────────────── 기준 위치부터 streaming ── PAID 변경 전달
-```
+![주문 104의 기준 상태 CREATED를 snapshot으로 읽는 동안 DB에서 PAID 변경이 커밋된다. Snapshot 완료 후 기준 WAL 위치 L0와 연결된 streaming에서 PAID update를 전달한다. 시간은 아래로 흐르며 DB와 connector의 작업은 서로 다른 레인에 표시한다.](/assets/images/kafka-textbook/fig-15-snapshot-streaming.svg "그림 15-2. Snapshot과 streaming의 시간 관계")
 
 그림은 “테이블 읽기를 마친 뒤 현재 WAL 끝에서 시작”하는 방식과 다르다. 후자의 방식이면 snapshot 중 커밋된 변경이 읽기 사이의 빈틈에서 사라질 수 있다. 기본 initial 절차는 트랜잭션과 로그 위치를 연결하고 완료 상태를 source 오프셋에 남긴다. 실제 일관성은 선택한 `snapshot.isolation.mode`와 DB 조건에 의존하므로 모든 사용자 지정 모드를 같은 계약으로 해석하지 않는다.
 
@@ -2316,11 +2301,7 @@ DB 트랜잭션이 커밋되면 주문 행과 발행 예정 기록이 함께 반
 4. Kafka가 레코드를 저장·복제한다. Consumer는 자신의 오프셋에서 이벤트를 읽어 업무 효과를 반영한다. 포인트 적립이라면 event ID 처리 기록과 적립을 같은 목적지 DB 트랜잭션에 넣는다.
 5. Consumer가 업무 반영 성공 뒤 Kafka 오프셋을 커밋한다. 그 사이 실패해 같은 이벤트가 다시 오면 동일 event ID로 이미 처리한 효과인지 판정한다.
 
-```text
-원본 DB 원자성          전달 경계                    목적지 업무 원자성
-orders + outbox ── relay/CDC ── SMT·converter ── Kafka ── 처리 ID + 포인트
-  하나의 커밋             재시도·위치 저장                  하나의 커밋
-```
+![원본 DB는 orders와 outbox를 함께 커밋하고 relay가 Kafka에 전달한다. 목적지 DB는 처리 ID 기록과 포인트 적립을 함께 커밋한다. 세 저장 경계 사이에서 재전달·재처리가 가능하며 전체를 묶는 원자성은 없다.](/assets/images/kafka-textbook/fig-16-outbox-boundaries.svg "그림 16-2. Outbox의 세 저장 경계")
 
 이 그림은 세 저장 경계를 하나의 전역 트랜잭션으로 연결하지 않는다. Source EOS를 사용할 수 있는 조건을 갖췄더라도 목적지 DB의 업무 원자성은 별도다. 일반 at-least-once relay에서 같은 outbox 이벤트가 Kafka에 재전달될 수 있고, consumer는 Kafka 오프셋 커밋 전 실패로 같은 레코드를 다시 읽을 수도 있다. 안정적인 event ID는 두 경우 모두 업무 효과를 중복 적용하지 않기 위한 근거다.
 
