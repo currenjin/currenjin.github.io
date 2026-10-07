@@ -1,19 +1,19 @@
 [
   {
+    "title": "Kafka",
+    "url": "/wiki/kafka",
+    "updated": "2026-10-07",
+    "summary": "로그·복제·커밋·트랜잭션에서 Kafka Connect·CDC·Outbox까지 배우는 웹 교과서",
+    "tags": "kafka, architecture, engineering",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "gRPC",
     "url": "/wiki/grpc",
     "updated": "2026-10-06",
     "summary": "RPC·Protobuf 계약에서 스트리밍·deadline·재시도·보안·운영까지 배우는 웹 교과서",
     "tags": "network, architecture, engineering",
-    "source": "Wiki",
-    "external": false
-  },
-  {
-    "title": "Kafka",
-    "url": "/wiki/kafka",
-    "updated": "2026-10-06",
-    "summary": "로그·복제·커밋·트랜잭션에서 Kafka Connect·CDC·Outbox까지 배우는 웹 교과서",
-    "tags": "kafka, architecture, engineering",
     "source": "Wiki",
     "external": false
   },
