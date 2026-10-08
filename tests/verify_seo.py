@@ -59,6 +59,8 @@ def inventory():
     now = dt.datetime.now(dt.timezone.utc)
     expected, excluded, counts = {}, set(), {}
     books = yaml.safe_load((ROOT / '_data/post_books.yml').read_text()) or []
+    series_path = ROOT / '_data/wiki_series.yml'
+    wiki_series = (yaml.safe_load(series_path.read_text()) or []) if series_path.exists() else []
     for collection, prefix in [('wiki', '/wiki/'), ('reviews', '/reviews/'), ('post', '/posts/')]:
         count = 0
         for path in (ROOT / ('_' + collection)).rglob('*.md'):
@@ -73,6 +75,16 @@ def inventory():
                 allowed = allowed and data.get('public') is True and date is not None and updated is not None
                 if allowed and date is not None and updated is not None:
                     allowed = updated >= date
+            if collection == 'wiki' and 'series' in data:
+                date, updated = stamp(data.get('date')), stamp(data.get('updated'))
+                allowed = allowed and data.get('public') is True and date is not None and updated is not None
+                if allowed and date is not None and updated is not None:
+                    allowed = updated >= date
+                allowed = allowed and any(
+                    series.get('public') is True and series.get('draft') is not True and series.get('published') is not False
+                    and series.get('id') == data.get('series')
+                    and any(entry.get('id') == relative and entry.get('state') == 'published' for entry in series.get('chapters', []))
+                    for series in wiki_series)
             if is_chapter:
                 allowed = allowed and relative == f"books/{data.get('book')}/{data.get('chapter_id')}"
                 allowed = allowed and any(book.get('public') is True and book.get('id') == data.get('book') and any(entry.get('id') == data.get('chapter_id') and entry.get('state') == 'published' for entry in book.get('chapters', [])) for book in books)

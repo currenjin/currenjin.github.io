@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'time'
 require 'ostruct'
+require_relative 'reading_navigation'
 
 # Post is one source collection. Book membership is a publication constraint,
 # not a second collection; public routes remain independent of source folders.
@@ -61,10 +62,12 @@ module CanonicalArchive
       doc.data['previous_chapter'] = index.positive? ? published[index - 1] : nil
       doc.data['next_chapter'] = published[index + 1]
     end
+    ReadingNavigation.attach(published, book)
     book
   end
 
   def self.prepare(site)
+    ReadingNavigation.prepare_wiki(site)
     documents = site.collections.fetch('post').docs
     eligible = documents.select { |doc| public_document?(doc, site.time) }
     eligible.each { |doc| route(doc) }

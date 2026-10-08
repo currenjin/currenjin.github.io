@@ -110,6 +110,46 @@ SVG와 사이트의 렌더링, 접근성, 대비, 테마·모바일 확인 절�
    수집·인용·링크 검증만으로 기술 의미까지 검증했다고 하지 않는다.
 6. 신규 문서는 저장소의 Wiki 생성 절차를 따른다. 다른 문서의 일괄 수정 권한으로 확대하지 않는다.
 
+## 공통 읽기 탐색과 선택적 Wiki 시리즈
+
+Wiki와 Post 장 상세는 같은 `reading-series.html` / `reading-chapter-nav.html`과
+플러그인의 `reading_series`, `reading_previous`, `reading_next` 계약을 사용한다.
+독립 Wiki에는 시리즈 UI나 이전/다음 장 링크가 생기지 않는다. 기존 본문·앵커·TOC는 바꾸지 않는다.
+시리즈는 사용자 승인 후에만 등록하며 현재 실제 Wiki 시리즈는 만들지 않는다.
+
+```yaml
+# _data/wiki_series.yml — 설명용 예시, 실제 데이터 아님
+- id: approved-topic
+  title: 승인된 학습 시리즈
+  public: false
+  chapters:
+    - id: topic-first       # 기존 _wiki/topic-first.md의 파일명 (확장자 제외)
+      state: published
+    - id: topic-next
+      state: published
+```
+
+참여 문서는 기존 프론트매터에 `series: approved-topic`만 추가한다. URL과 파일명은 유지한다.
+평면 `_wiki/<chapter-id>.md`만 지원하며 등록 순서가 장 순서다.
+시리즈의 YAML 불리언 `public: true`와 문서의 YAML 불리언 `public: true`,
+유효한 과거 `date`·`updated` (`updated >= date`), `state: published`가 모두 필요하다.
+시리즈나 문서의 `draft: true`, `published: false`는 공개를 막는다.
+`series`를 선언했지만 등록되지 않거나 비공개 시리즈인 문서는 출력에서 제외한다.
+날짜가 잘못된 문서, 경로 불일치, 누락된 장, 비공개 초안 제목·링크는 탐색에 포함하지 않는다.
+중복 시리즈·장 ID나 중복 소스는 빌드를 실패시킨다. Wiki의 `planned` 항목은 제목도 표시하지 않는다.
+일반 독립 Wiki의 출판 규칙에는 이 엄격한 선택적 멤버십 검사를 적용하지 않는다.
+
+Wiki와 Post는 같은 `article_toc` 렌더 필터와 기존 Wiki 목차 스타일·스크립트를 사용한다.
+이미 작성된 `#markdown-toc`은 중복 생성하지 않고 그대로 보존한다. 없으면 본문 헤딩의
+기존 ID로 목차만 앞에 추가하며 본문을 다시 직렬화하지 않는다. `toc: false`는 생성을 끈다.
+
+시리즈 목차는 헤더 아래 기본 접힘 상태이며 시리즈명·현재 장은 접혀도 보인다.
+펼치면 현재 장이 `aria-current="page"`로 강조되고 본문 아래에서 공개 장만 이전/다음으로 연결된다.
+Post의 기존 책 스키마·카탈로그·예정 장 정책은 그대로 유지한다.
+
+검증: `ruby tests/reading_navigation_test.rb`, `ruby tests/article_toc_test.rb`,
+`python3 tests/reading_navigation_integration.py` (실제 파일을 만든 임시 복사본에서만 Wiki 시리즈 등록).
+
 ## 검증·게시
 
 `AGENTS.md`의 현재 빌드·검증·게시 절차를 따른다.
