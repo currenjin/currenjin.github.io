@@ -1,6 +1,6 @@
 ---
 layout   : review
-title    : "6:16 in LA"
+title    : "Watch the Party Die"
 author   : "Kendrick Lamar"
 type     : music
 genre    : "힙합"
