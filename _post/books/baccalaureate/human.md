@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "01. 인간"
+title: "인간"
 book: baccalaureate
 chapter_id: human
 date: 2026-10-08 13:14:00 +0900

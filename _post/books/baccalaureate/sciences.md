@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "04. 과학"
+title: "과학"
 book: baccalaureate
 chapter_id: sciences
 date: 2026-10-08 13:14:00 +0900

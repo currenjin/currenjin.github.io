@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "09. 윤리학편"
+title: "윤리학편"
 book: baccalaureate
 chapter_id: ethics-volume
 date: 2026-10-08 13:14:00 +0900

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "02. 인문학"
+title: "인문학"
 book: baccalaureate
 chapter_id: humanities
 date: 2026-10-08 13:14:00 +0900

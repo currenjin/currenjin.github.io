@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "05. 정치와 권리"
+title: "정치와 권리"
 book: baccalaureate
 chapter_id: politics-and-rights
 date: 2026-10-08 13:14:00 +0900

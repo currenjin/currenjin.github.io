@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "06. 윤리"
+title: "윤리"
 book: baccalaureate
 chapter_id: ethics
 date: 2026-10-08 13:14:00 +0900
