@@ -25,3 +25,26 @@
     - id: becoming
       title: "내가 바라는 '나'"
       state: planned
+- id: baccalaureate
+  title: "바칼로레아"
+  intro: ""
+  public: true
+  chapters:
+    - id: human
+      state: published
+    - id: humanities
+      state: published
+    - id: arts
+      state: published
+    - id: sciences
+      state: published
+    - id: politics-and-rights
+      state: published
+    - id: ethics
+      state: published
+    - id: humanities-volume
+      state: published
+    - id: social-and-natural-sciences
+      state: published
+    - id: ethics-volume
+      state: published
