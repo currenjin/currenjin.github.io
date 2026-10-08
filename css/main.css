@@ -108,7 +108,19 @@
 .post-index .catalog-title-row .catalog-summary { display:inline; margin:0 0 0 12px; }
 .post-index .post-planned .catalog-title-row { color:var(--muted); }
 .post-reading-toc { margin:0 0 32px; padding:20px 0; border-block:1px solid var(--line); }
-.post-reading-toc h2 { margin:0 0 12px; font-size:18px; }
+.wiki-article .reading-series,.wiki-article .reading-chapter-nav { width:min(100%,720px); margin-inline:auto; }
+.reading-series summary { display:flex; align-items:baseline; flex-wrap:wrap; gap:8px; min-height:0; cursor:pointer; color:var(--ink); font:14px/1.7 var(--sans); overflow-wrap:anywhere; }
+.reading-series summary::before { content:"+"; color:var(--muted); }
+.reading-series details[open] > summary::before { content:"−"; }
+.reading-series-title { font-weight:600; }
+.reading-series-current { display:inline; margin:0; color:var(--soft); font-size:13px; }
+.reading-series summary:focus-visible,.reading-series-chapters a:focus-visible { outline:2px solid var(--focus); outline-offset:4px; }
+.reading-series-chapters { margin:16px 0 0; padding-left:1.6em; color:var(--soft); font:14px/1.7 var(--sans); }
+.reading-series-chapters li { padding:5px 0; overflow-wrap:anywhere; }
+.reading-series-chapters a { display:block; padding:4px 8px; color:var(--soft); text-decoration:none; border-left:2px solid transparent; }
+.reading-series-chapters a:hover { color:var(--accent); text-decoration:underline; }
+.reading-series-chapters a[aria-current="page"] { color:var(--accent); border-left-color:var(--accent); background:var(--code-bg); font-weight:600; }
+.reading-series-chapters small { margin-left:8px; color:var(--muted); }
 .post-chapter-nav { display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px; margin-top:40px; padding-top:20px; border-top:1px solid var(--line); font:13px/1.7 var(--sans); }
 .post-chapter-nav a { text-decoration:underline; text-underline-offset:3px; overflow-wrap:anywhere; }
 @media(max-width:760px) { .book-toc-panel { padding-left:0; } .post-chapter-nav { flex-direction:column; } }

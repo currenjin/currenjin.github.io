@@ -1,0 +1,12 @@
+{% if page.reading_series %}
+<nav class="reading-series post-reading-toc" aria-label="책 전체 목록">
+  <details>
+    <summary><span class="reading-series-title">{{ page.reading_series.title | escape }}</span><span class="reading-series-current">현재 장 · {{ page.title | escape }}</span></summary>
+    <ol class="reading-series-chapters">
+    {% for chapter in page.reading_series.chapters %}
+      <li>{% if chapter.planned %}<span>{{ chapter.title | escape }}</span><small>집필 예정</small>{% else %}<a href="{{ chapter.url | relative_url }}"{% if chapter.url == page.url %} aria-current="page"{% endif %}>{{ chapter.title | escape }}</a>{% endif %}</li>
+    {% endfor %}
+    </ol>
+  </details>
+</nav>
+{% endif %}

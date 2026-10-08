@@ -20,7 +20,7 @@ with tempfile.TemporaryDirectory(prefix='archive-lifecycle-') as tmp:
     book = [{'id':'lifecycle','title':'Lifecycle fixture','intro':'Fixture only','public':True,'chapters':[{'id':'first','state':'published'}, {'id':'plan','state':'planned','title':'Planned fixture'}, {'id':'secret','state':'published'}, {'id':'future','state':'published'}, {'id':'draft','state':'published'}, {'id':'unpublished','state':'published'}, {'id':'last','state':'published'}]}]
     metadata = root / '_data/post_books.yml'
     metadata.write_text(json.dumps(book))
-    command = ['docker','run','--rm','-v',f'{root}:/srv/jekyll','jekyll/jekyll:4','jekyll','build','--destination','/srv/jekyll/_site']
+    command = ['docker','run','--rm','-v',f'{root}:/srv/jekyll','-v','baccalaureate-gems:/usr/local/bundle','-w','/srv/jekyll','ruby:3.1','sh','-c','JEKYLL_ENV=production bundle exec jekyll build --destination /srv/jekyll/_site']
     def build():
         shutil.rmtree(root / '_site', ignore_errors=True)
         result = subprocess.run(command, capture_output=True, text=True, timeout=100)
@@ -34,7 +34,9 @@ with tempfile.TemporaryDirectory(prefix='archive-lifecycle-') as tmp:
         assert all(title not in x['url'] for x in index)
     first = (site / 'posts/chapters/lifecycle/first/index.html').read_text()
     last = (site / 'posts/chapters/lifecycle/last/index.html').read_text()
-    assert '<nav class="post-reading-toc" aria-label="책 전체 목록">' in first and '집필 예정' in first
+    assert '<nav class="reading-series post-reading-toc" aria-label="책 전체 목록">' in first and '집필 예정' in first
+    assert '<details>' in first and '<details open' not in first
+    assert 'href="/posts/chapters/lifecycle/first/" aria-current="page"' in first
     assert '다음 장 · last' in first and '이전 장 · first' in last
     assert 'book-toc-lifecycle' in (site / 'index.html').read_text()
     assert 'Lifecycle fixture' in (site / 'posts/index.html').read_text()

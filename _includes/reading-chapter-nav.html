@@ -1,0 +1,7 @@
+{% if page.reading_series %}
+<nav class="reading-chapter-nav post-chapter-nav" aria-label="장 탐색">
+  {% if page.reading_previous %}<a rel="prev" href="{{ page.reading_previous.url | relative_url }}">이전 장 · {{ page.reading_previous.title | escape }}</a>{% endif %}
+  {% if page.reading_series.url %}<a href="{{ page.reading_series.url | relative_url }}">목록</a>{% endif %}
+  {% if page.reading_next %}<a rel="next" href="{{ page.reading_next.url | relative_url }}">다음 장 · {{ page.reading_next.title | escape }}</a>{% endif %}
+</nav>
+{% endif %}

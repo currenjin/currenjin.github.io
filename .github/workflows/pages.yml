@@ -38,7 +38,11 @@ jobs:
       - name: Verify Kafka textbook and Issue attachment references
         run: python3 tests/verify_kafka_textbook.py _site
       - name: Verify publication boundary
-        run: ruby tests/archive_test.rb
+        run: |
+          ruby tests/archive_test.rb
+          ruby tests/article_toc_test.rb
+          ruby tests/reading_navigation_test.rb
+          READING_NAV_NATIVE_BUILD=1 python3 tests/reading_navigation_integration.py
       - name: Verify SEO
         run: python3 tests/verify_seo.py _site
       - uses: actions/upload-pages-artifact@v3
