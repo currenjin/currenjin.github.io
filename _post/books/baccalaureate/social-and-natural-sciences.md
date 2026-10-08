@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "08. 사회·자연과학편"
+title: "사회·자연과학편"
 book: baccalaureate
 chapter_id: social-and-natural-sciences
 date: 2026-10-08 13:14:00 +0900

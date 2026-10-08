@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "03. 예술"
+title: "예술"
 book: baccalaureate
 chapter_id: arts
 date: 2026-10-08 13:14:00 +0900
