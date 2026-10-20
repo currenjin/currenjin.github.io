@@ -38,6 +38,7 @@
   public: true
   title: "WEMEET MOBILITY"
   result: Software Engineer
+  project_url: https://www.wemeetmobility.com/
 
 - id: cosmic-connection
   date: "2022-10"
@@ -56,6 +57,7 @@
   public: true
   title: "TREVARI"
   result: Software Engineer
+  project_url: https://trevari.co.kr/
 
 - id: jointree
   date: "2019-02"
