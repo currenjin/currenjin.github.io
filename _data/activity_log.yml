@@ -64,16 +64,22 @@
   result: Network Engineer
 
 - id: national-skills-2018
-  date: "2018"
+  date: "2018-10"
   public: true
-  title: "전국기능경기대회 - IT Network Systems"
+  title: "National Skills Competition - IT Network Systems"
   result: Encouragement Award
 
 - id: regional-skills-2018
-  date: "2018"
+  date: "2018-04"
   public: true
-  title: "지방기능경기대회 - IT Network Systems"
+  title: "Daejeon Regional Skills Competition - IT Network Systems"
   result: Gold Medal
+
+- id: regional-skills-2017
+  date: "2017-04"
+  public: true
+  title: "Daejeon Regional Skills Competition - IT Network Systems"
+  result: Silver Medal
 
 - id: azure-az-900
   date: "2020-07"
