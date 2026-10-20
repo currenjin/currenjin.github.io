@@ -85,33 +85,40 @@
   date: "2020-07"
   public: true
   title: "Azure Certified AZ-900"
+  result: Certification
 
 - id: cisco-network-associate
   date: "2020-02"
   public: true
   title: "Cisco Certificate Network Associate"
+  result: Certification
 
 - id: information-processing-industrial-engineer
   date: "2019-05"
   public: true
   title: "정보처리산업기사"
+  result: Certification
 
 - id: electrician-craftsman
   date: "2018-07"
   public: true
   title: "전기기능사"
+  result: Certification
 
 - id: linux-master-level-2
   date: "2018-06"
   public: true
   title: "리눅스마스터 2급"
+  result: Certification
 
 - id: network-administrator-level-2
   date: "2016-09"
   public: true
   title: "네트워크관리사 2급"
+  result: Certification
 
 - id: information-equipment-operation-craftsman
   date: "2016-09"
   public: true
   title: "정보기기운용기능사"
+  result: Certification
