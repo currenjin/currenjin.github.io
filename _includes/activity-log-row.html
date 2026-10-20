@@ -1,7 +1,7 @@
 {% assign activity = include.activity %}
 <article class="entry" id="{{ activity.id | escape }}" data-filter-item data-kind="log" data-date="{{ activity.date }}">
   {% if activity.project_url %}<a class="entry-link" href="{{ activity.project_url | escape }}">{% endif %}
-  <time class="date" datetime="{{ activity.date }}">{{ activity.date | date: '%y-%m-%d' }}</time>
+  {% if activity.date_precision == 'year' %}<span class="date">{{ activity.date_label }}</span>{% else %}<time class="date" datetime="{{ activity.date }}">{{ activity.date_label }}</time>{% endif %}
   <span class="kind">log</span>
   <span class="entry-title">{{ activity.title | escape }}{% if activity.result %} <span class="activity-result{% if activity.result == 'Participant' %} activity-result--participant{% endif %}">{{ activity.result | escape }}</span>{% endif %}{% if activity.summary %}<small>{{ activity.summary | escape }}</small>{% endif %}</span>
   {% if activity.project_url %}</a>{% endif %}

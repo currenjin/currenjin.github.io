@@ -28,6 +28,22 @@ test('Home, log archive and search use only the publication-safe activity view',
   assert.match(read('css/main.css'), /\.entry\[data-kind="log"\] > \.entry-link\s*\{[^}]*display:grid/, 'A linked log keeps a focusable layout box');
 });
 
+test('partial activity periods sort after precise records in their period without invented days', () => {
+  const rows = ['2018', '2018-01', '2018-01-01', '2018-07', '2020-02', ''].map(date => ({dataset:{date}}));
+  const ledger = {children:[...rows], appendChild(row) {this.children=this.children.filter(r=>r!==row).concat(row)}};
+  const source=read('js/ledger.js');
+  vm.runInNewContext(source.slice(source.indexOf('  const ledger='), source.indexOf('  const reviewGrid=')), {document:{querySelector:()=>ledger}});
+  assert.deepEqual(ledger.children.map(r=>r.dataset.date), ['2020-02','2018-07','2018-01-01','2018-01','2018','']);
+});
+
+test('search sorts partial periods without publishing invented dates', async () => {
+  const source=read('js/ledger.js');
+  const loader=source.slice(source.indexOf('  const load='),source.indexOf('  // 모달 동안'));
+  const input=['2018','2018-01','2018-01-01','2018-07'].map(updated=>({updated}));
+  const actual=await vm.runInNewContext(`(async()=>{let records=[],loaded=false; ${loader} await load(); return records.map(r=>r.updated);})()`, {fetch:async()=>({ok:true,json:async()=>input})});
+  assert.deepEqual(Array.from(actual),['2018-07','2018-01-01','2018-01','2018']);
+});
+
 test('existing mixed ledger sorts log rows and filters with accurate counts', () => {
   const rows = [
     { dataset: { kind: 'wiki', date: '2026-10-17' } },

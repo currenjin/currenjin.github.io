@@ -37,12 +37,24 @@ class ActivityLogTest < Minitest::Test
     assert_equal ['2026-10-20', '2026-10-18'], prepare([entry('date'=>Date.new(2026,10,18)), entry('id'=>'today', 'date'=>'2026-10-20')]).map { |item| item['date'] }
   end
 
+  def test_partial_dates_preserve_precision_and_sort_unknown_periods_last
+    dates = %w[2018 2018-01 2018-01-01 2018-07 2026 2026-10 2026-10-20]
+    result = prepare(dates.map.with_index { |date, i| entry('id'=>"precision-#{i}", 'date'=>date) })
+    assert_equal dates.sort.reverse, result.map { |item| item['date'] }
+    assert_equal %w[day month year month day month year], result.map { |item| item['date_precision'] }
+    assert_equal ['26-10-20', '26-10', '2026', '18-07', '18-01-01', '18-01', '2018'], result.map { |item| item['date_label'] }
+    invalid = %w[2027 2026-11 2026-10-21 2026-00 2026-13 2026-1 2026-02-30 0000 0000-01 20180 2018-01-01-01]
+    assert_empty prepare(invalid.map { |date| entry('date'=>date) })
+  end
+
   def test_newest_first_without_mutating_source_or_exposing_extra_fields
-    input = [entry('id'=>'older', 'date'=>'2026-09-19', 'private_note'=>'not public'), entry]
+    input = [entry('id'=>'older', 'date'=>'2026-09-19', 'private_note'=>'not public', 'source'=>'PRIVATE_PROVENANCE', 'kind'=>'company'), entry]
     result = prepare(input)
     assert_equal ['completed-event', 'older'], result.map { |item| item['id'] }
     assert_equal '/log/#completed-event', result.first['url']
     refute result.last.key?('private_note')
+    refute result.last.key?('source')
+    refute result.last.key?('kind')
     assert_equal 'older', input.first['id']
   end
 

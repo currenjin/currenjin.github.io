@@ -14,14 +14,19 @@ module ActivityLog
       next unless row['id'].is_a?(String) && row['id'].match?(/\A[a-z0-9]+(?:-[a-z0-9]+)*\z/)
       next unless row['title'].is_a?(String) && !row['title'].strip.empty?
       day = row['date'].to_s
-      next unless day.match?(/\A\d{4}-\d{2}-\d{2}\z/)
+      next unless day.match?(/\A[0-9]{4}(?:-[0-9]{2}(?:-[0-9]{2})?)?\z/)
+      parts = day.split('-').map(&:to_i)
+      next unless parts.first.positive?
       begin
-        date = Date.iso8601(day)
+        # Lower bounds are used only to reject future/invalid periods, never published.
+        date = Date.new(parts[0], parts[1] || 1, parts[2] || 1)
       rescue ArgumentError
         next
       end
       next if date > site.time.to_date
-      item = { 'id'=>row['id'], 'date'=>day, 'title'=>row['title'],
+      precision = { 4=>'year', 7=>'month', 10=>'day' }.fetch(day.length)
+      item = { 'id'=>row['id'], 'date'=>day, 'date_precision'=>precision,
+               'date_label'=>(precision == 'year' ? day : day[2..-1]), 'title'=>row['title'],
                'url'=>"/log/##{row['id']}" }
       if row['summary'].is_a?(String) && !row['summary'].strip.empty?
         item['summary'] = row['summary']
