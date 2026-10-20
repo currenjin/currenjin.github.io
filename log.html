@@ -4,7 +4,7 @@ title: Log
 permalink: /log/
 ---
 <main id="main" class="activity-log">
-  <header class="archive-index-intro"><p class="eyebrow">log</p><h1>활동 기록</h1></header>
+  <header class="archive-index-intro"><p class="eyebrow">log</p><h1>도전하고 이루다</h1></header>
   <div class="ledger-head"><span>date</span><span>type</span><span>title</span></div>
   <div class="home-ledger">
     {% for activity in site.activity_log %}{% include activity-log-row.html activity=activity %}{% else %}<p>아직 공개한 기록이 없습니다.</p>{% endfor %}

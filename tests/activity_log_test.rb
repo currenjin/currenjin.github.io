@@ -49,8 +49,27 @@ class ActivityLogTest < Minitest::Test
   def test_invalid_rows_fail_closed_and_empty_data_is_supported
     assert_empty prepare(nil)
     assert_empty prepare({'unexpected'=>'mapping'})
-    invalid = [nil, 'text', entry('id'=>'bad id'), entry('id'=>nil), entry('title'=>''), entry('summary'=>' '), entry('title'=>123)]
+    invalid = [nil, 'text', entry('id'=>'bad id'), entry('id'=>nil), entry('title'=>''), entry('title'=>123)]
     assert_empty prepare(invalid)
+  end
+
+  def test_summary_is_optional_without_reserving_empty_text
+    [nil, '', ' ', 123, false, []].each do |summary|
+      result = prepare([entry('summary'=>summary)])
+      assert_equal 1, result.size
+      refute result.first.key?('summary')
+    end
+    assert_equal 'Confirmed result.', prepare([entry]).first['summary']
+  end
+
+  def test_result_is_optional_and_only_nonempty_strings_are_exposed
+    refute prepare([entry]).first.key?('result')
+    [nil, '', '  ', 1, true, [], {'text'=>'Participant'}].each do |value|
+      refute prepare([entry('result'=>value)]).first.key?('result'), value.inspect
+    end
+    ['1st Place', 'Top 6 Finalist', 'Participant', '<result> & confirmed'].each do |value|
+      assert_equal value, prepare([entry('result'=>value)]).first['result']
+    end
   end
 
   def test_project_link_is_optional_and_unsafe_urls_are_not_rendered

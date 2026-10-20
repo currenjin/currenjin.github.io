@@ -1,34 +1,34 @@
 - id: golden-sea
   date: "2026-10-18"
   public: true
-  title: Golden Sea
-  summary: Daytona HackSprint Seoul, 1st Place.
+  title: Daytona HackSprint Seoul - Golden Sea
+  result: 1st Place
   project_url: https://github.com/currenjin/2026-10-daytona-hack-sprint
 
 - id: prelook
   date: "2026-10-17"
   public: true
-  title: Prelook
-  summary: Vibe Coders Jam Session, 1st Place.
+  title: Vibe Coders Jam Session - Prelook
+  result: 1st Place
   project_url: https://github.com/currenjin/2026-base44-vibecoders-hackathon
 
 - id: spec-gap-replay
   date: "2026-10-16"
   public: true
-  title: Spec Gap Replay
-  summary: Google DeepMind AI Hackathon, Participant.
+  title: Google DeepMind AI Hackathon - Spec Gap Replay
+  result: Participant
   project_url: https://github.com/currenjin/2026-google-deepmind-ai-hackathon
 
 - id: collider
   date: "2026-09-19"
   public: true
-  title: Collider
-  summary: Daytona HackSprint Seoul, Top 6 Finalist.
+  title: Daytona HackSprint Seoul - Collider
+  result: Top 6 Finalist
   project_url: https://github.com/currenjin/2026-09-daytona-hack-sprint-seoul
 
 - id: reels-drama
   date: "2026-07-16"
   public: true
-  title: Reels Drama
-  summary: Google Cloud Study Jam Hackathon, Participant.
+  title: Google Cloud Study Jam Hackathon - Reels Drama
+  result: Participant
   project_url: https://github.com/currenjin/2026-07-google-cloud-study-jam-hackathon

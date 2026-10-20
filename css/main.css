@@ -186,6 +186,8 @@ main { padding:0 26px 90px; }
 .kind { text-transform:lowercase; }
 .entry-title { grid-column:3; min-width:0; overflow-wrap:anywhere; font-size:20px; line-height:1.2; letter-spacing:-.025em; text-wrap:pretty; }
 .entry small { display:block; max-width:720px; margin-top:5px; color:var(--muted); font:11px/1.45 var(--sans); letter-spacing:0; }
+.entry[data-kind="log"] .activity-result { display:inline; margin-inline-start:.55em; font:600 12px/1.4 var(--sans); letter-spacing:0; white-space:nowrap; }
+.entry[data-kind="log"] .activity-result--participant { color:var(--muted); font-weight:400; }
 .entry-external { color:var(--muted); font:10px var(--sans); }
 details.entry { display:block; margin-bottom:20px; }
 summary,.entry-summary { display:grid; grid-template-columns:82px 72px minmax(0,760px); align-items:baseline; min-height:44px; list-style:none; cursor:default; }

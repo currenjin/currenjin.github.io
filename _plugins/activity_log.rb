@@ -12,7 +12,7 @@ module ActivityLog
       next unless row.is_a?(Hash) && row['public'].equal?(true)
       next if row['draft'].equal?(true) || row['published'].equal?(false)
       next unless row['id'].is_a?(String) && row['id'].match?(/\A[a-z0-9]+(?:-[a-z0-9]+)*\z/)
-      next unless ['title', 'summary'].all? { |key| row[key].is_a?(String) && !row[key].strip.empty? }
+      next unless row['title'].is_a?(String) && !row['title'].strip.empty?
       day = row['date'].to_s
       next unless day.match?(/\A\d{4}-\d{2}-\d{2}\z/)
       begin
@@ -22,7 +22,13 @@ module ActivityLog
       end
       next if date > site.time.to_date
       item = { 'id'=>row['id'], 'date'=>day, 'title'=>row['title'],
-               'summary'=>row['summary'], 'url'=>"/log/##{row['id']}" }
+               'url'=>"/log/##{row['id']}" }
+      if row['summary'].is_a?(String) && !row['summary'].strip.empty?
+        item['summary'] = row['summary']
+      end
+      if row['result'].is_a?(String) && !row['result'].strip.empty?
+        item['result'] = row['result']
+      end
       begin
         url = URI.parse(row['project_url'].to_s)
         if url.is_a?(URI::HTTPS) && url.host && !url.host.empty? && !url.userinfo
