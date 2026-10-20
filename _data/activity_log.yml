@@ -37,26 +37,31 @@
   date: "2024-01"
   public: true
   title: "WEMEET MOBILITY"
+  result: Software Engineer
 
 - id: cosmic-connection
   date: "2022-10"
   public: true
   title: "COSMIC CONNECTION"
+  result: CEO & Co-Founder
 
 - id: cj-enm-chaeditor
   date: "2022-09"
   public: true
   title: "CJ ENM CHAEDITOR"
+  result: Tech Lead, Freelancer
 
 - id: trevari
   date: "2020-09"
   public: true
   title: "TREVARI"
+  result: Software Engineer
 
 - id: jointree
   date: "2019-02"
   public: true
   title: "JOINTREE"
+  result: Network Engineer
 
 - id: national-skills-2018
   date: "2018"
