@@ -6,6 +6,7 @@
     <a href="{{ '/wiki/index/' | prepend: site.baseurl }}"{% if page.collection == 'wiki' or page.layout == 'wikiindex' %} aria-current="page"{% endif %}>wiki</a>
     <a href="{{ '/posts/' | prepend: site.baseurl }}"{% if page.collection == 'post' or page.url == '/posts/' %} aria-current="page"{% endif %}>post</a>
     <a href="{{ '/reviews/' | prepend: site.baseurl }}"{% if page.collection == 'reviews' or page.layout == 'reviews' %} aria-current="page"{% endif %}>review</a>
+    <a href="{{ '/log/' | prepend: site.baseurl }}"{% if page.url == '/log/' %} aria-current="page"{% endif %}>log</a>
     {% include theme-toggle.html %}
   </nav>
 </header>

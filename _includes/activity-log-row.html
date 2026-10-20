@@ -1,0 +1,8 @@
+{% assign activity = include.activity %}
+<article class="entry" id="{{ activity.id | escape }}" data-filter-item data-kind="log" data-date="{{ activity.date }}">
+  {% if activity.project_url %}<a class="entry-link" href="{{ activity.project_url | escape }}">{% endif %}
+  <time class="date" datetime="{{ activity.date }}">{{ activity.date | date: '%y-%m-%d' }}</time>
+  <span class="kind">log</span>
+  <span class="entry-title">{{ activity.title | escape }}<small>{{ activity.summary | escape }}</small></span>
+  {% if activity.project_url %}</a>{% endif %}
+</article>

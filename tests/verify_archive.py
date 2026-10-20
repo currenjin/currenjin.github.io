@@ -62,7 +62,7 @@ for i, entry in enumerate(manifest):
 for folder in ['tests','docs','.ouroboros','scripts','vendor','_post']:
     assert not (SITE / folder).exists(), folder
 header = re.search(r'<nav class="site-nav".*?</nav>', home, re.S).group()
-positions = [header.index(s) for s in ['data-search-open','/wiki/index/','/posts/','/reviews/','theme-toggle']]
+positions = [header.index(s) for s in ['data-search-open','/wiki/index/','/posts/','/reviews/','/log/','theme-toggle']]
 assert positions == sorted(positions)
 wiki_index = (SITE / 'wiki/index/index.html').read_text()
 # Archive children must be separate pages, never a document's heading anchors.
@@ -84,5 +84,5 @@ for html in [wiki_index, post_index]:
         assert '<h2>독립 글</h2>' not in html
     assert 'data-review-filters' not in html
 filters = re.findall(r'data-filter="([^"]+)"', home)
-assert filters[:4] == ['all', 'wiki', 'post', 'review']
-print(json.dumps({'result':'PASS','approved_articles':5,'public_books':len([p for p in posts if p['url'].startswith('/posts/#')]),'source_body_fidelity':True,'header_order':['search','wiki','post','review','theme'],'excluded_authoring_artifacts':True}, ensure_ascii=False, indent=2))
+assert filters == ['all', 'wiki', 'post', 'review', 'log']
+print(json.dumps({'result':'PASS','approved_articles':5,'public_books':len([p for p in posts if p['url'].startswith('/posts/#')]),'source_body_fidelity':True,'header_order':['search','wiki','post','review','log','theme'],'excluded_authoring_artifacts':True}, ensure_ascii=False, indent=2))

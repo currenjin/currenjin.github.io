@@ -7,7 +7,7 @@ require 'yaml'
 # Normal (non-safe) builds only, like archive.rb. Filter the actual collections,
 # not just the sitemap, so withdrawn records cannot leak into files or catalogs.
 module PublicSEO
-  INDEX_PATHS = %w[/ /wiki/index/ /posts/ /reviews/ /graph/ /tag/].freeze
+  INDEX_PATHS = %w[/ /wiki/index/ /posts/ /reviews/ /log/ /graph/ /tag/].freeze
   def self.valid_date(value)
     return value.iso8601 if value.is_a?(Time) || value.is_a?(Date)
     return nil unless value.is_a?(String)

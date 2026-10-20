@@ -1,7 +1,7 @@
 # AGENTS.md
 
 개인 공개 아카이브. Jekyll로 **Post(`_post/`, `_post/books/`)**, **Wiki(`_wiki/`)**,
-**Review(`_reviews/`)**, 태그 기반 지식 그래프를 출판한다.
+**Review(`_reviews/`)**, **Log(`_data/activity_log.yml`)**, 태그 기반 지식 그래프를 출판한다.
 이 문서는 도구와 무관한 공통 작업 규칙의 정본이다. 에이전트 지침은 `AGENTS.md`만 유지하며 별도 `CLAUDE.md`는 만들지 않는다.
 
 ## 기본 원칙
@@ -40,6 +40,13 @@
 - Home의 전체 목록에서는 책 목차가 접히고 Post 필터에서는 펼쳐진다. `/posts/`의 목차는 항상 보인다.
 - 출판 경계는 `_plugins/archive.rb`가 강제한다. `--safe` 또는 기본 제한 플러그인 빌드로 우회하지 않는다.
 - 자동 수집 데이터로 승인된 정본을 덮어쓰지 않는다.
+
+## Log (`_data/activity_log.yml`)
+
+- 완료한 활동을 날짜와 한두 문장으로 기록한다. 선택 프로젝트 링크 외에 상세 페이지는 필수가 아니다.
+- 작성 기준과 스키마는 `docs/activity-log-authoring.md`를 따른다. 미래 계획, 감상, 사진을 추측해서 넣지 않는다.
+- `_plugins/activity_log.rb`가 명시적인 `public: true`, 유효한 비미래 날짜, 초안 여부를 검사한다. Home, `/log/`, 검색은 최신순 `site.activity_log`만 사용한다. 원시 `site.data.activity_log`는 출력하지 않는다.
+- 그래프 노드는 추가하지 않고 기존 date/type/title 행을 재사용한다.
 
 ## 위키 (`_wiki/*.md`)
 
@@ -180,6 +187,8 @@ tags     : [database, architecture]             # 선택
 # 공개 원문·출판·탐색 무결성 (Pages CI와 동일한 검증)
 python3 tests/verify_archive.py _site
 ruby tests/archive_test.rb
+ruby tests/activity_log_test.rb
+bundle exec ruby tests/activity_log_fixture_test.rb
 
 # JS·테마·상호작용 변경
 npm test

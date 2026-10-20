@@ -14,7 +14,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 ORIGIN = 'https://currenjin.github.io'
-INDEXES = {'/', '/wiki/index/', '/posts/', '/reviews/', '/graph/', '/tag/'}
+INDEXES = {'/', '/wiki/index/', '/posts/', '/reviews/', '/log/', '/graph/', '/tag/'}
 
 
 def source(path):

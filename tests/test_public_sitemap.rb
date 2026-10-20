@@ -67,10 +67,10 @@ class PublicSitemapTest < Minitest::Test
     wiki = [doc({}, '/wiki/index/'), doc({}, '/wiki/public/'), doc({'public' => false}, '/wiki/private/')]
     reviews = [doc({}, '/reviews/legacy/'), doc({'draft' => true}, '/reviews/draft/')]
     archive = [doc({'public' => true}, '/posts/article/'), doc({'public' => true}, '/posts/chapters/published/')]
-    pages = %w[/ /posts/ /reviews/ /graph/ /tag/ /books/ /wiki/ /search/].map { |url| doc({}, url) }
+    pages = %w[/ /posts/ /reviews/ /log/ /graph/ /tag/ /books/ /wiki/ /search/].map { |url| doc({}, url) }
     site = OpenStruct.new(time: Time.utc(2026, 10, 2), config: {'url' => 'https://currenjin.github.io', 'archive_documents' => archive}, collections: {'wiki' => OpenStruct.new(docs: wiki), 'reviews' => OpenStruct.new(docs: reviews)}, pages: pages)
     PublicSEO.prepare(site)
-    expected = %w[/ /wiki/index/ /wiki/public/ /reviews/legacy/ /posts/article/ /posts/chapters/published/ /posts/ /reviews/ /graph/ /tag/].map { |url| 'https://currenjin.github.io' + url }
+    expected = %w[/ /wiki/index/ /wiki/public/ /reviews/legacy/ /posts/article/ /posts/chapters/published/ /posts/ /reviews/ /log/ /graph/ /tag/].map { |url| 'https://currenjin.github.io' + url }
     assert_equal expected.sort, site.config.fetch('public_sitemap').map { |entry| entry['loc'] }.sort
     assert_equal 2, site.collections['wiki'].docs.size
     assert_equal 1, site.collections['reviews'].docs.size
