@@ -5,6 +5,7 @@ author   : "사사키 타쿠로, 하야시 신이치로, 코니시 히데카즈,
 type     : book
 genre    : "소프트웨어"
 tags     : ['aws', 'devops', 'cloud']
+cover_url: "https://image.aladin.co.kr/product/9814/14/cover500/8965401518_1.jpg"
 status   : finished
 rating  : 1.5
 ---
