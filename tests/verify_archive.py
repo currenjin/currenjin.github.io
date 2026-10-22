@@ -70,7 +70,7 @@ assert not re.search(r'href="/wiki/[^"#]*#[^"]*"', wiki_index), 'Wiki catalog le
 review_index = (SITE / 'reviews/index.html').read_text()
 assert '<p class="eyebrow">review</p>' in review_index
 assert '<p class="eyebrow">wiki</p>' in wiki_index
-assert '<h1>사유하고 남기다</h1>' in post_index
+assert '<h1>생각한 것</h1>' in post_index
 for html in [wiki_index, post_index]:
     count = re.search(r'<output class="archive-index-count"[^>]*>(\d+)/(\d+)</output>', html)
     assert count and count[1] == count[2]
