@@ -75,7 +75,19 @@ def verify(source, preview, private_site, sources):
     chapters = re.findall(r'^## (\d+)장\.', text, re.M)
     assert chapters == [str(i) for i in range(1, 9)], chapters
     assert re.findall(r'<a id="chapter-(\d+)"></a>', text) == chapters
-    assert text.count('```') == 2, 'all code must be represented by the canonical executable block'
+    blocks = re.findall(r'^```python\n(.*?)^```', text, re.M | re.S)
+    assert len(blocks) == 5 and text.count('```') == 10, 'four teaching fragments and one executable block required'
+    marker = text.index('<!-- executable: idempotency_demo.py -->')
+    for heading in ['### 입력 비교가 재실행을 막는 위치', '### 차감 조건과 결과 저장을 연결한다', '### 오류를 받았을 때 커밋 여부를 나눈다']:
+        assert text.index(heading) < marker, 'principle explanation must precede full code'
+    assert text.index('### 전체 실행 코드') < marker < text.index('### 실패 지점을 바꿔 관찰하기')
+    chapter4 = text.split('<a id="chapter-4"></a>')[1].split('<a id="chapter-5"></a>')[0]
+    for step in range(1, 7):
+        assert re.search(r'^' + str(step) + r'\. \*\*', chapter4, re.M), 'normal state step missing'
+    assert chapter4.index('1. **') < chapter4.index('![같은 DB'), 'diagram must not replace worked steps'
+    for heading in ['### 세 테이블은 무엇을 기억하는가', '### 같은 요청을 다시 받으면 어디서 갈라지는가', '### 최초 처리 중 실패하면 무엇이 남는가']:
+        assert heading in chapter4
+    assert text.index('### HTTP 메서드와 제품의 결과 저장 정책을 구분한다') > text.index('<a id="chapter-8"></a>')
     code = re.search(r'<!-- executable: idempotency_demo.py -->\n```python\n(.*?)\n```', text, re.S)
     assert code, 'canonical example missing'
     compile(code[1], 'idempotency_demo.py', 'exec')

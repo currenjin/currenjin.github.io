@@ -43,6 +43,18 @@ fs.mkdirSync(output, { recursive: true });
         await page.goto(base + '/wiki/idempotency/', { waitUntil: 'networkidle' });
         assert.equal(await page.locator('article h2').filter({hasText: /^[1-8]장\./}).count(), 8);
         assert.equal(await page.locator('#markdown-toc').count(), 1);
+        const ai = page.locator('details.ai-disclosure');
+        assert.equal(await ai.count(), 1);
+        await ai.locator('summary').click();
+        assert.match(await ai.innerText(), /이 문서의 본문 대부분은 생성형 AI가 작성했습니다\./);
+        assert.match(await ai.innerText(), /아직 작성자의 충분한 사실 검증을 거치지 않았습니다\./);
+        assert.doesNotMatch(await ai.innerText(), /작성자가 내용을 검토하고 수정했습니다\./);
+        assert.ok(await ai.locator('.ai-note').evaluate(e => {
+          const r = e.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth + 1;
+        }), 'detail AI panel overflow');
+        await page.screenshot({path: path.join(output, `${width}-${theme}-ai-detail.png`)});
+        await ai.locator('summary').press('Enter');
+        assert.equal(await ai.evaluate(e => e.open), false);
         await page.locator('#parent-list a').waitFor();
         assert.equal(await page.locator('#parent-list a').last().getAttribute('href'), '/wiki/index');
         assert.match(await page.locator('#parent-list').innerText(), /상위 문서/);
@@ -73,8 +85,8 @@ fs.mkdirSync(output, { recursive: true });
           if (box.left < 0 || box.right > innerWidth + 1) throw new Error('diagram overflow');
         });
         await page.screenshot({path: path.join(output, `${width}-${theme}-mechanism.png`)});
-        await page.locator('article pre').first().scrollIntoViewIfNeeded();
-        const codeScroll = await page.locator('article pre').first().evaluate(pre => {
+        await page.locator('article pre').last().scrollIntoViewIfNeeded();
+        const codeScroll = await page.locator('article pre').last().evaluate(pre => {
           for (let element = pre; element && element !== document.body; element = element.parentElement) {
             if (element.scrollWidth > element.clientWidth && ['auto', 'scroll'].includes(getComputedStyle(element).overflowX)) {
               element.scrollLeft = element.scrollWidth;
@@ -106,7 +118,29 @@ fs.mkdirSync(output, { recursive: true });
         await backlink.click();
         await page.waitForURL('**/wiki/idempotency/');
         assert.deepEqual(failedLocal, []);
-        results.push({width, theme, actualTheme, chapters: 8, overflow: false,
+        await page.goto(base + '/', {waitUntil: 'networkidle'});
+        const homeLink = page.locator('a[href="/wiki/idempotency/"]').filter({has: page.locator('.ai-mark')});
+        assert.equal(await homeLink.count(), 1);
+        assert.equal(await homeLink.locator('.ai-mark').innerText(), 'AI');
+        assert.equal(await homeLink.locator('details,button').count(), 0);
+        await homeLink.scrollIntoViewIfNeeded();
+        await page.screenshot({path: path.join(output, `${width}-${theme}-ai-home.png`)});
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+        await page.goto(base + '/wiki/index/', {waitUntil: 'networkidle'});
+        const catalogLink = page.locator('a[href="/wiki/idempotency/"]');
+        assert.equal(await catalogLink.count(), 1);
+        const catalogAI = catalogLink.locator('..').locator('details.ai-disclosure');
+        assert.equal(await catalogAI.count(), 1);
+        await catalogAI.locator('summary').click();
+        assert.match(await catalogAI.innerText(), /아직 작성자의 충분한 사실 검증을 거치지 않았습니다\./);
+        assert.doesNotMatch(await catalogAI.innerText(), /작성자가 내용을 검토하고 수정했습니다\./);
+        assert.ok(await catalogAI.locator('.ai-note').evaluate(e => {
+          const r = e.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth + 1;
+        }), 'catalog AI panel overflow');
+        await page.screenshot({path: path.join(output, `${width}-${theme}-ai-index.png`)});
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+        assert.deepEqual(failedLocal, []);
+        results.push({width, theme, actualTheme, chapters: 8, overflow: false, aiHomeIndexDetail: true,
           disclosurePointerEnterSpace: true, codeScroll, pageErrors: errors,
           metadataParent: true, tocNavigation: true, backlink: true,
           diagramDecoded: true, failedLocal, relatedPageNetworkFailures,

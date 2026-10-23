@@ -46,6 +46,8 @@ def main():
         source_mutations = {
             'missing-toc': original.replace('* TOC\n{:toc}', ''),
             'missing-chapter': original.replace('<a id="chapter-4"></a>', ''),
+            'missing-worked-step': original.replace('3. **재고가 충분할 때만 차감한다.**', '**재고가 충분할 때만 차감한다.**'),
+            'missing-teaching-fragment': original.replace('```python', '```text', 1),
             'unapproved-private-source': original.replace('public: true', 'public: false', 1),
         }
         for name, text in source_mutations.items():
