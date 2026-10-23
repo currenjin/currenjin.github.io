@@ -1,5 +1,14 @@
 [
   {
+    "title": "멱등성",
+    "url": "/wiki/idempotency",
+    "updated": "2026-10-23",
+    "summary": "재시도되는 요청을 식별하고 DB 효과와 결과 기록을 함께 확정하는 원리와 실패 조건",
+    "tags": "architecture, database, pattern",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "Kafka",
     "url": "/wiki/kafka",
     "updated": "2026-10-07",

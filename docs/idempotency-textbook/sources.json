@@ -1,0 +1,102 @@
+[
+  {
+    "id": "aws",
+    "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
+    "version_sections": "unversioned; client request identifier, different intent, late arrivals",
+    "reviewed_sections": [
+      "caller-provided client request identifier",
+      "atomic token plus mutating operations",
+      "Retries and semantic equivalence",
+      "Late arriving requests",
+      "Same client request ID, different intent"
+    ],
+    "status": 200
+  },
+  {
+    "id": "aws-backoff",
+    "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/",
+    "version_sections": "unversioned; retries, backoff and jitter",
+    "reviewed_sections": [
+      "Retries and backoff",
+      "Jitter"
+    ],
+    "status": 200
+  },
+  {
+    "id": "http",
+    "url": "https://www.rfc-editor.org/rfc/rfc9110.html",
+    "version_sections": "RFC 9110 (2022), 9.2.1, 9.2.2",
+    "reviewed_sections": [
+      "9.2.1 Safe Methods",
+      "9.2.2 Idempotent Methods"
+    ],
+    "status": 200
+  },
+  {
+    "id": "python",
+    "url": "https://docs.python.org/3.9/library/sqlite3.html",
+    "version_sections": "Python 3.9; Controlling Transactions, connection arguments",
+    "reviewed_sections": [
+      "connect timeout",
+      "Controlling Transactions",
+      "Using sqlite3 efficiently",
+      "Using the connection as a context manager"
+    ],
+    "status": 200
+  },
+  {
+    "id": "sqlite-atomic",
+    "url": "https://www.sqlite.org/atomiccommit.html",
+    "version_sections": "unversioned; 3 and 9",
+    "reviewed_sections": [
+      "1 Introduction",
+      "3 Single File Commit",
+      "4 Rollback",
+      "9 Things That Can Go Wrong"
+    ],
+    "status": 200
+  },
+  {
+    "id": "sqlite-create",
+    "url": "https://www.sqlite.org/lang_createtable.html",
+    "version_sections": "unversioned; 3.5, 3.6, 3.8",
+    "reviewed_sections": [
+      "3.5 PRIMARY KEY",
+      "3.6 UNIQUE",
+      "3.7 CHECK",
+      "3.8 NOT NULL"
+    ],
+    "status": 200
+  },
+  {
+    "id": "sqlite-isolation",
+    "url": "https://www.sqlite.org/isolation.html",
+    "version_sections": "unversioned; isolation and concurrency",
+    "reviewed_sections": [
+      "Isolation Between Database Connections",
+      "Isolation And Concurrency"
+    ],
+    "status": 200
+  },
+  {
+    "id": "sqlite-tx",
+    "url": "https://www.sqlite.org/lang_transaction.html",
+    "version_sections": "unversioned; 2, 2.1, 2.2, 3",
+    "reviewed_sections": [
+      "2.1 Read transactions versus write transactions",
+      "2.2 DEFERRED IMMEDIATE EXCLUSIVE",
+      "2.3 COMMIT busy",
+      "3 Response To Errors"
+    ],
+    "status": 200
+  },
+  {
+    "id": "stripe",
+    "url": "https://docs.stripe.com/api/idempotent_requests",
+    "version_sections": "unversioned; Idempotent requests",
+    "reviewed_sections": [
+      "Idempotent requests: API v1 only; v2 distinction inspected"
+    ],
+    "status": 200
+  }
+]

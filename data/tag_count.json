@@ -93,7 +93,7 @@
  },
  {
   "name": "architecture",
-  "size": 5
+  "size": 6
  },
  {
   "name": "asciidoc",
@@ -261,7 +261,7 @@
  },
  {
   "name": "database",
-  "size": 6
+  "size": 7
  },
  {
   "name": "db",
@@ -669,7 +669,7 @@
  },
  {
   "name": "pattern",
-  "size": 4
+  "size": 5
  },
  {
   "name": "pentium",

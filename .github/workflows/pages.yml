@@ -47,6 +47,10 @@ jobs:
           READING_NAV_NATIVE_BUILD=1 python3 tests/reading_navigation_integration.py
       - name: Verify SEO
         run: python3 tests/verify_seo.py _site
+      - name: Verify idempotency textbook and publication boundary
+        run: |
+          python3 tests/idempotency_examples.py
+          python3 tests/idempotency_publication.py _site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

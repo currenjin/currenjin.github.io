@@ -9,6 +9,7 @@ regenerate: true
 
 ## wiki items
 
+* [[idempotency]]
 * [[example]]
 * [[cosmos]]
 * [[typescript-compile]]

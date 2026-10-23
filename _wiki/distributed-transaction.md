@@ -124,6 +124,8 @@ sequenceDiagram
 
 ## 관련 문서
 
+- [멱등성](/wiki/idempotency/) — 요청 식별 범위, 결과 재생, 같은 DB 트랜잭션으로 중복 효과를 막는 구현과 반례.
+
 - [[kafka]] — 메시지가 실제로 흐르는 기반. 배달 보장(at-least-once·exactly-once)과 맞물린다
 - [[designing-data-intensive-applications]] — 7장(트랜잭션)·9장(일관성과 합의)
 
