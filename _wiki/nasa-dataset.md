@@ -1,4 +1,18 @@
-# NASA 데이터셋 읽고 해석하기
+---
+layout: wiki
+title: NASA 데이터셋 읽고 해석하기
+summary: NASA 공개 자료에서 질문을 정하고 광도곡선 데이터를 선택하는 과정과 해석의 근거
+date: 2026-10-27 13:03:50 +0900
+updated: 2026-10-27 13:03:50 +0900
+tags: [engineering]
+parent: '[[index]]'
+public: true
+toc: true
+latex: false
+---
+
+* TOC
+{:toc}
 
 ## 1. 학습을 시작한 이유
 

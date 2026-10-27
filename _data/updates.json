@@ -1,5 +1,14 @@
 [
   {
+    "title": "NASA 데이터셋 읽고 해석하기",
+    "url": "/wiki/nasa-dataset",
+    "updated": "2026-10-27",
+    "summary": "NASA 공개 자료에서 질문을 정하고 광도곡선 데이터를 선택하는 과정과 해석의 근거",
+    "tags": "engineering",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "멱등성",
     "url": "/wiki/idempotency",
     "updated": "2026-10-23",
