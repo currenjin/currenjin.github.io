@@ -51,6 +51,20 @@ function contrast (a, b) {
 const LIGHT = tokenBlock(MAIN_CSS, ':root')
 const DARK = tokenBlock(MAIN_CSS, ':root[data-theme="dark"]')
 
+test('the shared light palette matches the approved warm-paper A preview', () => {
+  const approved = {
+    '--paper': '#faf8f3', '--surface': '#fffdf8', '--img-placeholder': '#e8e4dc',
+    '--ink': '#292723', '--prose-ink': '#34312c', '--soft': '#504b44',
+    '--muted': '#696158', '--faint': '#81776a', '--home-muted': '#696158',
+    '--accent': '#825a42', '--wiki-link': '#825a42', '--heading-sub': '#34312c',
+    '--line': '#e4dfd5', '--line-strong': '#c4baab', '--rule-strong': '#39352f',
+    '--focus': '#825a42',
+  }
+  for (const [name, value] of Object.entries(approved)) {
+    assert.equal(LIGHT[name], value, name)
+  }
+})
+
 /* ── 1. resolution: stored choice wins, light is the fallback ─ */
 
 test('an explicit stored choice overrides the system preference', () => {

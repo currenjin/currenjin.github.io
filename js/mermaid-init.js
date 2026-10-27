@@ -33,13 +33,13 @@
       theme: 'base',
       themeVariables: {
         primaryColor: 'transparent',
-        primaryTextColor: token('--ink', '#23190f'),
-        primaryBorderColor: token('--ink', '#23190f'),
-        lineColor: token('--ink', '#23190f'),
+        primaryTextColor: token('--ink', '#292723'),
+        primaryBorderColor: token('--ink', '#292723'),
+        lineColor: token('--ink', '#292723'),
         tertiaryColor: 'transparent',
         clusterBkg: 'transparent',
-        clusterBorder: token('--line-strong', '#b9a686'),
-        edgeLabelBackground: token('--paper', '#f2ebdf'),
+        clusterBorder: token('--line-strong', '#c4baab'),
+        edgeLabelBackground: token('--paper', '#faf8f3'),
         fontFamily: 'Pretendard, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif'
       },
       flowchart: {

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#f2ebdf">
+<meta name="theme-color" content="#faf8f3">
 {% include theme-boot.html %}
 {% include seo-meta.html %}
 <link rel="icon" type="image/svg+xml" href="{{ '/resource/icon/favicon.svg' | prepend: site.baseurl }}">
@@ -20,29 +20,29 @@
 </script>
 <style>
   /* /graph/ 는 main.css 를 쓰지 않으므로 같은 팔레트를 --g-* 로 다시 선언한다.
-     값은 css/main.css 의 Parchment / Deep Ink 토큰과 1:1로 맞춘다.
+     값은 css/main.css 의 Warm Paper A / Deep Ink 토큰과 1:1로 맞춘다.
      캔버스(js/graph.js)는 여기 선언된 토큰을 읽어 그린다 — 하드코딩 금지. */
   :root {
     color-scheme: light;
-    --g-paper: #f2ebdf;
-    --g-surface: #f9f4ea;
-    --g-ink: #23190f;
-    --g-muted: #6b5741;
-    --g-faint: #8b7454;
-    --g-wiki: #8a4b2a;
-    --g-review: #23190f;
-    --g-line: #dccfb7;
-    --g-focus: #7a3e1f;
-    --g-panel: rgba(249, 244, 234, 0.95);
-    --g-float: rgba(249, 244, 234, 0.97);
+    --g-paper: #faf8f3;
+    --g-surface: #fffdf8;
+    --g-ink: #292723;
+    --g-muted: #696158;
+    --g-faint: #81776a;
+    --g-wiki: #825a42;
+    --g-review: #292723;
+    --g-line: #e4dfd5;
+    --g-focus: #825a42;
+    --g-panel: rgba(255, 253, 248, 0.95);
+    --g-float: rgba(255, 253, 248, 0.97);
     --g-shadow: 0 8px 30px rgba(60, 42, 24, 0.12);
     /* 캔버스 전용 — 희미하게 처리된 노드/엣지 */
-    --g-wiki-fade: rgba(138, 75, 42, 0.14);
-    --g-review-fade: rgba(35, 25, 15, 0.10);
-    --g-edge-ww: rgba(138, 75, 42, 0.42);
-    --g-edge-wr: rgba(138, 75, 42, 0.28);
-    --g-edge-rr: rgba(35, 25, 15, 0.20);
-    --g-edge-fade: rgba(107, 87, 65, 0.06);
+    --g-wiki-fade: rgba(130, 90, 66, 0.14);
+    --g-review-fade: rgba(41, 39, 35, 0.10);
+    --g-edge-ww: rgba(130, 90, 66, 0.42);
+    --g-edge-wr: rgba(130, 90, 66, 0.28);
+    --g-edge-rr: rgba(41, 39, 35, 0.20);
+    --g-edge-fade: rgba(105, 97, 88, 0.06);
     --g-serif: Georgia, "Times New Roman", "Apple SD Gothic Neo", serif;
     --g-sans: Arial, "Apple SD Gothic Neo", sans-serif;
   }
@@ -380,7 +380,7 @@
   </main>
 
   <script src="https://unpkg.com/force-graph@1.43.5/dist/force-graph.min.js"></script>
-  <script src="{{ '/js/theme.js?v=20261001-1' | prepend: site.baseurl }}"></script>
+  <script src="{{ '/js/theme.js?v=20261027-warm-a-1' | prepend: site.baseurl }}"></script>
   <script src="{{ '/js/graph-force.js' | prepend: site.baseurl }}"></script>
   <script src="{{ '/js/graph.js' | prepend: site.baseurl }}"></script>
 </body>

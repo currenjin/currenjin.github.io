@@ -32,22 +32,22 @@
 
   // 캔버스 색은 _layouts/graph.html 의 --g-* 토큰에서 읽는다. 테마가 바뀌면
   // 같은 객체를 제자리에서 갱신하므로 아래 draw 콜백들은 그대로 두면 된다.
-  // 폴백 값은 라이트(Parchment / Umber) 팔레트.
+  // 폴백 값은 라이트(Warm Paper A) 팔레트.
   const COLOR = {
-    paper: "#f2ebdf",
-    ink: "#23190f",
-    muted: "#6b5741",
-    accent: "#8a4b2a",
-    wiki: "#8a4b2a",
-    review: "#23190f",
-    wikiFade: "rgba(138,75,42,.14)",
-    reviewFade: "rgba(35,25,15,.10)",
+    paper: "#faf8f3",
+    ink: "#292723",
+    muted: "#696158",
+    accent: "#825a42",
+    wiki: "#825a42",
+    review: "#292723",
+    wikiFade: "rgba(130,90,66,.14)",
+    reviewFade: "rgba(41,39,35,.10)",
     edge: {
-      "wiki-wiki": "rgba(138,75,42,.42)",
-      "wiki-review": "rgba(138,75,42,.28)",
-      "review-review": "rgba(35,25,15,.20)",
+      "wiki-wiki": "rgba(130,90,66,.42)",
+      "wiki-review": "rgba(130,90,66,.28)",
+      "review-review": "rgba(41,39,35,.20)",
     },
-    edgeFade: "rgba(107,87,65,.06)",
+    edgeFade: "rgba(105,97,88,.06)",
   };
 
   const COLOR_TOKENS = {

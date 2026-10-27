@@ -1,6 +1,6 @@
 /* ============================================================
    THEME TOKENS
-   Light  — Parchment / Umber  (approved palette)
+   Light  — Warm Paper A  (approved palette)
    Dark   — Deep Ink, tuned down for prolonged reading
    Every colour below this block is expressed as a token. Raw hex
    outside :root / [data-theme] is a bug; tests/js/theme.test.cjs guards it.
@@ -9,26 +9,26 @@
   color-scheme: light;
 
   /* surfaces */
-  --paper:#f2ebdf;            /* page ground */
-  --surface:#f9f4ea;          /* raised: dialogs, notes, popovers */
-  --img-placeholder:#e3d9c5;  /* cover/image box before load */
+  --paper:#faf8f3;            /* page ground */
+  --surface:#fffdf8;          /* raised: dialogs, notes, popovers */
+  --img-placeholder:#e8e4dc;  /* cover/image box before load */
 
   /* text */
-  --ink:#23190f;              /* primary */
-  --prose-ink:#2c2114;        /* long-form wiki body */
-  --soft:#4b3b29;             /* secondary prose: summaries, quotes, notes */
-  --muted:#6b5741;            /* meta, labels, captions */
-  --faint:#8b7454;            /* least-emphasis chrome */
-  --home-muted:#6b5741;
-  --wiki-link:#8a4b2a;
-  --heading-sub:#3c2d1c;      /* sans sub-headings (h4) */
+  --ink:#292723;              /* primary */
+  --prose-ink:#34312c;        /* long-form wiki body */
+  --soft:#504b44;             /* secondary prose: summaries, quotes, notes */
+  --muted:#696158;            /* meta, labels, captions */
+  --faint:#81776a;            /* least-emphasis chrome */
+  --home-muted:#696158;
+  --wiki-link:#825a42;
+  --heading-sub:#34312c;      /* sans sub-headings (h4) */
 
   /* accent & rules */
-  --accent:#8a4b2a;           /* links, tags, affordances */
-  --line:#dccfb7;             /* hairline rules */
-  --line-strong:#b9a686;      /* emphasised hairline */
-  --rule-strong:#23190f;      /* structural rule under controls/inputs */
-  --focus:#7a3e1f;            /* focus ring */
+  --accent:#825a42;           /* links, tags, affordances */
+  --line:#e4dfd5;             /* hairline rules */
+  --line-strong:#c4baab;      /* emphasised hairline */
+  --rule-strong:#39352f;      /* structural rule under controls/inputs */
+  --focus:#825a42;            /* focus ring */
 
   /* depth */
   --scrim:rgba(35,25,15,.44);
