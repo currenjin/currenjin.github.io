@@ -45,8 +45,6 @@
 
 [위키백과](https://ko.wikipedia.org/wiki/광도곡선)에서는 광도곡선(light curve)을 어떤 천체의 빛의 세기를 시간에 대한 함수로 나타낸 그래프라고 설명한다.
 
-<!-- 게시 전 확인: 아래 두 GitHub 이미지 링크는 외부 조회에서 404가 확인되었다. 공개 접근 가능 여부를 확인한 뒤 게시할 것. -->
-
 <img width="528" height="122" alt="image" src="https://github.com/user-attachments/assets/768c6bbe-c5af-494c-adb5-027e258c6d20" />
 
 풀어서 말하면, 천체에서 오는 빛을 시간에 따라 측정하고 그 밝기가 어떻게 변했는지 나타낸 것이다. 일정 기간 동안 받은 빛의 총량 하나가 아니라, 각 시점의 측정값을 함께 살펴보는 것이다.
@@ -89,3 +87,16 @@
 
 따라서 우선 찾아볼 자료는 **특정 별의 측정 시각과 별빛 측정값이 함께 담긴 기록**이다. 광도곡선을 후보로 선택하는 이유도 여기에 있다. 이름이 낯익거나 설명 글에서 추천했기 때문이 아니라, 우리가 알아보려는 질문에 필요한 정보를 담고 있기 때문이다.
 
+### 데이터를 찾아보자
+
+앞서 살펴본 MAST의 설명에서는 TESS의 광도곡선을 이용해 별의 자전 주기를 추정할 수 있다고 했다. 그렇다면 실제로 어떤 자료를 찾아야 할까?
+
+TESS의 [Data Products](https://archive.stsci.edu/missions-and-data/tess/data-products)에는 제공되는 데이터의 종류가 정리되어 있다. 그중 `Light Curve File`이라는 항목을 확인하고, 같은 행에 연결된 [데이터 제품 설명 문서](https://archive.stsci.edu/missions/tess/doc/EXP-TESS-ARC-ICD-TM-0014.pdf)를 열었다.
+
+문서의 본문 30쪽, PDF 뷰어 기준으로는 31쪽에 `5 Light Curve Files`가 있다. 파일의 용도를 설명하는 `5.1 Purpose`에는 다음과 같이 적혀 있다.
+
+> A single file contains the light curves for one target for one sector
+
+한 파일에 한 관측 대상의 한 관측 구간에 대한 광도곡선이 들어 있다는 뜻이다. 특정 별 하나의 밝기 변화를 살펴보려는 목적에 맞는 자료 후보를 찾은 셈이다.
+
+다만 지금 확인한 것은 파일의 종류와 용도다. 아직 어느 별의 어떤 관측 기록을 사용할지는 정하지 않았다.
