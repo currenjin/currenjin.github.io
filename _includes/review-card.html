@@ -26,7 +26,7 @@
         {% if r.rating %}<span class="review-archive-rating">{{ r.rating | plus: 0.0 }}</span>{% endif %}
       </div>
       {% if r.author or r.genre %}<p class="review-archive-meta">{% if r.author %}{{ r.author | split: ',' | first | strip }}{% endif %}{% if r.author and r.genre %} · {% endif %}{% if r.genre %}{{ r.genre }}{% endif %}</p>{% endif %}
-      {% if review_body != empty %}<p class="review-archive-note">{{ r.content | strip_html | strip_newlines | truncate: 145 }}</p>{% endif %}
+      {% if review_body != empty %}<p class="review-archive-note">{{ r.content | readable_excerpt: 145 }}</p>{% endif %}
     </div>
   </a>
 </article>

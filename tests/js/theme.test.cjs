@@ -219,6 +219,13 @@ test('body and prose text clear WCAG AAA on both grounds', () => {
   }
 })
 
+test('current reading-navigation text clears AA on its selection surface', () => {
+  for (const [label, t] of [['light', LIGHT], ['dark', DARK]]) {
+    const ratio = contrast(t['--accent'], t['--reading-selection-bg'])
+    assert.ok(ratio >= AA, `${label} current navigation is ${ratio.toFixed(2)}:1`)
+  }
+})
+
 test('meta text and links clear WCAG AA on page and raised surfaces', () => {
   for (const [label, t] of [['light', LIGHT], ['dark', DARK]]) {
     for (const ground of ['--paper', '--surface']) {

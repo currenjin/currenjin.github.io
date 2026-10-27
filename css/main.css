@@ -29,6 +29,7 @@
   --line-strong:#c4baab;      /* emphasised hairline */
   --rule-strong:#39352f;      /* structural rule under controls/inputs */
   --focus:#825a42;            /* focus ring */
+  --reading-selection-bg:#eee8df;
 
   /* depth */
   --scrim:rgba(35,25,15,.44);
@@ -83,6 +84,7 @@
   --line-strong:#5b4e43;
   --rule-strong:#8b7968;
   --focus:#e8b991;
+  --reading-selection-bg:#14110f;
 
   --scrim:rgba(4,6,9,.64);
   --shadow-sm:0 10px 28px rgba(0,0,0,.45);
@@ -119,7 +121,7 @@
 .reading-series-chapters li { padding:5px 0; overflow-wrap:anywhere; }
 .reading-series-chapters a { display:block; padding:4px 8px; color:var(--soft); text-decoration:none; border-left:2px solid transparent; }
 .reading-series-chapters a:hover { color:var(--accent); text-decoration:underline; }
-.reading-series-chapters a[aria-current="page"] { color:var(--accent); border-left-color:var(--accent); background:var(--code-bg); font-weight:600; }
+.reading-series-chapters a[aria-current="page"] { color:var(--accent); border-left-color:var(--accent); background:var(--reading-selection-bg); font-weight:600; }
 .reading-series-chapters small { margin-left:8px; color:var(--muted); }
 .post-chapter-nav { display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px; margin-top:40px; padding-top:20px; border-top:1px solid var(--line); font:13px/1.7 var(--sans); }
 .post-chapter-nav a { text-decoration:underline; text-underline-offset:3px; overflow-wrap:anywhere; }
@@ -185,7 +187,7 @@ main { padding:0 26px 90px; }
 .date,.kind { color:var(--muted); font:11px/1.35 var(--sans); }
 .kind { text-transform:lowercase; }
 .entry-title { grid-column:3; min-width:0; overflow-wrap:anywhere; font-size:20px; line-height:1.2; letter-spacing:-.025em; text-wrap:pretty; }
-.entry small { display:block; max-width:720px; margin-top:5px; color:var(--muted); font:11px/1.45 var(--sans); letter-spacing:0; }
+.entry small { display:block; max-width:720px; margin-top:5px; color:var(--muted); font:14px/1.6 var(--sans); letter-spacing:0; }
 .entry[data-kind="log"] .activity-result { display:inline; margin-inline-start:.55em; font:600 12px/1.4 var(--sans); letter-spacing:0; white-space:nowrap; }
 .entry[data-kind="log"] .activity-result--participant { color:var(--muted); font-weight:400; }
 .entry-external { color:var(--muted); font:10px var(--sans); }
@@ -224,7 +226,7 @@ details[open] summary .entry-title::after { content:" −"; }
 .mixed-children { padding-top:26px; }
 .mixed-children .catalog-row { grid-template-columns:42px minmax(0,1fr); }
 .mixed-children .catalog-row:last-child { padding-bottom:0; }
-.catalog-summary { display:block; margin-top:6px; color:var(--muted); font:11px/1.5 var(--sans); }
+.catalog-summary { display:block; margin-top:6px; color:var(--muted); font:14px/1.6 var(--sans); }
 .article-kicker { display:flex; align-items:center; gap:7px; }
 .article-title-row { position:relative; display:flex; align-items:baseline; gap:8px; width:fit-content; max-width:100%; }
 .article-title-row h1 { min-width:0; }
@@ -257,10 +259,13 @@ details[open] summary .entry-title::after { content:" −"; }
 .prose code { overflow-wrap:anywhere; font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; }
 .prose pre { position:relative; max-width:100%; overflow:auto; padding:16px; background:var(--code-inline-bg); }
 .prose img { max-width:100%; height:auto; }
-.prose table { width:100%; margin:28px 0 36px; border-collapse:collapse; font:13px/1.55 var(--sans); }
+.prose table { width:100%; margin:28px 0 36px; border-collapse:collapse; font:16px/1.6 var(--sans); }
 .prose th,.prose td { padding:10px 12px 10px 0; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
 .prose th { color:var(--muted); font-weight:400; }
 .prose a { text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px; }
+.prose a.diagram-image { display:block; width:100%; max-width:100%; cursor:zoom-in; text-decoration:none; }
+.prose a.diagram-image img { display:block; }
+.prose .diagram-open { display:block; width:fit-content; margin:8px 0 22px auto; color:var(--wiki-link); font:13px/1.5 var(--sans); text-decoration:underline; text-underline-offset:4px; }
 #parent-list { margin-top:14px; color:var(--muted); font:11px/1.5 var(--sans); }
 .review-hero { display:grid; grid-template-columns:minmax(180px,300px) minmax(0,560px); gap:clamp(35px,7vw,95px); align-items:end; width:min(100%,980px); margin:clamp(19px,3vh,35px) 0 110px; }
 .review-hero .review-cover { max-height:430px; object-fit:contain; object-position:left bottom; }
@@ -289,8 +294,8 @@ details[open] summary .entry-title::after { content:" −"; }
 .review-archive-title { min-width:0; margin:0; overflow-wrap:anywhere; font-size:18px; font-weight:400; line-height:1.2; letter-spacing:-.02em; text-wrap:pretty; }
 .review-writing-mark { display:inline-block; margin-left:5px; padding:1px 3px; border:1px solid var(--line); color:var(--muted); font:8px/1.2 var(--sans); letter-spacing:0; vertical-align:.2em; white-space:nowrap; }
 .review-archive-rating { flex:0 0 auto; font:11px/1.2 var(--sans); }
-.review-archive-meta { margin:7px 0 0; color:var(--muted); font:10px/1.5 var(--sans); }
-.review-archive-note { display:-webkit-box; margin:15px 0 0; overflow:hidden; color:var(--soft); font-size:12px; line-height:1.55; -webkit-box-orient:vertical; -webkit-line-clamp:3; }
+.review-archive-meta { margin:7px 0 0; color:var(--muted); font:13px/1.5 var(--sans); }
+.review-archive-note { display:-webkit-box; margin:15px 0 0; overflow:hidden; color:var(--soft); font-size:14px; line-height:1.6; -webkit-box-orient:vertical; -webkit-line-clamp:3; }
 .review-archive-empty { padding:50px 0; }
 .wiki-article .article-head { width:min(100%,720px); margin-right:auto; margin-left:auto; }
 .wiki-article .article-layout { width:min(100%,720px); margin-right:auto; margin-left:auto; }
@@ -315,7 +320,7 @@ details[open] summary .entry-title::after { content:" −"; }
 .wiki-article #markdown-toc > li > a { color:var(--ink); font-weight:600; }
 .wiki-article #markdown-toc ul a { font-size:13px; }
 .wiki-article #markdown-toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
-.wiki-article #markdown-toc a.active-toc { border-left-color:var(--accent); background:var(--code-bg); color:var(--accent); }
+.wiki-article #markdown-toc a.active-toc { border-left-color:var(--accent); background:var(--reading-selection-bg); color:var(--accent); }
 .wiki-article #markdown-toc a:focus-visible,.wiki-toc-toggle:focus-visible { outline:2px solid var(--focus); outline-offset:-2px; color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
 .prose pre,
 .prose .highlight { max-width:100%; overflow-x:auto; background:var(--code-bg); color:var(--code-ink); }
@@ -348,7 +353,7 @@ body.search-open { overflow:hidden; }
 .global-search-result:hover,.global-search-result:focus-visible { text-decoration:none; }
 .global-search-result:hover strong,.global-search-result:focus-visible strong { text-decoration:underline; text-underline-offset:4px; }
 .global-search-copy strong { display:block; font-weight:400; font-size:18px; line-height:1.24; letter-spacing:-.02em; }
-.global-search-copy small { display:block; margin-top:5px; color:var(--muted); font:11px/1.45 var(--sans); }
+.global-search-copy small { display:block; margin-top:5px; color:var(--muted); font:14px/1.6 var(--sans); }
 .search-empty { color:var(--muted); font:13px/1.5 var(--sans); }
 .code-copy-btn { position:absolute; top:8px; right:8px; padding:5px 7px; border:1px solid var(--code-line); border-radius:2px; background:var(--code-chrome-bg); color:var(--code-chrome-ink); font:10px/1 var(--sans); opacity:0; }
 .prose pre:hover .code-copy-btn,.code-copy-btn:focus-visible,.code-copy-btn.is-copied { opacity:1; }
@@ -413,7 +418,7 @@ footer { padding:30px 26px; color:var(--muted); font:11px/1.5 var(--sans); }
   .prose h3 { font-size:23px; }
   .prose code { font-size:14px; }
   .code-copy-btn { opacity:1; }
-  .prose table { display:block; max-width:100%; overflow-x:auto; font-size:14px; -webkit-overflow-scrolling:touch; }
+  .prose table { display:block; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
   .review-hero { grid-template-columns:105px minmax(0,1fr); gap:24px; align-items:end; margin:22px 0 82px; }
   .review-hero h1 { font-size:33px; }
   .review-hero .byline { font-size:11px; }

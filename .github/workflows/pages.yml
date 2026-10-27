@@ -43,6 +43,7 @@ jobs:
           ruby tests/activity_log_test.rb
           bundle exec ruby tests/activity_log_fixture_test.rb
           ruby tests/article_toc_test.rb
+          ruby tests/readable_excerpt_test.rb
           ruby tests/reading_navigation_test.rb
           READING_NAV_NATIVE_BUILD=1 python3 tests/reading_navigation_integration.py
       - name: Verify SEO
