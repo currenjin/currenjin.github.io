@@ -1,45 +1,68 @@
 ---
 layout: default
 ---
-<main id="main" class="reviews-page">
+<main id="main" class="reviews-page" data-review-filters data-review-gallery>
   <header class="review-archive-intro">
     <p class="eyebrow">review</p>
     <h1>보고 들은 것</h1>
   </header>
 
-  <section class="review-type-controls" aria-label="리뷰 필터" data-review-filters>
-    <div class="review-filter-groups">
-      <div class="filters" aria-label="매체" data-review-filter-group="kind">
-        <button class="filter" data-review-filter="all" aria-pressed="true">전체</button>
-        <button class="filter" data-review-filter="book" aria-pressed="false">책</button>
-        <button class="filter" data-review-filter="music" aria-pressed="false">음악</button>
-        <button class="filter" data-review-filter="video" aria-pressed="false">영상</button>
-        <button class="filter" data-review-filter="webtoon" aria-pressed="false">웹툰</button>
-        <button class="filter" data-review-filter="other" aria-pressed="false">기타</button>
-      </div>
-      <span class="review-filter-divider" aria-hidden="true">|</span>
-      <div class="filters" aria-label="상태" data-review-filter-group="status">
-        <button class="filter" data-review-filter="all" aria-pressed="true">전체</button>
-        <button class="filter" data-review-filter="finished" aria-pressed="false">완료</button>
-        <button class="filter" data-review-filter="reading" aria-pressed="false">진행중</button>
-        <button class="filter" data-review-filter="want" aria-pressed="false">예정</button>
-      </div>
+  <section class="review-type-controls" aria-label="리뷰 필터" data-review-strip>
+    <div class="filters" aria-label="매체" data-review-filter-group="kind">
+      <button class="filter" data-review-filter="all" aria-pressed="true">전체</button>
+      <button class="filter" data-review-filter="book" aria-pressed="false">책</button>
+      <button class="filter" data-review-filter="music" aria-pressed="false">음악</button>
+      <button class="filter" data-review-filter="video" aria-pressed="false">영상</button>
+      <button class="filter" data-review-filter="webtoon" aria-pressed="false">웹툰</button>
+      <button class="filter" data-review-filter="other" aria-pressed="false">기타</button>
     </div>
-    <output class="review-filter-count" data-review-count aria-live="polite" aria-label="표시 중인 리뷰 수">{{ site.reviews | size }}/{{ site.reviews | size }}</output>
+    <a class="review-list-jump" href="#review-collection">목록으로 바로 가기 ↓</a>
   </section>
 
-  <div class="review-archive-grid">
-    {% assign rating_groups = site.reviews | group_by: 'rating' | sort: 'name' | reverse %}
-    {% for rating_group in rating_groups %}
-      {% for review in rating_group.items %}
-        {% assign review_body = review.content | strip %}
-        {% if review_body != empty %}{% include review-card.html review=review %}{% endif %}
+  <section class="review-stage" aria-label="리뷰 둘러보기" data-review-stage hidden>
+    <div class="review-stage-inner" data-review-stage-inner>
+      <div class="review-scene">
+        <div class="review-scene-copy" data-review-copy aria-live="polite" aria-atomic="true"></div>
+        <div class="review-artwork" data-review-artwork></div>
+      </div>
+      <div class="review-scene-bottom">
+        <div class="review-selectors" data-review-selectors aria-label="리뷰 선택"></div>
+        <span class="review-scroll-cue">스크롤해서 이어 보기 ↓</span>
+        <div class="review-arrows">
+          <button type="button" class="review-arrow" data-review-prev aria-label="이전 리뷰">←</button>
+          <button type="button" class="review-arrow" data-review-next aria-label="다음 리뷰">→</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="review-collection" id="review-collection" aria-labelledby="review-list-title">
+    <div class="review-collection-head">
+      <h2 id="review-list-title">리뷰 목록</h2>
+      <div class="review-list-tools">
+        <div class="filters" aria-label="상태" data-review-filter-group="status">
+          <button class="filter" data-review-filter="all" aria-pressed="true">전체</button>
+          <button class="filter" data-review-filter="finished" aria-pressed="false">완료</button>
+          <button class="filter" data-review-filter="reading" aria-pressed="false">진행중</button>
+          <button class="filter" data-review-filter="want" aria-pressed="false">예정</button>
+        </div>
+        <input type="search" class="review-local-search" data-review-search aria-label="작품 또는 저자 검색" placeholder="작품 또는 저자 검색" autocomplete="off">
+      </div>
+    </div>
+    <div class="review-archive-grid">
+      {% assign rating_groups = site.reviews | group_by: 'rating' | sort: 'name' | reverse %}
+      {% for rating_group in rating_groups %}
+        {% for review in rating_group.items %}
+          {% assign review_body = review.content | strip %}
+          {% if review_body != empty %}{% include review-card.html review=review %}{% endif %}
+        {% endfor %}
+        {% for review in rating_group.items %}
+          {% assign review_body = review.content | strip %}
+          {% if review_body == empty %}{% include review-card.html review=review %}{% endif %}
+        {% endfor %}
       {% endfor %}
-      {% for review in rating_group.items %}
-        {% assign review_body = review.content | strip %}
-        {% if review_body == empty %}{% include review-card.html review=review %}{% endif %}
-      {% endfor %}
-    {% endfor %}
-  </div>
-  <p class="empty review-archive-empty" data-empty>해당 기록이 없습니다.</p>
+    </div>
+    <p class="empty review-archive-empty" data-empty>해당 기록이 없습니다.</p>
+    <output class="review-filter-count" data-review-count aria-live="polite" aria-label="표시 중인 리뷰 수">{{ site.reviews | size }}/{{ site.reviews | size }}</output>
+  </section>
 </main>
