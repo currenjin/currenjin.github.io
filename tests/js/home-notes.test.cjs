@@ -5,15 +5,15 @@ const path = require('node:path')
 const root = path.join(__dirname, '../..')
 const read = name => fs.existsSync(path.join(root, name)) ? fs.readFileSync(path.join(root, name), 'utf8') : ''
 
-test('three Home notes have real fallback anchors and the approved payloads', () => {
+test('two Home notes retain their approved payloads without the withdrawn hackathon note', () => {
   const home = read('index.html')
-  for (const [id, phrase] of [['hackathon', '그 선택에 푹 빠져'], ['song', '생각할 거리를 남기는 가사'], ['camus', '나는 어떤 존재인지, 왜 살아가는지']]) {
+  for (const [id, phrase] of [['song', '생각할 거리를 남기는 가사'], ['camus', '나는 어떤 존재인지, 왜 살아가는지']]) {
     assert.ok(home.includes(`href="#home-note-${id}" data-home-note="${id}">${phrase}</a>`))
     assert.ok(home.includes(`id="home-note-${id}"`))
   }
-  assert.match(home, /src="https:\/\/github.com\/user-attachments\/assets\/daffcadc-bceb-4c0a-83e3-521971858844"/)
-  assert.match(home, /alt="Golden Sea 1st Place" width="746" height="436"/)
-  assert.match(home, /href="https:\/\/github.com\/currenjin\/2026-10-daytona-hack-sprint">저장소<\/a>/)
+  assert.doesNotMatch(home, /home-note-hackathon|data-home-note="hackathon"|daffcadc-bceb-4c0a-83e3-521971858844|2026-10-daytona-hack-sprint/)
+  assert.equal([...home.matchAll(/data-home-note="/g)].length, 2)
+  assert.match(home, /저는, 그 선택에 푹 빠져 만들고 싶었던/)
   assert.match(home, /Kendrick Lamar \/ Count Me Out/)
   const lyric = home.match(/<blockquote>([^<]+)<\/blockquote>/)[1]
   assert.equal(lyric, 'We may not know which way to go')

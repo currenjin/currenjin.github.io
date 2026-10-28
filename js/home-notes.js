@@ -23,7 +23,7 @@
   document.body.append(svg)
   let active = null
   let pinned = false
-  let timer
+
   let switchTimer
   let pending = null
   function cancelSwitch() { clearTimeout(switchTimer); pending = null }
@@ -39,13 +39,11 @@
     close.textContent = '닫기'
     close.addEventListener('click', () => dismiss(true))
     panel.prepend(close)
-    panel.addEventListener('pointerenter', () => { clearTimeout(timer); cancelSwitch() })
-    panel.addEventListener('pointerleave', scheduleClose)
-    panel.addEventListener('focusin', () => { pinned = true; clearTimeout(timer) })
+    panel.addEventListener('pointerenter', () => { pinned = true; cancelSwitch() })
+    panel.addEventListener('focusin', () => { pinned = true; cancelSwitch() })
   })
   notes.dataset.enhanced = ''
   function dismiss(returnFocus = false) {
-    clearTimeout(timer)
     cancelSwitch()
     if (!active) return
     const previous = active
@@ -84,7 +82,6 @@
     svg.style.display = y < 0 || y > innerHeight ? 'none' : ''
   }
   function open(trigger, pin = false) {
-    clearTimeout(timer)
     cancelSwitch()
     if (active !== trigger) {
       panels.forEach(panel => { panel.hidden = panel !== panelFor(trigger) })
@@ -102,10 +99,7 @@
       })
     }
   }
-  function scheduleClose() {
-    clearTimeout(timer)
-    if (!pinned) timer = setTimeout(() => dismiss(), 700)
-  }
+
   function distance(rect, x, y) {
     return Math.max(rect.left - x, 0, x - rect.right) ** 2 + Math.max(rect.top - y, 0, y - rect.bottom) ** 2
   }
@@ -113,7 +107,7 @@
     if (event.pointerType !== 'mouse' || narrow.matches || pinned) return
     const paragraph = event.target.closest('p')
     const candidates = paragraph ? [...paragraph.querySelectorAll('[data-home-note]')] : []
-    if (!candidates.length) { scheduleClose(); return }
+    if (!candidates.length) { cancelSwitch(); return }
     const nearest = candidates.reduce((best, item) => {
       const score = Math.min(...[...item.getClientRects()].map(rect => distance(rect, event.clientX, event.clientY)))
       return !best || score < best.score ? { item, score } : best
@@ -122,10 +116,10 @@
     if (pending !== nearest.item) {
       cancelSwitch()
       pending = nearest.item
-      switchTimer = setTimeout(() => open(nearest.item), 220)
+      switchTimer = setTimeout(() => open(nearest.item), 500)
     }
   })
-  intro.addEventListener('pointerleave', () => { cancelSwitch(); scheduleClose() })
+  intro.addEventListener('pointerleave', cancelSwitch)
   intro.addEventListener('focusin', event => {
     if (!restore && event.target.matches('[data-home-note]')) open(event.target, true)
   })

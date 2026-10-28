@@ -28,7 +28,7 @@ with sync_playwright() as p:
             ledger = page.locator('.ledger-head').bounding_box()
             shifts = page.evaluate('noteShifts')
             assert sum(shifts) == 0, shifts
-            for ident in ['hackathon', 'song', 'camus']:
+            for ident in ['song', 'camus']:
                 trigger = page.locator(f'[data-home-note="{ident}"]')
                 panel = page.locator(f'#home-note-{ident}')
                 if width > 1000:
@@ -68,11 +68,6 @@ with sync_playwright() as p:
                     assert box['y'] + box['height'] <= height
                     assert not page.locator('.home-note-leader').is_visible()
                 assert panel.locator('a').first.is_visible()
-                if ident == 'hackathon':
-                    image = panel.locator('img')
-                    image.evaluate('(img)=>img.decode()')
-                    assert image.evaluate('img=>[img.naturalWidth,img.naturalHeight]') == [746, 436]
-                    assert panel.locator('a').get_attribute('href') == 'https://github.com/currenjin/2026-10-daytona-hack-sprint'
                 page.screenshot(path=str(out / f'{width}-{theme}-{ident}.png'))
                 page.keyboard.press('Escape')
                 assert not panel.is_visible()
@@ -83,31 +78,15 @@ with sync_playwright() as p:
                 assert panel.is_visible()
                 page.locator('.site-head').click(position={'x': 2, 'y': 2})
                 assert not panel.is_visible()
-            # Switch directly between the first paragraph's two references.
+            # Intentional hover still switches between the remaining paragraphs.
             if width > 1000:
-                for ident in ['hackathon', 'song', 'hackathon', 'song']:
+                for ident in ['song', 'camus', 'song', 'camus']:
                     trigger = page.locator(f'[data-home-note="{ident}"]')
                     rect = trigger.evaluate('el=>el.getClientRects()[0].toJSON()')
                     page.mouse.move(rect['left'] + 3, rect['top'] + rect['height'] / 2)
                     page.locator(f'#home-note-{ident}').wait_for(state='visible')
                     assert page.locator(f'#home-note-{ident}').is_visible(), {'switch': ident, 'active': page.locator('[aria-expanded="true"][data-home-note]').all_text_contents(), 'rect': rect}
                     assert page.locator('.home-note:visible').count() == 1
-                # A wrapped inline phrase's union rectangle gives a different answer here.
-                point = page.locator('.personal-intro p').first.evaluate('''el=>{
-                  const ts=[...el.querySelectorAll('[data-home-note]')];
-                  const d=(r,x,y)=>Math.max(r.left-x,0,x-r.right)**2+Math.max(r.top-y,0,y-r.bottom)**2;
-                  const p=el.getBoundingClientRect();
-                  for(let x=p.left+2;x<p.right;x+=8) for(let y=p.top+2;y<p.bottom;y+=8){
-                    const fragment=ts.map(t=>Math.min(...[...t.getClientRects()].map(r=>d(r,x,y))));
-                    const union=ts.map(t=>d(t.getBoundingClientRect(),x,y));
-                    const f=fragment.indexOf(Math.min(...fragment)),u=union.indexOf(Math.min(...union));
-                    if(f!==u && fragment[f]+100<fragment[1-f]) return {x,y,id:ts[f].dataset.homeNote};
-                  }
-                }''')
-                assert point, 'Need a genuine wrapped-fragment/union disagreement'
-                page.mouse.move(point['x'], point['y'])
-                page.locator(f'#home-note-{point["id"]}').wait_for(state='visible')
-                assert page.locator(f'#home-note-{point["id"]}').is_visible()
                 page.keyboard.press('Escape')
             else:
                 page.locator('[data-home-note="camus"]').tap()
@@ -128,18 +107,18 @@ with sync_playwright() as p:
             assert page.locator('#home-note-song a').first.evaluate('el=>el===document.activeElement')
             page.keyboard.press('Escape')
             assert not errors, errors
-            results.append({'width': width, 'theme': theme, 'layout_shift': sum(shifts), 'errors': errors, 'notes': 3})
+            results.append({'width': width, 'theme': theme, 'layout_shift': sum(shifts), 'errors': errors, 'notes': 2})
             context.close()
     context = browser.new_context(java_script_enabled=False, reduced_motion='reduce', viewport={'width': 390, 'height': 844})
     page = context.new_page()
     page.goto(args.url)
-    assert page.locator('a[data-home-note]').count() == 3
-    for ident in ['hackathon', 'song', 'camus']:
+    assert page.locator('a[data-home-note]').count() == 2
+    for ident in ['song', 'camus']:
         page.locator(f'[data-home-note="{ident}"]').click()
         assert page.locator(f'#home-note-{ident}').is_visible()
         assert page.url.endswith(f'#home-note-{ident}')
     page.screenshot(path=str(out / '390-no-js.png'))
-    results.append({'no_js': 'all three anchor targets and source links accessible'})
+    results.append({'no_js': 'both anchor targets and source links accessible'})
     browser.close()
 (out / 'browser-results.json').write_text(json.dumps(results, ensure_ascii=False, indent=2))
 print(json.dumps(results, ensure_ascii=False, indent=2))
