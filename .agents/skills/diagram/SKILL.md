@@ -5,7 +5,9 @@ description: agent-kit 도식 절차와 이 아카이브의 출판 규칙을 함
 
 # Archive diagram integration
 
-도식의 필요 판단·구성·본문 보존·기술적 검토는 공통 정본 `~/.agents/skills/diagram/SKILL.md`를 실제로 읽고 따릅니다. 이 로컬 파일은 Jekyll 렌더·Issue 첨부·출판 계약만 소유합니다. 공통 정본이 없으면 [다른 기기 설정](../../agent-kit.md)을 안내하고 중단합니다. 비공개 원문을 이 공개 저장소에 복사하지 않습니다.
+도식 작업 전 [원격 읽기 안내](../../agent-kit.md)의 코드를 실행하여 현재 `main`의 SHA에 고정된 `skills/diagram/SKILL.md`와 writing·tidy 규칙 전체를 실제로 읽습니다. 공통 판단·구성·본문 보존·기술적 검토는 이 원격 정본을 따르고, 의존성의 상대 경로는 같은 SHA로 만든 새 임시 `KIT_ROOT`에서 해석합니다. 원격 접근이나 읽기가 실패하면 중단하며 오래된 로컬 설치본으로 대체하지 않습니다.
+
+이 파일은 Jekyll 렌더·Issue 첨부·출판 계약만 소유합니다. 전역 설치나 기기별 설정은 요구하지 않으며 비공개 원문을 이 공개 저장소에 복사하지 않습니다.
 
 먼저 `AGENTS.md`, `docs/writing-convention.md`와 대상 본문을 읽습니다. Wiki라면 `.agents/skills/wiki/SKILL.md`, `docs/wiki-authoring.md`도 읽습니다. 질문·평가는 조회·제안이며 작성 요청일 때만 승인 범위의 문서와 도식을 수정합니다.
 
