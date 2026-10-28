@@ -38,7 +38,8 @@ if not args.url:
 STATE = '''() => {
  const path=document.querySelector('.home-note-leader path');
  const panel=document.querySelector('.home-note:not([hidden])');
- return {d:path.getAttribute('d'),box:panel?.getBoundingClientRect().toJSON()};
+ const start=path.getPointAtLength(0), end=path.getPointAtLength(path.getTotalLength());
+ return {d:path.getAttribute('d'),box:panel?.getBoundingClientRect().toJSON(),start:{x:start.x,y:start.y},end:{x:end.x,y:end.y}};
 }'''
 # Sample the real SVG path against browser-rendered text ranges, not source regex.
 CLEAR = '''() => {
@@ -130,7 +131,12 @@ try:
                         if width == 1440 and theme == 'light' and ident == ids[0]:
                             page.screenshot(path=str(out / 'cursor-point-b.png'))
                             (out / 'cursor-states.json').write_text(json.dumps({'a': first, 'b': second}, indent=2))
-                        assert first['d'] != second['d'], f'SVG origin did not follow two cursor positions in active paragraph: {first}, {second}, points={a,b}, errors={errors}'
+                        assert first['start'] == second['start'], 'the source phrase detached when the cursor moved'
+                        anchor = trigger.evaluate('el=>[...el.getClientRects()].reduce((a,b)=>a.left<b.left?a:b).toJSON()')
+                        assert abs(first['start']['x'] - anchor['left']) < 1 and anchor['bottom'] < first['start']['y'] <= anchor['bottom'] + 4, 'line must start under the annotated phrase'
+                        assert first['end'] != second['end'], 'only the free endpoint should follow the cursor'
+                        assert abs(first['end']['x'] - a[0]) < 1 and abs(second['end']['x'] - b[0]) < 1, 'free endpoint must track cursor horizontally'
+                        assert first['d'] != second['d'], 'connector did not respond to pointer movement'
                         assert first['box'] == second['box'], 'popup chased cursor'
                         clear(page)
                         page.mouse.move(*c)

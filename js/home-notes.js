@@ -86,7 +86,7 @@
     const nearest = rects.reduce((a, b) => Math.abs((a.top + a.bottom) / 2 - y) < Math.abs((b.top + b.bottom) / 2 - y) ? a : b)
     const row = rects.filter(rect => rect.top < nearest.bottom && rect.bottom > nearest.top)
     return {
-      x:Math.max(box.left, Math.min(x, Math.max(...row.map(rect => rect.right)))),
+      x:Math.max(box.left, Math.min(x, box.right)),
       y:Math.max(...row.map(rect => rect.bottom)) + 2
     }
   }
@@ -105,11 +105,14 @@
     panel.style.maxHeight = `${bottom - top}px`
     panel.style.top = `${top}px`
     const target = panel.getBoundingClientRect()
-    const { x, y } = origin()
+    const fragment = [...active.getClientRects()].reduce((a, b) => a.left < b.left ? a : b)
+    const start = { x:fragment.left, y:fragment.bottom + 2 }
     const gutter = column.left - 14
-    const endY = Math.max(target.top + 18, Math.min(y, target.bottom - 18))
-    path.setAttribute('d', `M ${x} ${y} H ${gutter} V ${endY} H ${target.right}`)
-    svg.style.display = y < 0 || y > innerHeight ? 'none' : ''
+    const end = cursor?.paragraph === active.closest('p') ? origin() : {
+      x:target.right, y:Math.max(target.top + 18, Math.min(start.y, target.bottom - 18))
+    }
+    path.setAttribute('d', `M ${start.x} ${start.y} H ${gutter} V ${end.y} H ${end.x}`)
+    svg.style.display = start.y < 0 || start.y > innerHeight ? 'none' : ''
   }
   function open(trigger, pin = false) {
     cancelSwitch()
