@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="none"/>
-  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-size="50" fill="#91d478">✦</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>currenjin black hole</title><path d="M1 34C14 28.5 50 28.5 63 34C46 31 18 31 1 34Z" fill="#b5a484"/><circle cx="32" cy="30" r="12" fill="#25231f" stroke="#d9c8a5" stroke-width="1.3"/><path d="M19.5 30C19 13 45 13 44.5 30C42 16 22 16 19.5 30Z" fill="#b5a484"/><path d="M.5 34C17 35.6 47 35.6 63.5 34C46 39.6 18 39.6 .5 34Z" fill="#dfcda7"/><path d="M.5 34C18 35 46 35 63.5 34C46 37 18 37 .5 34Z" fill="#88734f"/></svg>

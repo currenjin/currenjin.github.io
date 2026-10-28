@@ -5,6 +5,18 @@ regenerate: true
 title: ""
 ---
 <main id="main" class="home">
+  <div class="home-opening">
+    <section class="cosmic-masthead" aria-label="currenjin">
+      <img class="cosmic-fallback" src="{{ '/resource/icon/favicon.svg' | relative_url }}" alt="" width="400" height="340" aria-hidden="true">
+      <canvas class="cosmic-canvas" aria-label="천체의 궤도 구조 전환" aria-pressed="false" role="button" tabindex="0"></canvas>
+      <h1 class="cosmic-type">currenjin</h1>
+    </section>
+    <section class="personal-intro" aria-label="소개">
+      <p>공통파트에서 일하는 소프트웨어 엔지니어입니다. 무언가에 푹 빠져 제 의도를 구현하는 순간을 좋아하며, 요즘은 해커톤에서 만들고 싶은 아이디어를 실제로 만들어내는 데 몰입합니다. 음악에서는 묵직한 베이스도 좋지만, 생각할 거리를 남기는 가사가 라임과 펀치라인까지 갖췄을 때 특히 좋습니다.</p>
+      <p>문득문득 나는 어떤 존재인지, 왜 살아가는지, 무엇을 위한 삶인지 묻습니다. 아직 답을 찾지는 못했습니다. 질문이 떠오르면 한동안 그 생각을 하며 저 자신을 들여다봅니다.</p>
+      <p>나중에 다시 찾아볼 지식은 위키에, 제 생각과 감상은 포스트와 리뷰에 남깁니다. 기록하는 동안 생각이 정리되거나 무언가를 깨닫기도 하지만, 기록 자체가 제게서 나온 흔적이기도 합니다. 누군가 이곳에서 제 생각을 발견하고 영감을 얻거나, 미래의 제가 돌아와 예전의 생각을 다시 만나면 좋겠습니다.</p>
+    </section>
+  </div>
   {% assign public_wiki = site.wiki | where_exp: 'w', 'w.public != false' %}
   {% assign wiki_count = public_wiki.size | minus: 1 %}{% assign total_records = wiki_count | plus: site.reviews.size | plus: site.archive_articles.size | plus: site.archive_books.size | plus: site.activity_log.size %}
   <section class="ledger-head" aria-label="기록 필터"><span>date</span><span>type</span><div class="ledger-actions"><div class="filters" data-filter-group><button class="filter" data-filter="all" aria-pressed="true">all</button><button class="filter" data-filter="wiki" aria-pressed="false">wiki</button><button class="filter" data-filter="post" aria-pressed="false">post</button><button class="filter" data-filter="review" aria-pressed="false">review</button><button class="filter" data-filter="log" aria-pressed="false">log</button></div><span class="result-count" data-result-count>{{ total_records }} / {{ total_records }}</span></div></section>
