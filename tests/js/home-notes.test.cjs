@@ -7,7 +7,7 @@ const read = name => fs.existsSync(path.join(root, name)) ? fs.readFileSync(path
 
 test('two Home notes retain their approved payloads without the withdrawn hackathon note', () => {
   const home = read('index.html')
-  for (const [id, phrase] of [['song', '생각할 거리를 남기는 가사'], ['camus', '나는 어떤 존재인지, 왜 살아가는지']]) {
+  for (const [id, phrase] of [['song', '생각할 거리를 남기는 가사'], ['socrates', '나는 어떤 존재인지, 왜 살아가는지']]) {
     assert.ok(home.includes(`href="#home-note-${id}" data-home-note="${id}">${phrase}</a>`))
     assert.ok(home.includes(`id="home-note-${id}"`))
   }
@@ -20,8 +20,10 @@ test('two Home notes retain their approved payloads without the withdrawn hackat
   assert.ok(lyric.split(/\s+/).length <= 10)
   assert.match(home, /https:\/\/www.youtube.com\/watch\?v=5GhhVHpPR_M/)
   assert.match(home, /https:\/\/music.apple.com\/us\/song\/count-me-out\/1623855685/)
-  assert.match(home, /카뮈는 의미를 찾는 인간과 그 물음에 답하지 않는 세계 사이의 간극을 ‘부조리’로 설명한다. 삶의 이유를 묻는 질문을 살펴보는 하나의 관점이다./)
-  assert.match(home, /https:\/\/plato.stanford.edu\/entries\/camus\//)
+  assert.match(home, /소크라테스/ )
+  assert.match(home, /<blockquote>성찰하지 않는 삶은 살 가치가 없다.<\/blockquote>/)
+  assert.ok(home.includes('https://classics.mit.edu/Plato/apology.html'))
+  assert.doesNotMatch(home, /카뮈|부조리|plato.stanford.edu\/entries\/camus/)
 })
 
 test('notes assets are root-only and separate from article and scene code', () => {

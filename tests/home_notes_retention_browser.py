@@ -24,7 +24,7 @@ with sync_playwright() as p:
     page.goto(args.url, wait_until='networkidle')
     page.wait_for_selector('[data-home-note][role="button"]')
     song = page.locator('#home-note-song')
-    camus = page.locator('#home-note-camus')
+    socrates = page.locator('#home-note-socrates')
     page.mouse.move(*point(page, 'song'))
     song.wait_for(state='visible')
     page.mouse.move(8, 8)
@@ -32,25 +32,25 @@ with sync_playwright() as p:
     assert song.is_visible(), 'reading note vanished when pointer left the paragraph'
     box = song.bounding_box()
     page.mouse.move(box['x'] + box['width'] / 2, box['y'] + 50)
-    page.mouse.move(*point(page, 'camus'))
+    page.mouse.move(*point(page, 'socrates'))
     page.wait_for_timeout(850)
-    assert song.is_visible() and not camus.is_visible(), 'a note being read changed during pointer transit'
-    page.locator('[data-home-note="camus"]').click()
-    assert camus.is_visible() and not song.is_visible(), 'explicit selection must switch a pinned note'
+    assert song.is_visible() and not socrates.is_visible(), 'a note being read changed during pointer transit'
+    page.locator('[data-home-note="socrates"]').click()
+    assert socrates.is_visible() and not song.is_visible(), 'explicit selection must switch a pinned note'
     page.keyboard.press('Escape')
-    assert not camus.is_visible()
+    assert not socrates.is_visible()
     page.mouse.move(8, 8)
     page.mouse.move(*point(page, 'song'))
     song.wait_for(state='visible')
-    page.mouse.move(*point(page, 'camus'))
+    page.mouse.move(*point(page, 'socrates'))
     page.wait_for_timeout(280)
     assert song.is_visible(), 'briefly crossing another reference changed the note'
     page.wait_for_timeout(350)
-    assert camus.is_visible(), 'deliberately dwelling on another paragraph must still discover its note'
+    assert socrates.is_visible(), 'deliberately dwelling on another paragraph must still discover its note'
     page.mouse.move(8, 8)
     page.wait_for_timeout(1000)
-    assert camus.is_visible(), 'newly selected note must also remain open'
+    assert socrates.is_visible(), 'newly selected note must also remain open'
     page.locator('.site-head').click(position={'x': 2, 'y': 2})
-    assert not camus.is_visible(), 'outside click must dismiss'
+    assert not socrates.is_visible(), 'outside click must dismiss'
     print(json.dumps({'pointer_leave_keeps_note': True, 'panel_reading_pins_note': True, 'explicit_switch': True, 'brief_transit_ignored': True, 'intentional_hover_switch': True, 'escape_and_outside_dismiss': True, 'local_js_overlay': args.local_js}))
     browser.close()

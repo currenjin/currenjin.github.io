@@ -23,6 +23,13 @@
   document.body.append(svg)
   let active = null
   let pinned = false
+  let cursor = null
+  let hover = null
+  let frame = 0
+  function schedulePlace() {
+    if (frame) return
+    frame = requestAnimationFrame(() => { frame = 0; place() })
+  }
 
   let switchTimer
   let pending = null
@@ -58,6 +65,31 @@
       restore = false
     }
   }
+  // Range rectangles include descenders. Route beneath the complete rendered
+  // line, not through the pointer's glyph; the vertical leg stays in the gutter.
+  function origin() {
+    const paragraph = active.closest('p')
+    const box = paragraph.getBoundingClientRect()
+    const fragment = [...active.getClientRects()].reduce((a, b) => a.left < b.left ? a : b)
+    const x = cursor && cursor.paragraph === paragraph ? box.left + box.width * cursor.x : fragment.left
+    const y = cursor && cursor.paragraph === paragraph ? box.top + box.height * cursor.y : (fragment.top + fragment.bottom) / 2
+    const walker = document.createTreeWalker(paragraph, NodeFilter.SHOW_TEXT)
+    const rects = []
+    let node
+    while ((node = walker.nextNode())) {
+      if (!node.textContent.trim()) continue
+      const range = document.createRange()
+      range.selectNodeContents(node)
+      rects.push(...[...range.getClientRects()].filter(rect => rect.width && rect.height))
+    }
+    if (!rects.length) return { x:fragment.left, y:fragment.bottom + 2 }
+    const nearest = rects.reduce((a, b) => Math.abs((a.top + a.bottom) / 2 - y) < Math.abs((b.top + b.bottom) / 2 - y) ? a : b)
+    const row = rects.filter(rect => rect.top < nearest.bottom && rect.bottom > nearest.top)
+    return {
+      x:Math.max(box.left, Math.min(x, Math.max(...row.map(rect => rect.right)))),
+      y:Math.max(...row.map(rect => rect.bottom)) + 2
+    }
+  }
   function place() {
     if (!active) return
     const panel = panelFor(active)
@@ -73,9 +105,7 @@
     panel.style.maxHeight = `${bottom - top}px`
     panel.style.top = `${top}px`
     const target = panel.getBoundingClientRect()
-    const fragment = [...active.getClientRects()].reduce((a, b) => a.left < b.left ? a : b)
-    const x = fragment.left
-    const y = fragment.bottom - 1
+    const { x, y } = origin()
     const gutter = column.left - 14
     const endY = Math.max(target.top + 18, Math.min(y, target.bottom - 18))
     path.setAttribute('d', `M ${x} ${y} H ${gutter} V ${endY} H ${target.right}`)
@@ -83,6 +113,7 @@
   }
   function open(trigger, pin = false) {
     cancelSwitch()
+    if (active !== trigger || pin) cursor = !pin && hover?.paragraph === trigger.closest('p') ? hover : null
     if (active !== trigger) {
       panels.forEach(panel => { panel.hidden = panel !== panelFor(trigger) })
       triggers.forEach(item => item.setAttribute('aria-expanded', String(item === trigger)))
@@ -108,11 +139,19 @@
     const paragraph = event.target.closest('p')
     const candidates = paragraph ? [...paragraph.querySelectorAll('[data-home-note]')] : []
     if (!candidates.length) { cancelSwitch(); return }
+    const bounds = paragraph.getBoundingClientRect()
+    hover = { paragraph, x:(event.clientX - bounds.left) / bounds.width, y:(event.clientY - bounds.top) / bounds.height }
     const nearest = candidates.reduce((best, item) => {
       const score = Math.min(...[...item.getClientRects()].map(rect => distance(rect, event.clientX, event.clientY)))
       return !best || score < best.score ? { item, score } : best
     }, null)
-    if (!active || nearest.item === active) { open(nearest.item); return }
+    if (!active) { open(nearest.item); return }
+    if (nearest.item === active) {
+      cancelSwitch()
+      cursor = hover
+      schedulePlace()
+      return
+    }
     if (pending !== nearest.item) {
       cancelSwitch()
       pending = nearest.item
@@ -144,10 +183,10 @@
   document.addEventListener('focusin', event => {
     if (active && !event.target.closest('.home-note, [data-home-note]')) dismiss()
   })
-  window.addEventListener('scroll', place, { passive:true })
-  window.addEventListener('resize', place)
-  new ResizeObserver(place).observe(notes)
-  panels.forEach(panel => new ResizeObserver(place).observe(panel))
+  window.addEventListener('scroll', schedulePlace, { passive:true })
+  window.addEventListener('resize', schedulePlace)
+  new ResizeObserver(schedulePlace).observe(notes)
+  panels.forEach(panel => new ResizeObserver(schedulePlace).observe(panel))
   const initial = triggers.find(trigger => `#${trigger.getAttribute('aria-controls')}` === location.hash)
   if (initial) open(initial, true)
 })()
