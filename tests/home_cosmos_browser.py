@@ -13,6 +13,7 @@ import re
 import threading
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
+from home_cosmos_no_flash import blank_scene
 
 
 @contextmanager
@@ -37,7 +38,7 @@ def verify_static(site, baseline):
     assert identities(home) == identities(old), 'canonical catalogue identity/content changed'
     assert str(home.select_one('.site-head')) == str(old.select_one('.site-head'))
     assert not home.select('.intro-note, .intro-popover, .note-leader')
-    assert home.select_one('.cosmic-fallback')
+    assert not home.select_one('.cosmic-fallback')
     assert 'noindex' not in str(home)
     assert not re.search(r'compare-left|study-label|localhost|/Users/|phi-home|미리보기', str(home))
     checked = 0
@@ -129,17 +130,17 @@ def verify_browser(site, baseline, evidence):
         context = browser.new_context(java_script_enabled=False, viewport={'width': 390, 'height': 844})
         page = context.new_page()
         page.goto(origin)
-        assert page.locator('.cosmic-fallback').is_visible()
+        blank_scene(page)
         assert not page.locator('.cosmic-canvas').is_visible(), 'unavailable scene must not expose a dead control'
         assert page.locator('.personal-intro p').count() == 3
-        page.screenshot(path=str(evidence / 'mobile-no-js-fallback.png'))
+        page.screenshot(path=str(evidence / 'mobile-no-js-blank.png'))
         context.close()
         context = browser.new_context(viewport={'width': 1440, 'height': 1100})
         page = context.new_page()
         page.route('**/vendor/three.module.js', lambda route: route.abort())
         page.goto(origin)
-        assert page.locator('.cosmic-fallback').is_visible()
-        page.screenshot(path=str(evidence / 'desktop-module-fallback.png'))
+        blank_scene(page)
+        page.screenshot(path=str(evidence / 'desktop-module-blank.png'))
         context.close()
         context = browser.new_context(viewport={'width': 1440, 'height': 1100})
         page = context.new_page()
@@ -147,7 +148,7 @@ def verify_browser(site, baseline, evidence):
         page.wait_for_function('window.cosmicState?.webgl && cosmicState.frames > 3')
         page.evaluate("window.loss = document.querySelector('canvas').getContext('webgl2').getExtension('WEBGL_lose_context'); loss.loseContext()")
         page.wait_for_function('!cosmicState.webgl')
-        assert page.locator('.cosmic-fallback').is_visible()
+        blank_scene(page)
         stopped = page.evaluate('cosmicState.frames')
         page.wait_for_timeout(200)
         assert page.evaluate('cosmicState.frames') == stopped
@@ -221,10 +222,10 @@ def verify_browser(site, baseline, evidence):
         page = unsupported.new_page(viewport={'width': 1440, 'height': 1100})
         page.goto(origin)
         page.wait_for_function('window.cosmicState?.error && !cosmicState.webgl')
-        assert page.locator('.cosmic-fallback').is_visible()
+        blank_scene(page)
         assert not page.locator('.cosmic-canvas').is_visible()
         page.screenshot(path=str(evidence / 'desktop-webgl-unavailable.png'))
-        receipts['webgl_disabled_fallback'] = True
+        receipts['webgl_disabled_blank'] = True
         unsupported.close()
     (evidence / 'receipts.json').write_text(json.dumps(receipts, ensure_ascii=False, indent=2))
     print(json.dumps(receipts, ensure_ascii=False, indent=2))
