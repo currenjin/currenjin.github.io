@@ -20,6 +20,19 @@ class ConsumerReferences(unittest.TestCase):
         self.assertNotIn('~/.agents/', text)
         self.assertNotIn('/Users/', text)
 
+    def test_type_safe_selection_and_discovery_contract(self):
+        guide = (ROOT / '.agents/agent-kit.md').read_text()
+        for token in ('--rule writing', '--rule tidy-first', '--skill report', '--list',
+                      'writing`과 `tidy-first`는 스킬이 아니라 규칙',
+                      'RESOURCE_NOT_FOUND', '후보는 제안일 뿐',
+                      '다운로드·아카이브 실패', '같은 SHA',
+                      'skills/<rule>/SKILL.md', '추측하지 않습니다'):
+            self.assertIn(token, guide)
+        paths = list((ROOT / '.agents').rglob('*.md')) + [ROOT / 'README.md']
+        for path in paths:
+            with self.subTest(path=path.relative_to(ROOT)):
+                self.assertNotRegex(path.read_text(), r'--path (?:skills/[^/\s]+/SKILL\.md|rules/[^/\s]+\.md)')
+
     def test_setup_records_private_access_requirement(self):
         text = (ROOT / '.agents/agent-kit.md').read_text()
         for expected in ['currenjin/agent-kit', 'private', 'CONSUMERS.md',
@@ -104,7 +117,7 @@ else:
                       calls[1])
         self.assertIn('Accept: application/vnd.github.raw+json', calls[1])
         args = json.loads(result.stdout.split('LOADER_ARGS=', 1)[1])
-        self.assertEqual(args, ['--revision', 'b' * 40, '--path', 'skills/diagram/SKILL.md'])
+        self.assertEqual(args, ['--revision', 'b' * 40, '--skill', 'diagram'])
 
     def test_remote_failure_stops_instead_of_using_local_rules(self):
         for failure in ['revision', 'invalid', 'script']:
