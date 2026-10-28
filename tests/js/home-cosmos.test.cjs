@@ -10,10 +10,12 @@ const paragraphs = [
   '답을 찾기 전의 생각에도 남겨둘 이유는 있습니다. 다시 찾아볼 지식은 위키에, 제가 생각하고 느낀 흔적은 포스트와 리뷰에 남기며, 쓰는 동안 생각을 정리하거나 무언가를 깨닫기도 합니다. 누군가에게는 이 기록이 새로운 생각의 계기가 되고, 미래의 저에게는 과거의 제가 무엇을 묻고 있었는지 보여주면 좋겠습니다.',
 ]
 
-test('Home contains the exact approved paragraphs, without inline explanatory UI', () => {
+test('Home contains the exact approved paragraphs with optional inline annotation markup', () => {
   const home = read('index.html')
-  for (const paragraph of paragraphs) assert.ok(home.includes(`<p>${paragraph}</p>`))
-  assert.doesNotMatch(home, /intro-note|intro-popover|note-leader|구조 살펴보기|신앙|이웃을 돕/)
+  const intro = home.match(/<section class="personal-intro"[\s\S]*?<\/section>/)[0]
+  const actual = [...intro.matchAll(/<p>([\s\S]*?)<\/p>/g)].map(match => match[1].replace(/<[^>]+>/g, ''))
+  assert.deepEqual(actual, paragraphs)
+  assert.doesNotMatch(home, /구조 살펴보기|신앙|이웃을 돕/)
 })
 
 test('Home retains the canonical dynamic archive and its navigation controls', () => {
