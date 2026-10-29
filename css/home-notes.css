@@ -20,7 +20,7 @@
 .home-note p a + a {margin-left:16px}
 .home-notes[data-enhanced] {position:absolute;margin:0;width:0;height:0}
 .home-notes[data-enhanced] .home-note {
-  position:fixed;z-index:90;box-sizing:border-box;
+  position:fixed;z-index:90;box-sizing:border-box;will-change:transform;
   width:300px;padding:32px 14px 12px;border:1px solid var(--line-strong);
   background:var(--paper);box-shadow:var(--shadow-sm);
   overflow-y:auto;overscroll-behavior:contain;
@@ -31,6 +31,7 @@
 .home-note-leader path {fill:none;stroke:var(--muted);stroke-width:.65;opacity:.32}
 @media(max-width:1000px) {
   .home-notes[data-enhanced] .home-note {left:12px!important;right:12px;top:auto!important;bottom:12px;width:auto!important;max-height:48dvh!important;padding-bottom:calc(20px + env(safe-area-inset-bottom));box-shadow:var(--shadow-sm)}
+  .home-notes[data-enhanced] .home-note {transform:none!important}
   .home-note-leader {display:none}
   .personal-intro [data-home-note] {scroll-margin-block:90px 55dvh}
 }

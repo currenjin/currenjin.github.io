@@ -4,6 +4,7 @@
   const notes = document.querySelector('.home-notes')
   if (!intro || !notes) return
   const narrow = matchMedia('(max-width:1000px)')
+  const reduced = matchMedia('(prefers-reduced-motion:reduce)')
   const triggers = [...intro.querySelectorAll('[data-home-note]')]
   triggers.forEach(anchor => {
     anchor.setAttribute('aria-controls', anchor.hash.slice(1))
@@ -21,21 +22,43 @@
   svg.append(path)
   svg.style.display = 'none'
   document.body.append(svg)
+  const panelFor = trigger => document.getElementById(trigger.getAttribute('aria-controls'))
+  const clamp = (value, min, max) => Math.max(min, Math.min(value, max))
   let active = null
   let pinned = false
   let cursor = null
   let hover = null
+  let preferredSide = null
   let frame = 0
-  function schedulePlace() {
-    if (frame) return
-    frame = requestAnimationFrame(() => { frame = 0; place() })
-  }
-
+  let dirty = false
+  let target = null
+  let pose = null
+  let lastPaint = 0
+  let lastFragment = -1
   let switchTimer
   let pending = null
-  function cancelSwitch() { clearTimeout(switchTimer); pending = null }
   let restore = false
-  const panelFor = trigger => document.getElementById(trigger.getAttribute('aria-controls'))
+  function cancelSwitch() { clearTimeout(switchTimer); pending = null }
+  function requestFrame() {
+    if (!frame) frame = requestAnimationFrame(time => {
+      frame = 0
+      if (dirty) { dirty = false; place() }
+      if (render(time)) requestFrame()
+    })
+  }
+  function schedulePlace() { dirty = true; requestFrame() }
+  function stopMotion() {
+    cancelAnimationFrame(frame)
+    frame = 0
+    dirty = false
+    target = null
+  }
+  function pin() {
+    pinned = true
+    cancelSwitch()
+    stopMotion()
+    if (active) panelFor(active).style.pointerEvents = ''
+  }
   panels.forEach(panel => {
     panel.hidden = true
     panel.setAttribute('role', 'dialog')
@@ -46,8 +69,8 @@
     close.textContent = '닫기'
     close.addEventListener('click', () => dismiss(true))
     panel.prepend(close)
-    panel.addEventListener('pointerenter', () => { pinned = true; cancelSwitch() })
-    panel.addEventListener('focusin', () => { pinned = true; cancelSwitch() })
+    panel.addEventListener('pointerenter', cancelSwitch)
+    panel.addEventListener('focusin', pin)
   })
   notes.dataset.enhanced = ''
   function dismiss(returnFocus = false) {
@@ -58,6 +81,9 @@
     triggers.forEach(trigger => trigger.setAttribute('aria-expanded', 'false'))
     active = null
     pinned = false
+    stopMotion()
+    pose = null
+    lastFragment = -1
     svg.style.display = 'none'
     if (returnFocus) {
       restore = true
@@ -65,171 +91,157 @@
       restore = false
     }
   }
-  let previousChoice = null
-  // A candidate is S -> actual client cursor -> E, with E on an incoming panel
-  // edge. Never clamp E independently: that would silently break collinearity.
-  // Solve the allowed distance beyond the cursor against viewport constraints,
-  // then prefer a panel disjoint from the active paragraph. Other prose can be
-  // crossed by a straight ray; a quiet stroke is preferable to a disguised bend.
-  function fit(interval, base, rate, min, max) {
-    if (Math.abs(rate) < 1e-7) return base >= min && base <= max ? interval : null
-    const a = (min - base) / rate
-    const b = (max - base) / rate
-    const result = [Math.max(interval[0], Math.min(a, b)), Math.min(interval[1], Math.max(a, b))]
-    return result[0] <= result[1] ? result : null
-  }
-  function placement(rects, pointer, width, height, paragraph) {
-    const candidates = []
-    const otherReferences = triggers.filter(trigger => trigger !== active).flatMap(trigger => [...trigger.getClientRects()])
-    rects.forEach((rect, fragment) => {
-      // Every source lies on a real fragment edge, including wrapped annotations.
-      const sources = [[rect.left, rect.top], [rect.right, rect.top],
-        [rect.left, rect.bottom], [rect.right, rect.bottom],
-        [rect.left, (rect.top + rect.bottom) / 2], [rect.right, (rect.top + rect.bottom) / 2],
-        [(rect.left + rect.right) / 2, rect.top], [(rect.left + rect.right) / 2, rect.bottom]]
-      sources.forEach(([x, y], source) => {
-        const distance = Math.hypot(pointer.x - x, pointer.y - y)
-        if (distance < 1) return
-        const ux = (pointer.x - x) / distance
-        const uy = (pointer.y - y) / distance
-        for (const axis of ['x', 'y']) {
-          if (Math.abs(axis === 'x' ? ux : uy) < 1e-7) continue
-          for (const fraction of [0, .25, .5, .75, 1]) {
-            const ox = axis === 'x' ? (ux > 0 ? 0 : -width) : -width * fraction
-            const oy = axis === 'y' ? (uy > 0 ? 0 : -height) : -height * fraction
-            const bx = pointer.x + ox
-            const by = pointer.y + oy
-            let interval = fit([24, Math.hypot(innerWidth, innerHeight)], bx, ux, 12, innerWidth - 12 - width)
-            if (interval) interval = fit(interval, by, uy, 12, innerHeight - 12 - height)
-            if (!interval) continue
-            let clear = []
-            for (const margin of [8, 0]) {
-              clear = [
-                fit(interval, bx, ux, -Infinity, paragraph.left - width - margin),
-                fit(interval, bx, ux, paragraph.right + margin, Infinity),
-                fit(interval, by, uy, -Infinity, paragraph.top - height - margin),
-                fit(interval, by, uy, paragraph.bottom + margin, Infinity)
-              ].filter(Boolean)
-              if (clear.length) break
-            }
-            const gap = clear.length ? Math.min(...clear.map(item => item[0])) : interval[0]
-            const left = bx + ux * gap
-            const top = by + uy * gap
-            const overlap = Math.max(0, Math.min(left + width, paragraph.right) - Math.max(left, paragraph.left)) *
-              Math.max(0, Math.min(top + height, paragraph.bottom) - Math.max(top, paragraph.top))
-            const referenceOverlap = otherReferences.reduce((sum, rect) => sum +
-              Math.max(0, Math.min(left + width, rect.right) - Math.max(left, rect.left)) *
-              Math.max(0, Math.min(top + height, rect.bottom) - Math.max(top, rect.top)), 0)
-            const key = `${fragment}:${source}:${axis}:${axis === 'x' ? Math.sign(ux) : Math.sign(uy)}:${fraction}`
-            const travel = previousChoice ? Math.hypot(left - previousChoice.left, top - previousChoice.top) : 0
-            candidates.push({ key, left, top, start:{ x, y },
-              end:{ x:pointer.x + ux * gap, y:pointer.y + uy * gap },
-              score:overlap * 20 + referenceOverlap * 100 + gap + 2000 / distance + travel * 2 +
-                64 * (1 - Math.abs(axis === 'x' ? ux : uy)), overlap, referenceOverlap })
-          }
-        }
-      })
-    })
-    candidates.sort((a, b) => a.score - b.score)
-    const best = candidates[0]
-    // Keep a viable branch through tiny movements instead of corner-flipping.
-    const previous = candidates.find(item => item.key === previousChoice?.key)
-    const chosen = previous && best && previous.score <= best.score + 48 &&
-      (previous.referenceOverlap < 1 || best.referenceOverlap >= 1) &&
-      (previous.overlap < 1 || best.overlap >= 1) ? previous : best
-    previousChoice = chosen || null
-    return chosen
-  }
   function place() {
     if (!active) return
     const panel = panelFor(active)
-    if (narrow.matches) { svg.style.display = 'none'; return }
-    const paragraph = active.closest('p').getBoundingClientRect()
-    panel.style.width = '300px'
-    const upperBand = paragraph.top - 20
-    panel.style.maxHeight = `${Math.min(420, innerHeight - 24, upperBand >= 112 ? upperBand : 420)}px`
-    const rects = [...active.getClientRects()].filter(rect => rect.width && rect.height)
-    const fragment = rects[0]
-    // Keyboard/hash activation has no pointer obligation and uses a readable
-    // leftward source ray. Pinning retains an already-open pointer placement.
-    const pointer = cursor || { x:paragraph.left - 28, y:(fragment.top + fragment.bottom) / 2 }
-    const chosen = placement(rects, pointer, panel.offsetWidth, panel.offsetHeight, paragraph)
-    if (!chosen) {
-      // At extreme rays a panel cannot fit beyond the actual pointer with
-      // 24px clearance. Keep it usable, mark the fallback, and hide the line.
-      panel.dataset.placement = 'edge-fallback'
-      panel.style.left = `${Math.max(12, Math.min(paragraph.left - panel.offsetWidth - 16, innerWidth - panel.offsetWidth - 12))}px`
-      panel.style.top = `${Math.max(12, Math.min(fragment.bottom + 16, innerHeight - panel.offsetHeight - 12))}px`
+    if (narrow.matches) {
+      target = null
+      pose = null
+      panel.style.removeProperty('transform')
+      panel.style.pointerEvents = ''
       svg.style.display = 'none'
       return
     }
-    panel.dataset.placement = chosen.overlap < 1 ? 'collinear' : 'collinear-overlap'
-    panel.style.left = `${chosen.left}px`
-    panel.style.top = `${chosen.top}px`
-    path.setAttribute('d', `M ${chosen.start.x} ${chosen.start.y} L ${chosen.end.x} ${chosen.end.y}`)
-    svg.style.display = chosen.start.y < 0 || chosen.start.y > innerHeight ? 'none' : ''
+    panel.style.width = '300px'
+    panel.style.maxHeight = `${Math.min(420, innerHeight-24)}px`
+    const {width,height} = panel.getBoundingClientRect()
+    const rects = [...active.getClientRects()].filter(rect => rect.width && rect.height)
+    if (!rects.length) return
+    const pointer = cursor || {x:rects[0].left,y:rects[0].bottom}
+    const maxLeft = innerWidth-width-12, maxTop = innerHeight-height-12
+    preferredSide ||= pointer.x > innerWidth/2 ? 'left' : 'right'
+    if (preferredSide === 'left' && pointer.x-width-16 < 12 && pointer.x+width+16 <= innerWidth-12) preferredSide = 'right'
+    else if (preferredSide === 'right' && pointer.x+width+16 > innerWidth-12 && pointer.x-width-16 >= 12) preferredSide = 'left'
+    let left = clamp(preferredSide === 'left' ? pointer.x-width-16 : pointer.x+16,12,maxLeft)
+    let top = clamp(pointer.y+16,12,maxTop)
+    if (pinned && pose) {
+      left = clamp(pose.left,12,maxLeft)
+      top = clamp(pose.top,12,maxTop)
+    } else {
+      // Keep every reference accessible; slide in a continuous vertical band.
+      let bands = [[12,maxTop]]
+      for (const r of triggers.flatMap(trigger => [...trigger.getClientRects()])) {
+        if (left+width <= r.left-8 || left >= r.right+8) continue
+        const low = r.top-height-8, high = r.bottom+8
+        bands = bands.flatMap(([a,b]) => high <= a || low >= b ? [[a,b]] :
+          [...(low > a ? [[a,low]] : []), ...(high < b ? [[high,b]] : [])])
+      }
+      if (bands.length) top = bands.map(([a,b]) => clamp(top,a,b)).sort((a,b) => Math.abs(a-top)-Math.abs(b-top))[0]
+    }
+    panel.dataset.placement = 'cursor-follow'
+    target = {left,top,width,height,rects,pointer}
   }
-  function open(trigger, pin = false) {
+  function drawLeader() {
+    const box = {left:pose.left,top:pose.top,right:pose.left+target.width,bottom:pose.top+target.height}
+    const choices = target.rects.map((r,index) => {
+      let bx = clamp((r.left+r.right)/2,box.left,box.right)
+      let by = clamp((r.top+r.bottom)/2,box.top,box.bottom)
+      const ax = clamp(bx,r.left,r.right), ay = clamp(by,r.top,r.bottom)
+      bx = clamp(ax,box.left,box.right)
+      by = clamp(ay,box.top,box.bottom)
+      return {ax,ay,bx,by,index,distance:Math.hypot(bx-ax,by-ay)}
+    }).filter(line => line.distance >= 1 && line.ay >= 0 && line.ay <= innerHeight)
+    choices.sort((a,b) => a.distance-b.distance)
+    const previous = choices.find(line => line.index === lastFragment)
+    const line = previous && choices[0] && previous.distance <= choices[0].distance+16 ? previous : choices[0]
+    if (!line || line.distance < 1) { svg.style.display = 'none'; return }
+    lastFragment = line.index
+    path.setAttribute('d', `M ${line.ax} ${line.ay} L ${line.bx} ${line.by}`)
+    svg.style.display = ''
+  }
+  function render(time, immediate = false) {
+    if (!active || !target || narrow.matches) return false
+    const dx = target.left-(pose?.left ?? target.left), dy = target.top-(pose?.top ?? target.top)
+    const distance = Math.hypot(dx,dy)
+    const elapsed = clamp(time-lastPaint,1,32)
+    const amount = immediate || reduced.matches || !pose || distance < .1 ? 1 :
+      Math.min(1-Math.exp(-elapsed/35),24/distance)
+    pose = {left:(pose?.left ?? target.left)+dx*amount,top:(pose?.top ?? target.top)+dy*amount}
+    pose.left = clamp(pose.left,12,innerWidth-target.width-12)
+    pose.top = clamp(pose.top,12,innerHeight-target.height-12)
+    lastPaint = time
+    const panel = panelFor(active)
+    panel.style.left = '0px'
+    panel.style.top = '0px'
+    panel.style.transform = `translate3d(${pose.left}px,${pose.top}px,0)`
+    panel.style.pointerEvents = amount < 1 && target.pointer.x >= pose.left && target.pointer.x <= pose.left+target.width &&
+      target.pointer.y >= pose.top && target.pointer.y <= pose.top+target.height ? 'none' : ''
+    drawLeader()
+    return amount < 1
+  }
+  function open(trigger, selected = false) {
     cancelSwitch()
     if (active !== trigger) {
-      cursor = !pin && hover?.paragraph === trigger.closest('p') ? hover : null
-      previousChoice = null
+      cursor = !selected && hover?.paragraph === trigger.closest('p') ? hover : null
+      preferredSide = null
+      lastFragment = -1
+      if (selected) pose = null
       panels.forEach(panel => { panel.hidden = panel !== panelFor(trigger) })
-      triggers.forEach(item => item.setAttribute('aria-expanded', String(item === trigger)))
+      triggers.forEach(item => item.setAttribute('aria-expanded',String(item === trigger)))
       active = trigger
+      if (!selected && !reduced.matches) {
+        const panel = panelFor(trigger)
+        const content = pose ? [...panel.querySelectorAll('h2, blockquote, p')] : [panel]
+        content.forEach(element => element.animate([{opacity:0},{opacity:1}],{duration:160,easing:'ease-out'}))
+      }
     }
-    pinned = pin
-    place()
-    if (pin && narrow.matches) {
-      trigger.scrollIntoView({ block:'start', behavior:'instant' })
+    pinned = selected
+    if (selected || reduced.matches) { place(); render(performance.now(),true) }
+    else schedulePlace()
+    if (selected && narrow.matches) {
+      trigger.scrollIntoView({block:'start',behavior:'instant'})
       requestAnimationFrame(() => {
-        const rect = trigger.getBoundingClientRect()
-        const top = panelFor(trigger).getBoundingClientRect().top
-        if (rect.bottom > top - 16) window.scrollBy(0, rect.bottom - top + 24)
+        const r = trigger.getBoundingClientRect(), top = panelFor(trigger).getBoundingClientRect().top
+        if (r.bottom > top-16) window.scrollBy(0,r.bottom-top+24)
       })
     }
   }
-
-  function distance(rect, x, y) {
-    return Math.max(rect.left - x, 0, x - rect.right) ** 2 + Math.max(rect.top - y, 0, y - rect.bottom) ** 2
+  function distance(rect,x,y) {
+    return Math.max(rect.left-x,0,x-rect.right)**2+Math.max(rect.top-y,0,y-rect.bottom)**2
   }
   intro.addEventListener('pointermove', event => {
     if (event.pointerType !== 'mouse' || narrow.matches || pinned) return
     const paragraph = event.target.closest('p')
     const candidates = paragraph ? [...paragraph.querySelectorAll('[data-home-note]')] : []
-    if (!candidates.length) { cancelSwitch(); return }
-    hover = { paragraph, x:event.clientX, y:event.clientY }
-    const nearest = candidates.reduce((best, item) => {
-      const score = Math.min(...[...item.getClientRects()].map(rect => distance(rect, event.clientX, event.clientY)))
-      return !best || score < best.score ? { item, score } : best
-    }, null)
-    if (!active) { open(nearest.item); return }
-    if (nearest.item === active) {
-      cancelSwitch()
-      cursor = hover
+    if (active && (!paragraph || candidates.length)) {
+      cursor = {paragraph,x:event.clientX,y:event.clientY}
       schedulePlace()
-      return
     }
+    if (!candidates.length) { cancelSwitch(); return }
+    hover = {paragraph,x:event.clientX,y:event.clientY}
+    const nearest = candidates.reduce((best,item) => {
+      const score = Math.min(...[...item.getClientRects()].map(r => distance(r,event.clientX,event.clientY)))
+      return !best || score < best.score ? {item,score} : best
+    },null)
+    if (!active) { open(nearest.item); return }
+    if (nearest.item === active) { cancelSwitch(); cursor = hover; schedulePlace(); return }
     if (pending !== nearest.item) {
       cancelSwitch()
       pending = nearest.item
-      switchTimer = setTimeout(() => open(nearest.item), 500)
+      switchTimer = setTimeout(() => open(nearest.item),180)
     }
   })
-  intro.addEventListener('pointerleave', cancelSwitch)
+  intro.addEventListener('pointerleave',cancelSwitch)
+  let previousPointer = null
+  document.addEventListener('pointermove', event => {
+    if (event.pointerType !== 'mouse') return
+    const panel = event.target.closest('.home-note')
+    if (active && panel === panelFor(active) && previousPointer) {
+      const r = panel.getBoundingClientRect()
+      if (previousPointer.x < r.left || previousPointer.x > r.right || previousPointer.y < r.top || previousPointer.y > r.bottom) pin()
+    }
+    previousPointer = {x:event.clientX,y:event.clientY}
+  },{capture:true,passive:true})
   intro.addEventListener('focusin', event => {
-    if (!restore && event.target.matches('[data-home-note]')) open(event.target, true)
+    if (!restore && event.target.matches('[data-home-note]')) open(event.target,true)
   })
   triggers.forEach(trigger => {
     trigger.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault()
-        trigger.click()
-      }
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); trigger.click() }
     })
     trigger.addEventListener('click', () => {
-      open(trigger, true)
-      panelFor(trigger).querySelector('.home-note-close').focus({ preventScroll:true })
+      open(trigger,true)
+      panelFor(trigger).querySelector('.home-note-close').focus({preventScroll:true})
     })
   })
   document.addEventListener('keydown', event => {
@@ -241,10 +253,10 @@
   document.addEventListener('focusin', event => {
     if (active && !event.target.closest('.home-note, [data-home-note]')) dismiss()
   })
-  window.addEventListener('scroll', schedulePlace, { passive:true })
-  window.addEventListener('resize', schedulePlace)
+  window.addEventListener('scroll',schedulePlace,{passive:true})
+  window.addEventListener('resize',schedulePlace)
   new ResizeObserver(schedulePlace).observe(notes)
   panels.forEach(panel => new ResizeObserver(schedulePlace).observe(panel))
   const initial = triggers.find(trigger => `#${trigger.getAttribute('aria-controls')}` === location.hash)
-  if (initial) open(initial, true)
+  if (initial) open(initial,true)
 })()

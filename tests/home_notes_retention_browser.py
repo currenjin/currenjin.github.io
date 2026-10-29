@@ -43,9 +43,9 @@ with sync_playwright() as p:
     page.mouse.move(*point(page, 'song'))
     song.wait_for(state='visible')
     page.mouse.move(*point(page, 'socrates'))
-    page.wait_for_timeout(280)
-    assert song.is_visible(), 'briefly crossing another reference changed the note'
-    page.wait_for_timeout(350)
+    page.wait_for_timeout(80)
+    assert song.is_visible() and not socrates.is_visible(), 'briefly crossing another reference changed the note'
+    page.wait_for_timeout(260)
     assert socrates.is_visible(), 'deliberately dwelling on another paragraph must still discover its note'
     page.mouse.move(8, 8)
     page.wait_for_timeout(1000)
