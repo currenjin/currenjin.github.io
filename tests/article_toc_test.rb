@@ -23,6 +23,44 @@ class ArticleTocTest < Minitest::Test
     assert_equal %w[a b c d e], result.scan(/href="#([^"]+)"/).flatten
     assert result.end_with?(body)
   end
+  def test_rendered_toc_prefix_skips_parser_and_preserves_same_body
+    ['"', "'"].each do |quote|
+      body = "\n<ul id=#{quote}markdown-toc#{quote}><li>Authored</li></ul>\n<h2 id=\"keep\">Keep</h2>"
+      Kramdown::Document.stub(:new, ->(*) { flunk 'existing rendered TOC must not be reparsed' }) do
+        assert_same body, article_toc(body)
+      end
+    end
+  end
+
+  def test_identifier_in_escaped_code_does_not_skip_generation
+    body = '<pre><code>&lt;ul id="markdown-toc"&gt;</code></pre><h2 id="keep">Keep</h2>'
+    result = article_toc(body)
+    assert result.start_with?('<ul id="markdown-toc">')
+    assert_includes result, 'href="#keep"'
+    assert result.end_with?(body)
+  end
+
+  def test_quoted_attribute_text_does_not_skip_generation
+    bodies = [
+      %q{<p title='<ul id="markdown-toc">'>Quoted example</p>},
+      %q{<p title="<ul id='markdown-toc'>">Quoted example</p>},
+      %q{<p>"id='markdown-toc'" and "id="markdown-toc""</p>},
+      %q{<!-- <ul id="markdown-toc"> --><p>Comment example</p>}
+    ]
+    bodies.each do |example|
+      body = example + '<h2 id="keep">Keep</h2>'
+      result = article_toc(body)
+      assert result.start_with?('<ul id="markdown-toc">'), example
+      assert_includes result, 'href="#keep"'
+      assert result.end_with?(body)
+    end
+  end
+
+  def test_nonprefix_existing_toc_remains_byte_identical
+    body = '<p>Intro</p><ul class="toc" id="markdown-toc"><li>Authored</li></ul><h2 id="keep">Keep</h2>'
+    assert_same body, article_toc(body)
+  end
+
   def test_existing_wiki_toc_and_explicit_opt_out_are_byte_identical
     body = '<ul id="markdown-toc"><li>Authored</li></ul><h2 id="keep">Keep</h2>'
     assert_equal body, article_toc(body)

@@ -13,6 +13,10 @@ module ArticleToc
     # body again. Read original IDs and prefix only navigation; no new gems.
     def article_toc(input, enabled = true)
       return input if enabled.equal?(false)
+      # Kramdown's rendered TOC starts with this unambiguous list tag. Anchor
+      # at the body start so escaped code and quoted attribute examples cannot
+      # bypass generation. Less canonical markup keeps the parser fallback.
+      return input if input.match?(/\A\s*<ul\s+id=(["'])markdown-toc\1\s*>/)
       tree = Kramdown::Document.new(input, input: 'html').root
       headings = []
       existing = false

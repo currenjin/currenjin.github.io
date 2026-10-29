@@ -8,6 +8,21 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+def prepare_fixture(root):
+    """Copy the production renderer and SEO contracts, not unrelated content."""
+    root.mkdir(parents=True)
+    for name in ['_plugins', '_layouts', '_includes']:
+        shutil.copytree(ROOT / name, root / name)
+    for name in ['_config.yml', 'Gemfile', 'Gemfile.lock', 'index.html', 'books.md',
+                 'search-index.json', 'sitemap.xml']:
+        shutil.copy2(ROOT / name, root / name)
+    for name in ['_wiki', '_post', '_reviews', '_data', 'tests']:
+        (root / name).mkdir()
+    for name in ['post_books.yml', 'activity_log.yml']:
+        (root / '_data' / name).write_text('[]\n')
+    shutil.copy2(ROOT / 'tests/verify_seo.py', root / 'tests/verify_seo.py')
+
+
 def run(root):
     if os.environ.get('READING_NAV_NATIVE_BUILD') == '1':
         subprocess.run(['bundle', 'exec', 'jekyll', 'build'], cwd=root,
@@ -40,9 +55,14 @@ summary: Scratch fixture
 Question untouched.
 '''
 
-with tempfile.TemporaryDirectory(prefix='reading-navigation-') as temp:
-    root = Path(temp) / 'repo'
-    shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns('.git', '_site', '.jekyll-cache', 'node_modules', '__pycache__'))
+def main():
+    with tempfile.TemporaryDirectory(prefix='reading-navigation-') as temp:
+        verify_fixture(Path(temp) / 'repo')
+    print('PASS: scratch Wiki rendered series, order, current, anchors, standalone, private/string/orphan/planned exclusion and withdrawal')
+
+
+def verify_fixture(root):
+    prepare_fixture(root)
     names = ['fixture-first', 'fixture-secret', 'fixture-last', 'fixture-orphan', 'fixture-string', 'fixture-standalone']
     for name in names:
         public = 'false' if name.endswith('secret') else ('"true"' if name.endswith('string') else 'true')
@@ -92,4 +112,6 @@ with tempfile.TemporaryDirectory(prefix='reading-navigation-') as temp:
     assert not (site / 'wiki/fixture-first').exists()
     assert not (site / 'wiki/fixture-last').exists()
     assert (site / 'wiki/fixture-standalone/index.html').exists()
-print('PASS: scratch Wiki rendered series, order, current, anchors, standalone, private/string/orphan/planned exclusion and withdrawal')
+
+if __name__ == '__main__':
+    main()
