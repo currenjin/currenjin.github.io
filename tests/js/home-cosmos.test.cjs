@@ -32,16 +32,17 @@ test('cosmic assets load only on the root Home, not other home-layout pages', ()
   assert.match(head, /{% if page.url == '\/' %}[\s\S]*?\/css\/home-cosmos.css[\s\S]*?type="module"[\s\S]*?\/js\/home-cosmos.js[\s\S]*?{% endif %}/)
 })
 
-test('approved A keeps layout and wordmark, with no substitute before a rendered frame', () => {
+test('approved artwork-right layout retains wordmark and first-frame readiness', () => {
   const css = read('css/home-cosmos.css')
-  assert.match(css, /\.cosmic-masthead\s*\{[^}]*grid-column:\s*1/)
-  assert.match(css, /\.personal-intro\s*\{[^}]*grid-column:\s*2/)
+  const desktop = css.match(/@media\s*\(min-width:\s*1001px\)\s*\{([\s\S]*?)\n\}/)[1]
+  assert.match(desktop, /\.cosmic-masthead\s*\{[^}]*grid-column:\s*2/)
+  assert.match(desktop, /\.personal-intro\s*\{[^}]*grid-column:\s*1/)
   assert.match(css, /@media\s*\(max-width:\s*1000px\)/)
   const home = read('index.html')
   assert.doesNotMatch(home, /cosmic-fallback/)
   assert.match(css, /\.cosmic-canvas\s*\{[^}]*visibility:hidden/)
   assert.match(css, /\[data-cosmic-ready="true"\] \.cosmic-canvas \{visibility:visible\}/)
-  assert.match(read('_includes/head.html'), /home-cosmos\.css\?v=20261028-no-flash-1/)
+  assert.match(read('_includes/head.html'), /home-cosmos\.css\?v=20261029-right-1/)
   assert.match(read('js/home-cosmos.js'), /renderer\.render\(scene,camera\);state\.frames\+\+;[^}]*hero\.dataset\.cosmicReady='true'/)
   assert.match(home, /<canvas[^>]*role="button"[^>]*tabindex="0"/)
   assert.match(home, /<h1 class="cosmic-type">currenjin<\/h1>/)

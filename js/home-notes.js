@@ -44,7 +44,8 @@
     panel.style.width = '300px'
     panel.style.maxHeight = `${Math.min(420,innerHeight-24)}px`
     const {width,height} = panel.getBoundingClientRect()
-    const left = column.left-width-24
+    const rightSide = column.left < innerWidth-column.right
+    const left = rightSide ? column.right+24 : column.left-width-24
     const top = clamp(paragraph.top,12,innerHeight-height-12)
     panel.style.left = `${left}px`
     panel.style.top = `${top}px`
@@ -52,8 +53,8 @@
     const source = [...active.getClientRects()].find(rect => rect.width && rect.height)
     if (!source || source.bottom < 0 || source.bottom+3 > innerHeight) { svg.style.display = 'none'; return }
     // Run beneath the source's text row, then vertically in the empty gutter.
-    const y = source.bottom+3, gutter = column.left-12, endY = top+height/2
-    path.setAttribute('d',`M ${source.left} ${y} H ${gutter} V ${endY} H ${left+width}`)
+    const y = source.bottom+3, gutter = rightSide ? column.right+12 : column.left-12, endY = top+height/2
+    path.setAttribute('d',`M ${rightSide ? source.right : source.left} ${y} H ${gutter} V ${endY} H ${rightSide ? left : left+width}`)
     svg.style.display = ''
   }
   function dismiss(returnFocus = false) {

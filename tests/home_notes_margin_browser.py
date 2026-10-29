@@ -64,7 +64,7 @@ try:
                         panel.wait_for(state='visible')
                         page.wait_for_timeout(60)
                         state=page.evaluate(CHECK)
-                        assert state['box']['right']<=state['column']['left']-20,state
+                        assert state['box']['left']>=state['column']['right']+20,state
                         assert state['box']['left']>=0 and state['box']['bottom']<=height,state
                         assert state['lineVisible'] and not state['hits'],state
                         assert state['animations']==0

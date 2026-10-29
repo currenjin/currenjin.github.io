@@ -50,7 +50,7 @@ with sync_playwright() as p:
                     box = panel.bounding_box()
                     col = page.locator('.personal-intro').bounding_box()
                     # The approved note stays in the margin, outside the prose.
-                    assert box['x'] + box['width'] <= col['x'] - 20
+                    assert box['x'] >= col['x'] + col['width'] + 20
                     assert box['x'] >= 0 and box['x'] + box['width'] <= width
                     assert box['y'] >= 0 and box['y'] + box['height'] <= height
                     assert page.locator('.home-note-leader').is_visible()
