@@ -14,12 +14,16 @@ test('two Home notes retain their approved payloads without the withdrawn hackat
   assert.doesNotMatch(home, /home-note-hackathon|data-home-note="hackathon"|daffcadc-bceb-4c0a-83e3-521971858844|2026-10-daytona-hack-sprint/)
   assert.equal([...home.matchAll(/data-home-note="/g)].length, 2)
   assert.match(home, /저는, 그 선택에 푹 빠져 만들고 싶었던/)
-  assert.match(home, /Kendrick Lamar \/ Count Me Out/)
-  const lyric = home.match(/<blockquote>([^<]+)<\/blockquote>/)[1]
-  assert.equal(lyric, 'We may not know which way to go')
-  assert.ok(lyric.split(/\s+/).length <= 10)
-  assert.match(home, /https:\/\/www.youtube.com\/watch\?v=5GhhVHpPR_M/)
-  assert.match(home, /https:\/\/music.apple.com\/us\/song\/count-me-out\/1623855685/)
+  const song = home.match(/<section id="home-note-song"[\s\S]*?<\/section>/)[0]
+  assert.match(song, /Kendrick Lamar \/ How Much a Dollar Cost/)
+  const lyric = 'How much a dollar really cost?'
+  const translation = '1달러의 진짜 값은?'
+  const url = 'https://music.apple.com/us/song/how-much-a-dollar-cost-feat-james-fauntleroy-ronald-isley/1440871891'
+  assert.ok(song.includes(`<blockquote><a href="${url}">${lyric}</a></blockquote>`))
+  assert.ok(song.includes(`<p>${translation}</p>`))
+  assert.equal([...song.matchAll(/<a /g)].length, 1)
+  assert.ok(lyric.split(/\s+/).length + translation.split(/\s+/).length <= 10)
+  assert.doesNotMatch(song, /Count Me Out|뮤직비디오|가사 출처|We may not know/ )
   assert.match(home, /소크라테스/ )
   assert.match(home, /<blockquote>성찰하지 않는 삶은 살 가치가 없다.<\/blockquote>/)
   assert.ok(home.includes('https://classics.mit.edu/Plato/apology.html'))
