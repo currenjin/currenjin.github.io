@@ -40,7 +40,7 @@ test('notes assets are root-only and separate from article and scene code', () =
 test('Home inspiration credits retain the approved English names and destinations', () => {
   const home = read('index.html')
   assert.match(home, /Inspired by/)
-  for (const [name,url] of [['Phi Institute of Design','https://www.phi.design/'],['Apple','https://www.apple.com/'],['pgLang','https://pg-lang.com/'],['John Grib','https://johngrib.github.io/']]) {
+  for (const [name,url] of [['Phi Institute of Design','https://www.phi.design/'],['Apple','https://www.apple.com/'],['pgLang','https://pg-lang.com/'],['John Grib','https://johngrib.github.io/'],['Bionic Reading','https://bionic-reading.com/']]) {
     assert.ok(home.includes(`<a href="${url}">${name}</a>`))
   }
 })
