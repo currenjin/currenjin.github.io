@@ -42,7 +42,7 @@ test('approved artwork-right layout retains wordmark and first-frame readiness',
   assert.doesNotMatch(home, /cosmic-fallback/)
   assert.match(css, /\.cosmic-canvas\s*\{[^}]*visibility:hidden/)
   assert.match(css, /\[data-cosmic-ready="true"\] \.cosmic-canvas \{visibility:visible\}/)
-  assert.match(read('_includes/head.html'), /home-cosmos\.css\?v=20261029-frame-2/)
+  assert.match(read('_includes/head.html'), /home-cosmos\.css\?v=20261029-intro-weight-1/)
   assert.match(read('js/home-cosmos.js'), /renderer\.render\(scene,camera\);state\.frames\+\+;[^}]*hero\.dataset\.cosmicReady='true'/)
   assert.match(home, /<canvas[^>]*role="button"[^>]*tabindex="0"/)
   assert.match(home, /<h1 class="cosmic-type">currenjin<\/h1>/)
@@ -54,6 +54,13 @@ test('cosmic module has no deferred explanatory subsystem and handles lifecycle'
   assert.doesNotMatch(source, /intro-note|intro-popover|noteLeader|drawLeader|placeNote|study-/)
   for (const contract of ['IntersectionObserver', 'visibilitychange', 'prefers-reduced-motion', 'webglcontextlost', 'webglcontextrestored', "e.key==='Enter'", "e.key===' '"]) assert.ok(source.includes(contract), contract)
   assert.doesNotMatch(source, /preserveDrawingBuffer:true/)
+})
+
+test('approved Home introduction uses weight 600 only on its three direct paragraphs', () => {
+  const css = read('css/home-cosmos.css')
+  assert.match(css, /\.personal-intro\s*>\s*p\s*\{[^}]*font-weight:\s*600\s*[;}]/)
+  assert.match(css, /\.personal-intro\s*\{[^}]*font:400 23px\/1\.95 var\(--sans\)/)
+  assert.match(read('_includes/head.html'), /home-cosmos\.css\?v=20261029-intro-weight-1/)
 })
 
 test('blackhole favicon replaces old identity and has raster and manifest fallbacks', () => {
