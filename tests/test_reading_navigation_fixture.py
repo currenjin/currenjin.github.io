@@ -48,6 +48,8 @@ class ReadingNavigationFixtureTest(unittest.TestCase):
         args, kwargs = run.call_args
         self.assertEqual(['bundle', 'exec', 'jekyll', 'build'], args[0])
         self.assertEqual('production', kwargs['env']['JEKYLL_ENV'])
+        self.assertEqual(str(ROOT / 'Gemfile'), kwargs['env'].get('BUNDLE_GEMFILE'),
+                         'scratch cwd must reuse the installed production bundle configuration')
         self.assertTrue(kwargs['check'])
 
 

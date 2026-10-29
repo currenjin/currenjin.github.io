@@ -26,7 +26,8 @@ def prepare_fixture(root):
 def run(root):
     if os.environ.get('READING_NAV_NATIVE_BUILD') == '1':
         subprocess.run(['bundle', 'exec', 'jekyll', 'build'], cwd=root,
-                       env={**os.environ, 'JEKYLL_ENV': 'production'}, check=True,
+                       env={**os.environ, 'JEKYLL_ENV': 'production',
+                            'BUNDLE_GEMFILE': str(ROOT / 'Gemfile')}, check=True,
                        stdout=subprocess.DEVNULL)
         return
     subprocess.run(['docker', 'run', '--rm', '-v', f'{root}:/srv/jekyll', '-v',
