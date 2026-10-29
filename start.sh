@@ -1,4 +1,9 @@
-bundle update && bundle install
+#!/usr/bin/env bash
+set -e
+
+# Use the committed lockfile; dependency upgrades are an explicit maintenance task.
+export BUNDLE_FROZEN=true
+bundle check || bundle install
 node scripts/generation/generate-data.js
 
 if [[ $1 = "docker" ]]; then

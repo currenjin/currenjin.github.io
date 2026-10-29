@@ -26,8 +26,11 @@ jobs:
       - name: Verify tools and JavaScript contracts
         run: |
           npm ci
+          npm run build:assets -- --check
           npm test
           python3 tests/test_repository_layout.py
+          python3 tests/test_start_script.py
+          python3 tests/test_reading_navigation_fixture.py
           python3 tests/test_kafka_integration_diagrams.py
       - name: Build canonical archive
         env:

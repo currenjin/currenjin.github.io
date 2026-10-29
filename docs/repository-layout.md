@@ -60,9 +60,27 @@ Post는 `_posts`가 아닌 `_post`다. 날짜형 파일명이나 Jekyll 블로�
 `docs`, `tests`, `scripts`, 에이전트 지침과 로컬 실험·의존성 디렉터리는 공개 출력에서 제외한다.
 기존 공개 `/start.sh`와 `/generateData.js`는 호환 경로로 유지한다. 비공개 장·초안은 빌드 결과에 남지 않는다.
 
+## 공개 자산 빌드
+
+Home 장면의 정본은 `js/home-cosmos.js`와 기존 `js/vendor/three.*.js`다.
+`npm ci` 후 `npm run build:assets`로 같은 Three.js 버전의
+`js/home-cosmos.bundle.js`를 생성한다. 생성 자산도 추적하므로 일반 Jekyll 빌드는
+Node 없이 동작한다. 장면이나 vendor를 수정하면 번들을 함께 갱신하며,
+CI의 `npm run build:assets -- --check`가 오래된 번들을 거부한다.
+기존 원본 JS와 vendor 공개 주소는 호환성을 위해 보존한다.
+
+일반 실행인 `start.sh`는 잠금 의존성을 확인하고 필요할 때만 설치한다.
+의존성 업그레이드는 실행 경로와 분리하여 명시적으로 수행한다.
+
+Mermaid는 렌더링된 다이어그램이 있을 때만 기존 CDN 버전을 로드한다.
+Wiki 상위 문서의 누락 복구는 새 줄을 표시해 본문 위치를 바꾸므로,
+동작 보존 최적화와 분리한다. 현재 상위 문서 표시와 기존 JSON 경로는 유지한다.
+
 ## 검증
 
 ```sh
+npm ci
+npm run build:assets -- --check
 npm test
 python3 tests/test_repository_layout.py
 ruby tests/archive_test.rb
@@ -73,6 +91,9 @@ python3 tests/verify_kafka_textbook.py
 ```
 
 브라우저 회귀는 `tests/browser/`에서 별도로 실행한다. 사용법과 임시 의존성은 각 파일 머리말을 따른다.
+최적화 전후 전체 출력은 `python3 tests/site_optimization_parity.py BASELINE_SITE _site`로 비교한다.
+Home 이미지와 Review 동작 비교는 Python Playwright와 Chromium을 준비한 뒤
+`python3 tests/site_optimization_browser.py BASELINE_SITE _site EVIDENCE_DIR`로 실행한다.
 삭제·비공개 전환은 깨끗한 destination에 일반 Docker Jekyll 빌드로 확인한다(`--safe` 금지).
 구조 변경은 이동 전후 소스 전체 바이트, 공개 URL 목록, HTML·검색·그래프·사이트맵,
 스크립트·스타일 의존성 및 생성 CLI의 JSON/stdout을 대조한다. feed의 확인된 빌드 시각만 정규화한다.
