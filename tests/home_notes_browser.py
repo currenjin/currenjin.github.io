@@ -49,7 +49,9 @@ with sync_playwright() as p:
                     panel.wait_for(state='visible')
                     box = panel.bounding_box()
                     col = page.locator('.personal-intro').bounding_box()
-                    assert box['x'] + box['width'] <= col['x'] - 10
+                    # The approved cursor-collinear viewer moves instead of staying in the gutter.
+                    assert box['x'] >= 0 and box['x'] + box['width'] <= width
+                    assert box['y'] >= 0 and box['y'] + box['height'] <= height
                     assert page.locator('.home-note-leader').is_visible()
                     assert page.locator('.home-note-leader path').get_attribute('d')
                     assert page.locator('.personal-intro').bounding_box() == initial

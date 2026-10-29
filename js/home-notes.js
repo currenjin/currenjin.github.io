@@ -65,59 +65,115 @@
       restore = false
     }
   }
-  // Range rectangles include descenders. Route beneath the complete rendered
-  // line, not through the pointer's glyph; the vertical leg stays in the gutter.
-  function origin() {
-    const paragraph = active.closest('p')
-    const box = paragraph.getBoundingClientRect()
-    const fragment = [...active.getClientRects()].reduce((a, b) => a.left < b.left ? a : b)
-    const x = cursor && cursor.paragraph === paragraph ? box.left + box.width * cursor.x : fragment.left
-    const y = cursor && cursor.paragraph === paragraph ? box.top + box.height * cursor.y : (fragment.top + fragment.bottom) / 2
-    const walker = document.createTreeWalker(paragraph, NodeFilter.SHOW_TEXT)
-    const rects = []
-    let node
-    while ((node = walker.nextNode())) {
-      if (!node.textContent.trim()) continue
-      const range = document.createRange()
-      range.selectNodeContents(node)
-      rects.push(...[...range.getClientRects()].filter(rect => rect.width && rect.height))
-    }
-    if (!rects.length) return { x:fragment.left, y:fragment.bottom + 2 }
-    const nearest = rects.reduce((a, b) => Math.abs((a.top + a.bottom) / 2 - y) < Math.abs((b.top + b.bottom) / 2 - y) ? a : b)
-    const row = rects.filter(rect => rect.top < nearest.bottom && rect.bottom > nearest.top)
-    return {
-      x:Math.max(box.left, Math.min(x, box.right)),
-      y:Math.max(...row.map(rect => rect.bottom)) + 2
-    }
+  let previousChoice = null
+  // A candidate is S -> actual client cursor -> E, with E on an incoming panel
+  // edge. Never clamp E independently: that would silently break collinearity.
+  // Solve the allowed distance beyond the cursor against viewport constraints,
+  // then prefer a panel disjoint from the active paragraph. Other prose can be
+  // crossed by a straight ray; a quiet stroke is preferable to a disguised bend.
+  function fit(interval, base, rate, min, max) {
+    if (Math.abs(rate) < 1e-7) return base >= min && base <= max ? interval : null
+    const a = (min - base) / rate
+    const b = (max - base) / rate
+    const result = [Math.max(interval[0], Math.min(a, b)), Math.min(interval[1], Math.max(a, b))]
+    return result[0] <= result[1] ? result : null
+  }
+  function placement(rects, pointer, width, height, paragraph) {
+    const candidates = []
+    const otherReferences = triggers.filter(trigger => trigger !== active).flatMap(trigger => [...trigger.getClientRects()])
+    rects.forEach((rect, fragment) => {
+      // Every source lies on a real fragment edge, including wrapped annotations.
+      const sources = [[rect.left, rect.top], [rect.right, rect.top],
+        [rect.left, rect.bottom], [rect.right, rect.bottom],
+        [rect.left, (rect.top + rect.bottom) / 2], [rect.right, (rect.top + rect.bottom) / 2],
+        [(rect.left + rect.right) / 2, rect.top], [(rect.left + rect.right) / 2, rect.bottom]]
+      sources.forEach(([x, y], source) => {
+        const distance = Math.hypot(pointer.x - x, pointer.y - y)
+        if (distance < 1) return
+        const ux = (pointer.x - x) / distance
+        const uy = (pointer.y - y) / distance
+        for (const axis of ['x', 'y']) {
+          if (Math.abs(axis === 'x' ? ux : uy) < 1e-7) continue
+          for (const fraction of [0, .25, .5, .75, 1]) {
+            const ox = axis === 'x' ? (ux > 0 ? 0 : -width) : -width * fraction
+            const oy = axis === 'y' ? (uy > 0 ? 0 : -height) : -height * fraction
+            const bx = pointer.x + ox
+            const by = pointer.y + oy
+            let interval = fit([24, Math.hypot(innerWidth, innerHeight)], bx, ux, 12, innerWidth - 12 - width)
+            if (interval) interval = fit(interval, by, uy, 12, innerHeight - 12 - height)
+            if (!interval) continue
+            let clear = []
+            for (const margin of [8, 0]) {
+              clear = [
+                fit(interval, bx, ux, -Infinity, paragraph.left - width - margin),
+                fit(interval, bx, ux, paragraph.right + margin, Infinity),
+                fit(interval, by, uy, -Infinity, paragraph.top - height - margin),
+                fit(interval, by, uy, paragraph.bottom + margin, Infinity)
+              ].filter(Boolean)
+              if (clear.length) break
+            }
+            const gap = clear.length ? Math.min(...clear.map(item => item[0])) : interval[0]
+            const left = bx + ux * gap
+            const top = by + uy * gap
+            const overlap = Math.max(0, Math.min(left + width, paragraph.right) - Math.max(left, paragraph.left)) *
+              Math.max(0, Math.min(top + height, paragraph.bottom) - Math.max(top, paragraph.top))
+            const referenceOverlap = otherReferences.reduce((sum, rect) => sum +
+              Math.max(0, Math.min(left + width, rect.right) - Math.max(left, rect.left)) *
+              Math.max(0, Math.min(top + height, rect.bottom) - Math.max(top, rect.top)), 0)
+            const key = `${fragment}:${source}:${axis}:${axis === 'x' ? Math.sign(ux) : Math.sign(uy)}:${fraction}`
+            const travel = previousChoice ? Math.hypot(left - previousChoice.left, top - previousChoice.top) : 0
+            candidates.push({ key, left, top, start:{ x, y },
+              end:{ x:pointer.x + ux * gap, y:pointer.y + uy * gap },
+              score:overlap * 20 + referenceOverlap * 100 + gap + 2000 / distance + travel * 2 +
+                64 * (1 - Math.abs(axis === 'x' ? ux : uy)), overlap, referenceOverlap })
+          }
+        }
+      })
+    })
+    candidates.sort((a, b) => a.score - b.score)
+    const best = candidates[0]
+    // Keep a viable branch through tiny movements instead of corner-flipping.
+    const previous = candidates.find(item => item.key === previousChoice?.key)
+    const chosen = previous && best && previous.score <= best.score + 48 &&
+      (previous.referenceOverlap < 1 || best.referenceOverlap >= 1) &&
+      (previous.overlap < 1 || best.overlap >= 1) ? previous : best
+    previousChoice = chosen || null
+    return chosen
   }
   function place() {
     if (!active) return
     const panel = panelFor(active)
     if (narrow.matches) { svg.style.display = 'none'; return }
-    const art = document.querySelector('.cosmic-masthead').getBoundingClientRect()
-    const column = intro.getBoundingClientRect()
-    panel.style.width = `${Math.min(300, art.width)}px`
-    panel.style.left = `${art.right - panel.offsetWidth}px`
-    const wordmark = document.querySelector('.cosmic-type').getBoundingClientRect()
-    const top = Math.max(16, Math.min(wordmark.bottom + 8, innerHeight - 160))
-    const ledgerTop = document.querySelector('.ledger-head').getBoundingClientRect().top
-    const bottom = Math.min(innerHeight - 16, ledgerTop > top + 120 ? ledgerTop - 12 : innerHeight - 16)
-    panel.style.maxHeight = `${bottom - top}px`
-    panel.style.top = `${top}px`
-    const target = panel.getBoundingClientRect()
-    const fragment = [...active.getClientRects()].reduce((a, b) => a.left < b.left ? a : b)
-    const start = { x:fragment.left, y:fragment.bottom + 2 }
-    const gutter = column.left - 14
-    const end = cursor?.paragraph === active.closest('p') ? origin() : {
-      x:target.right, y:Math.max(target.top + 18, Math.min(start.y, target.bottom - 18))
+    const paragraph = active.closest('p').getBoundingClientRect()
+    panel.style.width = '300px'
+    const upperBand = paragraph.top - 20
+    panel.style.maxHeight = `${Math.min(420, innerHeight - 24, upperBand >= 112 ? upperBand : 420)}px`
+    const rects = [...active.getClientRects()].filter(rect => rect.width && rect.height)
+    const fragment = rects[0]
+    // Keyboard/hash activation has no pointer obligation and uses a readable
+    // leftward source ray. Pinning retains an already-open pointer placement.
+    const pointer = cursor || { x:paragraph.left - 28, y:(fragment.top + fragment.bottom) / 2 }
+    const chosen = placement(rects, pointer, panel.offsetWidth, panel.offsetHeight, paragraph)
+    if (!chosen) {
+      // At extreme rays a panel cannot fit beyond the actual pointer with
+      // 24px clearance. Keep it usable, mark the fallback, and hide the line.
+      panel.dataset.placement = 'edge-fallback'
+      panel.style.left = `${Math.max(12, Math.min(paragraph.left - panel.offsetWidth - 16, innerWidth - panel.offsetWidth - 12))}px`
+      panel.style.top = `${Math.max(12, Math.min(fragment.bottom + 16, innerHeight - panel.offsetHeight - 12))}px`
+      svg.style.display = 'none'
+      return
     }
-    path.setAttribute('d', `M ${start.x} ${start.y} H ${gutter} V ${end.y} H ${end.x}`)
-    svg.style.display = start.y < 0 || start.y > innerHeight ? 'none' : ''
+    panel.dataset.placement = chosen.overlap < 1 ? 'collinear' : 'collinear-overlap'
+    panel.style.left = `${chosen.left}px`
+    panel.style.top = `${chosen.top}px`
+    path.setAttribute('d', `M ${chosen.start.x} ${chosen.start.y} L ${chosen.end.x} ${chosen.end.y}`)
+    svg.style.display = chosen.start.y < 0 || chosen.start.y > innerHeight ? 'none' : ''
   }
   function open(trigger, pin = false) {
     cancelSwitch()
-    if (active !== trigger || pin) cursor = !pin && hover?.paragraph === trigger.closest('p') ? hover : null
     if (active !== trigger) {
+      cursor = !pin && hover?.paragraph === trigger.closest('p') ? hover : null
+      previousChoice = null
       panels.forEach(panel => { panel.hidden = panel !== panelFor(trigger) })
       triggers.forEach(item => item.setAttribute('aria-expanded', String(item === trigger)))
       active = trigger
@@ -142,8 +198,7 @@
     const paragraph = event.target.closest('p')
     const candidates = paragraph ? [...paragraph.querySelectorAll('[data-home-note]')] : []
     if (!candidates.length) { cancelSwitch(); return }
-    const bounds = paragraph.getBoundingClientRect()
-    hover = { paragraph, x:(event.clientX - bounds.left) / bounds.width, y:(event.clientY - bounds.top) / bounds.height }
+    hover = { paragraph, x:event.clientX, y:event.clientY }
     const nearest = candidates.reduce((best, item) => {
       const score = Math.min(...[...item.getClientRects()].map(rect => distance(rect, event.clientX, event.clientY)))
       return !best || score < best.score ? { item, score } : best
