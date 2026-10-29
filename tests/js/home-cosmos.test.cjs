@@ -18,9 +18,9 @@ test('Home contains the exact approved paragraphs with optional inline annotatio
   assert.doesNotMatch(home, /구조 살펴보기|신앙|이웃을 돕/)
 })
 
-test('Home separates its opening and music sentences with line breaks and no extra emphasis', () => {
+test('Home retains its approved opening and music sentence line breaks', () => {
   const intro = read('index.html').match(/<section class="personal-intro"[\s\S]*?<\/section>/)[0]
-  const first = intro.match(/<p>([\s\S]*?)<\/p>/)[1]
+  const first = intro.match(/<p>([\s\S]*?)<\/p>/)[1].replace(/<span class="intro-word-start">([^<]*)<\/span>/g, '$1')
   assert.ok(first.startsWith('머릿속에서 일어나는 일을 이해하려면 깊이 생각해야 한다.<br> 나는 그 과정을 좋아한다.'))
   assert.ok(first.includes('만들어내는 일도 즐긴다.<br> 음악과 같은 여러 영감을 주는 창작물에서는'))
   assert.equal((intro.match(/<br\s*\/?\s*>/g) || []).length, 2)
@@ -51,7 +51,7 @@ test('approved artwork-right layout retains wordmark and first-frame readiness',
   assert.doesNotMatch(home, /cosmic-fallback/)
   assert.match(css, /\.cosmic-canvas\s*\{[^}]*visibility:hidden/)
   assert.match(css, /\[data-cosmic-ready="true"\] \.cosmic-canvas \{visibility:visible\}/)
-  assert.match(read('_includes/head.html'), /home-cosmos\.css\?v=20261029-intro-weight-1/)
+  assert.match(read('_includes/head.html'), /home-cosmos\.css\?v=20261029-bionic-1/)
   assert.match(read('js/home-cosmos.js'), /renderer\.render\(scene,camera\);state\.frames\+\+;[^}]*hero\.dataset\.cosmicReady='true'/)
   assert.match(home, /<canvas[^>]*role="button"[^>]*tabindex="0"/)
   assert.match(home, /<h1 class="cosmic-type">currenjin<\/h1>/)
@@ -65,11 +65,24 @@ test('cosmic module has no deferred explanatory subsystem and handles lifecycle'
   assert.doesNotMatch(source, /preserveDrawingBuffer:true/)
 })
 
-test('approved Home introduction uses weight 600 only on its three direct paragraphs', () => {
+test('approved Home introduction uses weight 700 on word starts and 400 elsewhere', () => {
   const css = read('css/home-cosmos.css')
-  assert.match(css, /\.personal-intro\s*>\s*p\s*\{[^}]*font-weight:\s*600\s*[;}]/)
+  assert.match(css, /\.personal-intro\s*>\s*p\s*\{[^}]*font-weight:\s*400\s*[;}]/)
+  assert.match(css, /\.personal-intro\s*>\s*p\s+\.intro-word-start\s*\{[^}]*font-weight:\s*700\s*[;}]/)
   assert.match(css, /\.personal-intro\s*\{[^}]*font:400 23px\/1\.95 var\(--sans\)/)
-  assert.match(read('_includes/head.html'), /home-cosmos\.css\?v=20261029-intro-weight-1/)
+  assert.match(read('_includes/head.html'), /home-cosmos\.css\?v=20261029-bionic-1/)
+})
+
+test('word-start emphasis matches the approved preview and is limited to the introduction', () => {
+  const home = read('index.html')
+  const intro = home.match(/<section class="personal-intro"[\s\S]*?<\/section>/)[0]
+  const actual = [...intro.matchAll(/<span class="intro-word-start">([^<]*)<\/span>/g)].map(match => match[1])
+  const expected = paragraphs.flatMap(p => [...p.matchAll(/[\p{L}\p{N}]+/gu)].map(match => {
+    const chars = Array.from(match[0])
+    return chars.slice(0, Math.ceil(chars.length / 2)).join('')
+  }))
+  assert.deepEqual(actual, expected)
+  assert.doesNotMatch(home.replace(intro, ''), /intro-word-start/)
 })
 
 test('blackhole favicon replaces old identity and has raster and manifest fallbacks', () => {

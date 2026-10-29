@@ -6,7 +6,7 @@ const root = path.join(__dirname, '../..')
 const read = name => fs.existsSync(path.join(root, name)) ? fs.readFileSync(path.join(root, name), 'utf8') : ''
 
 test('two Home notes retain their approved payloads without the withdrawn hackathon note', () => {
-  const home = read('index.html')
+  const home = read('index.html').replace(/<span class="intro-word-start">([^<]*)<\/span>/g, '$1')
   for (const [id, phrase] of [['song', '가사'], ['cosmos', '구절']]) {
     assert.ok(home.includes(`href="#home-note-${id}" data-home-note="${id}">${phrase}</a>`))
     assert.ok(home.includes(`id="home-note-${id}"`))
