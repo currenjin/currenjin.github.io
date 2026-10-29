@@ -56,8 +56,7 @@
 .home-inspiration a:hover {color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .home-inspiration a:focus-visible {outline:1px solid var(--muted);outline-offset:4px}
 @media(min-width:1001px) {
-  main.home {max-width:calc(1320px + 52px);margin-inline:auto}
-  .home-opening {gap:64px}
+  .home-opening {max-width:1320px;margin-inline:auto;gap:64px}
   .cosmic-masthead {grid-column:2}
   .personal-intro {grid-column:1}
 }

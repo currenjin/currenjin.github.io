@@ -38,7 +38,7 @@ try:
                 assert abs(s['hero']['width']-min(w-52,1320))<1,s
                 assert abs(s['hero']['left']+s['hero']['right']-w)<1,s
                 assert abs(s['art']['left']-s['intro']['right']-64)<1,s
-                assert abs(s['intro']['left']-s['ledger']['left'])<1,s
+                assert s['ledger']['left']==26, {'message':'catalogue must retain its original left edge',**s}
                 assert s['intro']['width']<=640 and s['intro']['top']==s['art']['top']==140,s
             else:
                 assert abs(s['intro']['top']-s['art']['bottom']-32)<1,s
