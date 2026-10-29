@@ -85,9 +85,11 @@ try:
                         page.wait_for_timeout(230)
                         assert panel.is_visible()
                         page.evaluate('window.scrollBy({top:20,behavior:"instant"})')
-                        page.wait_for_timeout(80)
-                        assert not page.evaluate(CHECK)['hits']
+                        page.evaluate('() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))')
+                        scrolled=page.evaluate(CHECK)
+                        assert not scrolled['hits'],scrolled
                         page.evaluate('window.scrollTo({top:0,behavior:"instant"})')
+                        page.evaluate('() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))')
                     else:
                         trigger.tap()
                         panel.wait_for(state='visible')
