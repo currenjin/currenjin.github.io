@@ -1,0 +1,2 @@
+# Preserve vendored GLSL template-string whitespace in this generated asset.
+js/home-cosmos.bundle.js -whitespace linguist-generated=true

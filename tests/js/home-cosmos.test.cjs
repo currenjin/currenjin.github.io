@@ -29,7 +29,7 @@ test('Home retains the canonical dynamic archive and its navigation controls', (
 
 test('cosmic assets load only on the root Home, not other home-layout pages', () => {
   const head = read('_includes/head.html')
-  assert.match(head, /{% if page.url == '\/' %}[\s\S]*?\/css\/home-cosmos.css[\s\S]*?type="module"[\s\S]*?\/js\/home-cosmos.js[\s\S]*?{% endif %}/)
+  assert.match(head, /{% if page.url == '\/' %}[\s\S]*?\/css\/home-cosmos.css[\s\S]*?type="module"[\s\S]*?\/js\/home-cosmos.bundle.js[\s\S]*?{% endif %}/)
 })
 
 test('approved artwork-right layout retains wordmark and first-frame readiness', () => {

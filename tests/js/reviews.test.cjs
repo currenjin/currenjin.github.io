@@ -92,8 +92,104 @@ function fixture(rows = records) {
   page.all={'[data-filter-item]':cards,'[data-review-filter-group]':[kind,status]};
   const media={matches:false,addEventListener(k,fn){this.change=fn;}}, events={};
   const env={document:{createElement:tag=>Object.assign(element(),{tagName:tag.toUpperCase()}),querySelector:()=>head},innerWidth:1440,matchMedia:()=>media,addEventListener(k,fn){events[k]=fn;},requestAnimationFrame:fn=>fn(), getComputedStyle:()=>({})};
-  return {page,stage,copy,artwork,dots,prev,next,count,empty,search,cards,music,finished,media,events,env};
+  return {page,stage,inner,head,strip,copy,artwork,dots,prev,next,count,empty,search,cards,music,finished,media,events,env};
 }
+
+function measuredFixture() {
+  const f = fixture(), operations = [], observers = [];
+  f.geometry = {top: 140, head: 54, strip: 54, stage: 880, inner: 560};
+  for (const name of ['head', 'strip', 'stage', 'inner']) {
+    f[name].getBoundingClientRect = () => {
+      operations.push(`read:${name}:rect`);
+      return {top: f.geometry.top, height: f.geometry[name]};
+    };
+    Object.defineProperty(f[name], 'offsetHeight', {get() {
+      operations.push(`read:${name}:height`); return f.geometry[name];
+    }});
+  }
+  const trackStyle = node => {
+    node.style = new Proxy(node.style, {set(target, key, value) {
+      operations.push(`write:${key}`); target[key] = value; return true;
+    }});
+    return node;
+  };
+  trackStyle(f.page);
+  const create = f.env.document.createElement;
+  f.env.document.createElement = tag => trackStyle(create(tag));
+  f.env.ResizeObserver = class {
+    constructor(callback) { this.callback = callback; this.nodes = []; observers.push(this); }
+    observe(node) { this.nodes.push(node); }
+  };
+  f.operations = operations;
+  f.resize = node => observers.filter(o => o.nodes.includes(node)).forEach(o => o.callback([{target: node}]));
+  f.assertPose = (progress, mobile = false, reduced = false) => {
+    for (const cover of f.artwork.children) {
+      const expected = gallery().coverTransform(Number(cover.dataset.offset), progress, mobile, reduced);
+      assert.equal(cover.style.transform, expected.transform);
+      assert.equal(cover.style.opacity, String(expected.opacity));
+    }
+  };
+  return f;
+}
+
+test('mounted offstage scrolls reuse dimensions and never repaint an unchanged clamped pose', t => {
+  const f = measuredFixture(); gallery().mount(f.page, f.env);
+  f.geometry.top = -2000; f.events.scroll(); f.assertPose(1);
+  f.operations.length = 0;
+  for (let i = 0; i < 60; i++) { f.geometry.top -= 10; f.events.scroll(); }
+  const reads = f.operations.filter(op => op.startsWith('read:')).length;
+  const cssWrites = f.operations.filter(op => op.startsWith('write:--')).length;
+  const poseWrites = f.operations.filter(op => /write:(transform|opacity)/.test(op)).length;
+  t.diagnostic(JSON.stringify({scrolls: 60, reads, cssWrites, poseWrites}));
+  assert.equal(reads, 60, 'only stage position is read on ordinary scroll');
+  assert.equal(cssWrites, 0, 'cached dimensions do not rewrite CSS variables');
+  assert.equal(poseWrites, 0, 'offstage end pose is already painted');
+  f.geometry.top = -52; f.events.scroll(); f.assertPose(.5);
+  f.geometry.top = 2000; f.events.scroll(); f.assertPose(0);
+  f.operations.length = 0;
+  for (let i = 0; i < 60; i++) { f.geometry.top += 10; f.events.scroll(); }
+  assert.equal(f.operations.filter(op => op.startsWith('write:')).length, 0);
+  f.geometry.top = 28; f.events.scroll(); f.assertPose(.25);
+});
+
+test('mounted resize measurements precede writes and invalidate only changed dimensions and poses', () => {
+  const f = measuredFixture(); gallery().mount(f.page, f.env);
+  f.geometry.top = -52; f.events.scroll(); f.assertPose(.5);
+  f.operations.length = 0;
+  f.geometry.head = 70; f.geometry.strip = 62; f.geometry.inner = 600;
+  f.resize(f.head);
+  f.assertPose((70 + 62 + 52) / (880 - 600));
+  assert.equal(f.page.style['--review-head-height'], '70px');
+  assert.equal(f.page.style['--review-filter-height'], '62px');
+  const firstWrite = f.operations.findIndex(op => op.startsWith('write:'));
+  assert.ok(firstWrite > 0);
+  assert.ok(f.operations.slice(firstWrite).every(op => !op.startsWith('read:')), 'all frame reads precede writes');
+  f.operations.length = 0;
+  f.resize(f.inner); // Theme/font observer notification with unchanged geometry.
+  assert.equal(f.operations.filter(op => op.startsWith('write:')).length, 0);
+  f.geometry.stage = 1000; f.resize(f.stage);
+  f.assertPose(184 / 400);
+  f.env.innerWidth = 600; f.events.resize(); f.assertPose(184 / 400, true);
+  f.media.matches = true; f.media.change(); f.assertPose(0, true, true);
+  f.operations.length = 0;
+  f.geometry.top = -100; f.events.scroll();
+  assert.equal(f.operations.filter(op => op.startsWith('write:')).length, 0);
+  f.media.matches = false; f.media.change(); f.assertPose(232 / 400, true);
+});
+
+test('mounted filters and selection repaint new covers at the current pose without replacing focused selectors', () => {
+  const f = measuredFixture(); gallery().mount(f.page, f.env);
+  f.geometry.top = -2000; f.events.scroll();
+  const button = f.dots.children[3]; button.emit('click');
+  assert.equal(f.dots.children[3], button); f.assertPose(1);
+  f.search.value = '없는 제목'; f.search.emit('input');
+  assert.equal(f.stage.hidden, true);
+  f.operations.length = 0; f.events.scroll();
+  assert.equal(f.operations.length, 0, 'hidden empty stage needs no geometry or style work');
+  f.geometry.top = -52; f.geometry.inner = 620;
+  f.search.value = ''; f.search.emit('input');
+  assert.equal(f.stage.hidden, false); f.assertPose(160 / 260);
+});
 
 test('real mount wires filtering, counts, selection and accessible pressed states', () => {
   const f=fixture(); gallery().mount(f.page,f.env);

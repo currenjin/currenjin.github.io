@@ -6,10 +6,13 @@
   "dependencies": {
     "yamljs": "^0.3.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  },
   "scripts": {
     "test": "node --test tests/js/*.test.cjs",
-    "generate:wiki": "node scripts/generation/generate-data.js"
+    "generate:wiki": "node scripts/generation/generate-data.js",
+    "build:assets": "node scripts/generation/build-home.js"
   },
   "repository": {
     "type": "git",

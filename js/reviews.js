@@ -64,6 +64,8 @@
     const strip = find('[data-review-strip]'), head = doc.querySelector('.site-head');
     const media = env.matchMedia('(prefers-reduced-motion: reduce)');
     let covers = [], selectors = [], scheduled = false, sceneShown = false, animations = [];
+    let dimensionsDirty = true, headHeight = 0, stripHeight = 0, distance = 0;
+    let writtenHeadHeight, writtenStripHeight, lastPose;
     const make = (tag, className, content) => {
       const node = doc.createElement(tag);
       node.className = className;
@@ -85,20 +87,40 @@
     function paint() {
       scheduled = false;
       if (media.matches) { animations.forEach(animation => animation.cancel()); animations = []; }
-      const headHeight = head?.getBoundingClientRect().height || 0;
-      const stripHeight = strip.getBoundingClientRect().height;
-      page.style.setProperty('--review-head-height', `${headHeight}px`);
-      page.style.setProperty('--review-filter-height', `${stripHeight}px`);
-      const distance = stage.offsetHeight - inner.offsetHeight;
-      const progress = distance > 0 ? (headHeight + stripHeight - stage.getBoundingClientRect().top) / distance : 0;
+      if (!covers.length && !dimensionsDirty) return;
+      if (dimensionsDirty) {
+        headHeight = head?.getBoundingClientRect().height || 0;
+        stripHeight = strip.getBoundingClientRect().height;
+        distance = stage.offsetHeight - inner.offsetHeight;
+        dimensionsDirty = false;
+      }
+      const progress = covers.length && distance > 0
+        ? Math.max(0, Math.min(1, (headHeight + stripHeight - stage.getBoundingClientRect().top) / distance)) : 0;
+      const mobile = env.innerWidth <= 760;
+      // Finish geometry reads before changing styles, including sticky offsets.
+      if (headHeight !== writtenHeadHeight) {
+        page.style.setProperty('--review-head-height', `${headHeight}px`);
+        writtenHeadHeight = headHeight;
+      }
+      if (stripHeight !== writtenStripHeight) {
+        page.style.setProperty('--review-filter-height', `${stripHeight}px`);
+        writtenStripHeight = stripHeight;
+      }
+      const pose = `${media.matches ? 0 : progress}:${mobile}`;
+      if (pose === lastPose) return;
+      lastPose = pose;
       covers.forEach(cover => {
-        const result = coverTransform(Number(cover.dataset.offset), progress, env.innerWidth <= 760, media.matches);
-        cover.style.transform = result.transform;
-        cover.style.opacity = String(result.opacity);
+        const result = coverTransform(Number(cover.dataset.offset), progress, mobile, media.matches);
+        if (cover.style.transform !== result.transform) cover.style.transform = result.transform;
+        if (cover.style.opacity !== String(result.opacity)) cover.style.opacity = String(result.opacity);
       });
     }
     function schedule() {
       if (!scheduled) { scheduled = true; env.requestAnimationFrame(paint); }
+    }
+    function measure() {
+      dimensionsDirty = true;
+      schedule();
     }
     function showScene() {
       const record = state.current;
@@ -132,6 +154,8 @@
       });
       selectors.forEach((button, index) => button.setAttribute('aria-pressed', String(index === state.index)));
       prev.disabled = next.disabled = state.featured.length < 2;
+      dimensionsDirty = true;
+      lastPose = undefined;
       paint();
       if (transition && !media.matches && copy.animate && artwork.animate) {
         animations = [
@@ -168,13 +192,13 @@
     prev.addEventListener('click', () => { state.move(-1); showScene(); });
     next.addEventListener('click', () => { state.move(1); showScene(); });
     env.addEventListener('scroll', schedule, {passive: true});
-    env.addEventListener('resize', schedule);
+    env.addEventListener('resize', measure);
     if (media.addEventListener) media.addEventListener('change', paint);
     else if (media.addListener) media.addListener(paint);
     if (env.ResizeObserver) {
-      const observer = new env.ResizeObserver(schedule);
+      const observer = new env.ResizeObserver(measure);
       if (head) observer.observe(head);
-      observer.observe(strip); observer.observe(inner);
+      observer.observe(strip); observer.observe(inner); observer.observe(stage);
     }
     render();
     page.classList.add('review-gallery-ready');
