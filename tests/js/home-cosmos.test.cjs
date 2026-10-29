@@ -18,6 +18,14 @@ test('Home contains the exact approved paragraphs with optional inline annotatio
   assert.doesNotMatch(home, /구조 살펴보기|신앙|이웃을 돕/)
 })
 
+test('Home separates its opening sentence with one line break and no extra emphasis', () => {
+  const intro = read('index.html').match(/<section class="personal-intro"[\s\S]*?<\/section>/)[0]
+  const first = intro.match(/<p>([\s\S]*?)<\/p>/)[1]
+  assert.ok(first.startsWith('머릿속에서 일어나는 일을 이해하려면 깊이 생각해야 한다.<br> 나는 그 과정을 좋아한다.'))
+  assert.equal((intro.match(/<br\s*\/?\s*>/g) || []).length, 1)
+  assert.doesNotMatch(intro, /<strong\b|<b\b|font-weight/)
+})
+
 test('Home retains the canonical dynamic archive and its navigation controls', () => {
   const home = read('index.html')
   for (const collection of ['site.activity_log', 'public_wiki', 'site.reviews', 'site.archive_books', 'site.archive_articles']) {
