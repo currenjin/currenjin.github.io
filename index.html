@@ -11,9 +11,18 @@ title: ""
       <h1 class="cosmic-type">currenjin</h1>
     </section>
     <section class="personal-intro" aria-label="소개">
-      <p>머릿속의 의도를 실제로 구현하려면 수많은 선택을 해야 합니다. 공통파트에서 일하는 소프트웨어 엔지니어인 저는, 그 선택에 푹 빠져 만들고 싶었던 모습을 구현하는 순간을 좋아합니다. 음악에서도 묵직한 드럼과 베이스를 좋아하지만, <a href="#home-note-song" data-home-note="song">생각할 거리를 남기는 가사</a>에 라임과 펀치라인까지 갖춰졌을 때, 무엇을 말하는지와 어떻게 표현하는지를 함께 즐깁니다.</p>
-      <p>하지만 무엇을 만들고 싶은지와 무엇을 위해 살아가는지는 서로 다른 질문입니다. 의도를 구현하는 데 몰입하다가도, 문득 <a href="#home-note-socrates" data-home-note="socrates">나는 어떤 존재인지, 왜 살아가는지</a> 묻게 됩니다. 아직 답을 찾지는 못했고, 질문이 떠오르면 한동안 그 생각을 합니다.</p>
-      <p>답을 찾기 전의 생각에도 남겨둘 이유는 있습니다. 다시 찾아볼 지식은 위키에, 제가 생각하고 느낀 흔적은 포스트와 리뷰에 남기며, 쓰는 동안 생각을 정리하거나 무언가를 깨닫기도 합니다. 누군가에게는 이 기록이 새로운 생각의 계기가 되고, 미래의 저에게는 과거의 제가 무엇을 묻고 있었는지 보여주면 좋겠습니다.</p>
+      <p>머릿속에서 일어나는 일을 이해하려면 깊이 생각해야 한다. 나는 그 과정을 좋아한다. 공통파트에서 소프트웨어 엔지니어로 일하며, 광활한 공상에 푹 빠져 무언가를 만들어내는 일도 즐긴다. 음악과 같은 여러 영감을 주는 창작물에서는 생각할 거리를 남기는 <a href="#home-note-song" data-home-note="song">가사</a>, <a href="#home-note-cosmos" data-home-note="cosmos">구절</a>, 장면 그리고 펀치라인에 매료되어 한 동안 빠져나오지 못하기도 한다.</p>
+      <p>그렇게 좋아하고 오래 생각한 것들을 나중에도 들여다보고 싶어 글로 남긴다. 이 공간에서는 내가 배우고 생각하고 느낀 흔적을 모으며, 쓰는 동안 막연했던 생각을 조금씩 정리한다.</p>
+      <p>내가 가사에서 생각할 거리를 얻듯, 이곳의 기록도 누군가에게 생각할 거리가 되면 좋겠다.</p>
+      <div class="home-inspiration">
+        <span>Inspired by</span>
+        <div class="home-inspiration-links">
+          <a href="https://www.phi.design/">Phi Institute of Design</a>
+          <a href="https://www.apple.com/">Apple</a>
+          <a href="https://pg-lang.com/">pgLang</a>
+          <a href="https://johngrib.github.io/">John Grib</a>
+        </div>
+      </div>
     </section>
   </div>
   {% assign public_wiki = site.wiki | where_exp: 'w', 'w.public != false' %}
@@ -44,10 +53,10 @@ title: ""
       <h2>Kendrick Lamar / How Much a Dollar Cost</h2>
       <blockquote><a href="https://music.apple.com/us/song/how-much-a-dollar-cost-feat-james-fauntleroy-ronald-isley/1440871891">How much a dollar really cost?</a></blockquote>
     </section>
-    <section id="home-note-socrates" class="home-note" aria-label="나는 어떤 존재인지, 왜 살아가는지">
-      <h2>소크라테스 / 『소크라테스의 변명』</h2>
-      <blockquote>성찰하지 않는 삶은 살 가치가 없다.</blockquote>
-      <p><a href="https://classics.mit.edu/Plato/apology.html">『소크라테스의 변명』 읽기</a></p>
+    <section id="home-note-cosmos" class="home-note" aria-label="코스모스의 첫 문장">
+      <h2>칼 세이건 / 『코스모스』</h2>
+      <blockquote>코스모스는 과거에도 있었고 현재에도 있으며 미래에도 있을 그 모든 것이다.</blockquote>
+      <p><a href="{{ '/reviews/코스모스/' | relative_url }}">『코스모스』 리뷰 읽기</a></p>
     </section>
   </aside>
 </main>

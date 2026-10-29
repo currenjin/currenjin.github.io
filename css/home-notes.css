@@ -20,7 +20,7 @@
 .home-note p a + a {margin-left:16px}
 .home-notes[data-enhanced] {position:absolute;margin:0;width:0;height:0}
 .home-notes[data-enhanced] .home-note {
-  position:fixed;z-index:90;box-sizing:border-box;will-change:transform;
+  position:fixed;z-index:90;box-sizing:border-box;
   width:300px;padding:32px 14px 12px;border:1px solid var(--line-strong);
   background:var(--paper);box-shadow:var(--shadow-sm);
   overflow-y:auto;overscroll-behavior:contain;

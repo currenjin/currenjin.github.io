@@ -28,7 +28,7 @@ with sync_playwright() as p:
             ledger = page.locator('.ledger-head').bounding_box()
             shifts = page.evaluate('noteShifts')
             assert sum(shifts) == 0, shifts
-            for ident in ['song', 'socrates']:
+            for ident in ['song', 'cosmos']:
                 trigger = page.locator(f'[data-home-note="{ident}"]')
                 panel = page.locator(f'#home-note-{ident}')
                 if width > 1000:
@@ -49,7 +49,8 @@ with sync_playwright() as p:
                     panel.wait_for(state='visible')
                     box = panel.bounding_box()
                     col = page.locator('.personal-intro').bounding_box()
-                    # The approved cursor-collinear viewer moves instead of staying in the gutter.
+                    # The approved note stays in the margin, outside the prose.
+                    assert box['x'] + box['width'] <= col['x'] - 20
                     assert box['x'] >= 0 and box['x'] + box['width'] <= width
                     assert box['y'] >= 0 and box['y'] + box['height'] <= height
                     assert page.locator('.home-note-leader').is_visible()
@@ -82,7 +83,7 @@ with sync_playwright() as p:
                 assert not panel.is_visible()
             # Intentional hover still switches between the remaining paragraphs.
             if width > 1000:
-                for ident in ['song', 'socrates', 'song', 'socrates']:
+                for ident in ['song', 'cosmos', 'song', 'cosmos']:
                     trigger = page.locator(f'[data-home-note="{ident}"]')
                     rect = trigger.evaluate('el=>el.getClientRects()[0].toJSON()')
                     page.mouse.move(rect['left'] + 3, rect['top'] + rect['height'] / 2)
@@ -91,14 +92,14 @@ with sync_playwright() as p:
                     assert page.locator('.home-note:visible').count() == 1
                 page.keyboard.press('Escape')
             else:
-                page.locator('[data-home-note="socrates"]').tap()
-                panel = page.locator('#home-note-socrates')
+                page.locator('[data-home-note="cosmos"]').tap()
+                panel = page.locator('#home-note-cosmos')
                 panel.evaluate("el=>{el.style.fontSize='30px';const fixture=document.createElement('p');fixture.textContent='스크롤 검증용 내용. '.repeat(40);el.insertBefore(fixture,el.lastElementChild)}")
                 assert panel.evaluate('el=>el.scrollHeight>el.clientHeight')
                 panel.locator('a').focus()
                 panel.locator('a').scroll_into_view_if_needed()
                 assert panel.locator('a').is_visible()
-                assert page.evaluate('document.activeElement.textContent') == '『소크라테스의 변명』 읽기'
+                assert page.evaluate('document.activeElement.textContent') == '『코스모스』 리뷰 읽기'
                 page.keyboard.press('Escape')
             assert page.evaluate('document.documentElement.scrollWidth-innerWidth') == 0
             # Real keyboard activation enters the note; Tab reaches the source link.
@@ -115,7 +116,7 @@ with sync_playwright() as p:
     page = context.new_page()
     page.goto(args.url)
     assert page.locator('a[data-home-note]').count() == 2
-    for ident in ['song', 'socrates']:
+    for ident in ['song', 'cosmos']:
         page.locator(f'[data-home-note="{ident}"]').click()
         assert page.locator(f'#home-note-{ident}').is_visible()
         assert page.url.endswith(f'#home-note-{ident}')
