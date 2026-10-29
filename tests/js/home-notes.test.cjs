@@ -17,12 +17,11 @@ test('two Home notes retain their approved payloads without the withdrawn hackat
   const song = home.match(/<section id="home-note-song"[\s\S]*?<\/section>/)[0]
   assert.match(song, /Kendrick Lamar \/ How Much a Dollar Cost/)
   const lyric = 'How much a dollar really cost?'
-  const translation = '1달러의 진짜 값은?'
   const url = 'https://music.apple.com/us/song/how-much-a-dollar-cost-feat-james-fauntleroy-ronald-isley/1440871891'
   assert.ok(song.includes(`<blockquote><a href="${url}">${lyric}</a></blockquote>`))
-  assert.ok(song.includes(`<p>${translation}</p>`))
+  assert.doesNotMatch(song, /<p>|1달러의 진짜 값은/)
   assert.equal([...song.matchAll(/<a /g)].length, 1)
-  assert.ok(lyric.split(/\s+/).length + translation.split(/\s+/).length <= 10)
+  assert.ok(lyric.split(/\s+/).length <= 10)
   assert.doesNotMatch(song, /Count Me Out|뮤직비디오|가사 출처|We may not know/ )
   assert.match(home, /소크라테스/ )
   assert.match(home, /<blockquote>성찰하지 않는 삶은 살 가치가 없다.<\/blockquote>/)
