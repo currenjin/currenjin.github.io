@@ -31,8 +31,8 @@ class ActivityLogTest < Minitest::Test
     assert_equal ['completed-event'], prepare([entry] + invalid.map { |extra| entry(extra) }).map { |item| item['id'] }
   end
 
-  def test_dates_are_strict_calendar_days_and_not_future_in_site_timezone
-    invalid = [nil, '', 'invalid', '2026-02-30', '2026-10-21', '2026-1-2', 'October 18, 2026', '2026-10-18T00:00:00Z']
+  def test_dates_are_strict_calendar_days
+    invalid = [nil, '', 'invalid', '2026-02-30', '2026-1-2', 'October 18, 2026', '2026-10-18T00:00:00Z']
     assert_empty prepare(invalid.map { |date| entry('date'=>date) })
     assert_equal ['2026-10-20', '2026-10-18'], prepare([entry('date'=>Date.new(2026,10,18)), entry('id'=>'today', 'date'=>'2026-10-20')]).map { |item| item['date'] }
   end
@@ -43,8 +43,18 @@ class ActivityLogTest < Minitest::Test
     assert_equal dates.sort.reverse, result.map { |item| item['date'] }
     assert_equal %w[day month year month day month year], result.map { |item| item['date_precision'] }
     assert_equal ['26-10-20', '26-10', '2026', '18-07', '18-01-01', '18-01', '2018'], result.map { |item| item['date_label'] }
-    invalid = %w[2027 2026-11 2026-10-21 2026-00 2026-13 2026-1 2026-02-30 0000 0000-01 20180 2018-01-01-01]
+    invalid = %w[2026-00 2026-13 2026-1 2026-02-30 0000 0000-01 20180 2018-01-01-01]
     assert_empty prepare(invalid.map { |date| entry('date'=>date) })
+  end
+
+  def test_future_public_activities_are_visible_at_every_date_precision
+    dates = %w[2027 2026-11 2026-11-14]
+    entries = dates.map.with_index { |date, i| entry('id'=>"planned-#{i}", 'date'=>date, 'result'=>'Planned') }
+    result = prepare(entries + [entry])
+    assert_equal dates.sort.reverse + ['2026-10-18'], result.map { |item| item['date'] }
+    assert_equal ['Planned'] * 3, result.first(3).map { |item| item['result'] }
+    hidden = [{'public'=>false}, {'public'=>'true'}, {'draft'=>true}, {'published'=>false}]
+    assert_empty prepare(hidden.map { |extra| entries.first.merge(extra) })
   end
 
   def test_newest_first_without_mutating_source_or_exposing_extra_fields

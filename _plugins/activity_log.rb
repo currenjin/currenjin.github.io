@@ -18,12 +18,12 @@ module ActivityLog
       parts = day.split('-').map(&:to_i)
       next unless parts.first.positive?
       begin
-        # Lower bounds are used only to reject future/invalid periods, never published.
-        date = Date.new(parts[0], parts[1] || 1, parts[2] || 1)
+        # Validate partial calendar dates without publishing invented month/day values.
+        Date.new(parts[0], parts[1] || 1, parts[2] || 1)
       rescue ArgumentError
         next
       end
-      next if date > site.time.to_date
+
       precision = { 4=>'year', 7=>'month', 10=>'day' }.fetch(day.length)
       item = { 'id'=>row['id'], 'date'=>day, 'date_precision'=>precision,
                'date_label'=>(precision == 'year' ? day : day[2..-1]), 'title'=>row['title'],

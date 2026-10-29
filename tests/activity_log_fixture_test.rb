@@ -24,7 +24,7 @@ Dir.mktmpdir('activity-log-fixture-', cache) do |tmp|
           'title'=>'LOG_FIXTURE_PUBLIC & <title>', 'summary'=>'Confirmed <text> & result.'}
   entries = [good, good.merge('id'=>'fixture-older', 'date'=>'2026-09-01', 'title'=>'LOG_FIXTURE_OLDER', 'project_url'=>'https://github.com/currenjin')]
   [{'public'=>false}, {'public'=>'true'}, {'public'=>nil}, {'draft'=>true}, {'published'=>false},
-   {'date'=>'2099'}, {'date'=>'2026-11'}, {'date'=>'2026-00'}, {'date'=>'2026-13'}, {'date'=>'0000'}, {'date'=>'2099-01-01'}, {'date'=>'2026-02-30'}, {'date'=>'invalid'}, {'date'=>nil}].each_with_index do |extra, i|
+   {'date'=>'2026-00'}, {'date'=>'2026-13'}, {'date'=>'0000'}, {'date'=>'2026-02-30'}, {'date'=>'invalid'}, {'date'=>nil}].each_with_index do |extra, i|
     entries << good.merge('id'=>"secret-#{i}", 'title'=>"LOG_FIXTURE_SECRET_#{i}").merge(extra)
   end
   entries.first['result'] = '<result> & confirmed'
@@ -37,7 +37,10 @@ Dir.mktmpdir('activity-log-fixture-', cache) do |tmp|
   entries << good.merge('id'=>'without-result', 'title'=>'Complete title - Project', 'summary'=>nil, 'result'=>nil)
   entries << good.merge('id'=>'year-only', 'date'=>'2018', 'result'=>'Gold Medal', 'summary'=>nil)
   entries << good.merge('id'=>'month-only', 'date'=>'2018-07', 'result'=>nil, 'summary'=>nil)
-  public_count = 5 + invalid_results.size
+  %w[2027 2026-11 2026-11-14].each_with_index do |date, i|
+    entries << good.merge('id'=>"planned-#{i}", 'date'=>date, 'title'=>"LOG_FIXTURE_PLANNED_#{i}", 'summary'=>nil, 'result'=>'Planned')
+  end
+  public_count = 8 + invalid_results.size
   File.write(File.join(src, '_data/activity_log.yml'), entries.to_yaml)
   config = {'source'=>src, 'destination'=>File.join(tmp, 'site'), 'plugins'=>[], 'quiet'=>true,
             'disable_disk_cache'=>true, 'time'=>Time.new(2026,10,20,0,0,0,'+09:00'), 'timezone'=>'Asia/Seoul',
@@ -56,7 +59,11 @@ Dir.mktmpdir('activity-log-fixture-', cache) do |tmp|
     raise 'Public count mismatch' unless html.scan('data-kind="log"').size == public_count
     raise 'Result not escaped or not adjacent to title' unless html.include?('LOG_FIXTURE_PUBLIC &amp; &lt;title&gt; <span class="activity-result">&lt;result&gt; &amp; confirmed</span><small>')
     raise 'Participant not understated' unless html.include?('<span class="activity-result activity-result--participant">Participant</span>')
-    raise 'Invalid/absent results reserved space' unless html.scan('class="activity-result').size == 3
+    raise 'Invalid/absent results reserved space' unless html.scan('class="activity-result').size == 6
+    %w[0 1 2].each do |i|
+      raise 'Future public activity missing' unless html.include?("LOG_FIXTURE_PLANNED_#{i} <span class=\"activity-result\">Planned</span>")
+    end
+    raise 'Future activity not sorted before completed activity' unless html.index('id="planned-2"') < html.index('id="fixture-good"')
     raise 'Optional summary reserved space' unless html.match?(%r{<span class="entry-title">Complete title - Project</span>})
     raise 'Year-only date became a fabricated day' unless html.match?(%r{id="year-only"[^>]*data-date="2018"[^>]*>\s*<span class="date">2018</span>}m)
     raise 'Month-only date lost its precision' unless html.match?(%r{id="month-only"[^>]*data-date="2018-07"[^>]*>\s*<time class="date" datetime="2018-07">18-07</time>}m)
@@ -73,5 +80,5 @@ Dir.mktmpdir('activity-log-fixture-', cache) do |tmp|
   raise 'Log archive not newest first' unless log.index('id="fixture-good"') < log.index('id="fixture-older"')
   raise 'Log navigation not current' unless log.match?(%r{href="/log/" aria-current="page">log</a>})
   raise 'Activity became graph nodes' if graph.include?('LOG_FIXTURE')
-  puts 'Activity fixture PASS: real Home/log/search expose only valid public entries, 14 excluded; strict source date precision; optional/invalid/escaped results; escaped text, projectless title, optional link, newest-first archive, current navigation, no graph nodes'
+  puts 'Activity fixture PASS: real Home/log/search expose future public activities, 11 excluded; strict source date precision; optional/invalid/escaped results; escaped text, projectless title, optional link, newest-first archive, current navigation, no graph nodes'
 end
