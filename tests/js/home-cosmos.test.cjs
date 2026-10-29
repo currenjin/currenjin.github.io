@@ -42,7 +42,7 @@ test('approved artwork-right layout retains wordmark and first-frame readiness',
   assert.doesNotMatch(home, /cosmic-fallback/)
   assert.match(css, /\.cosmic-canvas\s*\{[^}]*visibility:hidden/)
   assert.match(css, /\[data-cosmic-ready="true"\] \.cosmic-canvas \{visibility:visible\}/)
-  assert.match(read('_includes/head.html'), /home-cosmos\.css\?v=20261029-right-1/)
+  assert.match(read('_includes/head.html'), /home-cosmos\.css\?v=20261029-frame-1/)
   assert.match(read('js/home-cosmos.js'), /renderer\.render\(scene,camera\);state\.frames\+\+;[^}]*hero\.dataset\.cosmicReady='true'/)
   assert.match(home, /<canvas[^>]*role="button"[^>]*tabindex="0"/)
   assert.match(home, /<h1 class="cosmic-type">currenjin<\/h1>/)
