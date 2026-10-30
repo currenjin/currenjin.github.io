@@ -40,10 +40,10 @@ Dir.mktmpdir('activity-log-fixture-', cache) do |tmp|
   %w[2027 2026-11 2026-11-14].each_with_index do |date, i|
     entries << good.merge('id'=>"planned-#{i}", 'date'=>date, 'title'=>"LOG_FIXTURE_PLANNED_#{i}", 'summary'=>nil, 'result'=>'Upcoming')
   end
-  ['Certification', 'Software Engineer', '1st Place'].each_with_index do |result, i|
+  ['Certification', 'Software Engineer', '1st Place', 'CEO & Co-Founder', 'Tech Lead, Freelancer', 'Network Engineer'].each_with_index do |result, i|
     entries << good.merge('id'=>"emphasis-#{i}", 'result'=>result, 'summary'=>nil)
   end
-  public_count = 11 + invalid_results.size
+  public_count = 14 + invalid_results.size
   File.write(File.join(src, '_data/activity_log.yml'), entries.to_yaml)
   config = {'source'=>src, 'destination'=>File.join(tmp, 'site'), 'plugins'=>[], 'quiet'=>true,
             'disable_disk_cache'=>true, 'time'=>Time.new(2026,10,20,0,0,0,'+09:00'), 'timezone'=>'Asia/Seoul',
@@ -62,14 +62,14 @@ Dir.mktmpdir('activity-log-fixture-', cache) do |tmp|
     raise 'Public count mismatch' unless html.scan('data-kind="log"').size == public_count
     raise 'Result not escaped or not adjacent to title' unless html.include?('LOG_FIXTURE_PUBLIC &amp; &lt;title&gt; <span class="activity-result">&lt;result&gt; &amp; confirmed</span><small>')
     raise 'Participant not understated' unless html.include?('<span class="activity-result activity-result--participant">Participant</span>')
-    raise 'Invalid/absent results reserved space' unless html.scan('class="activity-result').size == 9
-    ['Gold Medal', '1st Place'].each do |result|
-      raise 'Confirmed achievement not emphasized' unless html.include?("<span class=\"activity-result activity-result--achievement\">#{result}</span>")
+    raise 'Invalid/absent results reserved space' unless html.scan('class="activity-result').size == 12
+    ['Gold Medal', '1st Place', 'Software Engineer', 'CEO & Co-Founder', 'Tech Lead, Freelancer', 'Network Engineer'].each do |result|
+      raise 'Confirmed achievement or company position not emphasized' unless html.include?("<span class=\"activity-result activity-result--achievement\">#{CGI.escapeHTML(result)}</span>")
     end
-    ['Upcoming', 'Certification', 'Software Engineer'].each do |result|
+    ['Upcoming', 'Certification'].each do |result|
       raise 'Ordinary label incorrectly emphasized' unless html.include?("<span class=\"activity-result\">#{result}</span>")
     end
-    raise 'Unknown result automatically emphasized' unless html.scan('activity-result--achievement').size == 2
+    raise 'Unknown result automatically emphasized' unless html.scan('activity-result--achievement').size == 6
     %w[0 1 2].each do |i|
       raise 'Future public activity missing' unless html.include?("LOG_FIXTURE_PLANNED_#{i} <span class=\"activity-result\">Upcoming</span>")
     end
