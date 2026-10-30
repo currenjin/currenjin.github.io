@@ -28,6 +28,12 @@ test('Home, log archive and search use only the publication-safe activity view',
   assert.match(read('css/main.css'), /\.entry\[data-kind="log"\] > \.entry-link\s*\{[^}]*display:grid/, 'A linked log keeps a focusable layout box');
 });
 
+test('activity labels are regular weight unless explicitly marked as achievements', () => {
+  const css = read('css/main.css');
+  assert.match(css, /\.entry\[data-kind="log"\] \.activity-result\s*\{[^}]*font:400 /);
+  assert.match(css, /\.entry\[data-kind="log"\] \.activity-result--achievement\s*\{[^}]*font-weight:600/);
+});
+
 test('partial activity periods sort after precise records in their period without invented days', () => {
   const rows = ['2018', '2018-01', '2018-01-01', '2018-07', '2020-02', ''].map(date => ({dataset:{date}}));
   const ledger = {children:[...rows], appendChild(row) {this.children=this.children.filter(r=>r!==row).concat(row)}};
