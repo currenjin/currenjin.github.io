@@ -45,7 +45,7 @@
 
 - 완료한 활동과 사용자가 공개를 승인한 예정 활동을 날짜와 한두 문장으로 기록한다. 선택 프로젝트 링크 외에 상세 페이지는 필수가 아니다.
 - 작성 기준과 스키마는 `docs/activity-log-authoring.md`를 따른다. 미래 계획, 감상, 사진을 추측해서 넣지 않는다.
-- `_plugins/activity_log.rb`가 명시적인 `public: true`, 유효한 날짜, 초안 여부를 검사한다. 미래 날짜도 표시하며 예정 활동은 `Planned`로 구분하고 완료 결과로 자동 전환하지 않는다. Home, `/log/`, 검색은 최신순 `site.activity_log`만 사용한다. 원시 `site.data.activity_log`는 출력하지 않는다.
+- `_plugins/activity_log.rb`가 명시적인 `public: true`, 유효한 날짜, 초안 여부를 검사한다. 미래 날짜도 표시하며 예정 활동은 `Upcoming`으로 구분하고 완료 결과로 자동 전환하지 않는다. Home, `/log/`, 검색은 최신순 `site.activity_log`만 사용한다. 원시 `site.data.activity_log`는 출력하지 않는다.
 - 그래프 노드는 추가하지 않고 기존 date/type/title 행을 재사용한다.
 
 ## 위키 (`_wiki/*.md`)
