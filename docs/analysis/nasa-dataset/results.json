@@ -1,0 +1,266 @@
+{
+  "input": "tess2018206045859-s0001-0000000441420236-0120-s_lc.fits",
+  "sha256": "fe601f0f82b7d89c4d303e3c3acaa43efb61e38976b47482efce577e0029c9c3",
+  "fits_internal_checksums": {
+    "PRIMARY": {
+      "checksum_status": 1,
+      "datasum_status": 2
+    },
+    "LIGHTCURVE": {
+      "checksum_status": 0,
+      "datasum_status": 2
+    },
+    "APERTURE": {
+      "checksum_status": 0,
+      "datasum_status": 2
+    }
+  },
+  "versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "astropy": "8.0.2",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2"
+  },
+  "primary": {
+    "OBJECT": "TIC 441420236",
+    "TICID": 441420236,
+    "SECTOR": 1,
+    "DATE-OBS": "2018-07-26T09:35:51.908",
+    "DATE-END": "2018-08-22T15:59:07.067",
+    "DATA_REL": 42,
+    "PROCVER": "spoc-5.0.10-20200904"
+  },
+  "time": {
+    "TIMESYS": "TDB",
+    "TIMEREF": "SOLARSYSTEM",
+    "BJDREFI": 2457000,
+    "BJDREFF": 0.0,
+    "TIMEDEL": 0.001388888888888889,
+    "TSTART": 1325.900707086946,
+    "TSTOP": 1353.16685476018
+  },
+  "columns": [
+    {
+      "name": "TIME",
+      "unit": "BJD - 2457000, days",
+      "format": "D"
+    },
+    {
+      "name": "TIMECORR",
+      "unit": "d",
+      "format": "E"
+    },
+    {
+      "name": "CADENCENO",
+      "unit": null,
+      "format": "J"
+    },
+    {
+      "name": "SAP_FLUX",
+      "unit": "e-/s",
+      "format": "E"
+    },
+    {
+      "name": "SAP_FLUX_ERR",
+      "unit": "e-/s",
+      "format": "E"
+    },
+    {
+      "name": "SAP_BKG",
+      "unit": "e-/s",
+      "format": "E"
+    },
+    {
+      "name": "SAP_BKG_ERR",
+      "unit": "e-/s",
+      "format": "E"
+    },
+    {
+      "name": "PDCSAP_FLUX",
+      "unit": "e-/s",
+      "format": "E"
+    },
+    {
+      "name": "PDCSAP_FLUX_ERR",
+      "unit": "e-/s",
+      "format": "E"
+    },
+    {
+      "name": "QUALITY",
+      "unit": null,
+      "format": "J"
+    },
+    {
+      "name": "PSF_CENTR1",
+      "unit": "pixel",
+      "format": "D"
+    },
+    {
+      "name": "PSF_CENTR1_ERR",
+      "unit": "pixel",
+      "format": "E"
+    },
+    {
+      "name": "PSF_CENTR2",
+      "unit": "pixel",
+      "format": "D"
+    },
+    {
+      "name": "PSF_CENTR2_ERR",
+      "unit": "pixel",
+      "format": "E"
+    },
+    {
+      "name": "MOM_CENTR1",
+      "unit": "pixel",
+      "format": "D"
+    },
+    {
+      "name": "MOM_CENTR1_ERR",
+      "unit": "pixel",
+      "format": "E"
+    },
+    {
+      "name": "MOM_CENTR2",
+      "unit": "pixel",
+      "format": "D"
+    },
+    {
+      "name": "MOM_CENTR2_ERR",
+      "unit": "pixel",
+      "format": "E"
+    },
+    {
+      "name": "POS_CORR1",
+      "unit": "pixels",
+      "format": "E"
+    },
+    {
+      "name": "POS_CORR2",
+      "unit": "pixels",
+      "format": "E"
+    }
+  ],
+  "counts": {
+    "total": 20076,
+    "nonfinite_time": 815,
+    "nonfinite_pdcsap": 2355,
+    "both_nonfinite": 815,
+    "any_nonfinite": 2355,
+    "quality_nonzero": 2389,
+    "nonfinite_and_quality": 2355,
+    "excluded_union": 2389,
+    "kept": 17687,
+    "clip_removed_from_kept": 443
+  },
+  "flux_median_e_per_s": 285650.84375,
+  "first_retained_row": {
+    "TIME": 1325.9444569126704,
+    "SAP_FLUX": 273840.125,
+    "PDCSAP_FLUX": 284066.125,
+    "PDCSAP_FLUX_ERR": 59.132293701171875,
+    "QUALITY": 0.0
+  },
+  "last_retained_time": 1353.045331679527,
+  "largest_gap_days": 1.1347018091319114,
+  "gap_bounds_btjd": [
+    1338.5263090213557,
+    1339.6610108304876
+  ],
+  "quality_values": {
+    "0": 17687,
+    "8": 815,
+    "16": 11,
+    "32": 18,
+    "128": 910,
+    "144": 1,
+    "160": 22,
+    "164": 30,
+    "512": 34,
+    "4096": 30,
+    "16384": 432,
+    "16392": 1,
+    "32768": 85
+  },
+  "settings": {
+    "period_range_days": [
+      0.5,
+      10
+    ],
+    "samples_per_peak": 30,
+    "weighting": "unweighted",
+    "model": "offset + one sine/cosine pair",
+    "detrending": "none for period search",
+    "normalization": "flux/median - 1",
+    "clipping_sensitivity": "151-sample segment-wise median; absolute residual <= 5*1.4826*MAD; no iteration"
+  },
+  "searches": {
+    "PDCSAP_quality_zero": {
+      "rows": 17687,
+      "period_days": 4.8472862764767415,
+      "power": 0.6530673295057339,
+      "grid_points": 1546,
+      "span_days": 27.100874766856577
+    },
+    "PDCSAP_local_5MAD": {
+      "rows": 17244,
+      "period_days": 4.8447766996396195,
+      "power": 0.6586746385892853,
+      "grid_points": 1546,
+      "span_days": 27.100874766856577
+    },
+    "PDCSAP_all_finite": {
+      "rows": 17721,
+      "period_days": 4.847417107339909,
+      "power": 0.6533198912141185,
+      "grid_points": 1546,
+      "span_days": 27.102263653790942
+    },
+    "SAP_quality_zero": {
+      "rows": 17687,
+      "period_days": 4.849969999211501,
+      "power": 0.6531388964761904,
+      "grid_points": 1546,
+      "span_days": 27.100874766856577
+    },
+    "first_half": {
+      "rows": 8936,
+      "period_days": 4.864015497065385,
+      "power": 0.7032715288623221,
+      "grid_points": 718,
+      "span_days": 12.581852108685325
+    },
+    "second_half": {
+      "rows": 8751,
+      "period_days": 4.949667644986756,
+      "power": 0.6093395617024144,
+      "grid_points": 764,
+      "span_days": 13.38432084903934
+    }
+  },
+  "repeat_check": {
+    "bin_width_days": 0.1,
+    "best_local_max_lag_days": 9.700000000000001,
+    "correlation": 0.9925685625782009,
+    "paired_bins": 153,
+    "local_maxima": [
+      {
+        "lag_days": 2.4000000000000004,
+        "r": -0.4023251281195357
+      },
+      {
+        "lag_days": 4.9,
+        "r": 0.9918150641186005
+      },
+      {
+        "lag_days": 7.300000000000001,
+        "r": -0.40004218317195417
+      },
+      {
+        "lag_days": 9.700000000000001,
+        "r": 0.9925685625782009
+      }
+    ]
+  }
+}

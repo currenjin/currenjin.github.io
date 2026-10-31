@@ -1,0 +1,37 @@
+{
+  "issue_comment": "https://github.com/currenjin/currenjin.github.io/issues/30#issuecomment-6541128376",
+  "images": [
+    {
+      "url": "https://github.com/user-attachments/assets/768c6bbe-c5af-494c-adb5-027e258c6d20",
+      "sha256": "67838758b2f93d889c22ae9bfc025830e62983d14de8b54fc4b4a1eda2a5245d",
+      "bytes": 30369,
+      "mime": "image/png",
+      "new": false,
+      "filename": null
+    },
+    {
+      "url": "https://github.com/user-attachments/assets/7c670ebc-6fd6-46bc-9bc1-a6cf3f88b686",
+      "sha256": "fd87ae702963b6724dac14c024dcb0808b810eee96f988cae7548d038e3f0743",
+      "bytes": 17901,
+      "mime": "image/png",
+      "new": false,
+      "filename": null
+    },
+    {
+      "url": "https://github.com/user-attachments/assets/f86c79a6-a986-41fa-9f06-13b0451e6a9e",
+      "sha256": "1e007186b2c367e436921dc998ef513083680ec4f9c69182e1f800bac23d35dc",
+      "bytes": 105002,
+      "mime": "image/png",
+      "new": true,
+      "filename": "au-mic-lightcurve.png"
+    },
+    {
+      "url": "https://github.com/user-attachments/assets/3fe40b0e-db78-4d20-bd0f-2aef414a0b90",
+      "sha256": "cc85afd788ae006a6b3941b02f65ec4b4bf8e6d86216af7cbf5de954c97e3184",
+      "bytes": 122489,
+      "mime": "image/png",
+      "new": true,
+      "filename": "au-mic-period-check.png"
+    }
+  ]
+}
