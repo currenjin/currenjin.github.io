@@ -44,8 +44,8 @@ for key, count in Counter(p.ids).items():
         errors.append("Duplicate id: " + key)
 manifest = json.loads(Path("docs/kafka-diagram-attachments.json").read_text())["figures"]
 expected_images = {item["url"] for item in manifest.values()}
-if len(p.images) != 20 or set(p.images) != expected_images:
-    errors.append("Expected all 20 actual Issue attachment images, without duplicates or local asset URLs")
+if len(p.images) != 22 or set(p.images) != expected_images:
+    errors.append("Expected all 22 actual Issue attachment images, without duplicates or local asset URLs")
 for src in p.images:
     if not src.startswith("https://github.com/user-attachments/assets/"):
         errors.append("Image is not an Issue attachment: " + src)

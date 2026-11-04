@@ -3,7 +3,7 @@ layout  : wiki
 title   : Kafka
 summary : 로그·복제·커밋·트랜잭션에서 Kafka Connect·CDC·Outbox까지 배우는 웹 교과서
 date    : 2026-07-12 15:00:00 +0900
-updated : 2026-11-04 11:13:09 +0900
+updated : 2026-11-04 11:35:51 +0900
 tags    : [kafka, architecture, engineering]
 toc     : true
 public  : true
@@ -1875,9 +1875,12 @@ Kafka는 클라이언트·다른 브로커·도구가 브로커에 연결할 때
 <a id="connect-source-sink"></a>
 **Source connector**는 외부 시스템에서 읽어 Kafka로 보내는 연동이고, **Sink connector**는 Kafka에서 읽어 외부 시스템에 쓰는 연동이다. 이름의 기준은 Kafka다. 데이터베이스는 방향에 따라 source가 될 수도, sink가 될 수도 있다.
 
-주문 DB를 Kafka로 가져오면 DB가 데이터의 출발점인 source다. Kafka의 주문 토픽을 검색 엔진으로 내보내면 검색 엔진이 도착점인 sink가 된다. Source·sink는 특정 DB 제품이나 서버 종류가 아니라 이 연동에서 맡는 방향을 가리킨다.
+| 역할 | 데이터 이동 | Worker의 Kafka 클라이언트 | 주문 연동 예시 |
+|---|---|---|---|
+| Source | 외부 → Kafka | 프로듀서로 발행 | 주문 DB → 주문 토픽 |
+| Sink | Kafka → 외부 | 컨슈머로 읽기 | 주문 토픽 → 검색 엔진 |
 
-앞에서 배운 프로듀서·컨슈머와 연결하면 source 쪽 worker는 Kafka 프로듀서로 발행하고, sink 쪽 worker는 Kafka 컨슈머로 읽는다. 다만 프로듀서 코드를 사용하는 모든 애플리케이션이 source connector인 것은 아니다. Connect에 등록되어 그 실행·위치 관리 방식을 따르는 연동 구현을 connector라고 부른다.
+Source·sink는 특정 DB 제품이나 서버 종류가 아니라 이 연동에서 맡는 방향을 가리킨다. 다만 프로듀서 코드를 사용하는 모든 애플리케이션이 source connector인 것은 아니다. Connect에 등록되어 그 실행·위치 관리 방식을 따르는 연동 구현을 connector라고 부른다.
 
 Source만 등록해도 Kafka 토픽까지 데이터를 가져올 수 있다. 이후에는 일반 컨슈머 애플리케이션이 읽어도 되므로 sink connector가 꼭 필요한 것은 아니다. 반대로 애플리케이션이 직접 발행한 토픽을 sink connector로 외부 DB에 적재할 수도 있다.
 
@@ -1892,19 +1895,17 @@ Source와 sink를 함께 쓰더라도 서로 직접 호출하지 않는다. Sour
 
 **Connector**는 연동 설정을 받아 실제 작업 단위들의 설정을 만든다. **Task**는 그 설정으로 원본을 읽거나 목적지에 쓰는 실행 단위다. **Worker**는 connector와 task를 실행하는 프로세스이므로, connector와 worker를 하나의 구성 요소로 묶어 이해하면 안 된다.
 
+다음은 DB 변경을 읽는 Debezium source를 두 worker에 배치한 예시다. Debezium의 변경 포착 원리는 15장에서 이어서 설명한다.
+
+![Worker A의 Connector가 만든 task 설정은 Connect가 Worker B의 source task에 전달한다. 점선은 설정이며 레코드 경로가 아니다. 실제 DB 변경 레코드는 Worker B의 task에서 converter·producer를 거쳐 Kafka로 간다.](https://github.com/user-attachments/assets/08342ac4-49f0-4304-9437-63f659a30057 "그림 14-1. Connector 관리와 Task 실행의 분리")
+
+이 배치는 고정 규칙이 아니다. 점선의 설정 전달은 시작·재구성 때 필요하고, 실선의 레코드 전달은 실행 중 반복된다. 이 둘을 구분해야 connector 관리 객체가 매 레코드를 복사한다고 오해하지 않는다.
+
 여기서 connector라는 말은 문맥에 따라 구현 종류와 등록한 작업을 가리킨다. `io.debezium.connector.postgresql.PostgresConnector`는 PostgreSQL용 구현 클래스이고, 뒤에서 등록할 `hangeul-orders-source`는 그 구현에 `market` DB 설정을 적용한 연동 작업의 이름이다. 같은 플러그인으로 다른 DB를 읽는 작업을 여러 개 등록할 수 있다.
 
 Connector 관리 객체가 모든 변경 레코드를 직접 복사하지는 않는다. 시작할 때 설정을 받아 `taskConfigs(maxTasks)`로 task별 설정을 만들고, 실제 복사는 task에 맡긴다. Source task는 `poll()`로 읽은 레코드를 worker에 반환하고, sink task는 worker가 `put()`에 전달한 레코드를 목적지에 쓴다.
 
 두 메서드는 프레임워크가 호출하는 구현 API이지 사용자가 REST로 매번 호출하는 명령이 아니다.
-
-가상의 worker A와 B가 같은 distributed Connect 클러스터에 속한다고 하자. 다음 배치는 가능한 할당의 한 예이며 고정 배치 규칙이 아니다.
-
-| 실행 위치 | 배치된 인스턴스 | 하는 일 |
-|---|---|---|
-| worker A | `hangeul-orders-source`의 connector 인스턴스 | DB 연동 설정을 받고 source task 설정을 만든다 |
-| worker B | 그 source의 task 0 | 주문 DB 변경을 읽고 Connect 레코드를 반환한다 |
-| worker A | 별도로 등록한 검색 sink의 task 0 | 할당된 Kafka 파티션의 레코드를 받아 검색 엔진에 쓴다 |
 
 Connector 인스턴스와 그 task들이 같은 worker에 있을 필요는 없다. 반대로 한 worker가 여러 connector와 task를 함께 실행할 수도 있다. Source와 sink는 같은 worker에 배치될 수 있지만, 데이터는 그 경우에도 Kafka 토픽을 거쳐 전달된다.
 
@@ -2240,6 +2241,10 @@ WAL을 먼저 남기면 트랜잭션마다 여러 데이터 파일의 변경 페
 
 PostgreSQL의 **logical decoding**은 저장 수준의 WAL 기록에서 행 수준 변경 정보를 꺼내 클라이언트가 해석할 표현으로 바꾸는 기능이다. `pgoutput`은 그 출력 형식을 제공하는 PostgreSQL 서버 쪽 플러그인이다. Debezium task는 복제 프로토콜로 이 스트림을 받으므로, worker가 DB 서버의 WAL 디렉터리를 공유 마운트하여 파일을 직접 읽는 구조가 아니다.
 
+![PostgreSQL에서 WAL을 영구 저장한 뒤 데이터 페이지를 파일에 반영하는 경로와, logical decoding·pgoutput으로 변경을 제공하는 경로가 나뉜다. 복제 스트림은 Connect worker의 Debezium task, converter·producer를 거쳐 Kafka로 간다.](https://github.com/user-attachments/assets/5e51493e-079f-440e-84c5-14e466cc3839 "그림 15-1. WAL의 복구 경로와 Debezium 전달 경로")
+
+왼쪽의 데이터 파일 반영을 마친 뒤 오른쪽 CDC를 시작하는 직렬 절차가 아니다. WAL이 원본 근거라는 점은 같지만, 데이터 페이지 반영과 Kafka 발행의 완료 시점은 다르다. 그림은 일반적인 동기 커밋과 초기 snapshot 이후 streaming을 가정한다.
+
 DB에서 주문 `104`의 변경이 커밋되면 서버의 decoding 경로가 해당 행의 변경을 제공한다. Debezium task는 이를 키와 `op=u`, `after.status=PAID`, 원본 위치 정보가 있는 Connect 레코드로 만든다. Worker의 converter와 producer가 Kafka 바이트와 발행을 맡는 다음 단계는 14장과 같다.
 
 이 경로에서 Debezium source가 검색 엔진의 문서를 직접 갱신하지는 않는다. Kafka 뒤에는 별도의 sink connector나 일반 컨슈머가 있어야 하며, 그쪽이 변경 이벤트의 형식과 삭제 의미를 해석한다. Debezium에는 Connect 밖에서 사용하는 Engine·Server 배포 방식도 있으므로 “Debezium은 반드시 Connect다”라고 일반화하지 않는다.
@@ -2274,14 +2279,18 @@ Slot을 유지한다고 WAL 디스크 공간이 무한히 보장되지는 않는
 
 14장의 검색 연동에 서로 다른 위치를 붙여 보자. `L0`와 `L1`은 순서를 설명하려고 붙인 WAL 위치의 기호이며 실제 LSN 표기가 아니다. Kafka 파티션 0의 오프셋 `500`도 가상 값이고, 여기서는 source exactly-once를 활성화하지 않은 일반적인 at-least-once 실행을 가정한다.
 
-1. Source의 마지막 저장 체크포인트는 `L0`다. Debezium task가 그 뒤 주문 `104`의 `PAID` 변경을 읽고 위치 정보 `L1`을 붙인다.
-2. Worker가 변경 레코드를 Kafka에 발행하고, 파티션 0의 오프셋 `500`에 저장됐다는 성공 응답을 받는다. 이 순간 source 체크포인트는 아직 `L0`일 수 있다.
-3. Worker가 source 체크포인트 저장을 마치면 새 task가 재개할 근거에 `L1`이 반영된다. 이것은 DB 변경이 Kafka까지 전달되었다는 source 쪽 진척이지 검색 반영 완료가 아니다.
-4. Sink가 Kafka 오프셋 `500`을 읽고 검색 문서 `104`를 `PAID`로 갱신한다. 목적지 쓰기 완료를 확인한 뒤 다음 위치 `501`을 sink group의 committed offset으로 저장한다.
+아래는 가능한 진행 예이며, sink 처리가 source 체크포인트 저장을 기다리는 것은 아니다.
 
-2번 직후 3번 전에 source worker가 죽으면, Kafka에는 이미 변경이 있어도 새 task는 `L0`라는 과거 체크포인트를 받는다. 원본 로그가 남아 있다면 같은 변경을 다시 읽어 발행할 수 있다. 두 발행은 업무상 같은 DB 변경이어도 Kafka에서는 다른 오프셋에 저장될 수 있으므로, Kafka 오프셋이 다르다는 이유만으로 서로 다른 업무 사건이라고 판단하면 안 된다.
+| 단계 | Source의 저장 체크포인트 | Kafka에 남은 레코드 | 검색·Sink의 상태 |
+|---|---|---|---|
+| ① Debezium이 `L1`의 `PAID` 변경을 읽음 | `L0` | 아직 미발행 | 아직 미반영 |
+| ② Kafka 발행 성공 응답 | 아직 `L0`일 수 있음 | 파티션 0, 오프셋 `500` | 아직 미반영일 수 있음 |
+| ③ Source 위치 저장 완료 | `L1`이 재개 근거에 반영 | 같은 `500` | 검색 완료를 뜻하지 않음 |
+| ④ Sink 외부 쓰기 확인 후 커밋 | Source와 별도 | 같은 `500`을 읽음 | 문서 `104`를 `PAID`로 반영, 다음 위치 `501` 커밋 |
 
-4번에서 검색 쓰기 뒤 sink 커밋 전에 죽는 경우는 다른 재전달이다. 이번에는 Kafka에 새로 발행하지 않아도 sink가 기존 오프셋 `500`을 다시 읽을 수 있다. 검색의 동일 키 덮어쓰기와 포인트 누적의 차이는 14장의 마지막 질문에서 다룬다.
+**② 발행 뒤 ③ 위치 저장 전 source가 죽으면:** Kafka에는 이미 변경이 있어도 새 task는 `L0`라는 과거 체크포인트를 받는다. 원본 로그가 남아 있다면 같은 변경을 다시 읽어 발행할 수 있다. 두 발행은 업무상 같은 DB 변경이어도 Kafka에서는 다른 오프셋에 저장될 수 있으므로, Kafka 오프셋이 다르다는 이유만으로 서로 다른 업무 사건이라고 판단하면 안 된다.
+
+**④ 검색 쓰기 뒤 sink 커밋 전 죽으면:** 다른 재전달이 발생할 수 있다. 이번에는 Kafka에 새로 발행하지 않아도 sink가 기존 오프셋 `500`을 다시 읽을 수 있다. 검색의 동일 키 덮어쓰기와 포인트 누적의 차이는 14장의 마지막 질문에서 다룬다.
 
 또한 **DB의 replication slot 상태와 Connect의 source 체크포인트도 같은 저장소가 아니다.** Slot은 DB가 이 복제 경로에 필요한 로그를 유지하는 데 관여하고, source 체크포인트는 Connect가 task 재개 위치를 저장한 기록이다. 둘의 진척을 sink의 Kafka 커밋과 혼동하면 “검색은 멈췄는데 source는 정상”인 상황을 설명하기 어렵다.
 

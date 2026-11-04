@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Source-level contracts for the four Kafka integration figures, not semantic QA."""
+"""Source-level contracts for Kafka integration figures, not semantic QA."""
 from pathlib import Path
 import re
 import unittest
@@ -17,6 +17,8 @@ FIGURES = [
     'fig-14-connect-record-path.svg',
     'fig-15-snapshot-streaming.svg',
     'fig-16-outbox-boundaries.svg',
+    'fig-14-connector-task-worker.svg',
+    'fig-15-wal-debezium-path.svg',
 ]
 
 
@@ -37,7 +39,8 @@ class IntegrationDiagrams(unittest.TestCase):
         cls.temp = tempfile.TemporaryDirectory(prefix='kafka-issue-diagrams-')
         cls.generated = Path(cls.temp.name)
         cls.manifest = json.loads((ROOT / 'docs/kafka-diagram-attachments.json').read_text())['figures']
-        subprocess.run([sys.executable, str(ROOT / 'scripts/generation/kafka_integration_diagrams.py'), '--output', cls.temp.name], check=True, capture_output=True)
+        for script in ('kafka_integration_diagrams.py', 'kafka_concept_diagrams.py'):
+            subprocess.run([sys.executable, str(ROOT / 'scripts/generation' / script), '--output', cls.temp.name], check=True, capture_output=True)
 
     @classmethod
     def tearDownClass(cls):
@@ -46,10 +49,10 @@ class IntegrationDiagrams(unittest.TestCase):
     def test_kafka_images_use_issue_attachments(self):
         source = (ROOT / '_wiki/kafka.md').read_text()
         images = re.findall(r'!\[[^\]]*\]\(([^\s)]+)', source)
-        self.assertEqual(len(images), 20)
+        self.assertEqual(len(images), 22)
         self.assertTrue(all(url.startswith('https://github.com/user-attachments/assets/') for url in images))
         self.assertEqual(set(images), {item['url'] for item in self.manifest.values()})
-        self.assertEqual(len(set(images)), 20)
+        self.assertEqual(len(set(images)), 22)
         self.assertFalse((ROOT / 'assets/images/kafka-textbook').exists())
 
     def test_each_figure_is_embedded_once_near_its_chapter(self):
@@ -96,10 +99,12 @@ class IntegrationDiagrams(unittest.TestCase):
                 self.assertEqual(len(data), self.manifest[name]['bytes'])
 
     def test_generator_refuses_repository_output(self):
-        result = subprocess.run([sys.executable, str(ROOT / 'scripts/generation/kafka_integration_diagrams.py'), '--output', str(ROOT / 'assets/images/kafka-textbook')], capture_output=True, text=True)
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn('output must be outside the repository', result.stderr)
-        self.assertFalse((ROOT / 'assets/images/kafka-textbook').exists())
+        for script in ('kafka_integration_diagrams.py', 'kafka_concept_diagrams.py'):
+            with self.subTest(generator=script):
+                result = subprocess.run([sys.executable, str(ROOT / 'scripts/generation' / script), '--output', str(ROOT / 'assets/images/kafka-textbook')], capture_output=True, text=True)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn('output must be outside the repository', result.stderr)
+                self.assertFalse((ROOT / 'assets/images/kafka-textbook').exists())
 
     def test_current_opaque_palette_contrast(self):
         # Both node fill and artboard are opaque; no alpha compositing is needed.
