@@ -3,7 +3,7 @@ layout  : wiki
 title   : Kafka
 summary : 로그·복제·커밋·트랜잭션에서 Kafka Connect·CDC·Outbox까지 배우는 웹 교과서
 date    : 2026-07-12 15:00:00 +0900
-updated : 2026-10-07 11:47:10 +0900
+updated : 2026-11-04 11:13:09 +0900
 tags    : [kafka, architecture, engineering]
 toc     : true
 public  : true
@@ -1872,9 +1872,47 @@ Kafka는 클라이언트·다른 브로커·도구가 브로커에 연결할 때
 ### Source·Sink, Connector·Task·Worker는 각각 무엇인가
 
 
-**Source connector**는 외부 시스템에서 읽어 Kafka로 보낸다. **Sink connector**는 Kafka에서 읽어 외부 시스템에 쓴다. 이름의 기준은 Kafka다. 데이터베이스는 방향에 따라 source가 될 수도, sink가 될 수도 있다.
+<a id="connect-source-sink"></a>
+**Source connector**는 외부 시스템에서 읽어 Kafka로 보내는 연동이고, **Sink connector**는 Kafka에서 읽어 외부 시스템에 쓰는 연동이다. 이름의 기준은 Kafka다. 데이터베이스는 방향에 따라 source가 될 수도, sink가 될 수도 있다.
 
-**Connector**는 연동 작업의 설정을 받아 실제 작업 단위를 만든다. **Task**가 그 작업을 실행한다. **Worker**는 connector와 task를 실행하는 프로세스다. 분산 모드에서 connector 인스턴스와 그 task들이 같은 worker에 있을 필요는 없다. worker를 늘리는 것과 task 수를 늘리는 것도 다르다. 실행할 task가 하나뿐이면 worker를 늘려도 그 task의 읽기 작업이 여러 개로 나뉘지 않는다.
+주문 DB를 Kafka로 가져오면 DB가 데이터의 출발점인 source다. Kafka의 주문 토픽을 검색 엔진으로 내보내면 검색 엔진이 도착점인 sink가 된다. Source·sink는 특정 DB 제품이나 서버 종류가 아니라 이 연동에서 맡는 방향을 가리킨다.
+
+앞에서 배운 프로듀서·컨슈머와 연결하면 source 쪽 worker는 Kafka 프로듀서로 발행하고, sink 쪽 worker는 Kafka 컨슈머로 읽는다. 다만 프로듀서 코드를 사용하는 모든 애플리케이션이 source connector인 것은 아니다. Connect에 등록되어 그 실행·위치 관리 방식을 따르는 연동 구현을 connector라고 부른다.
+
+Source만 등록해도 Kafka 토픽까지 데이터를 가져올 수 있다. 이후에는 일반 컨슈머 애플리케이션이 읽어도 되므로 sink connector가 꼭 필요한 것은 아니다. 반대로 애플리케이션이 직접 발행한 토픽을 sink connector로 외부 DB에 적재할 수도 있다.
+
+Source와 sink를 함께 쓰더라도 서로 직접 호출하지 않는다. Source가 멈춘 동안 sink는 Kafka에 이미 남아 있는 레코드를 계속 읽을 수 있고, sink가 멈춰도 source는 Kafka가 쓰기를 받아 주는 동안 계속 발행할 수 있다. 다만 sink가 다시 읽을 때까지 필요한 레코드가 보존되어 있어야 한다.
+
+이 독립성은 두 연동 사이에 Kafka 로그가 있기 때문에 생긴다.
+
+방향과 Kafka 클라이언트의 관계는 [Kafka 4.3 Connect Overview](https://kafka.apache.org/43/kafka-connect/overview/)와 [User Guide의 Running Kafka Connect](https://kafka.apache.org/43/kafka-connect/user-guide/)에 근거한다. 실제 레코드의 변환 순서는 뒤의 그림 14-3에서 살펴본다.
+
+<a id="connect-connector-task-worker"></a>
+### Connector·Task·Worker의 실행 단위
+
+**Connector**는 연동 설정을 받아 실제 작업 단위들의 설정을 만든다. **Task**는 그 설정으로 원본을 읽거나 목적지에 쓰는 실행 단위다. **Worker**는 connector와 task를 실행하는 프로세스이므로, connector와 worker를 하나의 구성 요소로 묶어 이해하면 안 된다.
+
+여기서 connector라는 말은 문맥에 따라 구현 종류와 등록한 작업을 가리킨다. `io.debezium.connector.postgresql.PostgresConnector`는 PostgreSQL용 구현 클래스이고, 뒤에서 등록할 `hangeul-orders-source`는 그 구현에 `market` DB 설정을 적용한 연동 작업의 이름이다. 같은 플러그인으로 다른 DB를 읽는 작업을 여러 개 등록할 수 있다.
+
+Connector 관리 객체가 모든 변경 레코드를 직접 복사하지는 않는다. 시작할 때 설정을 받아 `taskConfigs(maxTasks)`로 task별 설정을 만들고, 실제 복사는 task에 맡긴다. Source task는 `poll()`로 읽은 레코드를 worker에 반환하고, sink task는 worker가 `put()`에 전달한 레코드를 목적지에 쓴다.
+
+두 메서드는 프레임워크가 호출하는 구현 API이지 사용자가 REST로 매번 호출하는 명령이 아니다.
+
+가상의 worker A와 B가 같은 distributed Connect 클러스터에 속한다고 하자. 다음 배치는 가능한 할당의 한 예이며 고정 배치 규칙이 아니다.
+
+| 실행 위치 | 배치된 인스턴스 | 하는 일 |
+|---|---|---|
+| worker A | `hangeul-orders-source`의 connector 인스턴스 | DB 연동 설정을 받고 source task 설정을 만든다 |
+| worker B | 그 source의 task 0 | 주문 DB 변경을 읽고 Connect 레코드를 반환한다 |
+| worker A | 별도로 등록한 검색 sink의 task 0 | 할당된 Kafka 파티션의 레코드를 받아 검색 엔진에 쓴다 |
+
+Connector 인스턴스와 그 task들이 같은 worker에 있을 필요는 없다. 반대로 한 worker가 여러 connector와 task를 함께 실행할 수도 있다. Source와 sink는 같은 worker에 배치될 수 있지만, 데이터는 그 경우에도 Kafka 토픽을 거쳐 전달된다.
+
+Worker를 늘리는 일은 실행할 프로세스와 장애 시 인계 후보를 늘린다. Task를 늘리는 일은 한 연동의 일을 더 많은 실행 단위로 나누려는 선택이지만, 원본과 커넥터 구현이 그 분할을 지원해야 한다. 실행 task가 하나뿐이면 worker 세 대가 있어도 정상 상태에서 그 task의 읽기를 세 대가 동시에 나누어 수행하지 않는다.
+
+예를 들어 뒤에서 사용할 Debezium PostgreSQL 커넥터는 한 task로 동작한다. `tasks.max`를 3으로 바꿔도 하나의 PostgreSQL 변경 스트림을 자동으로 세 조각으로 나누지 않는다. Kafka 토픽의 파티션 수를 늘리는 일도 이미 원본을 읽고 있는 이 task를 복제하는 설정이 아니다.
+
+역할 분리와 호출 관계는 [Kafka 4.3 Connector Development Guide의 Connectors and Tasks·Source Tasks·Sink Tasks](https://kafka.apache.org/43/kafka-connect/connector-development-guide/)를 따른다. 한 task 제약은 [Debezium PostgreSQL 3.3.0.Final의 `tasks.max` 설명](https://github.com/debezium/debezium/blob/v3.3.0.Final/documentation/modules/ROOT/pages/connectors/postgresql.adoc)이며, 모든 source connector의 제약으로 일반화하지 않는다.
 
 ### Connect는 브로커 안의 기능인가, 별도 프로그램인가
 
@@ -2132,7 +2170,9 @@ Connect REST는 기본적으로 보호되지 않는다. 네트워크 접근 제�
 
 ### 먼저 현재 상태와 변경 이력을 구분한다
 
-Polling은 일정 간격으로 현재 테이블을 조회하는 방식이고, CDC는 DB가 제공하는 변경 정보를 따라 읽는 방식이다. Snapshot은 어떤 기준에서 존재하는 행들을 읽어 초기 상태를 채우는 절차다. 셋은 배타적인 제품명이 아니다. CDC 커넥터가 처음에 snapshot을 수행한 뒤 변경 로그를 읽을 수 있다.
+Polling은 일정 간격으로 현재 테이블을 조회하는 방식이고, CDC(Change Data Capture)는 DB의 변경을 포착하는 접근이다. 이 장에서는 DB가 제공하는 변경 로그를 따라 읽는 CDC를 다룬다.
+
+Snapshot은 어떤 기준에서 존재하는 행들을 읽어 초기 상태를 채우는 절차다. 셋은 배타적인 제품명이 아니다. CDC 커넥터가 처음에 snapshot을 수행한 뒤 변경 로그를 읽을 수 있다.
 
 가상의 주문 `104`가 `CREATED → PAID → CANCELED` 순서로 변경되었다고 하자. 검색 문서를 최신 상태로 맞추려면 최종 `CANCELED` 상태가 필요하다. “결제가 승인된 모든 주문을 정산해야 한다”면 중간의 `PAID` 전이도 필요하다. 같은 테이블을 복제한다는 말로 이 두 계약을 합칠 수 없다.
 
@@ -2171,9 +2211,44 @@ Checkpoint는 테이블에 대한 마지막 조회 위치다. Kafka로 레코드
 
 대안은 요구사항에 따라 달라진다. 삭제 여부를 남기는 soft delete와 수정 타임스탬프를 함께 쓰거나, 삭제 이력·outbox 테이블을 조회하거나, 삭제를 포함한 변경 로그를 읽는 CDC를 쓴다. 전체 스냅샷을 비교하여 없는 키를 찾는 별도 reconciliation도 가능하지만, 이는 JDBC source의 자동 기능이 아니라 추가 알고리즘이다. Soft delete도 커넥터가 그 행을 추출하고 downstream이 삭제 의미를 해석해야 완결된다.
 
+<a id="wal-principle"></a>
+### WAL의 선행 기록과 장애 복구
+
+**WAL(Write-Ahead Log)**은 PostgreSQL이 데이터 파일의 변경을 디스크에 반영하기 전에 그 변경을 설명하는 로그를 먼저 영구 저장하는 방식이다. WAL이라는 이름은 그 로그 자체를 가리킬 때도 쓴다. 테이블과 인덱스가 들어 있는 데이터 파일을 매 커밋마다 모두 디스크에 내려쓰지 않아도, 먼저 저장한 로그로 장애 후 변경을 다시 적용할 수 있다.
+
+주문 `104`의 상태를 `CREATED`에서 `PAID`로 바꾸는 트랜잭션을 생각해 보자. 다음은 WAL과 데이터 파일의 관계를 이해하기 위한 정상 흐름이며, PostgreSQL의 모든 내부 단계를 재현한 것은 아니다. 여기서는 WAL을 영구 저장한 뒤 커밋 성공을 알리는 일반적인 내구성 설정을 가정한다.
+
+1. PostgreSQL은 메모리의 데이터 페이지를 변경하고, 그 변경을 설명하는 WAL 레코드를 만든다. 페이지는 데이터 파일을 읽고 쓰는 블록 단위다.
+2. 커밋 시 필요한 WAL과 커밋 기록을 영구 저장하고 성공을 응답한다. 이때 주문 테이블의 변경 페이지는 아직 데이터 파일에 반영되지 않았을 수 있다.
+3. PostgreSQL은 변경 페이지를 나중에 데이터 파일에 내려쓴다. 그 페이지를 쓰기 전에는 해당 변경의 WAL이 먼저 영구 저장되어 있어야 한다.
+4. 커밋 뒤 3번을 마치기 전에 DB 프로세스가 종료되어도, 재시작 시 남아 있는 WAL로 필요한 변경을 다시 적용한다. 이 복구 동작이 REDO다.
+
+WAL을 먼저 남기면 트랜잭션마다 여러 데이터 파일의 변경 페이지를 모두 동기화하는 비용을 줄일 수 있다. 로그를 순차적으로 쓰고 여러 트랜잭션의 동기화 비용을 함께 부담할 수도 있다. 대신 WAL 저장 장치와 내구성 설정이 그 보장의 전제가 된다.
+
+`synchronous_commit=off` 같은 선택까지 동일한 커밋 응답 계약으로 취급해서는 안 된다. 이 설정은 [PostgreSQL 17의 Asynchronous Commit](https://www.postgresql.org/docs/17/wal-async-commit.html)에서 구분한다.
+
+**WAL은 처음부터 Kafka 이벤트를 만들기 위한 로그가 아니다.** DB 복구용 저장 수준 기록이므로 원래 SQL 문장이나 업무 이벤트 JSON의 목록과도 다르다. “결제가 승인되었다”라는 업무 의미를 DB가 자동으로 아는 것은 아니며, 이 차이가 뒤의 outbox 설계와 연결된다.
+
+근거는 [PostgreSQL 17의 Write-Ahead Logging](https://www.postgresql.org/docs/17/wal-intro.html)이다. 이 절은 PostgreSQL 17의 원리를 기준으로 하며 다른 DB의 binlog나 redo log를 모두 같은 API로 읽을 수 있다는 뜻은 아니다.
+
+<a id="debezium-role"></a>
+### Debezium과 Kafka Connect의 관계
+
+**Debezium**은 DB 변경을 읽어 변경 이벤트로 표현하는 CDC 구현을 제공하는 프로젝트다. 여기서는 PostgreSQL용 Debezium 3.3.0.Final source connector를 Kafka Connect worker에 설치해 사용한다. Connect가 공통 실행·관리 환경을 제공하고, Debezium은 PostgreSQL 변경을 어떤 방식으로 읽고 레코드로 만들지 구현한다.
+
+따라서 “Connect를 쓴다”만으로 CDC가 정해지지 않는다. 14장의 같은 worker 실행 환경에 JDBC polling source를 설치하면 현재 테이블을 주기적으로 조회하고, Debezium PostgreSQL source를 설치하면 초기 snapshot 뒤 logical replication 스트림을 읽는다. 두 방식은 같은 source 방향이어도 관측하는 데이터와 재개 위치가 다르다.
+
+PostgreSQL의 **logical decoding**은 저장 수준의 WAL 기록에서 행 수준 변경 정보를 꺼내 클라이언트가 해석할 표현으로 바꾸는 기능이다. `pgoutput`은 그 출력 형식을 제공하는 PostgreSQL 서버 쪽 플러그인이다. Debezium task는 복제 프로토콜로 이 스트림을 받으므로, worker가 DB 서버의 WAL 디렉터리를 공유 마운트하여 파일을 직접 읽는 구조가 아니다.
+
+DB에서 주문 `104`의 변경이 커밋되면 서버의 decoding 경로가 해당 행의 변경을 제공한다. Debezium task는 이를 키와 `op=u`, `after.status=PAID`, 원본 위치 정보가 있는 Connect 레코드로 만든다. Worker의 converter와 producer가 Kafka 바이트와 발행을 맡는 다음 단계는 14장과 같다.
+
+이 경로에서 Debezium source가 검색 엔진의 문서를 직접 갱신하지는 않는다. Kafka 뒤에는 별도의 sink connector나 일반 컨슈머가 있어야 하며, 그쪽이 변경 이벤트의 형식과 삭제 의미를 해석한다. Debezium에는 Connect 밖에서 사용하는 Engine·Server 배포 방식도 있으므로 “Debezium은 반드시 Connect다”라고 일반화하지 않는다.
+
+역할 구분은 [Debezium 3.3.0.Final Architecture](https://github.com/debezium/debezium/blob/v3.3.0.Final/documentation/modules/ROOT/pages/architecture.adoc), PostgreSQL 스트림 수신은 [PostgreSQL connector의 Overview·Streaming changes](https://github.com/debezium/debezium/blob/v3.3.0.Final/documentation/modules/ROOT/pages/connectors/postgresql.adoc), decoding 원리는 [PostgreSQL 17 Logical Decoding Concepts](https://www.postgresql.org/docs/17/logicaldecoding-explanation.html)를 따른다.
+
 ### PostgreSQL CDC의 구성 요소는 어디에 있는가
 
-**WAL(Write-Ahead Log)**은 PostgreSQL이 변경 복구 등을 위해 유지하는 로그다. **Logical decoding**은 이 로그를 행 수준의 변경 정보로 제공하는 기능이다. **LSN(Log Sequence Number)**은 WAL 내 위치를 식별한다. 여기서 LSN은 Kafka 토픽의 offset이 아니라 PostgreSQL 쪽 재개 위치의 근거다.
+**LSN(Log Sequence Number)**은 WAL 내 위치를 식별한다. 여기서 LSN은 Kafka 토픽의 offset이 아니라 PostgreSQL 쪽 재개 위치의 근거다. 한 변경이 Kafka에 저장되더라도 DB 쪽 위치와 Kafka 쪽 위치는 서로 다른 로그에서 부여되므로 같은 위치 체계로 비교하지 않는다.
 
 **Replication slot**은 PostgreSQL이 이 소비 경로에 필요한 로그 유지 상태를 관리하는 서버 측 객체다. **Publication**은 `pgoutput` 기반 logical replication에서 내보낼 테이블과 연산의 범위를 지정하는 서버 측 구성이다. **Replica identity**는 update·delete의 이전 행 식별에 어떤 정보를 제공할지 정하는 테이블 설정이다. 보통 기본 키 정보가 중요하며, 삭제 전 전체 행을 요구한다면 실제 identity 설정과 출력 내용을 확인해야 한다.
 
@@ -2193,6 +2268,26 @@ Publication·slot·`pgoutput`은 PostgreSQL 쪽에 있고 Debezium task는 worke
 Slot을 유지한다고 WAL 디스크 공간이 무한히 보장되지는 않는다. 오래 멈춘 connector가 따라잡아야 할 로그가 쌓이면 원본 DB의 공간과 보존 한계도 확인한다. Source 체크포인트가 남아 있어도 그 LSN의 WAL을 서버가 더 제공하지 못하면 기존 위치에서의 이어 읽기가 실패할 수 있다. Snapshot으로 현재 상태를 재구축할 수 있는 경우에도 사라진 중간 변경 이력이 복원된 것은 아니다.
 
 근거는 [Debezium PostgreSQL 3.3.0.Final의 How the connector works·Setting up PostgreSQL·Replica identity·WAL disk space consumption](https://github.com/debezium/debezium/blob/v3.3.0.Final/documentation/modules/ROOT/pages/connectors/postgresql.adoc)이다. 이 관계를 이해한 뒤 아래 로그 보존과 failover 조건을 읽는다.
+
+<a id="cdc-resume-positions"></a>
+### 주문 한 건의 위치와 재전달
+
+14장의 검색 연동에 서로 다른 위치를 붙여 보자. `L0`와 `L1`은 순서를 설명하려고 붙인 WAL 위치의 기호이며 실제 LSN 표기가 아니다. Kafka 파티션 0의 오프셋 `500`도 가상 값이고, 여기서는 source exactly-once를 활성화하지 않은 일반적인 at-least-once 실행을 가정한다.
+
+1. Source의 마지막 저장 체크포인트는 `L0`다. Debezium task가 그 뒤 주문 `104`의 `PAID` 변경을 읽고 위치 정보 `L1`을 붙인다.
+2. Worker가 변경 레코드를 Kafka에 발행하고, 파티션 0의 오프셋 `500`에 저장됐다는 성공 응답을 받는다. 이 순간 source 체크포인트는 아직 `L0`일 수 있다.
+3. Worker가 source 체크포인트 저장을 마치면 새 task가 재개할 근거에 `L1`이 반영된다. 이것은 DB 변경이 Kafka까지 전달되었다는 source 쪽 진척이지 검색 반영 완료가 아니다.
+4. Sink가 Kafka 오프셋 `500`을 읽고 검색 문서 `104`를 `PAID`로 갱신한다. 목적지 쓰기 완료를 확인한 뒤 다음 위치 `501`을 sink group의 committed offset으로 저장한다.
+
+2번 직후 3번 전에 source worker가 죽으면, Kafka에는 이미 변경이 있어도 새 task는 `L0`라는 과거 체크포인트를 받는다. 원본 로그가 남아 있다면 같은 변경을 다시 읽어 발행할 수 있다. 두 발행은 업무상 같은 DB 변경이어도 Kafka에서는 다른 오프셋에 저장될 수 있으므로, Kafka 오프셋이 다르다는 이유만으로 서로 다른 업무 사건이라고 판단하면 안 된다.
+
+4번에서 검색 쓰기 뒤 sink 커밋 전에 죽는 경우는 다른 재전달이다. 이번에는 Kafka에 새로 발행하지 않아도 sink가 기존 오프셋 `500`을 다시 읽을 수 있다. 검색의 동일 키 덮어쓰기와 포인트 누적의 차이는 14장의 마지막 질문에서 다룬다.
+
+또한 **DB의 replication slot 상태와 Connect의 source 체크포인트도 같은 저장소가 아니다.** Slot은 DB가 이 복제 경로에 필요한 로그를 유지하는 데 관여하고, source 체크포인트는 Connect가 task 재개 위치를 저장한 기록이다. 둘의 진척을 sink의 Kafka 커밋과 혼동하면 “검색은 멈췄는데 source는 정상”인 상황을 설명하기 어렵다.
+
+이 사례의 `L1`은 원본 위치의 개념만 보여 준다. 실제 Debezium 체크포인트에는 재개에 필요한 추가 상태가 있을 수 있으므로 이벤트 ID를 LSN 하나로 직접 설계하거나 source 오프셋을 임의로 수정하는 절차로 사용하지 않는다. 복구에는 저장된 위치뿐 아니라 slot과 원본 WAL이 재개에 필요한 범위를 계속 제공한다는 조건이 필요하다.
+
+위 실패 창은 [Kafka 4.3의 Resuming from Previous Offsets](https://kafka.apache.org/43/kafka-connect/connector-development-guide/)와 [Debezium PostgreSQL 3.3.0.Final의 Streaming changes·Behavior when things go wrong](https://github.com/debezium/debezium/blob/v3.3.0.Final/documentation/modules/ROOT/pages/connectors/postgresql.adoc)에 근거한 설명용 사례다. 실제 장애 주입 실험의 출력은 아니다.
 
 ### CDC는 행 조회가 아니라 변경 로그를 읽는다
 
@@ -2425,9 +2520,13 @@ Downstream이 포인트 적립을 한다면 이벤트 ID unique 제약과 적립
 | 삭제 표시(tombstone) | 값이 null인 레코드. 컴팩션에서 삭제를 뜻함 | [8장](#chapter-7) |
 | 소비 지연(lag) | 로그 끝과 커밋(또는 위치) 사이의 거리 | [10장](#chapter-9) |
 | 컨트롤러, KRaft | 클러스터 메타데이터를 관리하는 역할과 방식 | [4장](#chapter-3), [12장](#chapter-11) |
-| Connector·Task·Worker | 연동 설정·작업 단위·실행 프로세스 | [14장](#connect) |
+| Source·Sink | Kafka로 가져오는 연동과 Kafka에서 외부로 내보내는 연동 | [14장 방향](#connect-source-sink) |
+| Connector·Task·Worker | 연동 설정·작업 단위·실행 프로세스 | [14장 실행 단위](#connect-connector-task-worker) |
 | Converter·SMT | Connect 모델의 직렬화와 개별 레코드 변환 | [14장](#connect) |
 | CDC·Snapshot | 변경 로그 읽기와 초기 기준 상태의 연결 | [15장](#cdc) |
+| WAL·REDO | 데이터 파일보다 로그를 먼저 저장하고 장애 후 다시 적용하는 복구 원리 | [15장 WAL](#wal-principle) |
+| Debezium | DB 변경을 읽어 변경 이벤트로 표현하는 CDC 구현 | [15장 역할](#debezium-role) |
+| LSN·Source 체크포인트·Sink 커밋 | 원본 로그 위치와 각 연동의 재개 기록 | [15장 재전달](#cdc-resume-positions) |
 | Transactional Outbox | 업무 행과 발행할 이벤트 기록의 DB 원자성 | [16장](#outbox) |
 
 ## 부록 D. 공식 문서 찾아보기 | 장별로 먼저 열 페이지
@@ -2449,8 +2548,8 @@ Downstream이 포인트 적립을 한다면 이벤트 ID unique 제약과 적립
 | 11장 | 앞의 모든 장의 페이지 | [Design § Quotas](https://kafka.apache.org/43/design/design/#quotas) |
 | 12장 | [KRaft](https://kafka.apache.org/43/operations/kraft/) | [KRaft vs ZooKeeper](https://kafka.apache.org/43/getting-started/zk2kraft/) |
 | 13장 | [Security Overview](https://kafka.apache.org/43/security/security-overview/) | [Authorization and ACLs](https://kafka.apache.org/43/security/authorization-and-acls/) |
-| 14장 | [Connect User Guide](https://kafka.apache.org/43/kafka-connect/user-guide/) | [JDBC Sink](https://docs.confluent.io/kafka-connectors/jdbc/current/sink-connector/overview.html) |
-| 15장 | [JDBC Source](https://docs.confluent.io/kafka-connectors/jdbc/current/source-connector/overview.html) | [Debezium PostgreSQL v3.3.0.Final](https://github.com/debezium/debezium/blob/v3.3.0.Final/documentation/modules/ROOT/pages/connectors/postgresql.adoc) |
+| 14장 | [Connect User Guide](https://kafka.apache.org/43/kafka-connect/user-guide/), [Connector Development Guide](https://kafka.apache.org/43/kafka-connect/connector-development-guide/) | [JDBC Sink](https://docs.confluent.io/kafka-connectors/jdbc/current/sink-connector/overview.html) |
+| 15장 | [JDBC Source](https://docs.confluent.io/kafka-connectors/jdbc/current/source-connector/overview.html), [PostgreSQL 17 WAL](https://www.postgresql.org/docs/17/wal-intro.html) | [Debezium PostgreSQL v3.3.0.Final](https://github.com/debezium/debezium/blob/v3.3.0.Final/documentation/modules/ROOT/pages/connectors/postgresql.adoc), [Architecture](https://github.com/debezium/debezium/blob/v3.3.0.Final/documentation/modules/ROOT/pages/architecture.adoc), [Logical decoding](https://www.postgresql.org/docs/17/logicaldecoding-explanation.html) |
 | 16장 | [Debezium Outbox v3.3.0.Final](https://github.com/debezium/debezium/blob/v3.3.0.Final/documentation/modules/ROOT/pages/transformations/outbox-event-router.adoc) | 6·7장의 처리·트랜잭션 실패 모델 |
 
 설정 참조 페이지(브로커·토픽·프로듀서·컨슈머 설정), 모니터링 지표 표, 프로토콜 명세는 처음부터 읽기보다 증상이나 질문에 해당하는 항목을 찾아 답을 확인할 때 사용한다.

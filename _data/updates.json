@@ -1,5 +1,14 @@
 [
   {
+    "title": "Kafka",
+    "url": "/wiki/kafka",
+    "updated": "2026-11-04",
+    "summary": "로그·복제·커밋·트랜잭션에서 Kafka Connect·CDC·Outbox까지 배우는 웹 교과서",
+    "tags": "kafka, architecture, engineering",
+    "source": "Wiki",
+    "external": false
+  },
+  {
     "title": "NASA 데이터셋 읽고 해석하기",
     "url": "/wiki/nasa-dataset",
     "updated": "2026-10-27",
@@ -14,15 +23,6 @@
     "updated": "2026-10-23",
     "summary": "재시도되는 요청을 식별하고 DB 효과와 결과 기록을 함께 확정하는 원리와 실패 조건",
     "tags": "architecture, database, pattern",
-    "source": "Wiki",
-    "external": false
-  },
-  {
-    "title": "Kafka",
-    "url": "/wiki/kafka",
-    "updated": "2026-10-07",
-    "summary": "로그·복제·커밋·트랜잭션에서 Kafka Connect·CDC·Outbox까지 배우는 웹 교과서",
-    "tags": "kafka, architecture, engineering",
     "source": "Wiki",
     "external": false
   },

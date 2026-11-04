@@ -62,6 +62,12 @@ for target in ["foundation-planes", "foundation-pipeline", "foundation-log",
                "foundation-memory", "foundation-io", "foundation-guarantees"]:
     if target not in p.ids:
         errors.append("Missing foundation section: " + target)
+for target in ["connect-source-sink", "connect-connector-task-worker",
+               "wal-principle", "debezium-role", "cdc-resume-positions"]:
+    if target not in p.ids:
+        errors.append("Missing Connect/CDC concept section: " + target)
+    if target not in p.links:
+        errors.append("Missing glossary link to Connect/CDC concept: " + target)
 for name in ["fig-00-data-path.svg", "fig-00-memory-io.svg"]:
     if manifest[name]["url"] not in p.images:
         errors.append("Missing foundation figure: " + name)
