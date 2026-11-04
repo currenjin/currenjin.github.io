@@ -12,8 +12,13 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 NS = '{http://www.w3.org/2000/svg}'
+CONCEPT_FIGURES = {
+    'fig-14-source-sink.svg',
+    'fig-14-connector-task-worker.svg',
+    'fig-15-wal-debezium-path.svg',
+}
 FIGURES = [
-    'fig-14-connect-runtime.svg',
+    'fig-14-source-sink.svg',
     'fig-14-connect-record-path.svg',
     'fig-15-snapshot-streaming.svg',
     'fig-16-outbox-boundaries.svg',
@@ -81,12 +86,18 @@ class IntegrationDiagrams(unittest.TestCase):
                     assert node is not None
                     self.assertTrue(node.text)
                 self.assertTrue(svg.findall('.//' + NS + 'path'))
-                self.assertLessEqual(float(svg.get('width', '0')), 420)
+                width = float(svg.get('width', '0'))
+                if name in CONCEPT_FIGURES:
+                    self.assertLessEqual(float(svg.get('height', '0')) * 326 / width, 124)
+                else:
+                    self.assertLessEqual(width, 420)
                 self.assertFalse(any(e.tag in [NS + 'script', NS + 'image', NS + 'foreignObject'] for e in elements))
                 for e in elements:
                     self.assertFalse(any('href' in key for key in e.attrib))
                     if e.tag == NS + 'text':
                         self.assertGreaterEqual(float(e.get('font-size', '0')), 12)
+                        if name in CONCEPT_FIGURES:
+                            self.assertGreaterEqual(float(e.get('font-size', '0')) * 326 / width, 14)
                 background = svg.find(NS + 'rect')
                 assert background is not None
                 self.assertEqual(background.get('fill'), '#fbfaf6')
@@ -108,7 +119,7 @@ class IntegrationDiagrams(unittest.TestCase):
 
     def test_current_opaque_palette_contrast(self):
         # Both node fill and artboard are opaque; no alpha compositing is needed.
-        for fill in ('#fbfaf6', '#ffffff'):
+        for fill in ('#fbfaf6', '#ffffff', '#e8edf4'):
             self.assertGreaterEqual(contrast('#26262b', fill), 4.5)
             self.assertGreaterEqual(contrast('#555b6b', fill), 3)
 

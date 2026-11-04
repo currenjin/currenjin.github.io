@@ -1875,10 +1875,12 @@ Kafka는 클라이언트·다른 브로커·도구가 브로커에 연결할 때
 <a id="connect-source-sink"></a>
 **Source connector**는 외부 시스템에서 읽어 Kafka로 보내는 연동이고, **Sink connector**는 Kafka에서 읽어 외부 시스템에 쓰는 연동이다. 이름의 기준은 Kafka다. 데이터베이스는 방향에 따라 source가 될 수도, sink가 될 수도 있다.
 
-| 역할 | 데이터 이동 | Worker의 Kafka 클라이언트 | 주문 연동 예시 |
-|---|---|---|---|
-| Source | 외부 → Kafka | 프로듀서로 발행 | 주문 DB → 주문 토픽 |
-| Sink | Kafka → 외부 | 컨슈머로 읽기 | 주문 토픽 → 검색 엔진 |
+![주문 DB에서 Kafka로 향하는 Source와 Kafka에서 검색 엔진으로 향하는 Sink. 방향의 기준은 Kafka이며 두 연동 사이에는 Kafka 토픽이 있다.](https://github.com/user-attachments/assets/db65f660-5981-4b9b-b7ff-960ae984d581 "그림 14-1. Source와 Sink의 방향")
+
+| 역할 | Worker의 Kafka 클라이언트 |
+|---|---|
+| Source | 프로듀서로 발행 |
+| Sink | 컨슈머로 읽기 |
 
 Source·sink는 특정 DB 제품이나 서버 종류가 아니라 이 연동에서 맡는 방향을 가리킨다. 다만 프로듀서 코드를 사용하는 모든 애플리케이션이 source connector인 것은 아니다. Connect에 등록되어 그 실행·위치 관리 방식을 따르는 연동 구현을 connector라고 부른다.
 
@@ -1895,11 +1897,11 @@ Source와 sink를 함께 쓰더라도 서로 직접 호출하지 않는다. Sour
 
 **Connector**는 연동 설정을 받아 실제 작업 단위들의 설정을 만든다. **Task**는 그 설정으로 원본을 읽거나 목적지에 쓰는 실행 단위다. **Worker**는 connector와 task를 실행하는 프로세스이므로, connector와 worker를 하나의 구성 요소로 묶어 이해하면 안 된다.
 
-다음은 DB 변경을 읽는 Debezium source를 두 worker에 배치한 예시다. Debezium의 변경 포착 원리는 15장에서 이어서 설명한다.
+아래는 connector와 task 하나를 같은 worker에 배치한 예시다.
 
-![Worker A의 Connector가 만든 task 설정은 Connect가 Worker B의 source task에 전달한다. 점선은 설정이며 레코드 경로가 아니다. 실제 DB 변경 레코드는 Worker B의 task에서 converter·producer를 거쳐 Kafka로 간다.](https://github.com/user-attachments/assets/08342ac4-49f0-4304-9437-63f659a30057 "그림 14-1. Connector 관리와 Task 실행의 분리")
+![Worker 프로세스 안에 Connector와 Task를 함께 배치했다. Connector가 만든 task 설정을 Connect가 Task에 전달하며, 점선은 레코드 이동이 아닌 설정 관계다.](https://github.com/user-attachments/assets/13887a11-b127-43be-a17c-3af33cd7c192 "그림 14-2. Worker 안의 Connector와 Task")
 
-이 배치는 고정 규칙이 아니다. 점선의 설정 전달은 시작·재구성 때 필요하고, 실선의 레코드 전달은 실행 중 반복된다. 이 둘을 구분해야 connector 관리 객체가 매 레코드를 복사한다고 오해하지 않는다.
+점선의 설정 전달은 시작·재구성 때 필요하다. 실행 중 반복되는 레코드 복사와는 다른 관계다.
 
 여기서 connector라는 말은 문맥에 따라 구현 종류와 등록한 작업을 가리킨다. `io.debezium.connector.postgresql.PostgresConnector`는 PostgreSQL용 구현 클래스이고, 뒤에서 등록할 `hangeul-orders-source`는 그 구현에 `market` DB 설정을 적용한 연동 작업의 이름이다. 같은 플러그인으로 다른 DB를 읽는 작업을 여러 개 등록할 수 있다.
 
@@ -1921,9 +1923,7 @@ Connect worker는 브로커·컨트롤러와 **별도로 시작하는 JVM 프로
 
 실행 위치는 서버일 수도 컨테이너일 수도 있다. 같은 물리 서버에 브로커와 worker를 배치해도 두 프로세스의 역할은 합쳐지지 않는다. DB 읽기와 converter 변환의 CPU·메모리 부담, 검색 API 연결 수, 플러그인 장애의 영향 범위는 worker 쪽에서 발생한다. Worker를 별도로 배치하면 이런 연동 부하를 브로커 자원과 분리할 수 있지만 별도 배포·감시·용량 관리가 필요하다.
 
-![외부 DB에서 source worker를 거쳐 Kafka에 쓰고, 별도 sink worker가 Kafka에서 읽어 검색 엔진에 반영한다. Worker는 커넥터 플러그인을 실행하지만 브로커는 실행하지 않는다.](https://github.com/user-attachments/assets/17d0d065-b5a0-43dd-978f-b7d3f2c6db98 "그림 14-2. Connect 실행 경계")
-
-이 그림은 실행 구조다. 데이터가 꼭 한 worker의 source에서 같은 worker의 sink로 직접 넘어간다는 뜻은 아니다. Source worker는 Kafka에 쓰고, sink worker는 Kafka에서 읽는다. 서로 다른 worker나 서로 다른 Connect 클러스터여도 같은 토픽을 매개로 연결할 수 있다. 브로커는 레코드를 저장·복제·전달할 뿐 PostgreSQL 드라이버나 검색 엔진 플러그인을 실행하지 않는다.
+서로 다른 worker나 Connect 클러스터에서도 Source와 Sink는 같은 Kafka 토픽을 매개로 연결할 수 있다. 브로커는 레코드를 저장·복제·전달할 뿐 PostgreSQL 드라이버나 검색 엔진 플러그인을 실행하지 않는다.
 
 ### 플러그인 설치와 커넥터 등록은 서로 다른 작업이다
 
@@ -2241,9 +2241,9 @@ WAL을 먼저 남기면 트랜잭션마다 여러 데이터 파일의 변경 페
 
 PostgreSQL의 **logical decoding**은 저장 수준의 WAL 기록에서 행 수준 변경 정보를 꺼내 클라이언트가 해석할 표현으로 바꾸는 기능이다. `pgoutput`은 그 출력 형식을 제공하는 PostgreSQL 서버 쪽 플러그인이다. Debezium task는 복제 프로토콜로 이 스트림을 받으므로, worker가 DB 서버의 WAL 디렉터리를 공유 마운트하여 파일을 직접 읽는 구조가 아니다.
 
-![PostgreSQL에서 WAL을 영구 저장한 뒤 데이터 페이지를 파일에 반영하는 경로와, logical decoding·pgoutput으로 변경을 제공하는 경로가 나뉜다. 복제 스트림은 Connect worker의 Debezium task, converter·producer를 거쳐 Kafka로 간다.](https://github.com/user-attachments/assets/5e51493e-079f-440e-84c5-14e466cc3839 "그림 15-1. WAL의 복구 경로와 Debezium 전달 경로")
+![PostgreSQL의 WAL에서 얻은 행 변경 스트림을 Connect worker 안의 Debezium source task가 받고, worker가 Kafka로 발행한다. WAL과 task는 서로 다른 실행 경계에 있다.](https://github.com/user-attachments/assets/d69855e6-ae83-49b4-9f7f-62e601768cf9 "그림 15-1. WAL에서 Kafka로 향하는 변경 전달")
 
-왼쪽의 데이터 파일 반영을 마친 뒤 오른쪽 CDC를 시작하는 직렬 절차가 아니다. WAL이 원본 근거라는 점은 같지만, 데이터 페이지 반영과 Kafka 발행의 완료 시점은 다르다. 그림은 일반적인 동기 커밋과 초기 snapshot 이후 streaming을 가정한다.
+그림은 초기 snapshot 이후 새 변경을 계속 읽는 streaming 경로다. 데이터 페이지 반영과 Kafka 발행은 별도 경로이므로, 데이터 파일 쓰기를 마쳐야 CDC가 시작되는 것은 아니다.
 
 DB에서 주문 `104`의 변경이 커밋되면 서버의 decoding 경로가 해당 행의 변경을 제공한다. Debezium task는 이를 키와 `op=u`, `after.status=PAID`, 원본 위치 정보가 있는 Connect 레코드로 만든다. Worker의 converter와 producer가 Kafka 바이트와 발행을 맡는 다음 단계는 14장과 같다.
 
@@ -2256,15 +2256,6 @@ DB에서 주문 `104`의 변경이 커밋되면 서버의 decoding 경로가 해
 **LSN(Log Sequence Number)**은 WAL 내 위치를 식별한다. 여기서 LSN은 Kafka 토픽의 offset이 아니라 PostgreSQL 쪽 재개 위치의 근거다. 한 변경이 Kafka에 저장되더라도 DB 쪽 위치와 Kafka 쪽 위치는 서로 다른 로그에서 부여되므로 같은 위치 체계로 비교하지 않는다.
 
 **Replication slot**은 PostgreSQL이 이 소비 경로에 필요한 로그 유지 상태를 관리하는 서버 측 객체다. **Publication**은 `pgoutput` 기반 logical replication에서 내보낼 테이블과 연산의 범위를 지정하는 서버 측 구성이다. **Replica identity**는 update·delete의 이전 행 식별에 어떤 정보를 제공할지 정하는 테이블 설정이다. 보통 기본 키 정보가 중요하며, 삭제 전 전체 행을 요구한다면 실제 identity 설정과 출력 내용을 확인해야 한다.
-
-```text
-PostgreSQL 서버                              Connect worker
-업무 트랜잭션 → WAL → logical decoding ─────→ Debezium Source Task
-                      pgoutput / slot            ↓
-                      publication 대상         Connect 변경 레코드
-                                                   ↓ converter / producer
-Kafka 브로커                                   업무 토픽
-```
 
 Publication·slot·`pgoutput`은 PostgreSQL 쪽에 있고 Debezium task는 worker 쪽에 있다. DB는 변경 로그를 제공하고, task가 이를 Connect 레코드로 옮기며, worker의 producer가 Kafka로 보낸다. Debezium을 브로커에 설치하거나 Kafka가 SQL 트랜잭션 로그를 직접 읽는 것으로 이해하면 경로와 장애 위치가 뒤섞인다.
 

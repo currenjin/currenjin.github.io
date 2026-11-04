@@ -2,11 +2,6 @@
   "issue_url": "https://github.com/currenjin/currenjin.github.io/issues/30#issuecomment-6030659465",
   "format": "original SVG bytes",
   "figures": {
-    "fig-14-connect-runtime.svg": {
-      "url": "https://github.com/user-attachments/assets/17d0d065-b5a0-43dd-978f-b7d3f2c6db98",
-      "sha256": "88f7f15a3c5e1f6a7f8a45849f6ee7c71dac38f1fd11a7e32448c7f49d91c803",
-      "bytes": 8204
-    },
     "fig-00-data-path.svg": {
       "url": "https://github.com/user-attachments/assets/34677e35-9f06-46ff-ada6-da7f6c03672a",
       "sha256": "b6cddb01381c6b2c2e2386e1901e13d2a1759894de535a326c351d08d964907a",
@@ -102,17 +97,45 @@
       "sha256": "3cfcb50d61639a5efaae45baac98cf9fdf234451a6e05fca748b2498948756ce",
       "bytes": 9353
     },
+    "fig-14-source-sink.svg": {
+      "url": "https://github.com/user-attachments/assets/db65f660-5981-4b9b-b7ff-960ae984d581",
+      "sha256": "21988662acac93a934ca2f702430776cf67bbc45aa13adad377302e45f018e0d",
+      "bytes": 2419,
+      "issue_url": "https://github.com/currenjin/currenjin.github.io/issues/30#issuecomment-6622285084"
+    },
     "fig-14-connector-task-worker.svg": {
+      "url": "https://github.com/user-attachments/assets/13887a11-b127-43be-a17c-3af33cd7c192",
+      "sha256": "0cf006b5b5b6adc634f9dbf89942ea90a80d81322b670319a61210529e8977f4",
+      "bytes": 2791,
+      "issue_url": "https://github.com/currenjin/currenjin.github.io/issues/30#issuecomment-6622285084"
+    },
+    "fig-15-wal-debezium-path.svg": {
+      "url": "https://github.com/user-attachments/assets/d69855e6-ae83-49b4-9f7f-62e601768cf9",
+      "sha256": "e89891f9a45a07069b6c5d1448d2ef3f8f76de9b8db1a44027509d7a8d9c7894",
+      "bytes": 3489,
+      "issue_url": "https://github.com/currenjin/currenjin.github.io/issues/30#issuecomment-6622285084"
+    }
+  },
+  "retired_figures": {
+    "fig-14-connect-runtime.svg@before-20261104-revision": {
+      "url": "https://github.com/user-attachments/assets/17d0d065-b5a0-43dd-978f-b7d3f2c6db98",
+      "sha256": "88f7f15a3c5e1f6a7f8a45849f6ee7c71dac38f1fd11a7e32448c7f49d91c803",
+      "bytes": 8204,
+      "reason": "Replaced by the approved short concept figures; original Issue asset retained."
+    },
+    "fig-14-connector-task-worker.svg@before-20261104-revision": {
       "url": "https://github.com/user-attachments/assets/08342ac4-49f0-4304-9437-63f659a30057",
       "sha256": "181b1de77b357948f5f1e99ba87df8d90f6452bde76093780674ceda89e65b69",
       "bytes": 7616,
-      "issue_url": "https://github.com/currenjin/currenjin.github.io/issues/30#issuecomment-6620962945"
+      "issue_url": "https://github.com/currenjin/currenjin.github.io/issues/30#issuecomment-6620962945",
+      "reason": "Replaced by the approved short concept figures; original Issue asset retained."
     },
-    "fig-15-wal-debezium-path.svg": {
+    "fig-15-wal-debezium-path.svg@before-20261104-revision": {
       "url": "https://github.com/user-attachments/assets/5e51493e-079f-440e-84c5-14e466cc3839",
       "sha256": "c47b35d81307143e42181cd59e40ca11d2ce5e40f60e82e4ed124bc56d734087",
       "bytes": 10103,
-      "issue_url": "https://github.com/currenjin/currenjin.github.io/issues/30#issuecomment-6620962945"
+      "issue_url": "https://github.com/currenjin/currenjin.github.io/issues/30#issuecomment-6620962945",
+      "reason": "Replaced by the approved short concept figures; original Issue asset retained."
     }
   }
 }
