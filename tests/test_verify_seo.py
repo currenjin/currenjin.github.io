@@ -41,6 +41,9 @@ class VerifierTests(unittest.TestCase):
             redirect = seo.output(site, '/books/')
             redirect.parent.mkdir(parents=True)
             redirect.write_text(f'<head><link rel="canonical" href="{seo.ORIGIN}/reviews/"></head>')
+            (site / 'robots.txt').write_text(
+                f'User-agent: *\nAllow: /\n\nSitemap: {seo.ORIGIN}/sitemap.xml\n'
+                f'Sitemap: {seo.ORIGIN}/site-for-developers/sitemap.xml\n')
             (site / 'sitemap.xml').write_text(
                 '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
                 ''.join(f'<url><loc>{seo.ORIGIN}{quote(path, safe="/%")}</loc></url>' for path in expected) +

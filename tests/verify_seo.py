@@ -172,6 +172,9 @@ def verify(site):
             assert unquote(path) in search_urls, f'Public document absent from search: {path}'
     for utility in ['/books/', '/wiki/', '/search/', '/recent/', '/404/', '/posts/#what-am-i']:
         assert ORIGIN + utility not in urls
+    # This repository owns the host-root robots.txt, so it also advertises the SFD project sitemap.
+    sitemaps = re.findall(r'(?im)^sitemap:[ \t]*(\S+)[ \t]*$', (site / 'robots.txt').read_text())
+    assert sitemaps == [ORIGIN + '/sitemap.xml', ORIGIN + '/site-for-developers/sitemap.xml'], f'robots.txt sitemaps: {sitemaps}'
     redirect = Head(); redirect.feed(output(site, '/books/').read_text())
     assert redirect.canonical == [ORIGIN + '/reviews/'] and redirect.canonical_total == 1
     home = Head(); home.feed(output(site, '/').read_text())

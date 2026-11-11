@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://currenjin.github.io/sitemap.xml
+Sitemap: https://currenjin.github.io/site-for-developers/sitemap.xml
