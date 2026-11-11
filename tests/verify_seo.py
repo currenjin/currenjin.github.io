@@ -112,12 +112,16 @@ class Head(HTMLParser):
         self.canonical, self.meta, self.title = [], {}, ''
         self.in_head = self.in_title = False
         self.canonical_total = 0
+        self.refresh, self.refresh_total = [], 0
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         if tag == 'head': self.in_head = True
         if tag == 'link' and attrs.get('rel') == 'canonical':
             self.canonical_total += 1
             if self.in_head: self.canonical.append(attrs.get('href'))
+        if tag == 'meta' and (attrs.get('http-equiv') or '').lower() == 'refresh':
+            self.refresh_total += 1
+            if self.in_head: self.refresh.append(attrs.get('content'))
         if self.in_head and tag == 'meta':
             key = attrs.get('name', attrs.get('property'))
             self.meta.setdefault(key, []).append(attrs.get('content', ''))
@@ -177,6 +181,7 @@ def verify(site):
     assert sitemaps == [ORIGIN + '/sitemap.xml', ORIGIN + '/site-for-developers/sitemap.xml'], f'robots.txt sitemaps: {sitemaps}'
     redirect = Head(); redirect.feed(output(site, '/books/').read_text())
     assert redirect.canonical == [ORIGIN + '/reviews/'] and redirect.canonical_total == 1
+    assert redirect.refresh == ['0; url=/reviews/'] and redirect.refresh_total == 1, f'/books/ refresh outside <head>: {redirect.refresh}'
     home = Head(); home.feed(output(site, '/').read_text())
     config = yaml.safe_load((ROOT / '_config.yml').read_text())
     if not expected['/'][1].get('summary') and not expected['/'][1].get('seo_description'):

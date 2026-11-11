@@ -18,7 +18,8 @@ class VerifierTests(unittest.TestCase):
             self.assertEqual(seo.stamp(value), '2020-01-01T00:00:00+09:00')
 
     def verify_fixture(self, public_path='/reviews/한글/', search_path=None,
-                       excluded=(), extra_search=(), branding='Original branding'):
+                       excluded=(), extra_search=(), branding='Original branding',
+                       refresh_in_head=True):
         with tempfile.TemporaryDirectory(prefix='seo-verifier-') as tmp:
             root = Path(tmp)
             site = root / 'site'
@@ -40,7 +41,9 @@ class VerifierTests(unittest.TestCase):
                 target.write_text(html + '</head>')
             redirect = seo.output(site, '/books/')
             redirect.parent.mkdir(parents=True)
-            redirect.write_text(f'<head><link rel="canonical" href="{seo.ORIGIN}/reviews/"></head>')
+            refresh = '<meta http-equiv="refresh" content="0; url=/reviews/">'
+            redirect.write_text(f'<head><link rel="canonical" href="{seo.ORIGIN}/reviews/">'
+                                + (f'{refresh}</head>' if refresh_in_head else f'</head><body>{refresh}</body>'))
             (site / 'robots.txt').write_text(
                 f'User-agent: *\nAllow: /\n\nSitemap: {seo.ORIGIN}/sitemap.xml\n'
                 f'Sitemap: {seo.ORIGIN}/site-for-developers/sitemap.xml\n')
@@ -111,6 +114,10 @@ class VerifierTests(unittest.TestCase):
     def test_meaningful_home_branding_change_is_rejected(self):
         with self.assertRaisesRegex(AssertionError, 'Home branding changed'):
             self.verify_fixture(branding='Changed branding')
+
+    def test_legacy_redirect_refresh_outside_head_is_rejected(self):
+        with self.assertRaisesRegex(AssertionError, 'refresh outside <head>'):
+            self.verify_fixture(refresh_in_head=False)
 
 
 if __name__ == '__main__':
