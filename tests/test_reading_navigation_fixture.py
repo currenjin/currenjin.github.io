@@ -24,7 +24,7 @@ class ReadingNavigationFixtureTest(unittest.TestCase):
             root = Path(temp) / 'repo'
             module['prepare_fixture'](root)
             for name in ['_config.yml', 'Gemfile', 'Gemfile.lock', 'index.html', 'books.md',
-                         'search-index.json', 'sitemap.xml', 'tests/verify_seo.py']:
+                         'search-index.json', 'sitemap.xml', 'robots.txt', 'tests/verify_seo.py']:
                 self.assertEqual((ROOT / name).read_bytes(), (root / name).read_bytes(), name)
             for directory in ['_plugins', '_layouts', '_includes']:
                 source = {p.relative_to(ROOT) for p in (ROOT / directory).rglob('*') if p.is_file()}

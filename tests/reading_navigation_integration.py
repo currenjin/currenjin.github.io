@@ -14,7 +14,7 @@ def prepare_fixture(root):
     for name in ['_plugins', '_layouts', '_includes']:
         shutil.copytree(ROOT / name, root / name)
     for name in ['_config.yml', 'Gemfile', 'Gemfile.lock', 'index.html', 'books.md',
-                 'search-index.json', 'sitemap.xml']:
+                 'search-index.json', 'sitemap.xml', 'robots.txt']:
         shutil.copy2(ROOT / name, root / name)
     for name in ['_wiki', '_post', '_reviews', '_data', 'tests']:
         (root / name).mkdir()
