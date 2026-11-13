@@ -14,7 +14,7 @@ test('gallery uses real collection cards and loads assets only for the reviews l
   const layout = read('_layouts/reviews.html'), head = read('_includes/head.html');
   assert.match(layout, /data-review-gallery/);
   assert.match(layout, /data-review-stage[^>]*hidden/);
-  assert.match(layout, /data-review-search/);
+  assert.doesNotMatch(layout, /data-review-search/);
   assert.match(layout, /include review-card.html review=review/);
   assert.match(head, /if page.layout == 'reviews'[\s\S]*css\/reviews.css[\s\S]*js\/reviews.js[\s\S]*endif/);
   assert.doesNotMatch(layout, /base64|DESIGN STUDY|head-note/);
@@ -24,18 +24,19 @@ test('gallery uses real collection cards and loads assets only for the reviews l
 test('all review controls precede the animated stage', () => {
   const layout = read('_layouts/reviews.html');
   const controls = layout.slice(layout.indexOf('data-review-strip'), layout.indexOf('data-review-stage'));
-  for (const marker of ['data-review-filter-group="kind"', 'data-review-filter-group="status"', 'data-review-search', 'data-review-sort', 'data-review-count']) assert.ok(controls.includes(marker), marker);
+  for (const marker of ['data-review-filter-group="kind"', 'data-review-filter-group="status"', 'data-review-sort', 'data-review-count']) assert.ok(controls.includes(marker), marker);
   assert.match(controls, /value="rating"[^>]*>평점순/);
   assert.match(controls, /value="newest"[^>]*>최신순/);
   assert.match(controls, /value="oldest"[^>]*>오래된순/);
   assert.match(read('_includes/review-card.html'), /data-end-date=/);
 });
 
-test('search, sort and count form a right-aligned group without the list jump', () => {
+test('sort and count form a right-aligned group without local search or the list jump', () => {
   const layout = read('_layouts/reviews.html'), css = read('css/reviews.css');
   const group = layout.match(/<div class="review-search-tools">([\s\S]*?)<\/div>/);
   assert.ok(group, 'search, sort and count share one alignment container');
-  assert.match(group[1], /data-review-search[\s\S]*data-review-sort[\s\S]*data-review-count/);
+  assert.match(group[1], /data-review-sort[\s\S]*data-review-count/);
+  assert.doesNotMatch(layout, /data-review-search/);
   assert.doesNotMatch(layout, /review-list-jump|목록으로 바로 가기/);
   assert.match(css, /\.review-search-tools\s*\{[^}]*margin-left:auto/);
 });
@@ -77,6 +78,15 @@ test('sort change updates list DOM and the animated selection through real mount
   f.search.value = ''; f.search.emit('input');
   sort.value = 'rating'; sort.emit('change');
   assert.deepEqual(grid.children, f.cards);
+});
+
+test('gallery mounts without a local search input', () => {
+  const f = fixture(); delete f.page.map['[data-review-search]'];
+  const state = gallery().mount(f.page, f.env);
+  assert.equal(state.visible.length, records.length);
+  assert.equal(f.stage.hidden, false);
+  f.music.emit('click');
+  assert.ok(state.visible.every(r => r.kind === 'music'));
 });
 
 test('gallery selects at most six covered reviews, never a copied snapshot', () => {

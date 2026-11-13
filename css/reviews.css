@@ -32,10 +32,9 @@
 .reviews-page .review-collection-head { display:flex; align-items:center; justify-content:space-between; gap:25px; margin-bottom:32px; }
 .reviews-page .review-collection-head > h2 { flex-shrink:0; margin:0; font:400 28px/1.2 var(--serif); letter-spacing:-.035em; }
 .reviews-page .review-list-tools { display:contents; }
-.reviews-page .review-search-tools { display:flex; flex:0 1 360px; align-items:center; gap:16px; margin-left:auto; min-width:0; }
+.reviews-page .review-search-tools { display:flex; flex:0 0 auto; align-items:center; gap:16px; margin-left:auto; min-width:0; }
 .reviews-page .review-list-tools .filters { flex-wrap:wrap; gap:0; }
 .reviews-page .review-list-tools .filter { font:11px/1.2 var(--sans); }
-.reviews-page .review-local-search { flex:1; width:180px; min-width:0; min-height:44px; border:0; border-bottom:1px solid var(--line); border-radius:0; padding:13px 0; background:none; font:11px/1.4 var(--sans); }
 .reviews-page .review-sort { min-width:110px; min-height:44px; border:0; border-bottom:1px solid var(--line); border-radius:0; background:var(--paper); color:var(--ink); font:11px/1.4 var(--sans); }
 .reviews-page .review-archive-grid { width:100%; grid-template-columns:repeat(4,minmax(0,1fr)); gap:45px 30px; }
 .reviews-page .review-archive-link { display:flex; flex-direction:column; gap:0; }
@@ -77,7 +76,6 @@
   .reviews-page .review-collection-head { display:block; margin-bottom:20px; }
   .reviews-page .review-collection-head > h2 { font-size:25px; }
   .reviews-page .review-search-tools { gap:12px; }
-  .reviews-page .review-local-search { flex:1; width:120px; }
   .reviews-page .review-archive-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:30px 18px; }
   .reviews-page .review-archive-image { height:220px; padding:20px; }
   .reviews-page .review-archive-title { font-size:18px; }
@@ -92,7 +90,6 @@
 }
 @media (max-width:360px) {
   .reviews-page .review-archive-image { height:185px; }
-  .reviews-page .review-local-search { width:120px; }
 }
 @media (prefers-reduced-motion:reduce) {
   .reviews-page .review-scene-cover { transition:none; animation:none; }

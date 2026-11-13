@@ -197,7 +197,7 @@
       }));
     });
     const search = find('[data-review-search]');
-    search.addEventListener('input', () => { state.filter('query', search.value); render(); });
+    search?.addEventListener('input', () => { state.filter('query', search.value); render(); });
     const sort = find('[data-review-sort]');
     sort?.addEventListener('change', () => { state.filter('sort', sort.value); render(); });
     prev.addEventListener('click', () => { state.move(-1); showScene(); });
