@@ -17,6 +17,21 @@ layout: default
       <button class="filter" data-review-filter="other" aria-pressed="false">기타</button>
     </div>
     <a class="review-list-jump" href="#review-collection">목록으로 바로 가기 ↓</a>
+    <div class="review-list-tools">
+      <div class="filters" aria-label="상태" data-review-filter-group="status">
+        <button class="filter" data-review-filter="all" aria-pressed="true">전체</button>
+        <button class="filter" data-review-filter="finished" aria-pressed="false">완료</button>
+        <button class="filter" data-review-filter="reading" aria-pressed="false">진행중</button>
+        <button class="filter" data-review-filter="want" aria-pressed="false">예정</button>
+      </div>
+      <input type="search" class="review-local-search" data-review-search aria-label="작품 또는 저자 검색" placeholder="작품 또는 저자 검색" autocomplete="off">
+      <select class="review-sort" data-review-sort aria-label="리뷰 정렬" title="완료일 기준, 날짜 없는 기록은 마지막">
+        <option value="rating">평점순</option>
+        <option value="newest">최신순</option>
+        <option value="oldest">오래된순</option>
+      </select>
+      <output class="review-filter-count" data-review-count aria-live="polite" aria-label="표시 중인 리뷰 수">{{ site.reviews | size }}/{{ site.reviews | size }}</output>
+    </div>
   </section>
 
   <section class="review-stage" aria-label="리뷰 둘러보기" data-review-stage hidden>
@@ -39,15 +54,6 @@ layout: default
   <section class="review-collection" id="review-collection" aria-labelledby="review-list-title">
     <div class="review-collection-head">
       <h2 id="review-list-title">리뷰 목록</h2>
-      <div class="review-list-tools">
-        <div class="filters" aria-label="상태" data-review-filter-group="status">
-          <button class="filter" data-review-filter="all" aria-pressed="true">전체</button>
-          <button class="filter" data-review-filter="finished" aria-pressed="false">완료</button>
-          <button class="filter" data-review-filter="reading" aria-pressed="false">진행중</button>
-          <button class="filter" data-review-filter="want" aria-pressed="false">예정</button>
-        </div>
-        <input type="search" class="review-local-search" data-review-search aria-label="작품 또는 저자 검색" placeholder="작품 또는 저자 검색" autocomplete="off">
-      </div>
     </div>
     <div class="review-archive-grid">
       {% assign rating_groups = site.reviews | group_by: 'rating' | sort: 'name' | reverse %}
@@ -63,6 +69,5 @@ layout: default
       {% endfor %}
     </div>
     <p class="empty review-archive-empty" data-empty>해당 기록이 없습니다.</p>
-    <output class="review-filter-count" data-review-count aria-live="polite" aria-label="표시 중인 리뷰 수">{{ site.reviews | size }}/{{ site.reviews | size }}</output>
   </section>
 </main>

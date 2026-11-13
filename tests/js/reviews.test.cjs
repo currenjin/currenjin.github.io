@@ -21,6 +21,55 @@ test('gallery uses real collection cards and loads assets only for the reviews l
   assert.match(read('js/ledger.js'), /if\(controls.hasAttribute\('data-review-gallery'\)\)return/);
 });
 
+test('all review controls precede the animated stage', () => {
+  const layout = read('_layouts/reviews.html');
+  const controls = layout.slice(layout.indexOf('data-review-strip'), layout.indexOf('data-review-stage'));
+  for (const marker of ['data-review-filter-group="kind"', 'data-review-filter-group="status"', 'data-review-search', 'data-review-sort', 'data-review-count']) assert.ok(controls.includes(marker), marker);
+  assert.match(controls, /value="rating"[^>]*>평점순/);
+  assert.match(controls, /value="newest"[^>]*>최신순/);
+  assert.match(controls, /value="oldest"[^>]*>오래된순/);
+  assert.match(read('_includes/review-card.html'), /data-end-date=/);
+});
+
+test('time ordering uses completion dates with undated reviews last and preserves default order', () => {
+  const rows = records.slice(0, 5).map((r, i) => ({...r, endDate: ['', '2026-11-02', '2025-01-10', '2026-11-02', ''][i]}));
+  const state = gallery().createState(rows);
+  assert.deepEqual(state.visible, rows);
+  state.filter('sort', 'newest');
+  assert.deepEqual(state.visible, [rows[1], rows[3], rows[2], rows[0], rows[4]]);
+  assert.equal(state.current, rows[1]);
+  state.filter('sort', 'oldest');
+  assert.deepEqual(state.visible, [rows[2], rows[1], rows[3], rows[0], rows[4]]);
+  state.filter('kind', 'music');
+  state.filter('status', 'finished');
+  state.filter('query', '작품');
+  assert.deepEqual(state.visible, [rows[2], rows[0]]);
+  state.filter('sort', 'rating');
+  assert.deepEqual(state.visible, [rows[0], rows[2]]);
+  assert.deepEqual(rows.map(r => r.title), records.slice(0, 5).map(r => r.title));
+});
+
+test('sort change updates list DOM and the animated selection through real mount', () => {
+  const rows = records.slice(0, 3).map((r, i) => ({...r, endDate: ['', '2025-02-01', '2026-01-01'][i]}));
+  const f = fixture(rows), sort = element(), grid = element();
+  grid.children = [...f.cards];
+  grid.append = (...cards) => { for (const card of cards) { grid.children = grid.children.filter(c => c !== card); grid.children.push(card); } };
+  f.cards.forEach((c, i) => { c.dataset.endDate = rows[i].endDate; c.parentElement = grid; });
+  f.page.map['[data-review-sort]'] = sort;
+  const state = gallery().mount(f.page, f.env);
+  sort.value = 'newest'; sort.emit('change');
+  assert.deepEqual(state.visible.map(r => r.title), [rows[2].title, rows[1].title, rows[0].title]);
+  assert.deepEqual(grid.children, [f.cards[2], f.cards[1], f.cards[0]]);
+  assert.equal(state.current.title, rows[2].title);
+  assert.equal(f.count.textContent, '3/3');
+  f.search.value = '작품 2'; f.search.emit('input');
+  assert.equal(f.stage.hidden, false, 'search keeps the covered result in the animated stage');
+  assert.equal(state.current.title, rows[2].title);
+  f.search.value = ''; f.search.emit('input');
+  sort.value = 'rating'; sort.emit('change');
+  assert.deepEqual(grid.children, f.cards);
+});
+
 test('gallery selects at most six covered reviews, never a copied snapshot', () => {
   const state = gallery().createState(records);
   assert.equal(state.visible.length, 8);

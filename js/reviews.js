@@ -8,7 +8,7 @@
   const normalize = value => String(value || '').normalize('NFKC').toLocaleLowerCase('ko').trim();
 
   function createState(records) {
-    const active = {kind: 'all', status: 'all', query: ''};
+    const active = {kind: 'all', status: 'all', query: '', sort: 'rating'};
     const state = {visible: records, featured: [], index: 0,
       get current() { return state.featured[state.index]; },
       select(index) {
@@ -24,6 +24,13 @@
         (active.kind === 'all' || record.kind === active.kind) &&
         (active.status === 'all' || record.status === active.status) &&
         (!query || normalize(`${record.title} ${record.author}`).includes(query)));
+      if (active.sort === 'newest' || active.sort === 'oldest') {
+        state.visible.sort((a, b) => {
+          if (!a.endDate) return b.endDate ? 1 : 0;
+          if (!b.endDate) return -1;
+          return active.sort === 'newest' ? b.endDate.localeCompare(a.endDate) : a.endDate.localeCompare(b.endDate);
+        });
+      }
       state.featured = state.visible.filter(record => record.image).slice(0, 6);
       state.index = 0;
     }
@@ -51,6 +58,7 @@
       const image = card.querySelector('img.review-archive-cover');
       return {card, title: (title?.firstChild?.textContent || title?.textContent || '').trim(),
         author: text(card, '.review-archive-meta'), kind: card.dataset.kind, status: card.dataset.status,
+        endDate: card.dataset.endDate || '',
         image: image?.getAttribute('src') || image?.src || '',
         url: card.querySelector('.review-archive-link').href,
         note: text(card, '.review-archive-note'), meta: text(card, '.review-archive-kind'),
@@ -167,6 +175,7 @@
     function render() {
       const visible = new Set(state.visible);
       records.forEach(record => { record.card.hidden = !visible.has(record); });
+      state.visible.forEach(record => record.card.parentElement?.append(record.card));
       count.textContent = `${state.visible.length}/${records.length}`;
       empty.dataset.visible = String(state.visible.length === 0);
       selectors = state.featured.map((record, index) => {
@@ -189,6 +198,8 @@
     });
     const search = find('[data-review-search]');
     search.addEventListener('input', () => { state.filter('query', search.value); render(); });
+    const sort = find('[data-review-sort]');
+    sort?.addEventListener('change', () => { state.filter('sort', sort.value); render(); });
     prev.addEventListener('click', () => { state.move(-1); showScene(); });
     next.addEventListener('click', () => { state.move(1); showScene(); });
     env.addEventListener('scroll', schedule, {passive: true});
