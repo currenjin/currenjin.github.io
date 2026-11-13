@@ -31,6 +31,15 @@ test('all review controls precede the animated stage', () => {
   assert.match(read('_includes/review-card.html'), /data-end-date=/);
 });
 
+test('search, sort and count form a right-aligned group without the list jump', () => {
+  const layout = read('_layouts/reviews.html'), css = read('css/reviews.css');
+  const group = layout.match(/<div class="review-search-tools">([\s\S]*?)<\/div>/);
+  assert.ok(group, 'search, sort and count share one alignment container');
+  assert.match(group[1], /data-review-search[\s\S]*data-review-sort[\s\S]*data-review-count/);
+  assert.doesNotMatch(layout, /review-list-jump|목록으로 바로 가기/);
+  assert.match(css, /\.review-search-tools\s*\{[^}]*margin-left:auto/);
+});
+
 test('time ordering uses completion dates with undated reviews last and preserves default order', () => {
   const rows = records.slice(0, 5).map((r, i) => ({...r, endDate: ['', '2026-11-02', '2025-01-10', '2026-11-02', ''][i]}));
   const state = gallery().createState(rows);

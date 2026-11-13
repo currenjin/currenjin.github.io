@@ -16,7 +16,6 @@ layout: default
       <button class="filter" data-review-filter="webtoon" aria-pressed="false">웹툰</button>
       <button class="filter" data-review-filter="other" aria-pressed="false">기타</button>
     </div>
-    <a class="review-list-jump" href="#review-collection">목록으로 바로 가기 ↓</a>
     <div class="review-list-tools">
       <div class="filters" aria-label="상태" data-review-filter-group="status">
         <button class="filter" data-review-filter="all" aria-pressed="true">전체</button>
@@ -24,13 +23,15 @@ layout: default
         <button class="filter" data-review-filter="reading" aria-pressed="false">진행중</button>
         <button class="filter" data-review-filter="want" aria-pressed="false">예정</button>
       </div>
-      <input type="search" class="review-local-search" data-review-search aria-label="작품 또는 저자 검색" placeholder="작품 또는 저자 검색" autocomplete="off">
-      <select class="review-sort" data-review-sort aria-label="리뷰 정렬" title="완료일 기준, 날짜 없는 기록은 마지막">
-        <option value="rating">평점순</option>
-        <option value="newest">최신순</option>
-        <option value="oldest">오래된순</option>
-      </select>
-      <output class="review-filter-count" data-review-count aria-live="polite" aria-label="표시 중인 리뷰 수">{{ site.reviews | size }}/{{ site.reviews | size }}</output>
+      <div class="review-search-tools">
+        <input type="search" class="review-local-search" data-review-search aria-label="작품 또는 저자 검색" placeholder="작품 또는 저자 검색" autocomplete="off">
+        <select class="review-sort" data-review-sort aria-label="리뷰 정렬" title="완료일 기준, 날짜 없는 기록은 마지막">
+          <option value="rating">평점순</option>
+          <option value="newest">최신순</option>
+          <option value="oldest">오래된순</option>
+        </select>
+        <output class="review-filter-count" data-review-count aria-live="polite" aria-label="표시 중인 리뷰 수">{{ site.reviews | size }}/{{ site.reviews | size }}</output>
+      </div>
     </div>
   </section>
 
