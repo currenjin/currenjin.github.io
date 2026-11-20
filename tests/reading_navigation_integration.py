@@ -68,6 +68,40 @@ def verify_fixture(root):
     for name in names:
         public = 'false' if name.endswith('secret') else ('"true"' if name.endswith('string') else 'true')
         (root / '_wiki' / (name + '.md')).write_text(source(name, public, '' if name.endswith('standalone') else 'fixture'))
+    nested = root / '_wiki' / 'nested'
+    nested.mkdir()
+    (nested / 'topic.md').write_text(source('topic', 'true', ''))
+    first_source = root / '_wiki' / 'fixture-first.md'
+    first_source.write_text(first_source.read_text() + r'''
+
+Related: [[fixture-last]] and [[/nested/topic]]{한국어 & <도움말>}.
+
+Keep: \[[fixture-last]], `[[fixture-last]]`, [[fixture-secret]], [[missing]].
+
+Already linked: [literal [[fixture-last]]](/wiki/fixture-last/).
+
+Standard Markdown: [[fixture-last]](/inline-target/) and [[fixture-last]][reference].
+
+[reference]: /reference-target/
+
+Reference with bracket: [[fixture-last]][ref[part].
+
+[ref[part]: /bracket-reference-target/
+
+## [[fixture-last]]{Overview}
+
+## [[fixture-last]]{Overview}
+
+<section markdown="block">
+
+## [[fixture-last]]{Review heading}
+
+</section>
+
+```text
+[[fixture-last]]
+```
+''')
     metadata = '''- id: fixture
   title: Scratch series
   public: true
@@ -98,6 +132,19 @@ def verify_fixture(root):
     assert 'rel="prev"' not in first and 'rel="next"' not in last
     assert 'id="stable-original"' in first and 'Question untouched.' in first
     assert first.count('id="markdown-toc"') == 1
+    assert 'Related: <a href="/wiki/fixture-last/">fixture-last</a>' in first, 'Wiki backlink missing in initial HTML'
+    assert '<a href="/wiki/nested/topic/">한국어 &amp; &lt;도움말&gt;</a>' in first
+    assert 'Keep: [[fixture-last]], <code class="language-plaintext highlighter-rouge">[[fixture-last]]</code>, [[fixture-secret]], [[missing]].' in first
+    assert '<a href="/wiki/fixture-last/">literal [[fixture-last]]</a>' in first
+    assert '<a href="/inline-target/">[fixture-last]</a>' in first
+    assert '<a href="/reference-target/">[fixture-last]</a>' in first
+    assert '<a href="/bracket-reference-target/">[fixture-last]</a>' in first
+    assert '<h2 id="fixture-lastoverview"><a href="/wiki/fixture-last/">Overview</a></h2>' in first
+    assert '<h2 id="fixture-lastoverview-1"><a href="/wiki/fixture-last/">Overview</a></h2>' in first
+    assert 'href="#fixture-lastoverview"' in first
+    assert '<h2 id="fixture-lastreview-heading"><a href="/wiki/fixture-last/">Review heading</a></h2>' in first
+    assert 'href="#fixture-lastreview-heading"' in first
+    assert '<pre class="highlight"><code>[[fixture-last]]\n</code></pre>' in first
     standalone = (site / 'wiki/fixture-standalone/index.html').read_text()
     assert 'class="reading-series ' not in standalone and 'reading-chapter-nav' not in standalone
     for name in ['fixture-secret', 'fixture-string', 'fixture-orphan']:
